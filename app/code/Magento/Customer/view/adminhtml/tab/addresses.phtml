@@ -85,17 +85,17 @@
                             <?php endif;?>
 
                             <address>
-                                <?php echo $_address->format('html') ?>
+                                <?php echo $this->format($_address, 'html') ?>
                             </address>
                         </a>
                         <div class="field field-address-item-billing choice">
-                            <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_billing<?php echo $_address->getId() ?>" name="account[default_billing]" title="<?php echo __('Set as Default Billing Address') ?>"<?php if($_address->getId()==$customer->getDefaultBilling()): ?> checked="checked"<?php endif; ?> />
+                            <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_billing<?php echo $_address->getId() ?>" name="account[default_billing]" title="<?php echo __('Set as Default Billing Address') ?>"<?php if($_address->isDefaultBilling()): ?> checked="checked"<?php endif; ?> />
                             <label class="label" for="address_item_billing<?php echo $_address->getId() ?>">
                                 <span><?php echo __('Default Billing Address') ?></span>
                             </label>
                         </div>
                         <div class="field field-address-item-shipping choice">
-                            <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_shipping<?php echo $_address->getId() ?>" name="account[default_shipping]" title="<?php echo __('Set as Default Shipping Address') ?>"<?php if($_address->getId()==$customer->getDefaultShipping()): ?> checked="checked"<?php endif; ?> />
+                            <input type="checkbox" <?php if ($this->isReadonly()):?> disabled="disabled"<?php endif;?> value="<?php echo $_address->getId() ?>" id="address_item_shipping<?php echo $_address->getId() ?>" name="account[default_shipping]" title="<?php echo __('Set as Default Shipping Address') ?>"<?php if($_address->isDefaultShipping()): ?> checked="checked"<?php endif; ?> />
                             <label class="label" for="address_item_shipping<?php echo $_address->getId() ?>">
                                 <span><?php echo __('Default Shipping Address') ?></span>
                             </label>
@@ -164,7 +164,7 @@
                 <?php foreach ($addressCollection as $_address): ?>
                     <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>" style="display:none" data-mage-init='{"observableInputs": {"name": "address_item_<?php echo $_address->getId() ?>"}}'>
                         <?php
-                        $this->getForm()->addValues($_address->getData())
+                        $this->getForm()->addValues($_address->getAttributes())
                             ->setHtmlIdPrefix("_item{$_address->getId()}")
                             ->setFieldNameSuffix('address['.$_address->getId().']');
                         $this->addValuesToNamePrefixElement($_address->getPrefix())

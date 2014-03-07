@@ -75,4 +75,24 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $block->deserializeRenders('some-template|some-block|some-type');
     }
+
+    public function testGetIdentities()
+    {
+        /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\Sidebar');
+
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        $product = $this->getMock('Magento\Catalog\Model\Product', array('__wakeup'), array(), '', false);
+
+        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+
+        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
+        $quote = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $quote->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue(array($item)));
+
+        $block->setData('custom_quote', $quote);
+        $this->assertEquals($product->getIdentities(), $block->getIdentities());
+    }
 }

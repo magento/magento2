@@ -1129,7 +1129,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      */
     protected function _parseCustomPrice($price)
     {
-        $price = $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->getNumber($price);
+        $price = $this->_objectManager->get('Magento\Locale\FormatInterface')->getNumber($price);
         $price = $price > 0 ? $price : 0;
         return $price;
     }
@@ -1156,6 +1156,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             \Magento\Customer\Service\V1\CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER,
             'adminhtml_checkout',
             $customerDto->getAttributes(),
+            false,
             CustomerForm::DONT_IGNORE_INVISIBLE
         );
 
@@ -1186,9 +1187,9 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             CustomerMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
             'adminhtml_customer_address',
             $data,
+            $isAjax,
             CustomerForm::DONT_IGNORE_INVISIBLE,
-            [],
-            $isAjax
+            []
         );
 
         // prepare request

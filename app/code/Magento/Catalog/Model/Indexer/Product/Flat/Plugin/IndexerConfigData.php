@@ -45,23 +45,31 @@ class IndexerConfigData
     /**
      * Around get handler
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Indexer\Model\Config\Data $subject
+     * @param callable $proceed
+     * @param string $path
+     * @param string $default
      *
      * @return mixed|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      */
-    public function aroundGet(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $data = $invocationChain->proceed($arguments);
+    public function aroundGet(
+        \Magento\Indexer\Model\Config\Data $subject,
+        \Closure $proceed,
+        $path = null,
+        $default = null
+    ) {
+        $data = $proceed($path, $default);
 
         if (!$this->_state->isFlatEnabled()) {
             $indexerId = \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID;
-            if ((!isset($arguments['path']) || !$arguments['path']) && isset($data[$indexerId])) {
+            if (!$path && isset($data[$indexerId])) {
                 unset($data[$indexerId]);
-            } elseif (isset($arguments['path'])) {
-                list($firstKey, ) = explode('/', $arguments['path']);
+            } elseif ($path) {
+                list($firstKey, ) = explode('/', $path);
                 if ($firstKey == $indexerId) {
-                    $data = isset($arguments['default']) ? $arguments['default'] : null;
+                    $data = $default ?: null;
                 }
             }
         }

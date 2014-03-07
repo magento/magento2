@@ -68,3 +68,6 @@ dev/tests/static/testsuite/Magento/Test/Php/_files/phpcs/Magento/Sniffs/Annotati
 dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Helper/Helper.php
 dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/Model.php
 dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magento/FirstModule/Model/WithoutDependencies.php
+dev/tests/integration/testsuite/Magento/Code/_expected/SourceClassWithNamespaceFactory.php
+dev/tests/integration/testsuite/Magento/Code/_expected/SourceClassWithNamespaceInterceptor.php
+dev/tests/integration/testsuite/Magento/Code/_expected/SourceClassWithNamespaceProxy.php

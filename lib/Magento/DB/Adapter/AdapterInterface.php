@@ -661,7 +661,7 @@ interface AdapterInterface
     /**
      * Format Date to internal database date format
      *
-     * @param int|string|Zend_Date $date
+     * @param int|string|\Magento\Stdlib\DateTime\DateInterface $date
      * @param boolean $includeTime
      * @return \Zend_Db_Expr
      */

@@ -192,9 +192,9 @@ class Js extends \Magento\App\Helper\AbstractHelper
         $this->_addTranslation('Please enter issue number or start date for switch/solo card type.', __('Please enter issue number or start date for switch/solo card type.'));
         //js.js
         $this->_addTranslation('This date is a required value.', __('This date is a required value.'));
-        $this->_addTranslation('Please enter a valid day (1-%d).', __('Please enter a valid day (1-%d).'));
+        $this->_addTranslation('Please enter a valid day (1-%1).', __('Please enter a valid day (1-%1).'));
         $this->_addTranslation('Please enter a valid month (1-12).', __('Please enter a valid month (1-12).'));
-        $this->_addTranslation('Please enter a valid year (1900-%d).', __('Please enter a valid year (1900-%d).'));
+        $this->_addTranslation('Please enter a valid year (1900-%1).', __('Please enter a valid year (1900-%1).'));
         $this->_addTranslation('Please enter a valid full date', __('Please enter a valid full date'));
         //various files
         $this->_addTranslation('Allow', __('Allow'));
@@ -209,7 +209,7 @@ class Js extends \Magento\App\Helper\AbstractHelper
         $this->_addTranslation('Gift Options for ', __('Gift Options for '));
         $this->_addTranslation('New Option', __('New Option'));
         $this->_addTranslation('Add Products to New Option', __('Add Products to New Option'));
-        $this->_addTranslation('Add Products to Option "%s"', __('Add Products to Option "%s"'));
+        $this->_addTranslation('Add Products to Option "%1"', __('Add Products to Option "%1"'));
         $this->_addTranslation('Add Selected Products', __('Add Selected Products'));
         $this->_addTranslation('Select type of option.', __('Select type of option.'));
         $this->_addTranslation('Please add rows to option.', __('Please add rows to option.'));
@@ -246,7 +246,7 @@ class Js extends \Magento\App\Helper\AbstractHelper
         $this->_addTranslation('Close', __('Close'));
         $this->_addTranslation('Please enter a value less than or equal to %s.', __('Please enter a value less than or equal to %s.'));
         $this->_addTranslation('Please enter a value greater than or equal to %s.', __('Please enter a value greater than or equal to %s.'));
-        $this->_addTranslation('Maximum length of this field must be equal or less than %s symbols.', __('Maximum length of this field must be equal or less than %s symbols.'));
+        $this->_addTranslation('Maximum length of this field must be equal or less than %1 symbols.', __('Maximum length of this field must be equal or less than %1 symbols.'));
         $this->_addTranslation('No records found.', __('No records found.'));
         $this->_addTranslation('Recent items', __('Recent items'));
         $this->_addTranslation('Show all...', __('Show all...'));

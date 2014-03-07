@@ -207,7 +207,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
@@ -223,7 +223,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Logger $logger,
         \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
@@ -240,7 +240,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
             $logAdapterFactory,
             $logger,
             $moduleList,
-            $locale,
+            $localeDate,
             $centinelService,
             $data
         );

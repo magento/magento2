@@ -42,11 +42,16 @@ class Grouped
     /**
      * Initialize grouped product links
      *
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks $subject
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitializeLinks(\Magento\Catalog\Model\Product $product)
-    {
+    public function afterInitializeLinks(
+        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks $subject,
+        \Magento\Catalog\Model\Product $product
+    ) {
         $links = $this->request->getPost('links');
 
         if (isset($links['grouped']) && !$product->getGroupedReadonly()) {

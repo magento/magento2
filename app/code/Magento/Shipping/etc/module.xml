@@ -36,7 +36,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Directory"/>
             <module name="Magento_Contacts"/>
-            <module name="Magento_Usa"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Theme"/>

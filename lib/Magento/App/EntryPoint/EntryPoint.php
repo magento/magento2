@@ -86,8 +86,8 @@ class EntryPoint implements EntryPointInterface
             if (isset($this->_parameters[state::PARAM_MODE])
                 && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
             ) {
-                print $exception->getMessage() . "\n\n";
-                print $exception->getTraceAsString();
+                echo $exception->getMessage() . "\n\n";
+                echo $exception->getTraceAsString();
             } else {
                 $message = "Error happened during application run.\n";
                 try {
@@ -98,7 +98,7 @@ class EntryPoint implements EntryPointInterface
                 } catch (\Exception $e) {
                     $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
                 }
-                print $message;
+                echo $message;
             }
         }
     }

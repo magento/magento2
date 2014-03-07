@@ -65,4 +65,7 @@
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="isProductConfigured" type="Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped" />
     </type>
+    <type name="Magento\Catalog\Helper\Product\Configuration">
+        <plugin name="grouped_options" type="Magento\GroupedProduct\Helper\Product\Configuration\Plugin\Grouped"/>
+    </type>
 </config>

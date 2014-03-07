@@ -34,7 +34,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals');
+            ->create('Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals');
     }
 
     /**

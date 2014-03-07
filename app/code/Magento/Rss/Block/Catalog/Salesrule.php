@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Catalog;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Catalog;
-
 class Salesrule extends \Magento\Rss\Block\AbstractBlock
 {
     /**
@@ -60,6 +59,9 @@ class Salesrule extends \Magento\Rss\Block\AbstractBlock
         parent::__construct($context, $customerSession, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         /*
@@ -100,7 +102,7 @@ class Salesrule extends \Magento\Rss\Block\AbstractBlock
         $collection = $this->_collectionFactory->create();
         $collection->addWebsiteGroupDateFilter($websiteId, $customerGroup, $now)
             ->addFieldToFilter('is_rss', 1)
-            ->setOrder('from_date','desc');
+            ->setOrder('from_date', 'desc');
         $collection->load();
 
         /** @var $ruleModel \Magento\SalesRule\Model\Rule */

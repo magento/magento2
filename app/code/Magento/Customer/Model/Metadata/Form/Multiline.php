@@ -94,8 +94,8 @@ class Multiline extends Text
      */
     public function compactValue($value)
     {
-        if (is_array($value)) {
-            $value = trim(implode("\n", $value));
+        if (!is_array($value)) {
+            $value = [$value];
         }
         return parent::compactValue($value);
     }

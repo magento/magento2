@@ -51,8 +51,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $endDate = date('m/d/Y', strtotime('+3 day'));
         $this->_model->setInterval($startDate, $endDate);
 
-        $startDateMock = $this->getMock('Zend_Date', array(), array(), '', false);
-        $endDateMock = $this->getMock('Zend_Date', array(), array(), '', false);
+        $startDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
+        $endDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
         $map = array(
             array($startDate, null, null, $startDateMock),
             array($endDate, null, null, $endDateMock),

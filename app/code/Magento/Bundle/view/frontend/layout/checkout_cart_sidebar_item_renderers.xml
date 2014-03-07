@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="checkout.cart.sidebar.item.renderers">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml" cacheable="false"/>
+        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml"/>
     </referenceBlock>
 </layout>

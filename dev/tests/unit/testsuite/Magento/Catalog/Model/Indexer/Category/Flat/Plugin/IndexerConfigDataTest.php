@@ -37,9 +37,9 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
     protected $stateMock;
 
     /**
-     * @var \Magento\Code\Plugin\InvocationChain|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $chainMock;
+    protected $subjectMock;
 
     protected function setUp()
     {
@@ -47,9 +47,7 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Indexer\Category\Flat\State', array('isFlatEnabled'), array(), '', false
         );
 
-        $this->chainMock = $this->getMock(
-            'Magento\Code\Plugin\InvocationChain', array('proceed'), array(), '', false
-        );
+        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Config\Data', array(), array(), '', false);
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData(
             $this->stateMock
@@ -58,23 +56,21 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $isFlat
-     * @param array $arguments
+     * @param string $path
+     * @param mixed $default
      * @param array $inputData
      * @param array $outputData
      * @dataProvider aroundGetDataProvider
      */
-    public function testAroundGet($isFlat, array $arguments, $inputData, $outputData)
+    public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
         $this->stateMock->expects($this->once())
             ->method('isFlatEnabled')
             ->will($this->returnValue($isFlat));
-
-        $this->chainMock->expects($this->once())
-            ->method('proceed')
-            ->with($arguments)
-            ->will($this->returnValue($inputData));
-
-        $this->assertEquals($outputData, $this->model->aroundGet($arguments, $this->chainMock));
+        $closureMock = function () use ($inputData) {
+            return $inputData;
+        };
+        $this->assertEquals($outputData, $this->model->aroundGet($this->subjectMock, $closureMock, $path, $default));
     }
 
     public function aroundGetDataProvider()
@@ -95,42 +91,48 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
             // flat is enabled, nothing is being changed
             array(
                 true,
-                array(),
+                null,
+                null,
                 array('catalog_category_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('catalog_category_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is absent, flat indexer is being removed
             array(
                 false,
-                array(),
+                null,
+                null,
                 array('catalog_category_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is null, flat indexer is being removed
             array(
                 false,
-                array('path' => null),
+                null,
+                null,
                 array('catalog_category_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is flat indexer, flat indexer is being removed
             array(
                 false,
-                array('path' => 'catalog_category_flat'),
+                'catalog_category_flat',
+                null,
                 $flatIndexerData,
                 null,
             ),
             // flat is disabled, path is flat indexer, default is array(), flat indexer is being array()
             array(
                 false,
-                array('path' => 'catalog_category_flat', 'default' => array()),
-                $flatIndexerData,
+                'catalog_category_flat',
                 array(),
+                $flatIndexerData,
+                null,
             ),
             // flat is disabled, path is other indexer, nothing is being changed
             array(
                 false,
-                array('path' => 'other_indexer'),
+                'other_indexer',
+                null,
                 $otherIndexerData,
                 $otherIndexerData,
             ),

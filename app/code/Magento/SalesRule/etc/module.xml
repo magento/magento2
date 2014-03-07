@@ -45,6 +45,7 @@
             <module name="Magento_Reports"/>
             <module name="Magento_CatalogRule"/>
             <module name="Magento_Widget"/>
+            <module name="Magento_Cron"/>
         </depends>
     </module>
 </config>

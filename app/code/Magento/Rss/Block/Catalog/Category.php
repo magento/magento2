@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Catalog;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Catalog;
-
 class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
 {
     /**
@@ -94,6 +93,9 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
         parent::__construct($context, $customerSession, $catalogData, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         /*
@@ -107,6 +109,9 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $this->setCacheLifetime(600);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $categoryId = $this->getRequest()->getParam('cid');
@@ -134,7 +139,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
                 $_collection->addAttributeToSelect('url_key')
                     ->addAttributeToSelect('name')
                     ->addAttributeToSelect('is_anchor')
-                    ->addAttributeToFilter('is_active',1)
+                    ->addAttributeToFilter('is_active', 1)
                     ->addIdFilter($category->getChildren())
                     ->load()
                 ;
@@ -151,7 +156,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
                 */
                 $_productCollection = $currentCategory
                     ->getProductCollection()
-                    ->addAttributeToSort('updated_at','desc')
+                    ->addAttributeToSort('updated_at', 'desc')
                     ->setVisibility($this->_visibility->getVisibleInCatalogIds())
                     ->setCurPage(1)
                     ->setPageSize(50)
@@ -173,6 +178,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * Preparing data and adding to rss object
      *
      * @param array $args
+     * @return void
      */
     public function addNewItemXmlCallback($args)
     {
@@ -194,7 +200,7 @@ class Category extends \Magento\Rss\Block\Catalog\AbstractCatalog
                      . '<td  style="text-decoration:none;">' . $product->getDescription();
 
         if ($product->getAllowedPriceInRss()) {
-            $description.= $this->getPriceHtml($product,true);
+            $description.= $this->getPriceHtml($product, true);
         }
 
         $description .= '</td></tr></table>';

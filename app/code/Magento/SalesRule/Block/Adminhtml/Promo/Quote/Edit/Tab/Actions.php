@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Actions
@@ -72,9 +71,7 @@ class Actions
     }
 
     /**
-     * Prepare content for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -82,9 +79,7 @@ class Actions
     }
 
     /**
-     * Prepare title for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -92,9 +87,7 @@ class Actions
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
-     *
-     * @return true
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -102,15 +95,18 @@ class Actions
     }
 
     /**
-     * Returns status flag about this tab hidden or not
-     *
-     * @return true
+     * {@inheritdoc}
      */
     public function isHidden()
     {
         return false;
     }
 
+    /**
+     * Prepare form before rendering HTML
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
@@ -157,17 +153,6 @@ class Actions
             'title'     => __('Apply to Shipping Amount'),
             'name'      => 'apply_to_shipping',
             'values'    => $this->_sourceYesno->toOptionArray(),
-        ));
-
-        $fieldset->addField('simple_free_shipping', 'select', array(
-            'label'     => __('Free Shipping'),
-            'title'     => __('Free Shipping'),
-            'name'      => 'simple_free_shipping',
-            'options'    => array(
-                0 => __('No'),
-                \Magento\SalesRule\Model\Rule::FREE_SHIPPING_ITEM => __('For matching items only'),
-                \Magento\SalesRule\Model\Rule::FREE_SHIPPING_ADDRESS => __('For shipment with matching items'),
-            ),
         ));
 
         $fieldset->addField('stop_rules_processing', 'select', array(

@@ -36,9 +36,9 @@ namespace Magento\Core\Model\Resource\Translate;
 class String extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -47,16 +47,16 @@ class String extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
-        $this->_locale = $locale;
+        $this->_localeResolver = $localeResolver;
         $this->_storeManager = $storeManager;
     }
 
@@ -203,7 +203,7 @@ class String extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function deleteTranslate($string, $locale = null, $storeId = null)
     {
         if (is_null($locale)) {
-            $locale = $this->_locale->getLocaleCode();
+            $locale = $this->_localeResolver->getLocaleCode();
         }
 
         $where = array(
@@ -237,7 +237,7 @@ class String extends \Magento\Core\Model\Resource\Db\AbstractDb
         $table = $this->getMainTable();
 
         if (is_null($locale)) {
-            $locale = $this->_locale->getLocaleCode();
+            $locale = $this->_localeResolver->getLocaleCode();
         }
 
         if (is_null($storeId)) {

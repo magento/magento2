@@ -60,9 +60,9 @@ function updateFieldForTable($objectManager, $table, $col)
     $installer->startSetup();
 
     $table = $installer->getTable($table);
-    print '-----' . "\n";
+    echo '-----' . "\n";
     if ($installer->getConnection()->isTableExists($table)) {
-        print 'Table `' . $table . "` processed\n";
+        echo 'Table `' . $table . "` processed\n";
 
         $indexList = $installer->getConnection()->getIndexList($table);
         $pkField = array_shift($indexList[$installer->getConnection()->getPrimaryKeyName($table)]['fields']);
@@ -70,7 +70,7 @@ function updateFieldForTable($objectManager, $table, $col)
         $select = $installer->getConnection()->select()->from($table, array('id' => $pkField, 'content' => $col));
         $result = $installer->getConnection()->fetchPairs($select);
 
-        print 'Records count: ' . count($result) . ' in table: `' . $table . "`\n";
+        echo 'Records count: ' . count($result) . ' in table: `' . $table . "`\n";
 
         $logMessages = array();
         foreach ($result as $recordId => $string) {
@@ -87,10 +87,10 @@ function updateFieldForTable($objectManager, $table, $col)
             printLog($logMessages);
         }
     } else {
-        print 'Table `' . $table . "` was not found\n";
+        echo 'Table `' . $table . "` was not found\n";
     }
     $installer->endSetup();
-    print '-----' . "\n";
+    echo '-----' . "\n";
 }
 
 /**
@@ -101,8 +101,8 @@ function updateFieldForTable($objectManager, $table, $col)
 function printLog($logMessages)
 {
     foreach ($logMessages as $stringsArray) {
-        print "\n";
-        print implode("\n", $stringsArray);
-        print "\n";
+        echo "\n";
+        echo implode("\n", $stringsArray);
+        echo "\n";
     }
 }

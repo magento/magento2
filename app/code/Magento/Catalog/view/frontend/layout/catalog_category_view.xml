@@ -83,6 +83,13 @@
                 </action>
             </block>
         </block>
+        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                        <item name="compareProductLink" xsi:type="string">.action.tocompare</item>
+                </argument>
+            </arguments>
+        </block>
     </referenceContainer>
     <update handle="MAP_popup"/>
 </layout>

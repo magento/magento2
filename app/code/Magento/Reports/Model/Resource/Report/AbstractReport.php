@@ -49,9 +49,9 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Reports\Model\FlagFactory
@@ -61,7 +61,7 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
@@ -69,14 +69,14 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
     ) {
         parent::__construct($resource);
         $this->_logger = $logger;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_reportsFlagFactory = $reportsFlagFactory;
         $this->dateTime = $dateTime;
         $this->timezoneValidator = $timezoneValidator;
@@ -393,7 +393,7 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         $periods = $this->_getTZOffsetTransitions(
-            $this->_locale->storeDate($store)->toString(\Zend_Date::TIMEZONE_NAME), $from, $to
+            $this->_localeDate->scopeDate($store)->toString(\Zend_Date::TIMEZONE_NAME), $from, $to
         );
         if (empty($periods)) {
             return $column;
@@ -431,17 +431,17 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
         $tzTransitions = array();
         try {
             if (!empty($from)) {
-                $from = new \Zend_Date($from, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                $from = new \Magento\Stdlib\DateTime\Date($from, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                 $from = $from->getTimestamp();
             }
 
-            $to = new \Zend_Date($to, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $to = new \Magento\Stdlib\DateTime\Date($to, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             $nextPeriod = $this->_getWriteAdapter()->formatDate($to->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
             $to = $to->getTimestamp();
 
             $dtz = new \DateTimeZone($timezone);
             $transitions = $dtz->getTransitions();
-            $dateTimeObject = new \Zend_Date('c');
+            $dateTimeObject = new \Magento\Stdlib\DateTime\Date('c');
 
             for ($i = count($transitions) - 1; $i >= 0; $i--) {
                 $tr = $transitions[$i];
@@ -476,21 +476,21 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getStoreTimezoneUtcOffset($store = null)
     {
-        return $this->_locale->storeDate($store)->toString(\Zend_Date::GMT_DIFF_SEP);
+        return $this->_localeDate->scopeDate($store)->toString(\Zend_Date::GMT_DIFF_SEP);
     }
 
     /**
      * Retrieve date in UTC timezone
      *
      * @param mixed $date
-     * @return null|\Zend_Date
+     * @return null|\Magento\Stdlib\DateTime\DateInterface
      */
     protected function _dateToUtc($date)
     {
         if ($date === null) {
             return null;
         }
-        $dateUtc = new \Zend_Date($date);
+        $dateUtc = new \Magento\Stdlib\DateTime\Date($date);
         $dateUtc->setTimezone('Etc/UTC');
         return $dateUtc;
     }

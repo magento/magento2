@@ -112,7 +112,7 @@ class Observer
     protected $_productFactory;
 
     /**
-     * @var \Magento\Core\Model\DateFactory
+     * @var \Magento\Stdlib\DateTime\DateTimeFactory
      */
     protected $_dateFactory;
 
@@ -143,7 +143,7 @@ class Observer
      * @param \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\DateFactory $dateFactory
+     * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory
      * @param \Magento\TranslateInterface $translate
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
@@ -156,7 +156,7 @@ class Observer
         \Magento\ProductAlert\Model\Resource\Price\CollectionFactory $priceColFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\DateFactory $dateFactory,
+        \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
         \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory,
         \Magento\TranslateInterface $translate,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,

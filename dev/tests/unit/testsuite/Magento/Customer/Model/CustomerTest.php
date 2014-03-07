@@ -49,15 +49,15 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Model\Store\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $_coreStoreConfigMock;
 
-    /** @var \Magento\Mail\Template\TransportBuilder|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportBuilderMock;
 
-    /** @var \Magento\Mail\TransportInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
-    /**
-     * Set required values
-     */
+    /** @var \Magento\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_encryptor;
+
     protected function setUp()
     {
         $this->_website = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
@@ -74,14 +74,26 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_transportMock = $this->getMock('Magento\Mail\TransportInterface', array(), array(), '', false);
+        $this->_encryptor = $this->getMock('Magento\Encryption\EncryptorInterface');
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject('Magento\Customer\Model\Customer', array(
             'storeManager' => $this->_storeManager,
             'config' =>  $this->_config,
             'transportBuilder' => $this->_transportBuilderMock,
-            'coreStoreConfig' => $this->_coreStoreConfigMock
-            )
-        );
+            'coreStoreConfig' => $this->_coreStoreConfigMock,
+            'encryptor' => $this->_encryptor,
+        ));
+    }
+
+    public function testHashPassword()
+    {
+        $this->_encryptor
+            ->expects($this->once())
+            ->method('getHash')
+            ->with('password', 'salt')
+            ->will($this->returnValue('hash'))
+        ;
+        $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
     }
 
     public function testSendPasswordResetConfirmationEmail()

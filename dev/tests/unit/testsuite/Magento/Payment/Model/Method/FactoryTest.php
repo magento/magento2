@@ -69,7 +69,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Core\Exception
-     * @expectedExceptionMessage WrongClass class doesn't extend \Magento\Payment\Model\Method\AbstractMethod
+     * @expectedExceptionMessage WrongClass class doesn't implement \Magento\Payment\Model\MethodInterface
      */
     public function testWrongTypeException()
     {

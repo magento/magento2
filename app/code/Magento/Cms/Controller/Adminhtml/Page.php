@@ -42,19 +42,19 @@ class Page extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Core\Filter\Date
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
-        \Magento\Core\Filter\Date $dateFilter
+        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_dateFilter = $dateFilter;

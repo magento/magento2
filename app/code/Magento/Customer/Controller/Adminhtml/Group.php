@@ -18,15 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Controller\Adminhtml;
 
+use Magento\Customer\Controller\RegistryConstants;
 use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Service\V1\Dto\CustomerGroup;
+use Magento\Customer\Service\V1\Dto\CustomerGroupBuilder;
 
 /**
  * Customer groups controller
@@ -41,26 +42,28 @@ class Group extends \Magento\Backend\App\Action
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var CustomerGroupServiceInterface
      */
     protected $_groupService;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder
+     * @var CustomerGroupBuilder
      */
     protected $_customerGroupBuilder;
 
     /**
+     * Initialize Group Controller
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $customerGroupBuilder
+     * @param CustomerGroupServiceInterface $groupService
+     * @param CustomerGroupBuilder $customerGroupBuilder
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $customerGroupBuilder
+        CustomerGroupServiceInterface $groupService,
+        CustomerGroupBuilder $customerGroupBuilder
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_groupService = $groupService;
@@ -68,22 +71,25 @@ class Group extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    /**
+     * Initialize current group and set it in the registry.
+     *
+     * @return int
+     */
     protected function _initGroup()
     {
         $this->_title->add(__('Customer Groups'));
 
-        $currentGroup = null;
         $groupId = $this->getRequest()->getParam('id');
-        if (!is_null($groupId)) {
-            $currentGroup = $this->_groupService->getGroup($groupId);
-        } else {
-            $currentGroup = $this->_customerGroupBuilder->create();
-        }
-        $this->_coreRegistry->register('current_group', $currentGroup);
+        $this->_coreRegistry->register(RegistryConstants::CURRENT_GROUP_ID, $groupId);
+
+        return $groupId;
     }
 
     /**
      * Customer groups list.
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -98,34 +104,37 @@ class Group extends \Magento\Backend\App\Action
 
     /**
      * Edit or create customer group.
+     *
+     * @return void
      */
     public function newAction()
     {
-        $this->_initGroup();
+        $groupId = $this->_initGroup();
+
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Customer::customer_group');
         $this->_addBreadcrumb(__('Customers'), __('Customers'));
         $this->_addBreadcrumb(__('Customer Groups'), __('Customer Groups'), $this->getUrl('customer/group'));
 
-        /** @var \Magento\Customer\Service\V1\Dto\CustomerGroup $currentGroup */
-        $currentGroup = $this->_coreRegistry->registry('current_group');
-
-        if (!is_null($currentGroup->getId())) {
-            $this->_addBreadcrumb(__('Edit Group'), __('Edit Customer Groups'));
-        } else {
+        if (is_null($groupId)) {
             $this->_addBreadcrumb(__('New Group'), __('New Customer Groups'));
+            $this->_title->add(__('New Customer Group'));
+        } else {
+            $this->_addBreadcrumb(__('Edit Group'), __('Edit Customer Groups'));
+            $this->_title->add($this->_groupService->getGroup($groupId)->getCode());
         }
 
-        $this->_title->add($currentGroup->getId() ? $currentGroup->getCode() : __('New Customer Group'));
-
-        $this->_view->getLayout()->addBlock('Magento\Customer\Block\Adminhtml\Group\Edit', 'group', 'content')
-            ->setEditMode((bool)$this->_coreRegistry->registry('current_group')->getId());
+        $this->_view->getLayout()
+            ->addBlock('Magento\Customer\Block\Adminhtml\Group\Edit', 'group', 'content')
+            ->setEditMode((bool)$groupId);
 
         $this->_view->renderLayout();
     }
 
     /**
      * Edit customer group action. Forward to new action.
+     *
+     * @return void
      */
     public function editAction()
     {
@@ -134,11 +143,14 @@ class Group extends \Magento\Backend\App\Action
 
     /**
      * Create or save customer group.
+     *
+     * @return void
      */
     public function saveAction()
     {
         $taxClass = (int)$this->getRequest()->getParam('tax_class');
 
+        /** @var CustomerGroup $customerGroup */
         $customerGroup = null;
         if ($taxClass) {
             $id = $this->getRequest()->getParam('id');
@@ -154,17 +166,16 @@ class Group extends \Magento\Backend\App\Action
                 $this->_customerGroupBuilder->setTaxClassId($taxClass);
                 $customerGroup = $this->_customerGroupBuilder->create();
 
-                $this->_groupService->saveGroup($customerGroup);
+                $id = $this->_groupService->saveGroup($customerGroup);
                 $this->messageManager->addSuccess(__('The customer group has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl('customer/group'));
                 return;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 if ($customerGroup != null) {
-                    $this->_objectManager->get('Magento\Session\SessionManagerInterface')
-                        ->setCustomerGroupData($customerGroup->getData());
+                    $this->_coreRegistry->register(RegistryConstants::CURRENT_GROUP_ID, $id);
                 }
-                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', array('id' => $id)));
+                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', ['id' => $id]));
                 return;
             }
         } else {
@@ -173,39 +184,37 @@ class Group extends \Magento\Backend\App\Action
     }
 
     /**
-     * Delete customer group action
+     * Delete customer group.
+     *
+     * @return void
      */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
         if ($id) {
-            /** @var \Magento\Customer\Model\Group $customerGroup */
-            $customerGroup = $this->_objectManager->create('Magento\Customer\Model\Group')->load($id);
-            if (!$customerGroup->getId()) {
-                $this->messageManager->addError(__('The customer group no longer exists.'));
-                $this->_redirect('customer/*/');
-                return;
-            }
             try {
                 $this->_groupService->deleteGroup($id);
                 $this->messageManager->addSuccess(__('The customer group has been deleted.'));
                 $this->getResponse()->setRedirect($this->getUrl('customer/group'));
                 return;
             } catch (NoSuchEntityException $e) {
-                $this->_objectManager->get('Magento\Adminhtml\Model\Session')
-                    ->addError(__('The customer group no longer exists.'));
-                $this->_redirect('adminhtml/*/');
+                $this->messageManager->addError(__('The customer group no longer exists.'));
+                $this->getResponse()->setRedirect($this->getUrl('customer/*/'));
                 return;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', array('id' => $id)));
+                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', ['id' => $id]));
                 return;
             }
         }
-
         $this->_redirect('customer/group');
     }
 
+    /**
+     * Determine if authorized to perform group actions.
+     *
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Customer::group');

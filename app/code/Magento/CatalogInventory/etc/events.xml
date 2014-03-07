@@ -57,7 +57,7 @@
     <event name="sales_model_service_quote_submit_failure">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="revertQuoteInventory" />
     </event>
-    <event name="paypal_payment_cancel">
+    <event name="restore_quote">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="revertQuoteInventory" />
     </event>
     <event name="sales_order_item_cancel">

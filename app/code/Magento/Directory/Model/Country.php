@@ -46,9 +46,9 @@ class Country extends \Magento\Core\Model\AbstractModel
     static public $_format = array();
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
      * @var \Magento\Directory\Model\Country\FormatFactory
@@ -63,9 +63,9 @@ class Country extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Directory\Model\Country\FormatFactory $formatFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Locale\ListsInterface $localeLists
+     * @param Country\FormatFactory $formatFactory
+     * @param Resource\Region\CollectionFactory $regionCollectionFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -73,7 +73,7 @@ class Country extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -83,7 +83,7 @@ class Country extends \Magento\Core\Model\AbstractModel
         parent::__construct(
             $context, $registry, $resource, $resourceCollection, $data
         );
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
         $this->_formatFactory = $formatFactory;
         $this->_regionCollectionFactory = $regionCollectionFactory;
     }
@@ -220,7 +220,7 @@ T: {{telephone}}";
     public function getName()
     {
         if (!$this->getData('name')) {
-            $this->setData('name', $this->_locale->getCountryTranslation($this->getId()));
+            $this->setData('name', $this->_localeLists->getCountryTranslation($this->getId()));
         }
         return $this->getData('name');
     }

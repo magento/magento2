@@ -71,4 +71,21 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->assertEquals(false, $this->view->shouldRenderQuantity());
     }
+
+    public function testGetIdentities()
+    {
+        $productTags = array('catalog_product_1');
+        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $product->expects($this->once())
+            ->method('getIdentities')
+            ->will($this->returnValue($productTags));
+        $this->registryMock->expects($this->any())
+            ->method('registry')
+            ->with('product')
+            ->will($this->returnValue($product));
+        $this->assertEquals(
+            $productTags,
+            $this->view->getIdentities()
+        );
+    }
 }

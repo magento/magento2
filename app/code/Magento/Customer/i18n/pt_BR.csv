@@ -176,7 +176,7 @@
 "If there is an account associated with %s you will receive an email with a link to reset your password.","Se houver uma conta associada a %s você receberá um email com um link para reconfigurar a sua senha."
 "If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you billing address for proper VAT calculation","Se você é um cliente com VAT registrado, por favor, clique em <a href=""%s"">here</a> para inserir o seu endereço de cobrança para cálculo de VAT."
 "If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you shipping address for proper VAT calculation","Se você é um cliente com VAT registrado, por favor, clique em <a href=""%s"">here</a> para inserir o seu endereço de envio para cálculo de VAT."
-"If you believe this is an error, please contact us at %s","Se você considera isso um erro, entre em contato conosco em %s"
+"If you believe this is an error, please contact us at %1","Se você considera isso um erro, entre em contato conosco em %1"
 "If you have an account with us, please log in.","Se você possui uma conta conosco, por favor, faça seu login"
 "Invalid attribute option specified for attribute %s (%s), skipping the record.","Opção de atributo inválida para atributo %s (%s). Saltando o registro."
 "Invalid attribute set specified, skipping the record.","Conjunto especificado de atributo inválido, ignorando o registro."

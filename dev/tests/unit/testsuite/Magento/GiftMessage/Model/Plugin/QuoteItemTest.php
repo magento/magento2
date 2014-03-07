@@ -25,42 +25,60 @@ namespace Magento\GiftMessage\Model\Plugin;
 
 class QuoteItemTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Bundle\Model\Plugin\QuoteItem */
+    /**
+     * @var \Magento\Bundle\Model\Plugin\QuoteItem
+     */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_quoteItemMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteItemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_invocationChainMock;
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_orderItemMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderItemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_helperMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $helperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
 
     protected function setUp()
     {
-        $this->_orderItemMock = $this->getMock(
+        $this->orderItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Item',
             array('setGiftMessageId', 'setGiftMessageAvailable', '__wakeup'),
             array(),
             '',
             false
         );
-        $this->_quoteItemMock = $this->getMock(
+        $this->quoteItemMock = $this->getMock(
             'Magento\Sales\Model\Quote\Item',
             array('getGiftMessageId', 'getStoreId', '__wakeup'),
             array(),
             '',
             false
         );
-        $this->_invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain',
-            array(), array(), '', false);
-        $this->_helperMock = $this->getMock('Magento\GiftMessage\Helper\Message',
+        $orderItems = $this->orderItemMock;
+        $this->closureMock = function () use ($orderItems) {
+            return $orderItems;
+        };
+        $this->subjectMock = $this->getMock('Magento\Sales\Model\Convert\Quote', array(), array(), '', false);
+        $this->helperMock = $this->getMock('Magento\GiftMessage\Helper\Message',
             array('setGiftMessageId', 'isMessagesAvailable'), array(), '', false);
-        $this->_model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->_helperMock);
+        $this->model = new \Magento\GiftMessage\Model\Plugin\QuoteItem($this->helperMock);
     }
 
     public function testAroundItemToOrderItem()
@@ -69,28 +87,26 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $giftMessageId = 1;
         $isMessageAvailable = true;
 
-        $this->_invocationChainMock->expects($this->once())->method('proceed')
-            ->will($this->returnValue($this->_orderItemMock));
-        $this->_quoteItemMock->expects($this->any())
+        $this->quoteItemMock->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue($storeId));
-        $this->_quoteItemMock->expects($this->any())
+        $this->quoteItemMock->expects($this->any())
             ->method('getGiftMessageId')
             ->will($this->returnValue($giftMessageId));
 
-        $this->_helperMock->expects($this->once())->method('isMessagesAvailable')
-            ->with('item', $this->_quoteItemMock, $storeId)
+        $this->helperMock->expects($this->once())->method('isMessagesAvailable')
+            ->with('item', $this->quoteItemMock, $storeId)
             ->will($this->returnValue($isMessageAvailable));
-        $this->_orderItemMock->expects($this->once())
+        $this->orderItemMock->expects($this->once())
             ->method('setGiftMessageId')
             ->with($giftMessageId);
-        $this->_orderItemMock->expects($this->once())
+        $this->orderItemMock->expects($this->once())
             ->method('setGiftMessageAvailable')
             ->with($isMessageAvailable);
 
         $this->assertSame(
-            $this->_orderItemMock,
-            $this->_model->aroundItemToOrderItem(array($this->_quoteItemMock), $this->_invocationChainMock)
+            $this->orderItemMock,
+            $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock)
         );
 
     }

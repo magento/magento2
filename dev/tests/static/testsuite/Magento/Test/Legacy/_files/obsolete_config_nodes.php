@@ -30,13 +30,13 @@ return array(
     '/config/global/cache/betatypes'           => '',
     '/config/admin/fieldsets'                  => '',
     '/config/general/locale'                   =>
-        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+        'This configuration moved to Di configuration of \Magento\Locale\ConfigInterface',
     '/config/global/can_use_base_url'          =>
         'This configuration moved to Di configuration of \Magento\Backend\App\Action\Context class',
     '/config/global/locale/allow/codes'        =>
-        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+        'This configuration moved to Di configuration of \Magento\Locale\ConfigInterface',
     '/config/global/locale/allow/currencies'   =>
-        'This configuration moved to Di configuration of \Magento\Core\Model\Locale\Config model',
+        'This configuration moved to Di configuration of \Magento\Locale\ConfigInterface',
     '/config/global/mime/types'                =>
         'This configuration moved to Di configuration for \Magento\Downloadable\Helper\File class',
     '/config/global/models/*/deprecatedNode'   => '',

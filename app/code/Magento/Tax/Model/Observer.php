@@ -54,9 +54,9 @@ class Observer
     protected $_calculation;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Tax\Model\Resource\Report\TaxFactory
@@ -64,27 +64,35 @@ class Observer
     protected $_reportTaxFactory;
 
     /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
      * @param \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory
      * @param \Magento\Tax\Model\Calculation $calculation
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory,
         \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory,
         \Magento\Tax\Model\Calculation $calculation,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory,
+        \Magento\Locale\ResolverInterface $localeResolver
     ) {
         $this->_taxData = $taxData;
         $this->_orderTaxFactory = $orderTaxFactory;
         $this->_taxItemFactory = $taxItemFactory;
         $this->_calculation = $calculation;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_reportTaxFactory = $reportTaxFactory;
+        $this->_localeResolver = $localeResolver;
     }
 
     /**
@@ -254,13 +262,13 @@ class Observer
      */
     public function aggregateSalesReportTaxData($schedule)
     {
-        $this->_locale->emulate(0);
-        $currentDate = $this->_locale->date();
+        $this->_localeResolver->emulate(0);
+        $currentDate = $this->_localeDate->date();
         $date = $currentDate->subHour(25);
         /** @var $reportTax \Magento\Tax\Model\Resource\Report\Tax */
         $reportTax = $this->_reportTaxFactory->create();
         $reportTax->aggregate($date);
-        $this->_locale->revert();
+        $this->_localeResolver->revert();
         return $this;
     }
 

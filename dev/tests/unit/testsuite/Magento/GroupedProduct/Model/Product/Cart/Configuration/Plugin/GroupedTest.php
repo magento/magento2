@@ -34,17 +34,26 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invocationChainMock;
+    protected $productMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productMock;
+    protected $subjectMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
 
     protected function setUp()
     {
-        $this->invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->subjectMock =
+            $this->getMock('Magento\Catalog\Model\Product\CartConfiguration', array(), array(), '', false);
+        $this->closureMock = function () {
+            return 'Expected';
+        };
         $this->groupedPlugin = new \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped();
     }
 
@@ -55,10 +64,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getTypeId')
             ->will($this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE));
-        $this->invocationChainMock->expects($this->never())->method('proceed');
         $this->assertEquals(true,
-            $this->groupedPlugin->aroundIsProductConfigured(
-                array($this->productMock, $config), $this->invocationChainMock));
+            $this->groupedPlugin->aroundIsProductConfigured( $this->subjectMock, $this->closureMock,
+                $this->productMock, $config));
     }
 
     public function testAroundIsProductConfiguredWhenProductIsNotGrouped()
@@ -67,9 +75,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->productMock
             ->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue('product'));
-        $this->invocationChainMock->expects($this->once())->method('proceed')->with(array($this->productMock, $config));
-        $this->groupedPlugin->aroundIsProductConfigured(array($this->productMock, $config), $this->invocationChainMock);
+            ->will($this->returnValue('product'));;
+        $this->assertEquals('Expected',
+           $this->groupedPlugin->aroundIsProductConfigured( $this->subjectMock, $this->closureMock,
+               $this->productMock, $config));
     }
 }
 

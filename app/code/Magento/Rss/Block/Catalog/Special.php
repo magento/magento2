@@ -23,18 +23,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Catalog;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Catalog;
-
 class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
 {
     /**
-     * \Zend_Date object for date comparsions
+     * \Magento\Stdlib\DateTime\DateInterface object for date comparsions
      *
-     * @var \Zend_Date
+     * @var \Magento\Stdlib\DateTime\Date
      */
     protected static $_currentDate = null;
 
@@ -101,6 +100,9 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         parent::__construct($context, $customerSession, $catalogData, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         /*
@@ -110,6 +112,9 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $this->setCacheLifetime(600);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
          //store id is store view id
@@ -183,7 +188,7 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
                         if ($result['use_special']) {
                             $special = '<br />' . __('Special Expires On: %1',
                                     $this->formatDate($result['special_to_date'],
-                                        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM));
+                                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM));
                         }
                         $html .= sprintf('<p>%s %s%s</p>',
                             __('Price: %1', $this->_coreData->currency($result['price'])),
@@ -209,11 +214,12 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * Preparing data and adding to rss object
      *
      * @param array $args
+     * @return void
      */
     public function addSpecialXmlCallback($args)
     {
         if (!isset(self::$_currentDate)) {
-            self::$_currentDate = new \Zend_Date();
+            self::$_currentDate = new \Magento\Stdlib\DateTime\Date();
         }
 
         // dispatch event to determine whether the product will eventually get to the result
@@ -241,13 +247,12 @@ class Special extends \Magento\Rss\Block\Catalog\AbstractCatalog
         $args['results'][] = $row;
     }
 
-
     /**
      * Function for comparing two items in collection
      *
-     * @param $a
-     * @param $b
-     * @return  boolean
+     * @param array $a
+     * @param array $b
+     * @return bool
      */
     public function sortByStartDate($a, $b)
     {

@@ -25,7 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
-    <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
+    <preference for="Magento\Locale\ResolverInterface" type="Magento\Backend\Model\Locale\Resolver" />
     <preference for="Magento\App\Action\Context" type="Magento\Backend\App\Action\Context" />
     <preference for="Magento\UrlInterface" type="Magento\Backend\Model\UrlInterface" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
@@ -115,11 +115,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Core\App\Action\Plugin\Session">
-        <arguments>
-            <argument name="sessionNamespace" xsi:type="const">Magento\Backend\App\AbstractAction::SESSION_NAMESPACE</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\App\AbstractAction">
         <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
         <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
@@ -135,6 +130,12 @@
     <type name="Magento\Message\Manager">
         <arguments>
             <argument name="defaultGroup" xsi:type="string">backend</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translate">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+            <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
 </config>

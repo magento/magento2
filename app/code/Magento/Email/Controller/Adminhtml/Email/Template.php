@@ -143,7 +143,7 @@ class Template extends \Magento\Backend\App\Action
                 ->setTemplateCode($request->getParam('template_code'))
                 ->setTemplateText($request->getParam('template_text'))
                 ->setTemplateStyles($request->getParam('template_styles'))
-                ->setModifiedAt($this->_objectManager->get('Magento\Core\Model\Date')->gmtDate())
+                ->setModifiedAt($this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate())
                 ->setOrigTemplateCode($request->getParam('orig_template_code'))
                 ->setOrigTemplateVariables($request->getParam('orig_template_variables'));
 

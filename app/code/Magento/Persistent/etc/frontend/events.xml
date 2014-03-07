@@ -48,6 +48,7 @@
         <observer name="persistent_session" instance="Magento\Persistent\Model\Observer\Session" method="renewCookie" />
         <observer name="persistent_quote" instance="Magento\Persistent\Model\Observer" method="checkExpirePersistentQuote" />
         <observer name="persistent_customer" instance="Magento\Persistent\Model\Observer" method="emulateCustomer" />
+        <observer name="persistent_checkout" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="checkout_allow_guest">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="disableGuestCheckout" />
@@ -72,18 +73,6 @@
     </event>
     <event name="customer_register_success">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="removePersistentCookie" />
-    </event>
-    <event name="controller_action_predispatch_paypal_express_start">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
-    </event>
-    <event name="controller_action_predispatch_paypal_payflowexpress_start">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
-    </event>
-    <event name="controller_action_predispatch_googlecheckout_redirect_checkout">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
-    </event>
-    <event name="controller_action_predispatch_multishipping_checkout_index">
-        <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="preventExpressCheckout" />
     </event>
     <event name="render_block">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer" method="applyBlockPersistentData" />

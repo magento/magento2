@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 class Labels
@@ -31,9 +30,7 @@ class Labels
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Prepare content for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -41,9 +38,7 @@ class Labels
     }
 
     /**
-     * Prepare title for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -51,9 +46,7 @@ class Labels
     }
 
     /**
-     * Returns status flag about this tab can be showen or not
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -61,15 +54,18 @@ class Labels
     }
 
     /**
-     * Returns status flag about this tab hidden or not
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isHidden()
     {
         return false;
     }
 
+    /**
+     * Prepare form before rendering HTML
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $rule = $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
@@ -109,7 +105,7 @@ class Labels
      *
      * @param \Magento\Data\Form $form
      * @param array $labels
-     * @return \Magento\Data\Form\Element\Fieldset mixed
+     * @return \Magento\Data\Form\Element\Fieldset
      */
     protected function _createStoreSpecificFieldset($form, $labels)
     {

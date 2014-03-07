@@ -149,26 +149,32 @@ class Url
     protected $_urlFactory;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Resource\UrlFactory $urlFactory
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @var \Magento\Catalog\Model\Product\Url
+     */
+    protected $productUrl;
+
+    /**
+     * @param Resource\UrlFactory $urlFactory
+     * @param CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Product\Url $productUrl
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\UrlFactory $urlFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Catalog\Helper\Data $catalogData
+        \Magento\Catalog\Helper\Data $catalogData,
+        Product\Url $productUrl
     ) {
         $this->_urlFactory = $urlFactory;
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
+        $this->productUrl = $productUrl;
     }
 
     /**
@@ -236,16 +242,6 @@ class Url
     public function getCategoryModel()
     {
         return $this->getResource()->getCategoryModel();
-    }
-
-    /**
-     * Retrieve product model singleton
-     *
-     * @return \Magento\Catalog\Model\Product
-     */
-    public function getProductModel()
-    {
-        return $this->getResource()->getProductModel();
     }
 
     /**
@@ -395,9 +391,9 @@ class Url
             return $this;
         }
         if ($product->getUrlKey() == '') {
-            $urlKey = $this->getProductModel()->formatUrlKey($product->getName());
+            $urlKey = $this->productUrl->formatUrlKey($product->getName());
         } else {
-            $urlKey = $this->getProductModel()->formatUrlKey($product->getUrlKey());
+            $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
         }
 
         $idPath      = $this->generatePath('id', $product, $category);
@@ -819,9 +815,9 @@ class Url
     public function getProductRequestPath($product, $category)
     {
         if ($product->getUrlKey() == '') {
-            $urlKey = $this->getProductModel()->formatUrlKey($product->getName());
+            $urlKey = $this->productUrl->formatUrlKey($product->getName());
         } else {
-            $urlKey = $this->getProductModel()->formatUrlKey($product->getUrlKey());
+            $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
         }
         $storeId = $category->getStoreId();
         $suffix  = $this->getProductUrlSuffix($storeId);
@@ -956,9 +952,9 @@ class Url
             }
 
             if ($product->getUrlKey() == '') {
-                $urlKey = $this->getProductModel()->formatUrlKey($product->getName());
+                $urlKey = $this->productUrl->formatUrlKey($product->getName());
             } else {
-                $urlKey = $this->getProductModel()->formatUrlKey($product->getUrlKey());
+                $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
             }
             $productUrlSuffix  = $this->getProductUrlSuffix($category->getStoreId());
             if ($category->getLevel() > 1) {

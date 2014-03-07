@@ -44,7 +44,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testToTimestamp()
     {
-        $date = new \Zend_Date();
+        $date = new \Magento\Stdlib\DateTime\Date();
         $dateTime = new \Magento\Stdlib\DateTime;
         $this->assertEquals($date->getTimestamp(), $dateTime->toTimestamp($date));
 
@@ -87,7 +87,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     {
         // Take care when calling date here as it can be called much earlier than when testFormatDate
         // executes thus causing a discrepancy in the actual vs expected time. See MAGETWO-10296
-        $date = new \Zend_Date();
+        $date = new \Magento\Stdlib\DateTime\Date();
         return array(
             'null' => array(null, false, ''),
             'null including Time' => array(null, true, ''),

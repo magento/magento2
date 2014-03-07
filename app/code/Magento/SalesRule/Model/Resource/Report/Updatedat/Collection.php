@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report\Updatedat;
 
 /**
  * Sales report coupons collection
@@ -32,8 +32,6 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report\Updatedat;
-
 class Collection
     extends \Magento\SalesRule\Model\Resource\Report\Collection
 {

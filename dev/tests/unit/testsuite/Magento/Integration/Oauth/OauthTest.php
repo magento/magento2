@@ -55,7 +55,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var  \Zend_Oauth_Http_Utility */
     private $_httpUtilityMock;
 
-    /** @var \Magento\Core\Model\Date */
+    /** @var \Magento\Stdlib\DateTime\DateTime */
     private $_dateMock;
 
     private $_oauthToken;
@@ -130,7 +130,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_httpUtilityMock = $this->getMockBuilder('Zend_Oauth_Http_Utility')
             ->setMethods(array('sign'))
             ->getMock();
-        $this->_dateMock = $this->getMockBuilder('Magento\Core\Model\Date')
+        $this->_dateMock = $this->getMockBuilder('Magento\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
 

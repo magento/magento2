@@ -152,18 +152,38 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method($method)
             ->will($this->returnValue($testValue));
-        $this->_outputMock->expects($this->once())->method('export')->with($testValue);
+        $this->_outputMock->expects($this->once())->method('readableOutput')->with($testValue);
+        $this->_outputMock->expects($this->once())
+            ->method('prepareArray')->with($testValue)->will($this->returnArgument(0));
         $this->assertEquals($this->_responseMock, $model->launch());
     }
 
     public function executeShowsRequestedDataProvider()
     {
         return array(
-            array('show_locales', 'getAvailableLocales', 'locales'),
-            array('show_currencies', 'getAvailableCurrencies', 'currencies'),
-            array('show_timezones', 'getAvailableTimezones', 'timezones'),
-            array('show_install_options', 'getAvailableInstallOptions', 'install_options'),
+            array('show_locales', 'getAvailableLocales', array('locales')),
+            array('show_currencies', 'getAvailableCurrencies', array('currencies')),
+            array('show_timezones', 'getAvailableTimezones', array('timezones')),
         );
+    }
+
+    public function testLaunchShowsInstallOptions()
+    {
+        $required = array('required params');
+        $optional = array('optional params');
+
+        $model = $this->_createModel(array('show_install_options' => true));
+        $this->_installerMock
+            ->expects($this->once())
+            ->method('getRequiredParams')
+            ->will($this->returnValue($required));
+        $this->_installerMock
+            ->expects($this->once())
+            ->method('getOptionalParams')
+            ->will($this->returnValue($optional));
+        $this->_outputMock->expects($this->exactly(2))->method('alignArrayKeys');
+        $this->_outputMock->expects($this->at(1))->method('alignArrayKeys')->with($required);
+        $this->assertEquals($this->_responseMock, $model->launch());
     }
 
     public function testInstallReportsSuccessMessage()

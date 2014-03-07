@@ -30,7 +30,7 @@ namespace Magento\Reports\Block\Product;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
+class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \Magento\View\Block\IdentityInterface
 {
     const XML_PATH_RECENTLY_VIEWED_COUNT    = 'catalog/recently_products/viewed_count';
 
@@ -81,5 +81,19 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
         }
         $this->setRecentlyViewedProducts($this->getItemsCollection());
         return parent::_toHtml();
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getItemsCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+        return $identities;
     }
 }

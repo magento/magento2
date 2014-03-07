@@ -56,20 +56,25 @@ class Less
     }
 
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return string|null
+     * @param \Magento\Css\PreProcessor\Less $subject
+     * @param \Closure $proceed
+     * @param \Magento\View\Publisher\FileInterface $publisherFile
+     * @param string $targetDirectory
+     *
+     * @return \Magento\View\Publisher\FileInterface|null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundProcess(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\View\Publisher\CssFile $publicationFile */
-        $publicationFile = $arguments[0];
-
-        if ($publicationFile->getSourcePath()) {
-            return $invocationChain->proceed($arguments);
+    public function aroundProcess(
+        \Magento\Css\PreProcessor\Less $subject,
+        \Closure $proceed,
+        \Magento\View\Publisher\FileInterface $publisherFile,
+        $targetDirectory
+    ) {
+        if ($publisherFile->getSourcePath()) {
+            return $proceed($publisherFile, $targetDirectory);
         }
 
-        $this->cacheManager->initializeCacheByType(Cache::IMPORT_CACHE, $publicationFile);
+        $this->cacheManager->initializeCacheByType(Cache::IMPORT_CACHE, $publisherFile);
 
         $cachedFile = $this->cacheManager->getCachedFile(Cache::IMPORT_CACHE);
         if ($cachedFile instanceof \Magento\View\Publisher\FileInterface) {
@@ -78,7 +83,7 @@ class Less
 
         try {
             /** @var \Magento\View\Publisher\FileInterface $result */
-            $result = $invocationChain->proceed($arguments);
+            $result = $proceed($publisherFile, $targetDirectory);
             $this->cacheManager->saveCache(Cache::IMPORT_CACHE, $result);
         } catch (Filesystem\FilesystemException $e) {
             $this->logger->logException($e);

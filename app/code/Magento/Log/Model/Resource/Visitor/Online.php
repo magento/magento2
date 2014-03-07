@@ -35,15 +35,15 @@ namespace Magento\Log\Model\Resource\Visitor;
 class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Core\Model\Date $date)
+    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime\DateTime $date)
     {
         $this->_date = $date;
         parent::__construct($resource);

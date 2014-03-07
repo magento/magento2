@@ -75,23 +75,32 @@ class Fault extends \RuntimeException
      */
     protected $_details = array();
 
-    /** @var \Magento\Core\Model\App */
+    /**
+     * @var \Magento\Core\Model\App
+     */
     protected $_application;
 
-    /** @var Server */
+    /**
+     * @var Server
+     */
     protected $_soapServer;
 
     /**
-     * Construct exception.
-     *
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Core\Model\App $application
      * @param Server $soapServer
      * @param \Magento\Webapi\Exception $previousException
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
         \Magento\Core\Model\App $application,
         Server $soapServer,
-        \Magento\Webapi\Exception $previousException
+        \Magento\Webapi\Exception $previousException,
+        \Magento\Locale\ResolverInterface $localeResolver
     ) {
         parent::__construct($previousException->getMessage(), $previousException->getCode(), $previousException);
         $this->_soapCode = $previousException->getOriginator();
@@ -99,6 +108,7 @@ class Fault extends \RuntimeException
         $this->_errorCode = $previousException->getCode();
         $this->_application = $application;
         $this->_soapServer = $soapServer;
+        $this->_localeResolver = $localeResolver;
         $this->_setFaultName($previousException->getName());
     }
 
@@ -209,7 +219,7 @@ class Fault extends \RuntimeException
      */
     public function getLanguage()
     {
-        return $this->_application->getLocale()->getLocale()->getLanguage();
+        return $this->_localeResolver->getLocale()->getLanguage();
     }
 
     /**

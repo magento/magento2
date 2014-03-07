@@ -23,6 +23,7 @@
  */
 
 namespace Magento\Install\App\Action\Plugin;
+use Magento\App\RequestInterface;
 
 class Design
 {
@@ -75,10 +76,13 @@ class Design
     /**
      * Initialize design
      *
-     * @param array $arguments
-     * @return array
+     * @param \Magento\Install\Controller\Action $subject
+     * @param RequestInterface $request
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(array $arguments = array())
+    public function beforeDispatch(\Magento\Install\Controller\Action $subject, RequestInterface $request)
     {
         $areaCode = $this->_layout->getArea();
         $area = $this->_app->getArea($areaCode);
@@ -91,6 +95,5 @@ class Design
 
         $area->detectDesign($this->_request);
         $area->load(\Magento\Core\Model\App\Area::PART_TRANSLATE);
-        return $arguments;
     }
 }

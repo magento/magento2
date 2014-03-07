@@ -99,7 +99,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'name'         => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
             'class'        => 'input-text input-text-range-date',
-            'date_format'  => $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT),
+            'date_format'  => $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT),
             'image'        => $this->getViewFileUrl('images/grid-cal.gif')
         );
         /** @var $selectBlock \Magento\View\Element\Html\Date */

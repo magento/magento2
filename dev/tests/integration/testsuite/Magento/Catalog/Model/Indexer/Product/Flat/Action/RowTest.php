@@ -75,9 +75,9 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
         $this->markTestSkipped('Incomplete due to MAGETWO-21369');
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\Catalog\Model\CategoryFactory');
+            ->create('Magento\Catalog\Model\CategoryFactory');
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\Catalog\Block\Product\ListProduct');
+            ->create('Magento\Catalog\Block\Product\ListProduct');
 
         $this->assertTrue(
             $this->_state->isFlatEnabled(),

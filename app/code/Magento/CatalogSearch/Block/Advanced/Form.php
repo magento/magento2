@@ -34,7 +34,6 @@
 namespace Magento\CatalogSearch\Block\Advanced;
 
 use Magento\CatalogSearch\Model\Advanced;
-use Magento\Core\Model\LocaleInterface;
 use Magento\Data\Collection\Db;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -357,7 +356,9 @@ class Form extends Template
             ->setTitle($this->getAttributeLabel($attribute))
             ->setValue($value)
             ->setImage($this->getViewFileUrl('Magento_Core::calendar.gif'))
-            ->setDateFormat($this->_locale->getDateFormat(LocaleInterface::FORMAT_TYPE_SHORT))
+            ->setDateFormat(
+                $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            )
             ->setClass('input-text')
             ->getHtml();
     }

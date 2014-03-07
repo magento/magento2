@@ -129,7 +129,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 <block class="Magento\View\Element\Text" name="block1">
                     <block class="Magento\View\Element\Text"/>
                 </block>
-                <block class="Magento\View\Element\Text" template="test"/>
+                <block class="Magento\View\Element\Text" template="test" ttl="360"/>
                 <block class="Magento\View\Element\Text"/>
             </layout>',
             'Magento\View\Layout\Element'
@@ -141,6 +141,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $child = $this->_layout->getBlock('block1_schedule_block');
         $this->assertSame($this->_layout->getBlock('block1'), $child->getParentBlock());
         $this->assertEquals('test', $this->_layout->getBlock('schedule_block')->getData('template'));
+        $this->assertEquals('360', $this->_layout->getBlock('schedule_block')->getData('ttl'));
         $this->assertFalse($this->_layout->getBlock('nonexisting'));
     }
 
@@ -200,7 +201,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $block = $this->_layout->createBlock($blockType, $blockName, array('data' => $blockData));
 
-        $this->assertEquals($this->_layout, $block->getLayout());
         $this->assertRegExp($expectedName, $block->getNameInLayout());
         $this->assertEquals($expectedData, $block->getData());
     }

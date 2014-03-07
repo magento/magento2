@@ -474,4 +474,12 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('childSecondScalar', $result->secondScalar);
         $this->assertEquals('childOptionalScalar', $result->optionalScalar);
     }
+
+    public function testGetIgnoresFirstSlash()
+    {
+        $this->assertSame(
+            $this->_object->get('Magento\Test\Di\Child'),
+            $this->_object->get('\Magento\Test\Di\Child')
+        );
+    }
 }

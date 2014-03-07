@@ -34,38 +34,5 @@
                 <region_id>12</region_id>
             </origin>
         </shipping>
-        <carriers>
-            <flatrate>
-                <active>0</active>
-                <sallowspecific>0</sallowspecific>
-                <model>Magento\Shipping\Model\Carrier\Flatrate</model>
-                <name>Fixed</name>
-                <price>5.00</price>
-                <title>Flat Rate</title>
-                <type>I</type>
-                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
-                <handling_type>F</handling_type>
-            </flatrate>
-            <freeshipping>
-                <active>0</active>
-                <sallowspecific>0</sallowspecific>
-                <cutoff_cost>50</cutoff_cost>
-                <model>Magento\Shipping\Model\Carrier\Freeshipping</model>
-                <name>Free</name>
-                <title>Free Shipping</title>
-                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
-            </freeshipping>
-            <tablerate>
-                <active>0</active>
-                <sallowspecific>0</sallowspecific>
-                <condition_name>package_weight</condition_name>
-                <include_virtual_price>1</include_virtual_price>
-                <model>Magento\Shipping\Model\Carrier\Tablerate</model>
-                <name>Table Rate</name>
-                <title>Best Way</title>
-                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
-                <handling_type>F</handling_type>
-            </tablerate>
-        </carriers>
     </default>
 </config>

@@ -102,4 +102,10 @@ interface ViewInterface
      */
     public function setIsLayoutLoaded($value);
 
+    /**
+     * Returns is layout loaded
+     *
+     * @return bool
+     */
+    public function isLayoutLoaded();
 }

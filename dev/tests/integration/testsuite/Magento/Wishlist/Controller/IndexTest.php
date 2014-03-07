@@ -45,7 +45,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Customer\Model\Session', array($logger));
-        $this->_customerSession->login('customer@example.com', 'password');
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\CustomerAccountService');
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $this->_customerSession->setCustomerDtoAsLoggedIn($customer);
 
         $this->_messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Message\ManagerInterface');

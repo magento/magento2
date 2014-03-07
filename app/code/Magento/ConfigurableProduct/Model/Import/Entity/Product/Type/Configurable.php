@@ -259,14 +259,30 @@ class Configurable
     /**
      * Array of SKU to array of super attribute values for all products.
      *
+     * @param array $bunch - portion of products to process
+     * @param array $newSku - imported variations list
+     * @param array $oldSku - present variations list
      * @return $this
      */
-    protected function _loadSkuSuperAttributeValues()
+    protected function _loadSkuSuperAttributeValues($bunch, $newSku, $oldSku)
     {
         if ($this->_superAttributes) {
             $attrSetIdToName   = $this->_entityModel->getAttrSetIdToName();
+
+            $productIds = array();
+            foreach ($bunch as $rowData) {
+                if (!empty($rowData['_super_products_sku'])) {
+                    if (isset($newSku[$rowData['_super_products_sku']])) {
+                        $productIds[] = $newSku[$rowData['_super_products_sku']]['entity_id'];
+                    } elseif (isset($oldSku[$rowData['_super_products_sku']])) {
+                        $productIds[] = $oldSku[$rowData['_super_products_sku']]['entity_id'];
+                    }
+                }
+            }
+
             foreach ($this->_productColFac->create()
                         ->addFieldToFilter('type_id', $this->_productTypesConfig->getComposableTypes())
+                        ->addFieldToFilter ('entity_id', array('in' => $productIds))
                         ->addAttributeToSelect(array_keys($this->_superAttributes)) as $product) {
                 $attrSetName = $attrSetIdToName[$product->getAttributeSetId()];
 
@@ -401,7 +417,6 @@ class Configurable
         if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
             $this->_loadSkuSuperData();
         }
-        $this->_loadSkuSuperAttributeValues();
 
         while ($bunch = $this->_entityModel->getNextBunch()) {
             $superAttributes = array(
@@ -411,6 +426,9 @@ class Configurable
                 'super_link' => array(),
                 'relation'   => array()
             );
+
+            $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
+
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;

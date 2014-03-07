@@ -45,11 +45,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invocationChainMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $requestMock;
 
     /**
@@ -72,21 +67,26 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $frontendAttrMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
+
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array('create'));
         $this->configurableTypeMock =
             $this->getMock('Magento\ConfigurableProduct\Model\Product\Type\Configurable', array(), array(), '', false);
-        $this->invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $methods = array('setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', '__wakeup');
         $this->productMock =
             $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
-        $this->invocationChainMock
-            ->expects($this->once())
-            ->method('proceed')
-            ->with(array($this->requestMock))
-            ->will($this->returnValue($this->productMock));
+        $product = $this->productMock;
         $attributeMethods =
             array('getId', 'getFrontend', 'getAttributeCode', '__wakeup', 'setIsRequired', 'getIsUnique');
         $this->attributeMock
@@ -99,6 +99,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->frontendAttrMock =
             $this->getMock('Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend',
                 array(), array(), '', false);
+        $this->subjectMock =
+            $this->getMock('Magento\Catalog\Controller\Adminhtml\Product\Builder', array(), array(), '', false);
+        $this->closureMock = function () use ($product) {
+            return $product;
+        };
         $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin(
             $this->productFactoryMock,
             $this->configurableTypeMock
@@ -191,7 +196,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild(array($this->requestMock), $this->invocationChainMock)
+            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 
@@ -215,7 +220,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild(array($this->requestMock), $this->invocationChainMock)
+            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 
@@ -235,7 +240,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->assertEquals(
             $this->productMock,
-            $this->plugin->aroundBuild(array($this->requestMock), $this->invocationChainMock)
+            $this->plugin->aroundBuild($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 

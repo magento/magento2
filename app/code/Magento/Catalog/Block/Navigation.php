@@ -32,7 +32,7 @@ use Magento\Catalog\Model\Category;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Navigation extends \Magento\View\Element\Template
+class Navigation extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
      * @var Category
@@ -502,5 +502,15 @@ class Navigation extends \Magento\View\Element\Template
         }
 
         return $html;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(\Magento\Catalog\Model\Category::CACHE_TAG, \Magento\Core\Model\Store\Group::CACHE_TAG);
     }
 }

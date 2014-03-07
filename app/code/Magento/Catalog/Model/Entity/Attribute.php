@@ -66,12 +66,7 @@ use \Magento\Catalog\Model\Attribute\LockValidatorInterface;
  * @method \Magento\Catalog\Model\Entity\Attribute setIsWysiwygEnabled(int $value)
  * @method int getIsUsedForPromoRules()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
- *
- * @category    Magento
- * @package     Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
@@ -104,7 +99,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      * @param LockValidatorInterface $lockValidator
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -120,8 +115,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
+        \Magento\Locale\ResolverInterface $localeResolver,
         LockValidatorInterface $lockValidator,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -137,8 +133,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             $storeManager,
             $resourceHelper,
             $universalFactory,
-            $locale,
+            $localeDate,
             $catalogProductFactory,
+            $localeResolver,
             $resource,
             $resourceCollection,
             $data

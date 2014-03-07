@@ -58,7 +58,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $urlFactory;
 
     /**
-     * @var \Magento\Core\Model\DateFactory
+     * @var \Magento\Stdlib\DateTime\DateTimeFactory
      */
     protected $dateFactory;
 
@@ -67,7 +67,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Core\Model\DateFactory $dateFactory,
+        \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
         \Magento\UrlFactory $urlFactory,
         \Magento\GoogleCheckout\Model\ApiFactory $apiFactory,
         array $data = array()

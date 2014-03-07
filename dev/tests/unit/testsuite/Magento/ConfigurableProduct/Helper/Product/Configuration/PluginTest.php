@@ -39,11 +39,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invocationChainMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $productMock;
 
     /**
@@ -51,20 +46,29 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeInstanceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
+
     protected function setUp()
     {
         $this->itemMock = $this->getMock('Magento\Catalog\Model\Product\Configuration\Item\ItemInterface');
-        $this->invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->typeInstanceMock =
             $this->getMock('Magento\ConfigurableProduct\Model\Product\Type\Configurable',
                 array('getSelectedAttributesInfo', '__wakeup'), array(), '', false);
         $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->invocationChainMock
-            ->expects($this->once())
-            ->method('proceed')
-            ->with(array($this->itemMock))
-            ->will($this->returnValue(array('options')));
+        $this->closureMock = function () {
+            return array('options');
+        };
+        $this->subjectMock =
+            $this->getMock('Magento\Catalog\Helper\Product\Configuration', array(), array(), '', false);
         $this->plugin = new \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin();
     }
 
@@ -84,7 +88,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->will($this->returnValue(array('attributes')));
         $this->assertEquals(array('attributes', 'options'),
-            $this->plugin->aroundGetOptions(array($this->itemMock), $this->invocationChainMock));
+            $this->plugin->aroundGetOptions($this->subjectMock, $this->closureMock, $this->itemMock));
     }
 
     public function testAroundGetOptionsWhenProductTypeIsSimple()
@@ -96,6 +100,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->productMock
             ->expects($this->never())->method('getTypeInstance');
         $this->assertEquals(array('options'),
-            $this->plugin->aroundGetOptions(array($this->itemMock), $this->invocationChainMock));
+            $this->plugin->aroundGetOptions($this->subjectMock, $this->closureMock, $this->itemMock));
     }
 }

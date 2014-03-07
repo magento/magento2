@@ -386,7 +386,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
@@ -396,7 +396,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
@@ -407,7 +407,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         parent::__construct(
             $customerAddress,
             $logger,
-            $locale,
+            $localeResolver,
             $regionFactory,
             $logAdapterFactory,
             $countryFactory,

@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->_cacheMock->expects($this->once())
+        $this->_cacheMock->expects($this->any())
             ->method('load')
             ->will($this->returnValue(serialize($this->_resourcesConfig)));
 

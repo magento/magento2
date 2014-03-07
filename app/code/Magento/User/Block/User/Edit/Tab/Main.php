@@ -36,10 +36,16 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_authSession;
 
     /**
+     * @var \Magento\Locale\ListsInterface
+     */
+    protected $_LocaleLists;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Locale\ListsInterface $localeLists
      * @param array $data
      */
     public function __construct(
@@ -47,9 +53,11 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Locale\ListsInterface $localeLists,
         array $data = array()
     ) {
         $this->_authSession = $authSession;
+        $this->_LocaleLists = $localeLists;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -129,7 +137,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             'name'   => 'interface_locale',
             'label'  => __('Interface Locale'),
             'title'  => __('Interface Locale'),
-            'values' => $this->_locale->getTranslatedOptionLocales(),
+            'values' => $this->_LocaleLists->getTranslatedOptionLocales(),
             'class'  => 'select',
         ));
 

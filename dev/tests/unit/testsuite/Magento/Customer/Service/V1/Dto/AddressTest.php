@@ -144,6 +144,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->_fillAllFields($this->_addressBuilder);
         $expected = $this->_expectedValues;
+        $region = $expected['region'];
+        $expected['region'] = $region['region'];
+        $expected['region_id'] = 0;
         $this->assertEquals($expected, $this->_addressBuilder->create()->getAttributes());
     }
 

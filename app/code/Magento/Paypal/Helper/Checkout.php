@@ -51,28 +51,6 @@ class Checkout
     }
 
     /**
-     * Restore last active quote based on checkout session
-     *
-     * @return bool True if quote restored successfully, false otherwise
-     */
-    public function restoreQuote()
-    {
-        $order = $this->_session->getLastRealOrder();
-        if ($order->getId()) {
-            $quote = $this->_quoteFactory->create()->load($order->getQuoteId());
-            if ($quote->getId()) {
-                $quote->setIsActive(1)
-                    ->setReservedOrderId(null)
-                    ->save();
-                $this->_session->replaceQuote($quote)
-                    ->unsLastRealOrderId();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Cancel last placed order with specified comment message
      *
      * @param string $comment Comment appended to order history

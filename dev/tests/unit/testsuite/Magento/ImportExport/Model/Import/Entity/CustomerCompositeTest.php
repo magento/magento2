@@ -123,8 +123,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $data = array(
             'inlineFactory' => $inlineFactory,
             'context' => $context,
-            'locale' => $this->getMock('Magento\Core\Model\Locale', array(), array(), '', false),
-            'dateModel' => $this->getMock('Magento\Core\Model\Date', array(), array(), '', false)
+            'locale' => $this->getMock('Magento\Locale', array(), array(), '', false),
+            'dateModel' => $this->getMock('Magento\Stdlib\DateTime\DateTime', array(), array(), '', false)
         );
         $this->_coreHelper = $objectManager->getObject('Magento\Core\Helper\Data', $data);
         $this->_string = new \Magento\Stdlib\String;

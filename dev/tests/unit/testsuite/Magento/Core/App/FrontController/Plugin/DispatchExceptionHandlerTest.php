@@ -40,10 +40,24 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filesystemMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
+
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->_filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
+        $this->closureMock = function () {
+            return 'Expected';
+        };
+        $this->subjectMock = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
         $this->_model = new DispatchExceptionHandler(
             $this->_storeManagerMock,
             $this->_filesystemMock
@@ -52,9 +66,8 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundDispatch()
     {
-        $invocationChainMock = $this->getMock('\Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
-        $arguments = array();
-        $invocationChainMock->expects($this->once())->method('proceed')->with($arguments);
-        $this->_model->aroundDispatch($arguments, $invocationChainMock);
+        $requestMock = $this->getMock('Magento\App\RequestInterface');
+        $this->assertEquals('Expected',
+            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $requestMock));
     }
 }

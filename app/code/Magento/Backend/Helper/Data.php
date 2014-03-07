@@ -45,9 +45,9 @@ class Data extends AbstractHelper
     protected $_routeConfig;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_app;
+    protected $_locale;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface
@@ -72,7 +72,7 @@ class Data extends AbstractHelper
     /**
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\App\Route\Config $routeConfig
-     * @param \Magento\AppInterface $app
+     * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver
@@ -81,7 +81,7 @@ class Data extends AbstractHelper
     public function __construct(
         \Magento\App\Helper\Context $context,
         \Magento\App\Route\Config $routeConfig,
-        \Magento\AppInterface $app,
+        \Magento\Locale\ResolverInterface $locale,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\App\Area\FrontNameResolver $frontNameResolver,
@@ -89,7 +89,7 @@ class Data extends AbstractHelper
     ) {
         parent::__construct($context);
         $this->_routeConfig = $routeConfig;
-        $this->_app = $app;
+        $this->_locale = $locale;
         $this->_backendUrl = $backendUrl;
         $this->_auth = $auth;
         $this->_frontNameResolver = $frontNameResolver;
@@ -114,7 +114,7 @@ class Data extends AbstractHelper
     public function setPageHelpUrl($url = null)
     {
         if (is_null($url)) {
-            $request = $this->_app->getRequest();
+            $request = $this->_request;
             $frontModule = $request->getControllerModule();
             if (!$frontModule) {
                 $frontModule = $this->_routeConfig->getModulesByFrontName($request->getModuleName());
@@ -125,7 +125,7 @@ class Data extends AbstractHelper
                 }
             }
             $url = 'http://www.magentocommerce.com/gethelp/';
-            $url.= $this->_app->getLocale()->getLocaleCode().'/';
+            $url.= $this->_locale->getLocaleCode().'/';
             $url.= $frontModule.'/';
             $url.= $request->getControllerName().'/';
             $url.= $request->getActionName().'/';

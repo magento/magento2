@@ -270,8 +270,8 @@ class Indexer extends \Magento\Object implements IndexerInterface
             if (!$this->getState()->getUpdated()) {
                 return $this->getView()->getUpdated();
             }
-            $indexerUpdatedDate = new \Zend_Date($this->getState()->getUpdated());
-            $viewUpdatedDate = new \Zend_Date($this->getView()->getUpdated());
+            $indexerUpdatedDate = new \Magento\Stdlib\DateTime\Date($this->getState()->getUpdated());
+            $viewUpdatedDate = new \Magento\Stdlib\DateTime\Date($this->getView()->getUpdated());
             if ($viewUpdatedDate->compare($indexerUpdatedDate) == 1) {
                 return $this->getView()->getUpdated();
             }

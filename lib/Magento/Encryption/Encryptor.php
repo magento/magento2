@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,6 +33,11 @@ class Encryptor implements EncryptorInterface
      * Crypt key
      */
     const PARAM_CRYPT_KEY = 'crypt.key';
+
+    /**
+     * Default length of salt in bytes
+     */
+    const DEFAULT_SALT_LENGTH = 32;
 
     /**
      * @var \Magento\Math\Random
@@ -77,9 +80,10 @@ class Encryptor implements EncryptorInterface
      * Generate a [salted] hash.
      *
      * $salt can be:
-     * false - a random will be generated
-     * integer - a random with specified length will be generated
-     * string
+     * false - salt is not used
+     * true - random salt of the default length will be generated
+     * integer - random salt of specified length will be generated
+     * string - actual salt value to be used
      *
      * @param string $password
      * @param bool|int|string $salt
@@ -87,10 +91,16 @@ class Encryptor implements EncryptorInterface
      */
     public function getHash($password, $salt = false)
     {
+        if ($salt === false) {
+            return $this->hash($password);
+        }
+        if ($salt === true) {
+            $salt = self::DEFAULT_SALT_LENGTH;
+        }
         if (is_integer($salt)) {
             $salt = $this->_randomGenerator->getRandomString($salt);
         }
-        return $salt === false ? $this->hash($password) : $this->hash($salt . $password) . ':' . $salt;
+        return $this->hash($salt . $password) . ':' . $salt;
     }
 
     /**
@@ -158,7 +168,7 @@ class Encryptor implements EncryptorInterface
     /**
      * Return crypt model, instantiate if it is empty
      *
-     * @param string $key
+     * @param string|null $key NULL value means usage of the default key specified on constructor
      * @return \Magento\Encryption\Crypt
      */
     public function validateKey($key)
@@ -169,7 +179,7 @@ class Encryptor implements EncryptorInterface
     /**
      * Instantiate crypt model
      *
-     * @param string $key
+     * @param string|null $key NULL value means usage of the default key specified on constructor
      * @return \Magento\Encryption\Crypt
      */
     protected function _getCrypt($key = null)

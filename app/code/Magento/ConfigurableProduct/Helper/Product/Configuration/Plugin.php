@@ -24,27 +24,29 @@
  */
 namespace Magento\ConfigurableProduct\Helper\Product\Configuration;
 
-use Magento\Code\Plugin\InvocationChain;
-
 class Plugin
 {
     /**
      * Retrieve configuration options for configurable product
      *
-     * @param array $arguments
-     * @param InvocationChain $invocationChain
+     * @param \Magento\Catalog\Helper\Product\Configuration $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetOptions(array $arguments, InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item */
-        $item = $arguments[0];
+    public function aroundGetOptions(
+        \Magento\Catalog\Helper\Product\Configuration $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+    ) {
         $product = $item->getProduct();
         $typeId = $product->getTypeId();
         if ($typeId == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             $attributes = $product->getTypeInstance()->getSelectedAttributesInfo($product);
-            return array_merge($attributes, $invocationChain->proceed($arguments));
+            return array_merge($attributes, $proceed($item));
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 } 

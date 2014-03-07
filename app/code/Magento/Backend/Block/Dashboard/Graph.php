@@ -122,18 +122,26 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected $_dashboardData = null;
 
     /**
+     * @var \Magento\Locale\ListsInterface
+     */
+    protected $_localeLists = null;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Dashboard\Data $dashboardData
+     * @param \Magento\Locale\ListsInterface $localeLists
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
+        \Magento\Locale\ListsInterface $localeLists,
         array $data = array()
     ) {
         $this->_dashboardData = $dashboardData;
+        $this->_localeLists = $localeLists;
         parent::__construct($context, $collectionFactory, $data);
     }
 
@@ -217,7 +225,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         }
 
         $timezoneLocal = $this->_storeConfig->getConfig(
-            \Magento\Core\Model\LocaleInterface::XML_PATH_DEFAULT_TIMEZONE
+            $this->_localeDate->getDefaultTimezonePath()
         );
 
         list ($dateStart, $dateEnd) = $this->_collectionFactory->create()
@@ -316,7 +324,6 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $yorigin = 0;
 
         if ($minvalue >= 0 && $maxvalue >= 0) {
-            $miny = 0;
             if ($maxvalue > 10) {
                 $p = pow(10, $this->_getPow($maxvalue));
                 $maxy = (ceil($maxvalue/$p))*$p;
@@ -376,9 +383,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $params['chd'] .= $buffer;
 
-        $labelBuffer = "";
         $valueBuffer = array();
-        $rangeBuffer = "";
 
         if (sizeof($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
@@ -393,18 +398,18 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                             switch ($this->getDataHelper()->getParam('period')) {
                                 case '24h':
                                     $this->_axisLabels[$idx][$_index] = $this->formatTime(
-                                        new \Zend_Date($_label, 'yyyy-MM-dd HH:00'), 'short', false
+                                        new \Magento\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd HH:00'), 'short', false
                                     );
                                     break;
                                 case '7d':
                                 case '1m':
                                     $this->_axisLabels[$idx][$_index] = $this->formatDate(
-                                        new \Zend_Date($_label, 'yyyy-MM-dd')
+                                        new \Magento\Stdlib\DateTime\Date($_label, 'yyyy-MM-dd')
                                     );
                                     break;
                                 case '1y':
                                 case '2y':
-                                    $formats = $this->_locale->getTranslationList('datetime');
+                                    $formats = $this->_localeLists->getTranslationList('datetime');
                                     $format = isset($formats['yyMM']) ? $formats['yyMM'] : 'MM/yyyy';
                                     $format = str_replace(array("yyyy", "yy", "MM"), array("Y", "y", "m"), $format);
                                     $this->_axisLabels[$idx][$_index] = date($format, strtotime($_label));
@@ -431,8 +436,6 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                     } else {
                         $deltaY = 100;
                     }
-                    // setting range values for y axis
-                    $rangeBuffer = $indexid . "," . $miny . "," . $maxy . "|";
                 }
                 $indexid++;
             }

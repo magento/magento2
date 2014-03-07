@@ -23,7 +23,6 @@
  */
 namespace Magento\Customer\Block\Widget;
 
-use Magento\Core\Model\LocaleInterface;
 use Magento\Exception\NoSuchEntityException;
 
 class DobTest extends \PHPUnit_Framework_TestCase
@@ -62,23 +61,34 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $frontendCache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface', [], '', false);
         $frontendCache->expects($this->any())
             ->method('getLowLevelFrontend')->will($this->returnValue($zendCacheCore));
-        $app = $this->getMock('Magento\Core\Model\App', [], [], '', false);
-        $app->expects($this->any())->method('getCache')->will($this->returnValue($frontendCache));
+        $cache = $this->getMock('Magento\App\CacheInterface');
+        $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $locale = $objectManager
-            ->getObject('Magento\Core\Model\Locale', ['app' => $app, 'locale' => LocaleInterface::DEFAULT_LOCALE]);
+        $locale = $objectManager->getObject('\Magento\Locale', array(
+            'locale' => \Magento\Locale\ResolverInterface::DEFAULT_LOCALE
+        ));
+        $localeResolver = $this->getMock('\Magento\Locale\ResolverInterface');
+        $localeResolver->expects($this->any())
+            ->method('getLocale')
+            ->will($this->returnValue($locale));
+        $timezone = $objectManager
+            ->getObject(
+                '\Magento\Stdlib\DateTime\Timezone',
+                ['localeResolver' => $localeResolver]
+            );
 
         $context = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->any())->method('getLocale')->will($this->returnValue($locale));
+        $context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
 
         $this->_attribute = $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', [], [], '', false);
         $this->_metadataService =
             $this->getMockForAbstractClass(
                 'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
             );
-        $this->_metadataService
-            ->expects($this->any())->method('getAttributeMetadata')->will($this->returnValue($this->_attribute));
+        $this->_metadataService->expects($this->any())
+            ->method('getCustomerAttributeMetadata')
+            ->will($this->returnValue($this->_attribute));
 
         date_default_timezone_set('America/Los_Angeles');
 
@@ -248,7 +258,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * The LocaleInterface::DEFAULT_LOCALE is used to derive the Locale that is used to determine the
+     * The \Magento\Locale\ResolverInterface::DEFAULT_LOCALE is used to derive the Locale that is used to determine the
      * value of Dob::getDateFormat() for that Locale.
      */
     public function testGetDateFormat()

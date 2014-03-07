@@ -39,7 +39,9 @@ class Guest extends \Magento\Sales\Controller\AbstractController
      */
     protected function _loadValidOrder($orderId = null)
     {
-        return $this->_objectManager->get('Magento\Sales\Helper\Guest')->loadValidOrder();
+        return $this->_objectManager->get('Magento\Sales\Helper\Guest')->loadValidOrder(
+            $this->_request, $this->_response
+        );
     }
 
     /**

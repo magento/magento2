@@ -18,21 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 
 /**
  * Adminhtml newsletter queue grid block action item renderer
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -61,14 +54,14 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         $actions = array();
 
         $actions[] = array(
-            '@'	=>  array(
-                'href'  => $this->getUrl('newsletter/template/preview',
+            '@'	=> array(
+                'href' => $this->getUrl('newsletter/template/preview',
                     array(
-                        'id'        => $row->getTemplateId(),
-                        'subscriber'=> $this->_coreRegistry->registry('subscriber')->getId()
+                        'id'         => $row->getTemplateId(),
+                        'subscriber' => $this->_coreRegistry->registry('subscriber')->getId()
                     )
                 ),
-                'target'=>	'_blank'
+                'target' => '_blank'
             ),
             '#'	=> __('View')
         );
@@ -78,7 +71,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
 
     protected function _getEscapedValue($value)
     {
-        return addcslashes(htmlspecialchars($value),'\\\'');
+        return addcslashes(htmlspecialchars($value), '\\\'');
     }
 
     protected function _actionsToHtml(array $actions)
@@ -91,5 +84,4 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         }
         return implode('<span class="separator">&nbsp;|&nbsp;</span>', $html);
     }
-
 }

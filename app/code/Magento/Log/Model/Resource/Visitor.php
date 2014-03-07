@@ -39,7 +39,7 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $string;
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -50,13 +50,13 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\String $string
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Stdlib\String $string
     ) {

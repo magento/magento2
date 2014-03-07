@@ -119,26 +119,4 @@ class Config extends AbstractConfig
             $this->getResponse()->setBody('success');
         }
     }
-
-    /**
-     * Export shipping table rates in csv format
-     *
-     * @return ResponseInterface
-     */
-    public function exportTableratesAction()
-    {
-        $fileName = 'tablerates.csv';
-        /** @var $gridBlock \Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid */
-        $gridBlock = $this->_view->getLayout()
-            ->createBlock('Magento\Shipping\Block\Adminhtml\Carrier\Tablerate\Grid');
-        $website = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'));
-        if ($this->getRequest()->getParam('conditionName')) {
-            $conditionName = $this->getRequest()->getParam('conditionName');
-        } else {
-            $conditionName = $website->getConfig('carriers/tablerate/condition_name');
-        }
-        $gridBlock->setWebsiteId($website->getId())->setConditionName($conditionName);
-        $content = $gridBlock->getCsvFile();
-        return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
-    }
 }

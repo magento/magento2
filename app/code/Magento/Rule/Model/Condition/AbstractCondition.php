@@ -68,9 +68,9 @@ abstract class AbstractCondition extends \Magento\Object implements ConditionInt
     protected $_viewUrl;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\View\LayoutInterface
@@ -84,7 +84,7 @@ abstract class AbstractCondition extends \Magento\Object implements ConditionInt
     public function __construct(Context $context, array $data = array())
     {
         $this->_viewUrl = $context->getViewUrl();
-        $this->_locale = $context->getLocale();
+        $this->_localeDate = $context->getLocaleDate();
         $this->_layout = $context->getLayout();
 
         parent::__construct($data);
@@ -366,7 +366,7 @@ abstract class AbstractCondition extends \Magento\Object implements ConditionInt
         if ($this->getInputType() == 'date' && !$this->getIsValueParsed()) {
             // date format intentionally hard-coded
             $this->setValue(
-                $this->_locale->date($this->getData('value'),
+                $this->_localeDate->date($this->getData('value'),
                 \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT, null, false)->toString(\Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
             );
             $this->setIsValueParsed(true);

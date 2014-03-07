@@ -269,7 +269,9 @@ class Error_Processor
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))) {
+        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))
+            && !preg_match('/.*?\:[0-9]+$/', $url)
+        ) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
         }
         return  $url;
@@ -488,9 +490,9 @@ class Error_Processor
         $this->_setReportUrl();
 
         if (headers_sent()) {
-            print '<script type="text/javascript">';
-            print "window.location.href = '{$this->reportUrl}';";
-            print '</script>';
+            echo '<script type="text/javascript">';
+            echo "window.location.href = '{$this->reportUrl}';";
+            echo '</script>';
             exit;
         }
     }

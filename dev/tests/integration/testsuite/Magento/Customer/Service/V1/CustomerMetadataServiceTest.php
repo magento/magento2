@@ -59,15 +59,6 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testAttributeMetadataCached()
-    {
-        $firstCallMetadata = $this->_service->getAddressAttributeMetadata('firstname');
-        $secondCallMetadata = $this->_service->getAddressAttributeMetadata('firstname');
-
-        $this->assertSame($firstCallMetadata, $secondCallMetadata);
-
-    }
-
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */

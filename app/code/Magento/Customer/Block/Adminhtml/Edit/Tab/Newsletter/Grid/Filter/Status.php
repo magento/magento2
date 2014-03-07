@@ -18,56 +18,54 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter;
+
+use Magento\Newsletter\Model\Queue;
 
 /**
  * Adminhtml newsletter subscribers grid website filter
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter;
-
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
-
+    /**
+     * @var array
+     */
     protected static $_statuses;
 
     protected function _construct()
     {
-        self::$_statuses = array(
-                null                                        => null,
-                \Magento\Newsletter\Model\Queue::STATUS_SENT    => __('Sent'),
-                \Magento\Newsletter\Model\Queue::STATUS_CANCEL  => __('Cancel'),
-                \Magento\Newsletter\Model\Queue::STATUS_NEVER   => __('Not Sent'),
-                \Magento\Newsletter\Model\Queue::STATUS_SENDING => __('Sending'),
-                \Magento\Newsletter\Model\Queue::STATUS_PAUSE   => __('Paused'),
-            );
+        self::$_statuses = [
+            null                  => null,
+            Queue::STATUS_SENT    => __('Sent'),
+            Queue::STATUS_CANCEL  => __('Cancel'),
+            Queue::STATUS_NEVER   => __('Not Sent'),
+            Queue::STATUS_SENDING => __('Sending'),
+            Queue::STATUS_PAUSE   => __('Paused')
+        ];
         parent::_construct();
     }
 
+    /**
+     * @return array
+     */
     protected function _getOptions()
     {
-        $result = array();
-        foreach (self::$_statuses as $code=>$label) {
-            $result[] = array('value'=>$code, 'label'=>__($label));
+        $options = [];
+        foreach (self::$_statuses as $status => $label) {
+            $options[] = ['value' => $status, 'label' => __($label)];
         }
 
-        return $result;
+        return $options;
     }
 
+    /**
+     * @return array|null
+     */
     public function getCondition()
     {
-        if(is_null($this->getValue())) {
-            return null;
-        }
-
-        return array('eq'=>$this->getValue());
+        return is_null($this->getValue()) ? null : ['eq' => $this->getValue()];
     }
-
 }

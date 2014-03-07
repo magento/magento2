@@ -89,11 +89,6 @@ $table = $installer->getConnection()
         'unsigned'  => true,
         'nullable'  => false,
         ), 'Discount Step')
-    ->addColumn('simple_free_shipping', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
-        'unsigned'  => true,
-        'nullable'  => false,
-        'default'   => '0',
-        ), 'Simple Free Shipping')
     ->addColumn('apply_to_shipping', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,

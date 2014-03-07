@@ -1,3 +1,46 @@
+2.0.0.0-dev68
+=============
+* Cache:
+  * Implemented depersonalization of private content generation
+  * Implemented content invalidation
+  * Added Edge Side Includes (ESI) support
+  * Added a built-in caching application
+* GitHub requests:
+  * [#454](https://github.com/magento/magento2/pull/454) -- Allow to specify list of IPs in a body on maintenance.flag which will be granted access even if the flag is on
+  * [#204](https://github.com/magento/magento2/issues/204) -- Mage_ImportExport: Exporting configurable products ignores multiple configurable options
+  * [#418](https://github.com/magento/magento2/issues/418) -- Echo vs print
+  * [#419](https://github.com/magento/magento2/issues/419) -- Some translation keys are not correct.
+  * [#244](https://github.com/magento/magento2/issues/244) -- Retrieve base host URL without path in error processor
+  * [#411](https://github.com/magento/magento2/issues/411) -- Missed column 'payment_method' of table 'sales_flat_quote_address'
+  * [#284](https://github.com/magento/magento2/pull/284) -- Fix for Issue #278 (Import -> Stores with large amount of Configurable Products)
+* Fixed bugs:
+  * Fixed an issue where Mage_Eav_Model_Entity_Type::fetchNewIncrementId() did not rollback on exception
+  * Fixed an issue where a category containing more than 1000 products could not be saved
+  * Fixed inappropriate error messages displayed during installation when required extensions were not installed
+  * Fixed synopsis of the install.php script
+  * Fixed an issue where the schedule of recurring payments was not displayed in the shopping cart
+* Modularity improvements:
+  * Introduced the OfflinePayments module - a saparate module for offline payment methods
+  * Added the ability to enable/disable the Paypal module
+  * Moved the framework part of the Locale functionality from the Core module to library
+  * The Locale logic was split among appropriate classes in library, according to their responsibilities
+  * Removed the deprecated DHL functionality
+  * Introduced the OfflineShipping module for offline shipping carrier functionality: Flatrate, Tablerate, Freeshipping, Pickup
+  * Introduced a separate module for the DHL shipping carrier
+  * Introduced a separate module for the Fedex shipping carrier
+  * Introduced a separate module for the UPS shipping carrier
+  * Introduced a separate module for the USPS shipping carrier
+* Framework Improvements:
+  * Added the ability to intercept internal public calls
+  * Added the ability to access public interface of the intercepted object
+  * Added a static integrity test for plugin interface validation
+  * Added support for both class addressing approaches in DI: with and without slash ("\") at the beginning of a class name
+* Customer Service usage:
+  * Refactored the Customer module blocks and controllers to use customer service layer
+* Security:
+  * Introduced the ability to hash a password with a random salt of default length (32 chars) by the encryption library
+  * Utilized a random salt of default length for admin users, and frontend customers
+
 2.0.0.0-dev67
 =============
 * GitHub requests:

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rss\Block;
 
 class AbstractBlock extends \Magento\View\Element\Template
@@ -70,7 +69,7 @@ class AbstractBlock extends \Magento\View\Element\Template
     protected function _getCustomerGroupId()
     {
         $customerGroupId =   (int) $this->getRequest()->getParam('cid');
-        if($customerGroupId == null) {
+        if ($customerGroupId == null) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
         }
         return $customerGroupId;

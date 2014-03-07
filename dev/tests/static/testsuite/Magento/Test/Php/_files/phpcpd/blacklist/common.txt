@@ -48,7 +48,6 @@ Magento/Core/Model/Layout/File/Source/Override
 Magento/Core/Model/Store
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
-Magento/Customer/Block/Adminhtml/Edit/Tab
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
@@ -86,7 +85,7 @@ Magento/CatalogRule/Model
 Magento/Tax/Block/Checkout
 Magento/Tax/Model/Sales/Pdf
 Magento/Tax/Model/Config/Price
-Magento/Usa/Model/Shipping/Carrier
+Magento/Usps/Model
 Magento/Webapi/Block/Adminhtml
 Magento/Webapi/Model
 Magento/Widget/Model/Widget/Instance
@@ -114,3 +113,7 @@ Magento/Newsletter/Model/Template/Filter
 Magento/Newsletter/Model/Resource/Subscriber
 Magento/CatalogInventory/Model/Resource/Stock/Item
 lib/Magento/Filesystem/Driver
+Magento/OfflineShipping/Model/Carrier
+Magento/Usps/Model/Carrier
+Magento/Dhl/Model
+Magento/Shipping/Model

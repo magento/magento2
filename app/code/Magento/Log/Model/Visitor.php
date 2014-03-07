@@ -114,6 +114,11 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $dateTime;
 
     /**
+     * @var \Magento\Module\Manager
+     */
+    protected $moduleManager;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
@@ -126,9 +131,10 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param string[] $ignoredUserAgents
+     * @param array $ignoredUserAgents
      * @param array $ignores
      * @param array $data
      */
@@ -145,6 +151,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
         \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Module\Manager $moduleManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $ignoredUserAgents = array(),
@@ -162,6 +169,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         $this->_remoteAddress = $remoteAddress;
         $this->_serverAddress = $serverAddress;
         $this->dateTime = $dateTime;
+        $this->moduleManager = $moduleManager;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_ignores = $ignores;
@@ -180,6 +188,9 @@ class Visitor extends \Magento\Core\Model\AbstractModel
             if (in_array($userAgent, $this->_ignoredUserAgents)) {
                 $this->_skipRequestLogging = true;
             }
+        }
+        if ($this->moduleManager->isEnabled('Magento_PageCache')) {
+            $this->_skipRequestLogging = true;
         }
     }
 

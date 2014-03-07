@@ -31,7 +31,6 @@
     <preference for="Magento\Authorization\Policy" type="Magento\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Authorization\RoleLocator" type="Magento\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Session\SessionManagerInterface" type="Magento\Core\Model\Session" />
-    <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
     <preference for="Magento\App\ConfigInterface" type="Magento\App\Config" />
     <preference for="Magento\App\ReinitableConfigInterface" type="Magento\App\ReinitableConfig" />
@@ -76,6 +75,14 @@
     <preference for="Magento\Css\PreProcessor\AdapterInterface" type="Magento\Css\PreProcessor\Adapter\Oyejorge" />
     <preference for="Magento\Translate\ResourceInterface" type="Magento\Core\Model\Resource\Translate" />
     <preference for="Magento\BaseScopeResolverInterface" type="Magento\Core\Model\BaseScopeResolver" />
+    <preference for="Magento\LocaleInterface" type="Magento\Locale" />
+    <preference for="Magento\Locale\CurrencyInterface" type="Magento\Locale\Currency" />
+    <preference for="Magento\CurrencyInterface" type="Magento\Currency" />
+    <preference for="Magento\Locale\FormatInterface" type="Magento\Locale\Format" />
+    <preference for="Magento\Locale\ResolverInterface" type="Magento\Locale\Resolver" />
+    <preference for="Magento\Stdlib\DateTime\TimezoneInterface" type="Magento\Stdlib\DateTime\Timezone" />
+    <preference for="Magento\Stdlib\DateTime\DateInterface" type="Magento\Stdlib\DateTime\Date" />
+    <preference for="Magento\Locale\ScopeConfigInterface" type="Magento\Core\Model\Store\Config" />
     <preference for="Magento\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Less\PreProcessor\ErrorHandler" />
     <type name="Magento\Translate\Inline">
         <arguments>
@@ -96,7 +103,7 @@
         <arguments>
             <argument name="areas" xsi:type="array">
                 <item name="frontend" xsi:type="array">
-                    <item name="frontName" xsi:type="string"></item>
+                    <item name="frontName" xsi:type="null" />
                     <item name="router" xsi:type="string">standard</item>
                 </item>
             </argument>
@@ -367,17 +374,12 @@
     </type>
     <type name="Magento\Locale\Hierarchy\Config">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Core\Model\Locale\Hierarchy\Config\Reader</argument>
+            <argument name="reader" xsi:type="object">Magento\Locale\Hierarchy\Config\Reader</argument>
         </arguments>
     </type>
     <type name="Magento\Core\Model\Resource\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">core</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Core\Helper\Data">
-        <arguments>
-            <argument name="locale" xsi:type="object">Magento\Core\Model\Locale\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Core\Model\Resource\Setup\Migration">
@@ -461,11 +463,6 @@
             <argument name="url" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\App">
-        <arguments>
-            <argument name="frontController" xsi:type="object">Magento\App\FrontController\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Core\Model\App\Area">
         <arguments>
             <argument name="translator" xsi:type="object">Magento\Translate</argument>
@@ -480,13 +477,7 @@
     <type name="Magento\App\Action\Action">
         <plugin name="installInitializer" type="Magento\Core\App\Action\Plugin\Install" sortOrder="5"/>
         <plugin name="storeCheck" type="Magento\Core\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="sessionInitializer" type="Magento\Core\App\Action\Plugin\Session" sortOrder="20"/>
         <plugin name="designLoader" type="Magento\Core\App\Action\Plugin\Design" sortOrder="30"/>
-    </type>
-    <type name="Magento\Core\Model\Locale">
-        <arguments>
-            <argument name="dateModel" xsi:type="object">Magento\Core\Model\Date\Proxy</argument>
-        </arguments>
     </type>
     <virtualType name="Magento\Core\Model\Session\Storage" type="Magento\Session\Storage">
         <arguments>
@@ -522,6 +513,11 @@
             <argument name="fileSource" xsi:type="object">Magento\Less\File\Source\Aggregated</argument>
         </arguments>
     </type>
+    <type name="Magento\Less\PreProcessor\Instruction\Import">
+        <arguments>
+            <argument name="preProcessor" xsi:type="object">Magento\Less\PreProcessor\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Less\File\Source\Aggregated">
         <arguments>
             <argument name="libraryFiles" xsi:type="object">Magento\Less\File\Source\Library</argument>
@@ -552,6 +548,17 @@
                 <item name="stores" xsi:type="string">/config/stores</item>
                 <item name="websites" xsi:type="string">/config/websites</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Stdlib\DateTime\Timezone">
+        <arguments>
+            <argument name="defaultTimezonePath" xsi:type="string">general/locale/timezone</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Locale\Resolver">
+        <plugin name="initLocale" type="Magento\Translate\Locale\Resolver\Plugin" sortOrder="10"/>
+        <arguments>
+            <argument name="defaultLocalePath" xsi:type="string">general/locale/code</argument>
         </arguments>
     </type>
 </config>

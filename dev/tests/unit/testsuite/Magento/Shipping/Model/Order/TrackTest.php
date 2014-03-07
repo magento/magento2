@@ -30,7 +30,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $carrier = $this->getMock('Magento\Shipping\Model\Carrier\Freeshipping',
+        $carrier = $this->getMock('Magento\OfflineShipping\Model\Carrier\Freeshipping',
             ['setStore', 'getTrackingInfo'], [], '', false);
         $carrier->expects($this->once())->method('setStore')->with('');
         $carrier->expects($this->once())->method('getTrackingInfo')
@@ -40,7 +40,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         $carrierFactory->expects($this->once())->method('create')
             ->will($this->returnValue($carrier));
 
-        $shipment = $this->getMock('Magento\Shipping\Model\Carrier\Freeshipping', ['load'], [], '', false);
+        $shipment = $this->getMock('Magento\OfflineShipping\Model\Carrier\Freeshipping', ['load'], [], '', false);
         $shipment->expects($this->any())->method('load')
             ->will($this->returnValue($shipment));
 

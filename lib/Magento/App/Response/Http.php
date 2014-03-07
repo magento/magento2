@@ -33,11 +33,24 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     const COOKIE_VARY_STRING = 'X-Magento-Vary';
 
     /**
-     * Response vary identifiers
-     *
-     * @var array
+     * @var \Magento\Stdlib\Cookie
      */
-    protected $vary;
+    protected $cookie;
+
+    /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $context;
+
+    /**
+     * @param \Magento\Stdlib\Cookie $cookie
+     * @param \Magento\App\Http\Context $context
+     */
+    public function __construct(\Magento\Stdlib\Cookie $cookie, \Magento\App\Http\Context $context)
+    {
+        $this->cookie = $cookie;
+        $this->context = $context;
+    }
 
     /**
      * Get header value by name.
@@ -58,44 +71,76 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     }
 
     /**
-     * Set vary identifier
-     *
-     * @param string $name
-     * @param string|array $value
-     * @return $this
+     * Send Vary coookie
      */
-    public function setVary($name, $value)
+    public function sendVary()
     {
-        if (is_array($value)) {
-            $value = serialize($value);
+        $data = array_filter($this->context->getData());
+        if ($data) {
+            ksort($data);
+            $vary = sha1(serialize($data));
+            $this->cookie->set(self::COOKIE_VARY_STRING, $vary, null, '/');
         }
-        $this->vary[$name] = $value;
-        return $this;
     }
 
     /**
      * Send the response, including all headers, rendering exceptions if so
      * requested.
-     *
-     * @return void
      */
     public function sendResponse()
     {
-        setcookie(self::COOKIE_VARY_STRING, $this->getVaryString(), null, '/');
+        $this->sendVary();
         parent::sendResponse();
     }
 
     /**
-     * Returns hash of varies
+     * Set headers for public cache
+     * Accepts the time-to-live (max-age) parameter
      *
-     * @return string
+     * @param int $ttl
+     * @throws \InvalidArgumentException
      */
-    public function getVaryString()
+    public function setPublicHeaders($ttl)
     {
-        if (!empty($this->vary)) {
-            ksort($this->vary);
+        if (!$ttl) {
+            throw new \InvalidArgumentException('time to live is a mandatory parameter for set public headers');
         }
+        $this->setHeader('pragma', 'cache', true);
+        $this->setHeader('cache-control', 'public, max-age=' . $ttl . ', s-maxage=' . $ttl, true);
+        $this->setHeader('expires', gmdate('D, d M Y H:i:s T', strtotime('+' . $ttl . ' seconds')), true);
+    }
 
-        return sha1(serialize($this->vary));
+    /**
+     * Set headers for private cache
+     *
+     * @param int $ttl
+     * @throws \InvalidArgumentException
+     */
+    public function setPrivateHeaders($ttl)
+    {
+        if (!$ttl) {
+            throw new \InvalidArgumentException('time to live is a mandatory parameter for set private headers');
+        }
+        $this->setHeader('pragma', 'cache', true);
+        $this->setHeader('cache-control', 'private, max-age=' . $ttl, true);
+        $this->setHeader('expires', gmdate('D, d M Y H:i:s T', strtotime('+' . $ttl . ' seconds')), true);
+    }
+
+    /**
+     * Set headers for no-cache responses
+     */
+    public function setNoCacheHeaders()
+    {
+        $this->setHeader('pragma', 'no-cache', true);
+        $this->setHeader('cache-control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        $this->setHeader('expires', gmdate('D, d M Y H:i:s T', strtotime('-1 year')), true);
+    }
+
+    /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        return array('_body', '_exceptions', '_headers', '_headersRaw', '_httpResponseCode', 'context', 'cookie');
     }
 }

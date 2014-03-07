@@ -95,22 +95,18 @@ class Standard extends \Magento\App\Action\Action
      */
     public function cancelAction()
     {
+        /** @var \Magento\Checkout\Model\Session $session */
         $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
         $session->setQuoteId($session->getPaypalStandardQuoteId(true));
 
         if ($session->getLastRealOrderId()) {
+            /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')
                 ->loadByIncrementId($session->getLastRealOrderId());
             if ($order->getId()) {
-                $this->_objectManager->get('Magento\Event\ManagerInterface')->dispatch(
-                    'paypal_payment_cancel',
-                    array(
-                        'order' => $order,
-                        'quote' => $session->getQuote()
-                ));
                 $order->cancel()->save();
             }
-            $this->_objectManager->get('Magento\Paypal\Helper\Checkout')->restoreQuote();
+            $session->restoreQuote();
         }
         $this->_redirect('checkout/cart');
     }
@@ -128,6 +124,6 @@ class Standard extends \Magento\App\Action\Action
         $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
         $session->setQuoteId($session->getPaypalStandardQuoteId(true));
         $session->getQuote()->setIsActive(false)->save();
-        $this->_redirect('checkout/onepage/success', array('_secure'=>true));
+        $this->_redirect('checkout/onepage/success', array('_secure' => true));
     }
 }

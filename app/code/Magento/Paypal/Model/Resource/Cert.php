@@ -31,7 +31,7 @@ namespace Magento\Paypal\Model\Resource;
 class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
@@ -42,12 +42,12 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
+     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $coreDate,
+        \Magento\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Stdlib\DateTime $dateTime
     ) {
         $this->_coreDate = $coreDate;

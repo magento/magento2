@@ -43,7 +43,14 @@ class DateTest extends AbstractFormTestCase
         $this->attributeMetadataMock->expects($this->any())
             ->method('getInputFilter')
             ->will($this->returnValue('date'));
-        $this->date = new Date($this->localeMock, $this->loggerMock, $this->attributeMetadataMock, null, 0);
+        $this->date = new Date(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->attributeMetadataMock,
+            $this->localeResolverMock,
+            null,
+            0
+        );
     }
 
     public function testExtractValue()
@@ -156,7 +163,14 @@ class DateTest extends AbstractFormTestCase
     public function testOutputValue()
     {
         $this->assertEquals(null, $this->date->outputValue());
-        $date = new Date($this->localeMock, $this->loggerMock, $this->attributeMetadataMock, '2012/12/31', 0);
+        $date = new Date(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->attributeMetadataMock,
+            $this->localeResolverMock,
+            '2012/12/31',
+            0
+        );
         $this->assertEquals('2012-12-31', $date->outputValue());
 
     }

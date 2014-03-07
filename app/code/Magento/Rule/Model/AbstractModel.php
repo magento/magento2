@@ -88,15 +88,15 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     protected $_formFactory;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -105,13 +105,13 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_formFactory = $formFactory;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -341,7 +341,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
                  * Convert dates into \Zend_Date
                  */
                 if (in_array($key, array('from_date', 'to_date')) && $value) {
-                    $value = $this->_locale->date(
+                    $value = $this->_localeDate->date(
                         $value,
                         \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                         null,
@@ -383,8 +383,8 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         }
 
         if ($fromDate && $toDate) {
-            $fromDate = new \Zend_Date($fromDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-            $toDate = new \Zend_Date($toDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $fromDate = new \Magento\Stdlib\DateTime\Date($fromDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $toDate = new \Magento\Stdlib\DateTime\Date($toDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
 
             if ($fromDate->compare($toDate) === 1) {
                 $result[] = __('End Date must follow Start Date.');

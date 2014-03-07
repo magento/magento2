@@ -31,12 +31,12 @@
     <preference for="Magento\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
     <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
         <arguments>
-            <argument name="date" xsi:type="object">Magento\Core\Model\Date\Proxy</argument>
+            <argument name="date" xsi:type="object">Magento\Stdlib\DateTime\DateTime\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Integration\Model\Oauth\Token\Provider">
         <arguments>
-            <argument name="date" xsi:type="object">Magento\Core\Model\Date\Proxy</argument>
+            <argument name="date" xsi:type="object">Magento\Stdlib\DateTime\DateTime\Proxy</argument>
         </arguments>
     </type>
 </config>

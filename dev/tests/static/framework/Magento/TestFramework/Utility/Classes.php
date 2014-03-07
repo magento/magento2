@@ -337,4 +337,15 @@ class Classes
         return $classes;
     }
 
+    /**
+     * Retrieve module name by class
+     *
+     * @param string $class
+     * @return string
+     */
+    public static function getClassModuleName($class)
+    {
+        $parts = explode('\\', trim($class, '\\'));
+        return $parts[0] . '_' . $parts[1];
+    }
 }

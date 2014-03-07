@@ -18,39 +18,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block;
 
+use Magento\Customer\Service\V1\CustomerServiceInterface;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 
 /**
  * Customer front  newsletter manage block
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block;
-
 class Newsletter extends \Magento\Customer\Block\Account\Dashboard
 {
+    /**
+     * @var string
+     */
     protected $_template = 'form/newsletter.phtml';
 
     /**
+     * Constructor
+     *
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param CustomerServiceInterface $customerService
+     * @param CustomerAddressServiceInterface $addressService
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        CustomerServiceInterface $customerService,
+        CustomerAddressServiceInterface $addressService,
         array $data = array()
     ) {
-        parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        parent::__construct(
+            $context, $customerSession, $subscriberFactory, $customerService, $addressService, $data
+        );
         $this->_isScopePrivate = true;
     }
 
@@ -59,9 +65,13 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
         return $this->getSubscriptionObject()->isSubscribed();
     }
 
+    /**
+     * Return the save action Url.
+     *
+     * @return string
+     */
     public function getAction()
     {
         return $this->getUrl('*/*/save');
     }
-
 }

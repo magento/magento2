@@ -35,6 +35,7 @@
 namespace Magento\Catalog\Block\Product\Compare;
 
 class Sidebar extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
+    implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Compare Products Collection
@@ -104,5 +105,23 @@ class Sidebar extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     public function getCompareUrl()
     {
         return $this->_getHelper()->getListUrl();
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach($this->getItems() as $item) {
+            $product = $item->getProduct();
+            if ($product instanceof \Magento\Object\IdentityInterface) {
+                $identities[] = $product->getIdentities();
+            }
+        }
+        $identities[] = \Magento\Catalog\Model\Product\Compare\Item::CACHE_TAG . '_' . $this->getCatalogCompareItemId();
+        return $identities;
     }
 }

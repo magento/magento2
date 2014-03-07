@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 class Address extends \Magento\Rule\Model\Condition\AbstractCondition
@@ -73,6 +71,8 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Load attribute options
+     *
      * @return $this
      */
     public function loadAttributeOptions()
@@ -94,6 +94,11 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         return $this;
     }
 
+    /**
+     * Get attribute element
+     *
+     * @return $this
+     */
     public function getAttributeElement()
     {
         $element = parent::getAttributeElement();
@@ -102,6 +107,8 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Get input type
+     *
      * @return string
      */
     public function getInputType()
@@ -117,6 +124,8 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Get value element type
+     *
      * @return string
      */
     public function getValueElementType()
@@ -129,6 +138,8 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Get value select options
+     *
      * @return array|mixed
      */
     public function getValueSelectOptions()

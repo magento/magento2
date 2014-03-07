@@ -35,11 +35,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invocationChainMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $itemMock;
 
     /**
@@ -47,11 +42,26 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $closureMock;
+
     protected function setUp()
     {
-        $this->invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
-        $this->itemMock = $this->getMock('Magento\Catalog\Model\Product\Configuration\Item\ItemInterface');
+        $this->itemMock = $this->getMock('Magento\Object', array('getProduct'), array(), '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->subjectMock =
+            $this->getMock('Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar',
+                array(), array(), '', false);
+        $this->closureMock = function () {
+            return 'Expected';
+        };
         $this->sidebarMock = new \Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar();
     }
 
@@ -59,41 +69,36 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
     {
         $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
         $this->productMock
-            ->expects($this->once())
-            ->method('getTypeId')
-            ->will($this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE));
-        $this->invocationChainMock->expects($this->never())->method('proceed');
+        ->expects($this->once())
+        ->method('getTypeId')
+        ->will($this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE));
         $this->assertEquals('',
-            $this->sidebarMock->aroundGetItemQty(array($this->itemMock), $this->invocationChainMock));
+            $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock)
+        );
     }
 
     public function testAroundGetItemQtyWhenProductNotGrouped()
     {
-        $arguments = array($this->itemMock);
         $this->itemMock->expects($this->once())->method('getProduct')->will($this->returnValue($this->productMock));
         $this->productMock
             ->expects($this->once())
             ->method('getTypeId')
             ->will($this->returnValue('one'));
-        $this->invocationChainMock->expects($this->once())->method('proceed')->with($arguments);
-        $this->sidebarMock->aroundGetItemQty($arguments, $this->invocationChainMock);
+        $this->sidebarMock->aroundGetItemQty($this->subjectMock, $this->closureMock, $this->itemMock);
     }
 
     public function testAroundIsConfigurationRequiredWhenProductGrouped()
     {
-        $this->invocationChainMock->expects($this->never())->method('proceed');
         $this->assertEquals(true,
             $this->sidebarMock->aroundIsConfigurationRequired(
-                array(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE),
-                $this->invocationChainMock)
+                $this->subjectMock, $this->closureMock, \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
         );
     }
 
     public function testAroundIsConfigurationRequiredWhenProductNotGrouped()
     {
-        $arguments = array('someValue');
-        $this->invocationChainMock->expects($this->once())->method('proceed')->with($arguments);
-        $this->sidebarMock->aroundIsConfigurationRequired($arguments, $this->invocationChainMock);
+        $this->assertEquals('Expected',
+            $this->sidebarMock->aroundIsConfigurationRequired($this->subjectMock, $this->closureMock, 'someValue'));
     }
 }
 

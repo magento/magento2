@@ -41,7 +41,6 @@
         </arguments>
     </type>
     <type name="Magento\Review\Controller\Product">
-        <plugin name="sessionInitializer" type="reviewProductInitSession" />
         <arguments>
             <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
         </arguments>
@@ -53,11 +52,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="reviewProductInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <arguments>
-            <argument name="cookieCheckActions" xsi:type="array">
-                <item name="productReviewPost" xsi:type="string">post</item>
-            </argument>
-        </arguments>
-    </virtualType>
 </config>

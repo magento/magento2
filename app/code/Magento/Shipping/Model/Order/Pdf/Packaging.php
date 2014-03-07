@@ -24,14 +24,16 @@
 
 namespace Magento\Shipping\Model\Order\Pdf;
 
+use Magento\Shipping\Helper\Carrier;
+
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
-     * Usa data
+     * Carrier helper
      *
-     * @var \Magento\Usa\Helper\Data
+     * @var \Magento\Shipping\Helper\Carrier
      */
-    protected $_usaData = null;
+    protected $_carrierHelper;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -44,6 +46,11 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     protected $_layout;
 
     /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
@@ -52,10 +59,11 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Usa\Helper\Data $usaData
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Shipping\Helper\Carrier $carrierHelper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\LayoutInterface $layout
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -69,15 +77,17 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Usa\Helper\Data $usaData,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        Carrier $carrierHelper,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\View\LayoutInterface $layout,
+        \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
-        $this->_usaData = $usaData;
+        $this->_carrierHelper = $carrierHelper;
         $this->_storeManager = $storeManager;
         $this->_layout = $layout;
+        $this->_localeResolver = $localeResolver;
 
         parent::__construct(
             $paymentData,
@@ -88,7 +98,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $pdfConfig,
             $pdfTotalFactory,
             $pdfItemsFactory,
-            $locale,
+            $localeDate,
             $data
         );
     }
@@ -109,7 +119,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $page = $this->newPage();
 
         if ($shipment->getStoreId()) {
-            $this->locale->emulate($shipment->getStoreId());
+            $this->_localeResolver->emulate($shipment->getStoreId());
             $this->_storeManager->setCurrentStore($shipment->getStoreId());
         }
 
@@ -122,7 +132,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $this->_afterGetPdf();
 
         if ($shipment->getStoreId()) {
-            $this->locale->revert();
+            $this->_localeResolver->revert();
         }
         return $pdf;
     }
@@ -178,7 +188,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
             $package = new \Magento\Object($package);
             $params = new \Magento\Object($package->getParams());
-            $dimensionUnits = $this->_usaData->getMeasureDimensionName($params->getDimensionUnits());
+            $dimensionUnits = $this->_carrierHelper->getMeasureDimensionName($params->getDimensionUnits());
 
             $typeText = __('Type') . ' : '
                 . $packaging->getContainerTypeByCode($params->getContainer());
@@ -228,7 +238,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $this->y = $this->y - 10;
 
             $weightText = __('Total Weight') . ' : ' . $params->getWeight() .' '
-                . $this->_usaData->getMeasureWeightName($params->getWeightUnits());
+                . $this->_carrierHelper->getMeasureWeightName($params->getWeightUnits());
             $page->drawText($weightText, 35, $this->y, 'UTF-8');
 
             if ($params->getHeight() != null) {
@@ -246,7 +256,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
                 $page->drawText($sizeText, 35, $this->y, 'UTF-8');
             }
             if ($params->getGirth() != null) {
-                $dimensionGirthUnits = $this->_usaData->getMeasureDimensionName($params->getGirthDimensionUnits());
+                $dimensionGirthUnits = $this->_carrierHelper->getMeasureDimensionName($params->getGirthDimensionUnits());
                 $girthText = __('Girth')
                              . ' : ' . $params->getGirth() . ' ' . $dimensionGirthUnits;
                 $page->drawText($girthText, 200, $this->y, 'UTF-8');

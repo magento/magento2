@@ -39,6 +39,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configScopeMock;
+
     protected function setUp()
     {
         $readerMap = include(__DIR__ . '/../_files/reader_mock_map.php');
@@ -47,8 +52,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('read')
             ->will($this->returnValueMap($readerMap));
 
-        $configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
-        $configScopeMock->expects($this->any())
+        $this->configScopeMock = $this->getMock('Magento\Config\ScopeListInterface');
+        $this->configScopeMock->expects($this->any())
             ->method('getAllScopes')
             ->will($this->returnValue(array('global', 'backend', 'frontend')));
         $cacheMock = $this->getMock('Magento\Cache\FrontendInterface');
@@ -57,18 +62,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue(false));
 
-        $omConfigMock = $this->getMock('Magento\ObjectManager\Config');
+        $omConfigMock = $this->getMock('Magento\Interception\ObjectManager\Config');
         $omConfigMock->expects($this->any())
-            ->method('getInstanceType')
+            ->method('getOriginalInstanceType')
             ->will($this->returnArgument(0));
-        $this->_model = new \Magento\Interception\Config\Config(
+        $definitionMock = $this->getMock('Magento\ObjectManager\Definition');
+        $definitionMock->expects($this->any())->method('getClasses')->will($this->returnValue(array()));
+        $this->model = new \Magento\Interception\Config\Config(
             $readerMock,
-            $configScopeMock,
+            $this->configScopeMock,
             $cacheMock,
             new \Magento\ObjectManager\Relations\Runtime(),
             $omConfigMock,
-            null,
-            null,
+            $definitionMock,
             'interception'
         );
     }
@@ -80,7 +86,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasPlugins($expectedResult, $type)
     {
-        $this->assertEquals($expectedResult, $this->_model->hasPlugins($type));
+        $this->assertEquals($expectedResult, $this->model->hasPlugins($type));
     }
 
     public function hasPluginsDataProvider()

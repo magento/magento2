@@ -81,9 +81,9 @@ class Design implements \Magento\View\DesignInterface
     private $_storeConfig;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_app;
+    protected $_locale;
 
     /**
      * @var \Magento\App\State
@@ -96,7 +96,7 @@ class Design implements \Magento\View\DesignInterface
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Store\ConfigInterface $storeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Locale\ResolverInterface $locale
      * @param \Magento\App\State $appState
      * @param array $themes
      */
@@ -106,7 +106,7 @@ class Design implements \Magento\View\DesignInterface
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Store\ConfigInterface $storeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Core\Model\App $app,
+        \Magento\Locale\ResolverInterface $locale,
         \Magento\App\State $appState,
         array $themes
     ) {
@@ -117,7 +117,7 @@ class Design implements \Magento\View\DesignInterface
         $this->_storeConfig = $storeConfig;
         $this->_appState = $appState;
         $this->_themes = $themes;
-        $this->_app = $app;
+        $this->_locale = $locale;
     }
 
     /**
@@ -242,7 +242,7 @@ class Design implements \Magento\View\DesignInterface
         $params = array(
             'area'       => $this->getArea(),
             'themeModel' => $this->getDesignTheme(),
-            'locale'     => $this->_app->getLocale()->getLocaleCode()
+            'locale'     => $this->_locale->getLocaleCode()
         );
 
         return $params;

@@ -30,7 +30,7 @@
             <?php $options = $this->getGenderOptions(); ?>
             <?php $value = $this->getGender();?>
             <?php foreach ($options as $option):?>
-                <option value="<?php echo $option['value'] ?>"<?php if ($option['value'] == $value) echo ' selected="selected"' ?>><?php echo $option['label'] ?></option>
+                <option value="<?php echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php echo $option->getLabel() ?></option>
             <?php endforeach;?>
         </select>
     </div>

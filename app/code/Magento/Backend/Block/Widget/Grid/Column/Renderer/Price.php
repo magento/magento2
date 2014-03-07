@@ -44,6 +44,26 @@ class Price
     protected static $_currencies = array();
 
     /**
+     * @var \Magento\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeCurrency = $localeCurrency;
+    }
+
+
+    /**
      * Renders grid column
      *
      * @param   \Magento\Object $row
@@ -60,7 +80,7 @@ class Price
 
             $data = floatval($data) * $this->_getRate($row);
             $data = sprintf("%f", $data);
-            $data = $this->_locale->currency($currencyCode)->toCurrency($data);
+            $data = $this->_localeCurrency->getCurrency($currencyCode)->toCurrency($data);
             return $data;
         }
         return $this->getColumn()->getDefault();

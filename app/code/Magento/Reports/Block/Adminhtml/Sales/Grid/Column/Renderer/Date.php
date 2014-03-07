@@ -32,6 +32,20 @@ class Date
     extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
     /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
+
+    /**
      * Retrieve date format
      *
      * @return string
@@ -42,7 +56,7 @@ class Date
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    $localeCode = $this->_locale->getLocaleCode();
+                    $localeCode = $this->_localeResolver->getLocaleCode();
                     $localeData = new \Zend_Locale_Data;
                     switch ($this->getColumn()->getPeriodType()) {
                         case 'month' :
@@ -54,8 +68,8 @@ class Date
                             break;
 
                         default:
-                            self::$_format = $this->_locale->getDateFormat(
-                                \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
+                            self::$_format = $this->_localeDate->getDateFormat(
+                                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                             );
                             break;
                     }
@@ -93,13 +107,13 @@ class Date
             $format = $this->_getFormat();
             try {
                 $data = ($this->getColumn()->getGmtoffset())
-                    ? $this->_locale->date($data, $dateFormat)->toString($format)
-                    : $this->_locale->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
+                    ? $this->_localeDate->date($data, $dateFormat)->toString($format)
+                    : $this->_localeDate->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
             }
             catch (\Exception $e) {
                 $data = ($this->getColumn()->getTimezone())
-                    ? $this->_locale->date($data, $dateFormat)->toString($format)
-                    : $this->_locale->date($data, $dateFormat, null, false)->toString($format);
+                    ? $this->_localeDate->date($data, $dateFormat)->toString($format)
+                    : $this->_localeDate->date($data, $dateFormat, null, false)->toString($format);
             }
             return $data;
         }

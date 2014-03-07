@@ -40,7 +40,7 @@ use Magento\Directory\Model\Currency\Filter;
  * @method \Magento\Core\Model\Store setIsActive(int $value)
  */
 class Store extends AbstractModel
-    implements \Magento\BaseScopeInterface, \Magento\Url\ScopeInterface
+    implements \Magento\BaseScopeInterface, \Magento\Url\ScopeInterface, \Magento\Object\IdentityInterface
 {
     /**
      * Entity name
@@ -298,9 +298,9 @@ class Store extends AbstractModel
     protected $_cookie;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\App\Http\Context
      */
-    protected $response;
+    protected $_httpContext;
 
     /**
      * @param Context $context
@@ -317,7 +317,7 @@ class Store extends AbstractModel
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
@@ -337,7 +337,7 @@ class Store extends AbstractModel
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\ResponseInterface $response,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = array()
@@ -354,7 +354,7 @@ class Store extends AbstractModel
         $this->_storeManager = $storeManager;
         $this->_sidResolver = $sidResolver;
         $this->_cookie = $cookie;
-        $this->response = $response;
+        $this->_httpContext = $httpContext;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -950,7 +950,7 @@ class Store extends AbstractModel
      */
     public function setCurrentCurrency($currency)
     {
-        $this->response->setVary('current_currency', $currency->getCurrencyCode());
+        $this->_httpContext->setValue('current_currency', $currency->getCurrencyCode());
         $this->setData('current_currency', $currency);
         return $this;
     }
@@ -1290,5 +1290,15 @@ class Store extends AbstractModel
     public function getUrlModel()
     {
         return $this->_url;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

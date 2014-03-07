@@ -32,7 +32,7 @@ namespace Magento\Checkout\Block\Cart;
  * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
+class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Magento\View\Block\IdentityInterface
 {
     const XML_PATH_CHECKOUT_SIDEBAR_COUNT   = 'checkout/sidebar/count';
 
@@ -379,5 +379,20 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart
             }
         }
         return $this;
+    }
+
+    /**
+     * Retrieve block cache tags
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        /** @var $item \Magento\Sales\Model\Quote\Item */
+        foreach ($this->getItems() as $item) {
+            $identities = array_merge($identities, $item->getProduct()->getIdentities());
+        }
+        return $identities;
     }
 }

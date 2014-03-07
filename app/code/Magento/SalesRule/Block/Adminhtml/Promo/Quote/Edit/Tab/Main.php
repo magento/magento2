@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 /**
  * Shopping Cart Price Rule General Information Tab
@@ -31,8 +32,6 @@
  * @package Magento_Adminhtml
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
-
 class Main
     extends \Magento\Backend\Block\Widget\Form\Generic
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -77,9 +76,7 @@ class Main
     }
 
     /**
-     * Prepare content for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -87,9 +84,7 @@ class Main
     }
 
     /**
-     * Prepare title for tab
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -97,9 +92,7 @@ class Main
     }
 
     /**
-     * Returns status flag about this tab can be showed or not
-     *
-     * @return true
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -107,15 +100,18 @@ class Main
     }
 
     /**
-     * Returns status flag about this tab hidden or not
-     *
-     * @return true
+     * {@inheritdoc}
      */
     public function isHidden()
     {
         return false;
     }
 
+    /**
+     * Prepare form before rendering HTML
+     *
+     * @return $this
+     */
     protected function _prepareForm()
     {
         $model = $this->_coreRegistry->registry('current_promo_quote_rule');
@@ -244,7 +240,7 @@ class Main
             'label' => __('Uses per Customer'),
         ));
 
-        $dateFormat = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField('from_date', 'date', array(
             'name'   => 'from_date',
             'label'  => __('From Date'),

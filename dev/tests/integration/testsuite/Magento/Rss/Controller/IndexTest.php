@@ -65,8 +65,12 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('wishlist_id', $wishlist->getId())
             ->setParam('data', base64_encode('1'))
         ;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session')
-            ->login('customer@example.com', 'password');
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\CustomerAccountService');
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $session->setCustomerDtoAsLoggedIn($customer);
+
         $this->dispatch('rss/index/wishlist');
         $this->assertContains('<![CDATA[Simple Product]]>', $this->getResponse()->getBody());
     }

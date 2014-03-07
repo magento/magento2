@@ -34,5 +34,12 @@
             <container name="form.additional.info" label="invisible" as="form_additional_info"/>
             <container name="customer.form.register.fields.before" as="form_fields_before" label="Form Fields Before" htmlTag="div" htmlClass="customer-form-before"/>
         </block>
+        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                    <item name="registerSubmitButton" xsi:type="string">.action.submit</item>
+                </argument>
+            </arguments>
+        </block>
     </referenceContainer>
 </layout>

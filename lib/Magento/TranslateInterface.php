@@ -83,4 +83,13 @@ interface TranslateInterface
      * @return string
      */
     public function translate($args);
+
+    /**
+     * This method initializes the Translate object for this instance.
+     *
+     * @param string $localeCode
+     * @param string|null $area
+     * @return \Magento\TranslateInterface
+     */
+    public function initLocale($localeCode, $area = null);
 }

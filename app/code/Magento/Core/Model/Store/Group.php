@@ -40,7 +40,7 @@ namespace Magento\Core\Model\Store;
 
 use Magento\Core\Model\Website;
 
-class Group extends \Magento\Core\Model\AbstractModel
+class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     const ENTITY         = 'store_group';
     const CACHE_TAG      = 'store_group';
@@ -395,5 +395,15 @@ class Group extends \Magento\Core\Model\AbstractModel
             $this->_isReadOnly = (bool)$value;
         }
         return $this->_isReadOnly;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

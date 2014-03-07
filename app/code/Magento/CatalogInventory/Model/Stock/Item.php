@@ -165,11 +165,9 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * Locale model
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\FormatInterface
      */
-    protected $_locale;
+    protected $_localeFormat;
 
     /**
      * @var Status
@@ -192,6 +190,11 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $mathDivision;
 
     /**
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $_localeDate;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -201,8 +204,9 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Math\Division $mathDivision
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -217,8 +221,9 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Math\Division $mathDivision,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -232,8 +237,9 @@ class Item extends \Magento\Core\Model\AbstractModel
         $this->_catalogInventoryMinsaleqty = $catalogInventoryMinsaleqty;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeFormat = $localeFormat;
         $this->mathDivision = $mathDivision;
+        $this->_localeDate = $localeDate;
     }
 
     /**
@@ -609,7 +615,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         $result->setHasError(false);
 
         if (!is_numeric($qty)) {
-            $qty = $this->_locale->getNumber($qty);
+            $qty = $this->_localeFormat->getNumber($qty);
         }
 
         /**
@@ -627,7 +633,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             $result->setItemQty($qty);
 
             if (!is_numeric($qty)) {
-                $qty = $this->_locale->getNumber($qty);
+                $qty = $this->_localeFormat->getNumber($qty);
             }
             $origQty = intval($origQty);
             $result->setOrigQty($origQty);
@@ -818,7 +824,7 @@ class Item extends \Magento\Core\Model\AbstractModel
             // if qty is below notify qty, update the low stock date to today date otherwise set null
             $this->setLowStockDate(null);
             if ($this->verifyNotification()) {
-                $this->setLowStockDate($this->_locale->date(null, null, null, false)
+                $this->setLowStockDate($this->_localeDate->date(null, null, null, false)
                     ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
                 );
             }

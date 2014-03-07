@@ -30,7 +30,7 @@
  */
 namespace Magento\Contacts\Model\System\Config\Backend;
 
-class Links extends \Magento\Backend\Model\Config\Backend\Cache
+class Links extends \Magento\Backend\Model\Config\Backend\Cache implements \Magento\Object\IdentityInterface
 {
     /**
      * Cache tags to clean
@@ -38,5 +38,16 @@ class Links extends \Magento\Backend\Model\Config\Backend\Cache
      * @var string[]
      */
     protected $_cacheTags = array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
+
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
+    }
 
 }

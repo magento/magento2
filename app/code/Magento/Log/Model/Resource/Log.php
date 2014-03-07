@@ -42,7 +42,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -53,13 +53,13 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Stdlib\DateTime $dateTime
     ) {

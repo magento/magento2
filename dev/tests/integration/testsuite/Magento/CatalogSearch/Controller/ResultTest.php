@@ -34,6 +34,9 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testIndexActionTranslation()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager->get('Magento\Locale\ResolverInterface')->setLocale('de_DE');
+
         $this->getRequest()->setParam('q', 'query_text');
         $this->dispatch('catalogsearch/result');
 

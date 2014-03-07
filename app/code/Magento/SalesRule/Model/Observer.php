@@ -23,8 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Model;
+
+use Magento\Cron\Model\Schedule;
+use Magento\Event\Observer as EventObserver;
 
 class Observer
 {
@@ -54,9 +56,9 @@ class Observer
     protected $_reportRule;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
@@ -69,14 +71,20 @@ class Observer
     protected $messageManager;
 
     /**
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $_localeDate;
+
+    /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory $ruleCustomerFactory
      * @param \Magento\SalesRule\Model\Coupon $coupon
      * @param \Magento\SalesRule\Model\Resource\Coupon\Usage $couponUsage
      * @param \Magento\SalesRule\Model\Resource\Report\Rule $reportRule
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
@@ -84,22 +92,23 @@ class Observer
         \Magento\SalesRule\Model\Coupon $coupon,
         \Magento\SalesRule\Model\Resource\Coupon\Usage $couponUsage,
         \Magento\SalesRule\Model\Resource\Report\Rule $reportRule,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
-        \Magento\Message\ManagerInterface $messageManager
+        \Magento\Message\ManagerInterface $messageManager,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_ruleCustomerFactory = $ruleCustomerFactory;
         $this->_coupon = $coupon;
         $this->_couponUsage = $couponUsage;
         $this->_reportRule = $reportRule;
-        $this->_locale = $locale;
+        $this->_localeResolver = $localeResolver;
         $this->_collectionFactory = $collectionFactory;
         $this->messageManager = $messageManager;
     }
 
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
      * @return $this
      */
     public function salesOrderAfterPlace($observer)
@@ -160,16 +169,16 @@ class Observer
     /**
      * Refresh sales coupons report statistics for last day
      *
-     * @param \Magento\Cron\Model\Schedule $schedule
-     * @return \Magento\SalesRule\Model\Observer
+     * @param Schedule $schedule
+     * @return $this
      */
     public function aggregateSalesReportCouponsData($schedule)
     {
-        $this->_locale->emulate(0);
-        $currentDate = $this->_locale->date();
+        $this->_localeResolver->emulate(0);
+        $currentDate = $this->_localeDate->date();
         $date = $currentDate->subHour(25);
         $this->_reportRule->aggregate($date);
-        $this->_locale->revert();
+        $this->_localeResolver->revert();
         return $this;
     }
 
@@ -178,7 +187,7 @@ class Observer
      * If rules were found they will be set to inactive and notice will be add to admin session
      *
      * @param string $attributeCode
-     * @return \Magento\SalesRule\Model\Observer
+     * @return $this
      */
     protected function _checkSalesRulesAvailability($attributeCode)
     {
@@ -233,10 +242,10 @@ class Observer
     /**
      * After save attribute if it is not used for promo rules already check rules for containing this attribute
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\SalesRule\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function catalogAttributeSaveAfter(\Magento\Event\Observer $observer)
+    public function catalogAttributeSaveAfter(EventObserver $observer)
     {
         $attribute = $observer->getEvent()->getAttribute();
         if ($attribute->dataHasChangedFor('is_used_for_promo_rules') && !$attribute->getIsUsedForPromoRules()) {
@@ -250,10 +259,10 @@ class Observer
      * After delete attribute check rules that contains deleted attribute
      * If rules was found they will seted to inactive and added notice to admin session
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\SalesRule\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function catalogAttributeDeleteAfter(\Magento\Event\Observer $observer)
+    public function catalogAttributeDeleteAfter(EventObserver $observer)
     {
         $attribute = $observer->getEvent()->getAttribute();
         if ($attribute->getIsUsedForPromoRules()) {
@@ -266,8 +275,8 @@ class Observer
     /**
      * Add coupon's rule name to order data
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\SalesRule\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addSalesRuleNameToOrder($observer)
     {

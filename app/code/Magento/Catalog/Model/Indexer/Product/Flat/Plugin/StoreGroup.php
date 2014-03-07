@@ -29,6 +29,8 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 class StoreGroup
 {
     /**
+     * Product flat indexer processor
+     *
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor
      */
     protected $_productFlatIndexerProcessor;
@@ -45,16 +47,18 @@ class StoreGroup
     /**
      * Before save handler
      *
-     * @param array $methodArguments
-     * @return array
+     * @param \Magento\Core\Model\Resource\Store\Group $subject
+     * @param \Magento\Core\Model\AbstractModel $object
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSave(array $methodArguments)
-    {
-        /** @var $storeGroup \Magento\Core\Model\Store\Group */
-        $storeGroup = $methodArguments[0];
-        if (!$storeGroup->getId() || $storeGroup->dataHasChangedFor('root_category_id')) {
+    public function beforeSave(
+        \Magento\Core\Model\Resource\Store\Group $subject,
+        \Magento\Core\Model\AbstractModel $object
+    ) {
+        if (!$object->getId() || $object->dataHasChangedFor('root_category_id')) {
             $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
         }
-        return $methodArguments;
     }
 }

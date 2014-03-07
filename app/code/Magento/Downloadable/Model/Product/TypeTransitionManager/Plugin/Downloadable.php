@@ -25,8 +25,7 @@
  */
 namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
-use Magento\App\RequestInterface,
-    Magento\Code\Plugin\InvocationChain;
+use Magento\App\RequestInterface;
 
 class Downloadable
 {
@@ -49,13 +48,18 @@ class Downloadable
     /**
      * Change product type to downloadable if needed
      *
-     * @param array $arguments
-     * @param InvocationChain $invocationChain
+     * @param \Magento\Catalog\Model\Product\TypeTransitionManager $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundProcessProduct(array $arguments, InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $arguments[0];
+    public function aroundProcessProduct(
+        \Magento\Catalog\Model\Product\TypeTransitionManager $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product $product
+    ) {
         $isTypeCompatible = in_array($product->getTypeId(), array(
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
             \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
@@ -66,6 +70,6 @@ class Downloadable
             $product->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
             return;
         }
-        $invocationChain->proceed($arguments);
+        $proceed($product);
     }
 }

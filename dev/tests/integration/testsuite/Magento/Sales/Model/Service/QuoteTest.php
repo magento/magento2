@@ -66,7 +66,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @var AddressBuilder
      */
-    protected $_customerAddressBuilder;
+    protected $_addressBuilder;
 
 
     public function setUp()
@@ -120,16 +120,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $this->_prepareQuote(false);
 
-        $response = $this->_customerAccountService->createAccount(
-            $this->getSampleCustomerEntity(),
+        $customerDto = $this->_customerAccountService->createAccount(
+        $this->getSampleCustomerEntity(),
             $this->getSampleAddressEntity(),
             'password'
         );
 
-        $this->assertEquals('registered', $response->getStatus());
-
-        $existingCustomerId = $response->getCustomerId();
-        $customerDto = $this->_customerService->getCustomer($existingCustomerId);
+        $existingCustomerId = $customerDto->getCustomerId();
         $customerDto = $this->_customerBuilder->mergeDtoWithArray(
             $customerDto,
             [CustomerDto::EMAIL => 'new@example.com']
@@ -191,15 +188,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testSubmitOrderRollbackExistingCustomer()
     {
         $this->_prepareQuoteWithMockTransaction();
-        $response = $this->_customerAccountService->createAccount(
-            $this->getSampleCustomerEntity(),
+        $customerDto = $this->_customerAccountService->createAccount(
+        $this->getSampleCustomerEntity(),
             $this->getSampleAddressEntity(),
             'password'
         );
-        $this->assertEquals('registered', $response->getStatus());
 
-        $existingCustomerId = $response->getCustomerId();
-        $customerDto = $this->_customerService->getCustomer($existingCustomerId);
+        $existingCustomerId = $customerDto->getCustomerId();
         $customerDto = $this->_customerBuilder->mergeDtoWithArray(
             $customerDto,
             [CustomerDto::EMAIL => 'new@example.com']

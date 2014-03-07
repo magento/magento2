@@ -61,10 +61,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->_directory->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
-        $this->_directory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnValue($logDir));
+            ->will($this->returnCallback(
+                function ($path) use ($logDir) {
+                    $path = ltrim($path, '\/');
+                    return $logDir . '/' . $path;
+                }
+            ));
 
         if (!is_dir($logDir)) {
             mkdir($logDir, 0777, true);

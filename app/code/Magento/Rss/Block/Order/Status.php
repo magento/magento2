@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Order;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Order;
-
 class Status extends \Magento\View\Element\Template
 {
     /**
@@ -68,6 +67,9 @@ class Status extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         /*
@@ -77,6 +79,9 @@ class Status extends \Magento\View\Element\Template
         $this->setCacheLifetime(600);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         /** @var $rssObj \Magento\Rss\Model\Rss */
@@ -101,13 +106,13 @@ class Status extends \Magento\View\Element\Template
                 $urlAppend = 'view';
                 $type = $result['entity_type_code'];
                 if ($type && $type != 'order') {
-                   $urlAppend = $type;
+                    $urlAppend = $type;
                 }
                 $type  = __(ucwords($type));
                 $title = __('Details for %1 #%2', $type, $result['increment_id']);
                 $description = '<p>'
-                    . __('Notified Date: %1<br/>',$this->formatDate($result['created_at']))
-                    . __('Comment: %1<br/>',$result['comment'])
+                    . __('Notified Date: %1<br/>', $this->formatDate($result['created_at']))
+                    . __('Comment: %1<br/>', $result['comment'])
                     . '</p>';
                 $url = $this->_urlBuilder->getUrl('sales/order/' . $urlAppend, array('order_id' => $order->getId()));
                 $rssObj->_addEntry(array(
@@ -118,7 +123,7 @@ class Status extends \Magento\View\Element\Template
             }
         }
         $title = __('Order #%1 created at %2', $order->getIncrementId(), $this->formatDate($order->getCreatedAt()));
-        $url = $this->_urlBuilder->getUrl('sales/order/view',array('order_id' => $order->getId()));
+        $url = $this->_urlBuilder->getUrl('sales/order/view', array('order_id' => $order->getId()));
         $description = '<p>'
             . __('Current Status: %1<br/>', $order->getStatusLabel())
             . __('Total: %1<br/>', $order->formatPrice($order->getGrandTotal()))

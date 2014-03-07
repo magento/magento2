@@ -308,12 +308,12 @@ class Config
     /**
      * Method code setter
      *
-     * @param string|\Magento\Payment\Model\Method\AbstractMethod $method
+     * @param string|\Magento\Payment\Model\MethodInterface $method
      * @return $this
      */
     public function setMethod($method)
     {
-        if ($method instanceof \Magento\Payment\Model\Method\AbstractMethod) {
+        if ($method instanceof \Magento\Payment\Model\MethodInterface) {
             $this->_methodCode = $method->getCode();
         } elseif (is_string($method)) {
             $this->_methodCode = $method;
@@ -745,10 +745,10 @@ class Config
      * Get "What Is PayPal" localized URL
      * Supposed to be used with "mark" as popup window
      *
-     * @param \Magento\Core\Model\LocaleInterface|null $locale
+     * @param \Magento\Locale\ResolverInterface $locale
      * @return string
      */
-    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Core\Model\LocaleInterface $locale = null)
+    public function getPaymentMarkWhatIsPaypalUrl(\Magento\Locale\ResolverInterface $locale = null)
     {
         $countryCode = 'US';
         if (null !== $locale) {

@@ -81,23 +81,14 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionCleanAttributeLabelCache()
     {
-        // ensure string translation is cached
-        $this->_translate('Fixture String');
-        /** @var \Magento\Core\Model\Resource\Translate\String $translateString */
-        $translateString = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Translate\String');
-        $translateString->saveTranslate('Fixture String', 'New Db Translation', 'en_US');
-        $this->assertEquals(
-            'Fixture Db Translation', $this->_translate('Fixture String'), 'Translation is expected to be cached'
-        );
-
+        /** @var \Magento\Core\Model\Resource\Translate\String $string */
+        $string = $this->_objectManager->create('Magento\Core\Model\Resource\Translate\String');
+        $this->assertEquals($this->_translate('string to translate'), 'predefined string translation');
+        $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + array('attribute_id' => 1);
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-
-        $this->assertEquals(
-            'New Db Translation', $this->_translate('Fixture String'), 'Translation cache is expected to be flushed'
-        );
+        $this->assertEquals($this->_translate('string to translate'), 'new string translation');
     }
 
     /**
@@ -112,9 +103,8 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
             ->setDesignTheme(1);
         /** @var \Magento\TranslateInterface $translate */
-        $translate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\TranslateInterface');
-        $translate->init(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, null);
+        $translate = $this->_objectManager->create('Magento\TranslateInterface');
+        $translate->init(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, null, true);
         return $translate->translate(array($string));
     }
 
@@ -145,7 +135,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
             'used_for_sort_by' => '0',
             'apply_to' => array('simple'),
             'frontend_label' => array(
-                \Magento\Core\Model\Store::DEFAULT_STORE_ID => 'Fixture String',
+                \Magento\Core\Model\Store::DEFAULT_STORE_ID => 'string to translate',
             ),
         );
     }

@@ -39,7 +39,7 @@ USAGE
 $options = getopt('p:h');
 
 if (isset($options['h'])) {
-    print USAGE;
+    echo USAGE;
     exit(0);
 }
 

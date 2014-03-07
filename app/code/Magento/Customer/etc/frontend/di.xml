@@ -36,15 +36,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="customerAccountInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <arguments>
-            <argument name="cookieCheckActions" xsi:type="array">
-                <item name="customerLogin" xsi:type="string">loginPost</item>
-                <item name="customerCreate" xsi:type="string">createpost</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Customer\Controller\Account">
-        <plugin name="sessionInitializer" type="customerAccountInitSession" />
+    <type name="Magento\Core\Model\Layout">
+        <plugin name="customer-session-stab" type="Magento\Customer\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
 </config>

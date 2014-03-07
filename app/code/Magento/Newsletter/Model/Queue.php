@@ -98,16 +98,14 @@ class Queue extends \Magento\Core\Model\Template
     /**
      * Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * Problem factory
@@ -135,8 +133,8 @@ class Queue extends \Magento\Core\Model\Template
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\ProblemFactory $problemFactory
      * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
@@ -150,8 +148,8 @@ class Queue extends \Magento\Core\Model\Template
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory,
@@ -161,7 +159,7 @@ class Queue extends \Magento\Core\Model\Template
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
         $this->_templateFilter = $templateFilter;
         $this->_date = $date;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_templateFactory = $templateFactory;
         $this->_problemFactory = $problemFactory;
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
@@ -200,8 +198,8 @@ class Queue extends \Magento\Core\Model\Template
         if (is_null($startAt) || $startAt == '') {
             $this->setQueueStartAt(null);
         } else {
-            $format = $this->_locale->getDateTimeFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM);
-            $time = $this->_locale->date($startAt, $format)->getTimestamp();
+            $format = $this->_localeDate->getDateTimeFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
+            $time = $this->_localeDate->date($startAt, $format)->getTimestamp();
             $this->setQueueStartAt($this->_date->gmtDate(null, $time));
         }
         return $this;

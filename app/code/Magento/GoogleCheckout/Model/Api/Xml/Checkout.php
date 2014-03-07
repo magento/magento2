@@ -33,6 +33,8 @@
  */
 namespace Magento\GoogleCheckout\Model\Api\Xml;
 
+use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
+
 class Checkout extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
 {
     /**
@@ -853,7 +855,7 @@ EOT;
                                         <tax-areas>
 
 EOT;
-                        if ($rate['country'] === \Magento\Usa\Model\Shipping\Carrier\AbstractCarrier::USA_COUNTRY_ID) {
+                        if ($rate['country'] === AbstractCarrierOnline::USA_COUNTRY_ID) {
                             if (!empty($rate['postcode']) && $rate['postcode'] !== '*') {
                                 $rate['postcode'] = $this->_googleCheckoutData
                                     ->zipRangeToZipPattern($rate['postcode']);

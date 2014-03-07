@@ -41,6 +41,25 @@ class Page extends \Magento\Backend\Block\Template
     protected $_template = 'admin/page.phtml';
 
     /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
+
+    /**
      * Class constructor
      *
      * @return void
@@ -60,7 +79,7 @@ class Page extends \Magento\Backend\Block\Template
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_locale->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
         }
         return $this->getData('lang');
     }

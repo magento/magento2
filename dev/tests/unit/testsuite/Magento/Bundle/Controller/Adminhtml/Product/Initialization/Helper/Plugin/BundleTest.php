@@ -43,6 +43,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
     protected function setUp()
     {
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
@@ -52,6 +57,8 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             'getProductOptions', 'setProductOptions', 'setCanSaveBundleSelections', '__wakeup'
         );
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', $methods, array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
+            array(), array(), '', false);
         $this->model = new \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle(
             $this->requestMock
         );
@@ -88,7 +95,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($productOptionsBefore));
         $this->productMock->expects($this->once())->method('setProductOptions')->with($productOptionsAfter);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
-        $this->model->afterInitialize($this->productMock);
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 
     public function testAfterInitializeIfBundleSelectionsAndCustomOptionsExist()
@@ -106,7 +113,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('getPriceType')->will($this->returnValue(2));
         $this->productMock->expects($this->any())->method('getOptionsReadonly')->will($this->returnValue(true));
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
-        $this->model->afterInitialize($this->productMock);
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 
     public function testAfterInitializeIfCustomAndBundleOptionNotExist()
@@ -130,6 +137,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->productMock->expects($this->never())->method('setProductOptions');
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(true);
-        $this->model->afterInitialize($this->productMock);
+        $this->model->afterInitialize($this->subjectMock, $this->productMock);
     }
 } 

@@ -69,12 +69,16 @@ class Install
     /**
      * Dispatch request
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\App\Action\Action $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     * @return \Magento\App\ResponseInterface
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
+    public function aroundDispatch(
+        \Magento\App\Action\Action $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         if (!$this->_appState->isInstalled()) {
             $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
             $this->_response->setRedirect(
@@ -82,6 +86,6 @@ class Install
             );
             return $this->_response;
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($request);
     }
 }

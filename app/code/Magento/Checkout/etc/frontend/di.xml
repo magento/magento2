@@ -36,14 +36,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="checkoutCartInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <arguments>
-            <argument name="cookieCheckActions" xsi:type="array">
-                <item name="checkoutCartAdd" xsi:type="string">add</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Checkout\Controller\Cart">
-        <plugin name="sessionInitializer" type="checkoutCartInitSession" />
-    </type>
 </config>

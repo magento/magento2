@@ -36,7 +36,9 @@ use Magento\Eav\Exception;
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+class Attribute
+    extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+    implements \Magento\Object\IdentityInterface
 {
     /**
      * Prefix of model events names
@@ -64,14 +66,19 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
     protected $_cacheTag    = 'EAV_ATTRIBUTE';
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_catalogProductFactory;
+
+    /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @param \Magento\Model\Context $context
@@ -82,8 +89,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -97,8 +105,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\ProductFactory $catalogProductFactory,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -116,7 +125,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
             $resourceCollection,
             $data
         );
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
+        $this->_localeResolver = $localeResolver;
         $this->_catalogProductFactory = $catalogProductFactory;
     }
 
@@ -227,14 +237,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
             if (!\Zend_Locale_Format::isNumber($defaultValue,
-                                              array('locale' => $this->_locale->getLocaleCode()))
+                                              array('locale' => $this->_localeResolver->getLocaleCode()))
             ) {
                 throw new Exception(__('Invalid default decimal value'));
             }
 
             try {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
-                    array('locale' => $this->_locale->getLocaleCode())
+                    array('locale' => $this->_localeResolver->getLocaleCode())
                 );
                 $this->setDefaultValue($filter->filter($defaultValue));
             } catch (\Exception $e) {
@@ -253,9 +263,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+                $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
                 try {
-                    $defaultValue = $this->_locale->date($defaultValue, $format, null, false)->toValue();
+                    $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();
                     $this->setDefaultValue($defaultValue);
                 } catch (\Exception $e) {
                     throw new Exception(__('Invalid default date'));
@@ -424,5 +434,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
             ? (float)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
             : 0.0;
         return $groupSortWeight + $sortWeight;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

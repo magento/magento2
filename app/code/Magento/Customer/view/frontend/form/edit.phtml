@@ -49,7 +49,7 @@
             <?php echo $_gender->setGender($this->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" value="1" title="<?php echo __('Change Password') ?>"<?php if($this->getCustomer()->getChangePassword()==1): ?> checked="checked"<?php endif; ?> class="checkbox">
+            <input type="checkbox" name="change_password" id="change-password" value="1" title="<?php echo __('Change Password') ?>"<?php if($this->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox"/>
             <label class="label" for="change-password"><span><?php echo __('Change Password') ?></span></label>
         </div>
     </fieldset>
@@ -101,7 +101,7 @@
                     passwordId: '#password',
                     confirmationId: '#confirmation',
                     passwordContainer: 'fieldset.fieldset.password',
-                    showOnDefault: <?php echo $this->getCustomer()->getChangePassword() ? 'true' : 'false' ?>
+                    showOnDefault: <?php echo $this->getChangePassword() ? 'true' : 'false' ?>
                 });
                 var dataForm = $('#form-validate'), ignore;
                 <?php if ($_dob->isEnabled()): ?>

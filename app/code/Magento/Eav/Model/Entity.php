@@ -46,7 +46,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param array $data
@@ -55,7 +55,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
         $data = array()
@@ -64,7 +64,7 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
             $resource,
             $eavConfig,
             $attrSetEntity,
-            $locale,
+            $localeFormat,
             $resourceHelper,
             $universalFactory,
             $data

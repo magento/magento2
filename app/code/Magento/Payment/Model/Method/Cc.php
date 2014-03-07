@@ -48,11 +48,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_moduleList;
 
     /**
-     * Locale model
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * Centinel service model
@@ -75,7 +73,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Module\ModuleListInterface $moduleList
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
      * @param array $data
      */
@@ -86,14 +84,14 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Logger $logger,
         \Magento\Module\ModuleListInterface $moduleList,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
         array $data = array()
     ) {
         parent::__construct($eventManager, $paymentData, $coreStoreConfig, $logAdapterFactory, $data);
         $this->_moduleList = $moduleList;
         $this->_logger = $logger;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_centinelService = $centinelService;
     }
 
@@ -278,7 +276,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected function _validateExpDate($expYear, $expMonth)
     {
-        $date = $this->_locale->date();
+        $date = $this->_localeDate->date();
         if (!$expYear || !$expMonth || ($date->compareYear($expYear) == 1)
             || ($date->compareYear($expYear) == 0 && ($date->compareMonth($expMonth) == 1))
         ) {

@@ -44,7 +44,7 @@ namespace Magento\Cms\Model;
  * @method int getIsActive()
  * @method \Magento\Cms\Model\Block setIsActive(int $value)
  */
-class Block extends \Magento\Core\Model\AbstractModel
+class Block extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     /**
      * CMS block cache tag
@@ -86,5 +86,15 @@ class Block extends \Magento\Core\Model\AbstractModel
         throw new \Magento\Core\Exception(
             __('Make sure that static block content does not reference the block itself.')
         );
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

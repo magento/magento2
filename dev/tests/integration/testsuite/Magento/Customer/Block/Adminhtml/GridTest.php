@@ -25,7 +25,6 @@
 namespace Magento\Customer\Block\Adminhtml;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Core\Model\LocaleInterface;
 use Magento\Customer\Service\V1\CustomerService;
 use Magento\Stdlib\DateTime;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -44,7 +43,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerService */
     private $customerService;
 
-    /** @var LocaleInterface */
+    /** @var \Magento\Stdlib\DateTime\TimezoneInterface */
     private $locale;
 
 
@@ -58,7 +57,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerService'
         );
         $this->locale = Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\LocaleInterface'
+            'Magento\Stdlib\DateTime\TimezoneInterface'
         );
     }
 
@@ -101,7 +100,7 @@ EOT;
     private function formatDatetime($date)
     {
         $format = $this->locale->getDateTimeFormat(
-            LocaleInterface::FORMAT_TYPE_MEDIUM
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
         );
         return $this->locale->date($date, DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
     }

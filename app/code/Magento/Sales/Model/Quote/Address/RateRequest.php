@@ -48,12 +48,10 @@ namespace Magento\Sales\Model\Quote\Address;
  * - table (shiptable)
  *   - condition_name: package_weight
  * - limit
- *   - carrier: ups
- *   - method: 3dp
- * - ups
- *   - pickup: CC
- *   - container: CP
- *   - address: RES
+ *   - carrier: carrier code
+ *   - method: carrier method
+ * - shipping carrier
+ *   - specific carrier fields
  *
  * @method int getStoreId()
  * @method \Magento\Sales\Model\Quote\Address\RateRequest setStoreId(int $value)

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Block\Catalog;
 
 /**
  * Review form block
  */
-namespace Magento\Rss\Block\Catalog;
-
 class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
 {
     /**
@@ -86,6 +85,9 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
         parent::__construct($context, $customerSession, $catalogData, $data);
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         $storeId = $this->_getStoreId();
@@ -105,11 +107,11 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->_productFactory->create();
-        $todayStartOfDayDate  = $this->_locale->date()
+        $todayStartOfDayDate  = $this->_localeDate->date()
             ->setTime('00:00:00')
             ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
-        $todayEndOfDayDate  = $this->_locale->date()
+        $todayEndOfDayDate  = $this->_localeDate->date()
             ->setTime('23:59:59')
             ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
 
@@ -131,7 +133,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
                     array('attribute' => 'news_to_date', 'is' => new \Zend_Db_Expr('not null'))
                 )
             )
-            ->addAttributeToSort('news_from_date','desc')
+            ->addAttributeToSort('news_from_date', 'desc')
             ->addAttributeToSelect(array('name', 'short_description', 'description'), 'inner')
             ->addAttributeToSelect(
                 array(
@@ -161,6 +163,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * Preparing data and adding to rss object
      *
      * @param array $args
+     * @return void
      */
     public function addNewItemXmlCallback($args)
     {

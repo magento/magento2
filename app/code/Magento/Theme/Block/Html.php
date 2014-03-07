@@ -23,12 +23,18 @@
  */
 
 namespace Magento\Theme\Block;
+use Magento\View\Element\Template;
 
 /**
  * Html page block
  */
 class Html extends \Magento\View\Element\Template
 {
+    /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
     /**
      * The list of available URLs
      *
@@ -40,6 +46,21 @@ class Html extends \Magento\View\Element\Template
      * @var string
      */
     protected $_title = '';
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
+
 
     /**
      * Add block data
@@ -181,7 +202,7 @@ class Html extends \Magento\View\Element\Template
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_locale->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
         }
         return $this->getData('lang');
     }

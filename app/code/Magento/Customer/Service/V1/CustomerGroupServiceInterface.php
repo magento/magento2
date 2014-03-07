@@ -88,7 +88,7 @@ interface CustomerGroupServiceInterface
      * @param int $groupId
      * @throws NoSuchEntityException if $groupId is not found
      * @throws \Exception if something goes wrong during delete
-     * @return null
+     * @return void
      */
     public function deleteGroup($groupId);
 }

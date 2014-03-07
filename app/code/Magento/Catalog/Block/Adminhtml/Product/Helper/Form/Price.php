@@ -48,16 +48,16 @@ class Price extends \Magento\Data\Form\Element\Text
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\CurrencyInterface
      */
-    protected $_locale;
+    protected $_localeCurrency;
 
     /**
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Escaper $escaper
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
@@ -66,11 +66,11 @@ class Price extends \Magento\Data\Form\Element\Text
         \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Escaper $escaper,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         \Magento\Tax\Helper\Data $taxData,
         array $data = array()
     ) {
-        $this->_locale = $locale;
+        $this->_localeCurrency = $localeCurrency;
         $this->_storeManager = $storeManager;
         $this->_taxData = $taxData;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
@@ -100,7 +100,7 @@ class Price extends \Magento\Data\Form\Element\Text
                 $storeId = $this->getForm()->getDataObject()->getStoreId();
             }
             $store = $this->_storeManager->getStore($storeId);
-            $html .= '<strong>' . $this->_locale->currency($store->getBaseCurrencyCode())->getSymbol() . '</strong>';
+            $html .= '<strong>' . $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode())->getSymbol() . '</strong>';
             if ($this->_taxData->priceIncludesTax($store)) {
                 if ($attribute->getAttributeCode()!=='cost') {
                     $addJsObserver = true;

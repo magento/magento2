@@ -98,9 +98,9 @@ class Collection extends \Magento\Data\Collection
     protected $_dateFactory;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Reports\Model\Resource\Report\Collection\Factory
@@ -109,18 +109,18 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\DateFactory $dateFactory
      * @param \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\DateFactory $dateFactory,
         \Magento\Reports\Model\Resource\Report\Collection\Factory $collectionFactory
     ) {
         $this->_dateFactory = $dateFactory;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($entityFactory);
     }
@@ -195,13 +195,13 @@ class Collection extends \Magento\Data\Collection
     /**
      * Get interval for a day
      *
-     * @param \Zend_Date $dateStart
+     * @param \Magento\Stdlib\DateTime\DateInterface $dateStart
      * @return array
      */
-    protected function _getDayInterval(\Zend_Date $dateStart)
+    protected function _getDayInterval(\Magento\Stdlib\DateTime\DateInterface $dateStart)
     {
         $interval = array(
-            'period' => $dateStart->toString($this->_locale->getDateFormat()),
+            'period' => $dateStart->toString($this->_localeDate->getDateFormat()),
             'start'  => $dateStart->toString('yyyy-MM-dd HH:mm:ss'),
             'end'    => $dateStart->toString('yyyy-MM-dd 23:59:59')
         );
@@ -211,13 +211,15 @@ class Collection extends \Magento\Data\Collection
     /**
      * Get interval for a month
      *
-     * @param \Zend_Date $dateStart
-     * @param \Zend_Date $dateEnd
+     * @param \Magento\Stdlib\DateTime\DateInterface $dateStart
+     * @param \Magento\Stdlib\DateTime\DateInterface $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getMonthInterval(\Zend_Date $dateStart, \Zend_Date $dateEnd, $firstInterval)
-    {
+    protected function _getMonthInterval(
+        \Magento\Stdlib\DateTime\DateInterface $dateStart,
+        \Magento\Stdlib\DateTime\DateInterface $dateEnd, $firstInterval
+    ) {
         $interval = array();
         $interval['period'] =  $dateStart->toString('MM/yyyy');
         if ($firstInterval) {
@@ -246,13 +248,16 @@ class Collection extends \Magento\Data\Collection
     /**
      * Get Interval for a year
      *
-     * @param \Zend_Date $dateStart
-     * @param \Zend_Date $dateEnd
+     * @param \Magento\Stdlib\DateTime\DateInterface $dateStart
+     * @param \Magento\Stdlib\DateTime\DateInterface $dateEnd
      * @param bool $firstInterval
      * @return array
      */
-    protected function _getYearInterval(\Zend_Date $dateStart, \Zend_Date $dateEnd, $firstInterval)
-    {
+    protected function _getYearInterval(
+        \Magento\Stdlib\DateTime\DateInterface $dateStart,
+        \Magento\Stdlib\DateTime\DateInterface $dateEnd,
+        $firstInterval
+    ) {
         $interval = array();
         $interval['period'] =  $dateStart->toString('yyyy');
         $interval['start'] = ($firstInterval) ? $dateStart->toString('yyyy-MM-dd 00:00:00')
@@ -391,7 +396,7 @@ class Collection extends \Magento\Data\Collection
      */
     public function timeShift($datetime)
     {
-        return $this->_locale
+        return $this->_localeDate
             ->utcDate(null, $datetime, true, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
             ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
     }

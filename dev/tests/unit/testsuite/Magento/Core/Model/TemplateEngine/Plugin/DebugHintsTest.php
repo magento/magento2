@@ -46,11 +46,17 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_coreData;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\View\TemplateEngineFactory', array(), array(), '', false);
         $this->_model = new DebugHints($this->_objectManager, $this->_storeConfig, $this->_coreData);
     }
 
@@ -73,7 +79,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue($engineDecorated))
         ;
-        $this->assertEquals($engineDecorated, $this->_model->afterCreate($engine));
+        $this->assertEquals($engineDecorated, $this->_model->afterCreate($this->subjectMock, $engine));
     }
 
     public function afterCreateActiveDataProvider()
@@ -94,8 +100,8 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         $this->_coreData->expects($this->any())->method('isDevAllowed')->will($this->returnValue($isDevAllowed));
         $this->_setupConfigFixture($showTemplateHints, true);
         $this->_objectManager->expects($this->never())->method('create');
-        $engine = $this->getMock('Magento\View\TemplateEngineInterface');
-        $this->assertSame($engine, $this->_model->afterCreate($engine));
+        $engine = $this->getMock('Magento\View\TemplateEngineInterface', array(), array(), '', false);
+        $this->assertSame($engine, $this->_model->afterCreate($this->subjectMock, $engine));
     }
 
     public function afterCreateInactiveDataProvider()

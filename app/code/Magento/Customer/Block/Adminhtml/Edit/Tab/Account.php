@@ -18,27 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+
 /**
  * Customer account form block
  *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
-
-/**
- * @SuppressWarnings(PHPMD.DepthOfInheritance)
- */
-class Account extends \Magento\Backend\Block\Widget\Form\Generic
+class Account extends GenericMetadata
 {
     /**
      * Disable Auto Group Change Attribute Name
@@ -46,9 +40,9 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     const DISABLE_ATTRIBUTE_NAME = 'disable_auto_group_change';
 
     /**
-     * @var \Magento\Customer\Model\FormFactory
+     * @var \Magento\Customer\Model\Metadata\FormFactory
      */
-    protected $_customerFactory;
+    protected $_customerFormFactory;
 
     /**
      * @var \Magento\Core\Model\System\Store
@@ -66,29 +60,63 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_customerHelper;
 
     /**
+     * @var \Magento\Customer\Service\V1\CustomerServiceInterface
+     */
+    protected $_customerService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     */
+    protected $_customerAccountService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
+     */
+    protected $_customerMetadataService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Dto\CustomerBuilder
+     */
+    protected $_customerBuilder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Customer\Model\FormFactory $customerFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Customer\Model\FormFactory $customerFactory,
+        \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
+        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_systemStore = $systemStore;
-        $this->_customerFactory = $customerFactory;
+        $this->_customerFormFactory = $customerFormFactory;
+        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_customerMetadataService = $customerMetadataService;
+        $this->_customerBuilder = $customerBuilder;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -96,6 +124,9 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
      * Initialize form
      *
      * @return \Magento\Customer\Block\Adminhtml\Edit\Tab\Account
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function initForm()
     {
@@ -108,34 +139,39 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
             'legend' => __('Account Information')
         ));
 
-        $customer = $this->_coreRegistry->registry('current_customer');
-        /** @var $customerForm \Magento\Customer\Model\Form */
-        $customerForm = $this->_initCustomerForm($customer);
+        $customerData = $this->_backendSession->getCustomerData();
+        $customerId = isset($customerData['customer_id']) ? $customerData['customer_id'] : false;
+        $accountData = isset($customerData['account']) ? $customerData['account'] : [];
+        $customerDto = $this->_customerBuilder->populateWithArray($accountData)->create();
+
+        $customerForm = $this->_initCustomerForm($customerDto);
         $attributes = $this->_initCustomerAttributes($customerForm);
         $this->_setFieldset($attributes, $fieldset, array(self::DISABLE_ATTRIBUTE_NAME));
 
-        $form->getElement('group_id')->setRenderer($this->getLayout()
-            ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
-            ->setDisableAutoGroupChangeAttribute($customerForm->getAttribute(self::DISABLE_ATTRIBUTE_NAME))
-            ->setDisableAutoGroupChangeAttributeValue($customer->getData(self::DISABLE_ATTRIBUTE_NAME))
-        );
+        $form->getElement('group_id')
+            ->setRenderer(
+                $this->getLayout()
+                    ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
+                    ->setDisableAutoGroupChangeAttribute($customerForm->getAttribute(self::DISABLE_ATTRIBUTE_NAME))
+                    ->setDisableAutoGroupChangeAttributeValue($customerDto->getAttribute(self::DISABLE_ATTRIBUTE_NAME))
+            );
 
-        $this->_setCustomerWebsiteId($customer);
-        $customerStoreId = $this->_getCustomerStoreId($customer);
+        $customerStoreId = $customerDto->getStoreId();
 
         $prefixElement = $form->getElement('prefix');
         if ($prefixElement) {
             $prefixOptions = $this->_customerHelper->getNamePrefixOptions($customerStoreId);
             if (!empty($prefixOptions)) {
                 $fieldset->removeField($prefixElement->getId());
-                $prefixField = $fieldset->addField($prefixElement->getId(),
+                $prefixField = $fieldset->addField(
+                    $prefixElement->getId(),
                     'select',
                     $prefixElement->getData(),
                     $form->getElement('group_id')->getId()
                 );
                 $prefixField->setValues($prefixOptions);
-                if ($customer->getId()) {
-                    $prefixField->addElementValues($customer->getPrefix());
+                if ($customerId) {
+                    $prefixField->addElementValues($customerDto->getPrefix());
                 }
             }
         }
@@ -145,29 +181,33 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
             $suffixOptions = $this->_customerHelper->getNameSuffixOptions($customerStoreId);
             if (!empty($suffixOptions)) {
                 $fieldset->removeField($suffixElement->getId());
-                $suffixField = $fieldset->addField($suffixElement->getId(),
+                $suffixField = $fieldset->addField(
+                    $suffixElement->getId(),
                     'select',
                     $suffixElement->getData(),
                     $form->getElement('lastname')->getId()
                 );
                 $suffixField->setValues($suffixOptions);
-                if ($customer->getId()) {
-                    $suffixField->addElementValues($customer->getSuffix());
+                if ($customerId) {
+                    $suffixField->addElementValues($customerDto->getSuffix());
                 }
             }
         }
 
-        if ($customer->getId()) {
-            $this->_addEditCustomerFormFields($form, $fieldset, $customer);
+        if ($customerId) {
+            $accountData = array_merge(
+                $this->_addEditCustomerFormFields($form, $fieldset, $customerDto),
+                $accountData
+            );
         } else {
             $this->_addNewCustomerFormFields($form, $fieldset);
-            $customer->setData('sendemail', '1');
+            $accountData['sendemail'] = '1';
         }
 
         $this->_disableSendEmailStoreForEmptyWebsite($form);
-        $this->_handleReadOnlyCustomer($form, $customer);
+        $this->_handleReadOnlyCustomer($form, $customerId, $attributes);
 
-        $form->setValues($customer->getData());
+        $form->setValues($accountData);
         $this->setForm($form);
         return $this;
     }
@@ -187,19 +227,19 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Initialize attribute set
+     * Initialize attribute set.
      *
-     * @param \Magento\Customer\Model\Form $customerFor
-     * @return \Magento\Eav\Model\Entity\Attribute[]
+     * @param \Magento\Customer\Model\Metadata\Form $customerForm
+     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
      */
-    protected function _initCustomerAttributes(\Magento\Customer\Model\Form $customerForm)
+    protected function _initCustomerAttributes(\Magento\Customer\Model\Metadata\Form $customerForm)
     {
         $attributes = $customerForm->getAttributes();
-        foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
-            $attributeLabel = __($attribute->getFrontend()->getLabel());
-            $attribute->setFrontendLabel($attributeLabel);
-            $attribute->unsIsVisible();
+
+        foreach ($attributes as $key => $attribute) {
+            if ($attribute->getAttributeCode() == 'created_at') {
+                unset($attributes[$key]);
+            }
         }
         return $attributes;
     }
@@ -207,35 +247,30 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize customer form
      *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Customer\Model\Form $customerForm
+     * @param \Magento\Customer\Service\V1\Dto\Customer $customer
+     * @return \Magento\Customer\Model\Metadata\Form $customerForm
      */
-    protected function _initCustomerForm(\Magento\Customer\Model\Customer $customer)
+    protected function _initCustomerForm(\Magento\Customer\Service\V1\Dto\Customer $customer)
     {
-        /** @var $customerForm \Magento\Customer\Model\Form */
-        $customerForm = $this->_customerFactory->create();
-        $customerForm->setEntity($customer)
-            ->setFormCode('adminhtml_customer')
-            ->initDefaultValues();
-
-        return $customerForm;
+        return $this->_customerFormFactory->create('customer', 'adminhtml_customer', $customer->getAttributes());
     }
 
     /**
      * Handle Read-Only customer
      *
      * @param \Magento\Data\Form $form
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param int $customerId
+     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[] $attributes
+     * @return void
      */
-    protected function _handleReadOnlyCustomer($form, $customer)
+    protected function _handleReadOnlyCustomer($form, $customerId, $attributes)
     {
-        if (!$customer->isReadonly()) {
-            return;
-        }
-        foreach ($customer->getAttributes() as $attribute) {
-            $element = $form->getElement($attribute->getAttributeCode());
-            if ($element) {
-                $element->setReadonly(true, true);
+        if ($customerId && $this->_customerService->isReadonly($customerId)) {
+            foreach ($attributes as $attribute) {
+                $element = $form->getElement($attribute->getAttributeCode());
+                if ($element) {
+                    $element->setReadonly(true, true);
+                }
             }
         }
     }
@@ -336,9 +371,10 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Data\Form $form
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Customer\Service\V1\Dto\Customer $customerDto
+     * @returns string[] Values to set on the form
      */
-    protected function _addEditCustomerFormFields($form, $fieldset, $customer)
+    protected function _addEditCustomerFormFields($form, $fieldset, $customerDto)
     {
         $form->getElement('created_in')->setDisabled('disabled');
         if (!$this->_storeManager->isSingleStoreMode()) {
@@ -350,16 +386,18 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->removeField('website_id');
         }
 
-        if ($customer->isReadonly()) {
-            return;
+        if ($customerDto->getCustomerId() && $this->_customerService->isReadonly($customerDto->getCustomerId())) {
+            return [];
         }
 
+
         // Prepare customer confirmation control (only for existing customers)
-        $confirmationKey = $customer->getConfirmation();
-        if ($confirmationKey || $customer->isConfirmationRequired()) {
-            $confirmationAttr = $customer->getAttribute('confirmation');
+        $confirmationStatus = $this->_customerAccountService->getConfirmationStatus($customerDto->getCustomerId());
+        $confirmationKey = $customerDto->getConfirmation();
+        if ($confirmationStatus != CustomerAccountServiceInterface::ACCOUNT_CONFIRMED) {
+            $confirmationAttr = $this->_customerMetadataService->getCustomerAttributeMetadata('confirmation');
             if (!$confirmationKey) {
-                $confirmationKey = $customer->getRandomConfirmationKey();
+                $confirmationKey = $this->getRandomConfirmationKey();
             }
 
             $element = $fieldset->addField('confirmation', 'select', array(
@@ -374,78 +412,24 @@ class Account extends \Magento\Backend\Block\Widget\Form\Generic
 
             // Prepare send welcome email checkbox if customer is not confirmed
             // no need to add it, if website ID is empty
-            if ($customer->getConfirmation() && $customer->getWebsiteId()) {
+            if ($customerDto->getConfirmation() && $customerDto->getWebsiteId()) {
                 $fieldset->addField('sendemail', 'checkbox', array(
                     'name'  => 'sendemail',
                     'label' => __('Send Welcome Email after Confirmation')
                 ));
-                $customer->setData('sendemail', '1');
+                return ['sendemail' => '1'];
             }
         }
+        return [];
     }
 
     /**
-     * Add Password management fieldset
+     * Called when account needs confirmation and does not have a confirmation key.
      *
-     * @param \Magento\Data\Form $form
-     * @param string $fieldLabel
-     * @param boolean $isNew whether we set initial password or change existing one
+     * @return string confirmation key
      */
-    protected function _addPasswordManagementFieldset($form, $fieldLabel, $isNew)
+    protected function _getRandomConfirmationKey()
     {
-        // Add password management fieldset
-        $newFieldset = $form->addFieldset(
-            'password_fieldset',
-            array('legend' => __('Password Management'))
-        );
-        if ($isNew) {
-            // New customer password for existing customer
-            $elementId = 'new_password';
-            $elementClass = 'validate-new-password';
-        } else {
-            // Password field for newly generated customer
-            $elementId = 'password';
-            $elementClass = 'input-text required-entry validate-password';
-        }
-        $field = $newFieldset->addField($elementId, 'text',
-            array(
-                'label' => __($fieldLabel),
-                'name'  => $elementId,
-                'class' => $elementClass,
-                'required' => !$isNew,
-            )
-        );
-        $field->setRenderer(
-            $this->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Newpass')
-        );
-    }
-
-    /**
-     * Get Customer Store Id
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return int|null
-     */
-    protected function _getCustomerStoreId(\Magento\Customer\Model\Customer $customer)
-    {
-        $customerStoreId = null;
-        if ($customer->getId()) {
-            $customerStoreId = $this->_storeManager->getWebsite($customer->getWebsiteId())
-                ->getDefaultStore()
-                ->getId();
-        }
-        return $customerStoreId;
-    }
-
-    /**
-     * Set Customer Website Id in Single Store Mode
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     */
-    protected function _setCustomerWebsiteId(\Magento\Customer\Model\Customer $customer)
-    {
-        if ($this->_storeManager->isSingleStoreMode()) {
-            $customer->setWebsiteId($this->_storeManager->getStore(true)->getWebsiteId());
-        }
+        return md5(uniqid());
     }
 }

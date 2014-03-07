@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <module name="Magento_User" version="1.6.1.5" active="true">
+    <module name="Magento_User" version="1.6.1.6" active="true">
         <sequence>
             <module name="Magento_Backend"/>
         </sequence>

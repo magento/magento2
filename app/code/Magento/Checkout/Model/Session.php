@@ -286,7 +286,7 @@ class Session extends \Magento\Session\SessionManager
      */
     public function setQuoteId($quoteId)
     {
-        $this->setData($this->_getQuoteIdKey(), $quoteId);
+        $this->storage->setData($this->_getQuoteIdKey(), $quoteId);
     }
 
     /**
@@ -465,5 +465,36 @@ class Session extends \Magento\Session\SessionManager
             $this->_order->loadByIncrementId($orderId);
         }
         return $this->_order;
+    }
+
+    /**
+     * Restore last active quote
+     *
+     * @return bool True if quote restored successfully, false otherwise
+     */
+    public function restoreQuote()
+    {
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->getLastRealOrder();
+        if ($order->getId()) {
+            /** @var \Magento\Sales\Model\Quote $quote */
+            $quote = $this->_quoteFactory->create()->load($order->getQuoteId());
+            if ($quote->getId()) {
+                $quote->setIsActive(1)
+                    ->setReservedOrderId(null)
+                    ->save();
+                $this->replaceQuote($quote)
+                    ->unsLastRealOrderId();
+                $this->_eventManager->dispatch(
+                    'restore_quote',
+                    array(
+                        'order' => $order,
+                        'quote' => $quote
+                    )
+                );
+                return true;
+            }
+        }
+        return false;
     }
 }

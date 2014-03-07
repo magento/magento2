@@ -92,11 +92,11 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Retrieve CC expiration date
      *
-     * @return \Zend_Date
+     * @return \Magento\Stdlib\DateTime\Date
      */
     public function getCcExpDate()
     {
-        $date = $this->_locale->date(0);
+        $date = $this->_localeDate->date(0);
         $date->setYear($this->getInfo()->getCcExpYear());
         $date->setMonth($this->getInfo()->getCcExpMonth());
         return $date;

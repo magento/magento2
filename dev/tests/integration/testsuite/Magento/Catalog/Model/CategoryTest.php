@@ -161,6 +161,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Core/_files/store.php
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      */
     public function testSetStoreIdWithNonNumericValue()
     {

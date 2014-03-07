@@ -53,16 +53,18 @@ class StoreGroup
     }
 
     /**
-     * Process to invalidate indexer
-     *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Core\Model\Resource\Db\AbstractDb $subject
+     * @param callable $proceed
+     * @param \Magento\Core\Model\AbstractModel $group
+     * @return mixed
      */
-    public function aroundSave(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $needInvalidating = $this->validate($arguments[0]);
-        $objectResource = $invocationChain->proceed($arguments);
+    public function aroundSave(
+        \Magento\Core\Model\Resource\Db\AbstractDb $subject,
+        \Closure $proceed,
+        \Magento\Core\Model\AbstractModel $group
+    ) {
+        $needInvalidating = $this->validate($group);
+        $objectResource = $proceed($group);
         if ($needInvalidating) {
             $this->getIndexer()->invalidate();
         }

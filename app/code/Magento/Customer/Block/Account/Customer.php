@@ -33,18 +33,30 @@ class Customer extends \Magento\View\Element\Template
      */
     protected $_customerSession;
 
+    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
+    protected $_customerService;
+
+    /** @var \Magento\Customer\Helper\View */
+    protected $_viewHelper;
+
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $session
+     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param \Magento\Customer\Helper\View $viewHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $session,
+        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        \Magento\Customer\Helper\View $viewHelper,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_customerSession = $session;
+        $this->_customerService = $customerService;
+        $this->_viewHelper = $viewHelper;
         $this->_isScopePrivate = true;
     }
 
@@ -53,17 +65,23 @@ class Customer extends \Magento\View\Element\Template
      *
      * @return bool
      */
-
     public function customerLoggedIn()
     {
         return (bool)$this->_customerSession->isLoggedIn();
     }
 
     /**
-     * @return string
+     * Return the full name of the customer currently logged in
+     *
+     * @return string|null
      */
     public function getCustomerName()
     {
-        return $this->escapeHtml($this->_customerSession->getCustomer()->getName());
+        try {
+            $customer = $this->_customerService->getCustomer($this->_customerSession->getCustomerId());
+            return $this->escapeHtml($this->_viewHelper->getCustomerName($customer));
+        } catch (\Magento\Exception\NoSuchEntityException $e) {
+            return null;
+        }
     }
 }

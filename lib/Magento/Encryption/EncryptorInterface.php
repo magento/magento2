@@ -32,12 +32,13 @@ interface EncryptorInterface
      * Generate a [salted] hash.
      *
      * $salt can be:
-     * false - a random will be generated
-     * integer - a random with specified length will be generated
-     * string
+     * false - salt is not used
+     * true - random salt of the default length will be generated
+     * integer - random salt of specified length will be generated
+     * string - actual salt value to be used
      *
      * @param string $password
-     * @param mixed $salt
+     * @param bool|int|string $salt
      * @return string
      */
     public function getHash($password, $salt = false);

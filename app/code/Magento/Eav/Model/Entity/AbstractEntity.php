@@ -201,9 +201,9 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
     protected $_attrSetEntity;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\FormatInterface
      */
-    protected $_locale;
+    protected $_localeFormat;
 
     /**
      * @var \Magento\Eav\Model\Resource\Helper
@@ -219,7 +219,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
      * @param \Magento\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param array $data
@@ -228,7 +228,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         \Magento\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
         $data = array()
@@ -236,7 +236,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         $this->_eavConfig = $eavConfig;
         $this->_resource = $resource;
         $this->_attrSetEntity = $attrSetEntity;
-        $this->_locale = $locale;
+        $this->_localeFormat = $localeFormat;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
         parent::__construct();
@@ -978,7 +978,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         } else {
             $value = $object->getData($attribute->getAttributeCode());
             if ($attribute->getBackend()->getType() == 'datetime') {
-                $date  = new \Zend_Date($value, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+                $date  = new \Magento\Stdlib\DateTime\Date($value, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
                 $value = $date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             }
             $bind = array(
@@ -1374,7 +1374,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         }
 
         if ($fieldProp['DATA_TYPE'] == 'decimal') {
-            $value = $this->_locale->getNumber($value);
+            $value = $this->_localeFormat->getNumber($value);
         }
 
         return $value;
@@ -1569,7 +1569,7 @@ abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResou
         if (($type == 'int' || $type == 'decimal' || $type == 'datetime') && $value === '') {
             $value = null;
         } else if ($type == 'decimal') {
-            $value = $this->_locale->getNumber($value);
+            $value = $this->_localeFormat->getNumber($value);
         }
         $backendTable = $attribute->getBackendTable();
         if (!isset(self::$_attributeBackendTables[$backendTable])) {

@@ -57,9 +57,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
-        <plugin name="configurable" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
-    </type>
     <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
         <arguments>
             <argument name="isAvailable" xsi:type="boolean">false</argument>

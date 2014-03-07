@@ -759,4 +759,21 @@ class Files
         }
         return $result;
     }
+
+    /**
+     * Check module existence
+     *
+     * @param string $moduleName
+     * @return bool
+     */
+    public function isModuleExists($moduleName)
+    {
+        $key = __METHOD__ . "/{$moduleName}";
+        if (!isset(self::$_cache[$key])) {
+            list($namespace, $module) = explode('_', $moduleName);
+            self::$_cache[$key] = file_exists("{$this->_path}/app/code/{$namespace}/{$module}");
+        }
+
+        return self::$_cache[$key];
+    }
 }

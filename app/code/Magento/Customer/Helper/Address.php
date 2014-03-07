@@ -43,6 +43,12 @@ class Address extends \Magento\App\Helper\AbstractHelper
     const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
 
     /**
+     * Possible customer address types
+     */
+    const TYPE_BILLING  = 'billing';
+    const TYPE_SHIPPING = 'shipping';
+
+    /**
      * Array of Customer Address Attributes
      *
      * @var array

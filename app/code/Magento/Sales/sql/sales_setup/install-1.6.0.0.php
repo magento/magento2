@@ -587,11 +587,6 @@ $table = $installer->getConnection()
         ), 'Applied Rule Ids')
     ->addColumn('additional_data', \Magento\DB\Ddl\Table::TYPE_TEXT, '64k', array(
         ), 'Additional Data')
-    ->addColumn('free_shipping', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
-        'unsigned'  => true,
-        'nullable'  => false,
-        'default'   => '0',
-        ), 'Free Shipping')
     ->addColumn('is_qty_decimal', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         ), 'Is Qty Decimal')
@@ -1989,11 +1984,6 @@ $table = $installer->getConnection()
         'nullable'  => false,
         'default'   => '0',
         ), 'Same As Billing')
-    ->addColumn('free_shipping', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
-        'unsigned'  => true,
-        'nullable'  => false,
-        'default'   => '0',
-        ), 'Free Shipping')
     ->addColumn('collect_shipping_rates', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         'nullable'  => false,
@@ -2138,11 +2128,6 @@ $table = $installer->getConnection()
         ), 'Applied Rule Ids')
     ->addColumn('additional_data', \Magento\DB\Ddl\Table::TYPE_TEXT, '64k', array(
         ), 'Additional Data')
-    ->addColumn('free_shipping', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
-        'unsigned'  => true,
-        'nullable'  => false,
-        'default'   => '0',
-        ), 'Free Shipping')
     ->addColumn('is_qty_decimal', \Magento\DB\Ddl\Table::TYPE_SMALLINT, null, array(
         'unsigned'  => true,
         ), 'Is Qty Decimal')
@@ -2330,9 +2315,6 @@ $table = $installer->getConnection()
         ), 'Name')
     ->addColumn('description', \Magento\DB\Ddl\Table::TYPE_TEXT, '64k', array(
         ), 'Description')
-    ->addColumn('free_shipping', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
-        'unsigned'  => true,
-        ), 'Free Shipping')
     ->addColumn('is_qty_decimal', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
         'unsigned'  => true,
         ), 'Is Qty Decimal')

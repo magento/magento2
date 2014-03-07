@@ -31,6 +31,7 @@
         </sequence>
         <depends>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Multishipping"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Core"/>

@@ -112,14 +112,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
             if (!isset($data['report_from'])) {
                 // getting all reports from 2001 year
-                $date = new \Zend_Date(mktime(0, 0, 0, 1, 1, 2001));
-                $data['report_from'] = $date->toString($this->_locale->getDateFormat('short'));
+                $date = new \Magento\Stdlib\DateTime\Date(mktime(0, 0, 0, 1, 1, 2001));
+                $data['report_from'] = $date->toString($this->_localeDate->getDateFormat('short'));
             }
 
             if (!isset($data['report_to'])) {
                 // getting all reports from 2001 year
-                $date = new \Zend_Date();
-                $data['report_to'] = $date->toString($this->_locale->getDateFormat('short'));
+                $date = new \Magento\Stdlib\DateTime\Date();
+                $data['report_to'] = $date->toString($this->_localeDate->getDateFormat('short'));
             }
 
             $this->_setFilterValues($data);
@@ -139,8 +139,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                  * Validate from and to date
                  */
                 try {
-                    $from = $this->_locale->date($this->getFilter('report_from'), \Zend_Date::DATE_SHORT, null, false);
-                    $to   = $this->_locale->date($this->getFilter('report_to'), \Zend_Date::DATE_SHORT, null, false);
+                    $from = $this->_localeDate->date($this->getFilter('report_from'), \Zend_Date::DATE_SHORT, null, false);
+                    $to   = $this->_localeDate->date($this->getFilter('report_to'), \Zend_Date::DATE_SHORT, null, false);
 
                     $collection->setInterval($from, $to);
                 }
@@ -291,7 +291,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      */
     public function getDateFormat()
     {
-        return $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
     }
 
     /**

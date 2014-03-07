@@ -42,19 +42,19 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Core\Filter\Date
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Core\Filter\Date $dateFilter
+        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
@@ -139,11 +139,15 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected function _showLastExecutionTime($flagCode, $refreshCode)
     {
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
-        $updatedAt = ($flag->hasData())
-            ? $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->storeDate(
-                0, new \Zend_Date($flag->getLastUpdate(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT), true
-            )
-            : 'undefined';
+        $updatedAt = 'undefined';
+        if ($flag->hasData()) {
+            $date = new \Magento\Stdlib\DateTime\Date(
+                $flag->getLastUpdate(),
+                \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            );
+            $updatedAt = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')
+                ->storeDate(0, $date, true);
+        }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', array('code' => $refreshCode));

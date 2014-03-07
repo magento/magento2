@@ -103,20 +103,15 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * Load core Url rewrite model
-     *
-     * @return void
+     * @var Product
      */
-    protected function _construct()
-    {
-        $this->_init('core_url_rewrite', 'url_rewrite_id');
-    }
+    protected $productResource;
 
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Catalog\Model\Product $catalogProduct
+     * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Magento\Logger $logger
      */
@@ -124,16 +119,26 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Model\Product $catalogProduct,
+        Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Magento\Logger $logger
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
-        $this->_catalogProduct = $catalogProduct;
+        $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
         parent::__construct($resource);
+    }
+
+    /**
+     * Load core Url rewrite model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('core_url_rewrite', 'url_rewrite_id');
     }
 
     /**
@@ -161,16 +166,6 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getCategoryModel()
     {
         return $this->_catalogCategory;
-    }
-
-    /**
-     * Retrieve product model singleton
-     *
-     * @return \Magento\Catalog\Model\Product
-     */
-    public function getProductModel()
-    {
-        return $this->_catalogProduct;
     }
 
     /**
@@ -561,7 +556,7 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getWriteAdapter();
         if (!isset($this->_productAttributes[$attributeCode])) {
-            $attribute = $this->getProductModel()->getResource()->getAttribute($attributeCode);
+            $attribute = $this->productResource->getAttribute($attributeCode);
 
             $this->_productAttributes[$attributeCode] = array(
                 'entity_type_id' => $attribute->getEntityTypeId(),
@@ -635,7 +630,7 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
         if (!isset($this->_productAttributes[$attributeCode])) {
-            $attribute = $this->getProductModel()->getResource()->getAttribute($attributeCode);
+            $attribute = $this->productResource->getAttribute($attributeCode);
 
             $this->_productAttributes[$attributeCode] = array(
                 'entity_type_id' => $attribute->getEntityTypeId(),

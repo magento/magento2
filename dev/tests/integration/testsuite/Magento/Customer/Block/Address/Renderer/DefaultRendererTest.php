@@ -61,10 +61,8 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'John',
             'lastname' => 'Smith',
             'postcode' => '75477',
-            'region' => [
-                'region' => 'Alabama',
-                'region_id' => '1',
-            ],
+            'region' => 'Alabama',
+            'region_id' => '1',
             'street' => ['Green str, 67'],
             'telephone' => '3468676',
         ];

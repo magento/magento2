@@ -30,6 +30,7 @@
         </sequence>
         <depends>
             <module name="Magento_Core"/>
+            <module name="Magento_Backend"/>
         </depends>
     </module>
 </config>

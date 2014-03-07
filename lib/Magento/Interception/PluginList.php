@@ -28,12 +28,21 @@ namespace Magento\Interception;
 interface PluginList
 {
     /**
-     * Retrieve list of plugins listening for method
+     * Retrieve next plugins in chain
      *
      * @param string $type
      * @param string $method
-     * @param string $scenario
+     * @param string $code
      * @return array
      */
-    public function getPlugins($type, $method, $scenario);
+    public function getNext($type, $method, $code = null);
+
+    /**
+     * Retrieve plugin instance by code
+     *
+     * @param string $type
+     * @param string $code
+     * @return mixed
+     */
+    public function getPlugin($type, $code);
 }

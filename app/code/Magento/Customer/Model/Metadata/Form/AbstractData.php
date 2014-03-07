@@ -58,16 +58,21 @@ abstract class AbstractData
     protected $_extractedData       = array();
 
     /**
-     * \Magento\Core\Model\LocaleInterface FORMAT
+     * Date filter format
      *
      * @var string
      */
     protected $_dateFilterFormat;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
+
+    /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @var \Magento\Logger
@@ -80,7 +85,7 @@ abstract class AbstractData
     protected $_attribute;
 
     /**
-     * @var string
+     * @var string|int|bool
      */
     protected $_value;
 
@@ -88,22 +93,25 @@ abstract class AbstractData
     protected $_entityTypeCode;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
      * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
-     * @param string $value
-     * @param $entityTypeCode
+     * @param \Magento\Locale\ResolverInterface $localeResolver
+     * @param string|int|bool $value
+     * @param string $entityTypeCode
      * @param bool $isAjax
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
         \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
-        $value = null,
+        \Magento\Locale\ResolverInterface $localeResolver,
+        $value = false,
         $entityTypeCode,
         $isAjax = false
     ) {
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
+        $this->_localeResolver = $localeResolver;
         $this->_logger = $logger;
         $this->_attribute = $attribute;
         $this->_value = $value;
@@ -210,7 +218,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_locale->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
             } else {
                 $filter = new $filterClass();
             }
@@ -230,9 +238,9 @@ abstract class AbstractData
         if (is_null($format)) {
             // get format
             if (is_null($this->_dateFilterFormat)) {
-                $this->_dateFilterFormat = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT;
+                $this->_dateFilterFormat = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT;
             }
-            return $this->_locale->getDateFormat($this->_dateFilterFormat);
+            return $this->_localeDate->getDateFormat($this->_dateFilterFormat);
         } else if ($format === false) {
             // reset value
             $this->_dateFilterFormat = null;
@@ -512,14 +520,14 @@ abstract class AbstractData
     /**
      * Validate data
      *
-     * @param array|string $value
+     * @param array|string|null $value
      * @throws \Magento\Core\Exception
      * @return array|bool
      */
     abstract public function validateValue($value);
 
     /**
-     * Export attribute value to entity model
+     * Export attribute value
      *
      * @param array|string $value
      * @return array|string|bool
@@ -527,7 +535,7 @@ abstract class AbstractData
     abstract public function compactValue($value);
 
     /**
-     * Restore attribute value from SESSION to entity model
+     * Restore attribute value from SESSION
      *
      * @param array|string $value
      * @return array|string|bool
@@ -535,7 +543,7 @@ abstract class AbstractData
     abstract public function restoreValue($value);
 
     /**
-     * Return formated attribute value from entity model
+     * Return formatted attribute value from entity model
      *
      * @param string $format
      * @return string|array

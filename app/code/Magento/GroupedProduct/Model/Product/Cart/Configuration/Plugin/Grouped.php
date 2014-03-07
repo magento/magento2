@@ -31,18 +31,24 @@ class Grouped
     /**
      * Decide whether product has been configured for cart or not
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Catalog\Model\Product\CartConfiguration $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $config
+     *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundIsProductConfigured(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        list($product, $config) = $arguments;
-
+    public function aroundIsProductConfigured(
+        \Magento\Catalog\Model\Product\CartConfiguration $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product $product,
+        $config
+    ) {
         if ($product->getTypeId() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
             return isset($config['super_group']);
         }
 
-        return $invocationChain->proceed($arguments);
+        return $proceed($product, $config);
     }
 } 

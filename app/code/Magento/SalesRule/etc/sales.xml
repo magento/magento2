@@ -26,7 +26,6 @@
 <config>
     <section name="quote">
         <group name="totals">
-            <item name="freeshipping" instance="Magento\SalesRule\Model\Quote\Freeshipping" sort_order="150"/>
             <item name="discount" instance="Magento\SalesRule\Model\Quote\Discount" sort_order="400"/>
         </group>
         <group name="nominal_totals">

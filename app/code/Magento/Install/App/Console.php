@@ -164,13 +164,18 @@ class Console implements \Magento\LauncherInterface
 
         $installer = $this->_installerFactory->create(array('installArgs' => $this->_arguments));
         if (isset($this->_arguments['show_locales'])) {
-            $this->_output->export($installer->getAvailableLocales());
+            $this->_output->readableOutput($this->_output->prepareArray($installer->getAvailableLocales()));
         } elseif (isset($this->_arguments['show_currencies'])) {
-            $this->_output->export($installer->getAvailableCurrencies());
+            $this->_output->readableOutput($this->_output->prepareArray($installer->getAvailableCurrencies()));
         } elseif (isset($this->_arguments['show_timezones'])) {
-            $this->_output->export($installer->getAvailableTimezones());
+            $this->_output->readableOutput($this->_output->prepareArray($installer->getAvailableTimezones()));
         } elseif (isset($this->_arguments['show_install_options'])) {
-            $this->_output->export($installer->getAvailableInstallOptions());
+            $this->_output->readableOutput(PHP_EOL . 'Required parameters:');
+            $this->_output->readableOutput($this->_output->alignArrayKeys($installer->getRequiredParams()));
+            $this->_output->readableOutput(PHP_EOL . 'Optional parameters:');
+            $this->_output->readableOutput($this->_output->alignArrayKeys($installer->getOptionalParams()));
+            $this->_output->readableOutput(PHP_EOL . 'Flag values are considered positive if set to 1, y, true or yes.'
+                . 'Any other value is considered as negative.' . PHP_EOL);
         } else {
             $this->_handleInstall($installer);
         }

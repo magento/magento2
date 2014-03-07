@@ -372,7 +372,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
             $this->getSelect()->where($conditionSql, null, \Magento\DB\Select::TYPE_CONDITION);
         } else {
             throw new \Magento\Core\Exception(
-                __('Invalid attribute identifier for filter (' . get_class($attribute) . ')')
+                __('Invalid attribute identifier for filter (%1)', get_class($attribute))
             );
         }
 

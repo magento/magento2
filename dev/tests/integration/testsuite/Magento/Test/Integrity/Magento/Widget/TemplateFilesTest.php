@@ -27,13 +27,11 @@
 
 namespace Magento\Test\Integrity\Magento\Widget;
 
+/**
+ * @magentoAppArea frontend
+ */
 class TemplateFilesTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
-    }
-
     /**
      * Check if all the declared widget templates actually exist
      *

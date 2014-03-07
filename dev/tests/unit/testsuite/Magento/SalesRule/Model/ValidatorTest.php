@@ -105,19 +105,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         return true;
     }
 
-    public function testProcessFreeShipping()
-    {
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress', '__wakeup'), array(), '', false);
-        $item->expects($this->once())
-            ->method('getAddress')
-            ->will($this->returnValue(true));
-
-        $this->assertInstanceOf('Magento\SalesRule\Model\Validator', $this->model->processFreeShipping($item));
-
-        return true;
-    }
-
-    public function testProcessWhenItemPriceIsNegativeRulesAreNotApplied()
+    public function testProcess()
     {
         $negativePrice = -1;
 

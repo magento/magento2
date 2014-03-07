@@ -56,7 +56,7 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
     {
         $this->_helperMock = $this->getMock('Magento\GoogleAdwords\Helper\Data', array(), array(), '', false);
         $this->_localeMock = $this->getMock('Zend_Locale', array(), array(), '', false);
-        $this->_localeModelMock = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false);
+        $this->_localeModelMock = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false);
         $this->_localeModelMock->expects($this->once())->method('getLocale')
             ->will($this->returnValue($this->_localeMock));
         $this->_uppercaseFilterMock = $this->getMock('Magento\GoogleAdwords\Model\Filter\UppercaseTitle', array(),
@@ -64,7 +64,7 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject('Magento\GoogleAdwords\Model\Config\Source\Language', array(
-            'locale' => $this->_localeModelMock,
+            'localeResolver' => $this->_localeModelMock,
             'helper' => $this->_helperMock,
             'uppercaseFilter' => $this->_uppercaseFilterMock,
         ));

@@ -66,12 +66,12 @@ $suffix = $this->showSuffix();
                            name="<?php echo $this->getFieldName('prefix') ?>"
                            value="<?php echo $this->escapeHtml($this->getObject()->getPrefix()) ?>"
                            title="<?php echo $this->getStoreLabel('prefix') ?>"
-                           class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?>>
+                           class="input-text <?php echo $this->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?>>
                 <?php else: ?>
                     <select id="<?php echo $this->getFieldId('prefix') ?>"
                             name="<?php echo $this->getFieldName('prefix') ?>"
                             title="<?php echo $this->getStoreLabel('prefix') ?>"
-                            class="<?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?> >
+                            class="<?php echo $this->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?> >
                         <?php foreach ($this->getPrefixOptions() as $_option): ?>
                             <option value="<?php echo $_option ?>"<?php if ($this->getObject()->getPrefix() == $_option): ?> selected="selected"<?php endif; ?>>
                                 <?php echo __($_option) ?>
@@ -92,7 +92,7 @@ $suffix = $this->showSuffix();
                        name="<?php echo $this->getFieldName('firstname') ?>"
                        value="<?php echo $this->escapeHtml($this->getObject()->getFirstname()) ?>"
                        title="<?php echo $this->getStoreLabel('firstname') ?>"
-                       class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('firstname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('firstname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+                       class="input-text <?php echo $this->getAttributeValidationClass('firstname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->getAttributeValidationClass('firstname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
             </div>
         </div>
     <?php if ($middle): ?>
@@ -107,7 +107,7 @@ $suffix = $this->showSuffix();
                        name="<?php echo $this->getFieldName('middlename') ?>"
                        value="<?php echo $this->escapeHtml($this->getObject()->getMiddlename()) ?>"
                        title="<?php echo $this->getStoreLabel('middlename') ?>"
-                       class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('middlename') ?>" <?php echo $this->getFieldParams() ?> <?php echo $isMiddlenameRequired ? ' data-validate="{required:true}"' : '' ?>>
+                       class="input-text <?php echo $this->getAttributeValidationClass('middlename') ?>" <?php echo $this->getFieldParams() ?> <?php echo $isMiddlenameRequired ? ' data-validate="{required:true}"' : '' ?>>
             </div>
         </div>
     <?php endif; ?>
@@ -121,7 +121,7 @@ $suffix = $this->showSuffix();
                        name="<?php echo $this->getFieldName('lastname') ?>"
                        value="<?php echo $this->escapeHtml($this->getObject()->getLastname()) ?>"
                        title="<?php echo $this->getStoreLabel('lastname') ?>"
-                       class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('lastname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('lastname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+                       class="input-text <?php echo $this->getAttributeValidationClass('lastname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->getAttributeValidationClass('lastname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
             </div>
         </div>
     <?php if ($suffix): ?>
@@ -136,12 +136,12 @@ $suffix = $this->showSuffix();
                            name="<?php echo $this->getFieldName('suffix') ?>"
                            value="<?php echo $this->escapeHtml($this->getObject()->getSuffix()) ?>"
                            title="<?php echo $this->getStoreLabel('suffix') ?>"
-                           class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                           class="input-text <?php echo $this->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
                 <?php else: ?>
                     <select id="<?php echo $this->getFieldId('suffix') ?>"
                             name="<?php echo $this->getFieldName('suffix') ?>"
                             title="<?php echo $this->getStoreLabel('suffix') ?>"
-                            class="<?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                            class="<?php echo $this->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
                         <?php foreach ($this->getSuffixOptions() as $_option): ?>
                             <option value="<?php echo $_option ?>"<?php if ($this->getObject()->getSuffix() == $_option): ?> selected="selected"<?php endif; ?>>
                                 <?php echo __($_option) ?>

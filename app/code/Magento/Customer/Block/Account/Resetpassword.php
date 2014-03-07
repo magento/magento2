@@ -18,31 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Account;
+
+use Magento\View\Element\Template\Context;
 
 /**
  * Customer reset password form
- *
- * @category    Magento
- * @package     Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Customer\Block\Account;
-
 class Resetpassword extends \Magento\View\Element\Template
 {
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * Reset Password Constructor.
+     *
+     * @param Context $context
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        array $data = array()
+        Context $context,
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;

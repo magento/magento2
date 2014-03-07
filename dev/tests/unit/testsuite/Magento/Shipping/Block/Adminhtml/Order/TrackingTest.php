@@ -36,7 +36,7 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
         $registry->expects($this->once())->method('registry')
             ->with('current_shipment')->will($this->returnValue($shipment));
 
-        $carrier = $this->getMock('Magento\Shipping\Model\Carrier\Freeshipping',
+        $carrier = $this->getMock('Magento\OfflineShipping\Model\Carrier\Freeshipping',
             ['isTrackingAvailable', 'getConfigData'], [], '', false);
         $carrier->expects($this->once())->method('isTrackingAvailable')->will($this->returnValue(true));
         $carrier->expects($this->once())->method('getConfigData')->with('title')

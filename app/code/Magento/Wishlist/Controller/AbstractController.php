@@ -67,7 +67,7 @@ abstract class AbstractController extends \Magento\App\Action\Action
     {
         if (!$this->_localFilter) {
             $this->_localFilter = new \Zend_Filter_LocalizedToNormalized(
-                array('locale' => $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->getLocaleCode())
+                array('locale' => $this->_objectManager->get('Magento\Locale\ResolverInterface')->getLocaleCode())
             );
         }
         $qty = $this->_localFilter->filter((float)$qty);

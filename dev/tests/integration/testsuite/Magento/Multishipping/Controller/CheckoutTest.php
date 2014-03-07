@@ -27,6 +27,8 @@
 
 namespace Magento\Multishipping\Controller;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test class for \Magento\Multishipping\Controller\Checkout
  *
@@ -52,9 +54,12 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setQuoteId($quote->getId());
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         /** @var $session \Magento\Customer\Model\Session */
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $session = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Session', array($logger));
-        $session->login('customer@example.com', 'password');
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\CustomerAccountService');
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $session->setCustomerDtoAsLoggedIn($customer);
         $this->getRequest()->setPost('payment', array('method' => 'checkmo'));
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();

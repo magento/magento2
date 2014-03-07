@@ -29,35 +29,42 @@ class Sidebar
     /**
      * Get item qty
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed|string
+     * @param \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject
+     * @param callable $proceed
+     * @param \Magento\Object $item
+     *
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetItemQty(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item */
-        $item = $arguments[0];
+    public function aroundGetItemQty(
+        \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,
+        \Closure $proceed,
+        \Magento\Object $item
+    ) {
         if ($item->getProduct()->getTypeId() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
             return '';
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 
     /**
      * Check whether product configuration is required before adding to order
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return bool|mixed
+     * @param \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject
+     * @param callable $proceed
+     * @param string $productType
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundIsConfigurationRequired(
-        array $arguments,
-        \Magento\Code\Plugin\InvocationChain $invocationChain
+        \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,
+        \Closure $proceed,
+        $productType
     ) {
-        $typeId = $arguments[0];
-        if ($typeId == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
+        if ($productType == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
             return true;
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($productType);
     }
 } 

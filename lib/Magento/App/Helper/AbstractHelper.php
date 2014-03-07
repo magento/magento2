@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -65,11 +63,6 @@ abstract class AbstractHelper
     protected $_logger;
 
     /**
-     * @var \Magento\Core\Model\App
-     */
-    protected $_app;
-
-    /**
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
@@ -100,7 +93,6 @@ abstract class AbstractHelper
         $this->_moduleManager = $context->getModuleManager();
         $this->_logger = $context->getLogger();
         $this->_request = $context->getRequest();
-        $this->_app = $context->getApp();
         $this->_urlBuilder = $context->getUrlBuilder();
         $this->_httpHeader = $context->getHttpHeader();
         $this->_eventManager = $context->getEventManager();

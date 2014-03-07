@@ -49,7 +49,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_configClassName = '\Magento\ObjectManager\Config\Config';
+    protected $_configClassName = 'Magento\Interception\ObjectManager\Config';
 
     /**
      * Create object manager
@@ -106,7 +106,12 @@ class ObjectManagerFactory
             'Magento\App\Arguments' => $appArguments,
             'Magento\App\Filesystem\DirectoryList' => $directoryList,
             'Magento\Filesystem\DirectoryList' => $directoryList,
+            'Magento\ObjectManager\Relations' => $relations,
+            'Magento\Interception\Definition' => $definitionFactory->createPluginDefinition(),
+            'Magento\ObjectManager\Config' => $diConfig,
+            'Magento\ObjectManager\Definition' => $definitions,
             'Magento\Stdlib\BooleanUtils' => $booleanUtils,
+            $configClass => $diConfig,
         ));
 
         $argFactory->setObjectManager($objectManager);
@@ -122,25 +127,8 @@ class ObjectManagerFactory
         );
         $objectManager->get('Magento\Config\ScopeInterface')->setCurrentScope('global');
         $objectManager->get('Magento\App\Resource')->setCache($objectManager->get('Magento\App\CacheInterface'));
-
-        $relations = $definitionFactory->createRelations();
-
-        $interceptionConfig = $objectManager->create('Magento\Interception\Config\Config', array(
-            'relations' => $relations,
-            'omConfig' => $diConfig,
-            'classDefinitions' => $definitions instanceof \Magento\ObjectManager\Definition\Compiled
-                ? $definitions
-                : null,
-        ));
-
-        $pluginList = $this->_createPluginList($objectManager, $relations, $definitionFactory, $diConfig, $definitions);
-
-        $factory = $objectManager->create('Magento\Interception\FactoryDecorator', array(
-            'factory' => $factory,
-            'config' => $interceptionConfig,
-            'pluginList' => $pluginList
-        ));
-        $objectManager->setFactory($factory);
+        $interceptionConfig = $objectManager->get('Magento\Interception\Config\Config');
+        $diConfig->setInterceptionConfig($interceptionConfig);
 
         $this->configureDirectories($objectManager);
 

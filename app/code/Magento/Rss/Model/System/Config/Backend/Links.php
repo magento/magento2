@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Model\System\Config\Backend;
 
 /**
  * Cache cleaner backend model
  *
  */
-namespace Magento\Rss\Model\System\Config\Backend;
-
 class Links extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -64,6 +63,7 @@ class Links extends \Magento\Core\Model\Config\Value
     /**
      * Invalidate cache type, when value was changed
      *
+     * @return void
      */
     protected function _afterSave()
     {

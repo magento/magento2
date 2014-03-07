@@ -50,7 +50,7 @@ class Currency
 
         $data = floatval($data) * $this->_getRate($row);
         $data = sprintf("%f", $data);
-        $data = $this->_locale->currency($currency_code)->toCurrency($data);
+        $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
         return $data;
     }
 }

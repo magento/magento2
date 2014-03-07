@@ -96,7 +96,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->saveCache('test', 'catalog_product_999', array('catalog_product_999'));
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
         $this->_model->setId(999)->cleanCache();
-        $this->assertEmpty(
+        $this->assertFalse(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
                 ->loadCache('catalog_product_999')
         );

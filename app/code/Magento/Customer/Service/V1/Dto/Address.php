@@ -36,6 +36,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
     const KEY_CUSTOMER_ID = 'customer_id';
     const KEY_REGION = Region::KEY_REGION;
     const KEY_REGION_ID = Region::KEY_REGION_ID;
+    const KEY_REGION_CODE = Region::KEY_REGION_CODE;
     const KEY_STREET = 'street';
     const KEY_COMPANY = 'company';
     const KEY_TELEPHONE = 'telephone';
@@ -109,6 +110,29 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
                 $validData[$attributeCode] = $unvalidatedData[$attributeCode];
             }
         }
+
+        /** This triggers some code in _updateAddressModel in CustomerV1 Service */
+        if (!is_null($this->getRegion())) {
+            $region = $this->getRegion();
+            if (!is_null($region->getRegionId())) {
+                $validData[self::KEY_REGION_ID] = $region->getRegionId();
+            } else {
+                unset($validData[self::KEY_REGION_ID]);
+            }
+            if (!is_null($region->getRegion())) {
+                $validData[self::KEY_REGION] = $region->getRegion();
+            } else {
+                unset($validData[self::KEY_REGION]);
+            }
+            if (!is_null($region->getRegionCode())) {
+                $validData[self::KEY_REGION_CODE] = $region->getRegionCode();
+            } else {
+                unset($validData[self::KEY_REGION_CODE]);
+            }
+        } else {
+            unset($validData[self::KEY_REGION]);
+        }
+
         return $validData;
     }
 
@@ -142,7 +166,7 @@ class Address extends \Magento\Service\Entity\AbstractDto implements Eav\EntityI
     }
 
     /**
-     * @return \string[]|null
+     * @return string[]|null
      */
     public function getStreet()
     {

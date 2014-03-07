@@ -44,21 +44,29 @@ class Currency extends \Magento\View\Element\Template
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\LocaleInterface
+     */
+    protected $_locale;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Url $directoryUrl
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Directory\Helper\Url $directoryUrl,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_directoryUrl = $directoryUrl;
         $this->_currencyFactory = $currencyFactory;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->_locale = $localeResolver->getLocale();
     }
 
     /**

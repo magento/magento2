@@ -46,10 +46,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @var string[]
      */
     protected $_allowedFormats = array(
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_FULL,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_LONG,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT
+        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_FULL,
+        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG,
+        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
     );
 
     /**
@@ -72,11 +72,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Locale
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\App\State
      */
     protected $_appState;
@@ -90,7 +85,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param bool $dbCompatibleMode
      */
@@ -98,14 +92,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         $dbCompatibleMode = true
     ) {
         parent::__construct($context);
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
         $this->_appState = $appState;
         $this->_dbCompatibleMode = $dbCompatibleMode;
     }

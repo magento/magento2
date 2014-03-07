@@ -38,8 +38,19 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             'Magento\Module\Declaration\SchemaLocator', array(), array(), '', false
         );
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
+
+        $appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $appStateMock->expects($this->any())
+            ->method('isInstalled')
+            ->will($this->returnValue(true));
+
+        $dependencyManager = $this->getMock('Magento\Module\DependencyManagerInterface');
+        $dependencyManager->expects($this->any())
+            ->method('getExtendedModuleDependencies')
+            ->will($this->returnValue(array()));
+
         $this->_model = new \Magento\Module\Declaration\Reader\Filesystem(
-            $fileResolver, $converter, $schemaLocatorMock, $validationStateMock
+            $fileResolver, $converter, $schemaLocatorMock, $validationStateMock, $appStateMock, $dependencyManager
         );
     }
 

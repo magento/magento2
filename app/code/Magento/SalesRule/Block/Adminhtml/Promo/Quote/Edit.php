@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote;
 
 /**
  * Shopping cart rule edit form block
  */
-
-namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -57,6 +55,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize form
      * Add standard buttons
      * Add "Save and Continue" button
+     *
+     * @return void
      */
     protected function _construct()
     {

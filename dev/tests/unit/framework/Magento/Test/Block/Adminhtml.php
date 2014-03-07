@@ -84,9 +84,6 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\StoreManager */
     protected $_storeManagerMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\LocaleInterface */
-    protected $_localeMock;
-
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Math\Random */
     protected $_mathMock;
 
@@ -121,7 +118,6 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
         $escaperMock                = $this->_makeMock('Magento\Escaper');
         $filterManagerMock          = $this->_makeMock('Magento\Filter\FilterManager');
         $backendSessionMock         = $this->_makeMock('Magento\Backend\Model\Session');
-        $this->_localeMock          = $this->_makeMock('Magento\Core\Model\LocaleInterface');
         $appState                   = $this->_makeMock('Magento\App\State');
         $this->_mathMock            = $this->_makeMock('Magento\Math\Random');
         $this->_formKey             = $this->_makeMock('Magento\Data\Form\FormKey');
@@ -152,7 +148,6 @@ class Adminhtml extends \PHPUnit_Framework_TestCase
             $appMock,
             $escaperMock,
             $filterManagerMock,
-            $this->_localeMock,
             $this->_filesystemMock,
             $viewFileSystemMock,
             $templatePoolMock,

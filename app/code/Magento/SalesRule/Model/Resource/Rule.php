@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Model\Resource;
+
+use Magento\Core\Model\AbstractModel;
 
 /**
  * Sales Rule resource model
@@ -64,7 +65,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\String $string
-     * @param Coupon $resourceCoupon
+     * @param \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -78,6 +79,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
     /**
      * Initialize main table and table id field
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,11 +90,10 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Add customer group ids and website ids to rule data after load
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $object->setData('customer_group_ids', (array)$this->getCustomerGroupIds($object->getId()));
         $object->setData('website_ids', (array)$this->getWebsiteIds($object->getId()));
@@ -103,11 +105,10 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Prepare sales rule's discount quantity
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule
+     * @param AbstractModel $object
+     * @return $this
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(AbstractModel $object)
     {
         if (!$object->getDiscountQty()) {
             $object->setDiscountQty(new \Zend_Db_Expr('NULL'));
@@ -122,11 +123,10 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Save rule's associated store labels.
      * Save product attributes used in rule.
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule
+     * @param AbstractModel $object
+     * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         if ($object->hasStoreLabels()) {
             $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
@@ -169,7 +169,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param int $customerId
-     *
      * @return string
      */
     public function getCustomerUses($rule, $customerId)
@@ -187,7 +186,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param int $ruleId
      * @param array $labels
      * @throws \Exception
-     * @return \Magento\SalesRule\Model\Resource\Rule
+     * @return $this
      */
     public function saveStoreLabels($ruleId, $labels)
     {
@@ -263,8 +262,8 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     /**
      * Return codes of all product attributes currently used in promo rules for specified customer group and website
      *
-     * @param unknown_type $websiteId
-     * @param unknown_type $customerGroupId
+     * @param mixed $websiteId
+     * @param int $customerGroupId
      * @return mixed
      */
     public function getActiveAttributes($websiteId, $customerGroupId)
@@ -282,7 +281,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      *
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param mixed $attributes
-     * @return \Magento\SalesRule\Model\Resource\Rule
+     * @return $this
      */
     public function setActualProductAttributes($rule, $attributes)
     {
@@ -323,7 +322,6 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * Collect all product attributes used in serialized rule's action or condition
      *
      * @param string $serializedString
-     *
      * @return array
      */
     public function getProductAttributes($serializedString)

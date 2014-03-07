@@ -44,8 +44,13 @@ use Magento\Wishlist\Model\Resource\Wishlist\Collection;
  * @method string getUpdatedAt()
  * @method \Magento\Wishlist\Model\Wishlist setUpdatedAt(string $value)
  */
-class Wishlist extends \Magento\Core\Model\AbstractModel
+class Wishlist extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
+    /**
+     * Cache tag
+     */
+    const CACHE_TAG = 'wishlist';
+
     /**
      * Prefix of model events names
      *
@@ -93,7 +98,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -135,7 +140,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
      * @param ResourceWishlist $resource
      * @param Collection $resourceCollection
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param ItemFactory $wishlistItemFactory
      * @param CollectionFactory $wishlistCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -152,7 +157,7 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
         ResourceWishlist $resource,
         Collection $resourceCollection,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         ItemFactory $wishlistItemFactory,
         CollectionFactory $wishlistCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
@@ -674,5 +679,15 @@ class Wishlist extends \Magento\Core\Model\AbstractModel
     {
         $this->_hasDataChanges = true;
         return parent::save();
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

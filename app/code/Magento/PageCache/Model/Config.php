@@ -45,9 +45,17 @@ use Magento\App\Filesystem;
 class Config
 {
     /**#@+
+     * Cache types
+     */
+    const BUILT_IN = 0;
+    const VARNISH = 1;
+    /**#@-*/
+
+    /**#@+
      * XML path to Varnish settings
      */
     const XML_PAGECACHE_TTL = 'system/full_page_cache/ttl';
+    const XML_PAGECACHE_TYPE = 'system/full_page_cache/caching_application';
     const XML_VARNISH_PAGECACHE_ACCESS_LIST = 'system/full_page_cache/varnish/access_list';
     const XML_VARNISH_PAGECACHE_BACKEND_PORT = 'system/full_page_cache/varnish/backend_port';
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
@@ -82,6 +90,16 @@ class Config
         $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_config = $config;
+    }
+
+    /**
+     * Return currently selected cache type: built in or varnish
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->_config->getValue(self::XML_PAGECACHE_TYPE);
     }
 
     /**

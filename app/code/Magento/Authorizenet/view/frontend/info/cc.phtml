@@ -39,7 +39,7 @@
 <?php foreach ($cards as $key => $card): ?>
 
     <?php if ($showCount): ?>
-        <dt><?php echo sprintf(__('Credit Card %s'), $key + 1); ?></dt>
+        <dt><?php echo __('Credit Card %1', $key + 1); ?></dt>
     <?php endif; ?>
     <dd class="content">
         <table class="data table">

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rss\Controller;
 
 /**
  * RSS Controller for Order feed
  */
-namespace Magento\Rss\Controller;
-
 class Order extends \Magento\App\Action\Action
 {
     /**
@@ -52,6 +51,8 @@ class Order extends \Magento\App\Action\Action
 
     /**
      * Order status action
+     *
+     * @return void
      */
     public function statusAction()
     {

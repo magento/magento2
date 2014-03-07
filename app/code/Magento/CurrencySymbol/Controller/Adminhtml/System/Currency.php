@@ -138,7 +138,7 @@ class Currency extends \Magento\Backend\App\Action
                 foreach ($data as $currencyCode => $rate) {
                     foreach( $rate as $currencyTo => $value ) {
                         $value = abs($this->_objectManager
-                                ->get('Magento\Core\Model\LocaleInterface')
+                                ->get('Magento\Locale\FormatInterface')
                                 ->getNumber($value)
                         );
                         $data[$currencyCode][$currencyTo] = $value;

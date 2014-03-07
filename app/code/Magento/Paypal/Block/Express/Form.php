@@ -52,6 +52,7 @@ class Form extends \Magento\Paypal\Block\Standard\Form
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Paypal\Helper\Data $paypalData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
@@ -59,13 +60,14 @@ class Form extends \Magento\Paypal\Block\Standard\Form
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Paypal\Helper\Data $paypalData,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_paypalData = $paypalData;
         $this->_customerSession = $customerSession;
-        parent::__construct($context, $paypalConfigFactory, $data);
+        parent::__construct($context, $paypalConfigFactory, $localeResolver, $data);
         $this->_isScopePrivate = true;
     }
 

@@ -603,8 +603,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'export' => 'Magento\Backend\Block\System\Config\Form\Field\Export',
-            'import' => 'Magento\Backend\Block\System\Config\Form\Field\Import',
             'allowspecific' => 'Magento\Backend\Block\System\Config\Form\Field\Select\Allowspecific',
             'image' => 'Magento\Backend\Block\System\Config\Form\Field\Image',
             'file' => 'Magento\Backend\Block\System\Config\Form\Field\File',

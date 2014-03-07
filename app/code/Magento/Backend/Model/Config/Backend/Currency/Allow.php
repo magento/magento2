@@ -33,9 +33,9 @@ namespace Magento\Backend\Model\Config\Backend\Currency;
 class Allow extends AbstractCurrency
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\CurrencyInterface
      */
-    protected $_locale;
+    protected $_localeCurrency;
 
     /**
      * @param \Magento\Model\Context $context
@@ -43,7 +43,7 @@ class Allow extends AbstractCurrency
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -54,12 +54,12 @@ class Allow extends AbstractCurrency
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_locale = $locale;
+        $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $registry, $storeManager, $config, $coreStoreConfig, $resource,
             $resourceCollection, $data);
     }
@@ -77,14 +77,14 @@ class Allow extends AbstractCurrency
         foreach ($this->_getAllowedCurrencies() as $currencyCode) {
             if (!in_array($currencyCode, $this->_getInstalledCurrencies())) {
                 $exceptions[] = __('Selected allowed currency "%1" is not available in installed currencies.',
-                    $this->_locale->currency($currencyCode)->getName()
+                    $this->_localeCurrency->getCurrency($currencyCode)->getName()
                 );
             }
         }
 
         if (!in_array($this->_getCurrencyDefault(), $this->_getAllowedCurrencies())) {
             $exceptions[] = __('Default display currency "%1" is not available in allowed currencies.',
-                $this->_locale->currency($this->_getCurrencyDefault())->getName()
+                $this->_localeCurrency->getCurrency($this->_getCurrencyDefault())->getName()
             );
         }
 

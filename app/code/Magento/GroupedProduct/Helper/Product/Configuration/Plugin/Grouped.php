@@ -29,14 +29,18 @@ class Grouped
     /**
      * Retrieves grouped product options list
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\Catalog\Helper\Product\Configuration $subject
+     * @param callable $proceed
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetOptions(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item */
-        $item = $arguments['item'];
+    public function aroundGetOptions(
+        \Magento\Catalog\Helper\Product\Configuration $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+    ) {
         $product = $item->getProduct();
         $typeId  = $product->getTypeId();
         if ($typeId == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
@@ -56,7 +60,7 @@ class Grouped
                 }
             }
 
-            $options = array_merge($options, $invocationChain->proceed($arguments));
+            $options = array_merge($options, $proceed($item));
             $isUnConfigured = true;
             foreach ($options as &$option) {
                 if ($option['value']) {
@@ -66,6 +70,6 @@ class Grouped
             }
             return $isUnConfigured ? array() : $options;
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 } 

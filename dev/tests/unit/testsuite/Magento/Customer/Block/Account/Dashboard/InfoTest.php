@@ -38,12 +38,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\View\Element\Template\Context */
     private $_context;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
-    private $_customerSession;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerServiceInterface */
-    private $_customerService;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\Customer */
     private $_customer;
 
@@ -64,8 +58,18 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     /** @var Info */
     private $_block;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\CustomerCurrentServiceInterface
+     */
+    protected $customerCurrentService;
+
     public function setUp()
     {
+
+        $this->customerCurrentService = $this->getMockForAbstractClass(
+            'Magento\Customer\Service\V1\CustomerCurrentServiceInterface',
+            array(), '', false, true, true, array());
+
         $urlBuilder = $this->getMockForAbstractClass('Magento\UrlInterface', array(), '', false);
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnValue(self::CHANGE_PASSWORD_URL));
 
@@ -79,16 +83,9 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->_context->expects($this->once())->method('getUrlBuilder')->will($this->returnValue($urlBuilder));
         $this->_context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
 
-        $this->_customerSession = $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false);
-        $this->_customerSession->expects($this->any())->method('getId')->will($this->returnValue(self::CUSTOMER_ID));
-
-        $this->_customerService = $this->getMockForAbstractClass(
-            'Magento\Customer\Service\V1\CustomerServiceInterface', array(), '', false
-        );
         $this->_customer = $this->getMock('Magento\Customer\Service\V1\Dto\Customer', array(), array(), '', false);
         $this->_customer->expects($this->any())->method('getEmail')->will($this->returnValue(self::EMAIL_ADDRESS));
-        $this->_customerService
-            ->expects($this->any())->method('getCustomer')->will($this->returnValue($this->_customer));
+
 
         $this->_metadataService = $this->getMockForAbstractClass(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', array(), '', false
@@ -98,12 +95,13 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->_subscriber = $this->getMock('Magento\Newsletter\Model\Subscriber', array(), array(), '', false);
         $this->_subscriber->expects($this->any())->method('loadByEmail')->will($this->returnSelf());
         $this->_subscriberFactory
-            ->expects($this->any())->method('create')->will($this->returnValue($this->_subscriber));
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->_subscriber));
 
         $this->_block = new Info(
             $this->_context,
-            $this->_customerSession,
-            $this->_customerService,
+            $this->customerCurrentService,
             $this->_metadataService,
             $this->_subscriberFactory
         );
@@ -111,16 +109,21 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomer()
     {
-        $this->_customer->expects($this->once())->method('getCustomerId')->will($this->returnValue(self::CUSTOMER_ID));
+
+        $this->customerCurrentService->expects($this->once())
+            ->method('getCustomer')
+            ->will($this->returnValue($this->_customer));
+
         $customer = $this->_block->getCustomer();
-        $this->assertEquals(self::CUSTOMER_ID, $customer->getCustomerId());
+        $this->assertEquals($customer, $this->_customer);
     }
 
     public function testGetCustomerException()
     {
-        $this->_customerService
+        $this->customerCurrentService
             ->expects($this->once())
-            ->method('getCustomer')->will($this->throwException(new NoSuchEntityException('customerId', 1)));
+            ->method('getCustomer')
+            ->will($this->throwException(new NoSuchEntityException('customerId', 1)));
         $this->assertNull($this->_block->getCustomer());
     }
 
@@ -142,6 +145,11 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     public function testGetName(
         array $isVisible, $prefix, $firstname, $middlename, $lastname, $suffix, $expectedValue
     ) {
+
+        $this->customerCurrentService->expects($this->once())
+            ->method('getCustomer')
+            ->will($this->returnValue($this->_customer));
+
         $attributeMetadata =
             $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', array(), array(), '', false);
 
@@ -158,18 +166,30 @@ class InfoTest extends \PHPUnit_Framework_TestCase
          */
         foreach ($isVisible as $index => $boolean) {
             $attributeMetadata
-                ->expects($this->at($index))->method('isVisible')->will($this->returnValue($boolean));
+                ->expects($this->at($index))
+                ->method('isVisible')
+                ->will($this->returnValue($boolean));
         }
 
         /**
          * The AttributeMetadata::{getPrefix() | getMiddlename() | getSuffix()} methods are called twice,
          * while getFirstname() and getLastname() are only called once. Hence the use of any() vs. once().
          */
-        $this->_customer->expects($this->any())->method('getPrefix')->will($this->returnValue($prefix));
-        $this->_customer->expects($this->once())->method('getFirstname')->will($this->returnValue($firstname));
-        $this->_customer->expects($this->any())->method('getMiddlename')->will($this->returnValue($middlename));
-        $this->_customer->expects($this->once())->method('getLastname')->will($this->returnValue($lastname));
-        $this->_customer->expects($this->any())->method('getSuffix')->will($this->returnValue($suffix));
+        $this->_customer->expects($this->any())
+            ->method('getPrefix')
+            ->will($this->returnValue($prefix));
+        $this->_customer->expects($this->once())
+            ->method('getFirstname')
+            ->will($this->returnValue($firstname));
+        $this->_customer->expects($this->any())
+            ->method('getMiddlename')
+            ->will($this->returnValue($middlename));
+        $this->_customer->expects($this->once())
+            ->method('getLastname')
+            ->will($this->returnValue($lastname));
+        $this->_customer->expects($this->any())
+            ->method('getSuffix')
+            ->will($this->returnValue($suffix));
 
         $this->assertEquals($expectedValue, $this->_block->getName());
     }
@@ -200,6 +220,10 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getCustomerAttributeMetadata')
             ->will($this->throwException(new NoSuchEntityException('field', 'value')));
+
+        $this->customerCurrentService->expects($this->once())
+            ->method('getCustomer')
+            ->will($this->returnValue($this->_customer));
 
         /**
          * The AttributeMetadata::{getPrefix() | getMiddlename() | getSuffix()} methods are called twice,

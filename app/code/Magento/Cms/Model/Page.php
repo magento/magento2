@@ -66,7 +66,7 @@ namespace Magento\Cms\Model;
  * @method string getCustomThemeTo()
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
  */
-class Page extends \Magento\Core\Model\AbstractModel
+class Page extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     /**
      * No route page id
@@ -153,5 +153,15 @@ class Page extends \Magento\Core\Model\AbstractModel
             self::STATUS_ENABLED => __('Enabled'),
             self::STATUS_DISABLED => __('Disabled'),
         );
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

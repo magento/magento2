@@ -56,11 +56,9 @@ class Price extends \Magento\Index\Model\Resource\AbstractResource
     protected $_catalogProductType;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * Store manager
@@ -99,7 +97,7 @@ class Price extends \Magento\Index\Model\Resource\AbstractResource
      * @param \Magento\App\Resource $resource
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory
@@ -109,7 +107,7 @@ class Price extends \Magento\Index\Model\Resource\AbstractResource
         \Magento\App\Resource $resource,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\App\ConfigInterface $config,
         \Magento\Catalog\Model\Resource\Product\Indexer\Price\Factory $indexerPriceFactory,
@@ -117,7 +115,7 @@ class Price extends \Magento\Index\Model\Resource\AbstractResource
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_catalogProductType = $catalogProductType;
         $this->_config = $config;
         $this->_indexerPriceFactory = $indexerPriceFactory;
@@ -658,7 +656,7 @@ class Price extends \Magento\Index\Model\Resource\AbstractResource
             /** @var $store \Magento\Core\Model\Store */
             $store = $this->_storeManager->getStore($item['store_id']);
             if ($store) {
-                $timestamp = $this->_locale->storeTimeStamp($store);
+                $timestamp = $this->_localeDate->scopeTimeStamp($store);
                 $data[] = array(
                     'website_id' => $website->getId(),
                     'website_date'       => $this->dateTime->formatDate($timestamp, false),

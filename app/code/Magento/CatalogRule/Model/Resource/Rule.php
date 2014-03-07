@@ -89,7 +89,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
@@ -112,7 +112,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory
-     * @param \Magento\Core\Model\Date $coreDate
+     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
@@ -123,7 +123,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory,
-        \Magento\Core\Model\Date $coreDate,
+        \Magento\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,

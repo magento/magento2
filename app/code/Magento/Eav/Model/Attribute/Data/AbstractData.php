@@ -81,16 +81,21 @@ abstract class AbstractData
     protected $_extractedData       = array();
 
     /**
-     * \Magento\Core\Model\LocaleInterface FORMAT
+     * Date filter format
      *
      * @var string
      */
     protected $_dateFilterFormat;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
+
+    /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @var \Magento\Logger
@@ -98,17 +103,18 @@ abstract class AbstractData
     protected $_logger;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Logger $logger
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Logger $logger,
+        \Magento\Locale\ResolverInterface $localeResolver
     ) {
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_logger = $logger;
+        $this->_localeResolver = $localeResolver;
     }
 
     /**
@@ -247,7 +253,7 @@ abstract class AbstractData
         if ($filterCode) {
             $filterClass = 'Magento\Data\Form\Filter\\' . ucfirst($filterCode);
             if ($filterCode == 'date') {
-                $filter = new $filterClass($this->_dateFilterFormat(), $this->_locale->getLocale());
+                $filter = new $filterClass($this->_dateFilterFormat(), $this->_localeResolver->getLocale());
             } else {
                 $filter = new $filterClass();
             }
@@ -267,9 +273,9 @@ abstract class AbstractData
         if (is_null($format)) {
             // get format
             if (is_null($this->_dateFilterFormat)) {
-                $this->_dateFilterFormat = \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT;
+                $this->_dateFilterFormat = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT;
             }
-            return $this->_locale->getDateFormat($this->_dateFilterFormat);
+            return $this->_localeDate->getDateFormat($this->_dateFilterFormat);
         } else if ($format === false) {
             // reset value
             $this->_dateFilterFormat = null;

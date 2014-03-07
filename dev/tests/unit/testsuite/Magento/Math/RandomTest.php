@@ -52,11 +52,6 @@ class RandomTest extends \PHPUnit_Framework_TestCase
             array(10, \Magento\Math\Random::CHARS_LOWERS),
             array(10, \Magento\Math\Random::CHARS_UPPERS),
             array(10, \Magento\Math\Random::CHARS_DIGITS),
-            array(10, \Magento\Math\Random::CHARS_SPECIALS),
-            array(10, \Magento\Math\Random::CHARS_PASSWORD_LOWERS),
-            array(10, \Magento\Math\Random::CHARS_PASSWORD_UPPERS),
-            array(10, \Magento\Math\Random::CHARS_PASSWORD_DIGITS),
-            array(10, \Magento\Math\Random::CHARS_PASSWORD_SPECIALS),
             array(20,
                 \Magento\Math\Random::CHARS_LOWERS
                     . \Magento\Math\Random::CHARS_UPPERS

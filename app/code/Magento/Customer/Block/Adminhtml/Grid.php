@@ -112,6 +112,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('entity_id', array(

@@ -31,7 +31,7 @@ namespace Magento\RecurringProfile\Controller\Adminhtml;
 
 use Magento\App\Action\NotFoundException;
 use Magento\Core\Exception as CoreException;
-use Magento\Customer\Controller\Adminhtml\Index as CustomerController;
+use Magento\Customer\Controller\RegistryConstants;
 
 class RecurringProfile extends \Magento\Backend\App\Action
 {
@@ -224,7 +224,7 @@ class RecurringProfile extends \Magento\Backend\App\Action
         $customerId = (int)$this->getRequest()->getParam(self::PARAM_CUSTOMER_ID);
 
         if ($customerId) {
-            $this->_coreRegistry->register(CustomerController::REGISTRY_CURRENT_CUSTOMER_ID, $customerId);
+            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }
 
         $this->_view->loadLayout(false);

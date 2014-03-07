@@ -41,8 +41,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_websites = array(
-        \Magento\Core\Model\Store::DEFAULT_STORE_ID  => 'admin',
-        1                                                       => 'website1',
+        \Magento\Core\Model\Store::DEFAULT_STORE_ID => 'admin',
+        1 => 'website1',
     );
 
     /**
@@ -104,7 +104,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->getMock(
                 'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
             ),
-            $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false),
+            $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', array(), array(), '', false),
             $this->_getModelDependencies()

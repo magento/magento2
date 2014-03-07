@@ -25,8 +25,6 @@
  */
 namespace Magento\PageCache\Controller;
 
-use Magento\PageCache\Helper\Data;
-
 class Block extends \Magento\App\Action\Action
 {
     /**
@@ -40,12 +38,53 @@ class Block extends \Magento\App\Action\Action
             $this->_forward('noroute');
             return;
         }
-        $blocks = $this->getRequest()->getParam('blocks', array());
-        $handles = $this->getRequest()->getParam('handles', array());
+
+        $blocks = $this->_getBlocks();
+        $data = [];
+        foreach ($blocks as $blockName => $blockInstance) {
+            $data[$blockName] = $blockInstance->toHtml();
+        }
+
+        $this->getResponse()->setPrivateHeaders(\Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
+        $this->getResponse()->appendBody(json_encode($data));
+    }
+
+    /**
+     * Returns block content as part of ESI request from Varnish
+     */
+    public function esiAction()
+    {
+        $response = $this->getResponse();
+        $blocks = $this->_getBlocks();
+        $html = '';
+        $ttl = 0;
+
+        if (!empty($blocks)){
+            $blockInstance = array_shift($blocks);
+            $html = $blockInstance->toHtml();
+            $ttl = $blockInstance->getTtl();
+        }
+
+        $response->appendBody($html);
+        $response->setPublicHeaders($ttl);
+    }
+
+    /**
+     * Get blocks from layout by handles
+     *
+     * @return array [\Element\BlockInterface]
+     */
+    protected function _getBlocks()
+    {
+        $blocks = $this->getRequest()->getParam('blocks', '');
+        $handles = $this->getRequest()->getParam('handles', '');
 
         if (!$handles || !$blocks) {
-            return;
+            return [];
         }
+        $blocks = json_decode($blocks);
+        $handles = json_decode($handles);
+
         $this->_view->loadLayout($handles);
         $data = array();
 
@@ -53,12 +92,10 @@ class Block extends \Magento\App\Action\Action
         foreach ($blocks as $blockName) {
             $blockInstance = $layout->getBlock($blockName);
             if (is_object($blockInstance)) {
-                $data[$blockName] = $blockInstance->toHtml();
+                $data[$blockName] = $blockInstance;
             }
         }
 
-        $layout->setIsPrivate();
-
-        $this->getResponse()->appendBody(json_encode($data));
+        return $data;
     }
 }

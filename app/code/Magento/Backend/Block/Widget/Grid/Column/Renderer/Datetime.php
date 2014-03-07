@@ -50,8 +50,8 @@ class Datetime
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    self::$_format = $this->_locale->getDateTimeFormat(
-                        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
+                    self::$_format = $this->_localeDate->getDateTimeFormat(
+                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     );
                 }
                 catch (\Exception $e) {
@@ -74,11 +74,11 @@ class Datetime
         if ($data = $this->_getValue($row)) {
             $format = $this->_getFormat();
             try {
-                $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
             }
             catch (\Exception $e)
             {
-                $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
             }
             return $data;
         }

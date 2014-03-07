@@ -124,6 +124,13 @@
                 </arguments>
             </block>
         </block>
+        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                    <item name="compareProductLink" xsi:type="string">.action.tocompare</item>
+                </argument>
+            </arguments>
+        </block>
     </referenceContainer>
     <referenceContainer name="content.aside">
         <block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.related" template="Magento_Catalog::product/list/items.phtml">

@@ -31,7 +31,7 @@ namespace Magento\GoogleAdwords\Model\Config\Source;
 class Language implements \Magento\Option\ArrayInterface
 {
     /**
-     * @var \Zend_Locale
+     * @var \Magento\LocaleInterface
      */
     protected $_locale;
 
@@ -48,17 +48,17 @@ class Language implements \Magento\Option\ArrayInterface
     /**
      * Constructor
      *
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\GoogleAdwords\Helper\Data $helper
      * @param \Magento\GoogleAdwords\Model\Filter\UppercaseTitle $uppercaseFilter
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\GoogleAdwords\Helper\Data $helper,
         \Magento\GoogleAdwords\Model\Filter\UppercaseTitle $uppercaseFilter
     ) {
         $this->_helper = $helper;
-        $this->_locale = $locale->getLocale();
+        $this->_locale = $localeResolver->getLocale();
         $this->_uppercaseFilter = $uppercaseFilter;
     }
 

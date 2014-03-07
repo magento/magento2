@@ -27,4 +27,10 @@
     <event name="core_layout_render_element">
         <observer name="pagecache" instance="Magento\PageCache\Model\Observer" method="processLayoutRenderElement" />
     </event>
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_builtin" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+    </event>
+    <event name="adminhtml_cache_flush_system">
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="flushAllCache" />
+    </event>
 </config>

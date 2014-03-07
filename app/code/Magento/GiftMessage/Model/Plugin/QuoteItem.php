@@ -40,23 +40,27 @@ class QuoteItem
     }
 
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Sales\Model\Convert\Quote $subject
+     * @param callable $proceed
+     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     *
      * @return \Magento\Sales\Model\Order\Item|mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
+    public function aroundItemToOrderItem(
+        \Magento\Sales\Model\Convert\Quote $subject,
+        \Closure $proceed,
+        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+    ) {
         /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $invocationChain->proceed($arguments);
-        $quoteItem = reset($arguments);
-
+        $orderItem = $proceed($item);
         $isAvailable = $this->_helper->isMessagesAvailable(
             'item',
-            $quoteItem,
-            $quoteItem->getStoreId()
+            $item,
+            $item->getStoreId()
         );
 
-        $orderItem->setGiftMessageId($quoteItem->getGiftMessageId());
+        $orderItem->setGiftMessageId($item->getGiftMessageId());
         $orderItem->setGiftMessageAvailable($isAvailable);
         return $orderItem;
     }

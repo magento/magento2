@@ -175,7 +175,7 @@ class Recent extends \Magento\View\Element\Template
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
     }
 
     /**

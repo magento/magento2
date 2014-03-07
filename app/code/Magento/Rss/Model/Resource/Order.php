@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Rss\Model\Resource;
 
 /**
  * Order Rss Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Rss
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rss\Model\Resource;
-
 class Order
 {
     /**
@@ -93,7 +91,7 @@ class Order
 
         $select = $read->select()
             ->from(array('orders' => $res->getTableName('sales_flat_order')), array('increment_id'))
-            ->join(array('t' => $commentSelect),'t.entity_id = orders.entity_id')
+            ->join(array('t' => $commentSelect), 't.entity_id = orders.entity_id')
             ->order('orders.created_at desc');
 
         return $read->fetchAll($select);

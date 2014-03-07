@@ -29,11 +29,6 @@ namespace Magento\Backend\Block;
 class Dashboard extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * Location of the "Enable Chart" config param
      */
     const XML_PATH_ENABLE_CHARTS = 'admin/dashboard/enable_charts';

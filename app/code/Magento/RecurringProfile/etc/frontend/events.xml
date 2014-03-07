@@ -24,7 +24,7 @@
  */
 -->
 <config>
-    <event name="catalog_product_type_prepare_cart_options">
+    <event name="catalog_product_type_prepare_full_options">
         <observer name="recurring_profile_prepare_options" instance="Magento\RecurringProfile\Model\Observer" method="prepareProductRecurringProfileOptions" />
     </event>
 </config>

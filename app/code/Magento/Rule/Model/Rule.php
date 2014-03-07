@@ -51,7 +51,7 @@ class Rule extends AbstractModel
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Rule\Model\Condition\CombineFactory $conditionsFactory
      * @param \Magento\Rule\Model\Action\CollectionFactory $actionsFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -62,7 +62,7 @@ class Rule extends AbstractModel
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Rule\Model\Condition\CombineFactory $conditionsFactory,
         \Magento\Rule\Model\Action\CollectionFactory $actionsFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -71,7 +71,7 @@ class Rule extends AbstractModel
     ) {
         $this->_conditionsFactory = $conditionsFactory;
         $this->_actionsFactory = $actionsFactory;
-        parent::__construct($context, $registry, $formFactory, $locale, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
     }
 
     /**

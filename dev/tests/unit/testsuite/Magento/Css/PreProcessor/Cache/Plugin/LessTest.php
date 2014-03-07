@@ -63,12 +63,14 @@ class LessTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @param array $cacheManagerData
+     * @param \Closure $proceed
+     * @param $publisherFile
+     * @param $targetDirectory
+     * @param $cacheManagerData
+     *
      * @dataProvider aroundProcessDataProvider
      */
-    public function testAroundProcess($arguments, $invocationChain, $cacheManagerData)
+    public function testAroundProcess(\Closure $proceed, $publisherFile, $targetDirectory, $cacheManagerData)
     {
         if (!empty($cacheManagerData)) {
             foreach ($cacheManagerData as $method => $info) {
@@ -86,7 +88,12 @@ class LessTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertInstanceOf(
             'Magento\View\Publisher\CssFile',
-            $this->plugin->aroundProcess($arguments, $invocationChain)
+            $this->plugin->aroundProcess(
+                $this->getMock('\Magento\Css\PreProcessor\Less', array(), array(), '', false),
+                $proceed,
+                $publisherFile,
+                $targetDirectory
+            )
         );
     }
 
@@ -95,6 +102,7 @@ class LessTest extends \PHPUnit_Framework_TestCase
      */
     public function aroundProcessDataProvider()
     {
+        $dir = 'targetDirectory';
         /**
          * Prepare first item
          */
@@ -103,18 +111,18 @@ class LessTest extends \PHPUnit_Framework_TestCase
             ->method('getSourcePath')
             ->will($this->returnValue(false));
 
-        $argFirst[] = $cssFileFirst;
-
         $expectedFirst = $this->getMock('Magento\View\Publisher\CssFile', [], [], '', false);
         $cssFileFirst->expects($this->once())
             ->method('buildUniquePath')
             ->will($this->returnValue('expectedFirst'));
 
-        $invChainFirst = $this->getMock('Magento\Code\Plugin\InvocationChain', [], [], '', false);
-        $invChainFirst->expects($this->once())
-            ->method('proceed')
-            ->with($this->equalTo($argFirst))
-            ->will($this->returnValue($expectedFirst));
+        $invChainFirst = function (
+            \Magento\View\Publisher\CssFile $subject, $directory
+        ) use ($cssFileFirst, $dir, $expectedFirst) {
+            $this->assertEquals($subject, $cssFileFirst);
+            $this->assertEquals($directory, $dir);
+            return $expectedFirst;
+        };
 
         /**
          * Prepare second item
@@ -124,8 +132,9 @@ class LessTest extends \PHPUnit_Framework_TestCase
             ->method('getSourcePath')
             ->will($this->returnValue(false));
 
-        $argSecond[] = $cssFileSecond;
-        $invChainSecond = $this->getMock('Magento\Code\Plugin\InvocationChain', [], [], '', false);
+        $invChainSecond = function () {
+            $this->fail('Incorrect call of procced method');
+        };
 
         /**
          * Prepare third item
@@ -135,64 +144,78 @@ class LessTest extends \PHPUnit_Framework_TestCase
             ->method('getSourcePath')
             ->will($this->returnValue(false));
 
-        $argThird[] = $cssFileThird;
-
         $expectedThird = $this->getMock('Magento\View\Publisher\CssFile', [], [], '', false);
 
-        $invChainThird = $this->getMock('Magento\Code\Plugin\InvocationChain', [], [], '', false);
-        $invChainThird->expects($this->once())
-            ->method('proceed')
-            ->with($this->equalTo($argThird))
-            ->will($this->returnValue($expectedThird));
+        $invChainThird = function (
+            \Magento\View\Publisher\CssFile $subject, $directory
+        ) use ($cssFileThird, $dir, $expectedThird) {
+            $this->assertEquals($subject, $cssFileThird);
+            $this->assertEquals($directory, $dir);
+            return $expectedThird;
+        };
 
-        return [
-            'source path already exist' => [
-                'arguments' => $argFirst,
-                'invocationChain' => $invChainFirst,
+        return array(
+            'source path already exist' => array(
+                'procced' => $invChainFirst,
+                'publisherFile' => $cssFileFirst,
+                'targetDirectory' => $dir,
                 'cacheManagerData' => [],
                 'expected' => $expectedFirst
-            ],
-            'cached value exists' => [
-                'arguments' => $argSecond,
-                'invocationChain' => $invChainSecond,
-                'cacheManagerData' => ['getCachedFile' => ['result' => $cssFileSecond]],
+            ),
+            'cached value exists' => array(
+                'procced' => $invChainSecond,
+                'publisherFile' => $cssFileSecond,
+                'targetDirectory' => $dir,
+                'cacheManagerData' => array('getCachedFile' => array('result' => $cssFileSecond)),
                 'expected' => 'cached-value'
-            ],
-            'cached value does not exist' => [
-                'arguments' => $argThird,
-                'invocationChain' => $invChainThird,
-                'cacheManagerData' => [
-                    'getCachedFile' => ['result' => null],
-                    'saveCache' => ['result' => 'self']
-                ],
+            ),
+            'cached value does not exist' => array(
+                'procced' => $invChainThird,
+                'publisherFile' => $cssFileThird,
+                'targetDirectory' => $dir,
+                'cacheManagerData' => array(
+                    'getCachedFile' => array('result' => null),
+                    'saveCache' => array('result' => 'self')
+                ),
                 'expected' => $expectedThird
-            ],
-        ];
+            ),
+        );
+
     }
 
     public function testAroundProcessException()
     {
+        $dir = 'targetDirectory';
         $cssFile = $this->getMock('Magento\View\Publisher\CssFile', [], [], '', false);
         $cssFile->expects($this->once())
             ->method('getSourcePath')
             ->will($this->returnValue(false));
-
-        $arguments[] = $cssFile;
 
         $this->cacheManagerMock->expects($this->once())
             ->method('getCachedFile')
             ->will($this->returnValue(null));
 
         $exception = new \Magento\Filesystem\FilesystemException('Test Message');
-        $invocationChain = $this->getMock('Magento\Code\Plugin\InvocationChain', [], [], '', false);
-        $invocationChain->expects($this->once())
-            ->method('proceed')
-            ->with($this->equalTo($arguments))
-            ->will($this->throwException($exception));
+        $proceed = function (
+            \Magento\View\Publisher\CssFile $subject, $directory
+        ) use ($cssFile, $dir, $exception) {
+            $this->assertEquals($subject, $cssFile);
+            $this->assertEquals($directory, $dir);
+            throw $exception;
+        };
+
         $this->loggerMock->expects($this->once())
             ->method('logException')
             ->with($this->equalTo($exception))
             ->will($this->returnSelf());
-        $this->assertNull($this->plugin->aroundProcess($arguments, $invocationChain));
+
+        $this->assertNull(
+            $this->plugin->aroundProcess(
+                $this->getMock('\Magento\Css\PreProcessor\Less', array(), array(), '', false),
+                $proceed,
+                $cssFile,
+                $dir
+            )
+        );
     }
 }

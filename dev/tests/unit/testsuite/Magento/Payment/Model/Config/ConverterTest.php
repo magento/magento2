@@ -52,7 +52,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'SM' => 'Switch/Maestro',
             ),
             'groups' => array(
-                'paypal' => 'PayPal',
+                'any_payment' => 'Any Payment',
             ),
             'methods' => array(
                 'checkmo' => array(

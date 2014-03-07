@@ -65,7 +65,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     protected $_billingAgreementFactory;
 
     /**
-     * @var \Magento\Core\Model\DateFactory
+     * @var \Magento\Stdlib\DateTime\DateTimeFactory
      */
     protected $_dateFactory;
 
@@ -74,7 +74,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * @param \Magento\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory
-     * @param \Magento\Core\Model\DateFactory $dateFactory
+     * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -84,7 +84,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
         \Magento\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory,
-        \Magento\Core\Model\DateFactory $dateFactory,
+        \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()

@@ -25,6 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="checkout.cart.item.renderers">
-        <block class="Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped" as="grouped" template="Magento_Checkout::cart/item/default.phtml" cacheable="false"/>
+        <block class="Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped" as="grouped" template="Magento_Checkout::cart/item/default.phtml"/>
     </referenceBlock>
 </layout>

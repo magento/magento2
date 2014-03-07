@@ -18,21 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Wishlist\Model\Item;
 
 /**
  * Item option model
- *
- * @category    Magento
- * @package     Magento_Wishlist
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Model\Item;
-
 use Magento\Catalog\Model\Product;
 use Magento\Wishlist\Model\Item;
 
@@ -62,7 +55,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Checks that item option model has data changes
      *
-     * @return boolean
+     * @return bool
      */
     protected function _hasModelChanged()
     {

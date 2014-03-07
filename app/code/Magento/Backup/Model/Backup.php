@@ -65,9 +65,9 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     /**
      * Locale model
      *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * Backend auth session
@@ -88,7 +88,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
 
     /**
      * @param \Magento\Backup\Helper\Data $helper
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\App\Filesystem $filesystem
@@ -96,7 +96,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
      */
     public function __construct(
         \Magento\Backup\Helper\Data $helper,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\App\Filesystem $filesystem,
@@ -108,7 +108,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         $this->_filesystem = $filesystem;
         $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
         $this->_helper = $helper;
-        $this->_locale = $locale;
+        $this->_localeResolver = $localeResolver;
         $this->_backendAuthSession = $authSession;
     }
 
@@ -167,7 +167,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             'extension' => $this->_helper->getExtensionByType($backupData->getType()),
             'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
             'name' => $backupData->getName(),
-            'date_object' => new \Zend_Date((int)$backupData->getTime(), $this->_locale->getLocaleCode())
+            'date_object' => new \Magento\Stdlib\DateTime\Date((int)$backupData->getTime(), $this->_localeResolver->getLocaleCode())
         ));
 
         $this->setType($backupData->getType());

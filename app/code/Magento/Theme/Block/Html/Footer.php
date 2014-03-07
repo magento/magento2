@@ -27,7 +27,7 @@ namespace Magento\Theme\Block\Html;
 /**
  * Html page footer block
  */
-class Footer extends \Magento\View\Element\Template
+class Footer extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Copyright information
@@ -99,4 +99,15 @@ class Footer extends \Magento\View\Element\Template
         }
         return $this->_copyright;
     }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(\Magento\Core\Model\Store::CACHE_TAG, \Magento\Cms\Model\Block::CACHE_TAG);
+    }
+
 }

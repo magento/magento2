@@ -53,7 +53,7 @@ class Date implements \Magento\Data\Form\Filter\FilterInterface
     /**
      * Initialize filter
      *
-     * @param string $format    \Zend_Date input/output format
+     * @param string $format    \Magento\Stdlib\DateTime\Date input/output format
      * @param \Zend_Locale $locale
      */
     public function __construct($format = null, $locale = null)

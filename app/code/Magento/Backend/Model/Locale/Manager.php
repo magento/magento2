@@ -92,7 +92,7 @@ class Manager
      */
     public function getUserInterfaceLocale()
     {
-        $interfaceLocale = \Magento\Core\Model\LocaleInterface::DEFAULT_LOCALE;
+        $interfaceLocale = \Magento\Locale\ResolverInterface::DEFAULT_LOCALE;
 
         $userData = $this->_authSession->getUser();
         if ($userData && $userData->getInterfaceLocale()) {

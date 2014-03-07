@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 class Combine extends \Magento\Rule\Model\Condition\Combine
@@ -60,6 +58,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Get new child select options
+     *
      * @return array
      */
     public function getNewChildSelectOptions()

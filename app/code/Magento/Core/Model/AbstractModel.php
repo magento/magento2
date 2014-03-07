@@ -596,6 +596,7 @@ abstract class AbstractModel extends \Magento\Object
     {
         $this->cleanModelCache();
         $this->_eventManager->dispatch('model_save_after', array('object' => $this));
+        $this->_eventManager->dispatch('clean_cache_by_tags', array('object' => $this));
         $this->_eventManager->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
         return $this;
     }
@@ -660,6 +661,7 @@ abstract class AbstractModel extends \Magento\Object
     protected function _afterDelete()
     {
         $this->_eventManager->dispatch('model_delete_after', array('object' => $this));
+        $this->_eventManager->dispatch('clean_cache_by_tags', array('object' => $this));
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
         return $this;
     }

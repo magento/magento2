@@ -90,7 +90,7 @@ class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
                 if (empty($value) || !\Zend_Date::isDate($value, \Zend_Date::ISO_8601)) {
                     return null;
                 }
-                $date = new \Zend_Date($value, \Zend_Date::ISO_8601);
+                $date = new \Magento\Stdlib\DateTime\Date($value, \Zend_Date::ISO_8601);
                 $value = $date->toString(\Zend_Date::ATOM);
         } else {
             $value = $productAttribute->getFrontend()->getValue($product);

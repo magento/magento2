@@ -135,7 +135,7 @@ $numColumns = sizeof($this->getColumns());
             <?php endif ?>
         </div>
         <?php endif; ?>
-    <?php if ($this->getMassactionBlock()->isAvailable()): ?>
+    <?php if ($this->getMassactionBlock() && $this->getMassactionBlock()->isAvailable()): ?>
         <?php echo $this->getMassactionBlockHtml() ?>
         <?php endif ?>
     <div class="grid">
@@ -246,7 +246,7 @@ $numColumns = sizeof($this->getColumns());
         <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
         <?php echo $this->getJsObjectName() ?>.initGridRows();
         <?php endif; ?>
-        <?php if ($this->getMassactionBlock()->isAvailable()): ?>
+        <?php if ($this->getMassactionBlock() && $this->getMassactionBlock()->isAvailable()): ?>
         <?php echo $this->getMassactionBlock()->getJavaScript() ?>
         <?php endif ?>
         <?php echo $this->getAdditionalJavaScript(); ?>

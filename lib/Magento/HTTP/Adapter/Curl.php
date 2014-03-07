@@ -76,13 +76,13 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      */
     protected function _applyConfig()
     {
-        if (empty($this->_config)) {
-            return $this;
-        }
-
         // apply additional options to cURL
         foreach ($this->_options as $option => $value) {
             curl_setopt($this->_getResource(), $option, $value);
+        }
+
+        if (empty($this->_config)) {
+            return $this;
         }
 
         $verifyPeer = isset($this->_config['verifypeer']) ? $this->_config['verifypeer'] : true;

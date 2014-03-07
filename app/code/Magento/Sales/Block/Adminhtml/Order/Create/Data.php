@@ -41,10 +41,16 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
@@ -52,9 +58,11 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         $this->_currencyFactory = $currencyFactory;
+        $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $sessionQuote, $orderCreate, $data);
     }
 
@@ -89,7 +97,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getCurrencyName($code)
     {
-        return $this->_locale->currency($code)->getName();
+        return $this->_localeCurrency->getCurrency($code)->getName();
     }
 
     /**
@@ -100,7 +108,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getCurrencySymbol($code)
     {
-        $currency = $this->_locale->currency($code);
+        $currency = $this->_localeCurrency->getCurrency($code);
         return $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
     }
 

@@ -227,11 +227,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     protected $_customerSession;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * Catalog url
@@ -275,7 +273,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param Store\Config $coreStoreConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Zend_Db_Adapter_Abstract $connection
@@ -298,7 +296,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Stdlib\DateTime $dateTime,
         $connection = null
@@ -308,7 +306,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_productOptionFactory = $productOptionFactory;
         $this->_catalogUrl = $catalogUrl;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_customerSession = $customerSession;
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
@@ -1313,7 +1311,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $wId = $this->_storeManager->getWebsite()->getId();
         $gId = $this->_customerSession->getCustomerGroupId();
 
-        $storeDate = $this->_locale->storeTimeStamp($this->getStoreId());
+        $storeDate = $this->_localeDate->scopeTimeStamp($this->getStoreId());
         $conditions  = 'price_rule.product_id = e.entity_id AND ';
         $conditions .= "price_rule.rule_date = '" . $this->dateTime->formatDate($storeDate, false) . "' AND ";
         $conditions .= $this->getConnection()->quoteInto('price_rule.website_id = ? AND', $wId);

@@ -199,7 +199,7 @@ class Template extends \Magento\Backend\App\Action
                 ->setTemplateSenderName($request->getParam('sender_name'))
                 ->setTemplateText($request->getParam('text'))
                 ->setTemplateStyles($request->getParam('styles'))
-                ->setModifiedAt($this->_objectManager->get('Magento\Core\Model\Date')->gmtDate());
+                ->setModifiedAt($this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate());
 
             if (!$template->getId()) {
                 $template->setTemplateType(\Magento\Newsletter\Model\Template::TYPE_HTML);

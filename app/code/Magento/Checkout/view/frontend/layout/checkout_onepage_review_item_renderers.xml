@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="checkout.onepage.review.item.renderers">
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="onepage/review/item.phtml"/>
     </referenceBlock>
 </layout>
 

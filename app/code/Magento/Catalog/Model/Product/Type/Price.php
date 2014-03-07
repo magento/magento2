@@ -60,11 +60,9 @@ class Price
     protected $_customerSession;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * Store manager
@@ -85,20 +83,20 @@ class Price
      *
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Event\ManagerInterface $eventManager
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_customerSession = $customerSession;
         $this->_eventManager = $eventManager;
     }
@@ -458,7 +456,7 @@ class Price
         $finalPrice = $this->calculateSpecialPrice($finalPrice, $specialPrice, $specialPriceFrom, $specialPriceTo, $sId);
 
         if ($rulePrice === false) {
-            $storeTimestamp = $this->_locale->storeTimeStamp($sId);
+            $storeTimestamp = $this->_localeDate->scopeTimeStamp($sId);
             $rulePrice = $this->_ruleFactory->create()
                 ->getRulePrice($storeTimestamp, $wId, $gId, $productId);
         }
@@ -486,7 +484,7 @@ class Price
             $store = null)
     {
         if (!is_null($specialPrice) && $specialPrice != false) {
-            if ($this->_locale->isStoreDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
+            if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
                 $finalPrice     = min($finalPrice, $specialPrice);
             }
         }

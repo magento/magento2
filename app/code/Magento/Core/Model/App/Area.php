@@ -118,6 +118,11 @@ class Area
     protected $_storeManager;
 
     /**
+     * @var Area\DesignExceptions
+     */
+    protected $_designExceptions;
+
+    /**
      * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\TranslateInterface $translator
@@ -127,6 +132,7 @@ class Area
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\Design $design
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param Area\DesignExceptions $designExceptions
      * @param string $areaCode
      */
     public function __construct(
@@ -139,6 +145,7 @@ class Area
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\Design $design,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        Area\DesignExceptions $designExceptions,
         $areaCode
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -151,6 +158,7 @@ class Area
         $this->_logger = $logger;
         $this->_design = $design;
         $this->_storeManager = $storeManager;
+        $this->_designExceptions = $designExceptions;
     }
 
     /**
@@ -197,21 +205,11 @@ class Area
      */
     protected function _applyUserAgentDesignException($request)
     {
-        $userAgent = $request->getServer('HTTP_USER_AGENT');
-        if (empty($userAgent)) {
-            return false;
-        }
         try {
-            $expressions = $this->_coreStoreConfig->getConfig('design/theme/ua_regexp');
-            if (!$expressions) {
-                return false;
-            }
-            $expressions = unserialize($expressions);
-            foreach ($expressions as $rule) {
-                if (preg_match($rule['regexp'], $userAgent)) {
-                    $this->_getDesign()->setDesignTheme($rule['value']);
-                    return true;
-                }
+            $theme = $this->_designExceptions->getThemeForUserAgent($request);
+            if (false !== $theme) {
+                $this->_getDesign()->setDesignTheme($theme);
+                return true;
             }
         } catch (\Exception $e) {
             $this->_logger->logException($e);

@@ -101,7 +101,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
             'required' => true,
         ));
 
-        $dateFormat = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField('date_from', 'date', array(
             'label'    => __('Date From'),
             'title'    => __('Date From'),

@@ -109,12 +109,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo([]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo('blocks'), $this->equalTo(''))
+            ->will($this->returnValue(''));
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo([]))
-            ->will($this->returnValue([]));
+            ->with($this->equalTo('handles'), $this->equalTo(''))
+            ->will($this->returnValue(''));
         $result = $this->controller->renderAction();
         $this->assertNull($result);
     }
@@ -138,12 +138,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
-            ->with($this->equalTo('blocks'), $this->equalTo([]))
-            ->will($this->returnValue($blocks));
+            ->with($this->equalTo('blocks'), $this->equalTo(''))
+            ->will($this->returnValue(json_encode($blocks)));
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
-            ->with($this->equalTo('handles'), $this->equalTo([]))
-            ->will($this->returnValue($handles));
+            ->with($this->equalTo('handles'), $this->equalTo(''))
+            ->will($this->returnValue(json_encode($handles)));
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->with($this->equalTo($handles));
@@ -164,5 +164,68 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(json_encode($expectedData)));
 
         $this->controller->renderAction();
+    }
+
+    public function testEsiAction()
+    {
+        $block = 'block';
+        $handles = ['handle1', 'handle2'];
+        $html = 'some-html';
+        $mapData = array(
+            array('blocks', '', json_encode([$block])),
+            array('handles', '', json_encode($handles))
+        );
+
+        $blockInstance1 = $this->getMockForAbstractClass(
+            'Magento\View\Element\AbstractBlock', array(), '', false, true, true, array('toHtml', 'getTtl')
+        );
+
+        $blockInstance1->expects($this->once())
+            ->method('toHtml')
+            ->will($this->returnValue($html));
+        $blockInstance1->setTtl(360);
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->will($this->returnValueMap($mapData));
+
+        $this->viewMock->expects($this->once())
+            ->method('loadLayout')
+            ->with($this->equalTo($handles));
+
+        $this->viewMock->expects($this->once())
+            ->method('getLayout')
+            ->will($this->returnValue($this->layoutMock));
+
+        $this->layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with($this->equalTo($block))
+            ->will($this->returnValue($blockInstance1));
+
+        $this->responseMock->expects($this->once())
+            ->method('appendBody')
+            ->with($this->equalTo($html));
+
+        $result = $this->controller->esiAction();
+        $this->assertNull($result);
+    }
+
+    public function testEsiActionBlockNotExists()
+    {
+        $handles = json_encode(array('handle1', 'handle2'));
+        $mapData = array(
+            array('blocks', '', null),
+            array('handles', '',  $handles)
+        );
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->will($this->returnValueMap($mapData));
+        $this->viewMock->expects($this->never())
+            ->method('getLayout')
+            ->will($this->returnValue($this->layoutMock));
+
+        $result = $this->controller->esiAction();
+        $this->assertNull($result);
     }
 }

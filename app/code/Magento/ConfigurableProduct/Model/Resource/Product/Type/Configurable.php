@@ -232,7 +232,7 @@ class Configurable extends \Magento\Core\Model\Resource\Db\AbstractDb
                     array()
                 )->where('super_attribute.product_id = ?', $product->getId());
 
-            $attributesOptionsData[$superAttribute->getAttributeId()] = $this->_getReadAdapter()->fetchAssoc($select);
+            $attributesOptionsData[$superAttribute->getAttributeId()] = $this->_getReadAdapter()->fetchAll($select);
         }
         return $attributesOptionsData;
     }

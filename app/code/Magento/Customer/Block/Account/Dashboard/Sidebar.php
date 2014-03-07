@@ -18,22 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Account\Dashboard;
 
 /**
  * Account dashboard sidebar
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Customer\Block\Account\Dashboard;
-
 class Sidebar extends \Magento\View\Element\Template
 {
     protected $_cartItemsCount;
@@ -107,7 +99,7 @@ class Sidebar extends \Magento\View\Element\Template
 
     public function getCartItemsCount()
     {
-        if( !$this->_cartItemsCount ) {
+        if (!$this->_cartItemsCount) {
             $this->_cartItemsCount = $this->_createQuote()
                 ->setId($this->_checkoutSession->getQuote()->getId())
                 ->getItemsCollection()
@@ -119,7 +111,7 @@ class Sidebar extends \Magento\View\Element\Template
 
     public function getWishlist()
     {
-        if( !$this->_wishlist ) {
+        if (!$this->_wishlist) {
             $this->_wishlist = $this->_createWishList()->loadByCustomer($this->_customerSession->getCustomer());
             $this->_wishlist->getItemCollection()
                 ->addAttributeToSelect('name')
@@ -147,7 +139,7 @@ class Sidebar extends \Magento\View\Element\Template
 
     public function getCompareItems()
     {
-        if( !$this->_compareItems ) {
+        if ( !$this->_compareItems ) {
             $this->_compareItems =
                 $this->_createProductCompareCollection()->setStoreId($this->_storeManager->getStore()->getId());
             $this->_compareItems->setCustomerId(
@@ -168,7 +160,7 @@ class Sidebar extends \Magento\View\Element\Template
 
     public function getCompareRemoveUrlTemplate()
     {
-        return $this->getUrl('catalog/product_compare/remove',array('product'=>'#{id}'));
+        return $this->getUrl('catalog/product_compare/remove', ['product'=>'#{id}']);
     }
 
     public function getCompareAddUrlTemplate()

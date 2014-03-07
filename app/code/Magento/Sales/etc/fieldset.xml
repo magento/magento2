@@ -502,9 +502,6 @@
             <field name="is_nominal">
                 <aspect name="to_order_item" />
             </field>
-            <field name="free_shipping">
-                <aspect name="to_order_item" />
-            </field>
         </fieldset>
         <fieldset id="sales_convert_order">
             <field name="customer_id">
@@ -806,9 +803,6 @@
             <field name="base_cost">
                 <aspect name="to_invoice_item" />
                 <aspect name="to_cm_item" />
-                <aspect name="to_quote_item" />
-            </field>
-            <field name="free_shipping">
                 <aspect name="to_quote_item" />
             </field>
         </fieldset>

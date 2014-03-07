@@ -110,7 +110,7 @@ class Currencysymbol
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\LocaleInterface
      */
     protected $_locale;
 
@@ -132,7 +132,7 @@ class Currencysymbol
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Event\ManagerInterface $eventManager
      */
@@ -142,7 +142,7 @@ class Currencysymbol
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Core\Model\System\Store $systemStore,
         \Magento\Event\ManagerInterface $eventManager
     ) {
@@ -150,7 +150,7 @@ class Currencysymbol
         $this->_configFactory = $configFactory;
         $this->_cacheTypeList = $cacheTypeList;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_locale = $localeResolver->getLocale();
         $this->_systemStore  = $systemStore;
         $this->_eventManager = $eventManager;
         $this->_coreStoreConfig = $coreStoreConfig;

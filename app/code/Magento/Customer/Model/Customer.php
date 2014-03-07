@@ -499,13 +499,13 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Hash customer password
      *
-     * @param   string $password
-     * @param   int    $salt
-     * @return  string
+     * @param string $password
+     * @param bool|int|string $salt
+     * @return string
      */
-    public function hashPassword($password, $salt = null)
+    public function hashPassword($password, $salt = true)
     {
-        return $this->_encryptor->getHash($password, !is_null($salt) ? $salt : 2);
+        return $this->_encryptor->getHash($password, $salt);
     }
 
     /**

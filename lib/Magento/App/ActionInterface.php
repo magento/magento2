@@ -34,4 +34,11 @@ interface ActionInterface
      * @return ResponseInterface
      */
     public function dispatch(RequestInterface $request);
+
+    /**
+     * Get Response object
+     *
+     * @return ResponseInterface
+     */
+    public function getResponse();
 }

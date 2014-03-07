@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Locale\Hierarchy\Config\Reader
+     * @var \Magento\Locale\Hierarchy\Config\Reader
      */
     protected $_configReaderMock;
 

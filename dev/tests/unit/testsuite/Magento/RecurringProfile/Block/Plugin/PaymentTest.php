@@ -66,6 +66,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($quote)
             ->will($this->returnValue(true));
 
-        $this->assertArrayHasKey('hasRecurringItems', $this->payment->afterGetOptions([]));
+        $this->assertArrayHasKey(
+            'hasRecurringItems',
+            $this->payment->afterGetOptions(
+                $this->getMock('\Magento\Checkout\Block\Onepage\Payment', array(), array(), '', false),
+                []
+            )
+        );
     }
 }

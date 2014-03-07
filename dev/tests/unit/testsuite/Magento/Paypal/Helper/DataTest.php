@@ -70,19 +70,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getAllBillingAgreementMethodsDataProvider
-     * @param $paymentMethods
-     * @param $expectedResult
-     */
-    public function testGetAllBillingAgreementMethods($paymentMethods, $expectedResult)
-    {
-        $this->_paymentDataMock->expects($this->any())
-            ->method('getPaymentMethods')
-            ->will($this->returnValue($paymentMethods));
-        $this->assertEquals($expectedResult, $this->_helper->getAllBillingAgreementMethods());
-    }
-
-    /**
      * @dataProvider canManageBillingAgreementsDataProvider
      * @param $expectedResult
      * @param $methodInstance
@@ -112,29 +99,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getAllBillingAgreementMethodsDataProvider()
-    {
-        $methodInterfaceMock = $this->getMockBuilder('Magento\Paypal\Model\Billing\Agreement\MethodInterface')
-            ->getMock();
-        return array(
-            array(
-                array(
-                    'code1' => array('model' => $methodInterfaceMock, 'title' => 'title1'),
-                    'code2' => array('title' => 'title2'),
-                    'code3' => array('model' => new \StdClass(), 'title' => 'title3'),
-                ),
-                array('code1' => 'title1')
-            ),
-            array(
-                array('code' => array('title' => 'title')),
-                array()
-            )
-        );
-    }
-
-    /**
-     * @return array
-     */
     public function canManageBillingAgreementsDataProvider()
     {
         $methodInterfaceMock = $this->getMockBuilder('Magento\Paypal\Model\Billing\Agreement\MethodInterface')
@@ -145,4 +109,3 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
- 

@@ -25,8 +25,8 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="header.links">
-        <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-" cacheable="false"/>
-        <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login" cacheable="false"/>
+        <block class="Magento\Customer\Block\Account\Customer" name="customer" template="account/customer.phtml" before="-"/>
+        <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link-login"/>
     </referenceBlock>
     <move element="register-link" destination="header.links"/>
     <move element="top.links" destination="customer"/>

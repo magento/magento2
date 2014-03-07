@@ -61,9 +61,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
@@ -83,7 +83,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Core\Model\Resource\Helper $coreResourceHelper
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
      * @param mixed $connection
@@ -99,7 +99,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Core\Model\Resource\Helper $coreResourceHelper,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
         $connection = null,
@@ -116,7 +116,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         );
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_orderConfig = $orderConfig;
         $this->_reportOrderFactory = $reportOrderFactory;
     }
@@ -373,7 +373,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
         if (null == $tzTo) {
-            $tzTo = $this->_locale->storeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
+            $tzTo = $this->_localeDate->scopeDate()->toString(\Zend_Date::GMT_DIFF_SEP);
         }
         $adapter = $this->getConnection();
         $expression = $this->_getRangeExpression($range);
@@ -394,7 +394,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
-        $dateEnd   = $this->_locale->date();
+        $dateEnd   = $this->_localeDate->date();
         $dateStart = clone $dateEnd;
 
         // go to the end of a day
@@ -409,7 +409,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         switch ($range)
         {
             case '24h':
-                $dateEnd = $this->_locale->date();
+                $dateEnd = $this->_localeDate->date();
                 $dateEnd->addHour(1);
                 $dateStart = clone $dateEnd;
                 $dateStart->subDay(1);

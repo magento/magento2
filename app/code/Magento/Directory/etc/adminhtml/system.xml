@@ -36,7 +36,7 @@
                 <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Base Currency</label>
                     <frontend_model>Magento\Directory\Block\Adminhtml\Frontend\Currency\Base</frontend_model>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\Base</backend_model>
                     <comment>
                         <![CDATA[Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
@@ -44,12 +44,12 @@
                 </field>
                 <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Display Currency</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency</backend_model>
                 </field>
                 <field id="allow" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allowed Currencies</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\Allow</backend_model>
                     <can_be_empty>1</can_be_empty>
                 </field>

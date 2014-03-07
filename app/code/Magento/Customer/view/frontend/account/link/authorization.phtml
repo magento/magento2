@@ -22,10 +22,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var $this \Magento\Customer\Block\Account\AuthorizationLink */
+$dataPostParam = '';
+if ($this->isLoggedIn()) {
+    $dataPostParam = sprintf(" data-post='%s'", $this->getPostParams());
+}
 ?>
 <li>
-    <?php /** @var $this \Magento\Customer\Block\Account\AuthorizationLink */?>
-    <a <?php if ($this->isLoggedIn()) {echo "data-post='" . $this->getPostParams(); } ?>' <?php echo $this->getLinkAttributes();  ?> >
+    <a <?php echo $this->getLinkAttributes(); ?><?php echo $dataPostParam; ?>>
         <?php echo $this->escapeHtml($this->getLabel()); ?>
     </a>
 </li>

@@ -55,13 +55,13 @@
             }
             if (year < 1900 || year > curYear) {
                 this.dobErrorMessage =
-                    $.mage.__('Please enter a valid year (1900-%d).').replace('%d', curYear.toString());
+                    $.mage.__('Please enter a valid year (1900-%1).').replace('%1', curYear.toString());
                 return false;
             }
             var validateDayInMonth = new Date(year, month, 0).getDate();
             if (day < 1 || day > validateDayInMonth) {
                 this.dobErrorMessage =
-                    $.mage.__('Please enter a valid day (1-%d).').replace('%d', validateDayInMonth.toString());
+                    $.mage.__('Please enter a valid day (1-%1).').replace('%1', validateDayInMonth.toString());
                 return false;
             }
             var today = new Date(),

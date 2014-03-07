@@ -192,4 +192,26 @@ class CustomerBuilder extends \Magento\Service\Entity\AbstractDtoBuilder
     {
         return $this->_set(self::RP_TOKEN_CREATED_AT, $rpTokenCreatedAt);
     }
+
+    /**
+     * Adding ability to set custom attribute code
+     *
+     * @param string $attributeCode
+     * @param string|int $value
+     * @return $this
+     */
+    public function setAttribute($attributeCode, $value)
+    {
+        return $this->_set($attributeCode, $value);
+    }
+
+    /**
+     * Builds the entity.
+     *
+     * @return Customer
+     */
+    public function create()
+    {
+        return parent::create();
+    }
 }

@@ -41,7 +41,7 @@ use Magento\Core\Model\Resource\AbstractResource;
  * @method string getDateTo()
  * @method \Magento\Core\Model\Design setDateTo(string $value)
  */
-class Design extends AbstractModel
+class Design extends AbstractModel implements \Magento\Object\IdentityInterface
 {
     /**
      * Cache tag
@@ -65,9 +65,9 @@ class Design extends AbstractModel
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
-     * @var LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Stdlib\DateTime
@@ -77,7 +77,7 @@ class Design extends AbstractModel
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -86,13 +86,13 @@ class Design extends AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Stdlib\DateTime $dateTime,
         AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -117,7 +117,7 @@ class Design extends AbstractModel
     public function loadChange($storeId, $date = null)
     {
         if (is_null($date)) {
-            $date = $this->_dateTime->formatDate($this->_locale->storeTimeStamp($storeId), false);
+            $date = $this->_dateTime->formatDate($this->_localeDate->scopeTimeStamp($storeId), false);
         }
 
         $changeCacheId = 'design_change_' . md5($storeId . $date);
@@ -152,5 +152,15 @@ class Design extends AbstractModel
             $packageInto->setDesignTheme($design);
         }
         return $this;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

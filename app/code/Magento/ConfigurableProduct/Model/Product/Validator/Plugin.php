@@ -26,10 +26,8 @@
 namespace Magento\ConfigurableProduct\Model\Product\Validator;
 
 use Magento\App\RequestInterface;
-use Magento\App\ResponseInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Code\Plugin\InvocationChain;
 use Magento\Event\Manager;
 use Magento\Core\Helper;
 
@@ -65,19 +63,23 @@ class Plugin
     /**
      * Validate product data
      *
-     * @param $arguments
-     * @param InvocationChain $invocationChain
-     * @return ResponseInterface
+     * @param Product\Validator $subject
+     * @param callable $proceed
+     * @param Product $product
+     * @param RequestInterface $request
+     * @param \Magento\Object $response
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundValidate(array $arguments, InvocationChain $invocationChain)
-    {
-        /** @var Product $product */
-        $product = $arguments[0];
-        /** @var RequestInterface $request */
-        $request = $arguments[1];
-        /** @var \Magento\Object $response */
-        $response = $arguments[2];
-        $result = $invocationChain->proceed($arguments);
+    public function aroundValidate(
+        \Magento\Catalog\Model\Product\Validator $subject,
+        \Closure $proceed,
+        \Magento\Catalog\Model\Product $product,
+        \Magento\App\RequestInterface $request,
+        \Magento\Object $response
+    ) {
+        $result = $proceed($product, $request, $response);
         $variationProducts = (array)$request->getPost('variations-matrix');
         if ($variationProducts) {
             $validationResult = $this->_validateProductVariations($product, $variationProducts, $request);

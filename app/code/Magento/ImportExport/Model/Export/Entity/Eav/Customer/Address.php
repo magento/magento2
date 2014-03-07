@@ -127,7 +127,7 @@ class Address
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory
      * @param \Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory $eavCustomerFactory
@@ -139,7 +139,7 @@ class Address
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $resourceColFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerColFactory,
         \Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory $eavCustomerFactory,
@@ -151,7 +151,7 @@ class Address
             $storeManager,
             $collectionFactory,
             $resourceColFactory,
-            $locale,
+            $localeDate,
             $eavConfig,
             $data
         );

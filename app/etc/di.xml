@@ -39,7 +39,13 @@
     <preference for="Magento\View\DesignInterface" type="Magento\Core\Model\View\Design\Proxy" />
     <preference for="Magento\View\Design\ThemeInterface" type="Magento\Core\Model\Theme" />
     <preference for="Magento\View\ConfigInterface" type="Magento\View\Config" />
-    <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Core\Model\Locale" />
+    <preference for="Magento\Locale\ListsInterface" type="Magento\Locale\Lists" />
+    <type name="Magento\Locale\Lists">
+        <arguments>
+            <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Locale\ConfigInterface" type="Magento\Locale\Config" />
     <preference for="Magento\UrlInterface" type="Magento\Url" />
     <preference for="Magento\Data\Collection\Db\FetchStrategyInterface" type="Magento\Data\Collection\Db\FetchStrategy\Query" />
     <preference for="Magento\Config\ScopeInterface" type="Magento\Config\Scope" />
@@ -65,6 +71,23 @@
     <preference for="Magento\Json\DecoderInterface" type="Magento\Json\Decoder" />
     <preference for="Magento\Message\ManagerInterface" type="Magento\Message\Manager" />
     <preference for="Magento\App\Config\ValueInterface" type="Magento\Core\Model\Config\Value" />
+    <preference for="Magento\Module\DependencyManagerInterface" type="Magento\Module\DependencyManager" />    
+    <preference for="Magento\Interception\Chain" type="Magento\Interception\Chain\Chain" />
+    <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
+    <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
+    <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Image\Adapter\Config" />
+    <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
+    <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
+    <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
+    <preference for="Magento\TranslateInterface" type="Magento\Translate" />
+    <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
+    <preference for="Magento\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
+    <preference for="Magento\Mview\ConfigInterface" type="Magento\Mview\Config" />
+    <preference for="Magento\Mview\ViewInterface" type="Magento\Mview\View" />
+    <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
+    <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
+    <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
+    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />    
     <type name="Magento\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Message\Session\Proxy</argument>
@@ -90,15 +113,6 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Module\Output\ConfigInterface" type="Magento\Core\Model\Module\Output\Config" />
-    <preference for="Magento\View\Design\Theme\CustomizationInterface" type="Magento\View\Design\Theme\Customization" />
-    <preference for="Magento\Image\Adapter\ConfigInterface" type="Magento\Image\Adapter\Config" />
-    <preference for="Magento\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
-    <preference for="Magento\Session\Config\ConfigInterface" type="Magento\Core\Model\Session\Config" />
-    <preference for="Magento\Session\SidResolverInterface" type="Magento\Core\Model\Session\SidResolver\Proxy" />
-    <preference for="Magento\TranslateInterface" type="Magento\Translate" />
-    <preference for="Magento\Config\ScopeListInterface" type="interceptionConfigScope" />
-    <preference for="Magento\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
     <virtualType name="interceptionConfigScope" type="Magento\Config\Scope">
         <arguments>
             <argument name="defaultScope" xsi:type="string">global</argument>
@@ -158,6 +172,7 @@
     <type name="Magento\Translate">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
+            <argument name="locale" xsi:type="object">Magento\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Data\Structure" shared="false" />
@@ -309,12 +324,6 @@
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
         </arguments>
     </type>
-    <preference for="Magento\Mview\ConfigInterface" type="Magento\Mview\Config" />
-    <preference for="Magento\Mview\ViewInterface" type="Magento\Mview\View" />
-    <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
-    <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
-    <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
-    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
     <type name="Magento\Mview\View">
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Core\Model\Mview\View\State</argument>
@@ -329,6 +338,27 @@
     <type name="Magento\Mview\Config\Data">
         <arguments>
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Mview\View\State\CollectionInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Code\Generator">
+        <arguments>
+            <argument name="generatedEntities" xsi:type="array">
+                <item name="factory" xsi:type="string">\Magento\ObjectManager\Code\Generator\Factory</item>
+                <item name="proxy" xsi:type="string">\Magento\ObjectManager\Code\Generator\Proxy</item>
+                <item name="interceptor" xsi:type="string">\Magento\Interception\Code\Generator\Interceptor</item>
+                <item name="decorator" xsi:type="string">\Magento\Interception\Code\Generator\Decorator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\App\Cache\Frontend\Pool">
+        <arguments>
+            <argument name="frontendSettings" xsi:type="array">
+                <item name="page_cache" xsi:type="array">
+                    <item name="backend_options" xsi:type="array">
+                        <item name="cache_dir" xsi:type="string">page_cache</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

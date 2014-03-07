@@ -42,11 +42,16 @@ class Configurable
     /**
      * Initialize data for configurable product
      *
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $product
+     *
      * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitialize(\Magento\Catalog\Model\Product $product)
-    {
+    public function afterInitialize(
+        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
+        \Magento\Catalog\Model\Product $product
+    ) {
         $attributes = $this->request->getParam('attributes');
         if (!empty($attributes)) {
             $this->productType->setUsedProductAttributeIds($attributes, $product);

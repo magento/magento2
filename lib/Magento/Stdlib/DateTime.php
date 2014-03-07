@@ -56,12 +56,12 @@ class DateTime
      * Convert date to UNIX timestamp
      * Returns current UNIX timestamp if date is true
      *
-     * @param \Zend_Date|bool $date
+     * @param \Magento\Stdlib\DateTime\DateInterface|bool $date
      * @return int
      */
     public function toTimestamp($date)
     {
-        if ($date instanceof \Zend_Date) {
+        if ($date instanceof \Magento\Stdlib\DateTime\DateInterface) {
             return $date->getTimestamp();
         }
 
@@ -97,7 +97,7 @@ class DateTime
             return $this->now(!$includeTime);
         }
 
-        if ($date instanceof \Zend_Date) {
+        if ($date instanceof \Magento\Stdlib\DateTime\DateInterface) {
             if ($includeTime) {
                 return $date->toString(self::DATETIME_INTERNAL_FORMAT);
             } else {

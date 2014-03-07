@@ -36,20 +36,23 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped;
 class Initializer
 {
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject
+     * @param callable $proceed
+     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Object $config
+     *
      * @return \Magento\Sales\Model\Quote\Item|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundInit(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $arguments[0];
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $arguments[1];
-        /** @var \Magento\Object $config */
-        $config = $arguments[2];
-
-        $item = $invocationChain->proceed($arguments);
+    public function aroundInit(
+        \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject,
+        \Closure $proceed,
+        \Magento\Sales\Model\Quote $quote,
+        \Magento\Catalog\Model\Product $product,
+        \Magento\Object $config
+    ) {
+        $item = $proceed($quote, $product, $config);
 
         if (is_string($item) && $product->getTypeId() != Grouped::TYPE_CODE) {
             $item = $quote->addProductAdvanced(

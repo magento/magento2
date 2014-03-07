@@ -26,18 +26,18 @@
 <config>
     <router id="backend">
         <route id="adminhtml" frontName="admin">
-            <module name="Magento_Adminhtml" />
-            <module name="Magento_Catalog" before="Magento_Adminhtml" />
-            <module name="Magento_Wishlist" before="Magento_Adminhtml" />
-            <module name="Magento_Sales" before="Magento_Catalog" />
-            <module name="Magento_Customer" />
-            <module name="Magento_Paypal" after="Magento_Customer" />
+            <module name="Magento_ModuleD" />
+            <module name="Magento_ModuleB" before="Magento_ModuleD" />
+            <module name="Magento_ModuleC" before="Magento_ModuleD" />
+            <module name="Magento_ModuleA" before="Magento_ModuleB" />
+            <module name="Magento_ModuleE" />
+            <module name="Magento_ModuleF" after="Magento_ModuleE" />
         </route>
         <route id="customer" frontName="customer">
-            <module name="Magento_Customer" before="Magento_Wishlist" />
+            <module name="Magento_ModuleE" before="Magento_ModuleC" />
         </route>
         <route id="wishlist" frontName="wishlist">
-            <module name="Magento_Wishlist" />
+            <module name="Magento_ModuleC" />
         </route>
     </router>
     <router id="front" />

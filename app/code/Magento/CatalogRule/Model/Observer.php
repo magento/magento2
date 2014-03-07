@@ -38,7 +38,7 @@ use Magento\CatalogRule\Model\Resource\Rule\Collection;
 use Magento\CatalogRule\Model\Rule\Product\Price;
 use Magento\Registry;
 use Magento\Core\Model\StoreManagerInterface;
-use Magento\Core\Model\LocaleInterface;
+use Magento\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Event\Observer as EventObserver;
@@ -99,9 +99,9 @@ class Observer
     protected $_storeManager;
 
     /**
-     * @var LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\CatalogRule\Model\Resource\RuleFactory
@@ -126,7 +126,7 @@ class Observer
      * @param RuleFactory $ruleFactory
      * @param FlagFactory $flagFactory
      * @param StoreManagerInterface $storeManager
-     * @param LocaleInterface $locale
+     * @param TimezoneInterface $localeDate
      * @param CustomerModelSession $customerSession
      * @param BackendModelSession $backendSession
      * @param Registry $coreRegistry
@@ -143,7 +143,7 @@ class Observer
         RuleFactory $ruleFactory,
         FlagFactory $flagFactory,
         StoreManagerInterface $storeManager,
-        LocaleInterface $locale,
+        TimezoneInterface $localeDate,
         CustomerModelSession $customerSession,
         BackendModelSession $backendSession,
         Registry $coreRegistry,
@@ -157,7 +157,7 @@ class Observer
         $this->_ruleFactory = $ruleFactory;
         $this->_flagFactory = $flagFactory;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_customerSession = $customerSession;
         $this->_backendSession = $backendSession;
         $this->_coreRegistry = $coreRegistry;
@@ -243,7 +243,7 @@ class Observer
         if ($observer->hasDate()) {
             $date = $observer->getEvent()->getDate();
         } else {
-            $date = $this->_locale->storeTimeStamp($storeId);
+            $date = $this->_localeDate->scopeTimeStamp($storeId);
         }
 
         if ($observer->hasWebsiteId()) {
@@ -283,7 +283,7 @@ class Observer
     {
         $product = $observer->getEvent()->getProduct();
         $storeId = $product->getStoreId();
-        $date = $this->_locale->storeDate($storeId);
+        $date = $this->_localeDate->scopeDate($storeId);
         $key = false;
 
         $ruleData = $this->_coreRegistry->registry('rule_data');
@@ -480,7 +480,7 @@ class Observer
         if ($observer->getEvent()->hasDate()) {
             $date = $observer->getEvent()->getDate();
         } else {
-            $date = $this->_locale->storeTimeStamp($store);
+            $date = $this->_localeDate->scopeTimeStamp($store);
         }
 
         $productIds = array();

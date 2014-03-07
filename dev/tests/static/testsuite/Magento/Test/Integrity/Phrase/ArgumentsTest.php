@@ -38,10 +38,25 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
      */
     protected $_phraseCollector;
 
+
+    /**
+     * List of files that must be omitted
+     *
+     * @todo remove blacklist related logic when all files correspond to the standard
+     * @var array
+     */
+    protected $blackList;
+
     protected function setUp()
     {
         $this->_phraseCollector = new \Magento\Tools\I18n\Code\Parser\Adapter\Php\Tokenizer\PhraseCollector(
             new \Magento\Tools\I18n\Code\Parser\Adapter\Php\Tokenizer()
+        );
+
+        $rootDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
+        $this->blackList = array(
+            // the file below is the only file where strings are translated without corresponding arguments
+            $rootDir . str_replace('/', DIRECTORY_SEPARATOR, '/app/code/Magento/Core/Helper/Js.php'),
         );
     }
 
@@ -49,6 +64,9 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
     {
         $errors = array();
         foreach ($this->_getFiles() as $file) {
+            if (in_array($file, $this->blackList)) {
+                continue;
+            }
             $this->_phraseCollector->parse($file);
             foreach ($this->_phraseCollector->getPhrases() as $phrase) {
                 if (preg_match_all('/%(\d+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {

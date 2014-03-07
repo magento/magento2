@@ -69,6 +69,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
      * @param array $priceBlockTypes
@@ -94,6 +95,7 @@ class View extends \Magento\Catalog\Block\Product\View
         \Magento\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory,
         array $data = array(),
         array $priceBlockTypes = array()
@@ -118,6 +120,7 @@ class View extends \Magento\Catalog\Block\Product\View
             $string,
             $productHelper,
             $productTypeConfig,
+            $localeFormat,
             $data,
             $priceBlockTypes
         );

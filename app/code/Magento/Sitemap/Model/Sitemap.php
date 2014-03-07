@@ -136,7 +136,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
     protected $_cmsFactory;
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_dateModel;
 
@@ -164,7 +164,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
-     * @param \Magento\Core\Model\Date $modelDate
+     * @param \Magento\Stdlib\DateTime\DateTime $modelDate
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Stdlib\DateTime $dateTime
@@ -181,7 +181,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         \Magento\Sitemap\Model\Resource\Catalog\CategoryFactory $categoryFactory,
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
-        \Magento\Core\Model\Date $modelDate,
+        \Magento\Stdlib\DateTime\DateTime $modelDate,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\RequestInterface $request,
         \Magento\Stdlib\DateTime $dateTime,

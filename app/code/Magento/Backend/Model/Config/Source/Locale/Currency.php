@@ -34,19 +34,19 @@ class Currency implements \Magento\Option\ArrayInterface
     /**
      * @var array
      */
-    protected $_option;
+    protected $_options;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ListsInterface $localeLists
      */
-    public function __construct(\Magento\Core\Model\LocaleInterface $locale)
+    public function __construct(\Magento\Locale\ListsInterface $localeLists)
     {
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
     }
 
     /**
@@ -54,6 +54,10 @@ class Currency implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_locale->getOptionCurrencies();
+        if (!$this->_options) {
+            $this->_options = $this->_localeLists->getOptionCurrencies();
+        }
+        $options = $this->_options;
+        return $options;
     }
 }

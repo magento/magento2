@@ -24,5 +24,4 @@
  */
 -->
 <config>
-    <preference for="Magento\Core\Model\LocaleInterface" type="Magento\Backend\Model\Locale" />
 </config>

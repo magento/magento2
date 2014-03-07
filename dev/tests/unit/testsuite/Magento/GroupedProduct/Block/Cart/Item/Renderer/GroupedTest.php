@@ -152,4 +152,22 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         return ['parentProduct' => $parentProduct, 'childProduct' => $childProduct];
     }
+
+    public function testGetIdentities()
+    {
+        $productTags = array('catalog_product_1');
+        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $product->expects($this->exactly(2))
+            ->method('getIdentities')
+            ->will($this->returnValue($productTags));
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $item->expects($this->exactly(2))
+            ->method('getProduct')
+            ->will($this->returnValue($product));
+        $this->_renderer->setItem($item);
+        $this->assertEquals(
+            array_merge($productTags, $productTags),
+            $this->_renderer->getIdentities()
+        );
+    }
 }

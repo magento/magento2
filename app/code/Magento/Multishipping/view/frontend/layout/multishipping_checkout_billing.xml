@@ -32,10 +32,6 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="checkout/billing.phtml" cacheable="false">
-            <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">purchaseorder</argument>
-                <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
-            </action>
             <container name="payment_methods_before" label="Payment Methods Before"/>
             <container name="payment_methods_after" label="Payment Methods After"/>
         </block>

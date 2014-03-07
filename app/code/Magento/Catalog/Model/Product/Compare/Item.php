@@ -42,8 +42,12 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
+    /**
+     * Model cache tag
+     */
+    const CACHE_TAG = 'compare_item';
 
     /**
      * Prefix of model events names
@@ -285,5 +289,15 @@ class Item extends \Magento\Core\Model\AbstractModel
             $this->setData('visitor_id', $visitorId);
         }
         return $this->getData('visitor_id');
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

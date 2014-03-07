@@ -88,7 +88,7 @@
                 </field>
                 <field id="currency" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Accepted Currency</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                 </field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment from Applicable Countries</label>
@@ -172,7 +172,7 @@
                 </field>
                 <field id="currency" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Accepted Currency</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                 </field>
                 <field id="debug" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>

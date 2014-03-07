@@ -18,21 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Adminhtml customer recent orders grid block
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
+use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Controller\RegistryConstants;
+
+/**
+ * Adminhtml customer recent orders grid block
+ */
 class Accordion extends \Magento\Backend\Block\Widget\Accordion
 {
     /**
@@ -52,11 +50,23 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
      */
     protected $_itemsFactory;
 
+    /** @var \Magento\Customer\Model\Config\Share  */
+    protected $_shareConfig;
+
+    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface  */
+    protected $_customerService;
+
+    /** @var \Magento\Customer\Service\V1\Dto\CustomerBuilder  */
+    protected $_customerBuilder;
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory
      * @param \Magento\Registry $registry
+     * @param \Magento\Customer\Model\Config\Share $shareConfig
+     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
      * @param array $data
      */
     public function __construct(
@@ -64,18 +74,25 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory,
         \Magento\Registry $registry,
+        \Magento\Customer\Model\Config\Share $shareConfig,
+        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         $this->_quoteFactory = $quoteFactory;
         $this->_itemsFactory = $itemsFactory;
+        $this->_shareConfig = $shareConfig;
+        $this->_customerService = $customerService;
+        $this->_customerBuilder = $customerBuilder;
         parent::__construct($context, $data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _prepareLayout()
     {
-        $customer = $this->_coreRegistry->registry('current_customer');
-
         $this->setId('customerViewAccordion');
 
         $this->addItem('lastOrders', array(
@@ -84,19 +101,22 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
             'content_url' => $this->getUrl('customer/*/lastOrders', array('_current' => true)),
         ));
 
+        $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);    
+        $customer = $this->getCustomer($customerId);
+        $websiteIds = $this->_shareConfig->getSharedWebsiteIds($customer->getWebsiteId());
         // add shopping cart block of each website
-        foreach ($this->_coreRegistry->registry('current_customer')->getSharedWebsiteIds() as $websiteId) {
+        foreach ($websiteIds as $websiteId) {
             $website = $this->_storeManager->getWebsite($websiteId);
 
             // count cart items
             $cartItemsCount = $this->_quoteFactory->create()
-                ->setWebsite($website)->loadByCustomer($customer)
+                ->setWebsite($website)->loadByCustomer($customerId)
                 ->getItemsCollection(false)
                 ->addFieldToFilter('parent_item_id', array('null' => true))
                 ->getSize();
             // prepare title for cart
             $title = __('Shopping Cart - %1 item(s)', $cartItemsCount);
-            if (count($customer->getSharedWebsiteIds()) > 1) {
+            if (count($websiteIds) > 1) {
                 $title = __('Shopping Cart of %1 - %2 item(s)', $website->getName(), $cartItemsCount);
             }
 
@@ -104,13 +124,14 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
             $this->addItem('shopingCart' . $websiteId, array(
                 'title'   => $title,
                 'ajax'    => true,
-                'content_url' => $this->getUrl('customer/*/viewCart', array('_current' => true, 'website_id' => $websiteId)),
+                'content_url' => $this->getUrl('customer/*/viewCart',
+                        array('_current' => true, 'website_id' => $websiteId)),
             ));
         }
 
         // count wishlist items
         $wishlistCount = $this->_itemsFactory->create()
-            ->addCustomerIdFilter($customer->getId())
+            ->addCustomerIdFilter($customerId)
             ->addStoreData()
             ->getSize();
         // add wishlist ajax accordion
@@ -119,5 +140,24 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
             'ajax'  => true,
             'content_url' => $this->getUrl('customer/*/viewWishlist', array('_current' => true)),
         ));
+    }
+
+    /**
+     * Get customer data from session or service.
+     *
+     * @param int|null $customerId possible customer ID from DB
+     * @return Customer
+     * @throws NoSuchEntityException
+     */
+    protected function getCustomer($customerId)
+    {
+        $customerData = $this->_backendSession->getCustomerData();
+        if (!empty($customerData['account'])) {
+            return $this->_customerBuilder->populateWithArray($customerData['account'])->create();
+        } elseif ($customerId) {
+            return $this->_customerService->getCustomer($customerId);
+        } else {
+            return new Customer([]);
+        }
     }
 }

@@ -28,18 +28,24 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\DesignEditor\Model\Plugin\ThemeCopyService
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_factoryMock;
+    protected $factoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
 
     protected function setUp()
     {
-        $this->_factoryMock = $this->getMock('Magento\DesignEditor\Model\Theme\ChangeFactory',
+        $this->factoryMock = $this->getMock('Magento\DesignEditor\Model\Theme\ChangeFactory',
             array('create'), array(), '', false);
-        $this->_model = new \Magento\DesignEditor\Model\Plugin\ThemeCopyService($this->_factoryMock);
+        $this->subjectMock = $this->getMock('Magento\Theme\Model\CopyService', array(), array(), '', false);
+        $this->model = new \Magento\DesignEditor\Model\Plugin\ThemeCopyService($this->factoryMock);
     }
 
     public function testAroundCopySavesChangeTimeIfSourceThemeHasBeenAlreadyChanged()
@@ -72,10 +78,10 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_factoryMock->expects($this->at(0))
+        $this->factoryMock->expects($this->at(0))
             ->method('create')
             ->will($this->returnValue($sourceChangeMock));
-        $this->_factoryMock->expects($this->at(1))
+        $this->factoryMock->expects($this->at(1))
             ->method('create')
             ->will($this->returnValue($targetChangeMock));
 
@@ -101,13 +107,10 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
         $targetChangeMock->expects($this->once())
             ->method('save');
 
-        $methodArguments = array($sourceThemeMock, $targetThemeMock);
-        $invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
-        $invocationChainMock->expects($this->once())
-            ->method('proceed')
-            ->with($methodArguments);
+        $closureMock = function () {
 
-        $this->_model->aroundCopy($methodArguments, $invocationChainMock);
+        };
+        $this->model->aroundCopy($this->subjectMock, $closureMock, $sourceThemeMock, $targetThemeMock);
     }
 
 }

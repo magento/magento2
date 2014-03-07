@@ -43,16 +43,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Customer\Model\Session');
     }
 
-    public function testLogin()
-    {
-        $this->markTestSkipped('MAGETWO-18328');
-        $oldSessionId = $this->_customerSession->getSessionId();
-        $this->assertTrue($this->_customerSession->login('customer@example.com', 'password')); // fixture
-        $this->assertTrue($this->_customerSession->isLoggedIn());
-        $newSessionId = $this->_customerSession->getSessionId();
-        $this->assertNotEquals($oldSessionId, $newSessionId);
-    }
-
     public function testLoginById()
     {
         $this->markTestSkipped('MAGETWO-18328');

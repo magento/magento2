@@ -50,7 +50,7 @@ class App implements \Magento\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev67';
+    const VERSION = '2.0.0.0-dev68';
 
     /**
      * Application run code
@@ -85,32 +85,11 @@ class App implements \Magento\AppInterface
     protected $_areas = array();
 
     /**
-     * Application location object
-     *
-     * @var LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * Application configuration object
      *
      * @var \Magento\App\ConfigInterface
      */
     protected $_config;
-
-    /**
-     * Application front controller
-     *
-     * @var \Magento\App\FrontControllerInterface
-     */
-    protected $_frontController;
-
-    /**
-     * Flag to identify whether front controller is initialized
-     *
-     * @var bool
-     */
-    protected $_isFrontControllerInitialized = false;
 
     /**
      * Cache object
@@ -169,7 +148,6 @@ class App implements \Magento\AppInterface
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\App\State $appState
      * @param \Magento\Config\Scope $configScope
-     * @param \Magento\App\FrontControllerInterface $frontController
      */
     public function __construct(
         \Magento\App\ConfigInterface $config,
@@ -177,8 +155,7 @@ class App implements \Magento\AppInterface
         \Magento\ObjectManager $objectManager,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\App\State $appState,
-        \Magento\Config\Scope $configScope,
-        \Magento\App\FrontControllerInterface $frontController
+        \Magento\Config\Scope $configScope
     ) {
         $this->_config = $config;
         $this->_cache = $cache;
@@ -186,7 +163,6 @@ class App implements \Magento\AppInterface
         $this->_appState = $appState;
         $this->_eventManager = $eventManager;
         $this->_configScope = $configScope;
-        $this->_frontController = $frontController;
     }
 
     /**
@@ -265,19 +241,6 @@ class App implements \Magento\AppInterface
     }
 
     /**
-     * Retrieve application locale object
-     *
-     * @return LocaleInterface
-     */
-    public function getLocale()
-    {
-        if (!$this->_locale) {
-            $this->_locale = $this->_objectManager->get('Magento\Core\Model\LocaleInterface');
-        }
-        return $this->_locale;
-    }
-
-    /**
      * Retrieve layout object
      *
      * @return \Magento\View\LayoutInterface
@@ -305,16 +268,6 @@ class App implements \Magento\AppInterface
     public function getConfig()
     {
         return $this->_config;
-    }
-
-    /**
-     * Retrieve front controller object
-     *
-     * @return \Magento\App\FrontController
-     */
-    public function getFrontController()
-    {
-        return $this->_frontController;
     }
 
     /**
@@ -516,7 +469,7 @@ class App implements \Magento\AppInterface
             'revision'  => '0',
             'patch'     => '0',
             'stability' => 'dev',
-            'number'    => '67',
+            'number'    => '68',
         );
     }
 }

@@ -18,19 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Review\Block\Customer;
 
+use Magento\Customer\Service\V1\CustomerServiceInterface;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+
 /**
  * Customer Reviews list block
- *
- * @category   Magento
- * @package    Magento_Review
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -52,6 +49,8 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param CustomerServiceInterface $customerService
+     * @param CustomerAddressServiceInterface $addressService
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory
      * @param array $data
      */
@@ -59,11 +58,15 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        CustomerServiceInterface $customerService,
+        CustomerAddressServiceInterface $addressService,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $customerSession, $subscriberFactory, $data);
+        parent::__construct(
+            $context, $customerSession, $subscriberFactory, $customerService, $addressService, $data
+        );
         $this->_isScopePrivate = true;
     }
 
@@ -167,7 +170,7 @@ class ListCustomer extends \Magento\Customer\Block\Account\Dashboard
      */
     public function dateFormat($date)
     {
-        return $this->formatDate($date, \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
     }
 
     /**

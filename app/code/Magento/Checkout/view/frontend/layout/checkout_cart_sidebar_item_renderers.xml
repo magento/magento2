@@ -25,8 +25,8 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceBlock name="checkout.cart.sidebar.item.renderers">
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="cart/sidebar/default.phtml" cacheable="false"/>
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/sidebar/default.phtml" cacheable="false"/>
-        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="virtual" template="cart/sidebar/default.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="default" template="cart/sidebar/default.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/sidebar/default.phtml"/>
+        <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="virtual" template="cart/sidebar/default.phtml"/>
     </referenceBlock>
 </layout>

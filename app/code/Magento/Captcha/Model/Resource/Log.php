@@ -45,7 +45,7 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Core Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
@@ -56,12 +56,12 @@ class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
+     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $coreDate,        
+        \Magento\Stdlib\DateTime\DateTime $coreDate,
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
     ) {
         $this->_coreDate = $coreDate;

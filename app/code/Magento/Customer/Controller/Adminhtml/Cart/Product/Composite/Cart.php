@@ -38,9 +38,9 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Customer we're working with
      *
-     * @var \Magento\Customer\Model\Customer
+     * @var int id of the customer
      */
-    protected $_customer = null;
+    protected $_customerId;
 
     /**
      * Quote we're working with
@@ -59,24 +59,22 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Loads customer, quote and quote item by request params
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return $this
+     * @throws \Magento\Core\Exception
      */
     protected function _initData()
     {
-        $customerId = (int) $this->getRequest()->getParam('customer_id');
-        if (!$customerId) {
+        $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
+        if (!$this->_customerId) {
             throw new \Magento\Core\Exception(__('No customer ID defined.'));
         }
 
-        $this->_customer = $this->_objectManager->create('Magento\Customer\Model\Customer')
-            ->load($customerId);
-
-        $quoteItemId = (int) $this->getRequest()->getParam('id');
-        $websiteId = (int) $this->getRequest()->getParam('website_id');
+        $quoteItemId = (int)$this->getRequest()->getParam('id');
+        $websiteId = (int)$this->getRequest()->getParam('website_id');
 
         $this->_quote = $this->_objectManager->create('Magento\Sales\Model\Quote')
             ->setWebsite($this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getWebsite($websiteId))
-            ->loadByCustomer($this->_customer);
+            ->loadByCustomer($this->_customerId);
 
         $this->_quoteItem = $this->_quote->getItemById($quoteItemId);
         if (!$this->_quoteItem) {
@@ -89,7 +87,7 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Ajax handler to response configuration fieldset of composite product in customer's cart
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return void
      */
     public function configureAction()
     {
@@ -108,7 +106,7 @@ class Cart extends \Magento\Backend\App\Action
             $configureResult->setProductId($quoteItem->getProductId());
             $configureResult->setBuyRequest($quoteItem->getBuyRequest());
             $configureResult->setCurrentStoreId($quoteItem->getStoreId());
-            $configureResult->setCurrentCustomer($this->_customer);
+            $configureResult->setCustomerId($this->_customerId);
         } catch (\Exception $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());
@@ -121,7 +119,7 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * IFrame handler for submitted configuration for quote item
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart
+     * @return void
      */
     public function updateAction()
     {

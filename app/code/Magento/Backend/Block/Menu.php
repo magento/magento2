@@ -75,11 +75,17 @@ class Menu extends \Magento\Backend\Block\Template
     protected $_menuConfig;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @param Template\Context $context
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
@@ -88,12 +94,14 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
+        \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;
         $this->_authSession = $authSession;
         $this->_menuConfig = $menuConfig;
+        $this->_localeResolver = $localeResolver;
         parent::__construct($context, $data);
     }
 
@@ -280,7 +288,7 @@ class Menu extends \Magento\Backend\Block\Template
             'admin_top_nav',
             $this->getActive(),
             $this->_authSession->getUser()->getId(),
-            $this->_locale->getLocaleCode()
+            $this->_localeResolver->getLocaleCode()
         );
         // Add additional key parameters if needed
         $newCacheKeyInfo = $this->getAdditionalCacheKeyInfo();

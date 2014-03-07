@@ -90,7 +90,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $this->_initTestTheme($allowDuplication);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\LocaleInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Locale\ResolverInterface')
             ->setLocale($locale);
         $url = $this->viewUrl->getViewFileUrl($file);
         $this->assertStringEndsWith($expectedUrl, $url);
@@ -377,8 +377,22 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testPublishCssFileFromModule(
         $cssViewFile, $designParams, $expectedCssFile, $expectedCssContent, $expectedRelatedFiles
     ) {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $objectManager->configure(
+            ['Magento\View\Design\Fallback\Factory' => ['arguments' => [
+                'filesystem' => [
+                    'value' => 'Magento\View\MockedFilesystem',
+                    'name' => 'filesystem',
+                    \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'object'
+                ]
+
+            ]]]
+        );
+
+        $objectManager->get('Magento\Core\Model\App')
             ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+
         $this->viewUrl->getViewFileUrl($cssViewFile, $designParams);
 
         $expectedCssFile = $this->viewService->getPublicDir() . '/' . $expectedCssFile;
@@ -413,32 +427,32 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
                     'area'    => 'adminhtml',
                     'theme'   => 'magento_backend',
                     'locale'  => 'en_US',
-                    'module'  => 'Magento_Catalog',
+                    'module'  => 'Magento_ModuleA',
                 ),
-                'adminhtml/magento_backend/en_US/Magento_Catalog/product/product.css',
+                'adminhtml/magento_backend/en_US/Magento_ModuleA/product/product.css',
                 array(
-                    'url(../../Magento_Backend/images/gallery-image-base-label.png)',
+                    'url(../../Magento_ModuleB/images/gallery-image-base-label.png)',
                 ),
                 array(
-                    'adminhtml/magento_backend/en_US/Magento_Backend/images/gallery-image-base-label.png',
+                    'adminhtml/magento_backend/en_US/Magento_ModuleB/images/gallery-image-base-label.png',
                 ),
             ),
             'adminhtml' => array(
-                'Magento_Paypal::styles.css',
+                'Magento_ModuleC::styles.css',
                 array(
                     'area'    => 'adminhtml',
                     'theme'   => 'vendor_test',
                     'locale'  => 'en_US',
                     'module'  => false,
                 ),
-                'adminhtml/vendor_test/en_US/Magento_Paypal/styles.css',
+                'adminhtml/vendor_test/en_US/Magento_ModuleC/styles.css',
                 array(
-                    'url(images/paypal-logo.png)',
-                    'url(images/pp-allinone.png)',
+                    'url(images/logo.png)',
+                    'url(images/allinone.png)',
                 ),
                 array(
-                    'adminhtml/vendor_test/en_US/Magento_Paypal/images/paypal-logo.png',
-                    'adminhtml/vendor_test/en_US/Magento_Paypal/images/pp-allinone.png',
+                    'adminhtml/vendor_test/en_US/Magento_ModuleC/images/logo.png',
+                    'adminhtml/vendor_test/en_US/Magento_ModuleC/images/allinone.png',
                 ),
             ),
         );
@@ -733,5 +747,19 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
 
         $actualFile = $this->viewUrl->getViewFilePublicPath($filePath);
         $this->assertFileEquals($expectedFile, $actualFile);
+    }
+}
+
+class MockedFilesystem extends \Magento\App\Filesystem
+{
+    /**
+     * Re-write modules directory
+     *
+     * @param string $code
+     * @return string
+     */
+    public function getPath($code = self::ROOT_DIR)
+    {
+        return $code == \Magento\App\Filesystem::MODULES_DIR ? __DIR__ . '/_files' : parent::getPath($code);
     }
 }

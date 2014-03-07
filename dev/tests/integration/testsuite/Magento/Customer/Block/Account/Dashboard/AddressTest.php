@@ -34,11 +34,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Model\Session */
     protected $_customerSession;
 
+    /**
+     * @var \Magento\Module\Manager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
-        $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Customer\Model\Session');
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_customerSession = $this->objectManager->get('Magento\Customer\Model\Session');
+        $this->_block = $this->objectManager->get('Magento\View\LayoutInterface')
             ->createBlock(
                 'Magento\Customer\Block\Account\Dashboard\Address',
                 '',
@@ -56,18 +61,27 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerServiceInterface')
-            ->getCustomer(1);
-
         $this->_customerSession->setCustomerId(1);
+        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Customer\Service\V1\CustomerCurrentServiceInterface')
+            ->getCustomer();
         $object = $this->_block->getCustomer();
         $this->assertEquals($customer, $object);
     }
 
     public function testGetCustomerMissingCustomer()
     {
-        $this->assertNull($this->_block->getCustomer());
+        $moduleManager = $this->objectManager->get('Magento\Module\Manager');
+        if ($moduleManager->isEnabled('Magento_PageCache')) {
+            $customerDtoBuilder = $this->objectManager
+                ->create('Magento\Customer\Service\V1\Dto\CustomerBuilder');
+            $customerDto = $customerDtoBuilder
+                ->setGroupId($this->_customerSession->getCustomerGroupId())->create();
+            $this->assertEquals($customerDto, $this->_block->getCustomer());
+        } else {
+            $this->assertNull($this->_block->getCustomer());
+        }
+
     }
 
     /**
@@ -78,6 +92,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPrimaryShippingAddressHtml($customerId, $expected)
     {
+        // todo: this test is sensitive to caching impact
+
         if (!empty($customerId)) {
             $this->_customerSession->setCustomerId($customerId);
         }

@@ -54,14 +54,15 @@ class ApplicationInitializer
     /**
      * Perform required checks before cron run
      *
-     * @param array $methodArguments
-     * @return array
+     * @param \Magento\App\Cron $subject
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeExecute(array $methodArguments)
+    public function beforeLaunch(\Magento\App\Cron $subject)
     {
         $this->_sidResolver->setUseSessionInUrl(false);
         $this->_application->requireInstalledInstance();
-        return $methodArguments;
     }
 }
 

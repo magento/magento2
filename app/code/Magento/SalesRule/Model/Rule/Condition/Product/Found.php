@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
 class Found
@@ -47,7 +45,7 @@ class Found
     /**
      * Load value options
      *
-     * @return \Magento\SalesRule\Model\Rule\Condition\Product\Found
+     * @return $this
      */
     public function loadValueOptions()
     {
@@ -59,6 +57,8 @@ class Found
     }
 
     /**
+     * Return as html
+     *
      * @return string
      */
     public function asHtml()
@@ -75,10 +75,10 @@ class Found
     }
 
     /**
-     * validate
+     * Validate
      *
      * @param \Magento\Object $object Quote
-     * @return boolean
+     * @return bool
      */
     public function validate(\Magento\Object $object)
     {

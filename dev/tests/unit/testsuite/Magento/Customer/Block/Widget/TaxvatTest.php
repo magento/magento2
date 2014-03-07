@@ -39,9 +39,6 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata */
     private $_attribute;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
-    private $_customerSession;
-
     /** @var Taxvat */
     private $_block;
 
@@ -54,17 +51,14 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             $this->getMockForAbstractClass(
                 'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
             );
-        $this->_attributeMetadata->expects($this->any())->method('getAttributeMetadata')
-            ->with(self::CUSTOMER_ENTITY_TYPE, self::TAXVAT_ATTRIBUTE_CODE)
+        $this->_attributeMetadata->expects($this->any())->method('getCustomerAttributeMetadata')
+            ->with(self::TAXVAT_ATTRIBUTE_CODE)
             ->will($this->returnValue($this->_attribute));
-
-        $this->_customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
 
         $this->_block = new Taxvat(
             $this->getMock('Magento\View\Element\Template\Context', [], [], '', false),
             $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
-            $this->_attributeMetadata,
-            $this->_customerSession
+            $this->_attributeMetadata
         );
     }
 
@@ -132,32 +126,5 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeMetadata')
             ->will($this->throwException(new NoSuchEntityException('field', 'value')));
         $this->assertSame(false, $this->_block->isRequired());
-    }
-
-    public function testGetCustomer()
-    {
-        $abstractAttribute =
-            $this->getMockForAbstractClass(
-                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                [], '', false, true, true, ['__wakeup']
-            );
-        /** Do not include prefix, middlename, and suffix attributes when calling Customer::getName() */
-        $abstractAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
-
-        $config = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $config->expects($this->any())->method('getAttribute')->will($this->returnValue($abstractAttribute));
-
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $data = ['firstname' => 'John', 'lastname' => 'Doe'];
-        $customerModel = $objectManager
-            ->getObject('Magento\Customer\Model\Customer', ['config' => $config, 'data' => $data]);
-        $this->_customerSession
-            ->expects($this->once())->method('getCustomer')->will($this->returnValue($customerModel));
-
-        $customer = $this->_block->getCustomer();
-        $this->assertSame($customerModel, $customer);
-
-        $this->assertEquals('John Doe', $customer->getName());
     }
 }

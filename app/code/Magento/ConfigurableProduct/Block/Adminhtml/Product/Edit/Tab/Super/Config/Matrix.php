@@ -57,11 +57,23 @@ class Matrix
     protected $_config;
 
     /**
+     * @var \Magento\App\ConfigInterface
+     */
+    protected $_applicationConfig;
+
+    /**
+     * @var \Magento\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Registry $coreRegistry
+     * @param \Magento\App\ConfigInterface $applicationConfig
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
@@ -70,12 +82,16 @@ class Matrix
         \Magento\Catalog\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Registry $coreRegistry,
+        \Magento\App\ConfigInterface $applicationConfig,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         $this->_configurableType = $configurableType;
         $this->_productFactory = $productFactory;
         $this->_config = $config;
         $this->_coreRegistry = $coreRegistry;
+        $this->_applicationConfig = $applicationConfig;
+        $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $data);
     }
 
@@ -87,7 +103,9 @@ class Matrix
      */
     public function renderPrice($price)
     {
-        return $this->_locale->currency($this->_app->getBaseCurrencyCode())->toCurrency(sprintf('%f', $price));
+        return $this->_localeCurrency->getCurrency(
+            $this->_applicationConfig->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default')
+        )->toCurrency(sprintf('%f', $price));
     }
 
     /**

@@ -33,9 +33,9 @@ namespace Magento\Sales\Model;
 abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_coreLocale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Stdlib\DateTime
@@ -45,7 +45,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $coreLocale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
@@ -54,7 +54,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     public function __construct(
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $coreLocale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
@@ -63,7 +63,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         parent::__construct(
             $context, $registry, $resource, $resourceCollection, $data
         );
-        $this->_coreLocale = $coreLocale;
+        $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
     }
 
@@ -91,11 +91,11 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Get object created at date affected current active store timezone
      *
-     * @return \Zend_Date
+     * @return \Magento\Stdlib\DateTime\Date
      */
     public function getCreatedAtDate()
     {
-        return $this->_coreLocale->date(
+        return $this->_localeDate->date(
             $this->dateTime->toTimestamp($this->getCreatedAt()),
             null,
             null,
@@ -106,11 +106,11 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Get object created at date affected with object store timezone
      *
-     * @return \Zend_Date
+     * @return \Magento\Stdlib\DateTime\Date
      */
     public function getCreatedAtStoreDate()
     {
-        return $this->_coreLocale->storeDate(
+        return $this->_localeDate->scopeDate(
             $this->getStore(),
             $this->dateTime->toTimestamp($this->getCreatedAt()),
             true

@@ -80,9 +80,12 @@ class Directory
     }
 
     /**
+     * Compile class definitions
+     *
      * @param string $path
+     * @param bool $validate
      */
-    public function compile($path)
+    public function compile($path, $validate = true)
     {
         $rdi = new \RecursiveDirectoryIterator(realpath($path));
         $recursiveIterator = new \RecursiveIteratorIterator($rdi, 1);
@@ -97,7 +100,9 @@ class Directory
                         require_once $item->getRealPath();
                     }
                     try {
-                        $this->_validator->validate($className);
+                        if ($validate) {
+                            $this->_validator->validate($className);
+                        }
                         $signatureReader = new \Magento\Code\Reader\ClassReader();
                         $this->_definitions[$className] = $signatureReader->getConstructor($className);
                         $this->_relations[$className] = $signatureReader->getParents($className);

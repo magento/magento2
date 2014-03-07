@@ -86,11 +86,16 @@ class Setup
     /**
      * Process integration resource permissions after the integration is created
      *
+     * @param \Magento\Integration\Model\Resource\Setup $subject
      * @param string[] $integrationNames Name of integrations passed as array from the invocation chain
+     *
      * @return string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterInitIntegrationProcessing($integrationNames)
-    {
+    public function afterInitIntegrationProcessing(
+        \Magento\Integration\Model\Resource\Setup $subject,
+        $integrationNames
+    ) {
         if (empty($integrationNames)) {
             return array();
         }

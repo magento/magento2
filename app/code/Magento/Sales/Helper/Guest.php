@@ -71,7 +71,6 @@ class Guest extends \Magento\Core\Helper\Data
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -85,7 +84,6 @@ class Guest extends \Magento\Core\Helper\Data
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         \Magento\Registry $coreRegistry,
         \Magento\Customer\Model\Session $customerSession,
@@ -105,7 +103,6 @@ class Guest extends \Magento\Core\Helper\Data
             $context,
             $coreStoreConfig,
             $storeManager,
-            $locale,
             $appState,
             $dbCompatibleMode
         );
@@ -116,21 +113,21 @@ class Guest extends \Magento\Core\Helper\Data
      *
      * @return bool|null
      */
-    public function loadValidOrder()
+    public function loadValidOrder(\Magento\App\RequestInterface $request, \Magento\App\ResponseInterface $response)
     {
         if ($this->_customerSession->isLoggedIn()) {
-            $this->_app->getResponse()->setRedirect($this->_urlBuilder->getUrl('sales/order/history'));
+            $response->setRedirect($this->_urlBuilder->getUrl('sales/order/history'));
             return false;
         }
 
-        $post = $this->_app->getRequest()->getPost();
+        $post = $request->getPost();
         $errors = false;
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = $this->_orderFactory->create();
 
         if (empty($post) && !$this->_coreCookie->get($this->_cookieName)) {
-            $this->_app->getResponse()->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
+            $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
             return false;
         } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
             $type           = $post['oar_type'];
@@ -185,7 +182,7 @@ class Guest extends \Magento\Core\Helper\Data
         }
 
         $this->messageManager->addError(__('You entered incorrect data. Please try again.'));
-        $this->_app->getResponse()->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
+        $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
         return false;
     }
 

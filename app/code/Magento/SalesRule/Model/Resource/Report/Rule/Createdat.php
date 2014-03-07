@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report\Rule;
 
 /**
  * Rule report resource model with aggregation by created at
@@ -32,13 +32,12 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report\Rule;
-
 class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 {
     /**
      * Resource Report Rule constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,9 +47,9 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
     /**
      * Aggregate Coupons data by order created at
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
+     * @param mixed|null $from
+     * @param mixed|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {
@@ -64,7 +63,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param string $aggregationField
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
+     * @return $this
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {

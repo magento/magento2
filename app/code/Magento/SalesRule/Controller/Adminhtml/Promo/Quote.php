@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Controller\Adminhtml\Promo;
 
 class Quote extends \Magento\Backend\App\Action
@@ -41,7 +40,7 @@ class Quote extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var \Magento\Core\Filter\Date
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
@@ -49,13 +48,13 @@ class Quote extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Registry $coreRegistry,
         \Magento\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Core\Filter\Date $dateFilter
+        \Magento\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
@@ -63,6 +62,11 @@ class Quote extends \Magento\Backend\App\Action
         $this->_dateFilter = $dateFilter;
     }
 
+    /**
+     * Initiate rule
+     *
+     * @return void
+     */
     protected function _initRule()
     {
         $this->_title->add(__('Cart Price Rules'));
@@ -79,6 +83,11 @@ class Quote extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * Initiate action
+     *
+     * @return this
+     */
     protected function _initAction()
     {
         $this->_view->loadLayout();
@@ -88,6 +97,11 @@ class Quote extends \Magento\Backend\App\Action
         return $this;
     }
 
+    /**
+     * Index action
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Cart Price Rules'));
@@ -97,11 +111,21 @@ class Quote extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * New promo quote action
+     *
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('edit');
     }
 
+    /**
+     * Promo quote edit action
+     *
+     * @return void
+     */
     public function editAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -145,6 +169,7 @@ class Quote extends \Magento\Backend\App\Action
     /**
      * Promo quote save action
      *
+     * @return void
      */
     public function saveAction()
     {
@@ -230,6 +255,11 @@ class Quote extends \Magento\Backend\App\Action
         $this->_redirect('sales_rule/*/');
     }
 
+    /**
+     * Delete promo quote action
+     *
+     * @return void
+     */
     public function deleteAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -255,6 +285,11 @@ class Quote extends \Magento\Backend\App\Action
         $this->_redirect('sales_rule/*/');
     }
 
+    /**
+     * New condition html action
+     *
+     * @return void
+     */
     public function newConditionHtmlAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -279,6 +314,11 @@ class Quote extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($html);
     }
 
+    /**
+     * New action html action
+     *
+     * @return void
+     */
     public function newActionHtmlAction()
     {
         $id = $this->getRequest()->getParam('id');
@@ -303,6 +343,11 @@ class Quote extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($html);
     }
 
+    /**
+     * Apply rules action
+     *
+     * @return void
+     */
     public function applyRulesAction()
     {
         $this->_initAction();
@@ -311,6 +356,8 @@ class Quote extends \Magento\Backend\App\Action
 
     /**
      * Coupon codes grid
+     *
+     * @return void
      */
     public function couponsGridAction()
     {
@@ -362,6 +409,8 @@ class Quote extends \Magento\Backend\App\Action
 
     /**
      * Coupons mass delete action
+     *
+     * @return void
      */
     public function couponsMassDeleteAction()
     {
@@ -387,6 +436,8 @@ class Quote extends \Magento\Backend\App\Action
 
     /**
      * Generate Coupons action
+     *
+     * @return void
      */
     public function generateAction()
     {
@@ -434,6 +485,8 @@ class Quote extends \Magento\Backend\App\Action
 
     /**
      * Chooser source action
+     *
+     * @return void
      */
     public function chooserAction()
     {
@@ -448,7 +501,8 @@ class Quote extends \Magento\Backend\App\Action
 
     /**
      * Returns result of current user permission check on resource and privilege
-     * @return boolean
+     *
+     * @return bool
      */
     protected function _isAllowed()
     {

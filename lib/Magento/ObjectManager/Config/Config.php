@@ -79,20 +79,6 @@ class Config implements \Magento\ObjectManager\Config
     protected $_nonShared = array();
 
     /**
-     * Plugin configuration
-     *
-     * @var array
-     */
-    protected $_plugins = array();
-
-    /**
-     * Merged plugin config
-     *
-     * @var array
-     */
-    protected $_mergedPlugins = array();
-
-    /**
      * List of relations
      *
      * @var Relations
@@ -187,6 +173,7 @@ class Config implements \Magento\ObjectManager\Config
      */
     public function getPreference($type)
     {
+        $type = ltrim($type, '\\');
         $preferencePath = array();
         while (isset($this->_preferences[$type])) {
             if (isset($preferencePath[$this->_preferences[$type]])) {
@@ -252,12 +239,15 @@ class Config implements \Magento\ObjectManager\Config
         foreach ($configuration as $key => $curConfig) {
             switch ($key) {
                 case 'preferences':
-                    $this->_preferences = array_replace($this->_preferences, $curConfig);
+                    foreach ($curConfig as $for => $to) {
+                        $this->_preferences[ltrim($for, '\\')] = ltrim($to, '\\');
+                    }
                     break;
 
                 default:
+                    $key = ltrim($key, '\\');
                     if (isset($curConfig['type'])) {
-                        $this->_virtualTypes[$key] = $curConfig['type'];
+                        $this->_virtualTypes[$key] = ltrim($curConfig['type'], '\\');
                     }
                     if (isset($curConfig['arguments'])) {
                         if (!empty($this->_mergedArguments)) {

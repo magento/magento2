@@ -29,15 +29,6 @@ namespace Magento;
 interface ObjectManager
 {
     /**
-     * Set factory
-     *
-     * @param ObjectManager\Factory $factory
-     *
-     * @return void
-     */
-    public function setFactory(ObjectManager\Factory $factory);
-
-    /**
      * Create new object instance
      *
      * @param string $type

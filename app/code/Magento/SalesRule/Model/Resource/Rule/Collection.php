@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Rule;
 
 /**
  * Sales Rules resource collection model
@@ -32,8 +32,6 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Rule;
-
 class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
 {
     /**
@@ -55,7 +53,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     );
 
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
@@ -64,7 +62,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param mixed $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
@@ -73,7 +71,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Date $date,
+        \Magento\Stdlib\DateTime\DateTime $date,
         $connection = null,
         \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -83,6 +81,8 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
 
     /**
      * Set resource model and determine field mapping
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -100,8 +100,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * @param string $couponCode
      * @param string|null $now
      * @use $this->addWebsiteGroupDateFilter()
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function setValidationFilter($websiteId, $customerGroupId, $couponCode = '', $now = null)
     {
@@ -160,8 +159,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * @param int $customerGroupId
      * @param string|null $now
      * @use $this->addWebsiteFilter()
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function addWebsiteGroupDateFilter($websiteId, $customerGroupId, $now = null)
     {
@@ -199,7 +197,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     /**
      * Add primary coupon to collection
      *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function _initSelect()
     {
@@ -217,8 +215,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      * Find product attribute in conditions or actions
      *
      * @param string $attributeCode
-     *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function addAttributeInConditionFilter($attributeCode)
     {
@@ -236,7 +233,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     /**
      * Excludes price rules with generated specific coupon codes from collection
      *
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return $this
      */
     public function addAllowedSalesRulesFilter()
     {

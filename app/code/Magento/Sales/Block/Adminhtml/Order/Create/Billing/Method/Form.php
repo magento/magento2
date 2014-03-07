@@ -59,7 +59,7 @@ class Form extends \Magento\Payment\Block\Form\Container
     /**
      * Check payment method model
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod|null $method
+     * @param \Magento\Payment\Model\MethodInterface|null $method
      * @return bool
      */
     protected function _canUseMethod($method)

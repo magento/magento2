@@ -32,52 +32,48 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData
      */
-    protected $_model;
-
-    /**
-     * @var \Magento\Code\Plugin\InvocationChain|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_chainMock;
+    protected $model;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_stateMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
     protected function setUp()
     {
         $this->_stateMock = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Flat\State', array('isFlatEnabled'), array(), '', false
-        );
+        );        
+        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Config\Data', array(), array(), '', false);
 
-        $this->_chainMock = $this->getMock(
-            'Magento\Code\Plugin\InvocationChain', array('proceed'), array(), '', false
-        );
-
-        $this->_model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData(
+        $this->model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData(
             $this->_stateMock
         );
     }
 
     /**
-     * @param $isFlat
-     * @param array $arguments
-     * @param $inputData
-     * @param $outputData
+     * @param bool $isFlat
+     * @param string $path
+     * @param mixed $default
+     * @param array $inputData
+     * @param array $outputData
      * @dataProvider aroundGetDataProvider
      */
-    public function testAroundGet($isFlat, array $arguments, $inputData, $outputData)
+    public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
     {
+        $closureMock = function () use ($inputData) {
+            return $inputData;
+        };
         $this->_stateMock->expects($this->once())
             ->method('isFlatEnabled')
             ->will($this->returnValue($isFlat));
 
-        $this->_chainMock->expects($this->once())
-            ->method('proceed')
-            ->with($arguments)
-            ->will($this->returnValue($inputData));
-
-        $this->assertEquals($outputData, $this->_model->aroundGet($arguments, $this->_chainMock));
+        $this->assertEquals($outputData, $this->model->aroundGet($this->subjectMock, $closureMock, $path, $default));
     }
 
     public function aroundGetDataProvider()
@@ -98,42 +94,48 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
             // flat is enabled, nothing is being changed
             array(
                 true,
-                array(),
+                null,
+                null,
                 array('catalog_product_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('catalog_product_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is absent, flat indexer is being removed
             array(
                 false,
-                array(),
+                null,
+                null,
                 array('catalog_product_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is null, flat indexer is being removed
             array(
                 false,
-                array('path' => null),
+                null,
+                null,
                 array('catalog_product_flat' => $flatIndexerData, 'other_indexer' => $otherIndexerData),
                 array('other_indexer' => $otherIndexerData),
             ),
             // flat is disabled, path is flat indexer, flat indexer is being removed
             array(
                 false,
-                array('path' => 'catalog_product_flat'),
+                'catalog_product_flat',
+                null,
                 $flatIndexerData,
                 null,
             ),
             // flat is disabled, path is flat indexer, default is array(), flat indexer is being array()
             array(
                 false,
-                array('path' => 'catalog_product_flat', 'default' => array()),
-                $flatIndexerData,
+                'catalog_product_flat',
                 array(),
+                $flatIndexerData,
+                null,
             ),
             // flat is disabled, path is other indexer, nothing is being changed
             array(
                 false,
-                array('path' => 'other_indexer'),
+                'other_indexer',
+                null,
                 $otherIndexerData,
                 $otherIndexerData,
             ),

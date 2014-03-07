@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\View\Element\Template
+class View extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Core registry
@@ -227,5 +227,15 @@ class View extends \Magento\View\Element\Template
             }
         }
         return $res;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getCurrentCategory()->getIdentities();
     }
 }

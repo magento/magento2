@@ -257,7 +257,8 @@
         <xs:attribute type="xs:string" name="acl" use="optional"/>
         <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
         <xs:attribute type="xs:string" name="group" use="optional" />
-        <xs:attribute name="cacheable" type="xs:boolean" default="true" use="optional"/>
+        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
+        <xs:attribute type="xs:int" name="ttl" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="actionType">

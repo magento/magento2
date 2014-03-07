@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+use Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata;
+
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Validator */
@@ -36,7 +38,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->attrDataFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\ElementFactory')
+        $this->attrDataFactoryMock = $this->getMockBuilder('\Magento\Customer\Model\Metadata\ElementFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,14 +89,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValid($isValid)
     {
+        $data = ['something'];
         $attribute = $this->getMockAttribute();
         $this->mockDataModel($isValid, $attribute);
         $this->validator->setAttributes([$attribute]);
         $this->validator->setEntityType('ENTITY_TYPE');
-        $this->validator->setData(['something']);
+        $this->validator->setData($data);
         $this->assertEquals($isValid, $this->validator->isValid(['ENTITY']));
         $this->validator->setData([]);
-        $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Object([])));
+        $this->assertEquals($isValid, $this->validator->isValid(new \Magento\Object($data)));
     }
 
     public function trueFalseDataProvider()
@@ -103,7 +106,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata
+     * @return \PHPUnit_Framework_MockObject_MockObject | AttributeMetadata
      */
     protected function getMockAttribute()
     {
@@ -121,11 +124,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool                                                   $isValid
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param bool $isValid
+     * @param AttributeMetadata $attribute
      * @return void
      */
-    protected function mockDataModel($isValid, \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute)
+    protected function mockDataModel($isValid, AttributeMetadata $attribute)
     {
         $dataModel = $this->getMockBuilder('\Magento\Customer\Model\Metadata\Form\Text')
             ->disableOriginalConstructor()

@@ -27,9 +27,6 @@
     <event name="sales_order_save_before">
         <observer name="payment_sales_order_save_before" instance="Magento\Payment\Model\Observer" method="salesOrderBeforeSave" />
     </event>
-    <event name="sales_order_payment_save_before">
-        <observer name="payment_before_save" instance="Magento\Payment\Model\Observer" method="beforeOrderPaymentSave" />
-    </event>
     <event name="sales_order_status_unassign">
         <observer name="sales_order_status_update" instance="Magento\Payment\Model\Observer" method="updateOrderStatusForPaymentMethods" />
     </event>

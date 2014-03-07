@@ -231,4 +231,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->productConfigMock->expects($this->once())->method('getOptions')->with($itemMock);
         $this->_renderer->getOptionList();
     }
+
+    public function testGetIdentities()
+    {
+        $productTags = array('catalog_product_1');
+        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $product->expects($this->exactly(2))
+            ->method('getIdentities')
+            ->will($this->returnValue($productTags));
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $item->expects($this->exactly(2))
+            ->method('getProduct')
+            ->will($this->returnValue($product));
+        $this->_renderer->setItem($item);
+        $this->assertEquals(
+            array_merge($productTags, $productTags),
+            $this->_renderer->getIdentities()
+        );
+    }
 }

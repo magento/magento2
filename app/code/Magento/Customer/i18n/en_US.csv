@@ -176,7 +176,7 @@
 "If there is an account associated with %s you will receive an email with a link to reset your password.","If there is an account associated with %s you will receive an email with a link to reset your password."
 "If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you billing address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you billing address for proper VAT calculation"
 "If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you shipping address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%s"">here</a> to enter you shipping address for proper VAT calculation"
-"If you believe this is an error, please contact us at %s","If you believe this is an error, please contact us at %s"
+"If you believe this is an error, please contact us at %1","If you believe this is an error, please contact us at %1"
 "If you have an account with us, please log in.","If you have an account with us, please log in."
 "Invalid attribute option specified for attribute %s (%s), skipping the record.","Invalid attribute option specified for attribute %s (%s), skipping the record."
 "Invalid attribute set specified, skipping the record.","Invalid attribute set specified, skipping the record."

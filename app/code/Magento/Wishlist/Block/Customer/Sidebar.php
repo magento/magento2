@@ -34,7 +34,7 @@
  */
 namespace Magento\Wishlist\Block\Customer;
 
-class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
+class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\View\Block\IdentityInterface
 {
     /**
      * Retrieve block title
@@ -121,5 +121,20 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
     public function hasWishlistItems()
     {
         return $this->getItemCount() > 0;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getWishlistItems() as $item) {
+            /** @var $item \Magento\Wishlist\Model\Item */
+            $identities = array_merge($identities, $item->getProduct()->getIdentities());
+        }
+        return $identities;
     }
 }

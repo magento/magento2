@@ -48,6 +48,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
     protected function setUp()
     {
         $this->productTypeMock = $this->getMock(
@@ -57,6 +62,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $methods = array('setNewVariationsAttributeSetId', 'setAssociatedProductIds',
             'setCanSaveConfigurableAttributes', '__wakeup');
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
+            array(), array(), '', false);
         $this->plugin = new Configurable(
             $this->productTypeMock,
             $this->requestMock
@@ -94,7 +101,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock, $postValue)->will($this->returnValue($generatedProductIds));
         $this->productMock->expects($this->once())->method('setAssociatedProductIds')->with($expectedArray);
         $this->productMock->expects($this->once())->method('setCanSaveConfigurableAttributes')->with(true);
-        $this->plugin->afterInitialize($this->productMock);
+        $this->plugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameGenerateVariations()
@@ -128,7 +135,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('generateSimpleProducts');
         $this->productMock->expects($this->once())->method('setAssociatedProductIds')->with($associatedProductIds);
         $this->productMock->expects($this->once())->method('setCanSaveConfigurableAttributes')->with(true);
-        $this->plugin->afterInitialize($this->productMock);
+        $this->plugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 
     public function testAfterInitializeIfAttributesEmpty()
@@ -141,6 +148,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->productTypeMock->expects($this->never())->method('setUsedProductAttributeIds');
         $this->requestMock->expects($this->never())->method('getPost');
         $this->productTypeMock->expects($this->never())->method('generateSimpleProducts');
-        $this->plugin->afterInitialize($this->productMock);
+        $this->plugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 }

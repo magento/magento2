@@ -75,13 +75,18 @@ class RequestPreprocessor
      * Auto-redirect to base url (without SID) if the requested url doesn't match it.
      * By default this feature is enabled in configuration.
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\App\FrontController $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     *
+     * @return \Magento\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $request = $arguments[0];
+    public function aroundDispatch(
+        \Magento\App\FrontController $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         if ($this->_appState->isInstalled() && !$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\UrlInterface::URL_TYPE_WEB,
@@ -105,7 +110,7 @@ class RequestPreprocessor
         }
         $request->setDispatched(false);
 
-        return $invocationChain->proceed($arguments);
+        return $proceed($request);
     }
 
     /**

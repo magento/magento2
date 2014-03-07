@@ -233,8 +233,8 @@ class Collection
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
             $dtFormat   = \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-            $periodFrom = (!is_null($this->_from) ? new \Zend_Date($this->_from, $dtFormat) : null);
-            $periodTo   = (!is_null($this->_to)   ? new \Zend_Date($this->_to,   $dtFormat) : null);
+            $periodFrom = (!is_null($this->_from) ? new \Magento\Stdlib\DateTime\Date($this->_from, $dtFormat) : null);
+            $periodTo   = (!is_null($this->_to)   ? new \Magento\Stdlib\DateTime\Date($this->_to,   $dtFormat) : null);
             if ('year' == $this->_period) {
 
                 if ($periodFrom) {

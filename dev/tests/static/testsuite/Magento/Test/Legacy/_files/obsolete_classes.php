@@ -334,7 +334,7 @@ return array(
         'Magento\Backend\Model\Config\Backend\Serialized\Array'
     ),
     array('Mage_Adminhtml_Model_System_Config_Backend_Shipping_Tablerate',
-        'Magento\Shipping\Model\Config\Backend\Tablerate'
+        'Magento\OfflineShipping\Model\Config\Backend\Tablerate'
     ),
     array('Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron',
         'Magento\Cron\Model\Config\Backend\Sitemap'
@@ -527,10 +527,10 @@ return array(
         'Magento\Shipping\Model\Config\Source\Allspecificcountries'
     ),
     array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Flatrate',
-        'Magento\Shipping\Model\Config\Source\Flatrate'
+        'Magento\OfflineShipping\Model\Config\Source\Flatrate'
     ),
     array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Tablerate',
-        'Magento\Shipping\Model\Config\Source\Tablerate'
+        'Magento\OfflineShipping\Model\Config\Source\Tablerate'
     ),
     array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Taxclass',
         'Magento\Tax\Model\Config\Source\TaxClass\Product'
@@ -1616,6 +1616,7 @@ return array(
     array('Magento\Backend\Controller\AbstractAction', 'Magento\Backend\App\AbstractAction'),
     array('Magento\Backend\Controller\Context', 'Magento\Backend\App\Action\Context'),
     array('Magento\Backend\Controller\Adminhtml\Action', 'Magento\Backend\App\Action'),
+    array('Magento\Backend\Block\System\Shipping\Ups', 'Magento\Ups\Block\Backend\System\CarrierConfig'),
     array('Magento\Core\Block\Text', 'Magento\View\Element\Text'),
     array('Magento\Core\Block\Text\ListText', 'Magento\View\Element\Text\ListText'),
     array('Magento\Core\Block\Text\TextList\Item', 'Magento\View\Element\Text\TextList\Item'),
@@ -1856,6 +1857,7 @@ return array(
         'Magento\App\Dir\Verification',
         'Magento\App\Filesystem\DirectoryList\Verification'
     ),
+    array('Magento\Backend\Helper\Addresses'),
     array('Magento\Core\Model\Cookie', 'Magento\Stdlib\Cookie'),
     array('Magento\Core\Model\Logger', 'Magento\Logger'),
     array('Magento\Core\Block\Template\Context', 'Magento\View\Element\Template\Context'),
@@ -2157,6 +2159,75 @@ return array(
     ['Magento\Core\Helper\String', 'Magento\Code\NameBuilder'],
     ['Magento\Core\Model\Context', 'Magento\Model\Context'],
     ['Magento\Core\Model\Registry', 'Magento\Registry'],
+    ['Magento\Code\Plugin\InvocationChain'],
     ['Magento\Catalog\Helper\Product\Flat'],
-    ['Magento\Catalog\Helper\Flat\AbstractFlat']
+    ['Magento\Catalog\Helper\Flat\AbstractFlat'],
+    [
+        'Magento\Core\Model\LocaleInterface',
+        'Magento\Locale\ResolverInterface, Magento\Locale\CurrencyInterface,'
+        . 'Magento\Locale\FormatInterface, Magento\Stdlib\DateTime\TimezoneInterface'
+    ],
+    [
+        'Magento\Core\Model\Locale',
+        'Magento\Locale\Resolver, Magento\Locale\Currency, Magento\Locale\Format, '
+        . 'Magento\Stdlib\DateTime\Timezone, Magento\Locale\Lists'
+    ],
+    ['Magento\Core\Model\Locale\Hierarchy\Config\Converter', 'Magento\Locale\Hierarchy\Config\Converter'],
+    ['Magento\Core\Model\Locale\Hierarchy\Config\FileResolver', 'Magento\Locale\Hierarchy\Config\FileResolver'],
+    ['Magento\Core\Model\Locale\Hierarchy\Config\Reader', 'Magento\Locale\Hierarchy\Config\Reader'],
+    ['Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator', 'Magento\Locale\Hierarchy\Config\SchemaLocator'],
+    ['Magento\Core\Model\Locale\Config', 'Magento\Locale\Config'],
+    ['Magento\Core\Model\Locale\Validator', 'Magento\Locale\Validator'],
+    ['Magento\Core\Model\Date', 'Magento\Stdlib\DateTime\DateTime'],
+    ['Magento\Shipping\Model\Config\Source\Flatrate', 'Magento\OfflineShipping\Model\Config\Source\Flatrate'],
+    ['Magento\Shipping\Model\Carrier\Flatrate', 'Magento\OfflineShipping\Model\Carrier\Flatrate'],
+    ['Magento\Usa\Block\Adminhtml\Dhl\Unitofmeasure', 'Magento\Dhl\Block\Adminhtml\Unitofmeasure'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International', 'Magento\Dhl\Model\Carrier'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\AbstractMethod', 'Magento\Dhl\Model\Source\Method\AbstractMethod'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Doc', 'Magento\Dhl\Model\Source\Method\Doc'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freedoc', 'Magento\Dhl\Model\Source\Method\Freedoc'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freenondoc', 'Magento\Dhl\Model\Source\Method\Freenondoc'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Generic', 'Magento\Dhl\Model\Source\Method\Generic'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Nondoc', 'Magento\Dhl\Model\Source\Method\Nondoc'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Size', 'Magento\Dhl\Model\Source\Method\Size'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Unitofmeasure', 'Magento\Dhl\Model\Source\Method\Unitofmeasure'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl', 'Magento\Dhl\Model\AbstractDhl'],
+    ['Magento\Usa\Model\Shipping\Carrier\Dhl'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex', 'Magento\Fedex\Model\Carrier'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Droppff', 'Magento\Fedex\Model\Source\Droppff'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Freemethod', 'Magento\Fedex\Model\Source\Freemethod'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Generic', 'Magento\Fedex\Model\Source\Generic'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Method', 'Magento\Fedex\Model\Source\Method'],
+    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Packaging', 'Magento\Fedex\Model\Source\Packaging'],
+    ['Magento\Core\App\Action\Plugin\Session', 'Magento\Core\Block\RequireCookie'],
+    ['Magento\Rma\Model\CarrierFactory'],
+    ['Magento\Usa\Helper\Data'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Mode'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Container', 'Magento\Ups\Model\Config\Source\Container'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\DestType', 'Magento\Ups\Model\Config\Source\DestType'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Freemethod', 'Magento\Ups\Model\Config\Source\Freemethod'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Generic', 'Magento\Ups\Model\Config\Source\Generic'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Method', 'Magento\Ups\Model\Config\Source\Method'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\OriginShipment', 'Magento\Ups\Model\Config\Source\OriginShipment'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Pickup', 'Magento\Ups\Model\Config\Source\Pickup'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Type', 'Magento\Ups\Model\Config\Source\Type'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Unitofmeasure', 'Magento\Ups\Model\Config\Source\Unitofmeasure'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Container', 'Magento\Usps\Model\Source\Container'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Freemethod', 'Magento\Usps\Model\Source\Freemethod'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Generic', 'Magento\Usps\Model\Source\Generic'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Machinable', 'Magento\Usps\Model\Source\Machinable'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Method', 'Magento\Usps\Model\Source\Method'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size', 'Magento\Usps\Model\Source\Size'],
+    ['Magento\Usa\Model\Shipping\Carrier\Usps', 'Magento\Usps\Model\Carrier'],
+    ['Magento\Usa\Model\Shipping\Carrier\Ups', 'Magento\Ups\Model\Carrier'],
+    ['Magento\Usa\Model\Simplexml\Element', 'Magento\Shipping\Model\Simplexml\Element'],
+    ['Magento\Usa\Model\Shipping\Carrier\AbstractCarrier', 'Magento\Shipping\Model\Carrier\AbstractCarrierOnline'],
+    [
+        'Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Mode',
+        'Magento\Shipping\Model\Config\Source\Online\Mode'
+    ],
+    [
+        'Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype',
+        'Magento\Shipping\Model\Config\Source\Online\Requesttype'
+    ],
 );

@@ -38,7 +38,7 @@ $shortOpts = 'ehds';
 $options = getopt($shortOpts);
 
 if (isset($options['h'])) {
-    print USAGE;
+    echo USAGE;
     exit(0);
 }
 

@@ -26,25 +26,34 @@ namespace Magento\Bundle\Model\Plugin;
 class QuoteItemTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Bundle\Model\Plugin\QuoteItem */
-    protected $_model;
+    protected $model;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_quoteItemMock;
+    protected $quoteItemMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_invocationChainMock;
+    protected $orderItemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_orderItemMock;
+    /**
+     * @var /PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * @var /Closure
+     */
+    protected $closureMock;
 
     protected function setUp()
     {
-        $this->_orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', array(), array(), '', false);
-        $this->_quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
-        $this->_invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain',
-            array(), array(), '', false);
-
-        $this->_model = new \Magento\Bundle\Model\Plugin\QuoteItem();
+        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', array(), array(), '', false);
+        $this->quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $orderItem = $this->orderItemMock;
+        $this->closureMock = function () use ($orderItem) {
+            return $orderItem;
+        };
+        $this->subjectMock = $this->getMock('Magento\Sales\Model\Convert\Quote', array(), array(), '', false);
+        $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
     }
 
     public function testAroundItemToOrderItemPositive()
@@ -54,14 +63,12 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false);
         $productMock->expects($this->once())->method('getCustomOption')->with('bundle_selection_attributes')
             ->will($this->returnValue($bundleAttribute));
-        $this->_quoteItemMock->expects($this->once())->method('getProduct')
+        $this->quoteItemMock->expects($this->once())->method('getProduct')
             ->will($this->returnValue($productMock));
-        $this->_orderItemMock->expects($this->once())->method('setProductOptions');
-        $this->_invocationChainMock->expects($this->once())->method('proceed')
-            ->will($this->returnValue($this->_orderItemMock));
+        $this->orderItemMock->expects($this->once())->method('setProductOptions');
 
-        $orderItem = $this->_model->aroundItemToOrderItem(array($this->_quoteItemMock), $this->_invocationChainMock);
-        $this->assertSame($this->_orderItemMock, $orderItem);
+        $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $this->assertSame($this->orderItemMock, $orderItem);
     }
 
     public function testAroundItemToOrderItemNegative()
@@ -69,13 +76,11 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $productMock->expects($this->once())->method('getCustomOption')->with('bundle_selection_attributes')
             ->will($this->returnValue(false));
-        $this->_quoteItemMock->expects($this->once())->method('getProduct')
+        $this->quoteItemMock->expects($this->once())->method('getProduct')
             ->will($this->returnValue($productMock));
-        $this->_orderItemMock->expects($this->never())->method('setProductOptions');
-        $this->_invocationChainMock->expects($this->once())->method('proceed')
-            ->will($this->returnValue($this->_orderItemMock));
+        $this->orderItemMock->expects($this->never())->method('setProductOptions');
 
-        $orderItem = $this->_model->aroundItemToOrderItem(array($this->_quoteItemMock), $this->_invocationChainMock);
-        $this->assertSame($this->_orderItemMock, $orderItem);
+        $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $this->assertSame($this->orderItemMock, $orderItem);
     }
 }

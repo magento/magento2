@@ -57,19 +57,25 @@ class DispatchExceptionHandler
     /**
      * Handle dispatch exceptions
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\App\FrontController $subject
+     * @param callable $proceed
+     * @param \Magento\App\RequestInterface $request
+     *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
+    public function aroundDispatch(
+        \Magento\App\FrontController $subject,
+        \Closure $proceed,
+        \Magento\App\RequestInterface $request
+    ) {
         try {
-            return $invocationChain->proceed($arguments);
+            return $proceed($request);
         } catch (\Magento\Session\Exception $e) {
             header('Location: ' . $this->_storeManager->getStore()->getBaseUrl());
             exit;
         } catch (\Magento\Core\Model\Store\Exception $e) {
-            require $this->filesystem->getPath(Filesystem::PUB) . '/errors/404.php';
+            require $this->filesystem->getPath(Filesystem::PUB_DIR) . '/errors/404.php';
             exit;
         }
     }

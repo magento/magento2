@@ -78,11 +78,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $this->_model->getCategoryModel());
     }
 
-    public function testGetProductModel()
-    {
-        $this->assertInstanceOf('Magento\Catalog\Model\Product', $this->_model->getProductModel());
-    }
-
     public function testGetStoreRootCategory()
     {
         $root = $this->_model->getStoreRootCategory(1);

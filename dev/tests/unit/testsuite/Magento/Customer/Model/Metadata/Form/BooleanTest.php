@@ -36,7 +36,14 @@ class BooleanTest extends AbstractFormTestCase
     public function testGetOptionText($value, $expected)
     {
         // calling outputValue() will cause the protected method getOptionText() to be called
-        $boolean = new Boolean($this->localeMock, $this->loggerMock, $this->attributeMetadataMock, $value, 0);
+        $boolean = new Boolean(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->attributeMetadataMock,
+            $this->localeResolverMock,
+            $value,
+            0
+        );
         $this->assertSame($expected, $boolean->outputValue());
     }
 

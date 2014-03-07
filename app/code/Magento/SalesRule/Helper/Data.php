@@ -23,23 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Helper;
 
+use Magento\Sales\Model\Quote\Item\AbstractItem;
 /**
  * SalesRule data helper
  */
-namespace Magento\SalesRule\Helper;
-
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
      * Set store and base price which will be used during discount calculation to item object
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param   float $basePrice
-     * @param   float $price
-     * @return  \Magento\SalesRule\Helper\Data
+     * @param AbstractItem $item
+     * @param float $basePrice
+     * @param float $price
+     * @return $this
      */
-    public function setItemDiscountPrices(\Magento\Sales\Model\Quote\Item\AbstractItem $item, $basePrice, $price)
+    public function setItemDiscountPrices(AbstractItem $item, $basePrice, $price)
     {
         $item->setDiscountCalculationPrice($price);
         $item->setBaseDiscountCalculationPrice($basePrice);
@@ -49,12 +49,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Add additional amounts to discount calculation prices
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param   float $basePrice
-     * @param   float $price
-     * @return  \Magento\SalesRule\Helper\Data
+     * @param AbstractItem $item
+     * @param float $basePrice
+     * @param float $price
+     * @return $this
      */
-    public function addItemDiscountPrices(\Magento\Sales\Model\Quote\Item\AbstractItem $item, $basePrice, $price)
+    public function addItemDiscountPrices(AbstractItem $item, $basePrice, $price)
     {
         $discountPrice      = $item->getDiscountCalculationPrice();
         $baseDiscountPrice  = $item->getBaseDiscountCalculationPrice();

@@ -86,7 +86,11 @@ class NameTest extends \PHPUnit_Framework_TestCase
         );
         $this->_metadataService
             ->expects($this->any())
-            ->method('getAttributeMetadata')->will($this->returnValue($this->_attributeMetadata));
+            ->method('getCustomerAttributeMetadata')->will($this->returnValue($this->_attributeMetadata));
+        $this->_metadataService
+            ->expects($this->any())
+            ->method('getAddressAttributeMetadata')->will($this->returnValue($this->_attributeMetadata));
+
 
         $this->_block = new Name($context, $addressHelper, $this->_metadataService, $this->_customerHelper);
     }

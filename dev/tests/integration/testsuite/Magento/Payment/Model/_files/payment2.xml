@@ -34,8 +34,8 @@
         </type>
     </credit_cards>
     <groups>
-        <group id="paypal">
-            <label>PayPal Payment Methods</label>
+        <group id="any_payment">
+            <label>Any Payment Methods</label>
         </group>
         <group id="offline">
             <label>Offline Payment Methods</label>

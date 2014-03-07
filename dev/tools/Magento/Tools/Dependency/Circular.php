@@ -101,6 +101,10 @@ class Circular
 
         $path[] = $vertex;
         foreach ($this->dependencies[$vertex] as $dependency) {
+            if (!isset($this->dependencies[$dependency])) {
+                // dependency vertex is not described in basic definition
+                continue;
+            }
             $relations = $this->graph->getRelations();
             if (isset($relations[$vertex][$dependency])) {
                 continue;

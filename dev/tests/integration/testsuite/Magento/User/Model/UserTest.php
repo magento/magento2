@@ -315,6 +315,36 @@ class UserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     */
+    public function testBeforeSavePasswordHash()
+    {
+        $this->_model->setUsername('john.doe')
+            ->setFirstname('John')
+            ->setLastname('Doe')
+            ->setEmail('jdoe@gmail.com')
+            ->setPassword('123123q')
+        ;
+        $this->_model->save();
+        $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
+        $this->assertRegExp(
+            '/^[0-9a-f]+:[0-9a-zA-Z]{32}$/',
+            $this->_model->getPassword(),
+            'Salt is expected to be saved along with the password'
+        );
+
+        /** @var \Magento\User\Model\User $model */
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\User\Model\User');
+        $model->load($this->_model->getId());
+        $this->assertEquals(
+            $this->_model->getPassword(),
+            $model->getPassword(),
+            'Password data has been corrupted during saving'
+        );
+    }
+
+    /**
      * @expectedException \Magento\Core\Exception
      * @expectedExceptionMessage Your password confirmation must match your password.
      * @magentoDbIsolation enabled

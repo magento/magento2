@@ -37,8 +37,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param $attributeCode
-     * @return AttributeMetadataBuilder
+     * @param string $attributeCode
+     * @return $this
      */
     public function setAttributeCode($attributeCode)
     {
@@ -46,8 +46,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param $frontendInput
-     * @return AttributeMetadataBuilder
+     * @param string $frontendInput
+     * @return $this
      */
     public function setFrontendInput($frontendInput)
     {
@@ -55,8 +55,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param $inputFilter
-     * @return AttributeMetadataBuilder
+     * @param string $inputFilter
+     * @return $this
      */
     public function setInputFilter($inputFilter)
     {
@@ -64,8 +64,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param $storeLabel
-     * @return AttributeMetadataBuilder
+     * @param string $storeLabel
+     * @return $this
      */
     public function setStoreLabel($storeLabel)
     {
@@ -74,7 +74,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param string $validationRules
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setValidationRules($validationRules)
     {
@@ -83,7 +83,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param \Magento\Customer\Service\V1\Dto\Eav\Option[] $options
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setOptions($options)
     {
@@ -92,7 +92,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param boolean $visible
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setVisible($visible)
     {
@@ -101,7 +101,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param boolean $required
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setRequired($required)
     {
@@ -111,7 +111,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param int $count
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setMultilineCount($count)
     {
@@ -120,7 +120,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param string $dataModel
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setDataModel($dataModel)
     {
@@ -128,8 +128,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
     }
 
     /**
-     * @param $frontendClass
-     * @return AttributeMetadataBuilder
+     * @param string $frontendClass
+     * @return $this
      */
     public function setFrontendClass($frontendClass)
     {
@@ -138,7 +138,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param bool $isUserDefined
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setIsUserDefined($isUserDefined)
     {
@@ -147,7 +147,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param int $sortOrder
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setSortOrder($sortOrder)
     {
@@ -156,7 +156,7 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param string $frontendLabel
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setFrontendLabel($frontendLabel)
     {
@@ -165,10 +165,19 @@ class AttributeMetadataBuilder extends \Magento\Service\Entity\AbstractDtoBuilde
 
     /**
      * @param bool $isSystem
-     * @return AttributeMetadataBuilder
+     * @return $this
      */
     public function setIsSystem($isSystem)
     {
         return $this->_set(AttributeMetadata::IS_SYSTEM, $isSystem);
+    }
+
+    /**
+     * @param string $note
+     * @return $this
+     */
+    public function setNote($note)
+    {
+        return $this->_set(AttributeMetadata::NOTE, $note);
     }
 }

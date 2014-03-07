@@ -627,7 +627,7 @@ class User
      */
     protected function _getEncodedPassword($password)
     {
-        return $this->_encryptor->getHash($password, 2);
+        return $this->_encryptor->getHash($password, true);
     }
 
     /**

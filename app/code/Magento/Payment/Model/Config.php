@@ -55,9 +55,9 @@ class Config
     /**
      * Locale model
      *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
      * Payment method factory
@@ -72,21 +72,21 @@ class Config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\ConfigInterface $coreConfig
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ListsInterface $localeLists
      * @param \Magento\Config\DataInterface $dataStorage
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\ConfigInterface $coreConfig,
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ListsInterface $localeLists,
         \Magento\Config\DataInterface $dataStorage
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_dataStorage = $dataStorage;
         $this->_coreConfig = $coreConfig;
         $this->_methodFactory = $paymentMethodFactory;
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
     }
 
     /**
@@ -135,7 +135,7 @@ class Config
      * @param string $code
      * @param string $config
      * @param null|string|bool|int|Store $store
-     * @return AbstractMethod
+     * @return \Magento\Payment\Model\MethodInterface
      */
     protected function _getMethod($code, $config, $store = null)
     {
@@ -200,7 +200,7 @@ class Config
      */
     public function getMonths()
     {
-        $data = $this->_locale->getTranslationList('month');
+        $data = $this->_localeLists->getTranslationList('month');
         foreach ($data as $key => $value) {
             $monthNum = ($key < 10) ? '0'.$key : $key;
             $data[$key] = $monthNum . ' - ' . $value;

@@ -42,16 +42,18 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     protected $_string;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Stdlib\String $stringHelper
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Stdlib\String $stringHelper
     ) {
-        parent::__construct($locale, $logger);
+        parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
     }
 

@@ -215,9 +215,9 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @param \Magento\Event\ManagerInterface $eventManager
@@ -225,7 +225,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\UrlInterface $urlBuilder
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Ogone\Model\Config $config
@@ -237,14 +237,14 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\UrlInterface $urlBuilder,
         \Magento\Stdlib\String $string,
         \Magento\Ogone\Model\Config $config,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
+        $this->_localeResolver = $localeResolver;
         $this->_urlBuilder = $urlBuilder;
         $this->string = $string;
         $this->_config = $config;
@@ -311,7 +311,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         $formFields['orderID']  = $order->getIncrementId();
         $formFields['amount']   = round($order->getBaseGrandTotal()*100);
         $formFields['currency'] = $this->_storeManager->getStore()->getBaseCurrencyCode();
-        $formFields['language'] = $this->_locale->getLocaleCode();
+        $formFields['language'] = $this->_localeResolver->getLocaleCode();
 
         $formFields['CN']       = $this->_translate($billingAddress->getFirstname().' '.$billingAddress->getLastname());
         $formFields['EMAIL']    = $order->getCustomerEmail();

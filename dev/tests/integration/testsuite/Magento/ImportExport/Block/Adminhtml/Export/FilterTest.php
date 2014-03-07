@@ -62,8 +62,8 @@ class FilterTest
         $this->assertNotEmpty($html);
 
         $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\LocaleInterface')
-            ->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+            ->get('Magento\Stdlib\DateTime\TimezoneInterface')
+            ->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $pieces = array_filter(explode('<strong>', $html));
         foreach ($pieces as $piece) {
             $this->assertContains('dateFormat: "' . $dateFormat . '",', $piece);

@@ -95,6 +95,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogout()
     {
+        $this->markTestIncomplete('MAGETWO-17021');
         $this->_model->login(
             \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
         $this->assertNotEmpty($this->_model->getAuthStorage()->getData());

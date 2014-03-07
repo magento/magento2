@@ -25,7 +25,6 @@
  */
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
-use Magento\Code\Plugin\InvocationChain;
 use Magento\Registry;
 use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory;
 
@@ -61,15 +60,20 @@ class Plugin
     /**
      * Add is_configurable field to attribute presentation
      *
-     * @param array $arguments
-     * @param InvocationChain $invocationChain
-     * @return mixed
+     * @param \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject
+     * @param callable $proceed
+     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundMap($arguments, InvocationChain $invocationChain)
-    {
+    public function aroundMap(
+        \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject,
+        \Closure $proceed,
+        \Magento\Eav\Model\Entity\Attribute $attribute
+    ) {
         $setId = $this->registry->registry('current_attribute_set')->getId();
-        $attribute = $arguments[0];
-        $result = $invocationChain->proceed($arguments);
+        $result = $proceed($attribute);
         if (!isset($this->configurableAttributes[$setId])) {
             $this->configurableAttributes[$setId] = $this->attributeFactory->create()->getUsedAttributes($setId);
         }

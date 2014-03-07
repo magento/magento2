@@ -32,20 +32,26 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_processorMock;
+    protected $processorMock;
 
     /**
      * @var \Magento\Core\Model\Store\Group|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storeGroupMock;
+    protected $storeGroupMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $subjectMock;
 
     protected function setUp()
     {
-        $this->_processorMock = $this->getMock(
+        $this->processorMock = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Flat\Processor', array('markIndexerAsInvalid'), array(), '', false
         );
 
-        $this->_storeGroupMock = $this->getMock(
+        $this->subjectMock = $this->getMock('Magento\Core\Model\Resource\Store\Group', array(), array(), '', false);
+        $this->storeGroupMock = $this->getMock(
             'Magento\Core\Model\Store\Group', array('getId', '__wakeup', 'dataHasChangedFor'), array(), '', false
         );
     }
@@ -57,17 +63,15 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($matcherMethod, $storeId)
     {
-        $this->_processorMock->expects($this->$matcherMethod())
+        $this->processorMock->expects($this->$matcherMethod())
             ->method('markIndexerAsInvalid');
 
-        $this->_storeGroupMock->expects($this->once())
+        $this->storeGroupMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($storeId));
 
-        $methodArguments = array($this->_storeGroupMock);
-
-        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->_processorMock);
-        $this->assertEquals($methodArguments, $model->beforeSave($methodArguments));
+        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
+        $model->beforeSave($this->subjectMock, $this->storeGroupMock);
     }
 
     /**
@@ -77,21 +81,19 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangedWebsiteBeforeSave($matcherMethod, $websiteChanged)
     {
-        $this->_processorMock->expects($this->$matcherMethod())
+        $this->processorMock->expects($this->$matcherMethod())
             ->method('markIndexerAsInvalid');
 
-        $this->_storeGroupMock->expects($this->once())
+        $this->storeGroupMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
 
-        $this->_storeGroupMock->expects($this->once())
+        $this->storeGroupMock->expects($this->once())
             ->method('dataHasChangedFor')->with('root_category_id')
             ->will($this->returnValue($websiteChanged));
 
-        $methodArguments = array($this->_storeGroupMock);
-
-        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->_processorMock);
-        $this->assertEquals($methodArguments, $model->beforeSave($methodArguments));
+        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
+        $model->beforeSave($this->subjectMock, $this->storeGroupMock);
     }
 
     /**

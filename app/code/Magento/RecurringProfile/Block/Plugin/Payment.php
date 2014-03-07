@@ -49,10 +49,13 @@ class Payment
     /**
      * Add hasRecurringItems option
      *
+     * @param \Magento\Checkout\Block\Onepage\Payment $subject
      * @param array $result
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetOptions(array $result)
+    public function afterGetOptions(\Magento\Checkout\Block\Onepage\Payment $subject, array $result)
     {
         $quote = $this->session->getQuote();
         $result['hasRecurringItems'] = $quote && $this->filter->hasRecurringItems($quote);

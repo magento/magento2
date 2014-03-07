@@ -37,6 +37,11 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     protected $_storeManager;
 
     /**
+     * @var \Magento\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
@@ -45,8 +50,9 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -60,11 +66,13 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
+        $this->_localeResolver = $localeResolver;
         parent::__construct(
             $paymentData,
             $string,
@@ -74,7 +82,7 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $pdfConfig,
             $pdfTotalFactory,
             $pdfItemsFactory,
-            $locale,
+            $localeDate,
             $data
         );
     }
@@ -160,7 +168,7 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 
         foreach ($invoices as $invoice) {
             if ($invoice->getStoreId()) {
-                $this->locale->emulate($invoice->getStoreId());
+                $this->_localeResolver->emulate($invoice->getStoreId());
                 $this->_storeManager->setCurrentStore($invoice->getStoreId());
             }
             $page  = $this->newPage();
@@ -193,7 +201,7 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             /* Add totals */
             $this->insertTotals($page, $invoice);
             if ($invoice->getStoreId()) {
-                $this->locale->revert();
+                $this->_localeResolver->revert();
             }
         }
         $this->_afterGetPdf();

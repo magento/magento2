@@ -38,9 +38,6 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     private $_eavConfig;
 
-    /** @var array Cache of DTOs - entityType => attributeCode => DTO */
-    private $_cache;
-
     /**
      * @var \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory
      */
@@ -76,7 +73,6 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
         Dto\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
     ) {
         $this->_eavConfig = $eavConfig;
-        $this->_cache = [];
         $this->_attrFormCollectionFactory = $attrFormCollectionFactory;
         $this->_storeManager = $storeManager;
         $this->_optionBuilder = $optionBuilder;
@@ -88,16 +84,10 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
      */
     public function getAttributeMetadata($entityType, $attributeCode)
     {
-        $dtoCache = $this->_getEntityCache($entityType);
-        if (isset($dtoCache[$attributeCode])) {
-            return $dtoCache[$attributeCode];
-        }
-
         /** @var AbstractAttribute $attribute */
         $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
         if ($attribute) {
             $attributeMetadata = $this->_createMetadataAttribute($attribute);
-            $dtoCache[$attributeCode] = $attributeMetadata;
             return $attributeMetadata;
         } else {
             throw (new NoSuchEntityException('entityType', $entityType))
@@ -144,6 +134,40 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getCustomerAttributeMetadata($attributeCode)
+    {
+        return $this->getAttributeMetadata(self::ENTITY_TYPE_CUSTOMER, $attributeCode);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllCustomerAttributeMetadata()
+    {
+        return $this->getAllAttributeSetMetadata(self::ENTITY_TYPE_CUSTOMER, self::ATTRIBUTE_SET_ID_CUSTOMER);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAddressAttributeMetadata($attributeCode)
+    {
+        return $this->getAttributeMetadata(self::ENTITY_TYPE_ADDRESS, $attributeCode);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllAddressAttributeMetadata()
+    {
+        return $this->getAllAttributeSetMetadata(self::ENTITY_TYPE_ADDRESS, self::ATTRIBUTE_SET_ID_ADDRESS);
+    }
+
+
+
+    /**
      * Load collection with filters applied
      *
      * @param $entityType
@@ -188,6 +212,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
             ->setOptions($options)
             ->setFrontendClass($attribute->getFrontend()->getClass())
             ->setFrontendLabel($attribute->getFrontendLabel())
+            ->setNote($attribute->getNote())
             ->setIsSystem($attribute->getIsSystem())
             ->setIsUserDefined($attribute->getIsUserDefined())
             ->setSortOrder($attribute->getSortOrder());
@@ -195,50 +220,4 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
         return $this->_attributeMetadataBuilder->create();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getCustomerAttributeMetadata($attributeCode)
-    {
-        return $this->getAttributeMetadata('customer', $attributeCode);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAllCustomerAttributeMetadata()
-    {
-        return $this->getAllAttributeSetMetadata('customer', self::ATTRIBUTE_SET_ID_CUSTOMER);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAddressAttributeMetadata($attributeCode)
-    {
-        return $this->getAttributeMetadata('customer_address', $attributeCode);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAllAddressAttributeMetadata()
-    {
-        return $this->getAllAttributeSetMetadata('customer_address', self::ATTRIBUTE_SET_ID_ADDRESS);
-    }
-
-
-    /**
-     * Helper for getting access to an entity types DTO cache.
-     *
-     * @param $entityType
-     * @return \ArrayAccess
-     */
-    private function _getEntityCache($entityType)
-    {
-        if (!isset($this->_cache[$entityType])) {
-            $this->_cache[$entityType] = new \ArrayObject();
-        }
-        return $this->_cache[$entityType];
-    }
 }

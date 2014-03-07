@@ -34,16 +34,16 @@ class All implements \Magento\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ListsInterface $localeLists
      */
-    public function __construct(\Magento\Core\Model\LocaleInterface $locale)
+    public function __construct(\Magento\Locale\ListsInterface $localeLists)
     {
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
     }
 
     /**
@@ -53,7 +53,7 @@ class All implements \Magento\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         if (!$this->_options) {
-            $this->_options = $this->_locale->getOptionAllCurrencies();
+            $this->_options = $this->_localeLists->getOptionAllCurrencies();
         }
         $options = $this->_options;
         if (!$isMultiselect) {

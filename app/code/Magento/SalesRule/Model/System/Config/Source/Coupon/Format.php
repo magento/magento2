@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\SalesRule\Model\System\Config\Source\Coupon;
 
 /**
  * Options for Code Format Field in Auto Generated Specific Coupon Codes configuration section
@@ -31,8 +32,6 @@
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\System\Config\Source\Coupon;
-
 class Format implements \Magento\Option\ArrayInterface
 {
     /**
@@ -52,9 +51,7 @@ class Format implements \Magento\Option\ArrayInterface
     }
 
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

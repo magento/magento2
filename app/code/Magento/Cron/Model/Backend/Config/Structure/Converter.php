@@ -44,10 +44,13 @@ class Converter
     /**
      * Modify system configuration for cron
      *
+     * @param \Magento\Backend\Model\Config\Structure\Converter $subject
      * @param array $result
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterConvert(array $result)
+    public function afterConvert(\Magento\Backend\Model\Config\Structure\Converter $subject, array $result)
     {
         $groupIterator = 0;
         if (!isset($result['config']['system']['sections']['system']['children']['cron']['children']['template'])) {

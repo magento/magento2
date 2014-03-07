@@ -41,7 +41,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $_websites = array(
         \Magento\Core\Model\Store::DEFAULT_STORE_ID  => 'admin',
-        1                                                       => 'website1',
+        1 => 'website1',
     );
 
     /**
@@ -113,7 +113,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock(
                 'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
             ),
-            $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false),
+            $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', array(), array(), '', false),
             $this->getMock('Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory', array(), array(), '', false),

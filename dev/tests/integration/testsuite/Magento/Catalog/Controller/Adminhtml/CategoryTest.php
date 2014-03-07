@@ -35,6 +35,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
     /**
      * @magentoDataFixture Magento/Core/_files/store.php
      * @magentoDbIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @dataProvider saveActionDataProvider
      * @param array $inputData
      * @param array $defaultAttributes

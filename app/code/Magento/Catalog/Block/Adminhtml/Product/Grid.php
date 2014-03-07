@@ -32,6 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
+use Magento\Core\Model\Store;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -124,7 +125,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return \Magento\Core\Model\Store
+     * @return Store
      */
     protected function _getStore()
     {

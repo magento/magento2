@@ -55,13 +55,6 @@ class Currency
     protected $_storeManager;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
      * @var \Magento\Directory\Model\Currency\DefaultLocator
      */
     protected $_currencyLocator;
@@ -72,10 +65,17 @@ class Currency
     protected $_baseCurrency;
 
     /**
+     * @var \Magento\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
@@ -83,12 +83,17 @@ class Currency
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\Currency\DefaultLocator $currencyLocator,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\App\ConfigInterface $config,
+        \Magento\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_storeManager = $storeManager;
         $this->_currencyLocator = $currencyLocator;
-        $baseCurrencyCode = $this->_app->getBaseCurrencyCode();
+        $this->_localeCurrency = $localeCurrency;
+        $baseCurrencyCode = $config->getValue(
+            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default'
+        );
         $this->_baseCurrency = $currencyFactory->create()->load($baseCurrencyCode);
     }
 
@@ -105,7 +110,7 @@ class Currency
             $data = floatval($data) * $this->_getRate($row);
             $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && ($data > 0) ? '+' : '';
             $data = sprintf("%f", $data);
-            $data = $this->_locale->currency($currency_code)->toCurrency($data);
+            $data = $this->_localeCurrency->getCurrency($currency_code)->toCurrency($data);
             return $sign . $data;
         }
         return $this->getColumn()->getDefault();

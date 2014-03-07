@@ -46,15 +46,15 @@ class Statistics extends \Magento\Backend\App\Action
     protected $_adminSession = null;
 
     /**
-     * @var \Magento\Core\Filter\Date
+     * @var \Magento\Stdlib\DateTime\Filter\Date
      */
     protected $_dateFilter;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Core\Filter\Date $dateFilter
+     * @param \Magento\Stdlib\DateTime\Filter\Date $dateFilter
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Core\Filter\Date $dateFilter)
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Stdlib\DateTime\Filter\Date $dateFilter)
     {
         $this->_dateFilter = $dateFilter;
         parent::__construct($context);
@@ -154,7 +154,8 @@ class Statistics extends \Magento\Backend\App\Action
     {
         try {
             $collectionsNames = $this->_getCollectionNames();
-            $currentDate = $this->_objectManager->get('Magento\Core\Model\LocaleInterface')->date();
+            /** @var \Magento\Stdlib\DateTime\DateInterface $currentDate */
+            $currentDate = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')->date();
             $date = $currentDate->subHour(25);
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate($date);

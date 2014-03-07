@@ -162,8 +162,8 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     protected function _prepareForm()
     {
         $fieldset = $this->_form->addFieldset('main', array(
-            'no_container' => true
-        ));
+                'no_container' => true
+            ));
 
         $addressForm = $this->_customerFormFactory->create(
             'customer_address',

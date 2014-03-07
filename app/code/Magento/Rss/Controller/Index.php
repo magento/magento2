@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rss\Controller;
 
 use Magento\App\Action\NotFoundException;
@@ -64,6 +63,7 @@ class Index extends \Magento\App\Action\Action
     /**
      * Index action
      *
+     * @return void
      * @throws NotFoundException
      */
     public function indexAction()
@@ -78,6 +78,8 @@ class Index extends \Magento\App\Action\Action
 
     /**
      * Display feed not found message
+     *
+     * @return void
      */
     public function nofeedAction()
     {
@@ -92,7 +94,7 @@ class Index extends \Magento\App\Action\Action
      * Wishlist rss feed action
      * Show all public wishlists and private wishlists that belong to current user
      *
-     * @return mixed
+     * @return void
      */
     public function wishlistAction()
     {

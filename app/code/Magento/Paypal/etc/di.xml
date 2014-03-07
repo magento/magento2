@@ -31,4 +31,14 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Paypal\Model\PayflowadvancedFactory" type="Magento\Paypal\Model\PayflowlinkFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflowadvanced</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Controller\Payflowadvanced">
+        <arguments>
+            <argument name="payflowModelFactory" xsi:type="object">Magento\Paypal\Model\PayflowadvancedFactory</argument>
+        </arguments>
+    </type>
 </config>

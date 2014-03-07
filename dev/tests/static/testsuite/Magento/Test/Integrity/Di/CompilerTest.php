@@ -65,6 +65,13 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_validator;
 
+    /**
+     * Class arguments reader
+     *
+     * @var \Magento\Interception\Code\InterfaceValidator
+     */
+    protected $pluginValidator;
+
     protected function setUp()
     {
         $this->_shell = new \Magento\Shell(new \Magento\OSInfo());
@@ -92,6 +99,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Code\Validator\ArgumentSequence());
+        $this->pluginValidator = new \Magento\Interception\Code\InterfaceValidator();
     }
 
     protected function tearDown()
@@ -149,7 +157,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Checks if class is a real one or generated Factory
-     * @param $instanceName class name
+     * @param string $instanceName class name
      * @throws \PHPUnit_Framework_AssertionFailedError
      * @return bool
      */
@@ -278,6 +286,20 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test consistency of plugin interfaces
+     */
+    public function testPluginInterfaces()
+    {
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($plugin, $type) {
+                $this->validatePlugins($plugin, $type);
+            },
+            $this->pluginDataProvider()
+        );
+    }
+
+    /**
      * Validate constructor integrity
      */
     public function testConstructorIntegrity()
@@ -288,7 +310,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $autoloader,
             $this->_generationDir
         );
-        $generator = new \Magento\Code\Generator(null, $autoloader, $generatorIo);
+        $generator = new \Magento\Code\Generator($autoloader, $generatorIo, array(
+            \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
+                => 'Magento\ObjectManager\Code\Generator\Factory',
+        ));
         $autoloader = new \Magento\Code\Generator\Autoloader($generator);
         spl_autoload_register(array($autoloader, 'load'));
 
@@ -303,10 +328,58 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Validate plugin interface
+     *
+     * @param string $plugin
+     * @param string $type
+     */
+    protected function validatePlugins($plugin, $type)
+    {
+        try {
+            $module = \Magento\TestFramework\Utility\Classes::getClassModuleName($type);
+            if (\Magento\TestFramework\Utility\Files::init()->isModuleExists($module)) {
+                $this->pluginValidator->validate($plugin, $type);
+            }
+        } catch (\Magento\Interception\Code\ValidatorException $exception) {
+            $this->fail($exception->getMessage());
+        }
+    }
+
+    /**
+     * Get application plugins
+     *
+     * @return array
+     */
+    protected function pluginDataProvider()
+    {
+        $files = \Magento\TestFramework\Utility\Files::init()->getDiConfigs();
+        $plugins = array();
+        foreach ($files as $file) {
+            $dom = new \DOMDocument();
+            $dom->load($file);
+            $xpath = new \DOMXPath($dom);
+            $pluginList = $xpath->query('//config/type/plugin');
+            foreach ($pluginList as $node) {
+                /** @var $node \DOMNode */
+                $type = $node->parentNode->attributes->getNamedItem('name')->nodeValue;
+                $type = \Magento\TestFramework\Utility\Classes::resolveVirtualType($type);
+                if ($node->attributes->getNamedItem('type')) {
+                    $plugin = $node->attributes->getNamedItem('type')->nodeValue;
+                    $plugin = \Magento\TestFramework\Utility\Classes::resolveVirtualType($plugin);
+                    $plugins[] = array('plugin' => $plugin, 'intercepted type' => $type);
+                }
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
      * Test DI compiler
      *
      * @depends testConfigurationOfInstanceParameters
      * @depends testConstructorIntegrity
+     * @depends testPluginInterfaces
      */
     public function testCompiler()
     {
@@ -319,4 +392,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $this->fail($exception->getPrevious()->getMessage());
         }
     }
+
+
 }

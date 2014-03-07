@@ -53,7 +53,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User */
     protected $_userMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Locale\Validator */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Locale\Validator */
     protected $_validatorMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
@@ -99,7 +99,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('load', 'save', 'sendPasswordResetNotificationEmail', '__sleep', '__wakeup'))
             ->getMock();
 
-        $this->_validatorMock = $this->getMockBuilder('Magento\Core\Model\Locale\Validator')
+        $this->_validatorMock = $this->getMockBuilder('Magento\Locale\Validator')
             ->disableOriginalConstructor()
             ->setMethods(array('isValid'))
             ->getMock();
@@ -168,7 +168,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_userMock));
         $this->_objectManagerMock->expects($this->at(2))
             ->method('get')
-            ->with($this->equalTo('Magento\Core\Model\Locale\Validator'))
+            ->with($this->equalTo('Magento\Locale\Validator'))
             ->will($this->returnValue($this->_validatorMock));
         $this->_objectManagerMock->expects($this->at(3))
             ->method('get')

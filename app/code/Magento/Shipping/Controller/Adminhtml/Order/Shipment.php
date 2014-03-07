@@ -614,7 +614,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         if ($shipment) {
             $pdf = $this->_objectManager->create('Magento\Shipping\Model\Order\Pdf\Packaging')->getPdf($shipment);
             return $this->_fileFactory->create(
-                'packingslip' . $this->_objectManager->get('Magento\Core\Model\Date')->date('Y-m-d_H-i-s') . '.pdf',
+                'packingslip' . $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s') . '.pdf',
                 $pdf->render(),
                 \Magento\App\Filesystem::VAR_DIR,
                 'application/pdf'
@@ -720,6 +720,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
         /** @var \Magento\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get('Magento\App\Filesystem')
             ->getDirectoryWrite(\Magento\App\Filesystem::TMP_DIR);
+        $directory->create();
         $image = imagecreatefromstring($imageString);
         if (!$image) {
             return false;

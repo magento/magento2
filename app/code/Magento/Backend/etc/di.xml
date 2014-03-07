@@ -67,6 +67,7 @@
         <arguments>
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
             <argument name="auth" xsi:type="object">Magento\Backend\Model\Auth\Proxy</argument>
+            <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\App\Router\NoRouteHandlerList">

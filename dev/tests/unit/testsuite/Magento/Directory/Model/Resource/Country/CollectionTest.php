@@ -58,8 +58,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $localeMock = $this->getMock('Magento\Core\Model\LocaleInterface');
-        $localeMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
+        $localeListsMock = $this->getMock('Magento\Locale\ListsInterface');
+        $localeListsMock->expects($this->any())->method('getCountryTranslation')->will($this->returnArgument(0));
 
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
@@ -71,7 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $arguments = array(
             'logger' => $logger,
             'eventManager' => $eventManager,
-            'locale' => $localeMock,
+            'localeLists' => $localeListsMock,
             'fetchStrategy' => $fetchStrategy,
             'entityFactory' => $entityFactory,
             'coreStoreConfig' => $storeConfigMock,

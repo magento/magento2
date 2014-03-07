@@ -84,8 +84,6 @@ class Session extends \Magento\Session\SessionManager
      */
     protected $_customerService;
 
-    /** @var  \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
-    protected $_customerAccountService;
     /**
      * @var CustomerFactory
      */
@@ -107,9 +105,9 @@ class Session extends \Magento\Session\SessionManager
     protected $_storeManager;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\App\Http\Context
      */
-    protected $response;
+    protected $_httpContext;
 
     /**
      * @var \Magento\Customer\Service\V1\Dto\Customer
@@ -137,10 +135,9 @@ class Session extends \Magento\Session\SessionManager
      * @param \Magento\Core\Model\Session $session
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Converter $converter
-     * @param \Magento\App\ResponseInterface $response
+     * @param \Magento\App\Http\Context $httpContext
+     * @param Converter $converter
      * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param null $sessionName
      * @param array $data
      */
@@ -151,19 +148,18 @@ class Session extends \Magento\Session\SessionManager
         \Magento\Session\SaveHandlerInterface $saveHandler,
         \Magento\Session\ValidatorInterface $validator,
         \Magento\Session\StorageInterface $storage,
-        \Magento\Customer\Model\Config\Share $configShare,
+        Config\Share $configShare,
         \Magento\Core\Helper\Url $coreUrl,
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Customer\Model\Resource\Customer $customerResource,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        Resource\Customer $customerResource,
+        CustomerFactory $customerFactory,
         \Magento\UrlFactory $urlFactory,
         \Magento\Core\Model\Session $session,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
-        \Magento\App\ResponseInterface $response,
         \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         $sessionName = null,
         array $data = array()
     ) {
@@ -175,10 +171,9 @@ class Session extends \Magento\Session\SessionManager
         $this->_urlFactory = $urlFactory;
         $this->_session = $session;
         $this->_customerService = $customerService;
-        $this->_customerAccountService = $customerAccountService;
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
-        $this->response = $response;
+        $this->_httpContext = $httpContext;
         parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
         $this->start($sessionName);
         $this->_converter = $converter;
@@ -204,7 +199,7 @@ class Session extends \Magento\Session\SessionManager
     public function setCustomerDto(CustomerDto $customer)
     {
         $this->_customer = $customer;
-        $this->response->setVary('customer_group', $customer->getGroupId());
+        $this->_httpContext->setValue('customer_group', $customer->getGroupId());
         $this->setCustomerId($customer->getCustomerId());
         return $this;
     }
@@ -217,12 +212,7 @@ class Session extends \Magento\Session\SessionManager
      */
     public function getCustomerDto()
     {
-        /*** XXX: shouldn't this be CustomerDto? ***/
-        if ($this->_customer instanceof Customer) {
-            return $this->_customer;
-        }
-
-        if ($this->getCustomerId()) {
+        if (!($this->_customer instanceof CustomerDto) && $this->getCustomerId()) {
             $this->_customer = $this->_customerService->getCustomer($this->getCustomerId());
         }
 
@@ -259,11 +249,12 @@ class Session extends \Magento\Session\SessionManager
      *
      * @param   Customer $customerModel
      * @return  \Magento\Customer\Model\Session
+     * @deprecated use setCustomerId() instead
      */
     public function setCustomer(Customer $customerModel)
     {
         $this->_customerModel = $customerModel;
-        $this->response->setVary('customer_group', $customerModel->getGroupId());
+        $this->_httpContext->setValue('customer_group', $customerModel->getGroupId());
         $this->setCustomerId($customerModel->getId());
         if ((!$customerModel->isConfirmationRequired()) && $customerModel->getConfirmation()) {
             $customerModel->setConfirmation(null)->save();
@@ -313,11 +304,22 @@ class Session extends \Magento\Session\SessionManager
         return null;
     }
 
+    /**
+     * Retrieve customer id from current session
+     *
+     * @return int|null
+     */
     public function getId()
     {
         return $this->getCustomerId();
     }
 
+    /**
+     * Set customer id
+     *
+     * @param int|null $customerId
+     * @return \Magento\Customer\Model\Session
+     */
     public function setId($customerId)
     {
         return $this->setCustomerId($customerId);
@@ -379,24 +381,6 @@ class Session extends \Magento\Session\SessionManager
         try {
             $this->_customerService->getCustomer($customerId);
             $this->_isCustomerIdChecked = $customerId;
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Customer authorization
-     *
-     * @param   string $username
-     * @param   string $password
-     * @return  bool
-     */
-    public function login($username, $password)
-    {
-        try {
-            $customer = $this->_customerAccountService->authenticate($username, $password);
-            $this->setCustomerDtoAsLoggedIn($customer);
             return true;
         } catch (\Exception $e) {
             return false;

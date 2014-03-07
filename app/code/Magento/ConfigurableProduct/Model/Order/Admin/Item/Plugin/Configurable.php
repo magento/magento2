@@ -42,63 +42,69 @@ class Configurable
     /**
      * Get item sku
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Sales\Model\Order\Admin\Item $subject
+     * @param callable $proceed
+     * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetSku(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        list($item) = $arguments;
-
+    public function aroundGetSku(
+        \Magento\Sales\Model\Order\Admin\Item $subject,
+        \Closure $proceed,
+        \Magento\Sales\Model\Order\Item $item
+    ) {
         if ($item->getProductType() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             $productOptions = $item->getProductOptions();
             return $productOptions['simple_sku'];
         }
 
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 
     /**
      * Get item name
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Sales\Model\Order\Admin\Item $subject
+     * @param callable $proceed
+     * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetName(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        list($item) = $arguments;
-
+    public function aroundGetName(
+        \Magento\Sales\Model\Order\Admin\Item $subject,
+        \Closure $proceed,
+        \Magento\Sales\Model\Order\Item $item
+    ) {
         if ($item->getProductType() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             $productOptions = $item->getProductOptions();
             return $productOptions['simple_name'];
         }
 
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 
     /**
      * Get product id
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Sales\Model\Order\Admin\Item $subject
+     * @param callable $proceed
+     * @param \Magento\Sales\Model\Order\Item $item
      *
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetProductId(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var \Magento\Sales\Model\Order\Item $item */
-        list($item) = $arguments;
-
+    public function aroundGetProductId(
+        \Magento\Sales\Model\Order\Admin\Item $subject,
+        \Closure $proceed,
+        \Magento\Sales\Model\Order\Item $item
+    ) {
         if ($item->getProductType() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             $productOptions     = $item->getProductOptions();
             $product = $this->productFactory->create();
             return $product->getIdBySku($productOptions['simple_sku']);
         }
-        return $invocationChain->proceed($arguments);
+        return $proceed($item);
     }
 }

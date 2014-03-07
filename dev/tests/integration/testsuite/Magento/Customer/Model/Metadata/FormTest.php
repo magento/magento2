@@ -73,7 +73,27 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'region' => 'California'
         ];
 
-        $this->_expected = $this->_attributes;
+        $requestData = [
+            'company' => 'Company Name',
+            'fax' => '(555) 555-5555',
+            'middlename' => 'Mid',
+            'prefix' => 'Mr.',
+            'suffix' => 'Esq.',
+            'vat_id' => '',
+            'firstname' => 'New Name',
+            'lastname' => 'Doe',
+            'street' => ['2211 New Street'],
+            'city' => 'San Jose',
+            'country_id' => 'US',
+            'postcode' => '95131',
+            'telephone' => '5125125125',
+            'region_id' => 12,
+            'region' => 'California'
+        ];
+        $this->_request = $objectManager->get('Magento\App\RequestInterface');
+        $this->_request->setParams($requestData);
+
+        $this->_expected = array_merge($this->_attributes, $requestData);
 
         unset($this->_expected['id']);
         unset($this->_expected['default_shipping']);
@@ -82,8 +102,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         unset($this->_expected['prefix']);
         unset($this->_expected['suffix']);
 
-        $this->_request = $objectManager->get('Magento\App\RequestInterface');
-        $this->_request->setParams($this->_attributes);
+
     }
 
     public function testCompactData()
@@ -117,7 +136,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testRestoreData()
     {
-        $this->_expected['street'] = trim(implode("\n", $this->_expected['street']));
         $attributeValues = $this->_form->restoreData($this->_form->extractData($this->_request));
         $this->assertEquals($this->_expected, $attributeValues);
     }

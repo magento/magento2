@@ -80,9 +80,9 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_catalogRuleFactory;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -92,7 +92,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory
      * @param \Magento\Customer\Model\GroupFactory $customerGroup
      * @param \Magento\Catalog\Model\Config $config
@@ -101,7 +101,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogRule\Model\Resource\RuleFactory $catalogRuleFactory,
         \Magento\Customer\Model\GroupFactory $customerGroup,
         \Magento\Catalog\Model\Config $config,
@@ -112,7 +112,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
         $this->_config = $config;
         $this->_customerGroup = $customerGroup;
         $this->_catalogRuleFactory = $catalogRuleFactory;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_storeManager = $storeManager;
     }
 
@@ -545,7 +545,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _getBasePrice($productId, array $priceData, $website, $customerGroup)
     {
         $store          = $website->getDefaultStore();
-        $storeTimeStamp = $this->_locale->storeTimeStamp($store);
+        $storeTimeStamp = $this->_localeDate->scopeTimeStamp($store);
         $finalPrice     = $this->_calculateSpecialPrice($priceData['price'], $priceData, $website);
 
         $rulePrice = $this->_catalogRuleFactory->create()
@@ -842,7 +842,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
         $specialPrice       = $priceData['special_price'];
 
         if (!is_null($specialPrice) && $specialPrice != false) {
-            if ($this->_locale->isStoreDateInInterval($store, $priceData['special_from_date'],
+            if ($this->_localeDate->isScopeDateInInterval($store, $priceData['special_from_date'],
             $priceData['special_to_date'])) {
                 $specialPrice   = ($finalPrice * $specialPrice) / 100;
                 $finalPrice     = min($finalPrice, $specialPrice);

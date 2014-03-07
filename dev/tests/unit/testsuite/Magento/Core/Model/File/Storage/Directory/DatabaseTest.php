@@ -53,7 +53,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $helperStorageDatabase;
 
     /**
-     * @var \Magento\Core\Model\Date |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Stdlib\DateTime\DateTime |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dateModelMock;
 
@@ -101,7 +101,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->registryMock         = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->helperStorageDatabase = $this->getMock('Magento\Core\Helper\File\Storage\Database',
             array(), array(), '', false);
-        $this->dateModelMock        = $this->getMock('Magento\Core\Model\Date',
+        $this->dateModelMock        = $this->getMock('Magento\Stdlib\DateTime\DateTime',
             array(), array(), '', false);
         $this->applicationMock      = $this->getMock('Magento\Core\Model\App',
             array(), array(), '', false);

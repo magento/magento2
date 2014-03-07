@@ -143,4 +143,23 @@ class Share extends \Magento\Core\Model\Config\Value
         }
         return $this;
     }
+
+    /**
+     * Returns shared website Ids.
+     *
+     * @param int $websiteId the ID to use if website scope is on
+     * @return int[]
+     */
+    public function getSharedWebsiteIds($websiteId)
+    {
+        $ids = [];
+        if ($this->isWebsiteScope()) {
+            $ids[] = $websiteId;
+        } else {
+            foreach ($this->_storeManager->getWebsites() as $website) {
+                $ids[] = $website->getId();
+            }
+        }
+        return $ids;
+    }
 }

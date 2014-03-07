@@ -43,35 +43,51 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      *
      * @var array
      */
-    protected $_installOptions = array(
-        'license_agreement_accepted' => array('required' => 1),
-        'locale'                     => array('required' => 1),
-        'timezone'                   => array('required' => 1),
-        'default_currency'           => array('required' => 1),
-        'db_model'                   => array('required' => 0),
-        'db_host'                    => array('required' => 1),
-        'db_name'                    => array('required' => 1),
-        'db_user'                    => array('required' => 1),
-        'db_pass'                    => array('required' => 0),
-        'db_prefix'                  => array('required' => 0),
-        'url'                        => array('required' => 1),
-        'skip_url_validation'        => array('required' => 0),
-        'use_rewrites'               => array('required' => 1),
-        'use_secure'                 => array('required' => 1),
-        'secure_base_url'            => array('required' => 1),
-        'use_secure_admin'           => array('required' => 1),
-        'admin_lastname'             => array('required' => 1),
-        'admin_firstname'            => array('required' => 1),
-        'admin_email'                => array('required' => 1),
-        'admin_username'             => array('required' => 1),
-        'admin_password'             => array('required' => 1),
-        'admin_no_form_key'          => array('required' => 0),
-        'encryption_key'             => array('required' => 0),
-        'session_save'               => array('required' => 0),
-        'backend_frontname'          => array('required' => 0),
-        'enable_charts'              => array('required' => 0),
-        'order_increment_prefix'     => array('required' => 0),
-        'cleanup_database'           => array('required' => 0),
+    protected $installParameters = array();
+
+    /**
+     * Required parameters with descriptions
+     *
+     * @var array
+     */
+    protected $requiredParameters = array(
+        'license_agreement_accepted' => 'Accept licence. See LICENSE*.txt. Flag value.',
+        'locale'                     => 'Locale to use. Run with --show_locales for full list',
+        'timezone'                   => 'Time zone to use. Run with --show_timezones for full list',
+        'default_currency'           => 'Default currency. Run with --show_currencies for full list',
+        'db_host'                    => 'IP or name of your DB host',
+        'db_name'                    => 'Database name',
+        'db_user'                    => 'Database user name',
+        'url'                        => 'Instance URL. For example, "http://myinstance.com"',
+        'use_rewrites'               => 'Use web server rewrites. Flag value',
+        'use_secure'                 => 'Use https(ssl) protocol. Flag value',
+        'secure_base_url'            => 'Full secure URL if use_secure enabled. For example "https://myinstance.com"',
+        'use_secure_admin'           => 'Use secure protocol for backend. Flag value',
+        'admin_lastname'             => 'Admin user last name',
+        'admin_firstname'            => 'Admin user first name',
+        'admin_email'                => 'Admin email',
+        'admin_username'             => 'Admin login',
+        'admin_password'             => 'Admin password',
+    );
+
+    /**
+     * Optional parameters with descriptions
+     *
+     * @var array
+     */
+    protected $optionalParameters = array(
+        'db_model'                   => 'DB driver. "mysql4" is default and the only supported now',
+        'db_pass'                    => 'DB password. Empty by default',
+        'db_prefix'                  => 'Use prefix for tables of this installation. Empty by default',
+        'skip_url_validation'        => 'Skip URL validation on installation. Flag value. Validate by default',
+        'admin_no_form_key'          =>
+            'Disable the form key protection on the back-end. Flag value. Enabled by default',
+        'encryption_key'             => 'Key to encrypt sensitive data. Auto-generated if empty',
+        'session_save'               => 'Where session data will be stored. "files"(default) or "db"',
+        'backend_frontname'          => 'Backend URL path. "backend" by default',
+        'enable_charts'              => 'Enable charts on backend dashboard. Flag value. Enabled by default',
+        'order_increment_prefix'     => 'Order number prefix. Empty by default.',
+        'cleanup_database'           => 'Clean up database before installation. Flag value. Disabled by default',
     );
 
     /**
@@ -115,11 +131,11 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_appState;
 
     /**
-     * Locale model
+     * Locale Lists
      *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
      * Magento Object Manager
@@ -135,7 +151,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Install\Model\Installer\Data $installerData
      * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Locale\ListsInterface $localeLists
      * @param \Magento\ObjectManager $objectManager
      */
     public function __construct(
@@ -145,7 +161,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         \Magento\App\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Data $installerData,
         \Magento\App\State $appState,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Locale\ListsInterface $localeLists,
         \Magento\ObjectManager $objectManager
     ) {
         parent::__construct($installer);
@@ -155,8 +171,9 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_installerData = $installerData;
         $this->_installer->setDataModel($this->_installerData);
         $this->_appState = $appState;
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
         $this->_objectManager = $objectManager;
+        $this->installParameters = array_keys($this->requiredParameters + $this->optionalParameters);
     }
 
     /**
@@ -170,9 +187,9 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         /**
          * Check required options
          */
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
-            if (isset($optionInfo['required']) && $optionInfo['required'] && !isset($options[$optionName])) {
-                $this->addError("ERROR: installation option '$optionName' is required.");
+        foreach (array_keys($this->requiredParameters) as $optionName) {
+            if (!isset($options[$optionName])) {
+                $this->addError("ERROR: installation parameter '$optionName' is required.");
             }
         }
 
@@ -191,7 +208,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
         }
 
         $result = array();
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
+        foreach ($this->installParameters as $optionName) {
             $result[$optionName] = isset($options[$optionName]) ? $options[$optionName] : '';
         }
 
@@ -421,7 +438,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableLocales()
     {
-        return $this->_locale->getOptionLocales();
+        return $this->_localeLists->getOptionLocales();
     }
 
     /**
@@ -431,7 +448,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableCurrencies()
     {
-        return $this->_locale->getOptionCurrencies();
+        return $this->_localeLists->getOptionCurrencies();
     }
 
     /**
@@ -441,20 +458,26 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableTimezones()
     {
-        return $this->_locale->getOptionTimezones();
+        return $this->_localeLists->getOptionTimezones();
     }
 
     /**
-     * Retrieve available installation options
+     * Retrieve required installation params
      *
      * @return array
      */
-    public function getAvailableInstallOptions()
+    public function getRequiredParams()
     {
-        $result = array();
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
-            $result[$optionName] = ($optionInfo['required'] ? 'required' : 'optional');
-        }
-        return $result;
+
+        return $this->requiredParameters;
+    }
+
+    /**
+     * Get optional installation parameters
+     * @return array
+     */
+    public function getOptionalParams()
+    {
+        return $this->optionalParameters;
     }
 }

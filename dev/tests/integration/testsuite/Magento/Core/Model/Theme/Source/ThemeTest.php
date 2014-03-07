@@ -39,7 +39,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function testGetAllOptions()
     {
         /** @var $model \Magento\Core\Model\Theme\Source\Theme */
-        $model = Bootstrap::getObjectManager()->create('\Magento\Core\Model\Theme\Source\Theme');
+        $model = Bootstrap::getObjectManager()->create('Magento\Core\Model\Theme\Source\Theme');
 
         /** @var $expectedCollection \Magento\Core\Model\Theme\Collection */
         $expectedCollection = Bootstrap::getObjectManager()

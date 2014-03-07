@@ -162,4 +162,105 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             array('additional_messages')
         );
     }
+
+    /**
+     * @param bool $hasOrderId
+     * @param bool $hasQuoteId
+     * @dataProvider restoreQuoteDataProvider
+     */
+    public function testRestoreQuote($hasOrderId, $hasQuoteId)
+    {
+        $order = $this->getMock('Magento\Sales\Model\Order', ['getId', 'loadByIncrementId', '__wakeup'], [], '', false);
+        $order->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($hasOrderId ? 'order id' : null));
+        $orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
+        $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
+        $quoteFactory = $this->getMock('Magento\Sales\Model\QuoteFactory', ['create'], [], '', false);
+        $storage = $this->getMock('Magento\Session\Storage', null);
+        $store = $this->getMock('Magento\Core\Model\Store', [], [], '', false);
+        $storeManager = $this->getMockForAbstractClass('Magento\Core\Model\StoreManagerInterface');
+        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $eventManager = $this->getMockForAbstractClass('Magento\Event\ManagerInterface');
+
+        /** @var Session $session */
+        $session = $this->_helper->getObject(
+            'Magento\Checkout\Model\Session',
+            [
+                'orderFactory' => $orderFactory,
+                'quoteFactory' => $quoteFactory,
+                'storage' => $storage,
+                'storeManager' => $storeManager,
+                'eventManager' => $eventManager
+            ]
+        );
+        $lastOrderId = 'last order id';
+        $quoteId = 'quote id';
+        $anotherQuoteId = 'another quote id';
+        $session->setLastRealOrderId($lastOrderId);
+        $session->setQuoteId($quoteId);
+
+        if ($hasOrderId) {
+            $order->setQuoteId($quoteId);
+            $quote = $this->getMock(
+                'Magento\Sales\Model\Quote',
+                ['getId', 'save', 'setIsActive', 'setReservedOrderId', 'load', '__wakeup'],
+                [],
+                '',
+                false
+            );
+            $quote->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($hasQuoteId ? $anotherQuoteId : null));
+            $quote->expects($this->any())
+                ->method('load')
+                ->with($this->equalTo($quoteId))
+                ->will($this->returnValue($quote));
+            $quoteFactory->expects($this->once())->method('create')->will($this->returnValue($quote));
+            if ($hasQuoteId) {
+                $eventManager->expects($this->once())
+                    ->method('dispatch')
+                    ->with('restore_quote', ['order' => $order, 'quote' => $quote]);
+                $quote->expects($this->once())
+                    ->method('setIsActive')
+                    ->with($this->equalTo(1))
+                    ->will($this->returnSelf());
+                $quote->expects($this->once())
+                    ->method('setReservedOrderId')
+                    ->with($this->isNull())
+                    ->will($this->returnSelf());
+                $quote->expects($this->once())
+                    ->method('save');
+            } else {
+                $quote->expects($this->never())
+                    ->method('setIsActive');
+                $quote->expects($this->never())
+                    ->method('setReservedOrderId');
+                $quote->expects($this->never())
+                    ->method('save');
+            }
+        }
+        $result = $session->restoreQuote();
+        if ($hasOrderId && $hasQuoteId) {
+            $this->assertNull($session->getLastRealOrderId());
+            $this->assertEquals($anotherQuoteId, $session->getQuoteId());
+        } else {
+            $this->assertEquals($lastOrderId, $session->getLastRealOrderId());
+            $this->assertEquals($quoteId, $session->getQuoteId());
+        }
+        $this->assertEquals($result, $hasOrderId && $hasQuoteId);
+    }
+
+    /**
+     * @return array
+     */
+    public function restoreQuoteDataProvider()
+    {
+        return array(
+            array(true, true),
+            array(true, false),
+            array(false, true),
+            array(false, false),
+        );
+    }
 }

@@ -30,9 +30,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Gdata\Gshopping\Content $context */
-        $context = $objectManager->create('\Magento\Gdata\Gshopping\Content');
+        $context = $objectManager->create('Magento\Gdata\Gshopping\Content');
         $entry = $context->newEntry();
-        $this->assertInstanceOf('\Magento\Gdata\Gshopping\Entry', $entry);
+        $this->assertInstanceOf('Magento\Gdata\Gshopping\Entry', $entry);
         $this->assertEquals($context, $entry->getService());
     }
 }

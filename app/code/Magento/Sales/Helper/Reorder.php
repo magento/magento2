@@ -42,7 +42,6 @@ class Reorder extends \Magento\Core\Helper\Data
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
      * @param \Magento\App\State $appState
      * @param \Magento\Customer\Model\Session $customerSession
      * @param bool $dbCompatibleMode
@@ -51,7 +50,6 @@ class Reorder extends \Magento\Core\Helper\Data
         \Magento\App\Helper\Context $context,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
         \Magento\App\State $appState,
         \Magento\Customer\Model\Session $customerSession,
         $dbCompatibleMode = true
@@ -61,7 +59,6 @@ class Reorder extends \Magento\Core\Helper\Data
             $context,
             $coreStoreConfig,
             $storeManager,
-            $locale,
             $appState,
             $dbCompatibleMode
         );

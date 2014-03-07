@@ -44,6 +44,17 @@ class Date
     protected static $_format = null;
 
     /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Retrieve date format
      *
      * @return string
@@ -54,8 +65,8 @@ class Date
         if (!$format) {
             if (is_null(self::$_format)) {
                 try {
-                    self::$_format = $this->_locale->getDateFormat(
-                        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
+                    self::$_format = $this->_localeDate->getDateFormat(
+                        \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     );
                 }
                 catch (\Exception $e) {
@@ -79,17 +90,17 @@ class Date
             $format = $this->_getFormat();
             try {
                 if ($this->getColumn()->getGmtoffset()) {
-                    $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
-                    $data = $this->_locale->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
+                    $data = $this->_localeDate->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
                 }
             }
             catch (\Exception $e)
             {
                 if ($this->getColumn()->getTimezone()) {
-                    $data = $this->_locale->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
                 } else {
-                    $data = $this->_locale->date($data, null, null, false)->toString($format);
+                    $data = $this->_localeDate->date($data, null, null, false)->toString($format);
                 }
             }
             return $data;

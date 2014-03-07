@@ -83,9 +83,9 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $_localeResolver;
 
     /**
      * @var bool
@@ -114,7 +114,7 @@ abstract class AbstractAction extends \Magento\App\Action\Action
         $this->_backendUrl = $context->getBackendUrl();
         $this->_formKeyValidator = $context->getFormKeyValidator();
         $this->_title = $context->getTitle();
-        $this->_locale = $context->getLocale();
+        $this->_localeResolver = $context->getLocaleResolver();
         $this->_canUseBaseUrl = $context->getCanUseBaseUrl();
         $this->_session = $context->getSession();
     }
@@ -300,12 +300,12 @@ abstract class AbstractAction extends \Magento\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Core\Model\Locale\Validator')->isValid($forceLocale)) {
+        if ($this->_objectManager->get('Magento\Locale\Validator')->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 
         if (is_null($this->_getSession()->getLocale())) {
-            $this->_getSession()->setLocale($this->_locale->getLocaleCode());
+            $this->_getSession()->setLocale($this->_localeResolver->getLocaleCode());
         }
 
         return $this;

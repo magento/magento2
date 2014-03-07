@@ -38,18 +38,18 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     /**
      * Core Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
+     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param string $modulePrefix
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $coreDate,
+        \Magento\Stdlib\DateTime\DateTime $coreDate,
         $modulePrefix
     ) {
         parent::__construct($resource, $modulePrefix);

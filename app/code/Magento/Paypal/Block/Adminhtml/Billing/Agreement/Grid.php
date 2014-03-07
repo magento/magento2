@@ -156,15 +156,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'column_css_class'  => 'col-last-name'
         ));
 
-        $this->addColumn('method_code', array(
-            'header'            => __('Payment Method'),
-            'index'             => 'method_code',
-            'type'              => 'options',
-            'options'           => $this->_helper->getAllBillingAgreementMethods(),
-            'header_css_class'  => 'col-payment',
-            'column_css_class'  => 'col-payment'
-        ));
-
         $this->addColumn('reference_id', array(
             'header'            => __('Reference ID'),
             'index'             => 'reference_id',

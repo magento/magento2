@@ -77,11 +77,13 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     // @codingStandardsIgnoreStart
     /**
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
+     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
     public function testDetectDesignUserAgent()
     {
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
@@ -92,10 +94,14 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('magento_blank', $design->getDesignTheme()->getThemePath());
     }
 
+    // @codingStandardsIgnoreStart
     /**
+     * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
+     * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"magento_blank";}}
      * @magentoDataFixture Magento/Core/_files/design_change.php
      * @magentoAppIsolation enabled
      */
+    // @codingStandardsIgnoreEnd
     public function testDetectDesignDesignChange()
     {
         $this->_model->detectDesign();

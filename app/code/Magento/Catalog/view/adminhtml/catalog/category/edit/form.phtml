@@ -68,7 +68,7 @@
     <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
 
     var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
-    $('in_category_products').value = categoryProducts.toQueryString();
+    $('in_category_products').value = Object.toJSON(categoryProducts);
 
     function registerCategoryProduct(grid, element, checked){
         if(checked){
@@ -83,7 +83,7 @@
             }
             categoryProducts.unset(element.value);
         }
-        $('in_category_products').value = categoryProducts.toQueryString();
+        $('in_category_products').value = Object.toJSON(categoryProducts);
         grid.reloadParams = {'selected_products[]':categoryProducts.keys()};
     }
     function categoryProductRowClick(grid, event){
@@ -101,7 +101,7 @@
         var element = Event.element(event);
         if(element && element.checkboxElement && element.checkboxElement.checked){
             categoryProducts.set(element.checkboxElement.value, element.value);
-            $('in_category_products').value = categoryProducts.toQueryString();
+            $('in_category_products').value = Object.toJSON(categoryProducts);
         }
     }
 

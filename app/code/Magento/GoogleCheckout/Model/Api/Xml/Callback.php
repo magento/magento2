@@ -185,11 +185,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         $quote = $this->objectManager->create('Magento\Sales\Model\Quote')
             ->setStoreId($storeId)
             ->load($quoteId);
-        if ($quote->isVirtual()) {
-            $quote->getBillingAddress()->setPaymentMethod('googlecheckout');
-        } else {
-            $quote->getShippingAddress()->setPaymentMethod('googlecheckout');
-        }
+
         return $quote;
     }
 
@@ -858,7 +854,7 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         $payment->setAmountAuthorized($this->getData('root/authorization-amount/VALUE'));
 
         $expDate = $this->getData('root/authorization-expiration-date/VALUE');
-        $expDate = new \Zend_Date($expDate);
+        $expDate = new \Magento\Stdlib\DateTime\Date($expDate);
         $msg = __('Google Authorization:');
         $msg .= '<br />' . __('Amount: %1', '<strong>'
                 . $this->_formatAmount($payment->getAmountAuthorized()) . '</strong>');
@@ -867,11 +863,11 @@ class Callback extends \Magento\GoogleCheckout\Model\Api\Xml\AbstractXml
         $order->addStatusToHistory($order->getStatus(), $msg);
 
         $order->setPaymentAuthorizationAmount($payment->getAmountAuthorized());
-        $timestamp = $this->objectManager->create('Magento\Core\Model\Date')->gmtTimestamp(
+        $timestamp = $this->objectManager->create('Magento\Stdlib\DateTime\DateTime')->gmtTimestamp(
             $this->getData('root/authorization-expiration-date/VALUE')
         );
         $order->setPaymentAuthorizationExpiration(
-            $timestamp ? $timestamp : $this->objectManager->create('Magento\Core\Model\Date')->gmtTimestamp()
+            $timestamp ? $timestamp : $this->objectManager->create('Magento\Stdlib\DateTime\DateTime')->gmtTimestamp()
         );
 
         $order->save();

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * Product rule condition data model
@@ -32,8 +32,6 @@
  * @package Magento_SalesRule
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Rule\Condition;
-
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
@@ -48,6 +46,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
@@ -58,10 +57,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         \Magento\Catalog\Model\Product $product,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
     ) {
-        parent::__construct($context, $backendData, $config, $product, $productResource, $attrSetCollection, $data);
+        parent::__construct(
+            $context, $backendData, $config, $product, $productResource, $attrSetCollection, $localeFormat, $data
+        );
         $this->_productFactory = $productFactory;
     }
 
@@ -69,6 +71,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Add special attributes
      *
      * @param array $attributes
+     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -82,7 +85,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Validate Product Rule Condition
      *
      * @param \Magento\Object $object
-     *
      * @return bool
      */
     public function validate(\Magento\Object $object)

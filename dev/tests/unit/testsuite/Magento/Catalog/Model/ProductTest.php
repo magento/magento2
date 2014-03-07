@@ -102,7 +102,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 array(), array(), '', false
             ),
             $this->getMock('Magento\CatalogInventory\Model\Stock\ItemFactory', array(), array(), '', false),
-            $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
             $this->getMock('Magento\Catalog\Model\CategoryFactory', array(), array(), '', false),
             $this->getMock('Magento\Catalog\Model\Product\Option', array(), array(), '', false),
             $this->getMock('Magento\Catalog\Model\Product\Visibility', array(), array(), '', false),

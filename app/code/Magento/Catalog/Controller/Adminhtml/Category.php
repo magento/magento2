@@ -315,8 +315,7 @@ class Category extends \Magento\Backend\App\Action
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
             if (isset($data['category_products']) && !$category->getProductsReadonly()) {
-                $products = array();
-                parse_str($data['category_products'], $products);
+                $products = json_decode($data['category_products'], true);
                 $category->setPostedProducts($products);
             }
             $this->_eventManager->dispatch(

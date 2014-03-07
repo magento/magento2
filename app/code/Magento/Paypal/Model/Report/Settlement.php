@@ -248,7 +248,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
 
                 // Set last modified date, this value will be overwritten during parsing
                 if (isset($attributes['mtime'])) {
-                    $lastModified = new \Zend_Date($attributes['mtime']);
+                    $lastModified = new \Magento\Stdlib\DateTime\Date($attributes['mtime']);
                     $this->setReportLastModified(
                         $lastModified->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
                     );
@@ -320,7 +320,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
             $lineType = $line[0];
             switch($lineType) {
                 case 'RH': // Report header.
-                    $lastModified = new \Zend_Date($line[1]);
+                    $lastModified = new \Magento\Stdlib\DateTime\Date($line[1]);
                     $this->setReportLastModified($lastModified->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
                     //$this->setAccountId($columns[2]); -- probably we'll just take that from the section header...
                     break;

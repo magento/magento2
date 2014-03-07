@@ -133,6 +133,8 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
                     'getRpToken',
                     'setRpToken',
                     'setRpTokenCreatedAt',
+                    'isDeleteable',
+                    'isReadonly',
                     'isResetPasswordLinkTokenExpired',
                     'changeResetPasswordLinkToken',
                     'sendPasswordResetConfirmationEmail',
@@ -483,6 +485,44 @@ class CustomerServiceTest extends \PHPUnit_Framework_TestCase
                 'value' => null,
             ], $inputException->getParams());
         }
+    }
+
+    /**
+     * Verify the isReadonly and isDeleteable methods of the Customer Service.
+     *
+     * @param string $method The method, either 'isReadonly' or 'isDeleteable'
+     * @param bool $isBoolean If the customer is or is not readonly/deleteable
+     * @param bool $expected The expected value of isReadOnly() or isDeleteable()
+     *
+     * @dataProvider isBooleanDataProvider
+     */
+    public function testIsBoolean($method, $isBoolean, $expected)
+    {
+        $this->_mockReturnValue($this->_customerModelMock, ['getId' => self::ID]);
+
+        $this->_customerModelMock->expects($this->once())
+            ->method('load')->with(self::ID)->will($this->returnSelf());
+        $this->_customerModelMock->expects($this->once())->method($method)
+            ->will($this->returnValue($isBoolean));
+
+        $this->_customerFactoryMock->expects($this->once())
+            ->method('create')->will($this->returnValue($this->_customerModelMock));
+
+        $customerService = $this->_createService();
+        $this->assertEquals($expected, $customerService->$method(self::ID));
+    }
+
+    /**
+     * Data provider for testIsBoolean() for checking isReadonly() and isDeleteable()
+     *
+     * @return array
+     */
+    public function isBooleanDataProvider()
+    {
+        return [
+            ['isReadonly', true, true], ['isReadonly', false, false],
+            ['isDeleteable', true, true], ['isDeleteable', false, false]
+        ];
     }
 
     /**

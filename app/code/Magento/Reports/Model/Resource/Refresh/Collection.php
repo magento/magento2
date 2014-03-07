@@ -37,9 +37,9 @@ namespace Magento\Reports\Model\Resource\Refresh;
 class Collection extends \Magento\Data\Collection
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @var \Magento\Reports\Model\FlagFactory
@@ -48,16 +48,16 @@ class Collection extends \Magento\Data\Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory
     ) {
         parent::__construct($entityFactory);
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_reportsFlagFactory = $reportsFlagFactory;
     }
 
@@ -65,7 +65,7 @@ class Collection extends \Magento\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\Zend_Date
+     * @return string|\Magento\Stdlib\DateTime\DateInterface
      */
     protected function _getUpdatedAt($reportCode)
     {
@@ -74,8 +74,8 @@ class Collection extends \Magento\Data\Collection
             ->setReportFlagCode($reportCode)
             ->loadSelf();
         return ($flag->hasData())
-            ? $this->_locale
-                ->storeDate(0, new \Zend_Date($flag->getLastUpdate(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT), true)
+            ? $this->_localeDate
+                ->scopeDate(0, new \Magento\Stdlib\DateTime\Date($flag->getLastUpdate(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT), true)
             : '';
     }
 

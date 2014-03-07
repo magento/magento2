@@ -47,14 +47,4 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="wishlistInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <arguments>
-            <argument name="cookieCheckActions" xsi:type="array">
-                <item name="wishlistAdd" xsi:type="string">add</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Wishlist\Controller\Index">
-        <plugin name="sessionInitializer" type="wishlistInitSession" />
-    </type>
 </config>
