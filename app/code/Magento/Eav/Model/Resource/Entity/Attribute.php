@@ -206,6 +206,7 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
+            $frontendLabel = array_values($frontendLabel);
             if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
                 throw new \Magento\Core\Exception(__('Frontend label is not defined'));
             }
