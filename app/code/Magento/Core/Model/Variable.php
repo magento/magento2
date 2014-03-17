@@ -159,6 +159,27 @@ class Variable extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Retrieve translation option
+     *
+     * @param bool $withGroup
+     * @return array
+     */
+    public function getTranslateVariablesOptionArray($withGroup = false)
+    {
+        $optionArray[] = array(
+            'value' => '{{translate text=""}}',
+            'label' => "Translate string"
+        );
+        if ($withGroup && $optionArray) {
+            $optionArray = array(
+                'label' => __('Translation'),
+                'value' => $optionArray
+            );
+        }
+        return $optionArray;
+    }
+
+    /**
      * Retrieve variables option array
      *
      * @param bool $withGroup
