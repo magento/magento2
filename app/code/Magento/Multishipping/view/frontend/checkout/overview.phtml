@@ -172,7 +172,7 @@
         <div class="actions" id="review-buttons-container">
             <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
             <button type="submit" class="action submit" id="review-button"><span><?php echo __('Place Order') ?></span></button>
-            <span id="review-please-wait" class="please-wait load indicator" style="display:none;">
+            <span id="review-please-wait" class="please-wait load indicator" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
                 <span><?php echo __('Submitting order information...') ?></span>
             </span>
         </div>

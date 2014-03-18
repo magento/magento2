@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Controller;
+
+use Magento\App\RequestInterface;
 
 /**
  * Customer account controller
@@ -31,11 +34,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-
 class Customer extends \Magento\App\Action\Action
 {
     /**
@@ -74,6 +72,7 @@ class Customer extends \Magento\App\Action\Action
     /**
      * Display downloadable links bought by customer
      *
+     * @return void
      */
     public function productsAction()
     {

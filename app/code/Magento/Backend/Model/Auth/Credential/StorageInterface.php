@@ -46,8 +46,8 @@ interface StorageInterface
     /**
      * Login action. Check if given username and password are valid
      *
-     * @param $username
-     * @param $password
+     * @param string $username
+     * @param string $password
      * @return $this
      * @abstract
      */

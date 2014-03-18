@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Transactions;
 
 /**
  * Adminhtml transactions grid
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Transactions;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -50,11 +49,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_paymentData = null;
 
     /**
+     * Transaction
+     *
      * @var \Magento\Sales\Model\Order\Payment\Transaction
      */
     protected $_transaction;
 
     /**
+     * Collection factory
+     *
      * @var \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory
      */
     protected $_collectionFactory;
@@ -87,6 +90,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Set grid params
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -101,7 +105,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection for grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -122,7 +126,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add columns to grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -219,7 +223,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Retrieve row url
      *
-     * @param $item
+     * @param \Magento\Object $item
      * @return string
      */
     public function getRowUrl($item)

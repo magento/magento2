@@ -686,7 +686,6 @@ class Migration extends \Magento\Core\Model\Resource\Setup
             'giftmessage'       => 'Magento_GiftMessage',
             'googleanalytics'   => 'Magento_GoogleAnalytics',
             'googlebase'        => 'Magento_GoogleBase',
-            'googlecheckout'    => 'Magento_GoogleCheckout',
             'importexport'      => 'Magento_ImportExport',
             'productalert'      => 'Magento_ProductAlert',
             'salesrule'         => 'Magento_SalesRule',

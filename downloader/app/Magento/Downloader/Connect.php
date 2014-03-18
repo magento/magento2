@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloader;
 
 error_reporting(E_ALL & ~E_NOTICE);
@@ -277,7 +276,7 @@ class Connect
     /**
      * Set remote Config by URI
      *
-     * @param $uri
+     * @param string $uri
      * @return \Magento\Downloader\Connect
      */
     public function setRemoteConfig($uri)

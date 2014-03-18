@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Visitor
+ *
+ * @package Less
+ * @subpackage visitor
+ */
 class Less_Visitor{
 
 	var $methods = array();

@@ -86,7 +86,7 @@ $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     array('quote' => $quote)
 );
 $service->setOrderData(array('increment_id' => '100000001'));
-$service->submitAll();
+$service->submitAllWithDataObject();
 
 $order = $service->getOrder();
 $order->save();

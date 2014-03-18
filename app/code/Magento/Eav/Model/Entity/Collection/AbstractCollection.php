@@ -304,7 +304,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      */
     public function addItem(\Magento\Object $object)
     {
-        if (get_class($object) !== $this->_itemObjectClass) {
+        if (!($object instanceof $this->_itemObjectClass)) {
             throw new \Magento\Eav\Exception(__('Attempt to add an invalid object'));
         }
         return parent::addItem($object);

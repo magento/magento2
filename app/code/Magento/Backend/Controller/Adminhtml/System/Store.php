@@ -394,7 +394,8 @@ class Store extends Action
     public function deleteWebsitePostAction()
     {
         $itemId = $this->getRequest()->getParam('item_id');
-        $model = $this->_objectManager->create('Magento\Core\Model\Website')->load($itemId);
+        $model = $this->_objectManager->create('Magento\Core\Model\Website');
+        $model->load($itemId);
 
         if (!$model) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));

@@ -48,8 +48,8 @@ class Processor
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $state
      */
     public function __construct(
-       \Magento\Indexer\Model\Indexer $indexer,
-       \Magento\Catalog\Model\Indexer\Product\Flat\State $state
+        \Magento\Indexer\Model\Indexer $indexer,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $state
     ) {
         $this->_indexer = $indexer;
         $this->_state = $state;
@@ -72,6 +72,7 @@ class Processor
      * Reindex single row by id
      *
      * @param int $id
+     * @return void
      */
     public function reindexRow($id)
     {
@@ -85,6 +86,7 @@ class Processor
      * Reindex multiple rows by ids
      *
      * @param int[] $ids
+     * @return void
      */
     public function reindexList($ids)
     {
@@ -96,6 +98,8 @@ class Processor
 
     /**
      * Run full reindex
+     *
+     * @return void
      */
     public function reindexAll()
     {
@@ -107,6 +111,8 @@ class Processor
 
     /**
      * Mark Product flat indexer as invalid
+     *
+     * @return void
      */
     public function markIndexerAsInvalid()
     {

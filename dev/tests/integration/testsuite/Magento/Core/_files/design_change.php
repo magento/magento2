@@ -31,6 +31,6 @@ $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Mag
 $change = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Core\Model\Design');
 $change->setStoreId($storeId)
-    ->setDesign('magento_blank')
+    ->setDesign('magento_plushe')
     ->setDateFrom('2001-01-01 01:01:01')
     ->save(); // creating with predefined ID doesn't work for some reason

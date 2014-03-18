@@ -28,7 +28,7 @@ namespace Magento\App\Config\Initial;
 class Converter implements \Magento\Config\ConverterInterface
 {
     /**
-     * Node pathes to process
+     * Node paths to process
      *
      * @var array
      */

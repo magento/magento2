@@ -25,8 +25,7 @@
  */
 namespace Magento\Connect\Command;
 
-final class Channels
-extends \Magento\Connect\Command
+final class Channels extends \Magento\Connect\Command
 {
 
     /**
@@ -45,7 +44,7 @@ extends \Magento\Connect\Command
             $aliasT = "Available aliases:";
             $packager = $this->getPackager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
                 $data = $cache->getData();
                 @unlink($config->getFilename());
@@ -74,13 +73,13 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
         try {
-            if(count($params) != 1) {
+            if (count($params) != 1) {
                 throw new \Exception("Parameters count should be equal to 1");
             }
             $packager = $this->getPackager();
 
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
                 $cache->deleteChannel($params[0]);                
                 $packager->writeToRemoteCache($cache, $ftpObj);
@@ -109,7 +108,7 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
         try {
-            if(count($params) != 1) {
+            if (count($params) != 1) {
                 throw new \Exception("Parameters count should be equal to 1");
             }
             $url = $params[0];
@@ -120,7 +119,7 @@ extends \Magento\Connect\Command
                         
             $packager = $this->getPackager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                  list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
                  $cache->addChannel($data->name, $url);
                  $packager->writeToRemoteCache($cache, $ftpObj); 
@@ -162,7 +161,7 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
         try {
-            if(count($params) != 2) {
+            if (count($params) != 2) {
                 throw new \Exception("Parameters count should be equal to 2");
             }
 
@@ -170,7 +169,7 @@ extends \Magento\Connect\Command
             $chanUrl = $params[0];
             $alias = $params[1];            
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config,  $ftpObj) = $packager->getRemoteConf($ftp);
                 $cache->addChannelAlias($chanUrl, $alias);
                 $packager->writeToRemoteCache($cache, $ftpObj);

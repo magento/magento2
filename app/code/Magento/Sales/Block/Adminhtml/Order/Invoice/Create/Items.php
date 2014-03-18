@@ -23,14 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
 
 /**
  * Adminhtml invoice items grid
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
-
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
+    /**
+     * Disable submit button
+     *
+     * @var bool
+     */
     protected $_disableSubmitButton = false;
 
     /**
@@ -61,7 +65,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Prepare child blocks
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items
+     * @return $this
      */
     protected function _beforeToHtml()
     {
@@ -101,7 +105,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Get is submit button disabled or not
      *
-     * @return boolean
+     * @return bool
      */
     public function getDisableSubmitButton()
     {
@@ -166,16 +170,32 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $totalbarData;
     }
 
+    /**
+     * Format price
+     *
+     * @param float $price
+     * @return string
+     */
     public function formatPrice($price)
     {
         return $this->getInvoice()->getOrder()->formatPrice($price);
     }
 
+    /**
+     * Get update button html
+     *
+     * @return string
+     */
     public function getUpdateButtonHtml()
     {
         return $this->getChildHtml('update_button');
     }
 
+    /**
+     * Get update url
+     *
+     * @return string
+     */
     public function getUpdateUrl()
     {
         return $this->getUrl('sales/*/updateQty', array('order_id'=>$this->getInvoice()->getOrderId()));
@@ -196,6 +216,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return false;
     }
 
+    /**
+     * Check if qty can be edited
+     *
+     * @return bool
+     */
     public function canEditQty()
     {
         if ($this->getInvoice()->getOrder()->getPayment()->canCapture()) {
@@ -206,6 +231,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if capture operation is allowed in ACL
+     *
      * @return bool
      */
     public function isCaptureAllowed()
@@ -215,6 +241,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if invoice can be captured
+     *
      * @return bool
      */
     public function canCapture()
@@ -224,6 +251,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if gateway is associated with invoice order
+     *
      * @return bool
      */
     public function isGatewayUsed()
@@ -231,6 +259,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $this->getInvoice()->getOrder()->getPayment()->getMethodInstance()->isGateway();
     }
 
+    /**
+     * Check if new invoice emails can be sent
+     *
+     * @return bool
+     */
     public function canSendInvoiceEmail()
     {
         return $this->_salesData->canSendNewInvoiceEmail($this->getOrder()->getStore()->getId());

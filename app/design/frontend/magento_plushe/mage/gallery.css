@@ -1,0 +1,223 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     js
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+@font-face {
+  font-family: 'icons-blank-theme';
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot');
+  src: url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.eot?#iefix') format('embedded-opentype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.woff') format('woff'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.ttf') format('truetype'), url('../fonts/Blank-Theme-Icons/Blank-Theme-Icons.svg#icons-blank-theme') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.loading-mask {
+  position: relative;
+  z-index: 9999;
+}
+.loading-mask:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(204, 204, 204, 0.5);
+  background-image: url('../images/loader-1.gif');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.loading-mask .loader > p {
+  display: none;
+}
+.ui-widget-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(204, 204, 204, 0.5);
+}
+.zoom.lense {
+  position: absolute;
+  z-index: 9999;
+  overflow: hidden;
+  background: #ffffff;
+  outline: 1px solid #d1d1d1;
+}
+.zoom.lightbox {
+  position: fixed;
+  height: auto !important;
+  width: auto !important;
+  left: 20px !important;
+  top: 20px !important;
+  right: 20px;
+  bottom: 20px;
+  border: 1px solid #d1d1d1;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+}
+.zoom.lightbox .img.photo.container img {
+  position: absolute;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  display: block;
+}
+.zoom.lightbox .ui-dialog-titlebar-close:before {
+  background-image: url('../images/sprite-gallery.png');
+}
+.zoom.lightbox .ui-dialog-titlebar-close {
+  position: absolute;
+  line-height: 1;
+  top: 20px;
+  right: 20px;
+  display: inline-block;
+}
+.zoom.lightbox .ui-dialog-titlebar-close > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.zoom.lightbox .ui-dialog-titlebar-close:before {
+  content: '';
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  line-height: 13px;
+  vertical-align: middle;
+  background-image: url('../images/sprite-gallery.svg');
+  background-position: -60px 0;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+.zoom.lightbox .gallery.control.prev:before,
+.zoom.lightbox .gallery.control.next:before {
+  background-image: url('../images/sprite-gallery.png');
+}
+.zoom.lightbox .gallery.control.prev,
+.zoom.lightbox .gallery.control.next {
+  position: absolute;
+  top: 50%;
+  margin-top: -57px;
+  display: inline-block;
+}
+.zoom.lightbox .gallery.control.prev:before,
+.zoom.lightbox .gallery.control.next:before {
+  content: '';
+  display: inline-block;
+  width: 29px;
+  height: 57px;
+  line-height: 57px;
+  vertical-align: middle;
+  background-image: url('../images/sprite-gallery.svg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+.zoom.lightbox .gallery.control.prev {
+  left: 20px;
+}
+.zoom.lightbox .gallery.control.next {
+  right: 20px;
+}
+.zoom.lightbox .gallery.control.next:before {
+  background-position: -30px 0px;
+}
+.zoom.lightbox .product.photo.main {
+  position: absolute;
+  top: 33px;
+  left: 49px;
+  right: 49px;
+  bottom: 130px;
+  margin: 0 20px 72px 20px;
+}
+.zoom.lightbox .product.photo.main:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+}
+.zoom.lense .zoom.inner > img {
+  position: absolute;
+}
+.zoom.lightbox .product.photo.thumbs {
+  width: 100%;
+  padding: 15px 15px 15px 15px;
+  background: #ffffff;
+  position: absolute;
+  bottom: 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.zoom.lightbox .product.photo.thumbs ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  list-style-image: none;
+  white-space: nowrap;
+  position: relative;
+  vertical-align: top;
+  overflow: auto;
+}
+.zoom.lightbox .product.photo.thumbs .item.thumb {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  line-height: 1;
+}
+.zoom.lightbox .product.photo.thumbs li:first-child {
+  margin-left: 0;
+}
+.zoom.lightbox .product.photo.thumbs a {
+  border: 1px solid transparent;
+  display: block;
+  outline: none;
+}
+.zoom.lightbox .product.photo.thumbs .active {
+  border-color: #ff5f10;
+}
+.zoom.lightbox .product.photo.thumbs .item.thumb img {
+  border: none;
+  position: static;
+}
+.zoom.lightbox .gallery.control {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Address;
 
 /**
  * Customer address config
@@ -32,8 +32,6 @@
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Address;
-
 class Config extends \Magento\Config\Data
 {
     const DEFAULT_ADDRESS_RENDERER  = 'Magento\Customer\Block\Address\Renderer\DefaultRenderer';
@@ -95,7 +93,7 @@ class Config extends \Magento\Config\Data
      * Set store
      *
      * @param null|string|bool|int|\Magento\Core\Model\Store $store
-     * @return \Magento\Customer\Model\Address\Config
+     * @return $this
      */
     public function setStore($store)
     {

@@ -23,6 +23,10 @@
  */
 define('BP', realpath(__DIR__) . '/');
 
+/**
+ * @param string $className
+ * @return bool
+ */
 function i18n_tool_autoloader($className)
 {
     if (strpos($className, 'Magento\\Tools\\') !== false) {

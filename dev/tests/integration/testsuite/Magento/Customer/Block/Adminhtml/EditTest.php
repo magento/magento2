@@ -25,13 +25,11 @@ namespace Magento\Customer\Block\Adminhtml;
 
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Service\V1\Dto\Customer;
-
 /**
  * Class EditTest
  *
  * @magentoAppArea adminhtml
- * @magentoDataFixture createCustomer
+ * @magentoDataFixture Magento/Customer/_files/customer.php
  */
 class EditTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,24 +52,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      *
      * @var int
      */
-    private static $customerId;
-
-    /**
-     * Create a new Customer.
-     */
-    public static function createCustomer()
-    {
-        $customerService = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerServiceInterface');
-        $customer = new Customer([
-            'group_id' => 1,
-            'website_id' => 1,
-            'firstname' => 'Firstname',
-            'lastname' => 'Lastname',
-            'email' => 'firstname.lastname@gmail.com'
-        ]);
-        self::$customerId = $customerService->saveCustomer($customer);
-    }
+    private static $customerId = 1;
 
     /**
      * Execute per test initialization.

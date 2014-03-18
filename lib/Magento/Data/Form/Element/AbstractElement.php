@@ -23,7 +23,12 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
 
+use Magento\Data\Form;
+use Magento\Data\Form\AbstractForm;
+use Magento\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Escaper;
 
 /**
  * Data form abstract class
@@ -32,13 +37,6 @@
  * @package    Magento_Data
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Data\Form;
-use Magento\Data\Form\AbstractForm;
-use Magento\Data\Form\Element\Renderer\RendererInterface;
-use Magento\Escaper;
-
 abstract class AbstractElement extends AbstractForm
 {
     /**
@@ -57,7 +55,7 @@ abstract class AbstractElement extends AbstractForm
     protected $_form;
 
     /**
-     * @var
+     * @var array
      */
     protected $_elements;
 
@@ -125,7 +123,8 @@ abstract class AbstractElement extends AbstractForm
      *
      * @return bool
      */
-    public function isAdvanced() {
+    public function isAdvanced()
+    {
         return $this->_advanced;
     }
 
@@ -135,7 +134,8 @@ abstract class AbstractElement extends AbstractForm
      * @param bool $advanced
      * @return $this
      */
-    public function setAdvanced($advanced) {
+    public function setAdvanced($advanced)
+    {
         $this->_advanced = $advanced;
         return $this;
     }
@@ -221,7 +221,7 @@ abstract class AbstractElement extends AbstractForm
     }
 
     /**
-     * @param Form $form
+     * @param AbstractForm $form
      * @return $this
      */
     public function setForm($form)

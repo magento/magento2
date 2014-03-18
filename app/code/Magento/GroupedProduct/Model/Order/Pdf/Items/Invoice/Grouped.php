@@ -30,6 +30,8 @@ class Grouped extends \Magento\Sales\Model\Order\Pdf\Items\Invoice\DefaultInvoic
 {
     /**
      * Draw process
+     *
+     * @return void
      */
     public function draw()
     {

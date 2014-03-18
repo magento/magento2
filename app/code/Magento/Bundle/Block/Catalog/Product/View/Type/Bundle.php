@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 /**
  * Catalog bundle product info block
@@ -32,10 +32,11 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Catalog\Product\View\Type;
-
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+    /**
+     * @var mixed
+     */
     protected $_options         = null;
 
     /**
@@ -139,6 +140,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getOptions()
     {
         if (!$this->_options) {
@@ -161,6 +165,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         return $this->_options;
     }
 
+    /**
+     * @return bool
+     */
     public function hasOptions()
     {
         $this->getOptions();

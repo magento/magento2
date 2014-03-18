@@ -25,8 +25,8 @@
 -->
 <config>
     <group id="default">
-        <job name="catalog_product_index_price_reindex_all" instance="Magento\Catalog\Model\Observer" method="reindexProductPrices">
-            <schedule>0 2 * * *</schedule>
+        <job name="catalog_index_refresh_price" instance="\Magento\Catalog\Model\Indexer\Product\Price\Observer" method="refreshSpecialPrices">
+            <schedule>0 * * * *</schedule>
         </job>
         <job name="catalog_product_flat_indexer_store_cleanup" instance="Magento\Catalog\Helper\Product\Flat\Indexer" method="deleteAbandonedStoreFlatTables">
             <schedule>0 0 * * *</schedule>

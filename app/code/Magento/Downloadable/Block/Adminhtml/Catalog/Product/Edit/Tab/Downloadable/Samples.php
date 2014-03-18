@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 /**
  * Adminhtml catalog product downloadable items tab links section
@@ -31,8 +32,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
-
 class Samples
     extends \Magento\Backend\Block\Widget
 {
@@ -43,6 +42,9 @@ class Samples
      */
     protected $_config;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/downloadable/samples.phtml';
 
     /**
@@ -224,6 +226,7 @@ class Samples
     /**
      * Prepare layout
      *
+     * @return void
      */
     protected function _prepareLayout()
     {

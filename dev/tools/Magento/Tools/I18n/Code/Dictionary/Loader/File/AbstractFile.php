@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary\Loader\File;
 
 use Magento\Tools\I18n\Code\Dictionary\Loader\FileInterface;
@@ -56,7 +55,7 @@ abstract class AbstractFile implements FileInterface
     /**
      * Loader construct
      *
-     * @param \Magento\Tools\I18n\Code\Factory $factory
+     * @param Factory $factory
      */
     public function __construct(Factory $factory)
     {
@@ -91,6 +90,7 @@ abstract class AbstractFile implements FileInterface
      * Init file handler
      *
      * @param string $file
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _openFile($file)
@@ -109,6 +109,8 @@ abstract class AbstractFile implements FileInterface
 
     /**
      * Close file handler
+     *
+     * @return void
      */
     protected function _closeFile()
     {

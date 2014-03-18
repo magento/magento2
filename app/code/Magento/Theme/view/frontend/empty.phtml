@@ -44,7 +44,7 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
     <?php echo $this->getChildHtml('after_body_start') ?>
     <div class="page wrapper">
         <?php echo $this->getChildHtml('global_notices') ?>
-        <section class="page main">
+        <section id="maincontent" class="page main">
             <?php echo $this->getChildHtml('columns_top') ?>
             <div class="columns">
                 <?php echo $this->getChildHtml('main') ?>

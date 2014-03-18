@@ -66,7 +66,7 @@ class GenerateVariations extends Action
     /**
      * Check for is allowed
      *
-     * @return boolean
+     * @return bool
      */
     protected function _isAllowed()
     {
@@ -75,6 +75,8 @@ class GenerateVariations extends Action
 
     /**
      * Generate product variations matrix
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -87,6 +89,7 @@ class GenerateVariations extends Action
     /**
      * Save attribute options just created by user
      *
+     * @return void
      * @TODO Move this logic to configurable product type model
      *   when full set of operations for attribute options during
      *   product creation will be implemented: edit labels, remove, reorder.

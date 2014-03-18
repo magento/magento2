@@ -32,7 +32,7 @@
                 <resource id="Magento_Adminhtml::stores">
                     <resource id="Magento_Adminhtml::stores_settings">
                         <resource id="Magento_Adminhtml::config">
-                            <resource id="Magento_GoogleCheckout::google" title="Google API" />
+                            <resource id="Magento_GoogleAnalytics::google" title="Google API" />
                         </resource>
                     </resource>
                 </resource>

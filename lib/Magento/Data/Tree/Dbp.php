@@ -23,7 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Tree;
 
+use Magento\DB\Select;
 
 /**
  * Data DB tree
@@ -35,10 +37,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Tree;
-
-use Magento\DB\Select;
-
 class Dbp extends \Magento\Data\Tree
 {
 
@@ -116,6 +114,7 @@ class Dbp extends \Magento\Data\Tree
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param string $table
      * @param array $fields
+     * @throws \Exception
      */
     public function __construct($connection, $table, $fields)
     {
@@ -297,7 +296,8 @@ class Dbp extends \Magento\Data\Tree
      * @param array $result
      * @return array
      */
-    public function getChildren($node, $recursive = true, $result = array()) {
+    public function getChildren($node, $recursive = true, $result = array())
+    {
         if (is_numeric($node)) {
             $node = $this->getNodeById($node);
         }
@@ -319,11 +319,12 @@ class Dbp extends \Magento\Data\Tree
     /**
      * Move tree node
      *
-     * @todo Use adapter for generate conditions
      * @param Node $node
      * @param Node $newParent
      * @param Node $prevNode
      * @return void
+     * @throws \Exception
+     * @todo Use adapter for generate conditions
      */
     public function move($node, $newParent, $prevNode = null)
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloader;
 
 /**
  * Class for viewer
@@ -31,8 +32,6 @@
  * @package    Magento_Connect
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloader;
-
 class View
 {
     /**
@@ -133,6 +132,7 @@ class View
      * Retrieve link for header menu
      *
      * @param mixed $action
+     * @return string
      */
     public function getNavLinkParams($action)
     {

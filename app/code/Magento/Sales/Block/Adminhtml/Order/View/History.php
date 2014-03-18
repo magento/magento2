@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 /**
  * Order history block
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View;
-
 class History extends \Magento\Backend\Block\Template
 {
     /**
@@ -66,6 +65,11 @@ class History extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Preparing global layout
+     *
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $onclick = "submitAndReloadArea($('order_history_block').parentNode, '".$this->getSubmitUrl()."')";
@@ -79,6 +83,11 @@ class History extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get stat uses
+     *
+     * @return array
+     */
     public function getStatuses()
     {
         $state = $this->getOrder()->getState();
@@ -86,6 +95,11 @@ class History extends \Magento\Backend\Block\Template
         return $statuses;
     }
 
+    /**
+     * Check allow to send order comment email
+     *
+     * @return bool
+     */
     public function canSendCommentEmail()
     {
         return $this->_salesData->canSendOrderCommentEmail($this->getOrder()->getStore()->getId());
@@ -101,12 +115,22 @@ class History extends \Magento\Backend\Block\Template
         return $this->_coreRegistry->registry('sales_order');
     }
 
+    /**
+     * Check allow to add comment
+     *
+     * @return bool
+     */
     public function canAddComment()
     {
         return $this->_authorization->isAllowed('Magento_Sales::comment') &&
                $this->getOrder()->canComment();
     }
 
+    /**
+     * Submit URL getter
+     *
+     * @return string
+     */
     public function getSubmitUrl()
     {
         return $this->getUrl('sales/*/addComment', array('order_id'=>$this->getOrder()->getId()));
@@ -116,7 +140,7 @@ class History extends \Magento\Backend\Block\Template
      * Customer Notification Applicable check method
      *
      * @param  \Magento\Sales\Model\Order\Status\History $history
-     * @return boolean
+     * @return bool
      */
     public function isCustomerNotificationNotApplicable(\Magento\Sales\Model\Order\Status\History $history)
     {

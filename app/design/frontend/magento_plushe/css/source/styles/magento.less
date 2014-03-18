@@ -1,0 +1,1549 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  #Mixins
+//
+//  Common mixins used for styling magento elements
+//
+
+.pagerLabel() {
+    font-weight: @baseFontWeight;
+    line-height: 25px;
+    margin-right: 5px;
+}
+
+//  #Search form
+//
+//  ```html
+//    <div class="block search">
+//        <div class="title"><strong>Search</strong></div>
+//        <div class="content search">
+//        <form class="form minisearch">
+//            <div class="field search">
+//                <label for="search" class="label">Search</label>
+//                <div class="control">
+//                    <input type="text" class="input-text" placeholder="Search entire store here..." value="" name="q">
+//                    <a href="#" class="action advanced">Advanced Search</a>
+//                </div>
+//            </div>
+//            <div class="actions">
+//                <button class="action search" type="submit"><span>Search</span></button>
+//            </div>
+//        </form>
+//        </div>
+//    </div>
+//  ```
+//
+
+.block.search {
+    input {
+        border-radius: 3px 0 0 3px;
+        border-right: 0;
+        float: left;
+        width: 100%;
+        &:focus + {
+            border-color: @primary3;
+        }
+    }
+    .field .control {
+        width: 260px;
+    }
+    .label,
+    > .title,
+    .action.advanced {
+        display: none;
+    }
+    .action.search {
+        background: @primary7;
+        border: 1px solid @primary3;
+        border-radius: 0 3px 3px 0;
+        color: @primary3;
+        float: left;
+        padding: 7px;
+        &:hover {
+            color: @primary6;
+        }
+        span {
+            .iconAfter(@icon-magnifying-glass, 16px, 0, 'icons');
+            .iconHideText(16px);
+        }
+        .search.autocomplete {
+            display: none !important;
+        }
+    }
+    ::-webkit-input-placeholder {
+        color: @primary4;
+    }
+    :-moz-placeholder {
+        color: @primary4;
+    }
+    ::-moz-placeholder {
+        color: @primary4;
+    }
+    :-ms-input-placeholder {
+        color: @primary4;
+    }
+}
+
+//  #Newsletter sign up form
+//
+//  ```html
+//    <div class="block newsletter">
+//        <div class="title"><strong>Newsletter</strong></div>
+//        <div class="content">
+//            <form>
+//                <div class="field newsletter">
+//                    <label for="newsletter" class="label">Sign Up for Our Newsletter:</label>
+//                    <div class="control">
+//                        <input type="text" placeholder="Enter your email address" name="email">
+//                    </div>
+//                    <div class="actions">
+//                        <button type="submit" title="Subscribe" class="action subscribe">
+//                            <span>Subscribe</span>
+//                        </button>
+//                    </div>
+//                </div>
+//            </form>
+//        </div>
+//    </div>
+//  ```
+//
+
+.block.newsletter {
+    > .title {
+        display: none;
+    }
+    .label {
+        display: block;
+        font-size: @baseFontSizeBigger;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+    .control {
+        .box-sizing();
+        float: left;
+        padding-right: 45px;
+        width: 100%;
+    }
+    input[type="text"] {
+        width: 100%;
+    }
+    .actions {
+        float: right;
+        margin-left: -45px;
+        padding-left: 10px;
+    }
+    .action.subscribe {
+        .box-sizing();
+        background: @primaryActionBg;
+        border-radius: 3px;
+        border: 1px solid @primaryActionBg;
+        padding: 7px;
+        vertical-align: top;
+        &:hover {
+            background: @primaryActionBgH;
+        }
+        span {
+            .iconAfter(@icon-envelope, 16px, 0, "icons");
+            .iconHideText(16px);
+            color: @primary7;
+        }
+    }
+}
+
+//  #Mage Catalog
+//
+//  #Breadcrumbs
+//
+//  ```html
+//    <div class="breadcrumbs">
+//        <ul class="items">
+//            <li class="item">
+//                <a href="#">Home</a>
+//            </li>
+//            <li class="item">
+//                <a href="#">Level 1</a>
+//            </li>
+//            <li class="item">
+//                <strong>Level 2</strong>
+//            </li>
+//        </ul>
+//    </div>
+//  ```
+//
+
+.breadcrumbs {
+    font-size: @baseFontSizeMiddle;
+    .items {
+        margin: 0;
+        padding: 0;
+    }
+    .item {
+        display: inline;
+        font-weight: @baseFontWeightLighter;
+        &:before {
+            content: " / ";
+        }
+        &:first-child:before {
+            content: "";
+        }
+    }
+    strong {
+        font-weight: @baseFontWeight;
+    }
+}
+
+// #Pager
+//
+//  ```html
+//    <div class="pages">
+//        <strong class="label">Page</strong>
+//        <ol class="items">
+//            <li class="item"><a href="#" class="action previous"><span>Previous</span></a></li>
+//            <li class="item"><a href="#"><span>1</span></a></li>
+//            <li class="item current"><strong><span>2</span></strong></li>
+//            <li class="item"><a href="#"><span>3</span></a></li>
+//            <li class="item"><a title="Next" href="#" class="action next"><span>Next</span></a></li>
+//        </ol>
+//    </div>
+//  ```
+//
+
+.pages {
+    ol {
+        .resetList();
+    }
+    .item {
+        display: inline-block;
+    }
+    a {
+        padding: 0 3px;
+    }
+    strong {
+        color: @secondary1;
+        font-weight: normal;
+        padding: 0 3px;
+    }
+    > .label {
+        display: none;
+    }
+    .action {
+        &.previous {
+            .iconAfter(@icon-arrow-left-thick, 16px, 0, "icons");
+            .iconHideText(16px);
+            display: inline-block;
+        }
+        &.next {
+            .iconAfter(@icon-arrow-right-thick, 16px, 0, "icons");
+            .iconHideText(16px);
+            display: inline-block;
+        }
+        color: @primary3;
+        &:hover {
+            color: darken(@primary3, 20%);
+        }
+    }
+}
+
+// #View switcher
+//
+//  ```html
+//    <div class="modes">
+//        <strong class="label">View as</strong>
+//        <strong class="mode active grid">
+//            <span>Grid</span>
+//        </strong>
+//        <a href="#" class="mode list">
+//            <span>List</span>
+//        </a>
+//        <strong class="label">View as</strong>
+//        <a href="#" class="mode grid">
+//            <span>Grid</span>
+//        </a>
+//        <strong class="mode active list">
+//            <span>List</span>
+//        </strong>
+//    </div>
+//  ```
+//
+
+.modes {
+    .label {
+        display: none;
+    }
+    .mode {
+        border: 1px solid @primary3;
+        color: @primary3;
+        display: inline-block;
+        margin: 0 3px;
+        overflow: hidden;
+        padding: 4px;
+        &.active {
+            background: @primary3;
+            border-color: @primary3;
+            cursor: default;
+            color: @primary7;
+            span {
+                color: @primary7;
+            }
+            &:hover {
+                background: @primary3;
+                border-color: @primary3;
+                color: @primary7;
+                span {
+                    color: @primary7;
+                }
+            }
+        }
+        &:hover {
+            background: @primary4;
+            border-color: @primary4;
+            color: @primary7;
+            span {
+                color: @primary7;
+            }
+        }
+        &.grid {
+            .iconAfter(@icon-grid, 13px, 0, "icons");
+            .iconHideText(13px);
+            display: inline-block;
+        }
+        &.list {
+            .iconAfter(@icon-list, 13px, 0, "icons");
+            .iconHideText(13px);
+            display: inline-block;
+        }
+    }
+}
+
+// #"Sort by" switcher
+//
+//  ```html
+//    <div class="sorter">
+//        <label for="sorter" class="label">Sort By</label>
+//        <select data-mage-redirect="{'event':'change'}" id="sorter">
+//            <option selected="selected" value="">Position</option>
+//            <option value="">Name</option>
+//            <option value="">Price</option>
+//        </select>
+//        <a class="action sort desc" title="Set Ascending Direction" href="#">
+//            <span>Set Ascending Direction</span>
+//        </a>
+//        <a class="action sort asc" title="Set Descending Direction" href="#">
+//            <span>Set Descending Direction</span>
+//        </a>
+//    </div>
+//  ```
+//
+
+.sorter {
+    .label {
+        .pagerLabel();
+    }
+    select {
+        padding: 0;
+    }
+    .action.sort {
+        &.desc {
+            .iconAfter(@icon-arrow-down-thick, 13px, 0, "icons");
+            .iconHideText(13px);
+            display: inline-block;
+        }
+        &.asc {
+            .iconAfter(@icon-arrow-up-thick, 13px, 0, "icons");
+            .iconHideText(13px);
+            display: inline-block;
+        }
+    }
+}
+
+// #Pager limiter
+//
+//  ```html
+//    <div class="limiter">
+//        <strong class="label">Show</strong>
+//        <select data-mage-redirect="{'event':'change'}" id="limiter">
+//            <option selected="selected" value="">5</option>
+//            <option value="">10</option>
+//            <option value="">15</option>
+//            <option value="">All</option>
+//        </select>
+//        <span class="text">per page</span>
+//    </div>
+//  ```
+//
+
+.limiter {
+    .label {
+        .pagerLabel();
+    }
+    select {
+        padding: 0;
+    }
+    .text {
+        display: none;
+    }
+}
+
+// #Tags
+//
+//  ```html
+//    <ul class="tags items cloud">
+//        <li class="tag item">
+//            <a class="tag text" href="#" style="font-size:75%;">widget</a>
+//            <span class="amount">34</span>
+//        </li>
+//        <li class="tag item">
+//            <a class="tag text" href="#" style="font-size:75%;">plugin</a>
+//            <span class="amount">6</span>
+//        </li>
+//        <li class="tag item">
+//            <a class="tag text" href="#" style="font-size:145%;">admin</a>
+//            <span class="amount">2</span>
+//        </li>
+//        <li class="tag item">
+//            <a class="tag text" href="#" style="font-size:75%;">sidebar</a>
+//            <span class="amount">4</span>
+//        </li>
+//        <li class="tag item">
+//            <a class="tag text" href="#" style="font-size:110%;">comments</a>
+//            <span class="amount">1</span>
+//        </li>
+//    </ul>
+//  ```
+//
+
+.tags.items.cloud {
+    .resetList();
+    margin: 0 0 20px;
+    .item {
+        .resetList();
+        display: inline-block;
+        margin: 0 0 5px 5px;
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+    .amount {
+        margin-left: 3px;
+        &:before {
+            content: '(';
+        }
+        &:after {
+            content: ')';
+        }
+    }
+}
+
+// #Ratings
+//
+//  ```html
+//    <div class="field ratings">
+//        <label class="label"><span>How do you rate this product?</span></label>
+//        <div class="control">
+//            <div class="nested">
+//                <div class="field rating">
+//                    <label class="label"><span>Price</span></label>
+//                    <div class="control">
+//                        <input type="radio" name="ratings[3]" id="Price_1" value="11">
+//                        <label class="rating-1" for="Price_1" title="1 star">
+//                            <span>1 star</span>
+//                        </label>
+//                        <input type="radio" name="ratings[3]" id="Price_2" value="12">
+//                        <label class="rating-2" for="Price_2" title="2 stars">
+//                            <span>2 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[3]" id="Price_3" value="13">
+//                        <label class="rating-3" for="Price_3" title="3 stars">
+//                            <span>3 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[3]" id="Price_4" value="14">
+//                        <label class="rating-4" for="Price_4" title="4 stars">
+//                            <span>4 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[3]" id="Price_5" value="15">
+//                        <label class="rating-5" for="Price_5" title="5 stars">
+//                            <span>5 stars</span>
+//                        </label>
+//                    </div>
+//                </div>
+//                <div class="field rating">
+//                    <label class="label"><span>Value</span></label>
+//                    <div class="control">
+//                        <input type="radio" name="ratings[2]" id="Value_1" value="6">
+//                        <label class="rating-1" for="Value_1" title="1 star">
+//                            <span>1 star</span>
+//                        </label>
+//                        <input type="radio" name="ratings[2]" id="Value_2" value="7">
+//                        <label class="rating-2" for="Value_2" title="2 stars">
+//                            <span>2 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[2]" id="Value_3" value="8">
+//                        <label class="rating-3" for="Value_3" title="3 stars">
+//                            <span>3 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[2]" id="Value_4" value="9">
+//                        <label class="rating-4" for="Value_4" title="4 stars">
+//                            <span>4 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[2]" id="Value_5" value="10">
+//                        <label class="rating-5" for="Value_5" title="5 stars">
+//                            <span>5 stars</span>
+//                        </label>
+//                    </div>
+//                </div>
+//                <div class="field rating">
+//                    <label class="label"><span>Quality</span></label>
+//                    <div class="control">
+//                        <input type="radio" name="ratings[1]" id="Quality_1" value="1">
+//                        <label class="rating-1" for="Quality_1" title="1 star">
+//                            <span>1 star</span>
+//                        </label>
+//                        <input type="radio" name="ratings[1]" id="Quality_2" value="2">
+//                        <label class="rating-2" for="Quality_2" title="2 stars">
+//                            <span>2 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[1]" id="Quality_3" value="3">
+//                        <label class="rating-3" for="Quality_3" title="3 stars">
+//                            <span>3 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[1]" id="Quality_4" value="4">
+//                        <label class="rating-4" for="Quality_4" title="4 stars">
+//                            <span>4 stars</span>
+//                        </label>
+//                        <input type="radio" name="ratings[1]" id="Quality_5" value="5">
+//                        <label class="rating-5" for="Quality_5" title="5 stars">
+//                            <span>5 stars</span>
+//                        </label>
+//                    </div>
+//                </div>
+//            </div>
+//        </div>
+//    </div>
+//  ```
+//
+
+.field.ratings {
+    @starSize: 16px;
+    border-bottom: 1px solid;
+    .borderColor(@primary1);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    .nested {
+        display: table;
+    }
+    .field.rating {
+        display: table-row;
+        > .label {
+            display: table-cell;
+            vertical-align: top;
+            padding: 6px 0;
+        }
+        .control {
+            padding: 5px 10px;
+            display: table-cell;
+            z-index: 1;
+            &:before {
+                letter-spacing: 0.2em;
+                position: absolute;
+                z-index: 1;
+                display: block;
+                float: left;
+                font-family: "icons";
+                content: "\e009\e009\e009\e009\e009";
+                font-style: normal;
+                font-size: @starSize;
+                color: fade(@secondary1, 30%);
+                speak: none;
+                font-weight: normal;
+                -webkit-font-smoothing: antialiased;
+            }
+            input:focus + label:before,
+            input:checked + label:before {
+                color: @secondary1;
+                opacity: 1;
+            }
+            input[type="radio"] {
+                position: absolute;
+                margin-left: -999em;
+            }
+            label {
+                position: absolute;
+                display: block;
+                span {
+                    display: none;
+                }
+                &:before {
+                    letter-spacing: 0.2em;
+                    font-family: "icons";
+                    font-style: normal;
+                    font-size: @starSize;
+                    speak: none;
+                    font-weight: normal;
+                    -webkit-font-smoothing: antialiased;
+                    opacity: 0;
+                }
+                &:hover {
+                    &:before {
+                        color: @secondary1;
+                        opacity: 1;
+                    }
+                    & ~ label:before {
+                        opacity: 0 !important;
+                    }
+                }
+                cursor: pointer;
+            }
+            .rating-1 {
+                z-index: 6;
+                &:before {
+                    content: "\e009";
+                }
+            }
+            .rating-2 {
+                z-index: 5;
+                &:before {
+                    content: "\e009\e009";
+                }
+            }
+            .rating-3 {
+                z-index: 4;
+                &:before {
+                    content: "\e009\e009\e009";
+                }
+            }
+            .rating-4 {
+                z-index: 3;
+                &:before {
+                    content: "\e009\e009\e009\e009";
+                }
+            }
+            .rating-5 {
+                z-index: 2;
+                &:before {
+                    content: "\e009\e009\e009\e009\e009";
+                }
+            }
+        }
+    }
+}
+
+//  #Login form
+//  The login form's design differs from default form layout: labels are in the same line as inputs (in default form layout labels and corresponding inputs are in different lines) The code is the same, it differs only with styles.
+//
+//  ```html
+//    <fieldset class="fieldset login">
+//        <div class="field email required">
+//            <label for="email" class="label"><span>Email Address</span></label>
+//            <div class="control">
+//                <input type="text" class="input-text" value="" name="login[username]">
+//            </div>
+//        </div>
+//        <div class="field password required">
+//            <label class="label" for="pass"><span>Password</span></label>
+//            <div class="control">
+//                <input type="password" class="input-text" name="login[password]">
+//            </div>
+//        </div>
+//        <div class="actions">
+//            <div class="primary">
+//                <button id="send2" name="send" class="action login" type="submit"><span>Login</span></button>
+//            </div>
+//            <div class="secondary"><a href="#" class="action remind"><span>Forgot Your Password?</span></a></div>
+//        </div>
+//    </fieldset>
+//  ```
+//
+
+.fieldset {
+    &.login {
+        margin: 0;
+        padding: 0;
+        > .field {
+            .clearfix();
+            > .label {
+                .box-sizing();
+                float: left;
+                margin: 0;
+                padding-right: 10px;
+                padding-top: 7px;
+                text-align: right;
+                width: 40%;
+            }
+            > .control {
+                float: left;
+                margin: 0;
+                width: 60%;
+            }
+        }
+        .actions {
+            text-align: right;
+            .action.login {
+                &:extend(.primary.action all);
+            }
+            .secondary {
+                margin-top: 0.8em;
+            }
+        }
+    }
+}
+
+// #Loader
+//
+//  ```html
+//  <div class="loader"></div>
+//  ```
+//
+
+.loader {
+    background: url("@{baseDir}/images/loader.gif") no-repeat 50% 50%;
+    .size(20px);
+}
+
+//  #Button with loader
+//
+//  ```html
+//  <button class="action mySecondaryButton loading">Loading</button>
+//  ```
+//
+
+.action.mySecondaryButton {
+    &:extend(.secondary.action all);
+    &.loading {
+        padding-right: 30px;
+        position: relative;
+        &:after {
+            background: url("@{baseDir}/images/loader.gif") no-repeat 50% 50%;
+            .size(16px);
+            content: "";
+            margin: -8px 0 0;
+            position: absolute;
+            right: 7px;
+            top: 50%;
+        }
+    }
+}
+
+//  #Text block under loader
+//
+//  ```html
+//  <div class="textUnderLoader loading">
+//      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed lobortis magna, quis tincidunt elit. Donec molestie scelerisque ligula, ut eleifend nisl laoreet nec. Vivamus dapibus urna id risus porttitor cursus.</p>
+//      <p>Etiam lorem leo, accumsan quis est sit amet, tempus pellentesque ante. Donec rutrum convallis lacus, ac iaculis nulla scelerisque a. Pellentesque malesuada, mi eu condimentum volutpat, mi turpis congue sapien, et ornare nunc nunc vitae nibh. Duis scelerisque purus a sapien ultrices tempor. Sed nec blandit mauris, vel volutpat dolor.</p>
+//      <p>Vestibulum viverra tempus mi a accumsan. Nunc congue quis leo sed scelerisque. Fusce scelerisque magna nulla, sed malesuada nunc congue vel. Donec placerat malesuada bibendum. Nam bibendum nunc at neque consequat placerat. Aenean eu rutrum sapien. Vivamus vel mi urna. Suspendisse sit amet elit nunc.</p>
+//  </div>
+//  ```
+//
+
+.textUnderLoader {
+    background: @primary1;
+    border: 1px solid @primary3;
+    padding: 10px 20px;
+    &.loading {
+        position: relative;
+        &:before {
+            background: @primary7;
+            opacity: 0.7;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        &:after {
+            background: url("@{baseDir}/images/loader.gif") no-repeat 50% 50%;
+            .size(16px);
+            content: "";
+            margin: -8px 0 0 -8px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+    }
+}
+
+//  #Mage Checkout
+//
+//  #Checkout address form
+//  The checkout address form has specific logical fields grouping. Here styles are provided to separate the logical groups. The code is the same, it differs only with styles.
+//
+//  ```html
+//    <div class="opc wrapper">
+//        <form data-hasrequired="* Required Fields" class="form billing">
+//            <div class="field addresses">
+//                <label for="billing-address-select" class="label"><span>Select a billing address from your address book or enter a new address.</span></label>
+//                <div class="control">
+//                    <select class="address-select" name="billing_address_id">
+//                        <option value="">New Address</option>
+//                    </select>
+//                </div>
+//            </div>
+//            <fieldset class="fieldset address">
+//                <div class="field name-firstname required">
+//                    <label for="billing:firstname" class="label"><span>First Name</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[firstname]">
+//                    </div>
+//                </div>
+//                <div class="field name-lastname required">
+//                    <label for="billing:lastname" class="label"><span>Last Name</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[lastname]">
+//                    </div>
+//                </div>
+//                <div class="field company">
+//                    <label for="billing:company" class="label"><span>Company</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[company]">
+//                    </div>
+//                </div>
+//                <div class="field street required">
+//                    <label for="billing:street1" class="label"><span>Address</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[street][]">
+//                        <div class="nested">
+//                            <div class="field additional no-label">
+//                                <div class="control">
+//                                    <input type="text" class="input-text " value="" name="billing[street][]">
+//                                </div>
+//                            </div>
+//                        </div>
+//                    </div>
+//                </div>
+//                <div class="field city required">
+//                    <label for="billing:city" class="label"><span>City</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[city]">
+//                    </div>
+//                </div>
+//                <div class="field region required">
+//                    <label for="billing:region_id" class="label"><span>State/Province</span></label>
+//                    <div class="control">
+//                        <select name="billing[region_id]" defaultvalue="43">
+//                            <option value="">Please select region, state or province</option>
+//                            <option title="Alabama" value="1">Alabama</option>
+//                            <option title="Alaska" value="2">Alaska</option>
+//                            <option title="Arizona" value="4">Arizona</option>
+//                        </select>
+//                    </div>
+//                </div>
+//                <div class="field zip required">
+//                    <label for="billing:postcode" class="label"><span>Zip/Postal Code</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[postcode]">
+//                    </div>
+//                </div>
+//                <div class="field country required">
+//                    <label for="billing:country_id" class="label"><span>Country</span></label>
+//                    <div class="control">
+//                        <select class="validate-select" name="billing[country_id]">
+//                            <option value=""></option>
+//                            <option value="GB">United Kingdom</option>
+//                            <option value="US">United States</option>
+//                        </select>
+//                    </div>
+//                </div>
+//                <div class="field telephone required">
+//                    <label for="billing:telephone" class="label"><span>Telephone</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[telephone]">
+//                    </div>
+//                </div>
+//                <div class="field fax">
+//                    <label for="billing:fax" class="label"><span>Fax</span></label>
+//                    <div class="control">
+//                        <input type="text" class="input-text" value="" name="billing[fax]">
+//                    </div>
+//                </div>
+//                <div class="field save choice">
+//                    <input type="checkbox" class="checkbox" value="1" name="billing[save_in_address_book]">
+//                    <label for="billing:save_in_address_book" class="label"><span>Save in address book</span></label>
+//                </div>
+//            </fieldset>
+//            <div class="field choice">
+//                <input type="radio" class="radio" checked="checked" value="1" name="billing[use_for_shipping]">
+//                <label for="billing:use_for_shipping_yes" class="label"><span>Ship to this address</span></label>
+//            </div>
+//            <div class="field choice">
+//                <input type="radio" class="radio" value="0" name="billing[use_for_shipping]">
+//                <label for="billing:use_for_shipping_no" class="label"><span>Ship to different address</span></label>
+//            </div>
+//            <div id="billing-buttons-container" class="actions buttons-set form-buttons btn-only">
+//                <div class="primary">
+//                    <button class="button action continue" type="button"><span>Continue</span></button>
+//                </div>
+//            </div>
+//        </form>
+//    </div>
+//  ```
+//
+
+.opc {
+    .fieldset {
+        margin: 20px 0;
+        .formCols();
+    }
+    .field {
+        margin-bottom: 10px;
+    }
+    .field.fullname + .field.company,
+    .field.name-lastname + .field.company,
+    .field.country,
+    .field.taxvat {
+        margin: 0 40% 30px 0;
+    }
+    .actions .primary .action {
+        &:extend(.primary.action all);
+    }
+    .form {
+        &:extend(.hasRequired all);
+    }
+}
+
+//  #Payment method credit card form
+//  This form differs from the standard layout by its code and by design. Here labels are in the same line as inputs. It is necessary to replace the code by the new one.
+//
+//  ```html
+//    <ul class="form-list">
+//        <li>
+//            <label for="ccsave_cc_type" class="required"><em>*</em>Credit Card Type</label>
+//            <div class="input-box">
+//                <select id="ccsave_cc_type" name="payment[cc_type]">
+//                    <option value="">--Please Select--</option>
+//                    <option value="AE">American Express</option>
+//                    <option value="VI">Visa</option>
+//                    <option value="MC">MasterCard</option>
+//                    <option value="DI">Discover</option>
+//                </select>
+//            </div>
+//        </li>
+//        <li>
+//            <label for="ccsave_cc_number" class="required"><em>*</em>Credit Card Number</label>
+//            <div class="input-box">
+//                <input type="text" name="payment[cc_number]" class="input-text" value="">
+//            </div>
+//        </li>
+//        <li>
+//            <label for="ccsave_expiration" class="required"><em>*</em>Expiration Date</label>
+//            <div class="input-box">
+//                <div class="v-fix">
+//                    <select name="month" class="month">
+//                        <option value="" selected="selected">Month</option>
+//                        <option value="1">01 - January</option>
+//                        <option value="2">02 - February</option>
+//                        <option value="3">03 - March</option>
+//                        <option value="4">04 - April</option>
+//                        <option value="5">05 - May</option>
+//                        <option value="6">06 - June</option>
+//                        <option value="7">07 - July</option>
+//                        <option value="8">08 - August</option>
+//                        <option value="9">09 - September</option>
+//                        <option value="10">10 - October</option>
+//                        <option value="11">11 - November</option>
+//                        <option value="12">12 - December</option>
+//                    </select>
+//                </div>
+//                <div class="v-fix">
+//                    <select name="year" class="year">
+//                        <option value="" selected="selected">Year</option>
+//                        <option value="2013">2013</option>
+//                        <option value="2014">2014</option>
+//                        <option value="2015">2015</option>
+//                        <option value="2016">2016</option>
+//                        <option value="2017">2017</option>
+//                        <option value="2018">2018</option>
+//                        <option value="2019">2019</option>
+//                        <option value="2020">2020</option>
+//                        <option value="2021">2021</option>
+//                        <option value="2022">2022</option>
+//                        <option value="2023">2023</option>
+//                    </select>
+//                </div>
+//            </div>
+//        </li>
+//    </ul>
+//  ```
+//
+
+.form-list {
+    .resetList();
+    .required {
+        em {
+            display: none;
+        }
+        &:first-child:after {
+            color: @requiredField;
+            content: '*';
+        }
+    }
+    > li {
+        .clearfix();
+        margin: 0 0 10px;
+        .field {
+            .clearfix();
+            margin: 10px 0 0;
+            &:first-child {
+                margin: 0;
+            }
+        }
+        > label,
+        .field > label {
+            .box-sizing();
+            clear: left;
+            float: left;
+            padding: 7px 10px 0 0;
+            text-align: right;
+            width: 30%;
+        }
+        .input-box {
+            float: left;
+            width: 70%;
+            > input,
+            > select,
+            > textarea {
+                width: 100%;
+            }
+            > .v-fix {
+                float: left;
+                margin: 0 10px 0 0;
+            }
+        }
+    }
+}
+
+//  #Shopping Cart
+//  #Shopping cart estimation settings
+//  The shopping card estimation settings design differs from standard form layout by the code and by the design. Here the code and the styles are provided.
+//
+//  ```html
+//    <div class="cart summary">
+//
+//        <div class="block shipping active">
+//            <div class="title active"><strong>Estimate Shipping and Tax</strong></div>
+//            <div class="content">
+//            <form>
+//                <fieldset class="fieldset estimate">
+//                    <p class="field note">Enter your destination to get a shipping estimate.</p>
+//                    <div class="field country">
+//                        <label for="country" class="label"><span>Country</span></label>
+//                        <div class="control">
+//                            <select name="country_id" id="country" class="validate-select" title="Country">
+//                                <option value=""></option>
+//                                <option value="GB">United Kingdom</option>
+//                                <option value="US">United States</option>
+//                            </select>
+//                        </div>
+//                    </div>
+//                    <div class="field region">
+//                        <label for="region_id" class="label"><span>State/Province</span></label>
+//                        <div class="control">
+//                            <select name="region_id" title="State/Province" class="required-entry" defaultvalue="43">
+//                                <option value=""></option>
+//                                <option value="1" title="Alabama">Alabama</option>
+//                                <option value="2" title="Alaska">Alaska</option>
+//                                <option value="4" title="Arizona">Arizona</option>
+//                            </select>
+//                        </div>
+//                    </div>
+//                    <div class="field city">
+//                        <label for="city" class="label"><span>City</span></label>
+//                        <div class="control">
+//                            <input class="input-text" type="text" name="estimate_city" value="">
+//                        </div>
+//                    </div>
+//                    <div class="field postcode">
+//                        <label for="postcode" class="label"><span>Zip/Postal Code</span></label>
+//                        <div class="control">
+//                            <input class="input-text validate-postcode required-entry" type="text" name="estimate_postcode" value="">
+//                        </div>
+//                    </div>
+//                    <div class="actions">
+//                        <button type="submit" class="action quote"><span>Get a Quote</span></button>
+//                    </div>
+//                </fieldset>
+//            </form>
+//            <form>
+//                <fieldset class="fieldset rates">
+//                    <dl class="items methods">
+//                        <dt class="item title"><span>Flat Rate</span></dt>
+//                        <dd class="item options">
+//                            <div class="field choice item">
+//                                <input type="radio" class="radio" value="flatrate_flatrate" name="estimate_method">
+//                                <label for="s_method_flatrate_flatrate" class="label">
+//                                    <span>Fixed</span>
+//                                    <span class="price">$15.00</span>
+//                                </label>
+//                            </div>
+//                        </dd>
+//                    </dl>
+//                    <div class="actions">
+//                        <button value="Update Total" name="do" class="action update" type="submit"><span>Update Total</span></button>
+//                    </div>
+//                </fieldset>
+//            </form>
+//        </div>
+//
+//        <div class="block discount active">
+//            <div class="title active"><strong>Discount Codes</strong></div>
+//            <div class="content">
+//                <form>
+//                    <fieldset class="fieldset coupon">
+//                        <div class="field">
+//                            <label class="label" for="coupon_code"><span>Enter your coupon code if you have one.</span></label>
+//
+//                            <div class="control">
+//                                <input type="text" value="" name="coupon_code" class="input-text">
+//                            </div>
+//                        </div>
+//                        <div class="actions">
+//                            <div class="primary">
+//                                <button value="Apply Coupon" type="button" class="action apply">
+//                                    <span>Apply Coupon</span>
+//                                </button>
+//                            </div>
+//                        </div>
+//                    </fieldset>
+//                </form>
+//                </div>
+//            </div>
+//        </div>
+//
+//
+//    </div>
+//  ```
+//
+
+.cart.summary {
+    .fieldset {
+        border: 0;
+        font-size: @baseFontSizeMiddle;
+        padding: 0;
+        margin: 0;
+        .field {
+            margin: 0 0 10px;
+            &:not(.choice) {
+                .label {
+                    padding: 0 0 5px;
+                    display: block;
+                }
+            }
+        }
+        .action:not(.check) {
+            &:extend(.primary.action all);
+            padding: 6px 11px 5px;
+            span {
+                font-size: @baseFontSizeMiddle;
+                line-height: @baseFontSizeMiddle;
+            }
+        }
+        &.coupon,
+        &.estimate {
+            .actions {
+                display: table-cell;
+                width: 1%;
+                white-space: nowrap;
+                vertical-align: bottom;
+            }
+        }
+        &.coupon .field,
+        .field.postcode {
+            display: table-cell;
+            padding-right: 10px;
+            vertical-align: bottom;
+            width: 99%;
+            div.mage-error {
+                position: absolute;
+            }
+        }
+        &.rates {
+            padding-top: 25px;
+            .actions {
+                text-align: right;
+            }
+        }
+    }
+    .title {
+        cursor: pointer;
+        line-height: @baseFontSizeBigger;
+        margin: 0;
+        padding: 10px 5px;
+    }
+    .content {
+        padding: 15px 15px 20px;
+    }
+    input[type="text"] {
+        padding: 0 5px;
+        font-size: 12px;
+        height: 30px;
+    }
+    select {
+        padding: 5px 5px 4px;
+        font-size: 12px;
+    }
+    .items.methods {
+        dt {
+            font-weight: @baseFontWeightBolder;
+        }
+        dd {
+            margin: 10px 10px 25px;
+        }
+    }
+}
+
+//  #Popup
+//  ```html
+//        <div class="popup">
+//            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed lobortis magna, quis tincidunt elit. Donec molestie scelerisque ligula, ut eleifend nisl laoreet nec. Vivamus dapibus urna id risus porttitor cursus.</p>
+//            <p>Etiam lorem leo, accumsan quis est sit amet, tempus pellentesque ante. Donec rutrum convallis lacus, ac iaculis nulla scelerisque a. Pellentesque malesuada, mi eu condimentum volutpat, mi turpis congue sapien, et ornare nunc nunc vitae nibh. Duis scelerisque purus a sapien ultrices tempor. Sed nec blandit mauris, vel volutpat dolor.</p>
+//            <p>Vestibulum viverra tempus mi a accumsan. Nunc congue quis leo sed scelerisque. Fusce scelerisque magna nulla, sed malesuada nunc congue vel. Donec placerat malesuada bibendum. Nam bibendum nunc at neque consequat placerat. Aenean eu rutrum sapien. Vivamus vel mi urna. Suspendisse sit amet elit nunc.</p>
+//            <span data-dismiss="popup" class="close"></span>
+//        </div>
+//        <br>
+//        <br>
+//        <div class="popup system">
+//            <header class="header">
+//                Popup header
+//            </header>
+//            <div class="content">
+//                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed lobortis magna, quis tincidunt elit. Donec molestie scelerisque ligula, ut eleifend nisl laoreet nec. Vivamus dapibus urna id risus porttitor cursus.</p>
+//                <p>Etiam lorem leo, accumsan quis est sit amet, tempus pellentesque ante. Donec rutrum convallis lacus, ac iaculis nulla scelerisque a. Pellentesque malesuada, mi eu condimentum volutpat, mi turpis congue sapien, et ornare nunc nunc vitae nibh. Duis scelerisque purus a sapien ultrices tempor. Sed nec blandit mauris, vel volutpat dolor.</p>
+//                <p>Vestibulum viverra tempus mi a accumsan. Nunc congue quis leo sed scelerisque. Fusce scelerisque magna nulla, sed malesuada nunc congue vel. Donec placerat malesuada bibendum. Nam bibendum nunc at neque consequat placerat. Aenean eu rutrum sapien. Vivamus vel mi urna. Suspendisse sit amet elit nunc.</p>
+//            </div>
+//            <footer class="footer">
+//                <div class="actions">
+//                    <button type="button" class="action submit">OK</button>
+//                    <button type="button" class="action cancel">Cancel</button>
+//                </div>
+//            </footer>
+//            <span data-dismiss="popup" class="close"></span>
+//        </div>
+//    </div>
+//
+//    <div class="wrapper">
+//        <div class="fade">
+//            <div class="popup">
+//                <header class="header">
+//                    Popup header
+//                </header>
+//                <div class="content">
+//                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sed lobortis magna, quis tincidunt elit. Donec molestie scelerisque ligula, ut eleifend nisl laoreet nec. Vivamus dapibus urna id risus porttitor cursus.</p>
+//                    <p>Etiam lorem leo, accumsan quis est sit amet, tempus pellentesque ante. Donec rutrum convallis lacus, ac iaculis nulla scelerisque a. Pellentesque malesuada, mi eu condimentum volutpat, mi turpis congue sapien, et ornare nunc nunc vitae nibh. Duis scelerisque purus a sapien ultrices tempor. Sed nec blandit mauris, vel volutpat dolor.</p>
+//                    <p>Vestibulum viverra tempus mi a accumsan. Nunc congue quis leo sed scelerisque. Fusce scelerisque magna nulla, sed malesuada nunc congue vel. Donec placerat malesuada bibendum. Nam bibendum nunc at neque consequat placerat. Aenean eu rutrum sapien. Vivamus vel mi urna. Suspendisse sit amet elit nunc.</p>
+//                </div>
+//                <footer class="footer">
+//                    Some footer text
+//                    <div class="actions">
+//                        <button type="button" class="action submit">OK</button>
+//                        <button type="button" class="action cancel">Cancel</button>
+//                    </div>
+//                </footer>
+//                <span class="close" data-dismiss="popup"></span>
+//            </div>
+//        </div>
+//    </div>
+//  ```
+//
+
+.popup {
+    background: @primary2;
+    border: 1px solid @primary3;
+    display: inline-block;
+    padding: 20px;
+    position: relative;
+    > .close {
+        color: @primary4;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        top: 3px;
+        .iconBefore(@icon-close-thick, 12px, 0, "icons");
+        &:hover {
+            color: @primary6;
+        }
+    }
+    .fade & {
+        background: @pageMainBg;
+        box-shadow: 0 0 10px 0 @primary4;
+    }
+    > .header,
+    > .content {
+        margin: 0 0 5px;
+    }
+    > .header {
+        font-size: @baseFontSizeBigger;
+        font-weight: @baseFontWeightBolder;
+    }
+    .actions {
+        margin: 15px 0 0;
+        .action.submit {
+            &:extend(.primary.action all);
+            margin-right: 10px;
+        }
+        .action.cancel {
+            &:extend(.secondary.action all);
+        }
+    }
+    &.system {
+        background: @pageMainBg;
+        padding: 0;
+        > .header {
+            background: @primary2;
+            border-bottom: 1px solid @primary3;
+            border-radius: 5px 5px 0 0;
+            cursor: move;
+            padding: 10px 20px;
+        }
+        > .content {
+            padding: 20px;
+        }
+        > .footer {
+            border-top: 1px solid @primary3;
+            padding: 10px 20px;
+        }
+        .actions {
+            margin: 0;
+        }
+        .close {
+            right: 8px;
+            top: 8px;
+        }
+    }
+}
+
+.fade {
+    background-color: @primeBlackOpacity;
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10%;
+}
+
+
+//  #CSS tooltip
+//
+//  ####Accepted parameters
+//  **.tooltipSimple(*[background]*, *[color]*, *[fontSize]*, *[margin]*, *[padding]*, *[maxWidth]*, *[cursor]*);**
+//
+//  Tooltip can be added to any element
+//  ```html
+//  Projects in Sublime Text capture the full contents of the workspace,
+//  <span class="tooltip">
+//  <strong>Your content</strong>
+//  <div class="tooltip-content">Tooltip content</div>
+//  </span>
+//  including modified and unsaved files.
+//  You can switch between projects in a manner similar to Goto Anything,
+//  and the switch is instant, with no save prompts - all your modifications will be restored next time the project is opened.
+//  ```
+//
+
+//  #Radiobutton tooltip
+//
+//  ```html
+//  <div class="field choice tooltip">
+//  <input type="radio" class="radio" checked="" value="1" name="inputRadio">
+//  <label for="inputRadio" class="label"><span>Radiobutton choice</span></label>
+//  <div class="tooltip-content">Tooltip content</div>
+//  </div>
+//  ```
+
+.tooltip {
+    .tooltipCSS(rgba(0,0,0,.5), #fff, 16px, 10px 0 0, 8px, 500px, help);
+}
+
+//  #JS tooltip:
+//
+//  ####Accepted parameters
+//  **.tooltipJS(*[background]*, *[color]*, *[fontSize]*, *[padding]*, *[maxWidth]*);**
+//
+//  ####Add attributes to the tag:
+//
+//  **tooltip**="text tooltip"
+//
+//  **tooltip-position**="n, nw, ne, w, e, s, sw, se"
+//
+//  ```html
+//  <div class="example-tooltips">
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='nw'</strong>" tooltip-position="nw">
+//      <span>&#8598;</span>
+//    </button>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='n'</strong>" tooltip-position="n">
+//      <span>&#8593;</span>
+//    </button>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='ne'</strong>" tooltip-position="ne">
+//      <span>&#8599;</span>
+//    </button>
+//    <div class="separator"></div>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='w'</strong>" tooltip-position="w">
+//      <span>&#8592;</span>
+//    </button>
+//    <button tooltip="Default tooltip content from <strong class='example-tooltip-elem'>'tooltip'</strong> attribute">
+//      <span>Default</span>
+//    </button>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='e'</strong>" tooltip-position="e">
+//      <span>&#8594;</span>
+//    </button>
+//    <div class="separator"></div>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='sw'</strong>" tooltip-position="sw">
+//      <span>&#8601;</span>
+//    </button>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='s'</strong>" tooltip-position="s">
+//      <span>&#8595;</span>
+//    </button>
+//    <button tooltip="Tooltip content positioned by <strong class='example-tooltip-elem'>tooltip-position='se'</strong>" tooltip-position="se">
+//      <span>&#8600;</span>
+//    </button>
+//  <div>
+//  ```
+
+.tipsy {
+    .tooltipJS(rgba(0,0,0,.9), #fff);
+}
+
+//  #Tooltip mixins:
+.tooltipCSS(@background: @primeBlackOpacity, @color: @primary7, @fontSize: 16px, @margin: 10px 0 0, @padding: 4px 8px, @maxWidth: 200px, @cursor: help) {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.1;
+    cursor: @cursor;
+    .tooltip-content {
+        display: none;
+        position: absolute;
+        max-width: @maxWidth;
+        margin: @margin;
+        padding: @padding;
+        background: @background;
+        color: @color;
+        border-radius: 3px;
+        z-index: 20;
+        &:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: -5px;
+            left: 20px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid @background;
+        }
+    }
+    &:hover > .tooltip-content {
+        display: block;
+    }
+}
+
+.tooltipJS(@background: @primeBlackOpacity, @color: @primary7, @fontSize: 16px, @padding: 5px, @maxWidth: 200px) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    padding: @padding;
+    font-size: @fontSize;
+    z-index: 9999;
+    .tipsy-inner {
+        padding: 5px 8px 4px;
+        background-color: @background;
+        color: @color;
+        max-width: @maxWidth;
+        border-radius: 3px;
+    }
+    .tipsy-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid @background;
+    }
+    &.tipsy-s .tipsy-arrow {
+        top: 0;
+        left: 50%;
+        margin-left: -4px;
+    }
+    &.tipsy-se .tipsy-arrow {
+        top: 0;
+        left: 10px;
+    }
+    &.tipsy-sw .tipsy-arrow {
+        top: 0;
+        right: 10px;
+    }
+    &.tipsy-n .tipsy-arrow,
+    &.tipsy-ne .tipsy-arrow,
+    &.tipsy-nw .tipsy-arrow {
+        bottom: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid @background;
+        border-bottom: none;
+    }
+    &.tipsy-n .tipsy-arrow {
+        left: 50%;
+        margin-left: -4px;
+    }
+    &.tipsy-ne .tipsy-arrow {
+        left: 10px;
+    }
+    &.tipsy-nw .tipsy-arrow {
+        right: 10px;
+    }
+    &.tipsy-w .tipsy-arrow,
+    &.tipsy-e .tipsy-arrow {
+        top: 50%;
+        margin-top: -4px;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+    &.tipsy-w .tipsy-arrow {
+        right: 0;
+        border-right: none;
+        border-left: 5px solid @background;
+    }
+    &.tipsy-e .tipsy-arrow {
+        left: 0;
+        border-right: 5px solid @background;
+        border-left: none;
+    }
+}
+
+
+.example-tooltips {/*presentation styles*/
+    padding: 70px;
+    text-align: center;
+}
+
+.example-tooltips button {/*presentation styles*/
+    width: 70px;
+    height: 70px;
+    font-size: 18px;
+    margin: 10px 5px;
+}

@@ -23,7 +23,8 @@
  */
 
 namespace Magento\Customer\Model\Metadata\Form;
-use Magento\Customer\Service\V1\Dto\Eav\Option;
+use Magento\Customer\Service\V1\Data\Eav\Option;
+use Magento\Customer\Service\V1\Data\Eav\OptionBuilder;
 
 /**
  * test Magento\Customer\Model\Metadata\Form\Select
@@ -119,9 +120,9 @@ class SelectTest extends AbstractFormTestCase
             ->expects($this->any())
             ->method('getOptions')
             ->will($this->returnValue([
-                new Option(['value' => '14', 'label' => 'fourteen']),
-                new Option(['value' => 'some key', 'label' => 'some string']),
-                new Option(['value' => 'true', 'label' => 'True']),
+                (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
+                (new OptionBuilder())->setValue('some key')->setLabel('some string')->create(),
+                (new OptionBuilder())->setValue('true')->setLabel('True')->create(),
             ]));
         $select = $this->getClass($value);
         $actual = $select->outputValue();

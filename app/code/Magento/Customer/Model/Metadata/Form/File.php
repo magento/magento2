@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class File extends AbstractData
@@ -55,10 +54,10 @@ class File extends AbstractData
     /**
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param null $value
-     * @param $entityTypeCode
+     * @param string $entityTypeCode
      * @param bool $isAjax
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
@@ -67,7 +66,7 @@ class File extends AbstractData
     public function __construct(
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
         \Magento\Locale\ResolverInterface $localeResolver,
         $value = null,
         $entityTypeCode,
@@ -141,7 +140,7 @@ class File extends AbstractData
      * Return array of errors
      *
      * @param array $value
-     * @return array
+     * @return string[]
      */
     protected function _validateByRules($value)
     {
@@ -238,6 +237,8 @@ class File extends AbstractData
 
     /**
      * {@inheritdoc}
+     *
+     * @return $this|string
      */
     public function compactValue($value)
     {

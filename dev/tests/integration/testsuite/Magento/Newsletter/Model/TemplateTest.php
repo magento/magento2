@@ -45,8 +45,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * This test expects next themes for areas:
-     * current_store design/theme/full_name magento_plushe
-     * fixturestore_store design/theme/full_name magento_blank
+     * current_store design/theme/full_name magento_blank
+     * fixturestore_store design/theme/full_name magento_plushe
      *
      * @magentoAppIsolation  enabled
      * @magentoAppArea adminhtml
@@ -73,8 +73,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function getProcessedTemplateFrontendDataProvider()
     {
         return array(
-            'frontend'       => array('default',      'magento_plushe'),
-            'frontend store' => array('fixturestore', 'magento_blank')
+            'frontend'       => array('default',      'magento_blank'),
+            'frontend store' => array('fixturestore', 'magento_plushe')
         );
     }
 

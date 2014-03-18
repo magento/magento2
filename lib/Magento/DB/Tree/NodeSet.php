@@ -23,14 +23,12 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\DB\Tree;
 
 /**
  * TODO implements iterators
  *
  */
-namespace Magento\DB\Tree;
-
 class NodeSet implements \Iterator
 {
     /**
@@ -48,7 +46,11 @@ class NodeSet implements \Iterator
      */
     private $_current = 0;
 
-    function __construct() {
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
         $this->_nodes = array();
         $this->_current = 0;
         $this->_currentNode = 0;

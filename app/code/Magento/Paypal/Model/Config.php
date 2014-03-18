@@ -621,7 +621,7 @@ class Config
     /**
      * Get url that allows to edit checkout details on paypal side
      *
-     * @param $token
+     * @param \Magento\Paypal\Controller\Express|string $token
      * @return string
      */
     public function getExpressCheckoutEditUrl($token)

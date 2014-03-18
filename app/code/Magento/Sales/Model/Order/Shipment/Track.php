@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Shipment;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
@@ -50,8 +51,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Shipment;
-
 class Track extends \Magento\Sales\Model\AbstractModel
 {
     /**
@@ -59,9 +58,19 @@ class Track extends \Magento\Sales\Model\AbstractModel
      */
     const CUSTOM_CARRIER_CODE = 'custom';
 
+    /**
+     * @var \Magento\Sales\Model\Order\Shipment|null
+     */
     protected $_shipment = null;
 
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_shipment_track';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'track';
 
     /**
@@ -111,6 +120,8 @@ class Track extends \Magento\Sales\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -141,8 +152,8 @@ class Track extends \Magento\Sales\Model\AbstractModel
     /**
      * Declare Shipment instance
      *
-     * @param   \Magento\Sales\Model\Order\Shipment $shipment
-     * @return  \Magento\Sales\Model\Order\Shipment\Item
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @return $this
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -210,7 +221,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Track
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -229,7 +240,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * Retains previous data in the object.
      *
      * @param array $data
-     * @return \Magento\Sales\Model\Order\Shipment\Track
+     * @return $this
      */
     public function addData(array $data)
     {

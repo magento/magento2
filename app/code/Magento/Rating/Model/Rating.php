@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Model;
 
 /**
  * Rating model
@@ -39,8 +40,6 @@
  * @package    Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rating\Model;
-
 class Rating extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -95,7 +94,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
 
     /**
      * @param int $optionId
-     * @param $entityPkValue
+     * @param int $entityPkValue
      * @return $this
      */
     public function addOptionVote($optionId, $entityPkValue)
@@ -145,7 +144,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
     /**
      * Get rating collection object
      *
-     * @param $entityPkValue
+     * @param int $entityPkValue
      * @param bool $onlyForCurrentStore
      * @return \Magento\Data\Collection\Db
      */
@@ -156,7 +155,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @param $reviewId
+     * @param int $reviewId
      * @param bool $onlyForCurrentStore
      * @return array
      */

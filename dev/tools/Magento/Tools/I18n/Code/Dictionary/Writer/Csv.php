@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary\Writer;
 
 use Magento\Tools\I18n\Code\Dictionary\WriterInterface;
@@ -89,6 +88,8 @@ class Csv implements WriterInterface
 
     /**
      * Close file handler
+     *
+     * @return void
      */
     public function __destructor()
     {

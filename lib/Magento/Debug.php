@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
 
 /**
  * Magento Debug methods
@@ -31,10 +32,11 @@
  * @package     Magento_Debug
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento;
-
 class Debug
 {
+    /**
+     * @var int
+     */
     public static $argLength = 16;
 
     /**

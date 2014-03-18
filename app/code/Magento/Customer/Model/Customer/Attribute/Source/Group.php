@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Source;
 
 /**
  * Customer group attribute source
@@ -31,8 +32,6 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Source;
-
 class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
@@ -64,6 +63,9 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
         parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
     }
 
+    /**
+     * @return array
+     */
     public function getAllOptions()
     {
         if (!$this->_options) {

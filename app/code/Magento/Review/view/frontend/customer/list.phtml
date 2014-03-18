@@ -24,11 +24,12 @@
  */
 ?>
 <?php if( $this->getCollection() && $this->count()): ?>
-    <div class="toolbar reviews">
+    <div class="products toolbar reviews">
         <?php echo $this->getToolbarHtml() ?>
     </div>
     <div class="wrapper table reviews">
         <table class="data table reviews" id="my-reviews-table">
+            <caption class="table caption"><?php echo __('Product Reviews') ?></caption>
             <thead>
                 <tr>
                     <th class="col date"><?php echo __('Created') ?></th>
@@ -49,8 +50,11 @@
                     </td>
                     <td class="col summary">
                     <?php if($_review->getSum()): ?>
-                        <div class="rating">
-                            <span style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"></span>
+                        <div class="rating summary">
+                            <span class="label"><span><?php echo __('Rating') ?>:</span></span>
+                            <div class="rating result" title="<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%">
+                                <span style="width:<?php echo ( $_review->getSum() / $_review->getCount() ) ?>%;"><span><?php echo ( $_review->getSum() / $_review->getCount() ) ?>%</span></span>
+                            </div>
                         </div>
                     <?php endif; ?>
                     </td>
@@ -67,13 +71,13 @@
             </tbody>
         </table>
     </div>
-    <div class="toolbar reviews bottom">
+    <div class="products toolbar reviews bottom">
         <?php echo $this->getToolbarHtml() ?>
     </div>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('You have submitted no reviews.') ?></span></div>
 <?php endif; ?>
-<div class="actions">
+<div class="actions toolbar">
     <div class="secondary">
         <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>">
             <span><?php echo __('Back') ?></span>

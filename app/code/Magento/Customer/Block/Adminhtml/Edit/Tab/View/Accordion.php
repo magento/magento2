@@ -21,10 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
-use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Exception\NoSuchEntityException;
 use Magento\Customer\Controller\RegistryConstants;
 
@@ -53,10 +53,10 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
     /** @var \Magento\Customer\Model\Config\Share  */
     protected $_shareConfig;
 
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface  */
-    protected $_customerService;
+    /** @var CustomerAccountServiceInterface  */
+    protected $_customerAccountService;
 
-    /** @var \Magento\Customer\Service\V1\Dto\CustomerBuilder  */
+    /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder  */
     protected $_customerBuilder;
 
     /**
@@ -65,8 +65,8 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory
      * @param \Magento\Registry $registry
      * @param \Magento\Customer\Model\Config\Share $shareConfig
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
-     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
+     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
      * @param array $data
      */
     public function __construct(
@@ -75,15 +75,15 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory,
         \Magento\Registry $registry,
         \Magento\Customer\Model\Config\Share $shareConfig,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
-        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder,
+        CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         $this->_quoteFactory = $quoteFactory;
         $this->_itemsFactory = $itemsFactory;
         $this->_shareConfig = $shareConfig;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         $this->_customerBuilder = $customerBuilder;
         parent::__construct($context, $data);
     }
@@ -155,9 +155,9 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
         if (!empty($customerData['account'])) {
             return $this->_customerBuilder->populateWithArray($customerData['account'])->create();
         } elseif ($customerId) {
-            return $this->_customerService->getCustomer($customerId);
+            return $this->_customerAccountService->getCustomer($customerId);
         } else {
-            return new Customer([]);
+            return $this->_customerBuilder->create();
         }
     }
 }

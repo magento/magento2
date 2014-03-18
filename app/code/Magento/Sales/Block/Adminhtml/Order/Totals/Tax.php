@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 
 /**
  * Adminhtml order tax totals block
@@ -31,26 +32,32 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Totals;
-
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 {
     /**
+     * Tax helper
+     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxHelper;
 
     /**
+     * Tax calculation
+     *
      * @var \Magento\Tax\Model\Calculation
      */
     protected $_taxCalculation;
 
     /**
+     * Tax factory
+     *
      * @var \Magento\Tax\Model\Sales\Order\TaxFactory
      */
     protected $_taxOrderFactory;
 
     /**
+     * Sales admin helper
+     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_salesAdminHelper;

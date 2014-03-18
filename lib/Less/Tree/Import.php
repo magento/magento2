@@ -1,19 +1,20 @@
 <?php
 
-
-
-//
-// CSS @import node
-//
-// The general strategy here is that we don't want to wait
-// for the parsing to be completed, before we start importing
-// the file. That's because in the context of a browser,
-// most of the time will be spent waiting for the server to respond.
-//
-// On creation, we push the import path to our import queue, though
-// `import,push`, we also pass it a callback, which it'll call once
-// the file has been fetched, and parsed.
-//
+/**
+ * CSS @import node
+ *
+ * The general strategy here is that we don't want to wait
+ * for the parsing to be completed, before we start importing
+ * the file. That's because in the context of a browser,
+ * most of the time will be spent waiting for the server to respond.
+ *
+ * On creation, we push the import path to our import queue, though
+ * `import,push`, we also pass it a callback, which it'll call once
+ * the file has been fetched, and parsed.
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Import extends Less_Tree{
 
 	public $options;
@@ -69,22 +70,25 @@ class Less_Tree_Import extends Less_Tree{
 		}
 	}
 
-	function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
 		if( $this->css ){
 
-			self::OutputAdd( $strs, '@import ', $this->currentFileInfo, $this->index );
+			$output->add( '@import ', $this->currentFileInfo, $this->index );
 
-			$this->path->genCSS( $env, $strs );
+			$this->path->genCSS( $output );
 			if( $this->features ){
-				self::OutputAdd( $strs, ' ' );
-				$this->features->genCSS( $env, $strs );
+				$output->add( ' ' );
+				$this->features->genCSS( $output );
 			}
-			self::OutputAdd( $strs, ';' );
+			$output->add( ';' );
 		}
 	}
 
-	function toCSS($env = null){
-		$features = $this->features ? ' ' . $this->features->toCSS($env) : '';
+	function toCSS(){
+		$features = $this->features ? ' ' . $this->features->toCSS() : '';
 
 		if ($this->css) {
 			return "@import " . $this->path->toCSS() . $features . ";\n";
@@ -93,6 +97,9 @@ class Less_Tree_Import extends Less_Tree{
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	function getPath(){
 		if ($this->path instanceof Less_Tree_Quoted) {
 			$path = $this->path->value;
@@ -126,58 +133,36 @@ class Less_Tree_Import extends Less_Tree{
 			$path->value = Less_Environment::normalizePath($path->value);
 		}
 
+
+
 		return $path;
 	}
 
-	function compile($env) {
+	function compile( $env ){
 
 		$evald = $this->compileForImport($env);
-		$uri = $full_path = false;
 
 		//get path & uri
-		$evald_path = $evald->getPath();
-		if( $evald_path ){
-			foreach(Less_Parser::$import_dirs as $rootpath => $rooturi){
-				if( is_callable($rooturi) ){
-					list($path, $uri) = call_user_func($rooturi, $evald_path);
-					if( null !== $path ){
-						$full_path = $path;
-						break;
-					}
-				}else{
-					$path = $rootpath.$evald_path;
-					if( file_exists($path) ){
-						$full_path = Less_Environment::normalizePath($path);
-						$uri = Less_Environment::normalizePath(dirname($rooturi.$evald_path));
-						break;
-					}
-				}
-			}
+		$path_and_uri = null;
+		if( is_callable(Less_Parser::$options['import_callback']) ){
+			$path_and_uri = call_user_func(Less_Parser::$options['import_callback'],$evald);
 		}
 
-		if( !$full_path ){
-			$uri = $evald_path;
-			$full_path = $evald_path;
+		if( !$path_and_uri ){
+			$path_and_uri = $evald->PathAndUri();
 		}
+
+		if( $path_and_uri ){
+			list($full_path, $uri) = $path_and_uri;
+		}else{
+			$full_path = $uri = $evald->getPath();
+		}
+
 
 		//import once
-		$realpath = realpath($full_path);
-
-
-		if( $realpath && Less_Parser::FileParsed($realpath) ){
-			if( isset($this->currentFileInfo['reference']) ){
-				$evald->skip = true;
-			}elseif( !isset($evald->options['multiple']) && !$env->importMultiple ){
-				$evald->skip = true;
-			}
-		}
-
-		$features = ( $evald->features ? $evald->features->compile($env) : null );
-
-		if( $evald->skip ){
+		if( $evald->skip( $full_path, $env) ){
 			return array();
 		}
-
 
 		if( $this->options['inline'] ){
 			//todo needs to reference css file not import
@@ -191,14 +176,78 @@ class Less_Tree_Import extends Less_Tree{
 			}
 
 			return array( $contents );
+		}
 
-		}elseif( $evald->css ){
-			$temp = $this->compilePath( $env);
+
+		// css ?
+		if( $evald->css ){
+			$features = ( $evald->features ? $evald->features->compile($env) : null );
 			return new Less_Tree_Import( $this->compilePath( $env), $features, $this->options, $this->index);
 		}
 
 
-		// options
+		return $this->ParseImport( $full_path, $uri, $env );
+	}
+
+
+	/**
+	 * Using the import directories, get the full absolute path and uri of the import
+	 *
+	 * @param Less_Tree_Import $evald
+	 */
+	function PathAndUri(){
+
+		$evald_path = $this->getPath();
+
+		if( $evald_path ){
+
+			$import_dirs = array();
+
+			if( Less_Environment::isPathRelative($evald_path) ){
+				//if the path is relative, the file should be in the current directory
+				$import_dirs[ $this->currentFileInfo['currentDirectory'] ] = $this->currentFileInfo['uri_root'];
+
+			}else{
+				//otherwise, the file should be relative to the server root
+				$import_dirs[ $this->currentFileInfo['entryPath'] ] = $this->currentFileInfo['entryUri'];
+
+				//if the user supplied entryPath isn't the actual root
+				$import_dirs[ $_SERVER['DOCUMENT_ROOT'] ] = '';
+
+			}
+
+			// always look in user supplied import directories
+			$import_dirs = array_merge( $import_dirs, Less_Parser::$options['import_dirs'] );
+
+
+			foreach( $import_dirs as $rootpath => $rooturi){
+				if( is_callable($rooturi) ){
+					list($path, $uri) = call_user_func($rooturi, $evald_path);
+					if( is_string($path) ){
+						$full_path = $path;
+						return array( $full_path, $uri );
+					}
+				}else{
+					$path = rtrim($rootpath,'/\\').'/'.ltrim($evald_path,'/\\');
+
+					if( file_exists($path) ){
+						$full_path = Less_Environment::normalizePath($path);
+						$uri = Less_Environment::normalizePath(dirname($rooturi.$evald_path));
+						return array( $full_path, $uri );
+					}
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Parse the import url and return the rules
+	 *
+	 * @return Less_Tree_Media|array
+	 */
+	function ParseImport( $full_path, $uri, $env ){
+
 		$import_env = clone $env;
 		if( (isset($this->options['reference']) && $this->options['reference']) || isset($this->currentFileInfo['reference']) ){
 			$import_env->currentFileInfo['reference'] = true;
@@ -209,13 +258,34 @@ class Less_Tree_Import extends Less_Tree{
 		}
 
 		$parser = new Less_Parser($import_env);
-		$evald->root = $parser->parseFile($full_path, $uri, true);
+		$root = $parser->parseFile($full_path, $uri, true);
 
 
-		$ruleset = new Less_Tree_Ruleset(array(), $evald->root->rules );
+		$ruleset = new Less_Tree_Ruleset(array(), $root->rules );
 		$ruleset->evalImports($import_env);
 
 		return $this->features ? new Less_Tree_Media($ruleset->rules, $this->features->value) : $ruleset->rules;
+	}
+
+
+	/**
+	 * Should the import be skipped?
+	 *
+	 * @return boolean|null
+	 */
+	private function Skip($path, $env){
+
+		$path = realpath($path);
+
+		if( $path && Less_Parser::FileParsed($path) ){
+
+			if( isset($this->currentFileInfo['reference']) ){
+				return true;
+			}
+
+			return !isset($this->options['multiple']) && !$env->importMultiple;
+		}
+
 	}
 }
 

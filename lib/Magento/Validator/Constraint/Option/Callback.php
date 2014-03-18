@@ -60,6 +60,7 @@ class Callback implements \Magento\Validator\Constraint\OptionInterface
      * Set callback arguments
      *
      * @param mixed $arguments
+     * @return void
      */
     public function setArguments($arguments = null)
     {

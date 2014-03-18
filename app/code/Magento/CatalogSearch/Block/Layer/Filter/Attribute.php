@@ -23,18 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Block\Layer\Filter;
 
 /**
  * CatalogSearch attribute layer filter
  *
  */
-namespace Magento\CatalogSearch\Block\Layer\Filter;
-
 class Attribute extends \Magento\Catalog\Block\Layer\Filter\Attribute
 {
     /**
      * Set filter model name
      *
+     * @return void
      */
     public function _construct()
     {

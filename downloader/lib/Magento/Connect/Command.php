@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Connect Command abstract class. It cannot instantiate directly
@@ -31,8 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect;
-
 class Command
 {
     /**
@@ -93,6 +92,9 @@ class Command
      */
     protected static $_packager = null;
 
+    /**
+     * @var array
+     */
     protected static $_return = array();
 
     /**
@@ -142,8 +144,8 @@ class Command
      * @param string $command
      * @param string $options
      * @param string $params
-     * @throws \Exception if there's no needed method
      * @return mixed
+     * @throws \Exception If there's no needed method
      */
     public function run($command, $options, $params)
     {
@@ -161,8 +163,9 @@ class Command
 
     /**
      * Static
-     * @param $commandName
-     * @return unknown_type
+     * @param string $commandName
+     * @return mixed
+     * @throws \UnexpectedValueException
      */
     public static function getInstance($commandName)
     {
@@ -176,9 +179,9 @@ class Command
     /**
      * Cache config setter
      *
-     * @static
      * @param \Magento\Connect\Singleconfig $obj
-     * @return null
+     * @return void
+     * @static
      */
     public static function setSconfig($obj)
     {
@@ -199,7 +202,7 @@ class Command
      * Sets frontend object for all commands
      *
      * @param \Magento\Connect\Frontend $obj
-     * @return null
+     * @return void
      */
     public static function setFrontendObject($obj)
     {
@@ -210,7 +213,7 @@ class Command
      * Set config object for all commands
      *
      * @param \Magento\Connect\Config $obj
-     * @return null
+     * @return void
      */
     public static function setConfigObject($obj)
     {
@@ -281,8 +284,8 @@ class Command
      * Get Getopt args from command definitions
      * and parse them
      *
-     * @param $command
-     * @return array
+     * @param string $command
+     * @return void|array
      */
     public static function getGetoptArgs($command)
     {
@@ -315,7 +318,7 @@ class Command
     /**
      * Try to register commands automatically
      *
-     * @return null
+     * @return void
      */
     public static function registerCommands()
     {
@@ -360,19 +363,18 @@ class Command
      *
      * @param string $key
      * @param mixed $val
-     * @return null
+     * @return void
      */
     public static function setReturn($key, $val)
     {
         self::$_return[$key] = $val;
     }
-
     /**
      * Get command return
      *
-     * @param $key
-     * @param $clear
-     * @return mixed
+     * @param string $key
+     * @param bool $clear
+     * @return array|null
      */
     public static function getReturn($key, $clear = true)
     {
@@ -390,6 +392,7 @@ class Command
      * Cleanup command params from empty strings
      *
      * @param array $params by reference
+     * @return void
      */
     public function cleanupParams(array & $params)
     {
@@ -414,6 +417,7 @@ class Command
      * to two arguments if found in top of array
      *
      * @param array $params
+     * @return void
      */
     public function splitPackageArgs(array & $params)
     {
@@ -428,7 +432,6 @@ class Command
            array_unshift($params, $subs[1]);
         }
     }
-
 
     /**
      * Get packager instance

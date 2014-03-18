@@ -41,10 +41,14 @@
             <div class="message info empty"><span><?php echo __('You have no items in your wish list.') ?></span></div>
         <?php endif ?>
         <?php echo $this->getChildHtml('bottom'); ?>
-        <div class="actions">
-            <div class="primary"><?php echo $this->getChildHtml('control_buttons');?></div>
-            <div class="secondary"><a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back">
-                    <span><?php echo __('Back') ?></span></a>
+        <div class="actions toolbar">
+            <div class="primary">
+                <?php echo $this->getChildHtml('control_buttons');?>
+            </div>
+            <div class="secondary">
+                <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back">
+                    <span><?php echo __('Back') ?></span>
+                </a>
             </div>
         </div>
     </form>

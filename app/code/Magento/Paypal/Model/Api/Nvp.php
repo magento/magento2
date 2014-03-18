@@ -30,6 +30,8 @@ use Magento\Payment\Model\Cart;
 /**
  * NVP API wrappers model
  * @TODO: move some parts to abstract, don't hesitate to throw exceptions on api calls
+ *
+ * @method string getToken()
  */
 class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 {
@@ -156,7 +158,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         'VPAS'         => 'centinel_vpas_result',
         'ECISUBMITTED3DS' => 'centinel_eci_result',
 
-        // recurring payment profiles
+        // recurring payments
 //'TOKEN' => 'token',
         'SUBSCRIBERNAME'    =>'subscriber_name',
         'PROFILESTARTDATE'  => 'start_datetime',
@@ -177,8 +179,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         'TAXAMT'              => 'tax_amount',
         'INITAMT'             => 'init_amount',
         'FAILEDINITAMTACTION' => 'init_may_fail',
-        'PROFILEID'           => 'recurring_profile_id',
-        'PROFILESTATUS'       => 'recurring_profile_status',
+        'PROFILEID'           => 'recurring_payment_id',
+        'PROFILESTATUS'       => 'recurring_payment_status',
         'STATUS'              => 'status',
 
         //Next two fields are used for Brazil only
@@ -406,47 +408,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @var string[]
      */
     protected $_getPalDetailsResponse = array('PAL');
-
-    /**
-     * CreateRecurringPaymentsProfile request map
-     *
-     * @var string[]
-     */
-    protected $_createRecurringPaymentsProfileRequest = array(
-        'TOKEN', 'SUBSCRIBERNAME', 'PROFILESTARTDATE', 'PROFILEREFERENCE', 'DESC', 'MAXFAILEDPAYMENTS', 'AUTOBILLAMT',
-        'BILLINGPERIOD', 'BILLINGFREQUENCY', 'TOTALBILLINGCYCLES', 'AMT', 'TRIALBILLINGPERIOD', 'TRIALBILLINGFREQUENCY',
-        'TRIALTOTALBILLINGCYCLES', 'TRIALAMT', 'CURRENCYCODE', 'SHIPPINGAMT', 'TAXAMT', 'INITAMT', 'FAILEDINITAMTACTION'
-    );
-
-    /**
-     * CreateRecurringPaymentsProfile response map
-     *
-     * @var string[]
-     */
-    protected $_createRecurringPaymentsProfileResponse = array(
-        'PROFILEID', 'PROFILESTATUS'
-    );
-
-    /**
-     * Request/response for ManageRecurringPaymentsProfileStatus map
-     *
-     * @var string[]
-     */
-    protected $_manageRecurringPaymentsProfileStatusRequest = array('PROFILEID', 'ACTION');
-
-    /**
-     * Request for GetRecurringPaymentsProfileDetails
-     *
-     * @var string[]
-     */
-    protected $_getRecurringPaymentsProfileDetailsRequest = array('PROFILEID');
-
-    /**
-     * Response for GetRecurringPaymentsProfileDetails
-     *
-     * @var string[]
-     */
-    protected $_getRecurringPaymentsProfileDetailsResponse = array('STATUS', /* TODO: lot of other stuff */);
 
     /**
      * Map for billing address import/export
@@ -698,10 +659,10 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         \Magento\Directory\Model\CountryFactory $countryFactory,
         array $data = array()
     ) {
-        $this->_countryFactory = $countryFactory;
         parent::__construct(
             $customerAddress, $logger, $localeResolver, $regionFactory, $logAdapterFactory, $data
         );
+        $this->_countryFactory = $countryFactory;
     }
 
     /**
@@ -759,14 +720,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             $request['CALLBACKTIMEOUT'] = 6; // max value
             $request['MAXAMT'] = $request['AMT'] + 999.00; // it is impossible to calculate max amount
             $this->_exportShippingOptions($request);
-        }
-
-        // add recurring profiles information
-        $i = 0;
-        foreach ($this->_recurringPaymentProfiles as $profile) {
-            $request["L_BILLINGTYPE{$i}"] = 'RecurringPayments';
-            $request["L_BILLINGAGREEMENTDESCRIPTION{$i}"] = $profile->getScheduleDescription();
-            $i++;
         }
 
         $response = $this->call(self::SET_EXPRESS_CHECKOUT, $request);
@@ -1023,60 +976,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * CreateRecurringPaymentsProfile call
-     *
-     * @return void
-     */
-    public function callCreateRecurringPaymentsProfile()
-    {
-        $request = $this->_exportToRequest($this->_createRecurringPaymentsProfileRequest);
-        $response = $this->call('CreateRecurringPaymentsProfile', $request);
-        $this->_importFromResponse($this->_createRecurringPaymentsProfileResponse, $response);
-        $this->_analyzeRecurringProfileStatus($this->getRecurringProfileStatus(), $this);
-    }
-
-    /**
-     * ManageRecurringPaymentsProfileStatus call
-     *
-     * @return void
-     * @throws \Magento\Core\Exception
-     */
-    public function callManageRecurringPaymentsProfileStatus()
-    {
-        $request = $this->_exportToRequest($this->_manageRecurringPaymentsProfileStatusRequest);
-        if (isset($request['ACTION'])) {
-            $request['ACTION'] = $this->_filterRecurringProfileActionToNvp($request['ACTION']);
-        }
-        try {
-            $this->call('ManageRecurringPaymentsProfileStatus', $request);
-        } catch (\Magento\Core\Exception $e) {
-            if ((in_array(11556, $this->_callErrors) && 'Cancel' === $request['ACTION'])
-                || (in_array(11557, $this->_callErrors) && 'Suspend' === $request['ACTION'])
-                || (in_array(11558, $this->_callErrors) && 'Reactivate' === $request['ACTION'])
-            ) {
-                throw new \Magento\Core\Exception(
-                    __('We can\'t change the status because the current status doesn\'t match the real status.')
-                );
-            }
-            throw $e;
-        }
-    }
-
-    /**
-     * GetRecurringPaymentsProfileDetails call
-     *
-     * @param \Magento\Object $result
-     * @return void
-     */
-    public function callGetRecurringPaymentsProfileDetails(\Magento\Object $result)
-    {
-        $request = $this->_exportToRequest($this->_getRecurringPaymentsProfileDetailsRequest);
-        $response = $this->call('GetRecurringPaymentsProfileDetails', $request);
-        $this->_importFromResponse($this->_getRecurringPaymentsProfileDetailsResponse, $response);
-        $this->_analyzeRecurringProfileStatus($this->getStatus(), $result);
-    }
-
-    /**
      * Import callback request array into $this public data
      *
      * @param array $request
@@ -1146,7 +1045,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param string $methodName
      * @param array $request
      * @return array
-     * @throws \Magento\Core\Exception|Exception
+     * @throws \Magento\Core\Exception|\Exception
      */
     public function call($methodName, array $request)
     {
@@ -1394,7 +1293,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     /**
      * Adopt specified address object to be compatible with Magento
      *
-     * @param \Magento\Object
+     * @param \Magento\Object $address
      * @return void
      */
     protected function _applyStreetAndRegionWorkarounds(\Magento\Object $address)
@@ -1422,7 +1321,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * Adopt specified request array to be compatible with Paypal
      * Puerto Rico should be as state of USA and not as a country
      *
-     * @param array $request
+     * @param array &$request
      * @return void
      */
     protected function _applyCountryWorkarounds(&$request)
@@ -1614,60 +1513,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
                 return 'Accept';
             case \Magento\Paypal\Model\Pro::PAYMENT_REVIEW_DENY:
                 return 'Deny';
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Convert RP management action to NVP format
-     *
-     * @param string $value
-     * @return string|null
-     */
-    protected function _filterRecurringProfileActionToNvp($value)
-    {
-        switch ($value) {
-            case 'cancel':
-                return 'Cancel';
-            case 'suspend':
-                return 'Suspend';
-            case 'activate':
-                return 'Reactivate';
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Check the obtained RP status in NVP format and specify the profile state
-     *
-     * @param string $value
-     * @param \Magento\Object $result
-     * @return void
-     */
-    protected function _analyzeRecurringProfileStatus($value, \Magento\Object $result)
-    {
-        switch ($value) {
-            case 'ActiveProfile':
-            case 'Active':
-                $result->setIsProfileActive(true);
-                break;
-            case 'PendingProfile':
-                $result->setIsProfilePending(true);
-                break;
-            case 'CancelledProfile':
-            case 'Cancelled':
-                $result->setIsProfileCanceled(true);
-                break;
-            case 'SuspendedProfile':
-            case 'Suspended':
-                $result->setIsProfileSuspended(true);
-                break;
-            case 'ExpiredProfile':
-            case 'Expired': // ??
-                $result->setIsProfileExpired(true);
-                break;
             default:
                 break;
         }

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Filesystem\Rollback;
 
 /**
  * Rollback worker for rolling back via ftp
@@ -31,8 +32,6 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Filesystem\Rollback;
-
 class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
 {
     /**
@@ -45,8 +44,9 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
     /**
      * Files rollback implementation via ftp
      *
-     * @see \Magento\Backup\Filesystem\Rollback\AbstractRollback::run()
+     * @return void
      * @throws \Magento\Exception
+     * @see \Magento\Backup\Filesystem\Rollback\AbstractRollback::run()
      */
     public function run()
     {
@@ -73,6 +73,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
     /**
      * Initialize ftp client and connect to ftp
      *
+     * @return void
      * @throws \Magento\Backup\Exception\FtpConnectionFailed
      */
     protected function _initFtpClient()
@@ -88,6 +89,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
     /**
      * Perform ftp validation. Check whether ftp account provided points to current magento installation
      *
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _validateFtp()
@@ -117,6 +119,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
      * Unpack snapshot
      *
      * @param string $tmpDir
+     * @return void
      */
     protected function _unpackSnapshot($tmpDir)
     {
@@ -145,6 +148,8 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
 
     /**
      * Delete magento and all files from ftp
+     *
+     * @return void
      */
     protected function _cleanupFtp()
     {
@@ -168,6 +173,7 @@ class Ftp extends \Magento\Backup\Filesystem\Rollback\AbstractRollback
      * Perform files rollback
      *
      * @param string $tmpDir
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _uploadBackupToFtp($tmpDir)

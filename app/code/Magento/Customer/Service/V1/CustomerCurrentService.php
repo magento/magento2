@@ -39,14 +39,14 @@ class CustomerCurrentService implements \Magento\Customer\Service\V1\CustomerCur
     protected $layout;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\CustomerBuilder
+     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
      */
     protected $customerBuilder;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerService
+     * @var \Magento\Customer\Service\V1\CustomerAccountService
      */
-    protected $customerService;
+    protected $customerAccountService;
 
     /**
      * @var \Magento\App\RequestInterface
@@ -61,34 +61,34 @@ class CustomerCurrentService implements \Magento\Customer\Service\V1\CustomerCur
     /**
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\View\LayoutInterface $layout
-     * @param Dto\CustomerBuilder $customerBuilder
-     * @param CustomerServiceInterface $customerService
+     * @param Data\CustomerBuilder $customerBuilder
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\App\ViewInterface $view
      */
     public function __construct(
-        \Magento\Customer\Model\Session                         $customerSession,
-        \Magento\View\LayoutInterface                           $layout,
-        \Magento\Customer\Service\V1\Dto\CustomerBuilder        $customerBuilder,
-        \Magento\Customer\Service\V1\CustomerServiceInterface   $customerService,
-        \Magento\App\RequestInterface                           $request,
-        \Magento\Module\Manager                                 $moduleManager,
-        \Magento\App\ViewInterface                              $view
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\View\LayoutInterface $layout,
+        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
+        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\App\RequestInterface $request,
+        \Magento\Module\Manager $moduleManager,
+        \Magento\App\ViewInterface $view
     ) {
-        $this->customerSession  = $customerSession;
-        $this->layout           = $layout;
+        $this->customerSession = $customerSession;
+        $this->layout = $layout;
         $this->customerBuilder  = $customerBuilder;
-        $this->customerService  = $customerService;
-        $this->request          = $request;
-        $this->moduleManager    = $moduleManager;
-        $this->view             = $view;
+        $this->customerAccountService  = $customerAccountService;
+        $this->request = $request;
+        $this->moduleManager = $moduleManager;
+        $this->view = $view;
     }
 
     /**
-     * Returns customer Dto with customer group only
+     * Returns customer Data with customer group only
      *
-     * @return Dto\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
     protected function getDepersonalizedCustomer()
     {
@@ -96,19 +96,19 @@ class CustomerCurrentService implements \Magento\Customer\Service\V1\CustomerCur
     }
 
     /**
-     * Returns customer Dto from service
+     * Returns customer Data from service
      *
-     * @return Dto\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
     protected function getCustomerFromService()
     {
-        return $this->customerService->getCustomer($this->customerSession->getId());
+        return $this->customerAccountService->getCustomer($this->customerSession->getId());
     }
 
     /**
      * Returns current customer according to session and context
      *
-     * @return Dto\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
     public function getCustomer()
     {

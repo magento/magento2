@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Model;
 
+use Resource\Price\Customer\Collection;
 
 /**
  * ProductAlert for back in stock model
@@ -49,8 +51,6 @@
  * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model;
-
 class Stock extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -78,16 +78,25 @@ class Stock extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\ProductAlert\Model\Resource\Stock');
     }
 
+    /**
+     * @return Collection
+     */
     public function getCustomerCollection()
     {
         return $this->_customerColFactory->create();
     }
 
+    /**
+     * @return $this
+     */
     public function loadByParam()
     {
         if (!is_null($this->getProductId()) && !is_null($this->getCustomerId()) && !is_null($this->getWebsiteId())) {
@@ -96,6 +105,11 @@ class Stock extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param int $customerId
+     * @param int $websiteId
+     * @return $this
+     */
     public function deleteCustomer($customerId, $websiteId = 0)
     {
         $this->getResource()->deleteCustomer($this, $customerId, $websiteId);

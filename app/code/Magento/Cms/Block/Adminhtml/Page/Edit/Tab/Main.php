@@ -100,7 +100,6 @@ class Main
             'name'      => 'identifier',
             'label'     => __('URL Key'),
             'title'     => __('URL Key'),
-            'required'  => true,
             'class'     => 'validate-identifier',
             'note'      => __('Relative to Web Site Base URL'),
             'disabled'  => $isElementDisabled

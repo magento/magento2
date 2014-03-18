@@ -54,6 +54,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $postData = $this->_getAttributeData() + array('attribute_id' => '1');
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
+        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
         $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
         $model->load($postData['attribute_id']);
         $this->assertEquals('simple', $model->getData('apply_to'));

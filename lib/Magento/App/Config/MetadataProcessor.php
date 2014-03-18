@@ -39,11 +39,11 @@ class MetadataProcessor
 
     /**
      * @param \Magento\App\Config\Data\ProcessorFactory $processorFactory
-     * @param \Magento\App\Config\Initial $initialConfig
+     * @param Initial $initialConfig
      */
     public function __construct(
         \Magento\App\Config\Data\ProcessorFactory $processorFactory,
-        \Magento\App\Config\Initial $initialConfig
+        Initial $initialConfig
     ) {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();
@@ -72,9 +72,10 @@ class MetadataProcessor
     /**
      * Set array value by path
      *
-     * @param array $container
+     * @param array &$container
      * @param string $path
      * @param string $value
+     * @return void
      */
     protected function _setValue(array &$container, $path, $value)
     {

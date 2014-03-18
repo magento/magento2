@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Adminhtml catalog product downloadable items tab and form
@@ -31,7 +32,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 class Downloadable
     extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -43,8 +43,14 @@ class Downloadable
      */
     protected $_product = null;
 
+    /**
+     * @var \Magento\Object|null
+     */
     protected $_config = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/downloadable.phtml';
 
     /**

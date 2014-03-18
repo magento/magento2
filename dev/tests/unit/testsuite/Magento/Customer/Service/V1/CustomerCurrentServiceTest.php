@@ -43,17 +43,17 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\CustomerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerDtoBuilderMock;
+    protected $customerDataBuilderMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Service\V1\Data\Customer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerDtoMock;
+    protected $customerDataMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerServiceMock;
 
@@ -90,12 +90,17 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
             array(), array(), '', false);
         $this->layoutMock = $this->getMock('Magento\Core\Model\Layout',
             array(), array(), '', false);
-        $this->customerDtoBuilderMock = $this->getMock('Magento\Customer\Service\V1\Dto\CustomerBuilder',
+        $this->customerDataBuilderMock = $this->getMock('Magento\Customer\Service\V1\Data\CustomerBuilder',
             array('create', 'setGroupId'), array(), '', false);
-        $this->customerDtoMock = $this->getMock('Magento\Customer\Service\V1\Dto\Customer',
+        $this->customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer',
             array(), array(), '', false);
-        $this->customerServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerService',
-            array(), array(), '', false);
+        $this->customerServiceMock = $this->getMock(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->requestMock = $this->getMock('Magento\App\Request\Http',
             array(), array(), '', false);
         $this->moduleManagerMock = $this->getMock('Magento\Module\Manager',
@@ -106,7 +111,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
         $this->customerCurrentService = new \Magento\Customer\Service\V1\CustomerCurrentService(
             $this->customerSessionMock,
             $this->layoutMock,
-            $this->customerDtoBuilderMock,
+            $this->customerDataBuilderMock,
             $this->customerServiceMock,
             $this->requestMock,
             $this->moduleManagerMock,
@@ -115,9 +120,9 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test getCustomer method, method returns depersonalized customer Dto
+     * test getCustomer method, method returns depersonalized customer Data
      */
-    public function testGetCustomerDepersonalizeCustomerDto()
+    public function testGetCustomerDepersonalizeCustomerData()
     {
         $this->requestMock->expects($this->once())
             ->method('isAjax')
@@ -135,14 +140,14 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
             ->will($this->returnValue($this->customerGroupId));
-        $this->customerDtoBuilderMock->expects($this->once())
+        $this->customerDataBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->customerDtoMock));
-        $this->customerDtoBuilderMock->expects($this->once())
+            ->will($this->returnValue($this->customerDataMock));
+        $this->customerDataBuilderMock->expects($this->once())
             ->method('setGroupId')
             ->with($this->equalTo($this->customerGroupId))
             ->will($this->returnSelf());
-        $this->assertEquals($this->customerDtoMock, $this->customerCurrentService->getCustomer());
+        $this->assertEquals($this->customerDataMock, $this->customerCurrentService->getCustomer());
     }
 
     /**
@@ -160,7 +165,7 @@ class CustomerCurrentServiceTest extends \PHPUnit_Framework_TestCase
         $this->customerServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($this->equalTo($this->customerId))
-            ->will($this->returnValue($this->customerDtoMock));
-        $this->assertEquals($this->customerDtoMock, $this->customerCurrentService->getCustomer());
+            ->will($this->returnValue($this->customerDataMock));
+        $this->assertEquals($this->customerDataMock, $this->customerCurrentService->getCustomer());
     }
 }

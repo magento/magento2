@@ -25,7 +25,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 class ElementFactory
@@ -60,14 +59,14 @@ class ElementFactory
     /**
      * Create Form Element
      *
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
      * @param string|int|bool $value
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @return \Magento\Customer\Model\Metadata\Form\AbstractData
      */
     public function create(
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
         $value,
         $entityTypeCode,
         $isAjax = false

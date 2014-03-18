@@ -65,6 +65,8 @@ class Exception extends \Magento\Core\Exception
 
     /**
      * Retrieve exception name.
+     *
+     * @return string
      */
     public function getName()
     {

@@ -181,13 +181,13 @@
                     <comment>Leave empty for access from any location.</comment>
                 </field>
             </group>
-            <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="1">
+            <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
-                <field id="template_hints" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="1">
+                <field id="template_hints" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Template Path Hints</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="0" showInWebsite="1" showInStore="1">
+                <field id="template_hints_blocks" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Add Block Names to Hints</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>

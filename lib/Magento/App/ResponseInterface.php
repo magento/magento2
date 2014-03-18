@@ -29,6 +29,8 @@ interface ResponseInterface
 {
     /**
      * Send response to client
+     *
+     * @return int|void
      */
     public function sendResponse();
 }

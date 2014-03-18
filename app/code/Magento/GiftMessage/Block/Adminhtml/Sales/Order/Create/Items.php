@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
 
 /**
  * Gift message adminhtml sales order create items
@@ -31,8 +32,6 @@
  * @package    Magento_GiftMessage
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create;
-
 class Items extends \Magento\Backend\Block\Template
 {
     /**
@@ -80,7 +79,7 @@ class Items extends \Magento\Backend\Block\Template
         );
     }
 
-   /**
+    /**
      * Return form html
      *
      * @return string

@@ -32,6 +32,8 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
 {
     /**
      * Define table name and id field for resource
+     *
+     * @return void
      */
     protected function _construct()
     {

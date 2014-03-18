@@ -72,10 +72,6 @@
                 </div>
             <?php endif; ?>
 
-            <?php if ($_item->getProduct()->isVisibleInSiteVisibility()):?>
-            <a href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo __('Edit item') ?>" class="action edit"><span><?php echo __('Edit')?></span></a>
-            <?php endif ?>
-
 
         <?php // Prices ?>
 
@@ -199,9 +195,18 @@
         </div>
 
         <div class="product actions">
-            <a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo __('Remove item') ?>" class="action delete">
-                <span><?php echo __('Remove')?></span>
-            </a>
+            <?php if ($_item->getProduct()->isVisibleInSiteVisibility()):?>
+            <div class="primary">
+                <a href="<?php echo $this->getConfigureUrl() ?>"
+                   title="<?php echo __('Edit item') ?>"
+                   class="action edit"><span><?php echo __('Edit')?></span></a>
+            </div>
+            <?php endif ?>
+            <div class="secondary">
+                <a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo __('Remove item') ?>" class="action delete">
+                    <span><?php echo __('Remove')?></span>
+                </a>
+            </div>
         </div>
     </div>
 </div>

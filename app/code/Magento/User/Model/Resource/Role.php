@@ -60,7 +60,6 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @return void
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -74,6 +73,8 @@ class Role extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Define main table
+     *
+     * @return void
      */
     protected function _construct()
     {

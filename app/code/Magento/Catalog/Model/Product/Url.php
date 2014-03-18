@@ -53,11 +53,9 @@ class Url extends \Magento\Object
     protected $_urlRewrite;
 
     /**
-     * Catalog product url
-     *
-     * @var \Magento\Catalog\Helper\Product\Url
+     * @var \Magento\Filter\FilterManager
      */
-    protected $_catalogProductUrl = null;
+    protected $filter;
 
     /**
      * Catalog category
@@ -85,7 +83,7 @@ class Url extends \Magento\Object
      * @param \Magento\UrlInterface $url
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Helper\Product\Url $catalogProductUrl
+     * @param \Magento\Filter\FilterManager $filter
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param array $data
      */
@@ -94,7 +92,7 @@ class Url extends \Magento\Object
         \Magento\UrlInterface $url,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Helper\Product\Url $catalogProductUrl,
+        \Magento\Filter\FilterManager $filter,
         \Magento\Session\SidResolverInterface $sidResolver,
         array $data = array()
     ) {
@@ -102,7 +100,7 @@ class Url extends \Magento\Object
         $this->_url = $url;
         $this->_storeManager = $storeManager;
         $this->_catalogCategory = $catalogCategory;
-        $this->_catalogProductUrl = $catalogProductUrl;
+        $this->filter = $filter;
         $this->_sidResolver = $sidResolver;
         parent::__construct($data);
     }
@@ -183,11 +181,7 @@ class Url extends \Magento\Object
      */
     public function formatUrlKey($str)
     {
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $this->_catalogProductUrl->format($str));
-        $urlKey = strtolower($urlKey);
-        $urlKey = trim($urlKey, '-');
-
-        return $urlKey;
+        return $this->filter->translitUrl($str);
     }
 
     /**

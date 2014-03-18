@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order;
 
 /**
  * Flat sales order collection
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order;
-
 class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
 {
     /**
@@ -61,7 +59,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Model\Resource\Helper $coreResourceHelper
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -79,6 +77,8 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
 
     /**
      * Model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -91,7 +91,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     /**
      * Add items count expr to collection select, backward capability with eav structure
      *
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @return $this
      */
     public function addItemCountExpr()
     {
@@ -135,7 +135,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      * Join table sales_flat_order_address to select for billing and shipping order addresses.
      * Create correlation map
      *
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @return $this
      */
     protected function _addAddressFields()
     {
@@ -195,11 +195,11 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     /**
      * Add field search filter to collection as OR condition
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string $field
-     * @param null|string|array $condition
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @param int|string|array|null $condition
+     * @return $this
+     *
+     * @see self::_getConditionSql for $condition
      */
     public function addFieldToSearchFilter($field, $condition = null)
     {
@@ -212,8 +212,8 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      * Specify collection select filter by attribute value
      *
      * @param array $attributes
-     * @param array|integer|string|null $condition
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @param array|int|string|null $condition
+     * @return $this
      */
     public function addAttributeToSearchFilter($attributes, $condition = null)
     {
@@ -233,8 +233,8 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     /**
      * Add filter by specified billing agreements
      *
-     * @param int|array $agreements
-     * @return \Magento\Sales\Model\Resource\Order\Collection
+     * @param int|int[] $agreements
+     * @return $this
      */
     public function addBillingAgreementsFilter($agreements)
     {
@@ -245,24 +245,6 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
                 'main_table.entity_id = sbao.order_id',
                 array())
             ->where('sbao.agreement_id IN(?)', $agreements);
-        return $this;
-    }
-
-    /**
-     * Add filter by specified recurring profile id(s)
-     *
-     * @param array|int $ids
-     * @return \Magento\Sales\Model\Resource\Order\Collection
-     */
-    public function addRecurringProfilesFilter($ids)
-    {
-        $ids = (is_array($ids)) ? $ids : array($ids);
-        $this->getSelect()
-            ->joinInner(
-                array('srpo' => $this->getTable('recurring_profile_order')),
-                'main_table.entity_id = srpo.order_id',
-                array())
-            ->where('srpo.profile_id IN(?)', $ids);
         return $this;
     }
 }

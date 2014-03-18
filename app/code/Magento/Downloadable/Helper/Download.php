@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Helper;
 
 use Magento\App\Filesystem;
@@ -185,6 +184,8 @@ class Download extends \Magento\App\Helper\AbstractHelper
 
     /**
      * Retrieve file size in bytes
+     *
+     * @return int
      */
     public function getFileSize()
     {
@@ -246,7 +247,7 @@ class Download extends \Magento\App\Helper\AbstractHelper
      *
      * @param string $resourceFile
      * @param string $linkType
-     * @return \Magento\Downloadable\Helper\Download
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function setResource($resourceFile, $linkType = self::LINK_TYPE_FILE)
@@ -268,6 +269,8 @@ class Download extends \Magento\App\Helper\AbstractHelper
 
     /**
      * Output file contents
+     *
+     * @return void
      */
     public function output()
     {

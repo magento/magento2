@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 
 /**
  * Adminhtml sales shipment comment view block
@@ -32,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Invoice\View;
-
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**

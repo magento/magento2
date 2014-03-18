@@ -23,20 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
 /**
  * Subtotal Total Row Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
-
 class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
     //protected $_template = 'tax/checkout/subtotal.phtml';
 
     /**
+     * Tax config
+     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -63,6 +63,11 @@ class Discount extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
         parent::__construct($context, $sessionQuote, $orderCreate, $salesData, $salesConfig, $data);
     }
 
+    /**
+     * Display both
+     *
+     * @return bool
+     */
     public function displayBoth()
     {
         return $this->_taxConfig->displayCartSubtotalBoth();

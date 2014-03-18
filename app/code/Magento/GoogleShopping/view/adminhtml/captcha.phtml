@@ -26,11 +26,9 @@
 ?>
 
 <?php if ($this->getGcontentCaptchaToken() && $this->getGcontentCaptchaUrl()): ?>
-<ul class="messages">
-    <li class="error-msg">
-        <ul>
-            <li><img src="<?php echo $this->getGcontentCaptchaUrl() ?>"> <input type="text" id="user_confirm"> <?php echo $this->getConfirmButtonHtml() ?></li>
-        </ul>
-    </li>
-</ul>
+<div class="messages">
+    <div class="message error">
+        <div><img src="<?php echo $this->getGcontentCaptchaUrl() ?>"> <input type="text" id="user_confirm"> <?php echo $this->getConfirmButtonHtml() ?></div>
+    </div>
+</div>
 <?php endif; ?>

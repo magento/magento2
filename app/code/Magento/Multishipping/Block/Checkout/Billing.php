@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Multishipping\Block\Checkout;
 
 /**
  * Multishipping billing information
@@ -31,8 +32,6 @@
  * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class Billing extends \Magento\Payment\Block\Form\Container
 {
     /**
@@ -53,6 +52,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
@@ -61,6 +61,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
@@ -69,12 +70,14 @@ class Billing extends \Magento\Payment\Block\Form\Container
         $this->_multishipping = $multishipping;
         $this->_checkoutSession = $checkoutSession;
         $this->paymentSpecification = $paymentSpecification;
-        parent::__construct($context, $paymentHelper, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
         $this->_isScopePrivate = true;
     }
 
     /**
      * Prepare children blocks
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {

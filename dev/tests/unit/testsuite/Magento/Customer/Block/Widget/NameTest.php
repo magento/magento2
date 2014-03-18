@@ -24,9 +24,10 @@
 
 namespace Magento\Customer\Block\Widget;
 
-use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Service\V1\Data\CustomerBuilder;
 use Magento\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata;
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
@@ -73,12 +74,17 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->_escaper));
 
         $addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
-        $this->_metadataService = $this->getMockForAbstractClass(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
-        );
+
+        $this->_metadataService = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerMetadataService')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_metadataService->expects($this->any())
+            ->method('getCustomCustomerAttributeMetadata')
+            ->will($this->returnValue([]));
+
         $this->_customerHelper = $this->getMock('Magento\Customer\Helper\Data', [], [], '', false);
         $this->_attributeMetadata = $this->getMock(
-            'Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata',
+            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
             [],
             [],
             '',
@@ -180,7 +186,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
          * special characters so that the escapeHtml() method returns a htmlspecialchars translated value.
          */
-        $customer = new Customer([Customer::PREFIX => '  <' . self::PREFIX . '>  ']);
+        $customer = (new CustomerBuilder($this->_metadataService))->setPrefix('  <' . self::PREFIX . '>  ')->create();
+
         $this->_block->setObject($customer);
 
         $prefixOptions = [
@@ -202,7 +209,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPrefixOptionsEmpty()
     {
-        $customer = new Customer([Customer::PREFIX => self::PREFIX]);
+        $customer = (new CustomerBuilder($this->_metadataService))->setPrefix(self::PREFIX)->create();
         $this->_block->setObject($customer);
 
         $this->_customerHelper
@@ -217,7 +224,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
          * a properly htmlspecialchars translated value is returned.
          */
-        $customer = new Customer([Customer::SUFFIX => '  <' . self::SUFFIX . '>  ']);
+        $customer = (new CustomerBuilder($this->_metadataService))->setSuffix('  <' . self::SUFFIX . '>  ')->create();
         $this->_block->setObject($customer);
 
         $suffixOptions = [
@@ -237,7 +244,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuffixOptionsEmpty()
     {
-        $customer = new Customer([Customer::SUFFIX => self::SUFFIX]);
+        $customer = (new CustomerBuilder($this->_metadataService))->setSuffix('  <' . self::SUFFIX . '>  ')->create();
         $this->_block->setObject($customer);
 
         $this->_customerHelper
@@ -342,7 +349,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     private function _setUpShowAttribute(array $data)
     {
-        $customer = new Customer($data);
+        $customer = (new CustomerBuilder($this->_metadataService))->populateWithArray($data)->create();
 
         /**
          * These settings cause the first code path in Name::_getAttribute() to be executed, which

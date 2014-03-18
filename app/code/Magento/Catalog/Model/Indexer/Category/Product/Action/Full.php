@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
 class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -64,6 +63,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * Remove unnecessary data
+     *
+     * @return void
      */
     protected function removeUnnecessaryData()
     {
@@ -76,6 +77,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * Publish data from tmp to index
+     *
+     * @return void
      */
     protected function publishData()
     {
@@ -98,6 +101,8 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * Clear all index data
+     *
+     * @return void
      */
     protected function clearTmpData()
     {

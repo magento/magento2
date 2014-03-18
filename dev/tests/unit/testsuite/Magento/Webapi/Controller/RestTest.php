@@ -51,12 +51,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\App\State */
     protected $_appStateMock;
 
-    /** @var \Magento\Oauth\Oauth */
-    protected $_oauthServiceMock;
-
-    /** @var \Magento\Oauth\Helper\Request */
-    protected $_oauthHelperMock;
-
     /** @var \Magento\Authz\Service\AuthorizationV1Interface */
     protected $_authzServiceMock;
 
@@ -98,17 +92,16 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_oauthServiceMock = $this->getMockBuilder('Magento\Oauth\Oauth')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->_oauthHelperMock = $this->getMockBuilder('Magento\Oauth\Helper\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->_authzServiceMock = $this->getMockBuilder('Magento\Authz\Service\AuthorizationV1Interface')
             ->disableOriginalConstructor()
             ->getMock();
+
+        /** @var $applicationMock \Magento\AppInterface */
+        $applicationMock = $this->getMockBuilder('Magento\AppInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layoutMock = $this->getMockBuilder('Magento\View\LayoutInterface')->disableOriginalConstructor()->getMock();
+        $applicationMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
 
         $errorProcessorMock = $this->getMock('Magento\Webapi\Controller\ErrorProcessor', [], [], '', false);
         $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
@@ -117,17 +110,19 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $serializer = $objectManager->getObject('Magento\Webapi\Controller\ServiceArgsSerializer');
 
         /** Init SUT. */
-        $this->_restController = new \Magento\Webapi\Controller\Rest(
-            $this->_requestMock,
-            $this->_responseMock,
-            $this->_routerMock,
-            $this->_objectManagerMock,
-            $this->_appStateMock,
-            $this->_oauthServiceMock,
-            $this->_oauthHelperMock,
-            $this->_authzServiceMock,
-            $serializer,
-            $errorProcessorMock
+        $this->_restController = $objectManager->getObject(
+            'Magento\Webapi\Controller\Rest',
+            [
+                'request' => $this->_requestMock,
+                'response' => $this->_responseMock,
+                'router' => $this->_routerMock,
+                'objectManager' => $this->_objectManagerMock,
+                'appState' => $this->_appStateMock,
+                'application' => $applicationMock,
+                'authorizationService' => $this->_authzServiceMock,
+                'serializer' => $serializer,
+                'errorProcessor' => $errorProcessorMock
+            ]
         );
 
         // Set default expectations used by all tests
@@ -144,19 +139,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
 
         parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        unset($this->_restController);
-        unset($this->_requestMock);
-        unset($this->_responseMock);
-        unset($this->_routerMock);
-        unset($this->_objectManagerMock);
-        unset($this->_oauthServiceMock);
-        unset($this->_oauthHelperMock);
-        unset($this->_appStateMock);
-        parent::tearDown();
     }
 
     /**

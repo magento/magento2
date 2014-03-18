@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview;
 
 class Processor implements ProcessorInterface
@@ -56,6 +55,7 @@ class Processor implements ProcessorInterface
      * Materialize all views by group (all views if empty)
      *
      * @param string $group
+     * @return void
      */
     public function update($group = '')
     {
@@ -68,6 +68,7 @@ class Processor implements ProcessorInterface
      * Clear all views' changelogs by group (all views if empty)
      *
      * @param string $group
+     * @return void
      */
     public function clearChangelog($group = '')
     {

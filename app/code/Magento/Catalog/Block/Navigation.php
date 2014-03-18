@@ -124,6 +124,9 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->addData(array(

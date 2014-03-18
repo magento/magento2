@@ -28,7 +28,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\ObjectManager | \PHPUnit_Framework_MockObject_MockObject */
     private $_objectManager;
 
-    /** @var \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata | \PHPUnit_Framework_MockObject_MockObject */
     private $_attributeMetadata;
 
     /** @var string */
@@ -41,7 +41,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = $this->getMock('Magento\ObjectManager', [], [], '', false);
         $this->_attributeMetadata =
-            $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', [], [], '', false);
+            $this->getMock('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata', [], [], '', false);
         $this->_elementFactory = new ElementFactory($this->_objectManager, new \Magento\Stdlib\String());
     }
 

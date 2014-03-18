@@ -23,6 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data;
+
+use Magento\Data\Collection\EntityFactoryInterface;
 
 /**
  * Data collection
@@ -36,10 +39,6 @@
  * TODO: Refactor use of \Magento\Option\ArrayInterface in library. Probably will be refactored while
  * moving \Magento\Core to library
  */
-namespace Magento\Data;
-
-use Magento\Data\Collection\EntityFactoryInterface;
-
 class Collection implements \IteratorAggregate, \Countable, \Magento\Option\ArrayInterface
 {
     const SORT_ORDER_ASC    = 'ASC';
@@ -203,7 +202,7 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Option\Arra
      * - array() -- get all filters
      *
      * @param string|string[] $field
-     * @return \Magento\Object|\Magento\Object[]|null
+     * @return \Magento\Object|\Magento\Object[]|void
      */
     public function getFilter($field)
     {
@@ -279,7 +278,7 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Option\Arra
         $collectionSize = (int) $this->getSize();
         if (0 === $collectionSize) {
             return 1;
-        } elseif($this->_pageSize) {
+        } elseif ($this->_pageSize) {
             return ceil($collectionSize/$this->_pageSize);
         } else {
             return 1;
@@ -612,7 +611,7 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Option\Arra
      * @return $this
      * @throws \InvalidArgumentException
      */
-    function setItemObjectClass($className)
+    public function setItemObjectClass($className)
     {
         if (!is_a($className, 'Magento\Object', true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Object');

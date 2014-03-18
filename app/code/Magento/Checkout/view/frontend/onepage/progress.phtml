@@ -33,8 +33,8 @@
         <?php if ($this->getCheckout()->getStepData('billing', 'is_show')): ?>
         <?php if ($this->isStepComplete('billing')): ?>
             <dt class="complete">
-                <?php echo __('Billing Address') ?> <span class="separator">|</span>
-                <a href="#billing" data-goto-section="billing"><?php echo __('Change') ?></a>
+                <?php echo __('Billing Address') ?>
+                <a href="#billing" data-goto-section="billing" class="action billing"><?php echo __('Change') ?></a>
             </dt>
             <dd class="complete">
                 <address><?php echo $this->getBilling()->format('html') ?></address>
@@ -49,8 +49,8 @@
         <?php if ($this->getCheckout()->getStepData('shipping', 'is_show')): ?>
         <?php if ($this->isStepComplete('shipping')): ?>
             <dt class="complete">
-                <?php echo __('Shipping Address') ?> <span class="separator">|</span>
-                <a href="#payment" data-goto-section="shipping"><?php echo __('Change') ?></a>
+                <?php echo __('Shipping Address') ?>
+                <a href="#payment" data-goto-section="shipping" class="action shipping address"><?php echo __('Change') ?></a>
             </dt>
             <dd class="complete">
                 <address><?php echo $this->getShipping()->format('html') ?></address>
@@ -65,8 +65,8 @@
         <?php if ($this->getCheckout()->getStepData('shipping_method', 'is_show')): ?>
         <?php if ($this->isStepComplete('shipping_method')): ?>
             <dt class="complete">
-                <?php echo __('Shipping Method') ?> <span class="separator">|</span>
-                <a href="#shipping_method" data-goto-section="shipping_method"><?php echo __('Change') ?></a>
+                <?php echo __('Shipping Method') ?>
+                <a href="#shipping_method" data-goto-section="shipping_method" class="action shipping method"><?php echo __('Change') ?></a>
             </dt>
             <dd class="complete">
                 <?php if ($this->getShippingMethod()): ?>
@@ -97,8 +97,8 @@
         <?php if ($this->getCheckout()->getStepData('payment', 'is_show')): ?>
         <?php if ($this->isStepComplete('payment')): ?>
             <dt class="complete">
-                <?php echo __('Payment Method') ?> <span class="separator">|</span>
-                <a href="#payment" data-goto-section="payment"><?php echo __('Change') ?></a>
+                <?php echo __('Payment Method') ?>
+                <a href="#payment" data-goto-section="payment" class="action payment method"><?php echo __('Change') ?></a>
             </dt>
             <dd class="complete">
                 <?php echo $this->getPaymentHtml() ?>

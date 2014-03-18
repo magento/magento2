@@ -36,5 +36,8 @@ namespace Magento\Convert\Mapper;
 
 interface MapperInterface
 {
+    /**
+     * @return $this
+     */
     public function map();
 }

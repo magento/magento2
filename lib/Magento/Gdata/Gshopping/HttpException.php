@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Gdata\Gshopping;
 
 /**
  * \Exception class parse google responses to human readble format
@@ -30,8 +31,6 @@
  * @category    Magento
  * @package     Magento_Gdata
  */
-namespace Magento\Gdata\Gshopping;
-
 class HttpException extends \Zend_Gdata_App_HttpException
 {
     /**
@@ -146,7 +145,7 @@ class HttpException extends \Zend_Gdata_App_HttpException
      * Parse error response XML and fill arrays of codes and messages.
      *
      * @param \Zend_Http_Response $response
-     * @return $this
+     * @return $this|void
      */
     protected function _parseResponse($response)
     {

@@ -83,5 +83,16 @@ return array(
     ),
     'arbitrary_one' => 'Overridden Value One',
     'arbitrary_two' => 'Value Two',
+    'huge_nested_level' => array(
+        'level_one' => array(
+            'level_two' => array(
+                'level_three' => array(
+                    'level_four' => array(
+                        'level_five' => 'Level Five Data',
+                    )
+                )
+            )
+        )
+    ),
     'arbitrary_new' => 'Value New',
 );

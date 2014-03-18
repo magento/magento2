@@ -23,7 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Convert\Container;
 
+use Magento\Convert\ConvertException;
 
 /**
  * Convert container abstract
@@ -32,10 +34,6 @@
  * @package    Magento_Convert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Convert\Container;
-
-use Magento\Convert\ConvertException;
-
 abstract class AbstractContainer
 {
     /**
@@ -56,7 +54,7 @@ abstract class AbstractContainer
     /**
      * @param string $key
      * @param string|null $default
-     * @return array
+     * @return string
      */
     public function getVar($key, $default=null)
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Adminhtml catalog product bundle items tab block
@@ -31,13 +32,17 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
-
 class Bundle extends \Magento\Backend\Block\Widget
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * @var mixed
+     */
     protected $_product = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/bundle.phtml';
 
     /**
@@ -61,11 +66,17 @@ class Bundle extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getTabUrl()
     {
         return $this->getUrl('adminhtml/bundle_product_edit/form', array('_current' => true));
     }
 
+    /**
+     * @return string
+     */
     public function getTabClass()
     {
         return 'ajax';
@@ -74,7 +85,7 @@ class Bundle extends \Magento\Backend\Block\Widget
     /**
      * Prepare layout
      *
-     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -103,41 +114,65 @@ class Bundle extends \Magento\Backend\Block\Widget
         return $this->getProduct()->getCompositeReadonly();
     }
 
+    /**
+     * @return string
+     */
     public function getAddButtonHtml()
     {
         return $this->getChildHtml('add_button');
     }
 
+    /**
+     * @return string
+     */
     public function getOptionsBoxHtml()
     {
         return $this->getChildHtml('options_box');
     }
 
+    /**
+     * @return string
+     */
     public function getFieldSuffix()
     {
         return 'product';
     }
 
+    /**
+     * @return mixed
+     */
     public function getProduct()
     {
         return $this->_coreRegistry->registry('product');
     }
 
+    /**
+     * @return string
+     */
     public function getTabLabel()
     {
         return __('Bundle Items');
     }
 
+    /**
+     * @return string
+     */
     public function getTabTitle()
     {
         return __('Bundle Items');
     }
 
+    /**
+     * @return bool
+     */
     public function canShowTab()
     {
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function isHidden()
     {
         return false;

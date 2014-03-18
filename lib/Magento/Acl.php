@@ -42,6 +42,9 @@ class Acl extends \Zend_Acl
      */
     const RULE_PERM_ALLOW = 2;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->_roleRegistry = new \Magento\Acl\Role\Registry();

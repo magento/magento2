@@ -74,7 +74,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setTaxClassId('none')
     ->setDescription('description')
     ->setShortDescription('short description')
-    ->setEnableGooglecheckout(false)
     ->setOptionsContainer('container1')
     ->setMsrpEnabled(
         \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type\Enabled::MSRP_ENABLE_YES

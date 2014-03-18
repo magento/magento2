@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
 abstract class AbstractAction
@@ -120,6 +119,8 @@ abstract class AbstractAction
 
     /**
      * Run reindexation
+     *
+     * @return void
      */
     protected function reindex()
     {
@@ -322,6 +323,7 @@ abstract class AbstractAction
      * Reindex products of non anchor categories
      *
      * @param \Magento\Core\Model\Store $store
+     * @return void
      */
     protected function reindexNonAnchorCategories(\Magento\Core\Model\Store $store)
     {
@@ -468,6 +470,7 @@ abstract class AbstractAction
      * Reindex products of anchor categories
      *
      * @param \Magento\Core\Model\Store $store
+     * @return void
      */
     protected function reindexAnchorCategories(\Magento\Core\Model\Store $store)
     {
@@ -586,6 +589,7 @@ abstract class AbstractAction
      * Reindex all products to root category
      *
      * @param \Magento\Core\Model\Store $store
+     * @return void
      */
     protected function reindexRootCategory(\Magento\Core\Model\Store $store)
     {

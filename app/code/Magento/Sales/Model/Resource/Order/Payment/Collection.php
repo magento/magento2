@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order\Payment;
 
 /**
  * Flat sales order payment collection
  */
-namespace Magento\Sales\Model\Resource\Order\Payment;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**
@@ -56,7 +55,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Payment\Method\Converter $converter
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -73,7 +72,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     }
 
     /**
-     * Model initialization
+     * Model initialization\
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -83,7 +84,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     /**
      * Unserialize additional_information in each item
      *
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {

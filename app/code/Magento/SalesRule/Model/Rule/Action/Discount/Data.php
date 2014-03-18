@@ -48,6 +48,9 @@ class Data
      */
     protected $baseOriginalAmount;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->setAmount(0);

@@ -53,6 +53,25 @@
         <arguments>
             <argument name="typeSwitcherLabel" xsi:type="string">Virtual</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
+            <argument name="reindexPriceIndexerData" xsi:type="array">
+                <item name="byDataResult" xsi:type="array">
+                    <item name="group_price_changed" xsi:type="string">group_price_changed</item>
+                    <item name="tier_price_changed" xsi:type="string">tier_price_changed</item>
+                </item>
+                <item name="byDataChange" xsi:type="array">
+                    <item name="status" xsi:type="string">status</item>
+                    <item name="price" xsi:type="string">price</item>
+                    <item name="special_price" xsi:type="string">special_price</item>
+                    <item name="special_from_date" xsi:type="string">special_from_date</item>
+                    <item name="special_to_date" xsi:type="string">special_to_date</item>
+                    <item name="website_ids" xsi:type="string">website_ids</item>
+                    <item name="msrp" xsi:type="string">msrp</item>
+                    <item name="msrp_enabled" xsi:type="string">msrp_enabled</item>
+                    <item name="msrp_display_actual_price_type" xsi:type="string">msrp_display_actual_price_type</item>
+                    <item name="gift_wrapping_price" xsi:type="string">gift_wrapping_price</item>
+                    <item name="tax_class_id" xsi:type="string">tax_class_id</item>
+                </item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
@@ -141,6 +160,9 @@
             <argument name="flatIndexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Core\Model\Resource\Website">
+        <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
+    </type>
     <type name="Magento\Core\Model\Resource\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
@@ -151,13 +173,31 @@
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
     </type>
+    <type name="Magento\Customer\Model\Resource\Group">
+        <plugin name="invalidatePriceIndexerOnCustomerGroup" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup"/>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Plugin\AbstractPlugin">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Indexer\Model\Config\Data">
-        <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData" disabled="true"/>
-        <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData" disabled="true"/>
+        <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData" />
+        <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData" />
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Flat">
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
+        <arguments>
+            <argument name="defaultPriceIndexer" xsi:type="string">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup">
@@ -167,11 +207,12 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Flat\Processor">
         <arguments>
-            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
+            <argument name="indexer" xsi:type="object" shared="true">Magento\Indexer\Model\Indexer</argument>
         </arguments>
     </type>
     <type name="Magento\ImportExport\Model\Import">
         <plugin name="catalogProductFlatIndexerImport" type="\Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Import" />
+        <plugin name="invalidatePriceIndexerOnImport" type="\Magento\Catalog\Model\Indexer\Product\Price\Plugin\Import" />
     </type>
     <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
         <arguments>
@@ -235,6 +276,11 @@
     <type name="Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder">
         <arguments>
             <argument name="tableData" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Flat\TableData</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price\Processor">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
     </type>
 </config>

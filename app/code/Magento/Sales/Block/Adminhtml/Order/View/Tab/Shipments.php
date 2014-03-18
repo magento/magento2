@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order Shipments grid
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
-
 class Shipments
     extends \Magento\Backend\Block\Widget\Grid\Extended
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
@@ -41,6 +40,8 @@ class Shipments
     protected $_coreRegistry = null;
 
     /**
+     * Collection factory
+     *
      * @var \Magento\Sales\Model\Resource\Order\Collection\Factory
      */
     protected $_collectionFactory;
@@ -64,6 +65,11 @@ class Shipments
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -81,6 +87,11 @@ class Shipments
         return 'Magento\Sales\Model\Resource\Order\Shipment\Grid\Collection';
     }
 
+    /**
+     * Apply sorting and filtering to collection
+     *
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create($this->_getCollectionClass())
@@ -95,6 +106,11 @@ class Shipments
         return parent::_prepareCollection();
     }
 
+    /**
+     * Initialize grid columns
+     *
+     * @return $this
+     */
     protected function _prepareColumns()
     {
         $this->addColumn('increment_id', array(
@@ -140,6 +156,12 @@ class Shipments
         return $this->_coreRegistry->registry('current_order');
     }
 
+    /**
+     * Row URL getter
+     *
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function getRowUrl($row)
     {
         return $this->getUrl(
@@ -150,6 +172,11 @@ class Shipments
          ));
     }
 
+    /**
+     * Grid URL getter
+     *
+     * @return string
+     */
     public function getGridUrl()
     {
         return $this->getUrl('sales/*/shipments', array('_current' => true));
@@ -158,16 +185,26 @@ class Shipments
     /**
      * ######################## TAB settings #################################
      */
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTabLabel()
     {
         return __('Shipments');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTabTitle()
     {
         return __('Order Shipments');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function canShowTab()
     {
         if ($this->getOrder()->getIsVirtual()) {
@@ -176,6 +213,9 @@ class Shipments
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isHidden()
     {
         return false;

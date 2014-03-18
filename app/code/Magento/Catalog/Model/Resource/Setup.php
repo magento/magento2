@@ -50,7 +50,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
 
     /**
      * @param \Magento\Eav\Model\Entity\Setup\Context $context
-     * @param $resourceName
+     * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
@@ -719,28 +719,6 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                         'visible'                    => false,
                         'apply_to'                   => 'simple,virtual',
                         'group'                      => 'Prices',
-                    ),
-                    'is_recurring'       => array(
-                        'type'                       => 'int',
-                        'label'                      => 'Enable Recurring Profile',
-                        'input'                      => 'select',
-                        'source'                     => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean',
-                        'required'                   => false,
-                        'note'                       =>
-                            'Products with recurring profile participate in catalog as nominal items.',
-                        'sort_order'                 => 1,
-                        'apply_to'                   => 'simple,virtual',
-                        'group'                      => 'Recurring Profile',
-                    ),
-                    'recurring_profile'  => array(
-                        'type'                       => 'text',
-                        'label'                      => 'Recurring Payment Profile',
-                        'input'                      => 'text',
-                        'backend'                    => 'Magento\Catalog\Model\Product\Attribute\Backend\Recurring',
-                        'required'                   => false,
-                        'sort_order'                 => 2,
-                        'apply_to'                   => 'simple,virtual',
-                        'group'                      => 'Recurring Profile',
                     ),
                     'visibility'         => array(
                         'type'                       => 'int',

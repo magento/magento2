@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Order\Pdf\Items\Shipment;
 
 /**
@@ -75,6 +74,8 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 
     /**
      * Draw item line
+     *
+     * @return void
      */
     public function draw()
     {

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class View implements ViewInterface
@@ -47,17 +46,17 @@ class View implements ViewInterface
     protected $_translateInline;
 
     /**
-     * @var \Magento\App\ActionFlag
+     * @var ActionFlag
      */
     protected $_actionFlag;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $_response;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
@@ -68,21 +67,21 @@ class View implements ViewInterface
 
     /**
      * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\App\ResponseInterface $response
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @param \Magento\Config\ScopeInterface $configScope
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Translate\InlineInterface $translateInline
-     * @param \Magento\App\ActionFlag $actionFlag
+     * @param ActionFlag $actionFlag
      */
     public function __construct(
         \Magento\View\LayoutInterface $layout,
-        \Magento\App\RequestInterface $request,
-        \Magento\App\ResponseInterface $response,
+        RequestInterface $request,
+        ResponseInterface $response,
         \Magento\Config\ScopeInterface $configScope,
         \Magento\Event\ManagerInterface $eventManager,
         \Magento\Translate\InlineInterface $translateInline,
-        \Magento\App\ActionFlag $actionFlag
+        ActionFlag $actionFlag
     ) {
         $this->_layout = $layout;
         $this->_request = $request;

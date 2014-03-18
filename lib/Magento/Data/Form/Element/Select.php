@@ -23,6 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
+
+use Magento\Escaper;
 
 /**
  * Form select element
@@ -31,10 +34,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Escaper;
-
 class Select extends AbstractElement
 {
     /**
@@ -84,15 +83,13 @@ class Select extends AbstractElement
                         'label' => $option),
                         $value
                     );
-                }
-                elseif (is_array($option['value'])) {
+                } elseif (is_array($option['value'])) {
                     $html.='<optgroup label="'.$option['label'].'">'."\n";
                     foreach ($option['value'] as $groupItem) {
                         $html.= $this->_optionToHtml($groupItem, $value);
                     }
                     $html.='</optgroup>'."\n";
-                }
-                else {
+                } else {
                     $html.= $this->_optionToHtml($option, $value);
                 }
             }
@@ -122,8 +119,7 @@ class Select extends AbstractElement
                 $html .= $this->_optionToHtml($groupItem, $selected);
             }
             $html .='</optgroup>'."\n";
-        }
-        else {
+        } else {
             $html = '<option value="'.$this->_escape($option['value']).'"';
             $html.= isset($option['title']) ? 'title="'.$this->_escape($option['title']).'"' : '';
             $html.= isset($option['style']) ? 'style="'.$option['style'].'"' : '';

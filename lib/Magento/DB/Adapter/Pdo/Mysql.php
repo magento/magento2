@@ -281,6 +281,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Commit DB transaction
      *
      * @return $this
+     * @throws \Exception
      */
     public function commit()
     {
@@ -301,6 +302,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Rollback DB transaction
      *
      * @return $this
+     * @throws \Exception
      */
     public function rollBack()
     {
@@ -463,7 +465,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
-     * @return \Zend_Db_Statement_Pdo
+     * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
      */
     public function query($sql, $bind = array())
@@ -686,6 +688,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @param string $sql
      * @return array
+     * @throws \Exception
      */
     public function multi_query($sql)
     {
@@ -806,8 +809,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return $this
      */
     public function purgeOrphanRecords($tableName, $columnName, $refTableName, $refColumnName,
-                                       $onDelete = AdapterInterface::FK_ACTION_CASCADE)
-    {
+        $onDelete = AdapterInterface::FK_ACTION_CASCADE
+    ) {
         $onDelete = strtoupper($onDelete);
         if ($onDelete == AdapterInterface::FK_ACTION_CASCADE
             || $onDelete == AdapterInterface::FK_ACTION_RESTRICT
@@ -977,8 +980,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws \Zend_Db_Exception
      */
     public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition, $flushData = false,
-        $schemaName = null)
-    {
+        $schemaName = null
+    ) {
         if (!$this->tableColumnExists($tableName, $oldColumnName, $schemaName)) {
             throw new \Zend_Db_Exception(sprintf(
                 'Column "%s" does not exist in table "%s".',
@@ -1054,7 +1057,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($schemaName !== null) {
             $fromDbName = ' FROM ' . $this->quoteIdentifier($schemaName);
         }
-        $query = sprintf('SHOW TABLE STATUS%s LIKE %s', $fromDbName,  $this->quote($tableName));
+        $query = sprintf('SHOW TABLE STATUS%s LIKE %s', $fromDbName, $this->quote($tableName));
 
         return $this->raw_fetchRow($query);
     }
@@ -1146,7 +1149,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $tree = array();
         foreach ($this->listTables() as $table) {
-            foreach($this->getForeignKeys($table) as $key) {
+            foreach ($this->getForeignKeys($table) as $key) {
                 $tree[$table][$key['COLUMN_NAME']] = $key;
             }
         }
@@ -1180,8 +1183,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     continue;
                 }
                 $droppedKeys = array();
-                foreach($foreignKeys as $keyTable => $columns) {
-                    foreach($columns as $columnName => $keyOptions) {
+                foreach ($foreignKeys as $keyTable => $columns) {
+                    foreach ($columns as $columnName => $keyOptions) {
                         if ($table == $keyOptions['REF_TABLE_NAME'] && $column == $keyOptions['REF_COLUMN_NAME']) {
                             $this->dropForeignKey($keyTable, $keyOptions['FK_NAME']);
                             $droppedKeys[] = $keyOptions;
@@ -2542,11 +2545,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $indexType     the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
-     * @throws \Zend_Db_Exception|Exception
+     * @throws \Zend_Db_Exception
+     * @throws \Exception
      */
     public function addIndex($tableName, $indexName, $fields,
-        $indexType = AdapterInterface::INDEX_TYPE_INDEX, $schemaName = null)
-    {
+        $indexType = AdapterInterface::INDEX_TYPE_INDEX, $schemaName = null
+    ) {
         $columns = $this->describeTable($tableName, $schemaName);
         $keyList = $this->getIndexList($tableName, $schemaName);
 
@@ -2663,8 +2667,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function addForeignKey($fkName, $tableName, $columnName, $refTableName, $refColumnName,
         $onDelete = AdapterInterface::FK_ACTION_CASCADE,
         $onUpdate = AdapterInterface::FK_ACTION_CASCADE,
-        $purge = false, $schemaName = null, $refSchemaName = null)
-    {
+        $purge = false, $schemaName = null, $refSchemaName = null
+    ) {
         $this->dropForeignKey($tableName, $fkName, $schemaName);
 
         if ($purge) {
@@ -3197,14 +3201,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param  int $maxCharacters
      * @return string
      */
-     protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
-     {
+    protected function _minusSuperfluous($hash, $prefix, $maxCharacters)
+    {
          $diff        = strlen($hash) + strlen($prefix) -  $maxCharacters;
          $superfluous = $diff / 2;
          $odd         = $diff % 2;
          $hash        = substr($hash, $superfluous, - ($superfluous + $odd));
          return $hash;
-     }
+    }
 
     /**
      * Retrieve valid table name
@@ -3353,7 +3357,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Select $select
      * @param string $table     insert into table
      * @param array $fields
-     * @param int $mode
+     * @param int|false $mode
      * @return string
      */
     public function insertFromSelect(Select $select, $table, array $fields = array(), $mode = false)
@@ -3453,6 +3457,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Select $select
      * @param string|array $table
      * @return string
+     * @throws \Magento\DB\DBException
      */
     public function updateFromSelect(Select $select, $table)
     {
@@ -3801,9 +3806,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Drop trigger from database
      *
      * @param string $triggerName
-     * @param string $schemaName
-     * @throws \InvalidArgumentException
+     * @param string|null $schemaName
      * @return bool
+     * @throws \InvalidArgumentException
      */
     public function dropTrigger($triggerName, $schemaName = null)
     {

@@ -59,7 +59,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $designChange = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Core\Model\Design');
         $designChange->loadChange($storeId)->changeDesign($design);
-        $this->assertEquals('magento_blank', $design->getDesignTheme()->getThemePath());
+        $this->assertEquals('magento_plushe', $design->getDesignTheme()->getThemePath());
     }
 
     public function testCRUD()

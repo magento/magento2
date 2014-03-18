@@ -52,6 +52,7 @@ try {
  * @param \Magento\ObjectManager $objectManager
  * @param string $table
  * @param string $col
+ * @return void
  */
 function updateFieldForTable($objectManager, $table, $col)
 {
@@ -97,6 +98,7 @@ function updateFieldForTable($objectManager, $table, $col)
  * Print array of messages
  *
  * @param array $logMessages
+ * @return void
  */
 function printLog($logMessages)
 {

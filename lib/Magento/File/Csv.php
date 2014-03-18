@@ -23,14 +23,13 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
- 
+namespace Magento\File;
+
 /**
  * Csv parse
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\File;
-
 class Csv
 {
     /**
@@ -47,8 +46,11 @@ class Csv
      * @var string
      */
     protected $_enclosure = '"';
-    
-    public function __construct() 
+
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
         
     }
@@ -94,6 +96,7 @@ class Csv
      *
      * @param   string $file
      * @return  array
+     * @throws \Exception
      */
     public function getData($file)
     {
@@ -123,9 +126,9 @@ class Csv
         $data = array();
         $csvData = $this->getData($file);
         foreach ($csvData as $rowData) {
-        	if (isset($rowData[$keyIndex])) {
-        	    $data[$rowData[$keyIndex]] = isset($rowData[$valueIndex]) ? $rowData[$valueIndex] : null;
-        	}
+            if (isset($rowData[$keyIndex])) {
+                $data[$rowData[$keyIndex]] = isset($rowData[$valueIndex]) ? $rowData[$valueIndex] : null;
+            }
         }
         return $data;
     }
@@ -156,7 +159,8 @@ class Csv
      * @param string $enclosure
      * @return int
      */
-    public function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"') {
+    public function fputcsv(&$handle, $fields = array(), $delimiter = ',', $enclosure = '"')
+    {
         $str = '';
         $escape_char = '\\';
         foreach ($fields as $value) {
@@ -185,7 +189,7 @@ class Csv
                 $str .= $enclosure.$value.$enclosure.$delimiter;
             }
         }
-        $str = substr($str,0,-1);
+        $str = substr($str, 0, -1);
         $str .= "\n";
         return fwrite($handle, $str);
     }

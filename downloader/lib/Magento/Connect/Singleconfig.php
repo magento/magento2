@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to manipulate with channel/package cache file
@@ -31,8 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect;
-
 class Singleconfig
 {
     /**
@@ -59,7 +58,7 @@ class Singleconfig
     /**
      * Debug flag
      *
-     * @var boolean
+     * @var bool
      */
     protected $_debug = false;
 
@@ -106,7 +105,7 @@ class Singleconfig
      * Parse and return valid URL
      *
      * @param string $str
-     * @return string|boolean
+     * @return string|bool
      */
     public function getValidUri($str)
     {
@@ -130,7 +129,7 @@ class Singleconfig
     /**
      * Return formatted part of URI
      *
-     * @param  $uri
+     * @param string $uri
      * @return string
      */
     public function formatUri($uri)
@@ -155,8 +154,8 @@ class Singleconfig
     /**
      * Load cache from file
      *
-     * @param string $file
-     * @return null
+     * @param string|false $file
+     * @return void
      */
     public function load($file = false)
     {
@@ -213,7 +212,7 @@ class Singleconfig
      * Save contents
      *
      * @param string $file
-     * @return null
+     * @return void
      */
     public function save($file = false)
     {
@@ -239,7 +238,7 @@ class Singleconfig
     /**
      * Set empty config skeleton
      *
-     * @return null
+     * @return void
      */
     public function setEmptyConfig()
     {
@@ -256,7 +255,8 @@ class Singleconfig
      * @param string $chanName
      * @param \Magento\Connect\Config $config
      * @param \Magento\Connect\Rest $rest
-     * @return boolean
+     * @return bool
+     * @throws \Exception
      */
     public function checkChannel($chanName, $config, $rest = null)
     {
@@ -291,8 +291,8 @@ class Singleconfig
     /**
      * Check Channel name
      *
-     * @param  $chanName
-     * @return boolean
+     * @param string $chanName
+     * @return bool
      */
     public function isChannel($chanName)
     {
@@ -329,8 +329,8 @@ class Singleconfig
     /**
      * Is channel name?
      *
-     * @param $chanName
-     * @return boolean
+     * @param string $chanName
+     * @return bool
      */
     public function isChannelName($chanName)
     {
@@ -341,7 +341,7 @@ class Singleconfig
      * Is channel alias?
      *
      * @param string $chanName
-     * @return boolean
+     * @return bool
      */
     public function isChannelAlias($chanName)
     {
@@ -351,8 +351,8 @@ class Singleconfig
     /**
      * Is channel uri?
      *
-     * @param $uri
-     * @return boolean
+     * @param string $uri
+     * @return bool
      */
     public function isChannelUri($uri)
     {
@@ -364,7 +364,7 @@ class Singleconfig
      * Unset channel uri record
      *
      * @param string $uri
-     * @return null
+     * @return void
      */
     protected function unsetChannelUriRecord($uri)
     {
@@ -377,7 +377,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $uri
-     * @return null
+     * @return void
      */
     protected function setChannelUriRecord($chanName, $uri)
     {
@@ -401,7 +401,7 @@ class Singleconfig
      * Unset channel record
      *
      * @param string $chanName
-     * @return null
+     * @return void
      */
     protected function unsetChannelRecord($chanName)
     {
@@ -426,7 +426,7 @@ class Singleconfig
      * @param string $uri
      * @param mixed $data
      * @param array $packages
-     * @return null
+     * @return void
      */
     protected function setChannelRecord($chanName, $uri, $data, $packages = array())
     {
@@ -440,11 +440,11 @@ class Singleconfig
 
     /**
      * Set package record
-     *
      * @param string $chanName
      * @param string $packageName
-     * @param mixed $data
-     * @return null
+     * @param array $data
+     * @param string $oneField
+     * @return void
      */
     protected function setPackageRecord($chanName, $packageName, $data, $oneField = null)
     {
@@ -455,14 +455,12 @@ class Singleconfig
         }
     }
 
-
-
     /**
      * Unset package record
      *
      * @param string $chanName
      * @param string $packageName
-     * @return null
+     * @return void
      */
     protected function unsetPackageRecord($chanName, $packageName)
     {
@@ -474,6 +472,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $packageName
+     * @param string $field
      * @return array
      */
     protected function fetchPackage($chanName, $packageName, $field = null)
@@ -490,7 +489,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $packageName
-     * @return boolean
+     * @return bool
      */
     protected function hasPackageRecord($chanName, $packageName)
     {
@@ -512,7 +511,7 @@ class Singleconfig
      *
      * @param string $alias
      * @param string $chanName
-     * @return null
+     * @return void
      */
     protected function setChannelAlias($alias, $chanName)
     {
@@ -523,7 +522,7 @@ class Singleconfig
      * Unset channel alias
      *
      * @param string $alias
-     * @return null
+     * @return void
      */
     protected function unsetChannelAlias($alias)
     {
@@ -534,7 +533,7 @@ class Singleconfig
      * Clear all aliases of channel
      *
      * @param string $chanName channel name
-     * @return null
+     * @return void
      */
     protected function clearAliases($chanName)
     {
@@ -551,7 +550,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $alias
-     * @return null
+     * @return void
      */
     public function addChannelAlias($chanName, $alias)
     {
@@ -572,7 +571,7 @@ class Singleconfig
      * @param string $chanName
      * @param string $uri
      * @param array $data
-     * @return null
+     * @return void
      */
     public function addChannel($chanName, $uri, $data = array())
     {
@@ -595,7 +594,7 @@ class Singleconfig
      * Delete channel
      *
      * @param string $chanName
-     * @return null
+     * @return void
      */
     public function deleteChannel($chanName)
     {
@@ -638,7 +637,7 @@ class Singleconfig
      * Return Channel URI
      *
      * @param string $chan
-     * @return null
+     * @return void
      */
     public function chanUrl($chan)
     {
@@ -653,7 +652,7 @@ class Singleconfig
      * Add package
      *
      * @param \Magento\Connect\Package $package
-     * @return null
+     * @return void
      */
     public function addPackage($package)
     {
@@ -677,7 +676,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $package
-     * @return null
+     * @return void
      */
     public function deletePackage($chanName, $package)
     {
@@ -705,10 +704,10 @@ class Singleconfig
     /**
      * Retrieve Package object
      *
-     * @throws \Exception
      * @param string $chanName
      * @param string $package
      * @return \Magento\Connect\Package
+     * @throws \Exception
      */
     public function getPackageObject($chanName, $package)
     {
@@ -725,9 +724,9 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $package
-     * @param string $versionMin
-     * @param string $versionMax
-     * @return boolean
+     * @param string|false $versionMin
+     * @param string|false $versionMax
+     * @return bool
      */
     public function hasPackage($chanName, $package, $versionMin = false, $versionMax = false)
     {
@@ -744,7 +743,7 @@ class Singleconfig
      * Check whether package installed or not. Return package if it installed
      *
      * @param string $package package name
-     * @return array|boolean
+     * @return array|bool
      */
     public function isPackageInstalled($package)
     {
@@ -764,7 +763,7 @@ class Singleconfig
      * @param string $version
      * @param string $versionMin
      * @param string $versionMax
-     * @return boolean
+     * @return bool
      */
     public function versionInRange($version, $versionMin = false, $versionMax = false)
     {
@@ -781,6 +780,13 @@ class Singleconfig
         return $minOk && $maxOk;
     }
 
+    /**
+     * @param string $min1
+     * @param string $max1
+     * @param string $min2
+     * @param string $max2
+     * @return bool
+     */
     public function hasVersionRangeIntersect($min1, $max1, $min2, $max2)
     {
         if(version_compare($min1, $min2, ">") && version_compare($max1, $max2, ">")) {
@@ -798,7 +804,7 @@ class Singleconfig
     /**
      * Clear contents to defaults and save
      *
-     * @return null
+     * @return void
      */
     public function clear()
     {
@@ -809,9 +815,9 @@ class Singleconfig
     /**
      * Output error - throw exception
      *
-     * @param $message
+     * @param string $message
      * @throws \Exception
-     * @return null
+     * @return void
      */
     protected function doError($message)
     {
@@ -836,11 +842,11 @@ class Singleconfig
     /**
      * Retrieve Release Version from Rest Data
      *
-     * @param  $restData
-     * @param string|boolean $argVersionMin
-     * @param string|boolean $argVersionMax
+     * @param array $restData
+     * @param string|false $argVersionMin
+     * @param string|false $argVersionMax
      * @param string $preferredStability
-     * @return boolean|string
+     * @return bool|string
      */
     public function detectVersionFromRestArray($restData, $argVersionMin = false, $argVersionMax = false,
         $preferredStability = 'devel')
@@ -866,7 +872,7 @@ class Singleconfig
      * @param string $chanName
      * @param string $package
      * @param mixed $data
-     * @return boolean
+     * @return bool
      */
     public function setPackageDependencies($chanName, $package, $data)
     {
@@ -884,7 +890,7 @@ class Singleconfig
      *
      * @param string $chanName
      * @param string $package
-     * @return array|boolean
+     * @return array|bool
      */
     public function getPackageDependencies($chanName, $package)
     {
@@ -901,7 +907,7 @@ class Singleconfig
      * @param string $chanName
      * @param string $package
      * @param mixed $data
-     * @return boolean
+     * @return bool
      */
     public function setDependencyInfo($chanName, $package, $data)
     {
@@ -917,9 +923,9 @@ class Singleconfig
     /**
      * Get Dependency information from package
      *
-     * @param  $chanName
-     * @param  $package
-     * @return array|boolean
+     * @param string $chanName
+     * @param string $package
+     * @return array|false
      */
     public function getDependencyInfo($chanName, $package)
     {
@@ -943,7 +949,7 @@ class Singleconfig
     /**
      * Retrieve Packages array
      *
-     * @param string|boolean $channel
+     * @param string|bool $channel
      * @return array
      */
     public function getPackagesData($channel = false)
@@ -964,7 +970,7 @@ class Singleconfig
      * @param array $deps
      * @param string $chanName
      * @param string $packageName
-     * @return boolean
+     * @return bool
      */
     public function specifiedInDependencyList($deps, $chanName, $packageName)
     {
@@ -1004,7 +1010,7 @@ class Singleconfig
     /**
      * Get Installed packages array
      *
-     * @param string $chanName
+     * @param string|false $chanName
      * @return array
      */
     public function getInstalledPackages($chanName = false)
@@ -1039,7 +1045,7 @@ class Singleconfig
      * @param string $chanName
      * @param string $packageName
      * @param string $version
-     * @return array|boolean
+     * @return array|bool
      */
     public function hasConflicts($chanName, $packageName, $version)
     {

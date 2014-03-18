@@ -1,0 +1,384 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  # 1. Grid using floated columns
+//  Full documentation about grid usage: https://github.com/clearleft/clearless#grids
+//
+//  # 1.1 One column
+//
+//  ```html
+//    <div class="clearlessgrid1 gridwrapper">
+//        <div class="grid-1">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid1 {
+    .column-wrapper();
+    > .grid-1 {
+        .column();
+        .span(12);
+        .end-column();
+    }
+}
+
+//  # 1.2 One main column and one right sidebar
+//
+//  ```html
+//    <div class="clearlessgrid2 gridwrapper">
+//        <div class="main">column</div>
+//        <div class="sidebar">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid2 {
+    .column-wrapper();
+    .main {
+        .column();
+        .span(9);
+    }
+    .sidebar {
+        .column();
+        .span(3);
+        .end-column();
+    }
+}
+
+//  # 1.3 One main column and one left sidebar
+//
+//  ```html
+//    <div class="clearlessgrid3 gridwrapper">
+//        <div class="sidebar">column</div>
+//        <div class="main">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid3 {
+    .column-wrapper();
+    .main {
+        .column();
+        .span(9);
+        .end-column();
+    }
+    .sidebar {
+        .column();
+        .span(3);
+    }
+}
+
+//  # 1.4 One main column and two sidebars
+//
+//  ```html
+//    <div class="clearlessgrid4 gridwrapper">
+//        <div class="sidebar1">column</div>
+//        <div class="main">column</div>
+//        <div class="sidebar2">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid4 {
+    .column-wrapper();
+    .main {
+        .column();
+        .span(6);
+    }
+    .sidebar1,
+    .sidebar2 {
+        .column();
+        .span(3);
+    }
+    .sidebar2 {
+        .end-column();
+    }
+}
+
+//  # 1.5 Four columns
+//
+//  ```html
+//    <div class="clearlessgrid5 gridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid5 {
+    .column-wrapper();
+    > .grid-1 {
+        .column();
+        .span(3);
+        &:last-child {
+            .end-column();
+        }
+    }
+}
+
+//  # 1.6 Six columns
+//
+//  ```html
+//    <div class="clearlessgrid6 gridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//  ```
+//
+
+.clearlessgrid6 {
+    .column-wrapper();
+    > .grid-1 {
+        .column();
+        .span(2);
+        &:last-child {
+            .end-column();
+        }
+    }
+}
+
+//  # 1.7 Twelve columns
+//
+//  ```html
+//    <div class="clearlessgrid12 gridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//    ```
+//
+
+.clearlessgrid12 {
+    .column-wrapper();
+    > .grid-1 {
+        .column();
+        .span(1);
+        &:last-child {
+            .end-column();
+        }
+    }
+}
+
+//  # 2. Grid columns using display: inline-block
+//
+//  # 2.1 One column
+//
+//  ```html
+//    <div class="inlinegrid1 inlinegridwrapper">
+//        <div class="grid-1">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid1 {
+    .inline-column-wrapper();
+    > .grid-1 {
+        .inline-column();
+        .span(12);
+        .inline-end-column();
+    }
+}
+
+//  # 2.2 One main column and two right sidebar
+//
+//  ```html
+//    <div class="inlinegrid2 inlinegridwrapper">
+//        <div class="main">column</div>
+//        <div class="sidebar">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid2 {
+    .inline-column-wrapper();
+    .main {
+        .inline-column();
+        .span(9);
+    }
+    .sidebar {
+        .inline-column();
+        .span(3);
+        .inline-end-column();
+    }
+}
+
+//  # 2.3 One main column and one left sidebar
+//
+//  ```html
+//    <div class="inlinegrid3 inlinegridwrapper">
+//        <div class="sidebar">column</div>
+//        <div class="main">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid3 {
+    .inline-column-wrapper();
+    .main {
+        .inline-column();
+        .span(9);
+        .inline-end-column();
+    }
+    .sidebar {
+        .inline-column();
+        .span(3);
+    }
+}
+
+//  # 2.4 One main column and two sidebars
+//
+//  ```html
+//    <div class="inlinegrid4 inlinegridwrapper">
+//        <div class="sidebar1">column</div>
+//        <div class="main">column</div>
+//        <div class="sidebar2">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid4 {
+    .inline-column-wrapper();
+    .main {
+        .inline-column();
+        .span(6);
+    }
+    .sidebar1,
+    .sidebar2 {
+        .inline-column();
+        .span(3);
+    }
+    .sidebar2 {
+        .inline-end-column();
+    }
+}
+
+//  # 2.5 Four columns
+//
+//  ```html
+//    <div class="inlinegrid5 inlinegridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid5 {
+    .inline-column-wrapper();
+    > .grid-1 {
+        .inline-column();
+        .span(3);
+        &:last-child {
+            .inline-end-column();
+        }
+    }
+}
+
+//  # 2.6 Six columns
+//
+//  ```html
+//    <div class="inlinegrid6 inlinegridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid6 {
+    .inline-column-wrapper();
+    > .grid-1 {
+        .inline-column();
+        .span(2);
+        &:last-child {
+            .inline-end-column();
+        }
+    }
+}
+
+//  # 2.7 Twelve columns
+//
+//  ```html
+//    <div class="inlinegrid12 inlinegridwrapper">
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//        <div class="grid-1">column</div>
+//    </div>
+//    ```
+//
+
+.inlinegrid12 {
+    .inline-column-wrapper();
+    > .grid-1 {
+        .inline-column();
+        .span(1);
+        &:last-child {
+            .inline-end-column();
+        }
+    }
+}
+
+//  #Common settings
+
+@total-columns: 12;
+@column-width: 60px;
+@gutter-width: 20px;
+
+.gridwrapper > div,
+.inlinegridwrapper > div {
+    background: #e5e5e5;
+    border: 1px solid #999;
+    padding: 5px 0;
+    text-align: center;
+    .box-sizing();
+}

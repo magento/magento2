@@ -41,7 +41,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_groupService;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder
+     * @var \Magento\Customer\Service\V1\Data\CustomerGroupBuilder
      */
     protected $_groupBuilder;
 
@@ -51,7 +51,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
-     * @param \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $groupBuilder
+     * @param \Magento\Customer\Service\V1\Data\CustomerGroupBuilder $groupBuilder
      * @param array $data
      */
     public function __construct(
@@ -60,7 +60,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Data\FormFactory $formFactory,
         \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
-        \Magento\Customer\Service\V1\Dto\CustomerGroupBuilder $groupBuilder,
+        \Magento\Customer\Service\V1\Data\CustomerGroupBuilder $groupBuilder,
         array $data = array()
     ) {
         $this->_taxCustomer = $taxCustomer;
@@ -71,6 +71,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Prepare form for render
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
@@ -80,6 +82,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create();
 
         $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        /** @var \Magento\Customer\Service\V1\Data\CustomerGroup $customerGroup */
         if (is_null($groupId)) {
             $customerGroup = $this->_groupBuilder->create();
         } else {
@@ -127,12 +130,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
 
-        // TODO: need to figure out how the DTOs can work with forms
-        $form->addValues([
-            'id'                  => $customerGroup->getId(),
-            'customer_group_code' => $customerGroup->getCode(),
-            'tax_class_id'        => $customerGroup->getTaxClassId(),
-        ]);
+        if ( $this->_backendSession->getCustomerGroupData() ) {
+            $form->addValues($this->_backendSession->getCustomerGroupData());
+            $this->_backendSession->setCustomerGroupData(null);
+        } else {
+            // TODO: need to figure out how the DATA can work with forms
+            $form->addValues([
+                'id'                  => $customerGroup->getId(),
+                'customer_group_code' => $customerGroup->getCode(),
+                'tax_class_id'        => $customerGroup->getTaxClassId(),
+            ]);
+        }
 
         $form->setUseContainer(true);
         $form->setId('edit_form');

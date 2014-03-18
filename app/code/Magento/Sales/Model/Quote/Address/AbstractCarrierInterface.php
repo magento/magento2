@@ -36,7 +36,6 @@ interface AbstractCarrierInterface
     /**
      * Collect and get rates
      *
-     * @abstract
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return \Magento\Object|bool|null
      */
@@ -55,7 +54,7 @@ interface AbstractCarrierInterface
      * Do return of shipment
      * Implementation must be in overridden method
      *
-     * @param $request
+     * @param \Magento\Object $request
      * @return \Magento\Object
      */
     public function returnOfShipment($request);
@@ -128,7 +127,7 @@ interface AbstractCarrierInterface
     /**
      *  Retrieve sort order of current carrier
      *
-     * @return mixed
+     * @return string|null
      */
     public function getSortOrder();
 
@@ -152,7 +151,7 @@ interface AbstractCarrierInterface
     /**
      * Return weight in pounds
      *
-     * @param integer Weight in someone measure
+     * @param int $weight in someone measure
      * @return float Weight in pounds
      */
     public function convertWeightToLbs($weight);
@@ -191,6 +190,7 @@ interface AbstractCarrierInterface
      * Used to call debug method from not Payment Method context
      *
      * @param mixed $debugData
+     * @return void
      */
     public function debugData($debugData);
 

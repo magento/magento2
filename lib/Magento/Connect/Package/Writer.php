@@ -85,7 +85,6 @@ class Writer
      *
      * @param array $files
      * @param string $namePackage
-     * @return $this
      */
     public function __construct($files, $namePackage='')
     {

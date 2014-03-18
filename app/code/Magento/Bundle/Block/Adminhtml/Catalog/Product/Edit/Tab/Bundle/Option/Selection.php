@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
 /**
  * Bundle selection renderer
@@ -31,11 +32,12 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
-
 class Selection
     extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/bundle/option/selection.phtml';
 
     /**
@@ -87,6 +89,8 @@ class Selection
 
     /**
      * Initialize bundle option selection block
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -118,7 +122,7 @@ class Selection
     /**
      * Prepare block layout
      *
-     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection
+     * @return $this
      */
     protected function _prepareLayout()
     {

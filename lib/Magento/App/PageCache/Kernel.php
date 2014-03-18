@@ -75,6 +75,7 @@ class Kernel
      * Modify and cache application response
      *
      * @param \Magento\App\Response\Http $response
+     * @return void
      */
     public function process(\Magento\App\Response\Http $response)
     {

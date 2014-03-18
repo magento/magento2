@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\App\RequestInterface;
@@ -49,7 +48,7 @@ class Multiselect extends Select
     public function compactValue($value)
     {
         if (is_array($value)) {
-            foreach($value as $key => $val) {
+            foreach ($value as $key => $val) {
                 $value[$key] = parent::compactValue($val);
             }
 

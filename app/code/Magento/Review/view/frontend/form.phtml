@@ -34,18 +34,29 @@
         <legend class="legend"><span><?php echo __("You're reviewing:"); ?></span><strong><?php echo $this->escapeHtml($this->getProductInfo()->getName()) ?></strong></legend><br />
         <?php if ($this->getRatings() && $this->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
-        <div class="field ratings required">
-            <label class="label"><span><?php echo __('How do you rate this product?') ?></span></label>
+        <fieldset class="field ratings vote required">
+            <legend class="label"><span><?php echo __('How do you rate this product?') ?><span></legend>
             <div class="control">
                 <div class="nested" id="product-review-table">
                     <?php foreach ($this->getRatings() as $_rating): ?>
-                        <div class="field rating">
-                            <label class="label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></span></label>
-                            <div class="control">
+                        <div class="field choice rating">
+                            <label class="label" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_rating_label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?>:</span></label>
+                            <div class="control rating vote">
                             <?php $options = $_rating->getOptions();?>
                             <?php $iterator = 1; foreach ($options as $_option): ?>
-                                <input type="radio" name="ratings[<?php echo $_rating->getId() ?>]" id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" class="radio" data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}" />
-                                <label class="rating-<?php echo $iterator; ?>" for="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" title="<?php echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>">
+                                <input 
+                                    type="radio" 
+                                    name="ratings[<?php echo $_rating->getId() ?>]" 
+                                    id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" 
+                                    value="<?php echo $_option->getId() ?>" 
+                                    class="radio" 
+                                    data-validate="{required:true, messages:{required:'Please select one of each of the ratings above.'}}"
+                                    aria-labelledby="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_rating_label <?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>_label" />
+                                <label 
+                                    class="rating-<?php echo $iterator; ?>" 
+                                    for="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" 
+                                    title="<?php echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?>"
+                                    id="<?php echo $this->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>_label">
                                     <span><?php echo __('%1 %2', $iterator, $iterator > 1 ? 'stars' : 'star') ?></span>
                                 </label>
                             <?php $iterator++; ?>
@@ -56,7 +67,7 @@
                 </div>
                 <input type="hidden" name="validate_rating" class="validate-rating" value="" />
             </div>
-        </div>
+        </fieldset>
     <?php endif ?>
         <div class="field nickname required">
             <label for="nickname_field" class="label"><span><?php echo __('Nickname') ?></span></label>

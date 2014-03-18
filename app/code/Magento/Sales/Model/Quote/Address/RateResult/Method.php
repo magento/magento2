@@ -55,7 +55,7 @@ class Method extends AbstractResult
      * Round shipping carrier's method price
      *
      * @param string|float|int $price
-     * @return \Magento\Sales\Model\Quote\Address\RateResult\Method
+     * @return $this
      */
     public function setPrice($price)
     {

@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order;
+
+use Magento\View\Element\AbstractBlock;
 
 /**
  * Order information for print
@@ -30,9 +33,6 @@
  * @category   Magento
  * @package    Magento_Sales
  */
-
-namespace Magento\Sales\Block\Order;
-
 class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
@@ -64,6 +64,9 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         if ($headBlock = $this->getLayout()->getBlock('head')) {
@@ -75,17 +78,27 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
         );
     }
 
+    /**
+     * @return string
+     */
     public function getPaymentInfoHtml()
     {
         return $this->getChildHtml('payment_info');
     }
 
+    /**
+     * @return array|null
+     */
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_order');
     }
 
-    protected function _prepareItem(\Magento\View\Element\AbstractBlock $renderer)
+    /**
+     * @param AbstractBlock $renderer
+     * @return $this
+     */
+    protected function _prepareItem(AbstractBlock $renderer)
     {
         $renderer->setPrintStatus(true);
 

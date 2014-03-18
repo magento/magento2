@@ -161,10 +161,12 @@
         <!-- Addresses forms -->
         <div data-container="address-forms" class="address-item-edit" id="address_form_container">
             <?php if(count($addressCollection)): ?>
-                <?php foreach ($addressCollection as $_address): ?>
+                <?php
+                /** @var \Magento\Customer\Service\V1\Data\Address $_address */
+                foreach ($addressCollection as $_address): ?>
                     <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>" style="display:none" data-mage-init='{"observableInputs": {"name": "address_item_<?php echo $_address->getId() ?>"}}'>
                         <?php
-                        $this->getForm()->addValues($_address->getAttributes())
+                        $this->getForm()->addValues(\Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($_address))
                             ->setHtmlIdPrefix("_item{$_address->getId()}")
                             ->setFieldNameSuffix('address['.$_address->getId().']');
                         $this->addValuesToNamePrefixElement($_address->getPrefix())

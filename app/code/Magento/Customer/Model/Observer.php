@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model;
 
 /**
  * Customer module observer
  */
-namespace Magento\Customer\Model;
-
 class Observer
 {
     /**
@@ -80,7 +79,7 @@ class Observer
     /**
      * Check whether specified billing address is default for its customer
      *
-     * @param \Magento\Customer\Model\Address $address
+     * @param Address $address
      * @return bool
      */
     protected function _isDefaultBilling($address)
@@ -92,7 +91,7 @@ class Observer
     /**
      * Check whether specified shipping address is default for its customer
      *
-     * @param \Magento\Customer\Model\Address $address
+     * @param Address $address
      * @return bool
      */
     protected function _isDefaultShipping($address)
@@ -104,7 +103,7 @@ class Observer
     /**
      * Check whether specified address should be processed in after_save event handler
      *
-     * @param \Magento\Customer\Model\Address $address
+     * @param Address $address
      * @return bool
      */
     protected function _canProcessAddress($address)
@@ -128,6 +127,7 @@ class Observer
      * Address before save event handler
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function beforeAddressSave($observer)
     {
@@ -135,7 +135,7 @@ class Observer
             $this->_coreRegistry->unregister(self::VIV_CURRENTLY_SAVED_ADDRESS);
         }
 
-        /** @var $customerAddress \Magento\Customer\Model\Address */
+        /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         if ($customerAddress->getId()) {
             $this->_coreRegistry->register(self::VIV_CURRENTLY_SAVED_ADDRESS, $customerAddress->getId());
@@ -157,10 +157,11 @@ class Observer
      * Address after save event handler
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function afterAddressSave($observer)
     {
-        /** @var $customerAddress \Magento\Customer\Model\Address */
+        /** @var $customerAddress Address */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
 
@@ -212,10 +213,11 @@ class Observer
      * Revert emulated customer group_id
      *
      * @param \Magento\Event\Observer $observer
+     * @return void
      */
     public function quoteSubmitAfter($observer)
     {
-        /** @var $customer \Magento\Customer\Model\Customer */
+        /** @var $customer Customer */
         $customer = $observer->getQuote()->getCustomer();
 
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())) {

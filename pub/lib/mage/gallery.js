@@ -47,6 +47,7 @@
             showButtons: true,
             showNotice: true,
             activeClass: 'active',
+            disableLinks: true,
             controls: {
                 thumbs: {
                     container: '[data-role=gallery-thumbs-container]',
@@ -329,7 +330,9 @@
             this[control] = $.tmpl($(options.controls[control].template), templateData);
             this._on(this[control].find('a').add(this[control]), {
                 click: function(e){
-                    e.preventDefault();
+                    if (this.options.disableLinks || !$(e.target).is("[data-role='zoom-image']")) {
+                        e.preventDefault();
+                    }
                 }
             });
             return this[control];

@@ -154,6 +154,7 @@
                 <field id="scope" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Catalog Price Scope</label>
                     <comment><![CDATA[This defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency").]]></comment>
+                    <backend_model>Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope</backend_model>
                     <source_model>Magento\Catalog\Model\Config\Source\Price\Scope</source_model>
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 </field>

@@ -25,6 +25,8 @@
  */
 namespace Magento\Translate;
 
+use Magento\BaseScopeInterface;
+
 class Inline implements \Magento\Translate\InlineInterface
 {
     /**
@@ -130,13 +132,13 @@ class Inline implements \Magento\Translate\InlineInterface
     /**
      * Is enabled and allowed Inline Translates
      *
-     * @param mixed $scope
+     * @param BaseScopeInterface|int|null $scope
      * @return bool
      */
     public function isAllowed($scope = null)
     {
         if (is_null($this->_isAllowed)) {
-            if (!$scope instanceof \Magento\BaseScopeInterface) {
+            if (!$scope instanceof BaseScopeInterface) {
                 $scope = $this->_scopeResolver->getScope($scope);
             }
 

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class for convertiong old magento PEAR packages to new one
@@ -31,11 +32,11 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 final class Converter
 {
+    /**
+     * @var \Magento\Archive
+     */
     protected $_archiver;
 
     /**
@@ -50,6 +51,9 @@ final class Converter
         return $this->_archiver;
     }
 
+    /**
+     * @return Package
+     */
     public function newPackage()
     {
         return new \Magento\Connect\Package();
@@ -64,13 +68,18 @@ final class Converter
         return new Pear_Package_Parser_v2();
     }
 
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
 
     }
 
-
+    /**
+     * @param string $channel
+     * @return string
+     */
     public function convertChannelName($channel)
     {
         return str_replace("connect.magentocommerce.com/", "", $channel);
@@ -78,8 +87,8 @@ final class Converter
 
     /**
      * Convert package dependencies - urls - by ref
-     * @param array $deps  ref to array
-     * @return void
+     * @param array $oldDeps  ref to array
+     * @return array
      */
     public function convertPackageDependencies($oldDeps)
     {
@@ -101,6 +110,10 @@ final class Converter
         return $out;
     }
 
+    /**
+     * @param array $oldLicense
+     * @return array|bool|float|int|string
+     */
     public function convertLicense($oldLicense)
     {
         if(is_scalar($oldLicense)) {
@@ -109,6 +122,10 @@ final class Converter
         return array($oldLicense['_content'], $oldLicense['attribs']['uri']);
     }
 
+    /**
+     * @param array $maintainers
+     * @return array
+     */
     public function convertMaintainers($maintainers)
     {
         if(!is_array($maintainers) || !count($maintainers)) {
@@ -121,6 +138,9 @@ final class Converter
         return $out;
     }
 
+    /**
+     * @var array
+     */
     protected $fileMap = array();
 
     
@@ -333,7 +353,4 @@ final class Converter
         }
         return $destFile;
     }
-
-
-
 }

@@ -30,7 +30,7 @@
  */
 ?>
 <?php if ($this->getCollection()->getSize()): ?>
-<div class="toolbar">
+<div class="toolbar products">
     <?php if ($this->isExpanded()): ?>
     <div class="settings">
         <?php if ($this->isEnabledViewSwitcher()): ?>
@@ -75,7 +75,7 @@
         </div>
     </div>
     <?php endif; ?>
-
+    <?php echo $this->getPagerHtml() ?>
     <div class="pager">
         <p class="amount">
             <?php if ($this->getLastPageNum() > 1): ?>
@@ -87,7 +87,7 @@
             <?php endif; ?>
         </p>
         <div class="limiter">
-            <strong class="label"><?php echo __('Show') ?></strong>
+            <label for="limiter" class="label"><?php echo __('Show') ?></label>
             <select id="limiter" data-mage-init='{"redirectUrl":{"event":"change"}}'>
                 <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
                     <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
@@ -98,7 +98,6 @@
             </select>
             <span class="text"><?php echo __('per page') ?></span>
         </div>
-        <?php echo $this->getPagerHtml() ?>
     </div>
 </div>
 <?php endif ?>

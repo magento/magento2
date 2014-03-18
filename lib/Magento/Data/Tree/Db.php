@@ -23,6 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Tree;
 
 /**
  * Data DB tree
@@ -34,8 +35,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Tree;
-
 class Db extends \Magento\Data\Tree
 {
     const ID_FIELD      = 'id';
@@ -157,7 +156,7 @@ class Db extends \Magento\Data\Tree
      *
      * @param   int|Node $parentNode
      * @param   int $recursionLevel recursion level
-     * @return  this
+     * @return  $this
      * @throws \Exception
      */
     public function load($parentNode=null, $recursionLevel=100)
@@ -165,15 +164,12 @@ class Db extends \Magento\Data\Tree
         if (is_null($parentNode)) {
             $this->_loadFullTree();
             return $this;
-        }
-        elseif ($parentNode instanceof Node) {
+        } elseif ($parentNode instanceof Node) {
             $parentId = $parentNode->getId();
-        }
-        elseif (is_numeric($parentNode)) {
+        } elseif (is_numeric($parentNode)) {
             $parentId = $parentNode;
             $parentNode = null;
-        }
-        else {
+        } else {
             throw new \Exception('root node id is not defined');
         }
 
@@ -247,8 +243,7 @@ class Db extends \Magento\Data\Tree
         // New node order
         if (is_null($prevNode) || is_null($prevNode->getData($this->_orderField))) {
             $data[$this->_orderField] = 1;
-        }
-        else {
+        } else {
             $data[$this->_orderField] = $prevNode->getData($this->_orderField)+1;
         }
         $condition = $this->_conn->quoteInto("$this->_idField=?", $node->getId());
@@ -301,7 +296,7 @@ class Db extends \Magento\Data\Tree
                 array($this->_levelField=>$parentLevel+1),
                 $this->_conn->quoteInto($this->_idField.' IN (?)', $ids));
             foreach ($ids as $id) {
-            	$this->_updateChildLevels($id, $parentLevel+1);
+                $this->_updateChildLevels($id, $parentLevel+1);
             }
         }
         return $this;

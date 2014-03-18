@@ -94,7 +94,8 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
                     ) {
                         $this->fail("Duplicate files: '{$lessSourceFile}', '{$cssSourceFile}'");
                     } elseif ($directoryRead->isExist($directoryRead->getRelativePath($lessSourceFile))) {
-                        $this->assertFileExists($lessPreProcessor->processLessInstructions($lessFile, $params));
+                        $fileList = $lessPreProcessor->processLessInstructions($lessFile, $params);
+                        $this->assertFileExists($fileList->getPublicationPath());
                     }
                 }
             },
@@ -107,6 +108,9 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
      */
     public function testViewFilesFromThemes()
     {
+        $directoryRead = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
+        /** @var $viewService \Magento\View\Service */
+        $viewService = $this->objectManager->get('Magento\View\Service');
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**
@@ -114,33 +118,52 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $area
              * @param string $themeId
              */
-            function ($file, $area, $themeId) {
+            function ($file, $area, $themeId) use ($directoryRead, $viewService) {
                 $params = array('area' => $area, 'themeId' => $themeId);
+                $file = $viewService->extractScope($file, $params);
                 $viewFile = $this->viewFileSystem->getViewFile($file, $params);
-                $this->assertFileExists($viewFile);
+                $fileInfo = pathinfo($file);
 
-                $fileParts = explode(\Magento\View\Service::SCOPE_SEPARATOR, $file);
-                if (count($fileParts) > 1) {
-                    $params['module'] = $fileParts[0];
+                $relativePath = $directoryRead->getRelativePath($viewFile);
+                if ($fileInfo['extension'] === 'css' && !$directoryRead->isExist($relativePath)) {
+                    $viewFile = $this->viewFileSystem->getViewFile(
+                        "{$fileInfo['dirname']}/{$fileInfo['filename']}.less", $params
+                    );
+                    $fileInfo['extension'] = 'less';
                 }
-                if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
-                    $files = array();
-                    $content = file_get_contents($viewFile);
-                    preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
-                    foreach ($matches[1] as $relativePath) {
-                        $path = $this->_addCssDirectory($relativePath, $file);
-                        $pathFile = $this->viewFileSystem->getViewFile($path, $params);
-                        if (!is_file($pathFile)) {
-                            $files[] = $relativePath;
-                        }
-                    }
-                    if (!empty($files)) {
-                        $this->fail('Cannot find file(s): ' . implode(', ', $files));
-                    }
+
+                if ($fileInfo['extension'] === 'css') {
+                    $this->checkCssRelatedFiles($file, $viewFile, $params);
+                } else {
+                    $this->assertFileExists($viewFile);
                 }
             },
             $this->viewFilesFromThemesDataProvider($this->_getDesignThemes())
         );
+    }
+
+    /**
+     * Checks a css content and all related files
+     *
+     * @param string $file
+     * @param string $viewFile
+     * @param array $params
+     */
+    protected function checkCssRelatedFiles($file, $viewFile, $params)
+    {
+        $files = array();
+        $content = file_get_contents($viewFile);
+        preg_match_all(\Magento\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS, $content, $matches);
+        foreach ($matches[1] as $relativePath) {
+            $path = $this->_addCssDirectory($relativePath, $file);
+            $pathFile = $this->viewFileSystem->getViewFile($path, $params);
+            if (!is_file($pathFile)) {
+                $files[] = $relativePath;
+            }
+        }
+        if (!empty($files)) {
+            $this->fail('Cannot find file(s): ' . implode(', ', $files));
+        }
     }
 
     /**

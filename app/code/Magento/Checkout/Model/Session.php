@@ -26,9 +26,9 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
+use \Magento\Customer\Service\V1\Data\CustomerBuilder;
 use Magento\Sales\Model\Quote;
-use Magento\Customer\Service\V1\Dto\Customer as CustomerDto;
-use \Magento\Customer\Service\V1\Dto\CustomerBuilder;
 
 class Session extends \Magento\Session\SessionManager
 {
@@ -45,14 +45,14 @@ class Session extends \Magento\Session\SessionManager
     protected $_quote;
 
     /**
-     * Customer DTO
+     * Customer Data Object
      *
-     * @var null|CustomerDto
+     * @var null|CustomerDataObject
      */
     protected $_customer;
 
     /**
-     * Customer DTO builder
+     * Customer Data Object  builder
      *
      * @var CustomerBuilder
      */
@@ -158,7 +158,7 @@ class Session extends \Magento\Session\SessionManager
     {
         if ($customer instanceof \Magento\Customer\Model\Customer) {
             $this->_customerBuilder->populateWithArray($customer->getData());
-            $this->_customerBuilder->setCustomerId($customer->getId());
+            $this->_customerBuilder->setId($customer->getId());
             $this->_customer = $this->_customerBuilder->create();
         } else {
             $this->_customer = $customer;
@@ -169,7 +169,7 @@ class Session extends \Magento\Session\SessionManager
     /**
      * Set customer data.
      *
-     * @param CustomerDto|null $customer
+     * @param CustomerDataObject|null $customer
      * @return \Magento\Checkout\Model\Session
      */
     public function setCustomerData($customer)
@@ -242,7 +242,7 @@ class Session extends \Magento\Session\SessionManager
             if (!$this->getQuoteId()) {
                 if ($this->_customerSession->isLoggedIn() || $this->_customer) {
                     $customerId = $this->_customer
-                        ? $this->_customer->getCustomerId()
+                        ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
                     $quote->loadByCustomer($customerId);
                     $this->setQuoteId($quote->getId());
@@ -256,7 +256,7 @@ class Session extends \Magento\Session\SessionManager
                 if ($this->_customer) {
                     $quote->setCustomerData($this->_customer);
                 } else if ($this->_customerSession->isLoggedIn()) {
-                    $quote->setCustomerData($this->_customerSession->getCustomerData());
+                    $quote->setCustomerData($this->_customerSession->getCustomerDataObject());
                 }
             }
 
@@ -330,7 +330,7 @@ class Session extends \Magento\Session\SessionManager
         } else {
             $this->getQuote()->getBillingAddress();
             $this->getQuote()->getShippingAddress();
-            $this->getQuote()->setCustomerData($this->_customerSession->getCustomerData())
+            $this->getQuote()->setCustomerData($this->_customerSession->getCustomerDataObject())
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals()
                 ->save();
@@ -424,9 +424,7 @@ class Session extends \Magento\Session\SessionManager
         $this->setRedirectUrl(null)
             ->setLastOrderId(null)
             ->setLastRealOrderId(null)
-            ->setLastRecurringProfileIds(null)
-            ->setAdditionalMessages(null)
-        ;
+            ->setAdditionalMessages(null);
     }
 
     /**

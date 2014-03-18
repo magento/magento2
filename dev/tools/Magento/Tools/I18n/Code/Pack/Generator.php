@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Pack;
 
 use Magento\Tools\I18n\Code\Dictionary;
@@ -79,6 +78,7 @@ class Generator
      * @param string $locale
      * @param string $mode One of const of WriterInterface::MODE_
      * @param bool $allowDuplicates
+     * @return void
      * @throws \RuntimeException
      */
     public function generate($dictionaryPath, $packPath, $locale, $mode = WriterInterface::MODE_REPLACE,

@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
 /**
  * Sales Order Creditmemo Pdf default items renderer
  */
-class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractItems
+class Creditmemo extends AbstractItems
 {
     /**
      * Core string
@@ -75,6 +74,8 @@ class Creditmemo extends \Magento\Bundle\Model\Sales\Order\Pdf\Items\AbstractIte
 
     /**
      * Draw item line
+     *
+     * @return void
      */
     public function draw()
     {

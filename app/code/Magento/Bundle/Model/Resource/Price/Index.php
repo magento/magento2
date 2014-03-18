@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model\Resource\Price;
 
+use Magento\Core\Model\Website;
 
 /**
  * Bundle Product Price Index Resource model
@@ -32,8 +34,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource\Price;
-
 class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -46,7 +46,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Websites cache
      *
-     * @var array
+     * @var Website[]
      */
     protected $_websites;
 
@@ -119,6 +119,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -143,7 +144,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Retrieve websites collection array
      *
-     * @return array
+     * @return Website[]
      */
     protected function _getWebsites()
     {
@@ -223,7 +224,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Reindex Bundle product Price Index
      *
      * @param \Magento\Catalog\Model\Product|\Magento\Catalog\Model\Product\Condition\ConditionInterface|array|int $products
-     * @return \Magento\Bundle\Model\Resource\Price\Index
+     * @return $this
      */
     public function reindex($products = null)
     {
@@ -248,7 +249,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param int $priceType
-     * @return \Magento\Bundle\Model\Resource\Price\Index
+     * @return $this
      */
     protected function _reindexProduct($productId, $priceType)
     {
@@ -270,7 +271,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
             $priceData = $this->getProductsPriceData($productId, $website);
             $priceData = $priceData[$productId];
 
-            /* @var $website \Magento\Core\Model\Website */
+            /* @var $website Website */
             foreach ($this->_getCustomerGroups() as $group) {
                 /* @var $group \Magento\Customer\Model\Group */
                 if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
@@ -304,7 +305,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $groupId
      * @param float $minPrice
      * @param float $maxPrice
-     * @return \Magento\Bundle\Model\Resource\Price\Index
+     * @return $this
      */
     protected function _savePriceIndex($productId, $websiteId, $groupId, $minPrice, $maxPrice)
     {
@@ -372,10 +373,10 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve salable product statuses
      *
      * @param int|array $products
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @return array
      */
-    public function getProductsSalableStatus($products, \Magento\Core\Model\Website $website)
+    public function getProductsSalableStatus($products, Website $website)
     {
         $read = $this->_getReadAdapter();
         $productsData = array();
@@ -454,10 +455,10 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve product(s) price data
      *
      * @param int|array $products
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @return array
      */
-    public function getProductsPriceData($products, \Magento\Core\Model\Website $website)
+    public function getProductsPriceData($products, Website $website)
     {
         $productsData = array();
         $read = $this->_getReadAdapter();
@@ -488,11 +489,10 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\DB\Select $select
      * @param string $attributeCode
-     * @param \Magento\Core\Model\Website $website
-     * @return \Magento\Bundle\Model\Resource\Price\Index
+     * @param Website $website
+     * @return $this
      */
-    protected function _addAttributeDataToSelect(\Magento\DB\Select $select, $attributeCode,
-        \Magento\Core\Model\Website $website)
+    protected function _addAttributeDataToSelect(\Magento\DB\Select $select, $attributeCode, Website $website)
     {
         $attribute  = $this->_getAttribute($attributeCode);
         $store      = $website->getDefaultStore();
@@ -538,7 +538,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param array $priceData
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @param \Magento\Customer\Model\Group $customerGroup
      * @return float
      */
@@ -562,10 +562,10 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve custom options for product
      *
      * @param int $productId
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @return array
      */
-    public function getCustomOptions($productId, \Magento\Core\Model\Website $website)
+    public function getCustomOptions($productId, Website $website)
     {
         $options = array();
         $store   = $website->getDefaultStore();
@@ -753,7 +753,7 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param float $basePrice
      * @param array $priceData
      * @param array $priceIndex
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @param \Magento\Customer\Model\Group $group
      * @return array
      */
@@ -833,10 +833,10 @@ class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param float $finalPrice
      * @param array $priceData
-     * @param \Magento\Core\Model\Website $website
+     * @param Website $website
      * @return float
      */
-    public function _calculateSpecialPrice($finalPrice, array $priceData, \Magento\Core\Model\Website $website)
+    public function _calculateSpecialPrice($finalPrice, array $priceData, Website $website)
     {
         $store              = $website->getDefaultStore();
         $specialPrice       = $priceData['special_price'];

@@ -37,6 +37,7 @@ class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magen
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {

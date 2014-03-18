@@ -36,7 +36,7 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
 
     /**
      * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param strng $moduleName
+     * @param string $moduleName
      */
     public function __construct(\Magento\Module\Dir\Reader $moduleReader, $moduleName)
     {

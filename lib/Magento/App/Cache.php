@@ -31,7 +31,7 @@
 
 namespace Magento\App;
 
-class Cache implements \Magento\App\CacheInterface
+class Cache implements CacheInterface
 {
     /**
      * @var string

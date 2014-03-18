@@ -28,7 +28,7 @@ namespace Magento\App\Action;
 use Magento\App\RequestInterface;
 use Magento\App\ResponseInterface;
 
-class Action extends \Magento\App\Action\AbstractAction
+class Action extends AbstractAction
 {
     const FLAG_NO_DISPATCH              = 'no-dispatch';
     const FLAG_NO_POST_DISPATCH         = 'no-postDispatch';
@@ -83,7 +83,7 @@ class Action extends \Magento\App\Action\AbstractAction
     /**
      * @param Context $context
      */
-    public function __construct(\Magento\App\Action\Context $context)
+    public function __construct(Context $context)
     {
         parent::__construct($context->getRequest(), $context->getResponse());
         $this->_objectManager     = $context->getObjectManager();
@@ -120,7 +120,7 @@ class Action extends \Magento\App\Action\AbstractAction
             $actionMethodName = $request->getActionName() . 'Action';
             $this->$actionMethodName();
             \Magento\Profiler::start('postdispatch');
-            if (!$this->_actionFlag->get('', \Magento\App\Action\Action::FLAG_NO_POST_DISPATCH)) {
+            if (!$this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
                 $this->_eventManager->dispatch(
                     'controller_action_postdispatch_' . $request->getFullActionName(),
                     $eventParameters

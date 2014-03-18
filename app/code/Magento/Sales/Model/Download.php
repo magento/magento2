@@ -67,6 +67,7 @@ class Download
      * Custom options downloader
      *
      * @param array $info
+     * @return void
      * @throws \Exception
      */
     public function downloadFile($info)

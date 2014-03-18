@@ -163,6 +163,7 @@ abstract class AbstractEav
      *
      * @param array $entityIds      the entity ids limitation
      * @param int $attributeId      the attribute id limitation
+     * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
 

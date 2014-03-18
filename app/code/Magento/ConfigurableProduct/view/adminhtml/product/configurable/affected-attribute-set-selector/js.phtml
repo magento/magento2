@@ -29,7 +29,7 @@ jQuery(function($) {
     $(function() {
         var $form = $('#affected-attribute-set-form'),
             resetValidation = function() {
-                $form.find('.messages .error-msg').hide();
+                $form.find('.messages .message.error').hide();
                 $form.find('form').validation().data('validator').resetForm();
             };
 
@@ -66,7 +66,7 @@ jQuery(function($) {
                             return;
                         }
 
-                        $form.find('.messages .error-msg').hide();
+                        $form.find('.messages .message.error').hide();
                         if (!$form.find('form').validation().valid()) {
                             $form.find('input[name=new-attribute-set-name]').focus();
                             return false;
@@ -92,7 +92,7 @@ jQuery(function($) {
                                     $form.dialog('close')
                                         .data('target').click();
                                 } else {
-                                    $form.find('.messages .error-msg').replaceWith($(data.messages).find('.error-msg'));
+                                    $form.find('.messages .message.error').replaceWith($(data.messages).find('.message.error'));
                                 }
                             });
 

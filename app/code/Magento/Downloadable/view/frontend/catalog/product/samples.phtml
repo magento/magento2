@@ -31,12 +31,12 @@
 
 <?php if ($this->hasSamples()): ?>
     <dl class="downloadable samples">
-        <dt><?php echo $this->getSamplesTitle() ?></dt>
+        <dt class="samples title"><?php echo $this->getSamplesTitle() ?></dt>
         <?php $_samples = $this->getSamples() ?>
         <?php foreach ($_samples as $_sample): ?>
-            <dd>
+            <dd class="sample item">
                 <a href="<?php echo $this->getSampleUrl($_sample) ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>
-                   class="sample">
+                   class="sample link">
                     <?php echo $this->escapeHtml($_sample->getTitle()) ?>
                 </a>
             </dd>

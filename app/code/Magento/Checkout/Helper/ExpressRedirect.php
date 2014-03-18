@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Helper;
 
 use Magento\Checkout\Controller\Express\RedirectLoginInterface as RedirectLoginInterface;
@@ -68,6 +67,7 @@ class ExpressRedirect extends \Magento\App\Helper\AbstractHelper
      * Performs redirect to login for checkout
      * @param RedirectLoginInterface $expressRedirect
      * @param string|null $customerBeforeAuthUrlDefault
+     * @return void
      */
     public function redirectLogin(RedirectLoginInterface $expressRedirect, $customerBeforeAuthUrlDefault = null)
     {

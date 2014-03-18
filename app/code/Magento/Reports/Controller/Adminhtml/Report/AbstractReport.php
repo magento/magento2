@@ -146,7 +146,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
                 \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
             );
             $updatedAt = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')
-                ->storeDate(0, $date, true);
+                ->scopeDate(0, $date, true);
         }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');

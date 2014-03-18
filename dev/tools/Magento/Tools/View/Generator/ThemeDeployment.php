@@ -23,12 +23,11 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tools\View\Generator;
 
 /**
  * Transformation of files, which must be copied to new location and its contents processed
  */
-namespace Magento\Tools\View\Generator;
-
 class ThemeDeployment
 {
     /**
@@ -69,22 +68,58 @@ class ThemeDeployment
     private $_isDryRun;
 
     /**
+     * @var \Magento\App\State
+     */
+    private $appState;
+
+    /**
+     * @var \Magento\View\Asset\PreProcessor\PreProcessorInterface
+     */
+    private $preProcessor;
+
+    /**
+     * @var \Magento\View\Publisher\FileFactory
+     */
+    private $fileFactory;
+
+    /**
+     * @var \Magento\Filesystem\Directory\WriteInterface
+     */
+    private $tmpDirectory;
+
+    /**
      * Constructor
      *
      * @param \Magento\View\Url\CssResolver $cssUrlResolver
+     * @param \Magento\App\Filesystem $filesystem
+     * @param \Magento\View\Asset\PreProcessor\PreProcessorInterface $preProcessor
+     * @param \Magento\View\Publisher\FileFactory $fileFactory
+     * @param \Magento\App\State $appState
+     * @param \Magento\Core\Model\Theme\DataFactory $themeFactory
      * @param string $destinationHomeDir
      * @param string $configPermitted
      * @param string|null $configForbidden
      * @param bool $isDryRun
      * @throws \Magento\Exception
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\View\Url\CssResolver $cssUrlResolver,
+        \Magento\App\Filesystem $filesystem,
+        \Magento\View\Asset\PreProcessor\PreProcessorInterface $preProcessor,
+        \Magento\View\Publisher\FileFactory $fileFactory,
+        \Magento\App\State $appState,
+        \Magento\Core\Model\Theme\DataFactory $themeFactory,
         $destinationHomeDir,
         $configPermitted,
         $configForbidden = null,
         $isDryRun = false
     ) {
+        $this->themeFactory = $themeFactory;
+        $this->appState = $appState;
+        $this->preProcessor = $preProcessor;
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $this->fileFactory = $fileFactory;
         $this->_cssUrlResolver = $cssUrlResolver;
         $this->_destinationHomeDir = $destinationHomeDir;
         $this->_isDryRun = $isDryRun;
@@ -123,6 +158,7 @@ class ThemeDeployment
      * Copy all the files according to $copyRules
      *
      * @param array $copyRules
+     * @return void
      */
     public function run($copyRules)
     {
@@ -156,6 +192,7 @@ class ThemeDeployment
      * @param string $sourceDir
      * @param string $destinationDir
      * @param array $context
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _copyDirStructure($sourceDir, $destinationDir, $context)
@@ -164,8 +201,33 @@ class ThemeDeployment
             new \RecursiveDirectoryIterator($sourceDir, \RecursiveDirectoryIterator::SKIP_DOTS)
         );
         foreach ($files as $fileSource) {
-            $fileSource = (string) $fileSource;
+            $fileSource = (string)$fileSource;
             $extension = strtolower(pathinfo($fileSource, PATHINFO_EXTENSION));
+            if ($extension == 'less') {
+                $fileSource = preg_replace('/\.less$/', '.css', $fileSource);
+            }
+            $localPath = substr($fileSource, strlen($sourceDir) + 1);
+            $themeModel = $this->themeFactory->create(
+                ['data' => [
+                    'theme_path' => $context['destinationContext']['themePath'],
+                    'area' => $context['destinationContext']['area'],
+                ]]
+            );
+            $fileObject = $this->fileFactory->create(
+                $localPath,
+                array_merge($context['destinationContext'], ['themeModel' => $themeModel]),
+                $fileSource
+            );
+            /** @var \Magento\View\Publisher\FileAbstract $fileObject */
+            $fileObject = $this->appState->emulateAreaCode(
+                $context['destinationContext']['area'],
+                [$this->preProcessor, 'process'],
+                [$fileObject, $this->tmpDirectory]
+            );
+
+            if ($fileObject->getSourcePath()) {
+                $fileSource = $fileObject->getSourcePath();
+            }
 
             if (isset($this->_forbidden[$extension])) {
                 continue;
@@ -180,8 +242,10 @@ class ThemeDeployment
                 throw new \Magento\Exception($message);
             }
 
-            $fileDestination = $destinationDir . substr($fileSource, strlen($sourceDir));
-            $this->_deployFile($fileSource, $fileDestination, $context);
+            if (file_exists($fileSource)) {
+                $fileDestination = $destinationDir . '/' . $localPath;
+                $this->_deployFile($fileSource, $fileDestination, $context);
+            }
         }
     }
 
@@ -191,6 +255,7 @@ class ThemeDeployment
      * @param string $fileSource
      * @param string $fileDestination
      * @param array $context
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _deployFile($fileSource, $fileDestination, $context)

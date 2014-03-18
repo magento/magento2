@@ -25,7 +25,7 @@ namespace Magento\Customer\Controller\Adminhtml;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Dto\Customer;
+use Magento\Customer\Service\V1\Data\Customer;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
@@ -64,11 +64,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\CustomerAccountServiceInterface
      */
     protected $_acctServiceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\CustomerServiceInterface
-     */
-    protected $_customerServiceMock;
 
     /**
      * Session mock instance
@@ -166,14 +161,10 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->_acctServiceMock = $this
             ->getMockBuilder('Magento\Customer\Service\V1\CustomerAccountServiceInterface')
             ->getMock();
-        $this->_customerServiceMock = $this
-            ->getMockBuilder('Magento\Customer\Service\V1\CustomerServiceInterface')
-            ->getMock();
 
         $args = [
             'context' => $contextMock,
             'accountService' => $this->_acctServiceMock,
-            'customerService' => $this->_customerServiceMock,
         ];
 
 
@@ -209,7 +200,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('customer_id'), $this->equalTo(0))
             ->will($this->returnValue($customerId));
 
-        $this->_customerServiceMock->expects($this->once())
+        $this->_acctServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($customerId)
             ->will($this->throwException(new NoSuchEntityException('customerId', $customerId)));
@@ -237,7 +228,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $error = new \Magento\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
-        $this->_customerServiceMock->expects($this->once())
+        $this->_acctServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($customerId)
             ->will($this->throwException($exception));
@@ -265,7 +256,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $error = new \Magento\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);
 
-        $this->_customerServiceMock->expects($this->once())
+        $this->_acctServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($customerId)
             ->will($this->throwException($exception));
@@ -290,7 +281,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         // Setup a core exception to return
         $exception = new \Exception('Something Really Bad happened');
 
-        $this->_customerServiceMock->expects($this->once())
+        $this->_acctServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($customerId)
             ->will($this->throwException($exception));
@@ -316,16 +307,19 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('customer_id'), $this->equalTo(0))
             ->will($this->returnValue($customerId));
 
-        $customer = new Customer(['id' => $customerId, 'email' => $email, 'website_id' => $websiteId]);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        /** @var $customerBuilder \Magento\Customer\Service\V1\Data\CustomerBuilder' */
+        $customerBuilder = $objectManager->getObject('\Magento\Customer\Service\V1\Data\CustomerBuilder');
+        $customer = $customerBuilder->setId($customerId)->setEmail($email)->setWebsiteId($websiteId)->create();
 
-        $this->_customerServiceMock->expects($this->once())
+        $this->_acctServiceMock->expects($this->once())
             ->method('getCustomer')
             ->with($customerId)
             ->will($this->returnValue($customer));
 
-        // verify sendPasswordResetLink() is called
+        // verify initiatePasswordReset() is called
         $this->_acctServiceMock->expects($this->once())
-            ->method('sendPasswordResetLink')
+            ->method('initiatePasswordReset')
             ->with($email, $websiteId, CustomerAccountServiceInterface::EMAIL_REMINDER);
 
         // verify success message

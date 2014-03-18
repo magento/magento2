@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource;
 
 /**
  * Bundle Option Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource;
-
 class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +48,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
      * After save process
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Bundle\Model\Resource\Option
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -87,7 +86,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
      * After delete process
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Bundle\Model\Resource\Option
+     * @return $this
      */
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
     {

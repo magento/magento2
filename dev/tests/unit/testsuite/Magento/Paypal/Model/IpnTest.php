@@ -92,14 +92,14 @@ class IpnTest extends \PHPUnit_Framework_TestCase
             ->method('importToPayment');
 
         // Set request to ipn
-        $requestProperty = new \ReflectionProperty('Magento\Paypal\Model\Ipn', '_request');
+        $requestProperty = new \ReflectionProperty('Magento\Paypal\Model\Ipn', '_ipnRequest');
         $requestProperty->setAccessible(true);
         $requestProperty->setValue($this->_ipn, array(
             'mc_gross' => self::REQUEST_MC_GROSS,
         ));
 
         // Set info to ipn
-        $infoProperty = new \ReflectionProperty('Magento\Paypal\Model\Ipn', '_info');
+        $infoProperty = new \ReflectionProperty('Magento\Paypal\Model\Ipn', '_paypalInfo');
         $infoProperty->setAccessible(true);
         $infoProperty->setValue($this->_ipn, $info);
 

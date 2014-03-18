@@ -23,17 +23,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Shipment;
 
 /**
  * Adminhtml sales orders grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Shipment;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
+     * Collection factory
+     *
      * @var \Magento\Sales\Model\Resource\Order\Collection\Factory
      */
     protected $_collectionFactory;
@@ -54,9 +55,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         parent::__construct($context, $backendHelper, $data);
     }
 
-
     /**
      * Initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +81,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare and set collection of grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareCollection()
     {
@@ -91,7 +93,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare and add columns to grid
      *
-     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @return $this
      */
     protected function _prepareColumns()
     {
@@ -189,7 +191,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare and set options for massaction
      *
-     * @return \Magento\Sales\Block\Adminhtml\Shipment\Grid
+     * @return $this
      */
     protected function _prepareMassaction()
     {
@@ -219,5 +221,4 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         return $this->getUrl('sales/*/*', array('_current' => true));
     }
-
 }

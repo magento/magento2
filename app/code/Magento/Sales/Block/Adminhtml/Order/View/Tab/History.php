@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order history tab
@@ -31,13 +32,15 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
-
 class History
     extends \Magento\Backend\Block\Template
     implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'order/view/tab/history.phtml';
 
     /**
@@ -188,7 +191,7 @@ class History
      * Check whether status history comment is with customer notification
      *
      * @param array $item
-     * @param boolean $isSimpleCheck
+     * @param bool $isSimpleCheck
      * @return bool
      */
     public function isItemNotified(array $item, $isSimpleCheck = true)
@@ -231,9 +234,7 @@ class History
     }
 
     /**
-     * Get Tab Label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -241,9 +242,7 @@ class History
     }
 
     /**
-     * Get Tab Title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -281,9 +280,7 @@ class History
     }
 
     /**
-     * Can Show Tab
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -291,9 +288,7 @@ class History
     }
 
     /**
-     * Is Hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {
@@ -304,7 +299,7 @@ class History
      * Customer Notification Applicable check method
      *
      * @param array $historyItem
-     * @return boolean
+     * @return bool
      */
     public function isCustomerNotificationNotApplicable($historyItem)
     {

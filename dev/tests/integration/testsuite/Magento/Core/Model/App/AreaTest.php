@@ -107,7 +107,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->_model->detectDesign();
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\View\DesignInterface');
-        $this->assertEquals('magento_blank', $design->getDesignTheme()->getThemePath());
+        $this->assertEquals('magento_plushe', $design->getDesignTheme()->getThemePath());
     }
 
     // @codingStandardsIgnoreStart

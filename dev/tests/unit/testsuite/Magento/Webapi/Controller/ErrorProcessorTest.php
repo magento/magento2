@@ -59,7 +59,6 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         /** Initialize SUT. */
-        /** @var \Magento\TestFramework\Helper\ObjectManager $objectManager */
         $this->_errorProcessor = new \Magento\Webapi\Controller\ErrorProcessor(
             $this->_helperMock,
             $this->_appMock,

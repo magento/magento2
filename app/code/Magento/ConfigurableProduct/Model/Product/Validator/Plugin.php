@@ -1,7 +1,5 @@
 <?php
 /**
- * Configurable product validation
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,12 +23,16 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Validator;
 
+use Closure;
 use Magento\App\RequestInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Event\Manager;
 use Magento\Core\Helper;
 
+/**
+ * Configurable product validation
+ */
 class Plugin
 {
     /**
@@ -64,17 +66,16 @@ class Plugin
      * Validate product data
      *
      * @param Product\Validator $subject
-     * @param callable $proceed
+     * @param Closure $proceed
      * @param Product $product
      * @param RequestInterface $request
      * @param \Magento\Object $response
-     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundValidate(
         \Magento\Catalog\Model\Product\Validator $subject,
-        \Closure $proceed,
+        Closure $proceed,
         \Magento\Catalog\Model\Product $product,
         \Magento\App\RequestInterface $request,
         \Magento\Object $response

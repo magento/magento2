@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 /**
  * Adminhtml sales order create newsletter block
@@ -32,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
 class Load extends \Magento\View\Element\Template
 {
     /**
@@ -44,6 +42,8 @@ class Load extends \Magento\View\Element\Template
     protected $_adminhtmlJs = null;
 
     /**
+     * Json encoder
+     *
      * @var \Magento\Json\EncoderInterface
      */
     protected $_jsonEncoder;
@@ -65,6 +65,11 @@ class Load extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Render block HTML
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         $result = array();

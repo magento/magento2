@@ -27,10 +27,24 @@ namespace Magento\Xml;
 
 class Parser
 {
+    /**
+     * @var \DOMDocument|null
+     */
     protected $_dom = null;
+
+    /**
+     * @var \DOMDocument
+     */
     protected $_currentDom;
+
+    /**
+     * @var array
+     */
     protected $_content = array();
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->_dom = new \DOMDocument;
@@ -38,28 +52,45 @@ class Parser
         return $this;
     }
 
+    /**
+     * @return \DOMDocument|null
+     */
     public function getDom()
     {
         return $this->_dom;
     }
 
+    /**
+     * @return \DOMDocument
+     */
     protected function _getCurrentDom()
     {
         return $this->_currentDom;
     }
 
+    /**
+     * @param \DOMDocument $node
+     * @return $this
+     */
     protected function _setCurrentDom($node)
     {
         $this->_currentDom = $node;
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function xmlToArray()
     {
         $this->_content = $this->_xmlToArray();
         return $this->_content;
     }
 
+    /**
+     * @param bool $currentNode
+     * @return array
+     */
     protected function _xmlToArray($currentNode=false)
     {
         if (!$currentNode) {
@@ -102,16 +133,23 @@ class Parser
         return $content;
     }
 
+    /**
+     * @param string $file
+     * @return $this
+     */
     public function load($file)
     {
         $this->getDom()->load($file);
         return $this;
     }
 
+    /**
+     * @param string $string
+     * @return $this
+     */
     public function loadXML($string)
     {
         $this->getDom()->loadXML($string);
         return $this;
     }
-
 }

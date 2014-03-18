@@ -23,23 +23,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
+
+use Magento\Data\Form\Element\AbstractElement;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Create order account form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
-
-class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+class Account extends AbstractForm
 {
     /**
+     * Metadata form factory
+     *
      * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_metadataFormFactory;
 
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
-    protected $_customerService;
+    /** @var CustomerAccountServiceInterface */
+    protected $_customerAccountService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -47,7 +51,7 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
@@ -56,11 +60,11 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
         $this->_metadataFormFactory = $metadataFormFactory;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct($context, $sessionQuote, $orderCreate, $formFactory, $data);
     }
 
@@ -87,7 +91,7 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     /**
      * Prepare Form and add elements to form
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -129,10 +133,10 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     /**
      * Add additional data to form element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @param AbstractElement $element
+     * @return $this
      */
-    protected function _addAdditionalFormElementData(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _addAdditionalFormElementData(AbstractElement $element)
     {
         switch ($element->getId()) {
             case 'email':
@@ -151,11 +155,11 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     public function getFormValues()
     {
         try {
-            $customer = $this->_customerService->getCustomer($this->getCustomerId());
+            $customer = $this->_customerAccountService->getCustomer($this->getCustomerId());
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? $customer->getAttributes() : array();
+        $data = isset($customer) ? \Magento\Service\DataObjectConverter::toFlatArray($customer) : [];
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;

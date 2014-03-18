@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Replacing Visitor
+ *
+ * @package Less
+ * @subpackage visitor
+ */
 class Less_VisitorReplacing extends Less_Visitor{
 
 	function visitObj( $node ){

@@ -31,21 +31,21 @@ interface CustomerAddressCurrentServiceInterface
     /**
      * Returns all addresses for current customer
      *
-     * @return array|Dto\Address[]
+     * @return array|Data\Address[]
      */
     public function getCustomerAddresses();
 
     /**
      * Returns default billing address form current customer
      *
-     * @return Dto\Address|null
+     * @return Data\Address|null
      */
     public function getDefaultBillingAddress();
 
     /**
      * Returns default shipping address for current customer
      *
-     * @return Dto\Address|null
+     * @return Data\Address|null
      */
     public function getDefaultShippingAddress();
 }

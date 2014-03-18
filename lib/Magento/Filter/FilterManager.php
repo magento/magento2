@@ -43,6 +43,8 @@ namespace Magento\Filter;
  * @method string truncate(string $value, $params = array())
  * @method string encrypt(string $value, $params = array())
  * @method string decrypt(string $value, $params = array())
+ * @method string translit(string $value)
+ * @method string translitUrl(string $value)
  */
 class FilterManager
 {

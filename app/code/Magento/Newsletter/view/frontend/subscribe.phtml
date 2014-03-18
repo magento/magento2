@@ -25,7 +25,7 @@
 <div class="block newsletter">
     <div class="title"><strong>Newsletter</strong></div>
     <div class="content">
-        <form action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
+        <form class="form subscribe" action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
             <fieldset class="fieldset">
                 <div class="field newsletter">
                     <label class="label" for="newsletter"><span><?php echo __('Sign Up for Our Newsletter:') ?></span></label>
@@ -34,13 +34,13 @@
                                       placeholder="<?php echo __('Enter your email address') ?>"
                                       data-validate="{required:true, 'validate-email':true}"/>
                     </div>
-                    <div class="actions">
-                        <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
-                            <span><?php echo __('Subscribe') ?></span>
-                        </button>
-                    </div>
                 </div>
             </fieldset>
+            <div class="actions">
+                <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
+                    <span><?php echo __('Subscribe') ?></span>
+                </button>
+            </div>
         </form>
     </div>
 </div>

@@ -25,7 +25,7 @@
  */
 namespace Magento\App\Cache;
 
-class State implements \Magento\App\Cache\StateInterface
+class State implements StateInterface
 {
     /**
      * Cache identifier used to store cache type statuses

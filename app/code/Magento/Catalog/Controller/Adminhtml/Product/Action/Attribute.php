@@ -42,18 +42,36 @@ class Attribute extends Action
     protected $_productFlatIndexerProcessor;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    protected $_productPriceIndexerProcessor;
+
+    /**
+     * Catalog product
+     *
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $_catalogProduct = null;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
+     * @param \Magento\Catalog\Helper\Product $catalogProduct
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper,
-        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+        \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
+        \Magento\Catalog\Helper\Product $catalogProduct
     ) {
         parent::__construct($context);
         $this->_helper = $helper;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->_catalogProduct = $catalogProduct;
     }
 
     /**
@@ -196,6 +214,10 @@ class Attribute extends Action
 
             $this->_productFlatIndexerProcessor->reindexList($this->_helper->getProductIds());
 
+            if ($this->_catalogProduct->isDataForPriceIndexerWasChanged($attributesData)
+                || !empty($websiteRemoveData) || !empty($websiteAddData)) {
+                $this->_productPriceIndexerProcessor->reindexList($this->_helper->getProductIds());
+            }
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

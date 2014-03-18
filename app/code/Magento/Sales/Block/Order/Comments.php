@@ -80,8 +80,8 @@ class Comments extends \Magento\View\Element\Template
     /**
      * Sets comments parent model instance
      *
-     * @param \Magento\Sales\Model\AbstractModel
-     * @return \Magento\Sales\Block\Order\Comments
+     * @param \Magento\Sales\Model\AbstractModel $entity
+     * @return $this
      */
     public function setEntity($entity)
     {

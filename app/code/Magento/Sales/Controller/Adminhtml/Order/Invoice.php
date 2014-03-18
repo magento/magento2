@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml\Order;
+
+use Magento\Core\Exception;
+use Magento\App\ResponseInterface;
 
 /**
  * Adminhtml sales order edit controller
@@ -31,8 +35,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml\Order;
-
 class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
 {
     /**
@@ -63,6 +65,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Get requested items qty's from request
+     *
+     * @return array
      */
     protected function _getItemQtys()
     {
@@ -80,6 +84,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
      *
      * @param bool $update
      * @return \Magento\Sales\Model\Order\Invoice
+     * @throws Exception
      */
     protected function _initInvoice($update = false)
     {
@@ -114,7 +119,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', array('order' => $order))
                 ->prepareInvoice($savedQtys);
             if (!$invoice->getTotalQty()) {
-                throw new \Magento\Core\Exception(__('Cannot create an invoice without products.'));
+                throw new Exception(__('Cannot create an invoice without products.'));
             }
         }
 
@@ -126,7 +131,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
      * Save data for invoice and related order
      *
      * @param   \Magento\Sales\Model\Order\Invoice $invoice
-     * @return  \Magento\Sales\Controller\Adminhtml\Order\Invoice
+     * @return  $this
      */
     protected function _saveInvoice($invoice)
     {
@@ -143,7 +148,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
      * Prepare shipment
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return \Magento\Sales\Model\Order\Shipment|false
      */
     protected function _prepareShipment($invoice)
     {
@@ -169,6 +174,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Invoice information page
+     *
+     * @return void
      */
     public function viewAction()
     {
@@ -188,6 +195,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Start create invoice action
+     *
+     * @return void
      */
     public function startAction()
     {
@@ -200,6 +209,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Invoice create page
+     *
+     * @return void
      */
     public function newAction()
     {
@@ -222,6 +233,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Update items qty action
+     *
+     * @return void
      */
     public function updateQtyAction()
     {
@@ -234,7 +247,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
             $this->_view->loadLayout();
             $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $response = array(
                 'error'     => true,
                 'message'   => $e->getMessage()
@@ -253,6 +266,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
     /**
      * Save invoice
      * We can save only new invoice. Existing invoices are not editable
+     *
+     * @return void
      */
     public function saveAction()
     {
@@ -335,7 +350,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $this->_redirect('sales/*/new', array('order_id' => $orderId));
             }
             return;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));
@@ -347,6 +362,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Capture invoice action
+     *
+     * @return void
      */
     public function captureAction()
     {
@@ -356,7 +373,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $invoice->capture();
                 $this->_saveInvoice($invoice);
                 $this->messageManager->addSuccess(__('The invoice has been captured.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Invoice capturing error'));
@@ -369,6 +386,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Cancel invoice action
+     *
+     * @return void
      */
     public function cancelAction()
     {
@@ -378,7 +397,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $invoice->cancel();
                 $this->_saveInvoice($invoice);
                 $this->messageManager->addSuccess(__('You canceled the invoice.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Invoice canceling error'));
@@ -391,6 +410,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Void invoice action
+     *
+     * @return void
      */
     public function voidAction()
     {
@@ -400,7 +421,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
                 $invoice->void();
                 $this->_saveInvoice($invoice);
                 $this->messageManager->addSuccess(__('The invoice has been voided.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Invoice voiding error'));
@@ -411,13 +432,16 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
         }
     }
 
+    /**
+     * @return void
+     */
     public function addCommentAction()
     {
         try {
             $this->getRequest()->setParam('invoice_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Core\Exception(__('The Comment Text field cannot be empty.'));
+                throw new Exception(__('The Comment Text field cannot be empty.'));
             }
             $invoice = $this->_initInvoice();
             $invoice->addComment(
@@ -430,7 +454,7 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
             $this->_view->loadLayout();
             $response = $this->_view->getLayout()->getBlock('invoice_comments')->toHtml();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (Exception $e) {
             $response = array(
                 'error'     => true,
                 'message'   => $e->getMessage()
@@ -448,6 +472,8 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
 
     /**
      * Create pdf for current invoice
+     *
+     * @return ResponseInterface|void
      */
     public function printAction()
     {

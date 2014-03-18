@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview\View;
 
 class Changelog implements ChangelogInterface
@@ -68,6 +67,7 @@ class Changelog implements ChangelogInterface
     /**
      * Check DB connection
      *
+     * @return void
      * @throws \Exception
      */
     protected function checkConnection()
@@ -80,6 +80,7 @@ class Changelog implements ChangelogInterface
     /**
      * Create changelog table
      *
+     * @return void
      * @throws \Exception
      */
     public function create()
@@ -108,6 +109,7 @@ class Changelog implements ChangelogInterface
     /**
      * Drop changelog table
      *
+     * @return void
      * @throws \Exception
      */
     public function drop()
@@ -123,7 +125,7 @@ class Changelog implements ChangelogInterface
     /**
      * Clear changelog table by version_id
      *
-     * @param integer $versionId
+     * @param int $versionId
      * @return boolean
      * @throws \Exception
      */

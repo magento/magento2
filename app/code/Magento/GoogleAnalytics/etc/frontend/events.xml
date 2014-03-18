@@ -30,7 +30,4 @@
     <event name="multishipping_checkout_controller_success_action">
         <observer name="googleanalytics_order_success" instance="Magento\GoogleAnalytics\Model\Observer" method="setGoogleAnalyticsOnOrderSuccessPageView" />
     </event>
-    <event name="googlecheckout_block_link_html_before">
-        <observer name="googleanalytics_googlecheckout_integration" instance="Magento\GoogleAnalytics\Model\Observer" method="injectAnalyticsInGoogleCheckoutLink" />
-    </event>
 </config>

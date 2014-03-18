@@ -60,7 +60,7 @@ class Soap implements \Magento\App\FrontControllerInterface
     /** @var \Magento\App\State */
     protected $_appState;
 
-    /** @var \Magento\Core\Model\App */
+    /** @var \Magento\AppInterface */
     protected $_application;
 
     /**
@@ -107,6 +107,8 @@ class Soap implements \Magento\App\FrontControllerInterface
     }
 
     /**
+     * Dispatch SOAP request.
+     *
      * @param \Magento\App\RequestInterface $request
      * @return \Magento\App\ResponseInterface
      */
@@ -115,6 +117,10 @@ class Soap implements \Magento\App\FrontControllerInterface
         $pathParts = explode('/', trim($request->getPathInfo(), '/'));
         array_shift($pathParts);
         $request->setPathInfo('/' . implode('/', $pathParts));
+        $this->_application->loadAreaPart(
+            $this->_application->getLayout()->getArea(),
+            \Magento\Core\Model\App\Area::PART_TRANSLATE
+        );
         try {
             if (!$this->_appState->isInstalled()) {
                 throw new WebapiException(__('Magento is not yet installed'));
@@ -155,8 +161,9 @@ class Soap implements \Magento\App\FrontControllerInterface
      */
     protected function _getAccessToken()
     {
-        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            $token = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+        $headers = array_change_key_case(getallheaders(), CASE_UPPER);
+        if (isset($headers['AUTHORIZATION'])) {
+            $token = explode(' ', $headers['AUTHORIZATION']);
             if (isset($token[1]) && is_string($token[1])) {
                 return $token[1];
             }

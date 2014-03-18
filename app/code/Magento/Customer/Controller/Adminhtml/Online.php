@@ -27,6 +27,9 @@ namespace Magento\Customer\Controller\Adminhtml;
 
 class Online extends \Magento\Backend\App\Action
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_title->add(__('Customers Now Online'));
@@ -46,6 +49,9 @@ class Online extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Customer::online');

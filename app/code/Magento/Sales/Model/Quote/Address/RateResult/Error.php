@@ -25,6 +25,9 @@ namespace Magento\Sales\Model\Quote\Address\RateResult;
 
 class Error extends AbstractResult
 {
+    /**
+     * @return mixed
+     */
     public function getErrorMessage()
     {
         if (!$this->getData('error_message')) {

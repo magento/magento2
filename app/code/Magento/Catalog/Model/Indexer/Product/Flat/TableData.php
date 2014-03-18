@@ -56,6 +56,7 @@ class TableData implements TableDataInterface
      * @param string $flatTable
      * @param string $flatDropName
      * @param string $temporaryFlatTableName
+     * @return void
      */
     public function move($flatTable, $flatDropName, $temporaryFlatTableName)
     {

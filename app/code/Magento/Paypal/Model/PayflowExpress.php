@@ -36,11 +36,6 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
     protected $_formBlockType = 'Magento\Paypal\Block\PayflowExpress\Form';
 
     /**
-     * @var bool
-     */
-    protected $_canManageRecurringProfiles = false;
-
-    /**
      * Website Payments Pro instance type
      *
      * @var $_proType string

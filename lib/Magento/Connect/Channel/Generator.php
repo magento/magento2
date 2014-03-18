@@ -71,7 +71,7 @@ class Generator extends XmlGenerator
 
     /**
      * @param array $content
-     * @return this
+     * @return $this
      */
     public function save($content)
     {

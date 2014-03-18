@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup;
 
 /**
  * Class to work with filesystem backups
@@ -31,8 +32,6 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup;
-
 class Filesystem extends \Magento\Backup\AbstractBackup
 {
     /**
@@ -81,7 +80,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
      * Implementation Rollback functionality for Filesystem
      *
      * @throws \Magento\Exception
-     * @return bool
+     * @return void
      */
     public function rollback()
     {
@@ -101,7 +100,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
      * Implementation Create Backup functionality for Filesystem
      *
      * @throws \Magento\Exception
-     * @return boolean
+     * @return void
      */
     public function create()
     {
@@ -218,9 +217,9 @@ class Filesystem extends \Magento\Backup\AbstractBackup
     /**
      * Set directory where backups saved and add it to ignore paths
      *
-     * @see \Magento\Backup\AbstractBackup::setBackupsDir()
      * @param string $backupsDir
      * @return \Magento\Backup\Filesystem
+     * @see \Magento\Backup\AbstractBackup::setBackupsDir()
      */
     public function setBackupsDir($backupsDir)
     {
@@ -230,7 +229,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
     }
 
     /**
-     * getter for $_ftpPath variable
+     * Getter for $_ftpPath variable
      *
      * @return string
      */
@@ -252,6 +251,7 @@ class Filesystem extends \Magento\Backup\AbstractBackup
     /**
      * Check backups directory existence and whether it's writeable
      *
+     * @return void
      * @throws \Magento\Exception
      */
     protected function _checkBackupsDir()
@@ -276,6 +276,8 @@ class Filesystem extends \Magento\Backup\AbstractBackup
 
     /**
      * Generate tmp name for tarball
+     *
+     * @return string
      */
     protected function _getTarTmpPath()
     {

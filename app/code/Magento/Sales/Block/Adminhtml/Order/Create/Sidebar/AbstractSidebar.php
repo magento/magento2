@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 /**
  * Adminhtml sales order create sidebar block
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
@@ -43,6 +42,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     protected $_sidebarStorageAction = 'add';
 
     /**
+     * Sales config
+     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
@@ -85,6 +86,11 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
         return $this->getCustomerId();
     }
 
+    /**
+     * Retrieve disply item qty availablity
+     *
+     * @return false
+     */
     public function canDisplayItemQty()
     {
         return false;
@@ -93,7 +99,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve availability removing items in block
      *
-     * @return bool
+     * @return true
      */
     public function canRemoveItems()
     {
@@ -103,8 +109,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve identifier of block item
      *
-     * @param   \Magento\Object $item
-     * @return  int
+     * @param \Magento\Object $item
+     * @return int
      */
     public function getIdentifierId($item)
     {
@@ -114,8 +120,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve item identifier of block item
      *
-     * @param   mixed $item
-     * @return  int
+     * @param \Magento\Object $item
+     * @return int
      */
     public function getItemId($item)
     {
@@ -125,8 +131,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve product identifier linked with item
      *
-     * @param   mixed $item
-     * @return  int
+     * @param \Magento\Object $item
+     * @return int
      */
     public function getProductId($item)
     {
@@ -197,13 +203,18 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve item collection
      *
-     * @return mixed
+     * @return false
      */
     public function getItemCollection()
     {
         return false;
     }
 
+    /**
+     * Retrieve disply price availablity
+     *
+     * @return true
+     */
     public function canDisplayPrice()
     {
         return true;
@@ -223,8 +234,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Check whether product configuration is required before adding to order
      *
-     * @param $productType
-     * @return bool
+     * @param string|int|null $productType
+     * @return false
      */
     public function isConfigurationRequired($productType)
     {

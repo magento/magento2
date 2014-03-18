@@ -18,15 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Paypal\Model;
 
+use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
 use Magento\Paypal\Model\Api\Nvp;
-use Magento\RecurringProfile\Model\RecurringProfile;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Quote;
@@ -35,7 +33,6 @@ use Magento\Sales\Model\Quote;
  * PayPal Express Module
  */
 class Express extends \Magento\Payment\Model\Method\AbstractMethod
-    implements \Magento\Payment\Model\Recurring\Profile\MethodInterface
 {
     /**
      * @var string
@@ -361,9 +358,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $payment->setTransactionId($api->getTransactionId());
         $payment->setParentTransactionId($orderTransactionId);
 
-        $payment->addTransaction(Transaction::TYPE_AUTH, null, false,
-            $message
-        );
+        $payment->addTransaction(Transaction::TYPE_AUTH, null, false, $message);
 
         $order->setState($state, $status);
 
@@ -395,9 +390,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)
             && !$payment->getVoidOnlyAuthorization()
         ) {
-            $orderTransaction = $payment->lookupTransaction(
-                false, Transaction::TYPE_ORDER
-            );
+            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
             if ($orderTransaction) {
                 $payment->setParentTransactionId($orderTransaction->getTxnId());
                 $payment->setTransactionId($orderTransaction->getTxnId() . '-void');
@@ -482,9 +475,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             }
             //close order transaction if needed
             if ($payment->getShouldCloseParentTransaction()) {
-                $orderTransaction = $payment->lookupTransaction(
-                    false, Transaction::TYPE_ORDER
-                );
+                $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
 
                 if ($orderTransaction) {
                     $orderTransaction->setIsClosed(true);
@@ -590,75 +581,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Validate RP data
-     *
-     * @param RecurringProfile $profile
-     * @return null
+     * @return Api\Nvp
      */
-    public function validateRecurringProfile(RecurringProfile $profile)
+    public function getApi()
     {
-        return $this->_pro->validateRecurringProfile($profile);
-    }
-
-    /**
-     * Submit RP to the gateway
-     *
-     * @param RecurringProfile $profile
-     * @param \Magento\Payment\Model\Info $paymentInfo
-     * @return void
-     */
-    public function submitRecurringProfile(RecurringProfile $profile,
-        \Magento\Payment\Model\Info $paymentInfo
-    ) {
-        $token = $paymentInfo->getAdditionalInformation(
-            \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN
-        );
-        $profile->setToken($token);
-        $this->_pro->submitRecurringProfile($profile, $paymentInfo);
-    }
-
-    /**
-     * Fetch RP details
-     *
-     * @param string $referenceId
-     * @param \Magento\Object $result
-     * @return null
-     */
-    public function getRecurringProfileDetails($referenceId, \Magento\Object $result)
-    {
-        return $this->_pro->getRecurringProfileDetails($referenceId, $result);
-    }
-
-    /**
-     * Whether can get recurring profile details
-     *
-     * @return true
-     */
-    public function canGetRecurringProfileDetails()
-    {
-        return true;
-    }
-
-    /**
-     * Update RP data
-     *
-     * @param RecurringProfile $profile
-     * @return null
-     */
-    public function updateRecurringProfile(RecurringProfile $profile)
-    {
-        return $this->_pro->updateRecurringProfile($profile);
-    }
-
-    /**
-     * Manage status
-     *
-     * @param RecurringProfile $profile
-     * @return null
-     */
-    public function updateRecurringProfileStatus(RecurringProfile $profile)
-    {
-        return $this->_pro->updateRecurringProfileStatus($profile);
+        return $this->_pro->getApi();
     }
 
     /**
@@ -670,7 +597,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     public function assignData($data)
     {
         $result = parent::assignData($data);
-        $key = \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT;
+        $key = ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT;
         if (is_array($data)) {
             $this->getInfoInstance()->setAdditionalInformation($key, isset($data[$key]) ? $data[$key] : null);
         } elseif ($data instanceof \Magento\Object) {
@@ -691,14 +618,13 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $order = $payment->getOrder();
 
         // prepare api call
-        $token = $payment->getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_TOKEN);
+        $token = $payment->getAdditionalInformation(ExpressCheckout::PAYMENT_INFO_TRANSPORT_TOKEN);
 
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
 
-        $api = $this->_pro->getApi()
+        $api = $this->getApi()
             ->setToken($token)
-            ->setPayerId($payment->
-                getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID))
+            ->setPayerId($payment->getAdditionalInformation(ExpressCheckout::PAYMENT_INFO_TRANSPORT_PAYER_ID))
             ->setAmount($amount)
             ->setPaymentAction($this->_pro->getConfig()->paymentAction)
             ->setNotifyUrl($this->_urlBuilder->getUrl('paypal/ipn/'))
@@ -729,15 +655,17 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected function _importToPayment($api, $payment)
     {
-        $payment->setTransactionId($api->getTransactionId())->setIsTransactionClosed(0)
-            ->setAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_REDIRECT,
-                $api->getRedirectRequired());
+        $payment->setTransactionId($api->getTransactionId())
+            ->setIsTransactionClosed(0)
+            ->setAdditionalInformation(ExpressCheckout::PAYMENT_INFO_TRANSPORT_REDIRECT, $api->getRedirectRequired());
 
         if ($api->getBillingAgreementId()) {
-            $payment->setBillingAgreementData(array(
-                'billing_agreement_id'  => $api->getBillingAgreementId(),
-                'method_code'           => \Magento\Paypal\Model\Config::METHOD_BILLING_AGREEMENT
-            ));
+            $payment->setBillingAgreementData(
+                array(
+                    'billing_agreement_id' => $api->getBillingAgreementId(),
+                    'method_code' => \Magento\Paypal\Model\Config::METHOD_BILLING_AGREEMENT
+                )
+            );
         }
 
         $this->_pro->importPaymentInfo($api, $payment);
@@ -758,8 +686,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         }
         $info = $this->getInfoInstance();
         if ($info->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $info->lookupTransaction(
-                false, Transaction::TYPE_ORDER);
+            $orderTransaction = $info->lookupTransaction(false, Transaction::TYPE_ORDER);
             if ($orderTransaction) {
                 $info->setParentTransactionId($orderTransaction->getTxnId());
             }
@@ -779,8 +706,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_pro->getConfig()->setStoreId($payment->getOrder()->getStore()->getId());
 
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $payment->lookupTransaction(false,
-                Transaction::TYPE_ORDER);
+            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
             if ($orderTransaction->getIsClosed()) {
                 return false;
             }
@@ -814,8 +740,10 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             ->setTransactionId($parentTransactionId)
             ->callDoAuthorization();
 
-        $payment->setAdditionalInformation($this->_authorizationCountKey,
-            $payment->getAdditionalInformation($this->_authorizationCountKey) + 1);
+        $payment->setAdditionalInformation(
+            $this->_authorizationCountKey,
+            $payment->getAdditionalInformation($this->_authorizationCountKey) + 1
+        );
 
         return $api;
     }

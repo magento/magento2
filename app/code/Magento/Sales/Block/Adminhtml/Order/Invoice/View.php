@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
 
 /**
  * Adminhtml invoice create
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
-
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -50,6 +49,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
+     * Backend session
+     *
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_backendSession;
@@ -71,6 +72,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId    = 'invoice_id';
@@ -172,6 +178,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_coreRegistry->registry('current_invoice');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->getInvoice()->getEmailSent()) {
@@ -182,6 +193,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         return __('Invoice #%1 | %2 | %4 (%3)', $this->getInvoice()->getIncrementId(), $this->getInvoice()->getStateName(), $emailSent, $this->formatDate($this->getInvoice()->getCreatedAtDate(), 'medium', true));
     }
 
+    /**
+     * Get back url
+     *
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl(
@@ -192,21 +208,41 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             ));
     }
 
+    /**
+     * Get capture url
+     *
+     * @return string
+     */
     public function getCaptureUrl()
     {
         return $this->getUrl('sales/*/capture', array('invoice_id'=>$this->getInvoice()->getId()));
     }
 
+    /**
+     * Get void url
+     *
+     * @return string
+     */
     public function getVoidUrl()
     {
         return $this->getUrl('sales/*/void', array('invoice_id'=>$this->getInvoice()->getId()));
     }
 
+    /**
+     * Get cancel url
+     *
+     * @return string
+     */
     public function getCancelUrl()
     {
         return $this->getUrl('sales/*/cancel', array('invoice_id'=>$this->getInvoice()->getId()));
     }
 
+    /**
+     * Get email url
+     *
+     * @return string
+     */
     public function getEmailUrl()
     {
         return $this->getUrl('sales/*/email', array(
@@ -215,6 +251,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         ));
     }
 
+    /**
+     * Get credit memo url
+     *
+     * @return string
+     */
     public function getCreditMemoUrl()
     {
         return $this->getUrl('sales/order_creditmemo/start', array(
@@ -223,6 +264,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         ));
     }
 
+    /**
+     * Get print url
+     *
+     * @return string
+     */
     public function getPrintUrl()
     {
         return $this->getUrl('sales/*/print', array(
@@ -230,6 +276,12 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         ));
     }
 
+    /**
+     * Update back button url
+     *
+     * @param bool $flag
+     * @return $this
+     */
     public function updateBackButtonUrl($flag)
     {
         if ($flag) {

@@ -94,12 +94,19 @@ class Less implements PreProcessorInterface
                 $publisherFile->getViewParams()
             );
             $cssContent = $this->adapter->process($processedFiles->getPublicationPath());
+            $cssTrimmedContent = trim($cssContent);
+            if (empty($cssTrimmedContent)) {
+                return $publisherFile;
+            }
         } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->logger->logException($e);
             return $publisherFile; // It has 'null' source path
         } catch (Adapter\AdapterException $e) {
             $this->logger->logException($e);
             return $publisherFile; // It has 'null' source path
+        } catch (\Less_Exception_Compiler $e) {
+            $this->logger->logException($e);
+            return $publisherFile;
         }
 
         $tmpFilePath = Composite::TMP_VIEW_DIR . '/' . self::TMP_LESS_DIR . '/' . $publisherFile->buildUniquePath();

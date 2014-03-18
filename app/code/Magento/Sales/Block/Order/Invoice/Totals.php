@@ -25,6 +25,8 @@
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
+use Magento\Sales\Model\Order;
+
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
@@ -41,8 +43,14 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @var Order|null
+     */
     protected $_invoice = null;
 
+    /**
+     * @return Order
+     */
     public function getInvoice()
     {
         if ($this->_invoice === null) {
@@ -57,6 +65,10 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         return $this->_invoice;
     }
 
+    /**
+     * @param Order $invoice
+     * @return $this
+     */
     public function setInvoice($invoice)
     {
         $this->_invoice = $invoice;
@@ -66,7 +78,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Get totals source object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getSource()
     {
@@ -76,7 +88,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Initialize order totals array
      *
-     * @return \Magento\Sales\Block\Order\Totals
+     * @return $this
      */
     protected function _initTotals()
     {

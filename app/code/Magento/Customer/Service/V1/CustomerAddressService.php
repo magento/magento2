@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1;
 
 use Magento\Customer\Model\Address as CustomerAddressModel;
@@ -139,7 +138,7 @@ class CustomerAddressService implements CustomerAddressServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAddressById($addressId)
+    public function getAddress($addressId)
     {
         //TODO: use cache MAGETWO-16862
         $address = $this->_addressFactory->create();
@@ -208,6 +207,22 @@ class CustomerAddressService implements CustomerAddressServiceInterface
         }
 
         return $addressIds;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAddresses($addresses)
+    {
+        $inputException = new InputException();
+        foreach ($addresses as $key => $address) {
+            $addressModel = $this->_addressConverter->createAddressModel($address);
+            $inputException = $this->_validate($addressModel, $inputException, $key);
+        }
+        if ($inputException->getErrors()) {
+            throw $inputException;
+        }
+        return true;
     }
 
     /**

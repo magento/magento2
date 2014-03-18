@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Filesystem\Rollback;
 
 /**
  * Filesystem rollback workers abstract class
@@ -31,8 +32,6 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Filesystem\Rollback;
-
 abstract class AbstractRollback
 {
     /**
@@ -54,6 +53,8 @@ abstract class AbstractRollback
 
     /**
      * Main worker's function that makes files rollback
+     *
+     * @return void
      */
     abstract public function run();
 }

@@ -44,4 +44,15 @@
     </cache>
     <arbitrary_one>Value One</arbitrary_one>
     <arbitrary_two>Value Two</arbitrary_two>
+    <huge_nested_level>
+        <level_one>
+            <level_two>
+                <level_three>
+                    <level_four>
+                        <level_five>Level Five Data</level_five>
+                    </level_four>
+                </level_three>
+            </level_two>
+        </level_one>
+    </huge_nested_level>
 </config>

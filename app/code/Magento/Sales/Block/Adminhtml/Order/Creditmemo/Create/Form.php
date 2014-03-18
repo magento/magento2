@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 /**
  * Adminhtml creditmemo create form
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
-
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
     /**
@@ -62,6 +60,11 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         return $this->_coreRegistry->registry('current_creditmemo');
     }
 
+    /**
+     * Get save url
+     *
+     * @return string
+     */
     public function getSaveUrl()
     {
         return $this->getUrl('sales/*/save', array('_current' => true));

@@ -41,9 +41,9 @@ class Config extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'CONFIG';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

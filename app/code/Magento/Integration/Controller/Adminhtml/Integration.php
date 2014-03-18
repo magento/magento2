@@ -495,6 +495,7 @@ class Integration extends Action
      */
     protected function _setActivationSuccessMsg($isReauthorize, $integrationName)
     {
+        $integrationName = $this->escaper->escapeHtml($integrationName);
         $successMsg = $isReauthorize ? __("The integration '%1' has been re-authorized.", $integrationName)
             : __("The integration '%1' has been activated.", $integrationName);
         $this->messageManager->addSuccess($successMsg);

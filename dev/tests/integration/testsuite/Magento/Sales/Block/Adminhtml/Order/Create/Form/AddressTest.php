@@ -66,15 +66,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddressCollection()
     {
-        $addressDtos = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressDtos));
-        $this->assertEquals($addressDtos, $this->_addressBlock->getAddressCollection());
+        $addressData = $this->_getAddresses();
+        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
+        $this->assertEquals($addressData, $this->_addressBlock->getAddressCollection());
     }
 
     public function testGetAddressCollectionJson()
     {
-        $addressDtos = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressDtos));
+        $addressData = $this->_getAddresses();
+        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
         $expectedOutput = '[
             {
                 "firstname": false,
@@ -162,20 +162,20 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Customer\Service\V1\Dto\Address[]
+     * @return \Magento\Customer\Service\V1\Data\Address[]
      */
     protected function _getAddresses()
     {
-        /** @var \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Dto\AddressBuilder');
+        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
+        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
         $addressBuilder->populateWithArray(
             array('id' => 1, 'street' => 'Street1', 'firstname' => 'FirstName1', 'lastname' => 'LastName1')
         );
-        $addressDtos[] = $addressBuilder->create();
+        $addressData[] = $addressBuilder->create();
         $addressBuilder->populateWithArray(
             array('id' => 2, 'street' => 'Street2', 'firstname' => 'FirstName2', 'lastname' => 'LastName2')
         );
-        $addressDtos[] = $addressBuilder->create();
-        return $addressDtos;
+        $addressData[] = $addressBuilder->create();
+        return $addressData;
     }
 }

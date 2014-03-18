@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml;
+
+use Magento\App\ResponseInterface;
+use Magento\Backend\App\Action;
 
 /**
  * Adminhtml sales orders controller
@@ -31,16 +35,12 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml;
-
-use Magento\Backend\App\Action;
-
 class Order extends \Magento\Backend\App\Action
 {
     /**
      * Array of actions which can be processed without secret key validation
      *
-     * @var array
+     * @var string[]
      */
     protected $_publicActions = array('view', 'index');
 
@@ -82,7 +82,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return \Magento\Sales\Controller\Adminhtml\Order
+     * @return $this
      */
     protected function _initAction()
     {
@@ -96,7 +96,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Initialize order model instance
      *
-     * @return \Magento\Sales\Model\Order || false
+     * @return \Magento\Sales\Model\Order|false
      */
     protected function _initOrder()
     {
@@ -116,6 +116,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Orders grid
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -126,6 +128,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Order grid
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -134,7 +138,9 @@ class Order extends \Magento\Backend\App\Action
     }
 
     /**
-     * View order detale
+     * View order detail
+     *
+     * @return void
      */
     public function viewAction()
     {
@@ -161,6 +167,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Notify user
+     *
+     * @return void
      */
     public function emailAction()
     {
@@ -187,6 +195,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Cancel order
+     *
+     * @return void
      */
     public function cancelAction()
     {
@@ -210,6 +220,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Hold order
+     *
+     * @return void
      */
     public function holdAction()
     {
@@ -232,6 +244,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Unhold order
+     *
+     * @return void
      */
     public function unholdAction()
     {
@@ -256,6 +270,8 @@ class Order extends \Magento\Backend\App\Action
      * Manage payment state
      *
      * Either denies or approves a payment that is in "review" state
+     *
+     * @return void
      */
     public function reviewPaymentAction()
     {
@@ -295,6 +311,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Add order comment action
+     *
+     * @return void
      */
     public function addCommentAction()
     {
@@ -342,6 +360,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Generate invoices grid for ajax request
+     *
+     * @return void
      */
     public function invoicesAction()
     {
@@ -353,6 +373,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Generate shipments grid for ajax request
+     *
+     * @return void
      */
     public function shipmentsAction()
     {
@@ -364,6 +386,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Generate credit memos grid for ajax request
+     *
+     * @return void
      */
     public function creditmemosAction()
     {
@@ -375,6 +399,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Generate order history for ajax request
+     *
+     * @return void
      */
     public function commentsHistoryAction()
     {
@@ -389,6 +415,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Cancel selected orders
+     *
+     * @return void
      */
     public function massCancelAction()
     {
@@ -420,6 +448,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Hold selected orders
+     *
+     * @return void
      */
     public function massHoldAction()
     {
@@ -453,6 +483,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Unhold selected orders
+     *
+     * @return void
      */
     public function massUnholdAction()
     {
@@ -489,6 +521,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Change status for selected orders
+     *
+     * @return void
      */
     public function massStatusAction()
     {
@@ -497,6 +531,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Print documents for selected orders
+     *
+     * @return void
      */
     public function massPrintAction()
     {
@@ -505,6 +541,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Print invoices for selected orders
+     *
+     * @return ResponseInterface|void
      */
     public function pdfinvoicesAction()
     {
@@ -544,6 +582,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Print shipments for selected orders
+     *
+     * @return ResponseInterface|void
      */
     public function pdfshipmentsAction()
     {
@@ -583,6 +623,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Print credit memos for selected orders
+     *
+     * @return ResponseInterface|void
      */
     public function pdfcreditmemosAction()
     {
@@ -622,6 +664,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Print all documents for selected orders
+     *
+     * @return ResponseInterface|void
      */
     public function pdfdocsAction()
     {
@@ -687,6 +731,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Attempt to void the order payment
+     *
+     * @return void
      */
     public function voidPaymentAction()
     {
@@ -754,6 +800,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Export order grid to CSV format
+     *
+     * @return ResponseInterface|void
      */
     public function exportCsvAction()
     {
@@ -765,7 +813,9 @@ class Order extends \Magento\Backend\App\Action
     }
 
     /**
-     *  Export order grid to Excel XML format
+     * Export order grid to Excel XML format
+     *
+     * @return ResponseInterface|void
      */
     public function exportExcelAction()
     {
@@ -783,6 +833,7 @@ class Order extends \Magento\Backend\App\Action
     /**
      * Order transactions grid ajax action
      *
+     * @return void
      */
     public function transactionsAction()
     {
@@ -793,6 +844,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Edit order address form
+     *
+     * @return void
      */
     public function addressAction()
     {
@@ -815,6 +868,8 @@ class Order extends \Magento\Backend\App\Action
 
     /**
      * Save order address
+     *
+     * @return void
      */
     public function addressSaveAction()
     {

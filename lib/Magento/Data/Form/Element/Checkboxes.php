@@ -23,6 +23,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
+
+use Magento\Escaper;
 
 /**
  * Form select element
@@ -31,10 +34,6 @@
  * @package    Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Escaper;
-
 class Checkboxes extends AbstractElement
 {
     /**
@@ -69,19 +68,18 @@ class Checkboxes extends AbstractElement
      *
      * @return array
      */
-    protected function _prepareValues() {
+    protected function _prepareValues()
+    {
         $options = array();
         $values  = array();
 
         if ($this->getValues()) {
             if (!is_array($this->getValues())) {
                 $options = array($this->getValues());
-            }
-            else {
+            } else {
                 $options = $this->getValues();
             }
-        }
-        elseif ($this->getOptions() && is_array($this->getOptions())) {
+        } elseif ($this->getOptions() && is_array($this->getOptions())) {
             $options = $this->getOptions();
         }
         foreach ($options as $k => $v) {
@@ -131,21 +129,20 @@ class Checkboxes extends AbstractElement
 
     /**
      * @param mixed $value
-     * @return string
+     * @return string|void
      */
     public function getChecked($value)
     {
         if ($checked = $this->getValue()) {
-        }
-        elseif ($checked = $this->getData('checked')) {
-        }
-        else {
-            return ;
+
+        } elseif ($checked = $this->getData('checked')) {
+
+        } else {
+            return;
         }
         if (!is_array($checked)) {
             $checked = array(strval($checked));
-        }
-        else {
+        } else {
             foreach ($checked as $k => $v) {
                 $checked[$k] = strval($v);
             }
@@ -153,7 +150,7 @@ class Checkboxes extends AbstractElement
         if (in_array(strval($value), $checked)) {
             return 'checked';
         }
-        return ;
+        return;
     }
 
     /**
@@ -165,8 +162,7 @@ class Checkboxes extends AbstractElement
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
                 $disabled = array(strval($disabled));
-            }
-            else {
+            } else {
                 foreach ($disabled as $k => $v) {
                     $disabled[$k] = strval($v);
                 }
@@ -175,7 +171,7 @@ class Checkboxes extends AbstractElement
                 return 'disabled';
             }
         }
-        return ;
+        return;
     }
 
     /**
@@ -187,7 +183,7 @@ class Checkboxes extends AbstractElement
         if ($onclick = $this->getData('onclick')) {
             return str_replace('$value', $value, $onclick);
         }
-        return ;
+        return;
     }
 
     /**
@@ -199,7 +195,7 @@ class Checkboxes extends AbstractElement
         if ($onchange = $this->getData('onchange')) {
             return str_replace('$value', $value, $onchange);
         }
-        return ;
+        return;
     }
 
 //    public function getName($value)

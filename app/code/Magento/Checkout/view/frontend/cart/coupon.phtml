@@ -30,18 +30,19 @@
             <fieldset class="fieldset coupon<?php strlen($this->getCouponCode()) ? ' applied' : ''?>">
                 <input type="hidden" name="remove" id="remove-coupon" value="0" />
                 <div class="field">
-                    <label for="coupon_code" class="label"><span><?php echo __('Enter your coupon code if you have one.') ?></span></label>
+                    <label for="coupon_code" class="label"><span><?php echo __('Enter your code') ?></span></label>
                     <div class="control">
                         <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
                     </div>
                 </div>
-                <div class="actions">
+                <div class="actions toolbar">
+                    <?php if(!strlen($this->getCouponCode())): ?>
                     <div class="primary">
                         <button class="action apply" type="button" value="<?php echo __('Apply Coupon') ?>">
                             <span><?php echo __('Apply Coupon') ?></span>
                         </button>
                     </div>
-                    <?php if(strlen($this->getCouponCode())): ?>
+                    <?php else: ?>
                         <div class="secondary">
                             <button  type="button" class="action cancel" value="<?php echo __('Cancel Coupon') ?>"><span><?php echo __('Cancel Coupon') ?></span></button>
                         </div>

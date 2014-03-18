@@ -86,7 +86,7 @@ class Config
         /** @var $route \Magento\Webapi\Controller\Rest\Router\Route */
         $route = $this->_routeFactory->createRoute(
             'Magento\Webapi\Controller\Rest\Router\Route',
-            strtolower($routeData[self::KEY_ROUTE_PATH])
+            $this->_formatRoutePath($routeData[self::KEY_ROUTE_PATH])
         );
 
         $route->setServiceClass($routeData[self::KEY_CLASS])
@@ -94,6 +94,22 @@ class Config
             ->setSecure($routeData[self::KEY_IS_SECURE])
             ->setAclResources($routeData[self::KEY_ACL_RESOURCES]);
         return $route;
+    }
+
+    /**
+     * Lowercase all parts of the given route path except for the path parameters.
+     *
+     * @param string $routePath The route path (e.g. '/V1/Categories/:categoryId')
+     * @return string The modified route path (e.g. '/v1/categories/:categoryId')
+     */
+    protected function _formatRoutePath($routePath)
+    {
+        $routePathParts = explode('/', $routePath);
+        $pathParts = [];
+        foreach ($routePathParts as $pathPart) {
+            $pathParts[] = (substr($pathPart, 0, 1) === ":") ? $pathPart : strtolower($pathPart);
+        }
+        return implode('/', $pathParts);
     }
 
     /**

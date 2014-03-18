@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Model\Resource;
 
 /**
  * Product alert for back in abstract resource model
@@ -32,15 +32,13 @@
  * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model\Resource;
-
 abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Retrieve alert row by object parameters
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return array|bool
+     * @return array|false
      */
     protected function _getAlertRow(\Magento\Core\Model\AbstractModel $object)
     {
@@ -65,7 +63,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * Load object data by parameters
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\ProductAlert\Model\Resource\AbstractResource
+     * @return $this
      */
     public function loadByParam(\Magento\Core\Model\AbstractModel $object)
     {
@@ -82,7 +80,7 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * @param \Magento\Core\Model\AbstractModel $object
      * @param int $customerId
      * @param int $websiteId
-     * @return \Magento\ProductAlert\Model\Resource\AbstractResource
+     * @return $this
      */
     public function deleteCustomer(\Magento\Core\Model\AbstractModel $object, $customerId, $websiteId=null)
     {

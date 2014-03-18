@@ -56,7 +56,7 @@ class Edit extends Button
      * Get the icon on the grid according to the integration type
      *
      * @param \Magento\Object $row
-     * return string
+     * @return string
      */
     public function _getClassAttribute(Object $row)
     {

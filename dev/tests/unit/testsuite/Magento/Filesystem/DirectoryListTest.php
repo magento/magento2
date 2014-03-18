@@ -156,4 +156,14 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(str_replace('\\', '/', $newRoot), $dir->getConfig(AppFilesystem::ROOT_DIR)['path']);
         $this->assertEquals(str_replace('\\', '/', $newMedia), $dir->getConfig(AppFilesystem::MEDIA_DIR)['path']);
     }
+
+    public function testIsConfigured()
+    {
+        $dir = new DirectoryList(__DIR__, array(
+            AppFilesystem::PUB_DIR => array('uri' => '')
+        ));
+
+        $this->assertTrue($dir->isConfigured(AppFilesystem::PUB_DIR));
+        $this->assertFalse($dir->isConfigured(AppFilesystem::MEDIA_DIR));
+    }
 }

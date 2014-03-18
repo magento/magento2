@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * Comment
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Comment extends Less_Tree{
 
+	public $value;
+	public $silent;
+	public $isReferenced;
+	public $currentFileInfo;
 	public $type = 'Comment';
 
 	public function __construct($value, $silent, $index = null, $currentFileInfo = null ){
@@ -10,20 +20,23 @@ class Less_Tree_Comment extends Less_Tree{
 		$this->currentFileInfo = $currentFileInfo;
 	}
 
-	public function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	public function genCSS( $output ){
 		//if( $this->debugInfo ){
-			//self::OutputAdd( $strs, tree.debugInfo($env, $this), $this->currentFileInfo, $this->index);
+			//$output->add( tree.debugInfo($env, $this), $this->currentFileInfo, $this->index);
 		//}
-		self::OutputAdd( $strs, trim($this->value) );//TODO shouldn't need to trim, we shouldn't grab the \n
+		$output->add( trim($this->value) );//TODO shouldn't need to trim, we shouldn't grab the \n
 	}
 
-	public function toCSS($env = null){
-		return Less_Environment::$compress ? '' : $this->value;
+	public function toCSS(){
+		return Less_Parser::$options['compress'] ? '' : $this->value;
 	}
 
-	public function isSilent( $env ){
+	public function isSilent(){
 		$isReference = ($this->currentFileInfo && isset($this->currentFileInfo['reference']) && (!isset($this->isReferenced) || !$this->isReferenced) );
-		$isCompressed = Less_Environment::$compress && !preg_match('/^\/\*!/', $this->value);
+		$isCompressed = Less_Parser::$options['compress'] && !preg_match('/^\/\*!/', $this->value);
 		return $this->silent || $isReference || $isCompressed;
 	}
 

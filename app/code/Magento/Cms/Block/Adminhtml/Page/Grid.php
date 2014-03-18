@@ -185,7 +185,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Filter store condition
      *
-     * @param $collection
+     * @param \Magento\Data\Collection $collection
      * @param \Magento\Object $column
      * @return void
      */

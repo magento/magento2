@@ -76,4 +76,9 @@
             <argument name="copyConstructor" xsi:type="object">Magento\Catalog\Model\Product\CopyConstructor\Composite</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Option\UrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Url</argument>
+        </arguments>
+    </type>
 </config>

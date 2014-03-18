@@ -27,7 +27,9 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 class Config
 {
-    /** @var \Magento\Config\DataInterface */
+    /**
+     * @var \Magento\Config\DataInterface
+     */
     protected $_dataStorage;
 
     /**

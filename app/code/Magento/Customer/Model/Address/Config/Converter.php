@@ -38,7 +38,7 @@ class Converter implements \Magento\Config\ConverterInterface
         $output = array();
         /** @var \DOMNodeList $formats */
         $formats = $source->getElementsByTagName('format');
-        /** @var DOMNode $formatConfig */
+        /** @var \DOMNode $formatConfig */
         foreach ($formats as $formatConfig) {
             $formatCode = $formatConfig->attributes->getNamedItem('code')->nodeValue;
             $output[$formatCode] = array();

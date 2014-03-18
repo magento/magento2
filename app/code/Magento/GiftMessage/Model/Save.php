@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\GiftMessage\Model;
 
 /**
  * Adminhtml giftmessage save model
@@ -32,16 +32,17 @@
  * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Model;
-
 class Save extends \Magento\Object
 {
+    /**
+     * @var bool
+     */
     protected $_saved = false;
 
     /**
      * Gift message message
      *
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
 
@@ -81,7 +82,7 @@ class Save extends \Magento\Object
     /**
      * Save all seted giftmessages
      *
-     * @return \Magento\GiftMessage\Model\Save
+     * @return $this
      */
     public function saveAllInQuote()
     {
@@ -98,11 +99,17 @@ class Save extends \Magento\Object
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function getSaved()
     {
         return $this->_saved;
     }
 
+    /**
+     * @return $this
+     */
     public function saveAllInOrder()
     {
         $giftmessages = $this->getGiftmessages();
@@ -121,9 +128,9 @@ class Save extends \Magento\Object
     /**
      * Save a single gift message
      *
-     * @param integer $entityId
+     * @param int $entityId
      * @param array $giftmessage
-     * @return \Magento\GiftMessage\Model\Save
+     * @return $this
      */
     protected function _saveOne($entityId, $giftmessage)
     {
@@ -163,7 +170,7 @@ class Save extends \Magento\Object
         } elseif (!$giftmessageModel->isMessageEmpty()) {
             $giftmessageModel->save();
             $entityModel->setGiftMessageId($giftmessageModel->getId());
-            if($entityType != 'quote') {
+            if ($entityType != 'quote') {
                 $entityModel->save();
             }
             $this->_saved = true;
@@ -175,9 +182,9 @@ class Save extends \Magento\Object
     /**
      * Delete a single gift message from entity
      *
-     * @param \Magento\GiftMessage\Model\Message|null $giftmessageModel
      * @param \Magento\Object $entityModel
-     * @return \Magento\GiftMessage\Model\Save
+     * @param \Magento\GiftMessage\Model\Message|null $giftmessageModel
+     * @return $this
      */
     protected function _deleteOne($entityModel, $giftmessageModel=null)
     {
@@ -195,7 +202,7 @@ class Save extends \Magento\Object
      * Set allowed quote items for gift messages
      *
      * @param array $items
-     * @return \Magento\GiftMessage\Model\Save
+     * @return $this
      */
     public function setAllowQuoteItems($items)
     {
@@ -207,7 +214,7 @@ class Save extends \Magento\Object
      * Add allowed quote item for gift messages
      *
      * @param int $item
-     * @return \Magento\GiftMessage\Model\Save
+     * @return $this
      */
     public function addAllowQuoteItem($item)
     {
@@ -256,7 +263,7 @@ class Save extends \Magento\Object
      * Checks allowed quote item for gift messages
      *
      * @param  \Magento\Object $item
-     * @return boolean
+     * @return bool
      */
     public function getIsAllowedQuoteItem($item)
     {
@@ -285,8 +292,8 @@ class Save extends \Magento\Object
     /**
      * Imports quote items for gift messages from products data
      *
-     * @param unknown_type $products
-     * @return unknown
+     * @param mixed $products
+     * @return $this
      */
     public function importAllowQuoteItemsFromProducts($products)
     {
@@ -318,6 +325,10 @@ class Save extends \Magento\Object
         return $this;
     }
 
+    /**
+     * @param mixed $items
+     * @return $this
+     */
     public function importAllowQuoteItemsFromItems($items)
     {
         $allowedItems = $this->getAllowQuoteItems();
@@ -351,7 +362,7 @@ class Save extends \Magento\Object
      * Retrieve mapped type for entity
      *
      * @param string $type
-     * @return string
+     * @return string|null
      */
     protected function _getMappedType($type)
     {

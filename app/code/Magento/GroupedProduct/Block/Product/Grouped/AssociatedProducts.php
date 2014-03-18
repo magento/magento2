@@ -29,6 +29,9 @@ namespace Magento\GroupedProduct\Block\Product\Grouped;
 class AssociatedProducts
     extends \Magento\Backend\Block\Catalog\Product\Tab\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();

@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Multishipping\Block\Checkout;
+
+use Magento\Sales\Model\Quote\Address;
 
 /**
  * Multishipping checkout overview information
@@ -31,8 +34,6 @@
  * @package    Magento_Checkout
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class Overview extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
@@ -70,6 +71,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
 
     /**
      * Initialize default item renderer
+     *
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -93,7 +96,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return Address
      */
     public function getBillingAddress()
     {
@@ -144,7 +147,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return bool
      */
     public function getShippingAddressRate($address)
@@ -157,7 +160,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return mixed
      */
     public function getShippingPriceInclTax($address)
@@ -168,7 +171,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return mixed
      */
     public function getShippingPriceExclTax($address)
@@ -177,7 +180,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param $price
+     * @param float $price
      * @return mixed
      */
     public function formatPrice($price)
@@ -186,7 +189,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return mixed
      */
     public function getShippingAddressItems($address)
@@ -195,7 +198,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return mixed
      */
     public function getShippingAddressTotals($address)
@@ -203,7 +206,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $totals = $address->getTotals();
         foreach ($totals as $total) {
             if ($total->getCode()=='grand_total') {
-                if ($address->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_BILLING) {
+                if ($address->getAddressType() == Address::TYPE_BILLING) {
                     $total->setTitle(__('Total'));
                 }
                 else {
@@ -231,7 +234,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param Address $address
      * @return string
      */
     public function getEditShippingAddressUrl($address)
@@ -240,7 +243,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param $address
+     * @param Address $address
      * @return string
      */
     public function getEditBillingAddressUrl($address)
@@ -329,7 +332,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @param $totals
+     * @param mixed $totals
      * @param null $colspan
      * @return string
      */

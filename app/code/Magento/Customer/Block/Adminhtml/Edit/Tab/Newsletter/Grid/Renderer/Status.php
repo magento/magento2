@@ -28,8 +28,16 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
  */
 class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var array
+     */
     protected static $_statuses;
 
+    /**
+     * Constructor for Grid Renderer Status
+     *
+     * @return void
+     */
     protected function _construct()
     {
         self::$_statuses = array(
@@ -42,11 +50,19 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         parent::_construct();
     }
 
+    /**
+     * @param \Magento\Object $row
+     * @return string
+     */
     public function render(\Magento\Object $row)
     {
         return __($this->getStatus($row->getQueueStatus()));
     }
 
+    /**
+     * @param string $status
+     * @return string
+     */
     public static function getStatus($status)
     {
         if (isset(self::$_statuses[$status])) {

@@ -32,10 +32,10 @@
                 loaderText: $.mage.__('Please wait...'),
                 imgAlt: $.mage.__('Loading...')
             },
-            template: '<div class="loading-mask" data-role="loader">' +
+            template: '<div class="loading-mask" data-role="loader" {{if texts.loaderText}}data-text="${texts.loaderText}"{{/if}}>' +
                 '<div class="loader">' +
-                '<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">' +
-                '<p>{{if texts.loaderText}}${texts.loaderText}{{/if}}</p>' +
+                '{{if icon}}<img {{if texts.imgAlt}}alt="${texts.imgAlt}"{{/if}} src="${icon}">{{/if}}' +
+                '{{if texts.loaderText}}<p>${texts.loaderText}</p>{{/if}}' +
                 '</div>' +
                 '</div>'
         },

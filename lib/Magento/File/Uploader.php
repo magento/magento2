@@ -23,6 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\File;
 
 /**
  * File upload class
@@ -34,9 +35,6 @@
  * @package    Magento_File
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\File;
-
 class Uploader
 {
     /**
@@ -263,7 +261,7 @@ class Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
-     * @return bool
+     * @return bool|void
      */
     protected function _moveFile($tmpPath, $destPath)
     {
@@ -361,7 +359,7 @@ class Uploader
     /**
      * Convert filename to lowercase in case of case-insensitive file names
      *
-     * @param string
+     * @param string $fileName
      * @return string
      */
     public function correctFileNameCase($fileName)

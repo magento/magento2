@@ -161,9 +161,18 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testInitCheckoutNotLoggedIn()
     {
+        /* The customer session must be cleared before the real test begins. Need to
+           have a customer via the data fixture to actually log out. */
+        /** @var $customerSession \Magento\Customer\Model\Session*/
+        $customerSession = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Session');
+        $customerSession->setCustomerId(1);
+        $customerSession->logout();
+
         $this->_model->saveBilling($this->_getCustomerData(), null);
         $this->_prepareQuote($this->_getQuote());
         $this->assertTrue($this->_model->getCheckout()->getSteps()['shipping']['allow']);
@@ -186,11 +195,12 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $emailFromFixture = 'customer@example.com';
         /** @var $customerSession \Magento\Customer\Model\Session*/
         $customerSession = Bootstrap::getObjectManager()->create(
-            '\Magento\Customer\Model\Session');
-        /** @var $customerService \Magento\Customer\Service\V1\CustomerService*/
-        $customerService = Bootstrap::getObjectManager()->create('\Magento\Customer\Service\V1\CustomerService');
-        $customerDto = $customerService->getCustomer($customerIdFromFixture);
-        $customerSession->setCustomerData($customerDto);
+            'Magento\Customer\Model\Session');
+        /** @var $customerService \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
+        $customerService = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $customerData = $customerService->getCustomer($customerIdFromFixture);
+        $customerSession->setCustomerDataObject($customerData);
         $this->_model = Bootstrap::getObjectManager()->create(
             'Magento\Checkout\Model\Type\Onepage',
             ['customerSession' => $customerSession]
@@ -490,7 +500,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $validationErrors = '"Email" is not a valid email address.';
+        $validationErrors = 'Please correct this email address: "invalidemail".';
         $this->assertEquals(['error' => -1, 'message' => $validationErrors], $result, 'Validation error is invalid.');
     }
 

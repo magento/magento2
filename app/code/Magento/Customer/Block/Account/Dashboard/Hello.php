@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Block\Account\Dashboard;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+
 class Hello extends \Magento\View\Element\Template
 {
     /**
@@ -36,9 +38,9 @@ class Hello extends \Magento\View\Element\Template
     protected $_viewHelper;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerServiceInterface
+     * @var CustomerAccountServiceInterface
      */
-    protected $_customerService;
+    protected $_customerAccountService;
 
     /**
      * Constructor
@@ -46,19 +48,19 @@ class Hello extends \Magento\View\Element\Template
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\View $viewHelper,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_viewHelper = $viewHelper;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -70,7 +72,7 @@ class Hello extends \Magento\View\Element\Template
      */
     public function getCustomerName()
     {
-        $customer = $this->_customerService->getCustomer($this->_customerSession->getCustomerId());
+        $customer = $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
         return $this->_viewHelper->getCustomerName($customer);
     }
 }

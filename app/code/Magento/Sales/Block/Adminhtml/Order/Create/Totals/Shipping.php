@@ -23,21 +23,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
 /**
  * Subtotal Total Row Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
-
 class Shipping
     extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'order/create/totals/shipping.phtml';
 
     /**
+     * Tax config
+     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -63,7 +68,6 @@ class Shipping
         $this->_taxConfig = $taxConfig;
         parent::__construct($context, $sessionQuote, $orderCreate, $salesData, $salesConfig, $data);
     }
-
 
     /**
      * Check if we need display shipping include and exclude tax

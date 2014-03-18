@@ -44,7 +44,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
 
     /**
      * @param Setup\Context $context
-     * @param $resourceName
+     * @param string $resourceName
      * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param string $moduleName

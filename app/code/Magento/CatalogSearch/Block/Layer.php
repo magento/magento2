@@ -23,11 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Layered Navigation block for search
- *
- */
 namespace Magento\CatalogSearch\Block;
 
 use Magento\Catalog\Block\Layer\View;
@@ -37,6 +32,10 @@ use Magento\CatalogSearch\Model\Resource\EngineProvider;
 use Magento\Registry;
 use Magento\View\Element\Template\Context;
 
+/**
+ * Layered Navigation block for search
+ *
+ */
 class Layer extends View
 {
     /**
@@ -91,6 +90,8 @@ class Layer extends View
 
     /**
      * Internal constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

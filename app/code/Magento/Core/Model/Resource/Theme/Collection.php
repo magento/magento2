@@ -39,6 +39,8 @@ class Collection
 
     /**
      * Collection initialization
+     *
+     * @return void
      */
     protected function _construct()
     {

@@ -34,6 +34,7 @@
 <?php if(count($_items)): ?>
     <div class="wrapper table downloadable products">
         <table id="my-downloadable-products-table" class="data table downloadable products">
+            <caption class="table caption"><?php echo __('Downloadable Products') ?></caption>
             <thead>
                 <tr>
                     <th class="col id"><?php echo __('Order #') ?></th>
@@ -69,7 +70,7 @@
     <?php echo $this->getChildHtml('pager'); ?>
 </div>
 
-<div class="actions">
+<div class="actions toolbar">
     <div class="secondary">
         <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back">
             <span><?php echo __('Back') ?></span>

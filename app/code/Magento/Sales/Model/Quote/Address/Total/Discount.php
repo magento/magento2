@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Quote\Address\Total;
 
 class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
@@ -54,7 +53,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
     /**
      * @param \Magento\Sales\Model\Quote\Address $address
-     * @return $this|\Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {

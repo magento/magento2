@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\Acl;
 
 require_once(__DIR__ . '/Menu/Generator.php');
@@ -141,7 +140,7 @@ class Generator
     /**
      * Get module name from file name
      *
-     * @param $fileName string
+     * @param string $fileName
      * @return string
      */
     public function getModuleName($fileName)
@@ -174,7 +173,7 @@ class Generator
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getForwardNodeNames()
     {
@@ -185,6 +184,7 @@ class Generator
 
     /**
      * @param array $metaNodeNames
+     * @return void
      */
     public function setMetaNodeNames($metaNodeNames)
     {
@@ -213,7 +213,7 @@ class Generator
     /**
      * Get valid node types
      *
-     * @return array
+     * @return int[]
      */
     public function getValidNodeTypes()
     {
@@ -236,6 +236,7 @@ class Generator
 
     /**
      * @param string $basePath
+     * @return void
      */
     public function setBasePath($basePath)
     {
@@ -256,7 +257,6 @@ class Generator
      * @param \DOMDocument $resultDom
      * @param string $nodeName
      * @param \DOMNode $parent
-     *
      * @return \DOMNode
      */
     public function createNode(\DOMDocument $resultDom, $nodeName, \DOMNode $parent)
@@ -273,9 +273,9 @@ class Generator
      * Generate unique id for ACL item
      *
      * @param \DOMNode $node
-     * @param $xpath string
-     * @param $resourceId string
-     * @return mixed
+     * @param string $xpath
+     * @param string $resourceId
+     * @return string
      */
     public function generateId(\DOMNode $node, $xpath, $resourceId)
     {
@@ -294,6 +294,7 @@ class Generator
      * @param \DOMNode $node
      * @param \DOMNode $dataNode
      * @param string $module
+     * @return void
      */
     public function setMetaInfo(\DOMNode $node, \DOMNode $dataNode, $module)
     {
@@ -330,6 +331,7 @@ class Generator
 
     /**
      * @param array $adminhtmlFiles
+     * @return void
      */
     public function setAdminhtmlFiles($adminhtmlFiles)
     {
@@ -350,7 +352,8 @@ class Generator
      * @param \DOMNode $node - data source
      * @param \DOMDocument $dom - result \DOMDocument
      * @param \DOMNode $parentNode - parent node from result document
-     * @param $moduleName
+     * @param string $moduleName
+     * @return void
      */
     public function parseNode(\DOMNode $node, \DOMDocument $dom, \DOMNode $parentNode, $moduleName)
     {
@@ -379,7 +382,7 @@ class Generator
     /**
      * Check if node is restricted
      *
-     * @param $nodeName string
+     * @param string $nodeName
      * @return bool
      */
     public function isRestrictedNode($nodeName)
@@ -389,6 +392,8 @@ class Generator
 
     /**
      * Print help message
+     *
+     * @return void
      */
     public function printHelpMessage()
     {
@@ -423,6 +428,8 @@ class Generator
 
     /**
      * Parse adminhtml.xml files
+     *
+     * @return void
      */
     public function parseAdminhtmlFiles()
     {
@@ -447,6 +454,8 @@ class Generator
 
     /**
      * Update ACL resource id
+     *
+     * @return void
      */
     public function updateAclResourceIds()
     {
@@ -464,7 +473,8 @@ class Generator
     }
 
     /**
-     * @param $node \DOMNode
+     * @param \DOMNode $node
+     * @return void
      */
     public function updateChildAclNodes($node)
     {
@@ -490,6 +500,7 @@ class Generator
 
     /**
      * @param array $aclResourceMaps
+     * @return void
      */
     public function setAclResourceMaps($aclResourceMaps)
     {
@@ -499,7 +510,8 @@ class Generator
     /**
      * Save ACL files
      *
-     * @throws \Exception if tidy extension is not installed
+     * @return void
+     * @throws \Exception If tidy extension is not installed
      */
     public function saveAclFiles()
     {
@@ -527,6 +539,7 @@ class Generator
 
     /**
      * @param array $parsedDomList
+     * @return void
      */
     public function setParsedDomList($parsedDomList)
     {
@@ -535,6 +548,7 @@ class Generator
 
     /**
      * @param array $adminhtmlDomList
+     * @return void
      */
     public function setAdminhtmlDomList($adminhtmlDomList)
     {
@@ -551,6 +565,8 @@ class Generator
 
     /**
      * Remove empty files
+     *
+     * @return array
      */
     public function removeAdminhtmlFiles()
     {
@@ -608,6 +624,7 @@ class Generator
 
     /**
      * @param string $artifactsPath
+     * @return void
      */
     public function setArtifactsPath($artifactsPath)
     {
@@ -616,6 +633,8 @@ class Generator
 
     /**
      * Run migration process
+     *
+     * @return void
      */
     public function run()
     {
@@ -643,9 +662,10 @@ class Generator
     /**
      * Print statistic
      *
-     * @param $result
-     * @param $menuResult
-     * @param $artifacts
+     * @param array $result
+     * @param array $menuResult
+     * @param array $artifacts
+     * @return void
      */
     public function printStatistic($result, $menuResult, $artifacts)
     {
@@ -693,7 +713,8 @@ class Generator
     /**
      * Save artifacts files
      *
-     * @param $artifacts
+     * @param array $artifacts
+     * @return void
      */
     public function saveArtifacts($artifacts)
     {

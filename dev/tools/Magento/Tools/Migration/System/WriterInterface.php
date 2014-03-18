@@ -31,13 +31,15 @@ interface WriterInterface
     /**
      * @param string $fileName
      * @param string $contents
+     * @return void
      */
     public function write($fileName, $contents);
 
     /**
      * Remove file
      *
-     * @param $fileName
+     * @param string $fileName
+     * @return void
      */
     public function remove($fileName);
 }

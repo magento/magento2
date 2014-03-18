@@ -66,7 +66,10 @@ try {
     $objectManagerFactory = new \Magento\App\ObjectManagerFactory();
     $objectManager = $objectManagerFactory->create(BP, $_SERVER);
 
-    $config = $objectManager->create('Magento\Tools\View\Generator\Config', array('cmdOptions' => $options));
+    $config = $objectManager->create(
+        'Magento\Tools\View\Generator\Config',
+        array('cmdOptions' => $options, 'allowedFiles' => array('.htaccess'))
+    );
     $themes = $objectManager->create('Magento\Core\Model\Theme\Collection');
     $themes->setItemObjectClass('Magento\Tools\View\Generator\ThemeLight');
     $themes->addDefaultPattern('*');
@@ -76,12 +79,16 @@ try {
             'fallbackRule' => $fallbackFactory->createViewFileRule()
         ));
     $copyRules = $generator->getCopyRules();
-    $deployment = $objectManager->create('Magento\Tools\View\Generator\ThemeDeployment', array(
+    $deployment = $objectManager->create(
+        'Magento\Tools\View\Generator\ThemeDeployment',
+        [
             'destinationHomeDir' => $config->getDestinationDir(),
             'configPermitted' => __DIR__ . '/config/permitted.php',
             'configForbidden' => __DIR__ . '/config/forbidden.php',
-            'isDryRun' => $config->isDryRun()
-        ));
+            'isDryRun' => $config->isDryRun(),
+            'preProcessor' => $objectManager->create('Magento\View\Asset\PreProcessor\Composite')
+        ]
+    );
     $deployment->run($copyRules);
 } catch (\Exception $e) {
     $logger->log('Error: ' . $e->getMessage(), \Zend_Log::ERR);

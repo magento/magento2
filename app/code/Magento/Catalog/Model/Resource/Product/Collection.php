@@ -467,6 +467,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Define product website and category product tables
      *
+     * @return void
      */
     protected function _initTables()
     {
@@ -625,12 +626,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
 
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', array('collection' => $this));
-        }
-
-        foreach ($this as $product) {
-            if ($product->isRecurring() && $profile = $product->getRecurringProfile()) {
-                $product->setRecurringProfile(unserialize($profile));
-            }
         }
 
         return $this;

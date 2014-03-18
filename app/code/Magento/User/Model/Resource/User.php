@@ -228,7 +228,7 @@ class User extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Create role for provided user of provided type
      *
-     * @param $parentId
+     * @param int $parentId
      * @param ModelUser $user
      * @return void
      */

@@ -1,7 +1,5 @@
 <?php
 /**
- * Plugin for product type transition manager
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,8 +23,12 @@
  */
 namespace Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin;
 
+use Closure;
 use Magento\App\RequestInterface;
 
+/**
+ * Plugin for product type transition manager
+ */
 class Downloadable
 {
     /**
@@ -49,15 +51,14 @@ class Downloadable
      * Change product type to downloadable if needed
      *
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $subject
-     * @param callable $proceed
+     * @param Closure $proceed
      * @param \Magento\Catalog\Model\Product $product
-     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundProcessProduct(
         \Magento\Catalog\Model\Product\TypeTransitionManager $subject,
-        \Closure $proceed,
+        Closure $proceed,
         \Magento\Catalog\Model\Product $product
     ) {
         $isTypeCompatible = in_array($product->getTypeId(), array(

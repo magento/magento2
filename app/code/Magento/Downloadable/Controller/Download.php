@@ -21,18 +21,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Controller;
+
+use Magento\App\ResponseInterface;
+use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Core\Exception as CoreException;
+use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 
 /**
  * Download controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Controller;
-
-use Magento\Downloadable\Helper\Download as DownloadHelper;
-use Magento\Core\Exception as CoreException;
-use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
-
 class Download extends \Magento\App\Action\Action
 {
 
@@ -61,6 +61,7 @@ class Download extends \Magento\App\Action\Action
      *
      * @param string $path         Path to resource
      * @param string $resourceType Type of resource (see Magento\Downloadable\Helper\Download::LINK_TYPE_* constants)
+     * @return void
      */
     protected function _processDownload($path, $resourceType)
     {
@@ -98,7 +99,7 @@ class Download extends \Magento\App\Action\Action
     /**
      * Download sample action
      *
-     * @return \Magento\App\ResponseInterface
+     * @return ResponseInterface
      */
     public function sampleAction()
     {
@@ -133,7 +134,7 @@ class Download extends \Magento\App\Action\Action
     /**
      * Download link's sample action
      *
-     * @return \Magento\App\ResponseInterface
+     * @return ResponseInterface
      */
     public function linkSampleAction()
     {
@@ -165,7 +166,7 @@ class Download extends \Magento\App\Action\Action
     /**
      * Download link action
      *
-     * @return \Magento\App\ResponseInterface
+     * @return void|ResponseInterface
      */
     public function linkAction()
     {

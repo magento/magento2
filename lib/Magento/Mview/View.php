@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview;
 
 class View extends \Magento\Object implements ViewInterface
@@ -206,6 +205,7 @@ class View extends \Magento\Object implements ViewInterface
     /**
      * Materialize view by IDs in changelog
      *
+     * @return void
      * @throws \Exception
      */
     public function update()
@@ -247,6 +247,8 @@ class View extends \Magento\Object implements ViewInterface
 
     /**
      * Suspend view updates and set version ID to changelog's end
+     *
+     * @return void
      */
     public function suspend()
     {
@@ -260,6 +262,8 @@ class View extends \Magento\Object implements ViewInterface
 
     /**
      * Resume view updates
+     *
+     * @return void
      */
     public function resume()
     {
@@ -272,6 +276,8 @@ class View extends \Magento\Object implements ViewInterface
 
     /**
      * Clear precessed changelog entries
+     *
+     * @return void
      */
     public function clearChangelog()
     {

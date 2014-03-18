@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource;
 
 /**
  * Bundle Selection Resource Model
@@ -32,13 +32,12 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource;
-
 class Selection extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table and id field
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -123,6 +122,7 @@ class Selection extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Save bundle item price per website
      *
      * @param \Magento\Bundle\Model\Selection $item
+     * @return void
      */
     public function saveSelectionPrice($item)
     {

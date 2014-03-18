@@ -35,7 +35,7 @@
                 <argument name="file" xsi:type="string">matchMedia.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js" after="mage-zoom-js">
             <arguments>
                 <argument name="file" xsi:type="string">js/responsive.js</argument>
             </arguments>

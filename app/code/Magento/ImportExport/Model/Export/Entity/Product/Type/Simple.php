@@ -54,7 +54,7 @@ class Simple
      */
     protected $_disabledAttrs = array(
         'old_id',
-        'recurring_profile',
+        'recurring_payment',
         'is_recurring',
         'tier_price',
         'group_price',

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Transactions;
 
 /**
  * Adminhtml transaction detail
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Transactions;
-
 class Detail extends \Magento\Backend\Block\Widget\Container
 {
     /**
@@ -66,6 +65,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     /**
      * Add control buttons
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -104,6 +104,11 @@ class Detail extends \Magento\Backend\Block\Widget\Container
         return __("Transaction # %1 | %2", $this->_txn->getTxnId(), $this->formatDate($this->_txn->getCreatedAt(), \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true));
     }
 
+    /**
+     * Render block html
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         $this->setTxnIdHtml($this->escapeHtml($this->_txn->getTxnId()));

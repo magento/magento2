@@ -30,20 +30,6 @@ namespace Magento\Stdlib;
 class Cookie
 {
     /**
-     * @var \Magento\App\RequestInterface
-     */
-    protected $httpRequest;
-
-    /**
-     * @param \Magento\App\RequestInterface $request
-     */
-    public function __construct(
-        \Magento\App\RequestInterface $request
-    ) {
-        $this->httpRequest = $request;
-    }
-
-    /**
      * Set cookie
      *
      * @param string $name The cookie name
@@ -95,7 +81,7 @@ class Cookie
         if ($period === null) {
             return $this;
         }
-        $value = $this->httpRequest->getCookie($name, false);
+        $value = $this->get($name, false);
         if ($value !== false) {
             $this->set($name, $value, $period, $path, $domain, $secure, $httponly);
         }
@@ -105,11 +91,15 @@ class Cookie
     /**
      * Retrieve cookie or false if not exists
      *
-     * @param string $name The cookie name
+     * @param string|null $name
+     * @param mixed|null $default
      * @return mixed
      */
-    public function get($name = null)
+    public function get($name = null, $default = null)
     {
-        return $this->httpRequest->getCookie($name, false);
+        if (null === $name) {
+            return $_COOKIE;
+        }
+        return (isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
     }
 }

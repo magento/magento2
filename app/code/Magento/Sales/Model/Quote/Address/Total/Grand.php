@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Model\Quote\Address\Total;
 
 class Grand extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
@@ -33,7 +31,7 @@ class Grand extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      * Collect grand total address amount
      *
      * @param   \Magento\Sales\Model\Quote\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address\Total\Grand
+     * @return  $this
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
@@ -52,7 +50,7 @@ class Grand extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      * Add grand total information to address
      *
      * @param   \Magento\Sales\Model\Quote\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address\Total\Grand
+     * @return  $this
      */
     public function fetch(\Magento\Sales\Model\Quote\Address $address)
     {

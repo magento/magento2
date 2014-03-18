@@ -37,16 +37,16 @@
         <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"><?php echo ($_cartQty == 1) ? __('1 item') : __('%1 items',$_cartQty) ?></span>
     </a>
     <?php if ($this->getIsNeedToDisplaySideBar()): ?>
-        <div data-target="dropdown" class="block minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
+        <div data-target="dropdown" class="block active minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
             <button title="<?php echo __('Close'); ?>" type="button" class="action close" data-toggle="dropdown">
                 <span><?php echo __('Close'); ?></span>
             </button>
             <div class="title">
                 <strong>
                     <span class="text"><?php echo __('My Cart'); ?></span>
-                    <span title="<?php echo __('Items in Cart'); ?>" class="qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
-                        <?php echo $_cartQty ?>
-                    </span>
+                    <span title="<?php echo __('Items in Cart'); ?>"
+                          class="qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"
+                        ><?php echo $_cartQty ?></span>
                 </strong>
             </div>
             <div class="content">

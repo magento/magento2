@@ -51,6 +51,8 @@ class Block extends \Magento\App\Action\Action
 
     /**
      * Returns block content as part of ESI request from Varnish
+     *
+     * @return void
      */
     public function esiAction()
     {
@@ -59,7 +61,7 @@ class Block extends \Magento\App\Action\Action
         $html = '';
         $ttl = 0;
 
-        if (!empty($blocks)){
+        if (!empty($blocks)) {
             $blockInstance = array_shift($blocks);
             $html = $blockInstance->toHtml();
             $ttl = $blockInstance->getTtl();

@@ -41,23 +41,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\TestFramework\Cookie(
-            new \Magento\TestFramework\Request(
-                $this->getMock('\Magento\App\Route\ConfigInterface'),
-                $this->getMock('Magento\App\Request\PathInfoProcessorInterface'),
-                'http://example.com'
-            ),
-            new \Magento\TestFramework\Response(
-                $this->getMock('\Magento\Stdlib\Cookie', array(), array(), '', false),
-                $this->getMock('Magento\App\Http\Context', array(), array(), '', false)
-            )
-        );
+        $this->_model = new \Magento\TestFramework\Cookie();
     }
 
     public function testSet()
     {
         $cookieValue = 'some_cookie_value';
-        $this->assertFalse($this->_model->get(self::SAMPLE_COOKIE_NAME));
+        $this->assertNull($this->_model->get(self::SAMPLE_COOKIE_NAME));
         $this->_model->set(self::SAMPLE_COOKIE_NAME, $cookieValue);
         $this->assertEquals($cookieValue, $this->_model->get(self::SAMPLE_COOKIE_NAME));
         $this->assertEquals($cookieValue, $_COOKIE[self::SAMPLE_COOKIE_NAME]);

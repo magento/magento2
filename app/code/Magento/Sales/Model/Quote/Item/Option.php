@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote\Item;
 
 /**
  * Item option model
@@ -37,8 +38,6 @@
  * @method \Magento\Sales\Model\Quote\Item\Option setCode(string $value)
  * @method \Magento\Sales\Model\Quote\Item\Option setValue(string $value)
  */
-namespace Magento\Sales\Model\Quote\Item;
-
 class Option extends \Magento\Core\Model\AbstractModel
     implements \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
 {
@@ -54,6 +53,8 @@ class Option extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -78,7 +79,7 @@ class Option extends \Magento\Core\Model\AbstractModel
      * Set quote item
      *
      * @param   \Magento\Sales\Model\Quote\Item $item
-     * @return  \Magento\Sales\Model\Quote\Item\Option
+     * @return $this
      */
     public function setItem($item)
     {
@@ -100,8 +101,8 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Set option product
      *
-     * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Sales\Model\Quote\Item\Option
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this
      */
     public function setProduct($product)
     {
@@ -133,7 +134,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize item identifier before save data
      *
-     * @return \Magento\Sales\Model\Quote\Item\Option
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -146,7 +147,7 @@ class Option extends \Magento\Core\Model\AbstractModel
     /**
      * Clone option object
      *
-     * @return \Magento\Sales\Model\Quote\Item\Option
+     * @return $this
      */
     public function __clone()
     {

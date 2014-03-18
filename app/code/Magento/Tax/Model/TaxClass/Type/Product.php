@@ -29,9 +29,7 @@
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
-class Product
-    extends \Magento\Tax\Model\TaxClass\AbstractType
-    implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
+class Product extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
      * @var \Magento\Catalog\Model\Product

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote\Address\Total;
 
 /**
  * Address Total Collector model
  */
-namespace Magento\Sales\Model\Quote\Address\Total;
-
 class Collector extends \Magento\Sales\Model\Config\Ordered
 {
     /**
@@ -159,7 +158,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     /**
      * Initialize retrievers array
      *
-     * @return \Magento\Sales\Model\Quote\Address\Total\Collector
+     * @return $this
      */
     protected function _initRetrievers()
     {

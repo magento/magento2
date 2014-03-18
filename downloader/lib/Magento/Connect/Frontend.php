@@ -31,7 +31,7 @@ class Frontend
      * Silent flag. If set no output is produced to view.
      * Should be used in derived classes.
      *
-     * @var boolean
+     * @var bool
      */
     protected $_silent = false;
 
@@ -39,7 +39,7 @@ class Frontend
      * Capture mode. If set command output should be collected
      * by derived class impplementation
      *
-     * @var boolean
+     * @var bool
      */
     protected $_capture = false;
 
@@ -68,7 +68,7 @@ class Frontend
      * Add error to errors list
      *
      * @param mixed $data
-     * @return null
+     * @return void
      */
     public function addError($data)
     {
@@ -78,7 +78,7 @@ class Frontend
     /**
      * Get errors, clear errors list with first param
      *
-     * @param boolean $clear
+     * @param bool $clear
      * @return array
      */
     public function getErrors($clear = true)
@@ -94,7 +94,7 @@ class Frontend
     /**
      * Clear errors array
      *
-     * @return null
+     * @return void
      */
     public function clearErrors()
     {
@@ -104,7 +104,7 @@ class Frontend
     /**
      * Are there any errros?
      *
-     * @return boolean
+     * @return bool
      */
     public function hasErrors()
     {
@@ -115,7 +115,7 @@ class Frontend
      * Error processing
      * @param string $command
      * @param string $message
-     * @return null
+     * @return void
      */
     public function doError($command, $message)
     {
@@ -147,7 +147,7 @@ class Frontend
     /**
      * Set capture mode
      *
-     * @param boolean $arg true by default
+     * @param bool $arg true by default
      * @return \Magento\Connect\Frontend
      */
     public function setCapture($arg = true)
@@ -159,7 +159,7 @@ class Frontend
     /**
      * Getter for capture mode
      *
-     * @return boolean
+     * @return bool
      */
     public function isCapture()
     {
@@ -169,8 +169,8 @@ class Frontend
     /**
      * Log stub
      *
-     * @param $msg
-     * @return
+     * @param string $msg
+     * @return void
      */
     public function log($msg)
     {
@@ -181,7 +181,7 @@ class Frontend
      * Ouptut method
      *
      * @param array $data
-     * @return null
+     * @return void
      */
     public function output($data)
     {
@@ -191,7 +191,7 @@ class Frontend
     /**
      * Get instance of derived class
      *
-     * @param $class CLI for example will produce \Magento\Connect\Frontend\CLI
+     * @param string $class CLI for example will produce \Magento\Connect\Frontend\CLI
      * @return object
      */
     public static function getInstance($class)
@@ -204,7 +204,7 @@ class Frontend
      * Get output if capture mode set
      * Clear prevoius if needed
      *
-     * @param boolean $clearPrevious
+     * @param bool $clearPrevious
      * @return mixed
      */
     public function getOutput($clearPrevious = true)
@@ -237,33 +237,33 @@ class Frontend
     /**
      * Set silent mode
      *
-     * @param boolean $value
+     * @param bool $value
      * @return \Magento\Connect\Frontend
      */
     public function setSilent($value = true)
     {
-        $this->_silent = (boolean) $value;
+        $this->_silent = (bool) $value;
         return $this;
     }
 
     /**
      * Is silent mode?
      *
-     * @return boolean
+     * @return bool
      */
     public function isSilent()
     {
-        return (boolean) $this->_silent;
+        return (bool) $this->_silent;
     }
 
     /**
-    * Method for ask client about rewrite all files.
-    *
-    * @param $string
-    */
+     * Method for ask client about rewrite all files.
+     *
+     * @param string $string
+     * @return void
+     */
     public function confirm($string)
     {
 
     }
 }
-

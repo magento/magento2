@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product;
 
 /**
  * Product View block (to modify getTierPrices method)
@@ -32,8 +32,6 @@
  * @package    Magento_Bundle
  * @module     Catalog
  */
-namespace Magento\Bundle\Block\Catalog\Product;
-
 class View extends \Magento\Catalog\Block\Product\View
 {
     /**

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * Magento
@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="formkey"/>
-    <container name="root" label="Root" output="1">
-        <block class="Magento\Customer\Block\Adminhtml\Grid" name="admin.customer.grid"/>
-    </container>
+    <update handle="customer_index_grid_block"/>
+    <block class="Magento\Backend\Block\Widget\Grid\Container" name="admin.block.customer.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml" output="1"/>
 </layout>

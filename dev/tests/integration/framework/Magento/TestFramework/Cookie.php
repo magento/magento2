@@ -33,17 +33,6 @@ namespace Magento\TestFramework;
 class Cookie extends \Magento\Stdlib\Cookie
 {
     /**
-     * @param \Magento\App\RequestInterface $request
-     */
-    public function __construct(
-        \Magento\App\RequestInterface $request = null
-    ) {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $request = $request ?: $objectManager->get('Magento\App\RequestInterface');
-        parent::__construct($request);
-    }
-
-    /**
      * Dummy function, which sets value directly to $_COOKIE super-global array instead of calling setcookie()
      *
      * @param string $name The cookie name

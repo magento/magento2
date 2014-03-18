@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\System\Config;
 
 /**
@@ -35,11 +34,17 @@ class Mode extends \Magento\Core\Model\Config\Value
     protected $_productFlatIndexerProcessor;
 
     /**
+     * @var \Magento\Indexer\Model\Indexer\State
+     */
+    protected $indexerState;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+     * @param \Magento\Indexer\Model\Indexer\State $indexerState
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -50,11 +55,13 @@ class Mode extends \Magento\Core\Model\Config\Value
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\App\ConfigInterface $config,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
+        \Magento\Indexer\Model\Indexer\State $indexerState,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->indexerState = $indexerState;
         parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
@@ -71,12 +78,16 @@ class Mode extends \Magento\Core\Model\Config\Value
 
     /**
      * Process flat enabled mode change
+     *
+     * @return void
      */
     public function processValue()
     {
-        if ($this->isValueChanged()) {
-            if ($this->getValue()) {
-                $this->_productFlatIndexerProcessor->markIndexerAsInvalid();
+        if ((bool)$this->getValue() != (bool)$this->getOldValue()) {
+            if ((bool)$this->getValue()) {
+                $this->indexerState->loadByIndexer(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID);
+                $this->indexerState->setStatus(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
+                $this->indexerState->save();
             } else {
                 $this->_productFlatIndexerProcessor->getIndexer()->setScheduled(false);
             }

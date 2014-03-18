@@ -95,8 +95,10 @@
     </div>
 </div>
 
-<div class="actions">
-    <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
+<div class="actions toolbar">
+    <div class="secondary">
+        <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
+    </div>
 </div>
 <script type="text/javascript">
     head.js("<?php echo $this->getViewFileUrl('Magento_Customer::address.js'); ?>", function() {

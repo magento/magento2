@@ -23,12 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml;
 
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
+     * Admin helper
+     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_adminHelper;
@@ -52,8 +53,8 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Format total value based on order currency
      *
-     * @param   \Magento\Object $total
-     * @return  string
+     * @param \Magento\Object $total
+     * @return string
      */
     public function formatValue($total)
     {
@@ -70,7 +71,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Initialize order totals array
      *
-     * @return \Magento\Sales\Block\Order\Totals
+     * @return $this
      */
     protected function _initTotals()
     {

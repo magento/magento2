@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Install\Model;
 
 /**
  * Installer model
  */
-namespace Magento\Install\Model;
-
 class Installer extends \Magento\Object
 {
     /**
@@ -360,6 +358,7 @@ class Installer extends \Magento\Object
     /**
      * Check all necessary extensions are loaded and available
      *
+     * @return void
      * @throws \Exception
      */
     protected function checkExtensionsLoaded()

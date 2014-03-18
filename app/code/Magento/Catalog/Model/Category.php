@@ -610,11 +610,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
      */
     public function formatUrlKey($str)
     {
-        $str = $this->filter->removeAccents($str);
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $str);
-        $urlKey = strtolower($urlKey);
-        $urlKey = trim($urlKey, '-');
-        return $urlKey;
+        return $this->filter->translitUrl($str);
     }
 
     /**

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 /**
@@ -751,7 +750,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     /**
      * Retrieve formatting date
      *
-     * @param   string $date
+     * @param   \Zend_Date|string|null $date
      * @param   string $format
      * @param   bool $showTime
      * @return  string
@@ -765,7 +764,7 @@ abstract class AbstractBlock extends \Magento\Object implements BlockInterface
     /**
      * Retrieve formatting time
      *
-     * @param   string $time
+     * @param   \Zend_Date|string|null $time
      * @param   string $format
      * @param   bool $showDate
      * @return  string

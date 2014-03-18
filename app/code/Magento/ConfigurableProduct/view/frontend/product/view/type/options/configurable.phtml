@@ -29,9 +29,8 @@ $_product    = $this->getProduct();
 $_attributes = $this->decorateArray($this->getAllowAttributes());
 ?>
 <?php if ($_product->isSaleable() && count($_attributes)):?>
-    <div class="product options configure">
     <?php foreach($_attributes as $_attribute): ?>
-        <div class="field required">
+        <div class="field configurable required">
             <label class="label" for="attribute<?php echo $_attribute->getAttributeId() ?>">
                 <span><?php echo $this->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
             </label>
@@ -45,7 +44,6 @@ $_attributes = $this->decorateArray($this->getAllowAttributes());
             </div>
         </div>
     <?php endforeach; ?>
-    </div>
     <script type="text/javascript">
         (function ($) {
             head.js("<?php echo $this->getViewFileUrl('jquery/jquery.parsequery.js') ?>",

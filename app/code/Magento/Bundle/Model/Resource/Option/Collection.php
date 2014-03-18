@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource\Option;
 
 /**
  * Bundle Options Resource Collection
@@ -32,8 +32,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource\Option;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -53,6 +51,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Init model and resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -63,7 +62,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Joins values to options
      *
      * @param int $storeId
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function joinValues($storeId)
     {
@@ -98,7 +97,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets product id filter
      *
      * @param int $productId
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setProductIdFilter($productId)
     {
@@ -109,7 +108,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Sets order by position
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setPositionOrder()
     {
@@ -126,7 +125,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Bundle\Model\Resource\Selection\Collection $selectionsCollection
      * @param bool $stripBefore
      * @param bool $appendAll
-     * @return array
+     * @return \Magento\Object[]
      */
     public function appendSelections($selectionsCollection, $stripBefore = false, $appendAll = true)
     {
@@ -154,7 +153,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Removes appended selections before
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     protected function _stripSelections()
     {
@@ -169,7 +168,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Sets filter by option id
      *
      * @param array|int $ids
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function setIdFilter($ids)
     {
@@ -184,7 +183,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Reset all item ids cache
      *
-     * @return \Magento\Bundle\Model\Resource\Option\Collection
+     * @return $this
      */
     public function resetAllIds()
     {
@@ -205,4 +204,3 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         return $this->_itemIds;
     }
 }
-

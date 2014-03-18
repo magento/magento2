@@ -31,7 +31,8 @@ class Configurable
     /**
      * Reindex temporary (price result data) for all products
      *
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price\Configurable
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {

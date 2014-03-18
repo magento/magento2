@@ -21,13 +21,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\Dto\Eav\AttributeMetadataBuilder;
-use Magento\Customer\Service\V1\Dto\Address;
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
+use Magento\Customer\Service\V1\Data\Address;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Customer\Service\V1\Data\AddressBuilder;
+use Magento\Customer\Service\V1\Data\CustomerBuilder;
 use Magento\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\Data\AddressConverter;
 
 /**
  * Customer addresses forms
@@ -67,16 +71,16 @@ class Addresses extends GenericMetadata
     /** @var  \Magento\Customer\Model\Metadata\FormFactory */
     protected $_metadataFormFactory;
 
-    /** @var  \Magento\Customer\Service\V1\CustomerServiceInterface */
-    protected $_customerService;
+    /** @var  CustomerAccountServiceInterface */
+    protected $_customerAccountService;
 
-    /** @var  \Magento\Customer\Service\V1\CustomerMetadataServiceInterface */
+    /** @var  CustomerMetadataServiceInterface */
     protected $_metadataService;
 
-    /** @var  \Magento\Customer\Service\V1\Dto\AddressBuilder */
+    /** @var  AddressBuilder */
     protected $_addressBuilder;
 
-    /** @var \Magento\Customer\Service\V1\Dto\CustomerBuilder */
+    /** @var CustomerBuilder */
     protected $_customerBuilder;
 
     /** @var  AttributeMetadataBuilder */
@@ -86,18 +90,18 @@ class Addresses extends GenericMetadata
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\System\Store $systemStore,
+     * @param \Magento\Core\Model\System\Store $systemStore
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Renderer\RegionFactory $regionFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService
-     * @param \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
-     * @param \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder
-     * @param AttributeMetadataBuilder $attributeMetadataBuilder;
+     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param CustomerMetadataServiceInterface $metadataService
+     * @param AddressBuilder $addressBuilder
+     * @param CustomerBuilder $customerBuilder
+     * @param AttributeMetadataBuilder $attributeMetadataBuilder
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
      *
@@ -114,10 +118,10 @@ class Addresses extends GenericMetadata
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
         \Magento\Customer\Helper\Data $customerHelper,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService,
-        \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder,
-        \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder,
+        CustomerAccountServiceInterface $customerAccountService,
+        CustomerMetadataServiceInterface $metadataService,
+        AddressBuilder $addressBuilder,
+        CustomerBuilder $customerBuilder,
         AttributeMetadataBuilder $attributeMetadataBuilder,
         \Magento\Directory\Helper\Data $directoryHelper,
         array $data = []
@@ -129,7 +133,7 @@ class Addresses extends GenericMetadata
         $this->_regionFactory = $regionFactory;
         $this->_metadataFormFactory = $metadataFormFactory;
         $this->_systemStore = $systemStore;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         $this->_metadataService = $metadataService;
         $this->_addressBuilder = $addressBuilder;
         $this->_customerBuilder = $customerBuilder;
@@ -138,11 +142,17 @@ class Addresses extends GenericMetadata
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getRegionsUrl()
     {
         return $this->getUrl('directory/json/countryRegion');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
@@ -174,7 +184,7 @@ class Addresses extends GenericMetadata
     /**
      * Check block is readonly.
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadonly()
     {
@@ -185,12 +195,15 @@ class Addresses extends GenericMetadata
         }
 
         try {
-            return $this->_customerService->isReadonly($customerId);
+            return !$this->_customerAccountService->canModify($customerId);
         } catch (NoSuchEntityException $e) {
             return false;
         }
     }
 
+    /**
+     * @return string
+     */
     public function getDeleteButtonHtml()
     {
         return $this->getChildHtml('delete_button');
@@ -232,7 +245,7 @@ class Addresses extends GenericMetadata
         $addressForm = $this->_metadataFormFactory->create(
             'customer_address',
             'adminhtml_customer_address',
-            $address->getAttributes()
+            AddressConverter::toFlatArray($address)
         );
 
         $attributes = $addressForm->getAttributes();
@@ -318,7 +331,7 @@ class Addresses extends GenericMetadata
                 ->create();
         }
         $this->assign('addressCollection', $addressCollection);
-        $form->setValues($address->getAttributes());
+        $form->setValues(AddressConverter::toFlatArray($address));
         $this->setForm($form);
 
         return $this;
@@ -414,7 +427,7 @@ class Addresses extends GenericMetadata
     /**
      * Return ISO2 country codes, which have optional Zip/Postal pre-configured
      *
-     * @return array
+     * @return array|string
      */
     public function getOptionalZipCountries()
     {
@@ -432,7 +445,7 @@ class Addresses extends GenericMetadata
     }
 
     /**
-     * eturn, whether non-required state should be shown
+     * Return, whether non-required state should be shown
      *
      * @return int 1 if should be shown, and 0 if not.
      */
@@ -461,6 +474,7 @@ class Addresses extends GenericMetadata
      */
     public function format(Address $address, $type)
     {
-        return $this->_addressHelper->getFormatTypeRenderer($type)->renderArray($address->getAttributes());
+        return $this->_addressHelper->getFormatTypeRenderer($type)
+            ->renderArray(AddressConverter::toFlatArray($address));
     }
 }

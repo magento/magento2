@@ -603,26 +603,26 @@ return array(
         '\Magento\Catalog\Model\Product\Type',
         '\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE'
     ),
-    ['PERIOD_UNIT_DAY', '\Magento\Payment\Model\Recurring\Profile', '\Magento\RecurringProfile\Model\PeriodUnits::DAY'],
+    ['PERIOD_UNIT_DAY', '\Magento\Payment\Model\Recurring\Profile', '\Magento\RecurringPayment\Model\PeriodUnits::DAY'],
     [
         'PERIOD_UNIT_WEEK',
         '\Magento\Payment\Model\Recurring\Profile',
-        '\Magento\RecurringProfile\Model\PeriodUnits::WEEK'
+        '\Magento\RecurringPayment\Model\PeriodUnits::WEEK'
     ],
     [
         'PERIOD_UNIT_SEMI_MONTH',
         '\Magento\Payment\Model\Recurring\Profile',
-        '\Magento\RecurringProfile\Model\PeriodUnits::SEMI_MONTH'
+        '\Magento\RecurringPayment\Model\PeriodUnits::SEMI_MONTH'
     ],
     [
         'PERIOD_UNIT_MONTH',
         '\Magento\Payment\Model\Recurring\Profile',
-        '\Magento\RecurringProfile\Model\PeriodUnits::MONTH'
+        '\Magento\RecurringPayment\Model\PeriodUnits::MONTH'
     ],
     [
         'PERIOD_UNIT_YEAR',
         '\Magento\Payment\Model\Recurring\Profile',
-        '\Magento\RecurringProfile\Model\PeriodUnits::YEAR'
+        '\Magento\RecurringPayment\Model\PeriodUnits::YEAR'
     ],
     array('XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY', '\Magento\Catalog\Helper\Category\Flat',
         '\Magento\Catalog\Model\Indexer\Category\Flat\Config::XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY'),

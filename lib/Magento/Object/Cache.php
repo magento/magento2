@@ -23,7 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Object;
 
 /**
  * Object Cache
@@ -32,8 +32,6 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Object;
-
 class Cache
 {
     /**
@@ -144,6 +142,7 @@ class Cache
      * @param string $idx
      * @param array|string $tags
      * @return string
+     * @throws \Magento\Exception
      */
     public function save($object, $idx=null, $tags=null)
     {
@@ -196,7 +195,8 @@ class Cache
      *
      * @param string|array $refName
      * @param string $idx
-     * @return boolean
+     * @return bool|void
+     * @throws \Magento\Exception
      */
     public function reference($refName, $idx)
     {

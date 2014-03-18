@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
  */
-namespace Magento;
-
 class Shell
 {
     /**
@@ -83,6 +82,7 @@ class Shell
      * Run external command in background
      *
      * @param string $command
+     * @return void
      * @throws \Magento\Exception
      */
     public function executeInBackground($command)
@@ -99,6 +99,7 @@ class Shell
      * Log a message, if a logger is specified
      *
      * @param string $message
+     * @return void
      */
     protected function _log($message)
     {

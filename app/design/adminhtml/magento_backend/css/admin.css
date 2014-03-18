@@ -954,61 +954,6 @@ button.primary,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
-.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
-.PrimaryAddButton,
-.PrimarySplitButton > .action-toggle.primary,
-input[type=button].primary,
-input[type=submit].primary,
-input[type=reset].primary,
-button.primary,
-[class^="action-"].primary,
-.popup-window .add-widget.primary,
-.PrimarySplitButton.btn-round .action-default.primary,
-.sales-order-index .page-actions .add,
-.adminhtml-rma-index .page-actions .add,
-.adminhtml-catalog-event-index .page-actions .add,
-.adminhtml-urlrewrite-index .page-actions .add,
-.catalog-search-index .page-actions .add,
-.catalog-product-review-index .page-actions .add,
-.catalog-rule-promo-catalog-index .page-actions .add,
-.sales-rule-promo-quote-index .page-actions .add,
-.adminhtml-reminder-index .page-actions .add,
-.newsletter-template-index .page-actions .add,
-.adminhtml-system-email-template-index .page-actions .add,
-.adminhtml-sitemap-index .page-actions .add,
-.adminhtml-googleshopping-types-index .page-actions .add,
-.customer-index-index .page-actions .add,
-.adminhtml-cms-page-index .page-actions .add,
-.cms-block-index .page-actions .add,
-.adminhtml-banner-index .page-actions .add,
-.adminhtml-widget-instance-index .page-actions .add,
-.cms-page-index .page-actions .add,
-.adminhtml-webapi-user-index .page-actions .add,
-.adminhtml-webapi-role-index .page-actions .add,
-.adminhtml-system-variable-index .page-actions .add,
-.adminhtml-user-index .page-actions .add,
-.adminhtml-user-role-index .page-actions .add,
-.adminhtml-integration-index .page-actions .add,
-.adminhtml-system-design-theme-index .page-actions .add,
-.adminhtml-system-design-index .page-actions .add,
-.adminhtml-customer-attribute-index .page-actions .add,
-.adminhtml-customer-address-attribute-index .page-actions .add,
-.rating-index-index .page-actions .add,
-.tax-rule-index .page-actions .add,
-.tax-rate-index .page-actions .add,
-.adminhtml-rma-item-attribute-index .page-actions .add,
-.adminhtml-reward-rate-index .page-actions .add,
-.customer-group-index .page-actions .add,
-.checkout-agreement-index .page-actions .add,
-.catalog-product-attribute-index .page-actions .add,
-.catalog-product-set-index .page-actions .add,
-.catalog-product-new .actions-split > .action-toggle.primary,
-.catalog-product-edit .actions-split > .action-toggle.primary,
-.catalog-product-index .actions-split > .action-toggle.primary,
-.adminhtml-integration-new .actions-split > .action-toggle.primary,
-.catalog-product-new .actions-split.btn-round .action-default.primary,
-.catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary,
 .adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   color: #fff;
   background: #007dbd;
@@ -1519,49 +1464,6 @@ button.primary.disabled:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
-.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
-.PrimarySplitButton.btn-round .action-default.primary,
-.sales-order-index .page-actions .add,
-.adminhtml-rma-index .page-actions .add,
-.adminhtml-catalog-event-index .page-actions .add,
-.adminhtml-urlrewrite-index .page-actions .add,
-.catalog-search-index .page-actions .add,
-.catalog-product-review-index .page-actions .add,
-.catalog-rule-promo-catalog-index .page-actions .add,
-.sales-rule-promo-quote-index .page-actions .add,
-.adminhtml-reminder-index .page-actions .add,
-.newsletter-template-index .page-actions .add,
-.adminhtml-system-email-template-index .page-actions .add,
-.adminhtml-sitemap-index .page-actions .add,
-.adminhtml-googleshopping-types-index .page-actions .add,
-.customer-index-index .page-actions .add,
-.adminhtml-cms-page-index .page-actions .add,
-.cms-block-index .page-actions .add,
-.adminhtml-banner-index .page-actions .add,
-.adminhtml-widget-instance-index .page-actions .add,
-.cms-page-index .page-actions .add,
-.adminhtml-webapi-user-index .page-actions .add,
-.adminhtml-webapi-role-index .page-actions .add,
-.adminhtml-system-variable-index .page-actions .add,
-.adminhtml-user-index .page-actions .add,
-.adminhtml-user-role-index .page-actions .add,
-.adminhtml-integration-index .page-actions .add,
-.adminhtml-system-design-theme-index .page-actions .add,
-.adminhtml-system-design-index .page-actions .add,
-.adminhtml-customer-attribute-index .page-actions .add,
-.adminhtml-customer-address-attribute-index .page-actions .add,
-.rating-index-index .page-actions .add,
-.tax-rule-index .page-actions .add,
-.tax-rate-index .page-actions .add,
-.adminhtml-rma-item-attribute-index .page-actions .add,
-.adminhtml-reward-rate-index .page-actions .add,
-.customer-group-index .page-actions .add,
-.checkout-agreement-index .page-actions .add,
-.catalog-product-attribute-index .page-actions .add,
-.catalog-product-set-index .page-actions .add,
-.catalog-product-new .actions-split.btn-round .action-default.primary,
-.catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary,
 .adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   width: 36px;
   height: 31px;
@@ -1775,10 +1677,6 @@ button.primary.disabled:active,
 .catalog-product-new .actions-split.btn-round .action-default.primary,
 .catalog-product-edit .actions-split.btn-round .action-default.primary,
 .catalog-product-index .actions-split.btn-round .action-default.primary,
-.adminhtml-integration-new .actions-split.btn-round .action-default.primary,
-.catalog-product-new .actions-split.btn-round .action-default.primary,
-.catalog-product-edit .actions-split.btn-round .action-default.primary,
-.catalog-product-index .actions-split.btn-round .action-default.primary,
 .adminhtml-integration-new .actions-split.btn-round .action-default.primary {
   border-radius: 2px 0 0 2px;
 }
@@ -1804,10 +1702,6 @@ button.primary.disabled:active,
   outline: none;
 }
 .PrimarySplitButton > .action-toggle.primary,
-.catalog-product-new .actions-split > .action-toggle.primary,
-.catalog-product-edit .actions-split > .action-toggle.primary,
-.catalog-product-index .actions-split > .action-toggle.primary,
-.adminhtml-integration-new .actions-split > .action-toggle.primary,
 .catalog-product-new .actions-split > .action-toggle.primary,
 .catalog-product-edit .actions-split > .action-toggle.primary,
 .catalog-product-index .actions-split > .action-toggle.primary,
@@ -2230,7 +2124,6 @@ button.primary.disabled:active,
   -webkit-font-smoothing: antialiased;
   content: '\e01f';
   /* search icon */
-
   font-size: 20px;
   color: #b2b2b2;
 }
@@ -2448,13 +2341,11 @@ button.primary.disabled:active,
   -webkit-font-smoothing: antialiased;
   content: '\e02c';
   /* arrow down */
-
   font-size: 11px;
 }
 .actions-split > .action-toggle.active:before {
   content: '\e029';
   /* arrow up */
-
 }
 .actions-split > .action-toggle.primary {
   border-left: 1px solid #e1721d;
@@ -2539,7 +2430,6 @@ button.primary.disabled:active,
   -webkit-font-smoothing: antialiased;
   content: '\e07f';
   /* delete icon */
-
   color: #b7b3ad;
 }
 /*
@@ -2554,7 +2444,6 @@ button.primary.disabled:active,
   -webkit-font-smoothing: antialiased;
   content: '\e03e';
   /* lock icon */
-
   color: #b7b3ad;
 }
 .data-table .action-.delete:hover:before,
@@ -2912,13 +2801,11 @@ input.mage-error ~ .addafter {
   -webkit-font-smoothing: antialiased;
   content: '\e02a';
   /* arrow right icon */
-
   color: #b2b0ad;
 }
 .collapsable-wrapper.opened > .fieldset-wrapper-title > .title:before {
   content: '\e02c';
   /* arrow down icon */
-
 }
 .collapsable-wrapper .fieldset-wrapper-title > .title:hover:before {
   color: #7e7e7e;
@@ -3179,7 +3066,6 @@ input.mage-error ~ .addafter {
   -webkit-font-smoothing: antialiased;
   content: '\e01e';
   /* checked icon */
-
   text-align: center;
   color: #7ba4b1;
   font-size: 9px;
@@ -3379,7 +3265,6 @@ table thead {
 }
 table thead.active {
   /*background:#F37B21;*/
-
 }
 table th {
   text-align: left;
@@ -4272,18 +4157,6 @@ table tbody tr:nth-child(odd):hover th {
 /*
     Messages (Global)
 -------------------------------------- */
-.message {
-  margin: 0;
-  padding: 10px 26px 10px 32px;
-  background: #f9f5ec;
-  border: 0;
-  -moz-border-radius: 0;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-  color: #676056;
-  text-shadow: none;
-  border-bottom: 1px solid #c7c2b6;
-}
 .wrapper > .message {
   padding: 0 20px;
 }
@@ -4292,12 +4165,35 @@ table tbody tr:nth-child(odd):hover th {
   min-width: 960px;
   margin: 0 auto;
 }
-.message:before,
-.message-system .message-inner:before {
+.messages {
+  margin: 20px 0;
+}
+.messages > .message:last-child {
+  margin-bottom: 0;
+}
+.messages.license {
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 20px auto;
+  max-width: 1300px;
+  min-width: 960px;
+  padding: 0 20px;
+}
+.message {
+  background: #f9f5ec;
+  border-bottom: 1px solid #c7c2b6;
+  border-radius: 5px;
+  color: #676056;
+  margin: 20px 0;
+  padding: 10px 26px 10px 35px;
+  position: relative;
+  text-shadow: none;
+}
+.message:before {
   position: absolute;
-  left: 8px;
+  left: 11px;
   top: 50%;
-  margin-top: -8px;
+  margin-top: -11px;
   background: none;
   text-shadow: none;
   width: auto;
@@ -4309,10 +4205,28 @@ table tbody tr:nth-child(odd):hover th {
   font-weight: normal;
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
-  content: '\e006';
-  /* notification icon */
-
-  color: #6e685e;
+  line-height: inherit;
+  content: '\e046';
+  /* icon-info  */
+  color: #d87e34;
+}
+.message.error {
+  color: #963535;
+  border-color: #963535;
+  background: #f3dcd8;
+}
+.message.error:before {
+  content: '\e069';
+  color: #963535;
+}
+.message.success {
+  border-color: #ceceb6;
+  background: #e4eecb;
+  color: #185b00;
+}
+.message.success:before {
+  content: '\e067';
+  color: #185b00;
 }
 .messages-inbox {
   float: right;
@@ -4334,7 +4248,24 @@ table tbody tr:nth-child(odd):hover th {
   margin: 0 auto;
 }
 .message-system .message-inner:before {
+  background: none;
+  border: 0;
+  content: '\e006';
+  /* notification icon */
+  color: #6e685e;
+  font-family: 'MUI-Icons';
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
+  height: auto;
+  left: 8px;
   margin-top: -10px;
+  position: absolute;
+  text-shadow: none;
+  top: 50%;
+  width: auto;
+  font-size: 16px;
 }
 .message-system .message-content {
   padding: 10px 26px 10px 32px;
@@ -4349,6 +4280,9 @@ table tbody tr:nth-child(odd):hover th {
   box-shadow: 0 1px 2px #46433d;
   z-index: 994;
 }
+.message-noscript:before {
+  content: '';
+}
 .message-noscript .message-content {
   margin: 0 auto;
   max-width: 1300px;
@@ -4356,9 +4290,6 @@ table tbody tr:nth-child(odd):hover th {
   padding: 3px 0;
   position: relative;
   text-align: center;
-}
-.message-noscript:before {
-  content: '';
 }
 .message-noscript .message-content:before {
   position: relative;
@@ -4370,13 +4301,12 @@ table tbody tr:nth-child(odd):hover th {
   border: 0;
   font-family: 'MUI-Icons';
   font-style: normal;
-  speak: none;
   font-weight: normal;
-  -webkit-font-smoothing: antialiased;
   font-size: 32px;
+  speak: none;
+  -webkit-font-smoothing: antialiased;
   content: '\e006';
   /* notification icon */
-
   color: #6e685e;
 }
 .message-demo-mode {
@@ -4414,17 +4344,18 @@ table tbody tr:nth-child(odd):hover th {
   font-size: 16px;
   content: '\e006';
   /* notification icon */
-
 }
 /*
     Information message
 -------------------------------------- */
-.message-info {
+.message-info,
+.message.info {
   background: #fffbf0;
   border: 1px solid #d87e34;
   margin-bottom: 20px;
 }
-.message-info:before {
+.message-info:before,
+.message.info:before {
   font-family: 'MUI-Icons';
   font-style: normal;
   speak: none;
@@ -4432,19 +4363,20 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e046';
   /* icon-info  */
-
   color: #d87e34;
 }
 /*
     Error message
 -------------------------------------- */
-.message-error {
+.message-error,
+.message.error {
   color: #963535;
   background: #f3dcd8;
   border: 1px solid #963535;
   margin-bottom: 20px;
 }
-.message-error:before {
+.message-error:before,
+.message.error:before {
   content: '\e069';
   color: #963535;
 }
@@ -4490,7 +4422,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e02c';
   /* arrow down icon */
-
   color: #b3b0ad;
   margin: 0 0 0 3px;
   vertical-align: text-top;
@@ -4621,22 +4552,16 @@ table tbody tr:nth-child(odd):hover th {
   content: '';
   background: -moz-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
   /* FF3.6+ */
-
   background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.06)));
   /* Chrome,Safari4+ */
-
   background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
   /* Chrome10+,Safari5.1+ */
-
   background: -o-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
   /* Opera 11.10+ */
-
   background: -ms-linear-gradient(left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
   /* IE10+ */
-
   background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
   /* W3C */
-
   z-index: 2;
 }
 /* Sidebar and main column vertical separator */
@@ -4738,7 +4663,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e02a';
   /* arrow right icon */
-
   font-size: 14px;
   color: #ada79e;
 }
@@ -4748,7 +4672,6 @@ table tbody tr:nth-child(odd):hover th {
 .side-col .ui-accordion-header-active:before {
   content: '\e02c';
   /* arrow down icon */
-
 }
 .side-col .tabs {
   margin: 0 0 30px;
@@ -4802,7 +4725,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e02b';
   /* left turned triangle icon */
-
   font-size: 22px;
   color: #f5f2ed;
   overflow: hidden;
@@ -4838,7 +4760,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e006';
   /* warning icon */
-
   color: #d87e34;
 }
 .side-col .ui-tabs-loading span.loader:after {
@@ -4938,7 +4859,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e02b';
   /* left turned triangle icon */
-
   font-size: 22px;
   text-shadow: -1px 1px 0 #bdbbb7;
   color: #f5f2ed;
@@ -5048,22 +4968,16 @@ table tbody tr:nth-child(odd):hover th {
 .page-actions.fixed .page-actions-inner {
   background: -moz-linear-gradient(top, #f5f2ed 0%, #f5f2ed 56%, rgba(245, 242, 237, 0) 100%);
   /* FF3.6+ */
-
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f2ed), color-stop(56%, #f5f2ed), color-stop(100%, rgba(245, 242, 237, 0)));
   /* Chrome,Safari4+ */
-
   background: -webkit-linear-gradient(top, #f5f2ed 0%, #f5f2ed 56%, rgba(245, 242, 237, 0) 100%);
   /* Chrome10+,Safari5.1+ */
-
   background: -o-linear-gradient(top, #f5f2ed 0%, #f5f2ed 56%, rgba(245, 242, 237, 0) 100%);
   /* Opera 11.10+ */
-
   background: -ms-linear-gradient(top, #f5f2ed 0%, #f5f2ed 56%, rgba(245, 242, 237, 0) 100%);
   /* IE10+ */
-
   background: linear-gradient(to bottom, #f5f2ed 0%, #f5f2ed 56%, rgba(245, 242, 237, 0) 100%);
   /* W3C */
-
   padding: 11px 20px 11px;
   min-height: 36px;
   margin: 0 auto;
@@ -5310,7 +5224,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e029';
   /* user icon */
-
   position: absolute;
   top: -12px;
   left: 50%;
@@ -5378,7 +5291,6 @@ table tbody tr:nth-child(odd):hover th {
   -webkit-font-smoothing: antialiased;
   content: '\e038';
   /* arrow down icon */
-
   color: #8c8172;
 }
 .grid tr.headings th a:hover:after {
@@ -5392,7 +5304,6 @@ table tbody tr:nth-child(odd):hover th {
   color: #c7b299;
   content: '\e035';
   /* arrow up icon */
-
   display: block;
 }
 .grid tr.headings th a.sort-arrow-desc:hover:after,
@@ -5503,7 +5414,6 @@ table tbody tr:nth-child(odd):hover th {
   font-size: 16px;
   content: '\e06a';
   /* icon calendar  */
-
   color: #cac3b4;
   z-index: 1;
 }
@@ -5682,7 +5592,6 @@ table .col-draggable .draggable-handle {
 .data-table {
   border-collapse: separate;
   /* do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear*/
-
   width: 100%;
 }
 .data-table thead,
@@ -6421,7 +6330,7 @@ table .col-draggable .draggable-handle {
 .sales-creditmemo-index .col-1-layout,
 .sales-billing-agreement-index .col-1-layout,
 .sales-transactions-index .col-1-layout,
-.sales-recurring-profile-index .col-1-layout,
+.sales-recurring-payment-index .col-1-layout,
 .adminhtml-googleshopping-items-index .col-1-layout,
 .customer-online-index .col-1-layout,
 .newsletter-queue-index .col-1-layout,

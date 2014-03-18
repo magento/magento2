@@ -52,15 +52,16 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Catalog\Exception
      */
     public function create($className, array $data = array())
     {
         $indexerPrice = $this->_objectManager->create($className, $data);
 
         if (!$indexerPrice instanceof \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice) {
-            throw new \Magento\Core\Exception($className
-                . ' doesn\'t extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice');
+            throw new \Magento\Catalog\Exception(
+                $className . ' doesn\'t extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice'
+            );
         }
         return $indexerPrice;
     }

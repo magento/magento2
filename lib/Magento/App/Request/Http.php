@@ -100,13 +100,13 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
 
     /**
      * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\Request\PathInfoProcessorInterface $pathInfoProcessor
+     * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param string $uri
      * @param array $directFrontNames
      */
     public function __construct(
         \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\Request\PathInfoProcessorInterface $pathInfoProcessor,
+        PathInfoProcessorInterface $pathInfoProcessor,
         $uri = null,
         $directFrontNames = array()
     ) {
@@ -277,10 +277,10 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
     /**
      * Retrieve HTTP HOST
      *
-     * @todo getHttpHost should return only string (currently method return boolean value too)
-     *
      * @param bool $trimPort
      * @return string
+     *
+     * @todo getHttpHost should return only string (currently method return boolean value too)
      */
     public function getHttpHost($trimPort = true)
     {
@@ -299,7 +299,6 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\App\Request
      *
      * @param string|array $key
      * @param mixed $value
-     *
      * @return $this
      */
     public function setPost($key, $value = null)

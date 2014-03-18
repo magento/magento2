@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Cache\Frontend;
 
 /**
@@ -40,7 +39,7 @@ class Pool implements \Iterator
     private $_arguments;
 
     /**
-     * @var \Magento\App\Cache\Frontend\Factory
+     * @var Factory
      */
     private $_factory;
 
@@ -56,12 +55,12 @@ class Pool implements \Iterator
 
     /**
      * @param \Magento\App\Arguments $arguments
-     * @param \Magento\App\Cache\Frontend\Factory $frontendFactory
+     * @param Factory $frontendFactory
      * @param array $frontendSettings Format: array('<frontend_id>' => array(<cache_settings>), ...)
      */
     public function __construct(
         \Magento\App\Arguments $arguments,
-        \Magento\App\Cache\Frontend\Factory $frontendFactory,
+        Factory $frontendFactory,
         array $frontendSettings = array()
     ) {
         $this->_arguments = $arguments;

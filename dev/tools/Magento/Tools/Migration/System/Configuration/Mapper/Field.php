@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration\Mapper;
 
 class Field
@@ -31,7 +30,8 @@ class Field
 {
     /**
      * List of allowed node names
-     * @var array
+     *
+     * @var string[]
      */
     protected $_allowedFieldNames = array(
         'label',
@@ -74,8 +74,8 @@ class Field
      * Transform sub configuration
      *
      * @param array $config
-     * @param $parentNode
-     * @param $element
+     * @param array $parentNode
+     * @param array $element
      * @return array
      */
     public function _transformSubConfig(array $config, $parentNode, $element)

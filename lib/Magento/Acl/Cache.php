@@ -25,7 +25,7 @@
  */
 namespace Magento\Acl;
 
-class Cache implements \Magento\Acl\CacheInterface
+class Cache implements CacheInterface
 {
     /**
      * Cache
@@ -50,7 +50,7 @@ class Cache implements \Magento\Acl\CacheInterface
      * @param \Magento\Config\CacheInterface $cache
      * @param string $cacheKey
      */
-    function __construct(\Magento\Config\CacheInterface $cache, $cacheKey)
+    public function __construct(\Magento\Config\CacheInterface $cache, $cacheKey)
     {
         $this->_cache = $cache;
         $this->_cacheKey = $cacheKey;

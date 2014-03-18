@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser;
 
 use Magento\Tools\I18n\Code;
@@ -41,9 +40,9 @@ class Contextual extends AbstractParser
     /**
      * Parser construct
      *
-     * @param \Magento\Tools\I18n\Code\FilesCollector $filesCollector
-     * @param \Magento\Tools\I18n\Code\Factory $factory
-     * @param \Magento\Tools\I18n\Code\Context $context
+     * @param Code\FilesCollector $filesCollector
+     * @param Code\Factory $factory
+     * @param Code\Context $context
      */
     public function __construct(Code\FilesCollector $filesCollector, Code\Factory $factory, Code\Context $context)
     {
@@ -55,7 +54,8 @@ class Contextual extends AbstractParser
     /**
      * Parse one type
      *
-     * @param $options
+     * @param array $options
+     * @return void
      */
     protected function _parseByTypeOptions($options)
     {
@@ -77,6 +77,7 @@ class Contextual extends AbstractParser
      * @param array $phraseData
      * @param string $contextType
      * @param string $contextValue
+     * @return void
      */
     protected function _addPhrase($phraseData, $contextType, $contextValue)
     {

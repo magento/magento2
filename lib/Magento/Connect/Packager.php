@@ -60,7 +60,7 @@ class Packager
      */
     public function getArchiver()
     {
-        if(is_null($this->_archiver)) {
+        if (is_null($this->_archiver)) {
             $this->_archiver = new \Magento\Archive();
         }
         return $this->_archiver;
@@ -129,7 +129,7 @@ class Packager
         $ftpObj = new Ftp();
         $ftpObj->connect($ftpString);
         $remoteConfigExists = $ftpObj->fileExists("cache.cfg");
-        if(!$remoteConfigExists) {
+        if (!$remoteConfigExists) {
             $configFile= uniqid("temp_cachecfg_");
             $remoteCfg = new Singleconfig($configFile);
             $remoteCfg->clear();
@@ -155,7 +155,7 @@ class Packager
         $wd = $ftpObj->getcwd();
         $remoteConfigExists = $ftpObj->fileExists($cfgFile);
         $tempConfigFile = uniqid($cfgFile."_temp");
-        if(!$remoteConfigExists) {
+        if (!$remoteConfigExists) {
             $remoteCfg = new Config($tempConfigFile);
             $remoteCfg->store();
             $ftpObj->upload($cfgFile, $tempConfigFile);
@@ -207,11 +207,11 @@ class Packager
         $contents = $package->getContents();
 
         $targetPath = rtrim($configObj->magento_root, "\\/");
-        foreach($contents as $file) {
+        foreach ($contents as $file) {
             $fileName = basename($file);
             $filePath = dirname($file);
             $dest = $targetPath . '/' . $filePath . '/' . $fileName;
-            if(@file_exists($dest)) {
+            if (@file_exists($dest)) {
                 //var_dump($dest);
                 @unlink($dest);
             }
@@ -231,7 +231,7 @@ class Packager
         $ftpDir = $ftp->getcwd();
         $package = $cacheObj->getPackageObject($chanName, $package);
         $contents = $package->getContents();
-        foreach($contents as $file) {
+        foreach ($contents as $file) {
             $res = $ftp->delete($file);
         }
         $ftp->chdir($ftpDir);
@@ -265,13 +265,13 @@ class Packager
         $tar = $arc->unpack($file, $target);
         $modeFile = $configObj->global_file_mode;
         $modeDir = $configObj->global_dir_mode;
-        foreach($contents as $file) {
+        foreach ($contents as $file) {
             $fileName = basename($file);
             $filePath = $this->convertFtpPath(dirname($file));
             $source = $tar . '/' . $file;
             if (file_exists($source) && is_file($source)) {
-                $args = array(ltrim($file,"/"), $source);
-                if($modeDir) {
+                $args = array(ltrim($file, "/"), $source);
+                if ($modeDir) {
                     $args[] = $modeDir;
                 }
                 call_user_func_array(array($ftp,'upload'), $args);
@@ -299,7 +299,7 @@ class Packager
         $tar = $arc->unpack($file, $target);
         $modeFile = $configObj->global_file_mode;
         $modeDir = $configObj->global_dir_mode;
-        foreach($contents as $file) {
+        foreach ($contents as $file) {
             $fileName = basename($file);
             $filePath = dirname($file);
             $source = $tar . '/' . $file;
@@ -308,7 +308,7 @@ class Packager
             $dest = $targetPath . '/' . $filePath . '/' . $fileName;
             if (is_file($source)) {
                 @copy($source, $dest);
-                if($modeFile) {
+                if ($modeFile) {
                     @chmod($dest, $modeFile);
                 }
             } else {
@@ -356,7 +356,7 @@ class Packager
         $listModified = array();
         foreach ($hashContents as $file=>$hash) {
             $localFile = uniqid("temp_remote_");
-            if(!$ftp->fileExists($file)) {
+            if (!$ftp->fileExists($file)) {
                 continue;
             }
             $ftp->get($localFile, $file);
@@ -381,25 +381,25 @@ class Packager
      */
     public function getUpgradesList($channels, $cacheObject, $configObj, $restObj = null, $checkConflicts = false)
     {
-        if(is_scalar($channels)) {
+        if (is_scalar($channels)) {
             $channels = array($channels);
         }
 
-        if(!$restObj) {
+        if (!$restObj) {
             $restObj = new \Magento\Connect\Rest();
         }
 
         $updates = array();
-        foreach($channels as $chan) {
+        foreach ($channels as $chan) {
 
-            if(!$cacheObject->isChannel($chan)) {
+            if (!$cacheObject->isChannel($chan)) {
                 continue;
             }
             $chanName = $cacheObject->chanName($chan);
             $localPackages = $cacheObject->getInstalledPackages($chanName);
             $localPackages = $localPackages[$chanName];
 
-            if(!count($localPackages)) {
+            if (!count($localPackages)) {
                 continue;
             }
 
@@ -413,35 +413,35 @@ class Packager
              */
             $state = $configObj->preferred_state ? $configObj->preferred_state : "devel";
 
-            foreach($localPackages as $localName=>$localData) {
-                if(!isset($remotePackages[$localName])) {
+            foreach ($localPackages as $localName=>$localData) {
+                if (!isset($remotePackages[$localName])) {
                     continue;
                 }
                 $package = $remotePackages[$localName];
                 $neededToUpgrade = false;
                 $remoteVersion = $localVersion = trim($localData[Singleconfig::K_VER]);
-                foreach($package as $version => $s) {
+                foreach ($package as $version => $s) {
 
-                    if( $cacheObject->compareStabilities($s, $state) < 0 ) {
+                    if ( $cacheObject->compareStabilities($s, $state) < 0 ) {
                         continue;
                     }
 
-                    if(version_compare($version, $localVersion, ">")) {
+                    if (version_compare($version, $localVersion, ">")) {
                         $neededToUpgrade = true;
                         $remoteVersion = $version;
                     }
 
-                    if($checkConflicts) {
+                    if ($checkConflicts) {
                         $conflicts = $cacheObject->hasConflicts($chanName, $localName, $remoteVersion);
-                        if(false !== $conflicts) {
+                        if (false !== $conflicts) {
                             $neededToUpgrade = false;
                         }
                     }
                 }
-                if(!$neededToUpgrade) {
+                if (!$neededToUpgrade) {
                     continue;
                 }
-                if(!isset($updates[$chanName])) {
+                if (!isset($updates[$chanName])) {
                     $updates[$chanName] = array();
                 }
                 $updates[$chanName][$localName] = array("from"=>$localVersion, "to"=>$remoteVersion);
@@ -458,7 +458,7 @@ class Packager
      * @param Singleconfig $cache
      * @param Config $config
      * @param bool $withDepsRecursive
-     * @return array
+     * @return array|void
      */
     public function getUninstallList($chanName, $package, $cache, $config, $withDepsRecursive = true)
     {
@@ -471,9 +471,9 @@ class Packager
 
         try {
             $chanName = $cache->chanName($chanName);
-            if(!$cache->hasPackage($chanName, $package)) {
+            if (!$cache->hasPackage($chanName, $package)) {
                 $level--;
-                if($level == 0) {
+                if ($level == 0) {
                     $hash = array();
                     return array('list'=>array());
                 }
@@ -492,17 +492,17 @@ class Packager
                 'packages' => $dependencies,
             );
 
-            if($withDepsRecursive) {
+            if ($withDepsRecursive) {
                 $flds = array('name','channel','min','max');
                 $fldsCount = count($flds);
-                foreach($dependencies as $row) {
-                    foreach($flds as $key) {
+                foreach ($dependencies as $row) {
+                    foreach ($flds as $key) {
                         $varName = "p".ucfirst($key);
                         $$varName = $row[$key];
                     }
                     $method = __FUNCTION__;
                     $keyInner = $pChannel . "/" . $pName;
-                    if(!isset($hash[$keyInner])) {
+                    if (!isset($hash[$keyInner])) {
                         $this->$method($pChannel, $pName, $cache, $config,
                         $withDepsRecursive, false);
                     }
@@ -513,7 +513,7 @@ class Packager
         }
 
         $level--;
-        if(0 === $level) {
+        if (0 === $level) {
             $out = $this->processDepsHash($hash);
             $hash = array();
             return array('list'=>$out);
@@ -531,7 +531,7 @@ class Packager
      * @param string|false $versionMin
      * @param bool $withDepsRecursive
      * @param bool $forceRemote
-     * @return array
+     * @return array|void
      * @throws \Exception
      */
     public function getDependenciesList($chanName, $package, $cache, $config, $versionMax = false, $versionMin = false,
@@ -550,16 +550,16 @@ class Packager
             $rest = new \Magento\Connect\Rest($config->protocol);
             $rest->setChannel($cache->chanUrl($chanName));
             $releases = $rest->getReleases($package);
-            if(!$releases || !count($releases)) {
+            if (!$releases || !count($releases)) {
                 throw new \Exception("No releases for: '{$package}', skipping");
             }
             $state = $config->preffered_state ? $confg->preffered_state : 'devel';
             $version = $cache->detectVersionFromRestArray($releases, $versionMin, $versionMax, $state);
-            if(!$version) {
+            if (!$version) {
                 throw new \Exception("Version for '{$package}' was not detected");
             }
             $packageInfo = $rest->getPackageReleaseInfo($package, $version);
-            if(false === $packageInfo) {
+            if (false === $packageInfo) {
                 throw new \Exception("Package release '{$package}' not found on server");
             }
             unset($rest);
@@ -576,17 +576,17 @@ class Packager
                 'packages'           => $dependencies,
             );
 
-            if($withDepsRecursive) {
+            if ($withDepsRecursive) {
                 $flds = array('name','channel','min','max');
                 $fldsCount = count($flds);
-                foreach($dependencies as $row) {
-                    foreach($flds as $key) {
+                foreach ($dependencies as $row) {
+                    foreach ($flds as $key) {
                         $varName = "p".ucfirst($key);
                         $$varName = $row[$key];
                     }
                     $method = __FUNCTION__;
                     $keyInner = $pChannel . "/" . $pName;
-                    if(!isset($_depsHash[$keyInner])) {
+                    if (!isset($_depsHash[$keyInner])) {
                         $_deps[] = $row;
                         $this->$method($pChannel, $pName, $cache, $config,
                         $pMax, $pMin, $withDepsRecursive, $forceRemote, false);
@@ -594,28 +594,28 @@ class Packager
                         $downloaded = $_depsHash[$keyInner]['downloaded_version'];
                         $hasMin = $_depsHash[$keyInner]['min'];
                         $hasMax = $_depsHash[$keyInner]['max'];
-                        if($pMin === $hasMin && $pMax === $hasMax) {
+                        if ($pMin === $hasMin && $pMax === $hasMax) {
                             //var_dump("Equal requirements, skipping");
                             continue;
                         }
 
-                        if($cache->versionInRange($downloaded, $pMin, $pMax)) {
+                        if ($cache->versionInRange($downloaded, $pMin, $pMax)) {
                             //var_dump("Downloaded package matches new range too");
                             continue;
                         }
 
                         $names = array("pMin","pMax","hasMin","hasMax");
-                        for($i=0, $c=count($names); $i<$c; $i++) {
-                            if(!isset($$names[$i])) {
+                        for ($i=0, $c=count($names); $i<$c; $i++) {
+                            if (!isset($$names[$i])) {
                                 continue;
                             }
-                            if(false !== $$names[$i]) {
+                            if (false !== $$names[$i]) {
                                 continue;
                             }
                             $$names[$i] = $i % 2 == 0 ? "0" : "999999999";
                         }
 
-                        if(!$cache->hasVersionRangeIntersect($pMin,$pMax, $hasMin, $hasMax)) {
+                        if (!$cache->hasVersionRangeIntersect($pMin, $pMax, $hasMin, $hasMax)) {
                             $reason = "Detected {$pName} conflict of versions: {$hasMin}-{$hasMax} and {$pMin}-{$pMax}";
                             unset($_depsHash[$keyInner]);
                             $_failed[] = array(
@@ -648,7 +648,7 @@ class Packager
         }
 
         $level--;
-        if($level == 0) {
+        if ($level == 0) {
             $out = $this->processDepsHash($_depsHash);
             $deps = $_deps;
             $failed = $_failed;
@@ -672,7 +672,7 @@ class Packager
         $nodes = array();
         $graph = new \Magento\Connect\Structures\Graph();
 
-        foreach($depsHash as $key=>$data) {
+        foreach ($depsHash as $key=>$data) {
             $packages = $data['packages'];
             $node = new \Magento\Connect\Structures\Node();
             $nodes[$key] =& $node;
@@ -682,12 +682,12 @@ class Packager
             unset($node);
         }
 
-        if(count($nodes) > 1) {
-            foreach($depsHash as $key=>$data) {
+        if (count($nodes) > 1) {
+            foreach ($depsHash as $key=>$data) {
                 $packages = $data['packages'];
-                foreach($packages as $pdata) {
+                foreach ($packages as $pdata) {
                     $pName = $pdata['channel'] . "/" . $pdata['name'];
-                    if(isset($nodes[$key], $nodes[$pName])) {
+                    if (isset($nodes[$key], $nodes[$pName])) {
                         $nodes[$key]->connectTo($nodes[$pName]);
                     }
                 }
@@ -697,8 +697,8 @@ class Packager
         $sortReverse ? krsort($result) : ksort($result);
         $out = array();
         $total = 0;
-        foreach($result as $order=>$nodes) {
-            foreach($nodes as $n) {
+        foreach ($result as $order=>$nodes) {
+            foreach ($nodes as $n) {
                 $out[] = $n->getData();
             }
         }

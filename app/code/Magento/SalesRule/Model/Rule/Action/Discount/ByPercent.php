@@ -61,7 +61,7 @@ class ByPercent extends AbstractDiscount
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @param float $qty
-     * @param $rulePercent
+     * @param float $rulePercent
      * @return Data
      */
     protected function _calculate($rule, $item, $qty, $rulePercent)

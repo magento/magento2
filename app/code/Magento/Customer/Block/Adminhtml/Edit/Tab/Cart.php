@@ -21,16 +21,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Adminhtml customer orders grid block
- */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
+use Magento\Catalog\Model\Product;
 use Magento\Customer\Controller\RegistryConstants;
 use \Magento\Directory\Model\Currency;
 
 /**
+ * Adminhtml customer orders grid block
+ *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -104,7 +103,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {

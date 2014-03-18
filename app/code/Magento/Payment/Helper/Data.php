@@ -255,24 +255,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Get payment methods that implement recurring profilez management
-     *
-     * @param mixed $store
-     * @return array
-     */
-    public function getRecurringProfileMethods($store = null)
-    {
-        $result = array();
-        foreach ($this->getPaymentMethods() as $code => $data) {
-            $method = $this->getMethodInstance($code);
-            if ($method && $method->canManageRecurringProfiles()) {
-                $result[] = $method;
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Retrieve all payment methods
      *
      * @return array

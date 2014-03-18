@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Block\Layer;
 
 /**
  * Catalog layered navigation view block
@@ -31,8 +32,6 @@
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Layer;
-
 class View extends \Magento\View\Element\Template
 {
     /**
@@ -93,6 +92,8 @@ class View extends \Magento\View\Element\Template
 
     /**
      * Internal constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

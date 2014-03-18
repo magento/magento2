@@ -24,12 +24,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Translate\Locale\Resolver;
 
 /**
  * Magento translate abstract adapter
  */
-namespace Magento\Translate\Locale\Resolver;
-
 class Plugin
 {
     /**
@@ -40,7 +39,7 @@ class Plugin
     /**
      * @param \Magento\TranslateInterface $translate
      */
-    function __construct(\Magento\TranslateInterface $translate)
+    public function __construct(\Magento\TranslateInterface $translate)
     {
         $this->_translate = $translate;
     }
@@ -48,6 +47,7 @@ class Plugin
     /**
      * @param \Magento\Locale\ResolverInterface $subject
      * @param string|null $localeCode
+     * @return void
      */
     public function afterEmulate(\Magento\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -57,6 +57,7 @@ class Plugin
     /**
      * @param \Magento\Locale\ResolverInterface $subject
      * @param string|null $localeCode
+     * @return void
      */
     public function afterRevert(\Magento\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -65,6 +66,7 @@ class Plugin
 
     /**
      * @param string|null $localeCode
+     * @return void
      */
     protected function _init($localeCode)
     {

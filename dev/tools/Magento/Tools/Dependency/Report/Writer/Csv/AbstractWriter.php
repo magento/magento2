@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Writer\Csv;
 
 use Magento\Tools\Dependency\Report\Data\ConfigInterface;
@@ -65,6 +64,7 @@ abstract class AbstractWriter implements WriterInterface
      * Template method. Check passed options step
      *
      * @param array $options
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function checkOptions($options)
@@ -87,6 +87,7 @@ abstract class AbstractWriter implements WriterInterface
      *
      * @param string $filename
      * @param array $data
+     * @return void
      */
     protected function writeToFile($filename, $data)
     {

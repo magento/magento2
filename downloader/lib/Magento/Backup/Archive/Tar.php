@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Archive;
 
 /**
  * Extended version of \Magento\Archive\Tar that supports filtering
@@ -31,14 +32,12 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Archive;
-
 class Tar extends \Magento\Archive\Tar
 {
     /**
      * Filenames or filename parts that are used for filtering files
      *
-     * @var array()
+     * @var array
      */
     protected $_skipFiles = array();
 
@@ -46,9 +45,10 @@ class Tar extends \Magento\Archive\Tar
      * Overridden \Magento\Archive\Tar::_createTar method that does the same actions as it's parent but filters
      * files using \Magento\Backup\Filesystem\Iterator\Filter
      *
-     * @see \Magento\Archive\Tar::_createTar()
      * @param bool $skipRoot
      * @param bool $finalize
+     * @return void
+     * @see \Magento\Archive\Tar::_createTar()
      */
     protected function _createTar($skipRoot = false, $finalize = false)
     {

@@ -56,7 +56,7 @@ $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElemen
     <a href="#" id="<?php echo($popupId);?>"><?php echo __('Click for price'); ?></a>
 
     <?php else: ?>
-    <span class="msrp price message">
+    <span class="msrp message">
          <?php echo $_catalogHelper->getMsrpPriceMessage($_product) ?>
     </span>
     <?php endif; ?>
@@ -84,7 +84,8 @@ $priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElemen
             <?php endif; ?>
                 $("#<?php echo($helpLinkId);?>").addToCart({
                     helpLinkId: "#<?php echo($helpLinkId);?>",
-                    productName: '<?php echo $_product->getName() ?>'
+                    productName: '<?php echo $_product->getName() ?>',
+                    closeButtonId: '#map-popup-close'
                 });
             });
     })(jQuery);

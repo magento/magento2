@@ -23,21 +23,22 @@
  */
 namespace Magento\Bundle\Model\Plugin;
 
+use Closure;
+
 class QuoteItem
 {
     /**
      * Add bundle attributes to order data
      *
      * @param \Magento\Sales\Model\Convert\Quote $subject
-     * @param callable $proceed
+     * @param Closure $proceed
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     *
-     * @return \Magento\Sales\Model\Order\Item|mixed
+     * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundItemToOrderItem(
         \Magento\Sales\Model\Convert\Quote $subject,
-        \Closure $proceed,
+        Closure $proceed,
         \Magento\Sales\Model\Quote\Item\AbstractItem $item
     ) {
         /** @var $orderItem \Magento\Sales\Model\Order\Item */

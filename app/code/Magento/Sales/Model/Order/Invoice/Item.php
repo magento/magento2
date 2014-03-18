@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Item _getResource()
@@ -91,14 +92,26 @@
  * @method float getBaseHiddenTaxAmount()
  * @method \Magento\Sales\Model\Order\Invoice\Item setBaseHiddenTaxAmount(float $value)
  */
-namespace Magento\Sales\Model\Order\Invoice;
-
 class Item extends \Magento\Core\Model\AbstractModel
 {
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_invoice_item';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'invoice_item';
 
+    /**
+     * @var \Magento\Sales\Model\Order\Invoice|null
+     */
     protected $_invoice = null;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Item|null
+     */
     protected $_orderItem = null;
 
     /**
@@ -130,6 +143,8 @@ class Item extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -139,8 +154,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare invoice instance
      *
-     * @param   \Magento\Sales\Model\Order\Invoice $invoice
-     * @return  \Magento\Sales\Model\Order\Invoice\Item
+     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @return $this
      */
     public function setInvoice(\Magento\Sales\Model\Order\Invoice $invoice)
     {
@@ -161,8 +176,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare order item instance
      *
-     * @param   \Magento\Sales\Model\Order\Item $item
-     * @return  \Magento\Sales\Model\Order\Invoice\Item
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @return $this
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -191,8 +206,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare qty
      *
-     * @param   float $qty
-     * @return  \Magento\Sales\Model\Order\Invoice\Item
+     * @param float $qty
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setQty($qty)
@@ -221,7 +236,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Applying qty to order item
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     public function register()
     {
@@ -244,7 +259,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Cancelling invoice item
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     public function cancel()
     {
@@ -268,7 +283,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Invoice item row total calculation
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     public function calcRowTotal()
     {
@@ -317,7 +332,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -333,7 +348,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * After object save
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Item
+     * @return $this
      */
     protected function _afterSave()
     {

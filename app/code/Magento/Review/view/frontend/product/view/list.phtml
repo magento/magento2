@@ -34,20 +34,22 @@
         <strong><?php echo __('Customer Reviews') ?></strong>
     </div>
     <div class="content">
-    <?php echo $this->getChildHtml('toolbar') ?>
+        <div class="toolbar products">
+            <?php echo $this->getChildHtml('toolbar') ?>
+        </div>
     <ol class="reviews items">
     <?php foreach ($_items as $_review):?>
         <li class="item review">
-            <div class="reviews summary">
             <?php foreach ($_review->getRatingVotes() as $_vote): ?>
-                <span class="label"><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></span>
-                <div class="rating" title="<?php echo $_vote->getPercent() ?>%">
+            <div class="rating summary item">
+                <span class="label"><span><?php echo $this->escapeHtml($_vote->getRatingCode()) ?>:</span></span>
+                <div class="rating result" title="<?php echo $_vote->getPercent() ?>%">
                     <span style="width:<?php echo $_vote->getPercent() ?>%">
-                        <?php echo $_vote->getPercent() ?>
+                        <span><?php echo $_vote->getPercent() ?>%</span>
                     </span>
                 </div>
-            <?php endforeach; ?>
             </div>
+            <?php endforeach; ?>
             <div class="review details">
                 <p class="author">
                     <span><?php echo __('Review by')?></span>
@@ -65,7 +67,9 @@
         </li>
     <?php endforeach; ?>
     </ol>
-    <?php echo $this->getChildHtml('toolbar') ?>
+        <div class="toolbar products">
+            <?php echo $this->getChildHtml('toolbar') ?>
+        </div>
     </div>
 </div>
 <?php endif;?>

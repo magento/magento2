@@ -46,7 +46,6 @@
             <module name="Magento_Customer"/>
             <module name="Magento_DesignEditor"/>
             <module name="Magento_Downloadable"/>
-            <module name="Magento_GoogleCheckout"/>
             <module name="Magento_GoogleShopping"/>
             <module name="Magento_ImportExport"/>
             <module name="Magento_Index"/>

@@ -50,26 +50,26 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     private $_storeConfig;
 
     /**
-     * @var Dto\SearchResultsBuilder
+     * @var Data\SearchResultsBuilder
      */
     private $_searchResultsBuilder;
 
     /**
-     * @var Dto\CustomerGroupBuilder
+     * @var Data\CustomerGroupBuilder
      */
     private $_customerGroupBuilder;
 
     /**
      * @param GroupFactory $groupFactory
      * @param StoreConfig $storeConfig
-     * @param Dto\SearchResultsBuilder $searchResultsBuilder
-     * @param Dto\CustomerGroupBuilder $customerGroupBuilder
+     * @param Data\SearchResultsBuilder $searchResultsBuilder
+     * @param Data\CustomerGroupBuilder $customerGroupBuilder
      */
     public function __construct(
         GroupFactory $groupFactory,
         StoreConfig $storeConfig,
-        Dto\SearchResultsBuilder $searchResultsBuilder,
-        Dto\CustomerGroupBuilder $customerGroupBuilder
+        Data\SearchResultsBuilder $searchResultsBuilder,
+        Data\CustomerGroupBuilder $customerGroupBuilder
     ) {
         $this->_groupFactory = $groupFactory;
         $this->_storeConfig = $storeConfig;
@@ -104,7 +104,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function searchGroups(Dto\SearchCriteria $searchCriteria)
+    public function searchGroups(Data\SearchCriteria $searchCriteria)
     {
         $this->_searchResultsBuilder->setSearchCriteria($searchCriteria);
 
@@ -117,7 +117,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         if ($sortOrders) {
             foreach ($searchCriteria->getSortOrders() as $field => $direction) {
                 $field = $this->translateField($field);
-                $collection->addOrder($field, $direction == Dto\SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
+                $collection->addOrder($field, $direction == Data\SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
             }
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
@@ -137,11 +137,12 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     /**
      * Adds some filters from a filter group to a collection.
      *
-     * @param Dto\Search\FilterGroupInterface $filterGroup
+     * @param Data\Search\FilterGroupInterface $filterGroup
      * @param Collection $collection
+     * @return void
      * @throws \Magento\Exception\InputException
      */
-    protected function addFiltersToCollection(Dto\Search\FilterGroupInterface $filterGroup, Collection $collection)
+    protected function addFiltersToCollection(Data\Search\FilterGroupInterface $filterGroup, Collection $collection)
     {
         if (strcasecmp($filterGroup->getGroupType(), 'AND')) {
             throw new InputException('Only AND grouping is currently supported for filters.');
@@ -160,10 +161,10 @@ class CustomerGroupService implements CustomerGroupServiceInterface
      * Helper function that adds a filter to the collection
      *
      * @param Collection $collection
-     * @param Dto\Filter $filter
-     * @return string
+     * @param Data\Filter $filter
+     * @return void
      */
-    protected function addFilterToCollection(Collection $collection, Dto\Filter $filter)
+    protected function addFilterToCollection(Collection $collection, Data\Filter $filter)
     {
         $field = $this->translateField($filter->getField());
         $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
@@ -174,10 +175,11 @@ class CustomerGroupService implements CustomerGroupServiceInterface
      * Helper function that adds a FilterGroup to the collection.
      *
      * @param Collection $collection
-     * @param Dto\Search\FilterGroupInterface $group
+     * @param Data\Search\FilterGroupInterface $group
+     * @return void
      * @throws \Magento\Exception\InputException
      */
-    protected function addFilterGroupToCollection(Collection $collection, Dto\Search\FilterGroupInterface $group)
+    protected function addFilterGroupToCollection(Collection $collection, Data\Search\FilterGroupInterface $group)
     {
         if (strcasecmp($group->getGroupType(), 'OR')) {
             throw new InputException('The only nested groups currently supported for filters are of type OR.');
@@ -256,7 +258,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function saveGroup(Dto\CustomerGroup $group)
+    public function saveGroup(Data\CustomerGroup $group)
     {
         $customerGroup = $this->_groupFactory->create();
         if ($group->getId()) {
@@ -278,5 +280,6 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         $customerGroup = $this->_groupFactory->create();
         $customerGroup->setId($groupId);
         $customerGroup->delete();
+        return true;
     }
 }

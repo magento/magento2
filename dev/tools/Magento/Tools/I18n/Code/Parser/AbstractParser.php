@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser;
 
 use Magento\Tools\I18n\Code;
@@ -63,8 +62,8 @@ abstract class AbstractParser implements Code\ParserInterface
     /**
      * Parser construct
      *
-     * @param \Magento\Tools\I18n\Code\FilesCollector $filesCollector
-     * @param \Magento\Tools\I18n\Code\Factory $factory
+     * @param Code\FilesCollector $filesCollector
+     * @param Code\Factory $factory
      */
     public function __construct(Code\FilesCollector $filesCollector, Code\Factory $factory)
     {
@@ -76,7 +75,8 @@ abstract class AbstractParser implements Code\ParserInterface
      * Add parser
      *
      * @param string $type
-     * @param \Magento\Tools\I18n\Code\Parser\AdapterInterface $adapter
+     * @param AdapterInterface $adapter
+     * @return void
      */
     public function addAdapter($type, AdapterInterface $adapter)
     {
@@ -99,7 +99,8 @@ abstract class AbstractParser implements Code\ParserInterface
     /**
      * Parse one type
      *
-     * @param $options
+     * @param array $options
+     * @return void
      */
     abstract protected function _parseByTypeOptions($options);
 
@@ -107,6 +108,7 @@ abstract class AbstractParser implements Code\ParserInterface
      * Validate options
      *
      * @param array $parseOptions
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _validateOptions($parseOptions)

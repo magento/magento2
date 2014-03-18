@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Error;
 
 /**
@@ -86,6 +85,7 @@ class Handler implements HandlerInterface
      * @param string $errorStr
      * @param string $errorFile
      * @param int $errorLine
+     * @return bool
      */
     public function handler($errorNo, $errorStr, $errorFile, $errorLine)
     {

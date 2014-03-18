@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Helper;
 
 /**
@@ -85,9 +84,9 @@ abstract class AbstractHelper
     protected $_remoteAddress;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param Context $context
      */
-    public function __construct(\Magento\App\Helper\Context $context)
+    public function __construct(Context $context)
     {
         $this->_inlineFactory = $context->getInlineFactory();
         $this->_moduleManager = $context->getModuleManager();

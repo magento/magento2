@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to validate string resources
@@ -31,8 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect;
-
 class Validator
 {
     /**
@@ -120,7 +119,7 @@ class Validator
     * Validate License url
     *
     * @param mixed $str
-    * @return boolean
+    * @return bool
     */
     public function validateLicenseUrl($str)
     {
@@ -309,7 +308,7 @@ class Validator
     /**
      * Validate date format
      *
-     * @param $date
+     * @param string $date
      * @return bool
      */
     public function validateDate($date)
@@ -324,6 +323,7 @@ class Validator
 
     /**
      * Validate email
+     *
      * @param string $email
      * @return bool
      */
@@ -334,7 +334,8 @@ class Validator
 
     /**
      * Validate package name
-     * @param $name
+     *
+     * @param string $name
      * @return bool
      */
     public function validatePackageName($name)

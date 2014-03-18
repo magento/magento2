@@ -106,7 +106,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             $form->setDataObject($product);
 
             $fieldset = $form->addFieldset(
-                'group-fields-' .$group->getAttributeGroupCode(),
+                'group-fields-' . $group->getAttributeGroupCode(),
                  array(
                     'class' => 'user-defined',
                     'legend' => $legend,
@@ -136,13 +136,6 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             if ($groupPrice) {
                 $groupPrice->setRenderer(
                     $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group')
-                );
-            }
-
-            $recurringProfile = $form->getElement('recurring_profile');
-            if ($recurringProfile) {
-                $recurringProfile->setRenderer(
-                    $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Recurring')
                 );
             }
 
@@ -196,7 +189,10 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             $form->addValues($values);
             $form->setFieldNameSuffix('product');
 
-            $this->_eventManager->dispatch('adminhtml_catalog_product_edit_prepare_form', array('form' => $form));
+            $this->_eventManager->dispatch(
+                'adminhtml_catalog_product_edit_prepare_form',
+                ['form' => $form, 'layout' => $this->getLayout()]
+            );
 
             $this->setForm($form);
         }

@@ -40,4 +40,8 @@
         <title translate="true">Product Categories</title>
         <description translate="true">Indexed product/categories association</description>
     </indexer>
+    <indexer id="catalog_product_price" view_id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price">
+        <title translate="true">Product Price</title>
+        <description translate="true">Index product prices</description>
+    </indexer>
 </config>

@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Attribute\Data;
 
 /**
  * Customer Address Postal/Zip Code Attribute Data Model
@@ -33,8 +33,6 @@
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Attribute\Data;
-
 class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
 {
     /**
@@ -69,6 +67,10 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
         parent::__construct($localeDate, $logger, $localeResolver, $stringHelper);
     }
 
+    /**
+     * @param string $value
+     * @return true|string[]
+     */
     public function validateValue($value)
     {
         $countryId      = $this->getExtractedData('country_id');

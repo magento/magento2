@@ -52,7 +52,7 @@ class File implements DriverInterface
     /**
      * Is file or directory exist in file system
      *
-     * @param $path
+     * @param string $path
      * @return bool
      * @throws FilesystemException
      */

@@ -44,21 +44,29 @@ abstract class AbstractAgreement extends \Magento\Core\Model\AbstractModel
 
     /**
      * Init billing agreement
+     *
+     * @return string
      */
     abstract public function initToken();
 
     /**
      * Verify billing agreement details
+     *
+     * @return $this
      */
     abstract public function verifyToken();
 
     /**
      * Create billing agreement
+     *
+     * @return $this
      */
     abstract public function place();
 
     /**
      * Cancel billing agreement
+     *
+     * @return $this
      */
     abstract public function cancel();
 

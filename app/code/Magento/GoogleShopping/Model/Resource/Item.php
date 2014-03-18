@@ -35,6 +35,9 @@ namespace Magento\GoogleShopping\Model\Resource;
 
 class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('googleshopping_items', 'item_id');

@@ -21,6 +21,9 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\OfflineShipping\Model\Observer\SalesRule;
+
+use Magento\OfflineShipping\Model\SalesRule\Rule;
 
 /**
  * Checkout cart shipping block plugin
@@ -29,10 +32,12 @@
  * @package   Magento_OfflineShipping
  * @author    Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\OfflineShipping\Model\Observer\SalesRule;
-
 class ActionsTab
 {
+    /**
+     * @param \Magento\Event\Observer $observer
+     * @return void
+     */
     public function prepareForm($observer)
     {
         /** @var \Magento\Data\Form $form */
@@ -46,8 +51,8 @@ class ActionsTab
                     'name'      => 'simple_free_shipping',
                     'options'    => array(
                         0 => __('No'),
-                        \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ITEM => __('For matching items only'),
-                        \Magento\OfflineShipping\Model\SalesRule\Rule::FREE_SHIPPING_ADDRESS => __('For shipment with matching items'),
+                        Rule::FREE_SHIPPING_ITEM => __('For matching items only'),
+                        Rule::FREE_SHIPPING_ADDRESS => __('For shipment with matching items'),
                     ),
                 ));
             }

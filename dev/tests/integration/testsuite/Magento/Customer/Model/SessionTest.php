@@ -27,6 +27,8 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @magentoDataFixture Magento/Customer/_files/customer.php
  */
@@ -51,5 +53,22 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_customerSession->isLoggedIn());
         $newSessionId = $this->_customerSession->getSessionId();
         $this->assertNotEquals($oldSessionId, $newSessionId);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppIsolation enabled
+     */
+    public function testLoginByIdCustomerDataLoadedCorrectly()
+    {
+        $fixtureCustomerId = 1;
+
+        /** @var \Magento\Customer\Model\Session $customerSession */
+        $customerSession = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $customerSession->loginById($fixtureCustomerId);
+
+        $customerData = $customerSession->getCustomerData();
+
+        $this->assertEquals($fixtureCustomerId, $customerData->getId(), "Customer data was loaded incorrectly");
     }
 }

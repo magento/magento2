@@ -88,7 +88,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
-     * @param null $item
+     * @param mixed $item
      * @return bool
      */
     public function isShipmentSeparately($item = null)
@@ -135,7 +135,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
     }
 
     /**
-     * @param null $item
+     * @param mixed $item
      * @return bool
      */
     public function isChildCalculated($item = null)
@@ -181,6 +181,10 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         return false;
     }
 
+    /**
+     * @param mixed $item
+     * @return mixed|null
+     */
     public function getSelectionAttributes($item)
     {
         if ($item instanceof \Magento\Sales\Model\Order\Item) {
@@ -194,6 +198,10 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         return null;
     }
 
+    /**
+     * @param mixed $item
+     * @return array
+     */
     public function getOrderOptions($item = null)
     {
         $result = array();
@@ -212,6 +220,9 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         return $result;
     }
 
+    /**
+     * @return mixed
+     */
     public function getOrderItem()
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
@@ -221,6 +232,10 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         }
     }
 
+    /**
+     * @param mixed $item
+     * @return string
+     */
     public function getValueHtml($item)
     {
         $result = $this->escapeHtml($item->getName());

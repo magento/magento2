@@ -21,9 +21,10 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Layout\Reference;
+
 use Magento\Tools\Layout\Formatter;
+
 /**
  * Processor
  */
@@ -92,8 +93,8 @@ class Processor
     /**
      * Get layout file from Magento root directory
      *
-     * @param $path
-     * @return array
+     * @param string $path
+     * @return string[]
      */
     public function getLayoutFiles($path)
     {
@@ -162,6 +163,7 @@ class Processor
      * @param array $layouts
      * @param string $processor
      * @param bool $overwrite
+     * @return void
      */
     public function updateReferences($layouts, $processor = '', $overwrite = true)
     {

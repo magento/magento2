@@ -77,7 +77,7 @@
     window.onerror = function (message) {
         if ($.mage.isDevMode()) {
             $('[data-container-for=messages]').append(
-                '<ul class="messages"><li class="error-msg" data-role="js-error"><ul><li>' + message + '</li></ul></li></ul>'
+                '<div class="messages"><div class="message error" data-role="js-error"><div>' + message + '</div></div></div>'
             );
         }
     };

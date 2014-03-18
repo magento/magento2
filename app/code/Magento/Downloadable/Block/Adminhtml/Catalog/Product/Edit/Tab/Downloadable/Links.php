@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 /**
  * Adminhtml catalog product downloadable items tab links section
@@ -31,8 +32,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
-
 class Links
     extends \Magento\Backend\Block\Template
 {
@@ -50,6 +49,9 @@ class Links
      */
     protected $_purchasedSeparatelyAttribute = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'product/edit/downloadable/links.phtml';
 
     /**
@@ -136,6 +138,7 @@ class Links
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -330,8 +333,8 @@ class Links
     /**
      * Return formatted price with two digits after decimal point
      *
-     * @param decimal $value
-     * @return decimal
+     * @param float $value
+     * @return string
      */
     public function getPriceValue($value)
     {
@@ -351,6 +354,7 @@ class Links
     /**
      * Prepare block Layout
      *
+     * @return void
      */
     protected function _prepareLayout()
     {

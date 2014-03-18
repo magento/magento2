@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Address;
 
 /**
@@ -89,7 +88,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Customer\Model\Address\Config
+     * @var Config
      */
     protected $_addressConfig;
 
@@ -108,7 +107,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
@@ -120,7 +119,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Address\Config $addressConfig,
+        Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
@@ -179,21 +178,33 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         }
     }
 
+    /**
+     * @return string
+     */
     public function getStreet1()
     {
         return $this->getStreet(1);
     }
 
+    /**
+     * @return string
+     */
     public function getStreet2()
     {
         return $this->getStreet(2);
     }
 
+    /**
+     * @return string
+     */
     public function getStreet3()
     {
         return $this->getStreet(3);
     }
 
+    /**
+     * @return string
+     */
     public function getStreet4()
     {
         return $this->getStreet(4);
@@ -212,8 +223,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Alias for a street setter. To be used though setDataUsingMethod('street_full', $value).
      *
-     * @param string|array $street
-     * @return \Magento\Customer\Model\Address\AbstractAddress
+     * @param string|string[] $street
+     * @return $this
      */
     public function setStreetFull($street)
     {
@@ -223,8 +234,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Non-magic setter for a street field
      *
-     * @param string|array $street
-     * @return \Magento\Customer\Model\Address\AbstractAddress
+     * @param string|string[] $street
+     * @return $this
      */
     public function setStreet($street)
     {
@@ -266,7 +277,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Combine values of street lines into a single string
      *
-     * @param array|string $value
+     * @param string[]|string $value
      * @return string
      */
     protected function _implodeStreetValue($value)
@@ -282,6 +293,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      *
      * To be used in controllers for views data
      *
+     * @return $this
      */
     public function explodeStreetAddress()
     {
@@ -311,15 +323,13 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
 
         if (!empty($region) && is_string($region)) {
             $this->setData('region', $region);
-        }
-        elseif (!$regionId && is_numeric($region)) {
+        } elseif (!$regionId && is_numeric($region)) {
             if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region', $this->getRegionModel($region)->getName());
                 $this->setData('region_id', $region);
             }
-        }
-        elseif ($regionId && !$region) {
-               if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
+        } elseif ($regionId && !$region) {
+            if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region', $this->getRegionModel($regionId)->getName());
             }
         }
@@ -330,6 +340,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Return 2 letter state code if available, otherwise full region name
      *
+     * @return string
      */
     public function getRegionCode()
     {
@@ -340,18 +351,19 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
             if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region_code', $this->getRegionModel($region)->getCode());
             }
-        }
-        elseif ($regionId) {
+        } elseif ($regionId) {
             if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region_code', $this->getRegionModel($regionId)->getCode());
             }
-        }
-        elseif (is_string($region)) {
+        } elseif (is_string($region)) {
             $this->setData('region_code', $region);
         }
         return $this->getData('region_code');
     }
 
+    /**
+     * @return int
+     */
     public function getRegionId()
     {
         $regionId = $this->getData('region_id');
@@ -370,6 +382,9 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         return $this->getData('region_id');
     }
 
+    /**
+     * @return int
+     */
     public function getCountry()
     {
         $country = $this->getCountryId();
@@ -383,7 +398,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      */
     public function getCountryModel()
     {
-        if(!isset(self::$_countryModels[$this->getCountryId()])) {
+        if (!isset(self::$_countryModels[$this->getCountryId()])) {
             $country = $this->_createCountryInstance();
             $country->load($this->getCountryId());
             self::$_countryModels[$this->getCountryId()] = $country;
@@ -400,11 +415,11 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      */
     public function getRegionModel($regionId = null)
     {
-        if(is_null($regionId)) {
+        if (is_null($regionId)) {
             $regionId = $this->getRegionId();
         }
 
-        if(!isset(self::$_regionModels[$regionId])) {
+        if (!isset(self::$_regionModels[$regionId])) {
             $region = $this->_createRegionInstance();
             $region->load($regionId);
             self::$_regionModels[$regionId] = $region;
@@ -413,9 +428,21 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         return self::$_regionModels[$regionId];
     }
 
+    /**
+     * Format address in a specific way
+     *
+     * Deprecated, use this code instead:
+     * $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
+     * $addressData = \Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($address);
+     * $formattedAddress = $renderer->renderArray($addressData);
+     *
+     * @param string $type
+     * @return string|null
+     * @deprecated
+     */
     public function format($type)
     {
-        if(!($formatType = $this->getConfig()->getFormatByCode($type))
+        if (!($formatType = $this->getConfig()->getFormatByCode($type))
             || !$formatType->getRenderer()) {
             return null;
         }
@@ -426,13 +453,16 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve address config object
      *
-     * @return \Magento\Customer\Model\Address\Config
+     * @return Config
      */
     public function getConfig()
     {
         return $this->_addressConfig;
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeSave()
     {
         parent::_beforeSave();

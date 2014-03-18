@@ -44,6 +44,6 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
     {
         $sourceFilePath = realpath(__DIR__ . '/../_files/oyejorge.less');
         $resultCss = file_get_contents(__DIR__ . '/../_files/oyejorge.css');
-        $this->assertEquals(trim($resultCss), $this->model->process($sourceFilePath));
+        $this->assertEquals($resultCss, $this->model->process($sourceFilePath));
     }
 }

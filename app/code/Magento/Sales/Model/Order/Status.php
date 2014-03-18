@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Order;
 
 class Status extends \Magento\Core\Model\AbstractModel
@@ -59,6 +58,9 @@ class Status extends \Magento\Core\Model\AbstractModel
         $this->_storeManager = $storeManager;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Sales\Model\Resource\Order\Status');
@@ -69,8 +71,8 @@ class Status extends \Magento\Core\Model\AbstractModel
      *
      * @param string $state
      * @param boolean $isDefault make the status as default one for state
+     * @return $this
      * @throws \Exception
-     * @return \Magento\Sales\Model\Order\Status
      */
     public function assignState($state, $isDefault = false)
     {
@@ -89,8 +91,8 @@ class Status extends \Magento\Core\Model\AbstractModel
      * Unassigns order status from particular state
      *
      * @param string $state
+     * @return $this
      * @throws \Exception
-     * @return \Magento\Sales\Model\Order\Status
      */
     public function unassignState($state)
     {
@@ -125,7 +127,7 @@ class Status extends \Magento\Core\Model\AbstractModel
     /**
      * Get status label by store
      *
-     * @param mixed $store
+     * @param null|string|bool|int|\Magento\Core\Model\Store $store
      * @return string
      */
     public function getStoreLabel($store = null)
@@ -143,7 +145,7 @@ class Status extends \Magento\Core\Model\AbstractModel
      * Load default status per state
      *
      * @param string $state
-     * @return \Magento\Sales\Model\Order\Status
+     * @return $this
      */
     public function loadDefaultByState($state)
     {

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Model;
 
 /**
  * Rating Observer Model
  */
-namespace Magento\Rating\Model;
-
 class Observer
 {
     /**
@@ -48,7 +47,7 @@ class Observer
      * Cleanup product ratings after product delete
      *
      * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\Rating\Model\Observer
+     * @return  $this
      */
     public function processProductAfterDeleteEvent(\Magento\Event\Observer $observer)
     {

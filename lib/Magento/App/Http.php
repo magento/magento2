@@ -25,8 +25,10 @@
  */
 namespace Magento\App;
 
-use Magento\App\ObjectManager\ConfigLoader,
-    Magento\Event;
+use Magento\App\ObjectManager\ConfigLoader;
+use Magento\App\Request\Http as RequestHttp;
+use Magento\App\Response\Http as ResponseHttp;
+use Magento\Event;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,7 +66,7 @@ class Http implements \Magento\LauncherInterface
     protected $_state;
 
     /**
-     * @var \Magento\App\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
@@ -77,21 +79,21 @@ class Http implements \Magento\LauncherInterface
      * @param \Magento\ObjectManager $objectManager
      * @param Event\Manager $eventManager
      * @param AreaList $areaList
-     * @param Request\Http $request
-     * @param Response\Http $response
+     * @param RequestHttp $request
+     * @param ResponseHttp $response
      * @param ConfigLoader $configLoader
      * @param State $state
-     * @param \Magento\App\Filesystem $filesystem
+     * @param Filesystem $filesystem
      */
     public function __construct(
         \Magento\ObjectManager $objectManager,
         Event\Manager $eventManager,
         AreaList $areaList,
-        \Magento\App\Request\Http $request,
-        \Magento\App\Response\Http $response,
+        RequestHttp $request,
+        ResponseHttp $response,
         ConfigLoader $configLoader,
         State $state,
-        \Magento\App\Filesystem $filesystem
+        Filesystem $filesystem
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -139,7 +141,7 @@ class Http implements \Magento\LauncherInterface
                             $reportData['script_name'] = $_SERVER['SCRIPT_NAME'];
                         }
                     }
-                    require_once($this->_filesystem->getPath(\Magento\App\Filesystem::PUB_DIR) . '/errors/report.php');
+                    require_once($this->_filesystem->getPath(Filesystem::PUB_DIR) . '/errors/report.php');
                     $processor = new \Error_Processor($this->_response);
                     $processor->saveReport($reportData);
                     $this->_response = $processor->processReport();

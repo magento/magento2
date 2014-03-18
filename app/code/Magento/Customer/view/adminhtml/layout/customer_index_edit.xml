@@ -55,10 +55,4 @@
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" template="Magento_Customer::edit/js.phtml" name="customer.edit.js" as="customer_edit_js"/>
     </referenceContainer>
-    <referenceBlock name="customer_edit_tabs">
-        <action method="addTab">
-            <argument name="name" xsi:type="string">customer_edit_tab_recurring_profile</argument>
-            <argument name="block" xsi:type="string">Magento\RecurringProfile\Block\Adminhtml\Customer\Edit\Tab\RecurringProfile</argument>
-        </action>
-    </referenceBlock>
 </layout>

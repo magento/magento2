@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Multishipping\Block\Checkout;
+
+use Magento\Customer\Model\Address;
 
 /**
  * Mustishipping checkout shipping
@@ -31,8 +34,6 @@
  * @package    Magento_Checkout
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Multishipping\Block\Checkout;
-
 class Shipping extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
@@ -76,6 +77,9 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return $this->_multishipping;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         if ($headBlock = $this->getLayout()->getBlock('head')) {
@@ -85,13 +89,16 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * @return \Magento\Customer\Model\Address[]
+     * @return Address[]
      */
     public function getAddresses()
     {
         return $this->getCheckout()->getQuote()->getAllShippingAddresses();
     }
 
+    /**
+     * @return mixed
+     */
     public function getAddressCount()
     {
         $count = $this->getData('address_count');
@@ -102,6 +109,10 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return $count;
     }
 
+    /**
+     * @param Address $address
+     * @return \Magento\Object[]
+     */
     public function getAddressItems($address)
     {
         $items = array();
@@ -117,17 +128,29 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return $itemsFilter->filter($items);
     }
 
+    /**
+     * @param Address $address
+     * @return mixed
+     */
     public function getAddressShippingMethod($address)
     {
         return $address->getShippingMethod();
     }
 
+    /**
+     * @param Address $address
+     * @return mixed
+     */
     public function getShippingRates($address)
     {
         $groups = $address->getGroupedAllShippingRates();
         return $groups;
     }
 
+    /**
+     * @param string $carrierCode
+     * @return string
+     */
     public function getCarrierName($carrierCode)
     {
         if ($name = $this->_storeConfig->getConfig('carriers/'.$carrierCode.'/title')) {
@@ -136,26 +159,45 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
         return $carrierCode;
     }
 
+    /**
+     * @param Address $address
+     * @return string
+     */
     public function getAddressEditUrl($address)
     {
         return $this->getUrl('*/checkout_address/editShipping', array('id'=>$address->getCustomerAddressId()));
     }
 
+    /**
+     * @return string
+     */
     public function getItemsEditUrl()
     {
         return $this->getUrl('*/*/backToAddresses');
     }
 
+    /**
+     * @return string
+     */
     public function getPostActionUrl()
     {
         return $this->getUrl('*/*/shippingPost');
     }
 
+    /**
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl('*/*/backtoaddresses');
     }
 
+    /**
+     * @param Address $address
+     * @param float $price
+     * @param bool $flag
+     * @return float
+     */
     public function getShippingPrice($address, $price, $flag)
     {
         return $address->getQuote()->getStore()->convertPrice($this->_taxHelper->getShippingPrice($price, $flag, $address), true);

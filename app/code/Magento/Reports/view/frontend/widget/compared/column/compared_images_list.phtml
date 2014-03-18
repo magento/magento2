@@ -25,7 +25,6 @@
 <?php
 if ($exist = $this->getRecentlyComparedProducts()) {
     $type = 'widget-compared';
-    $class = 'widget compared mini products images';
 
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_compared_products_images_only_widget';
@@ -40,7 +39,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block <?php echo $class; ?>">
+<div class="block widget compared mini products images">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>

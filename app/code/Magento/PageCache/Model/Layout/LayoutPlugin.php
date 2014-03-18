@@ -66,7 +66,7 @@ class LayoutPlugin
      * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
      *
      * @param \Magento\Core\Model\Layout $subject
-     * @param $result
+     * @param mixed $result
      * @return mixed
      */
     public function afterGenerateXml(\Magento\Core\Model\Layout $subject, $result)
@@ -82,14 +82,14 @@ class LayoutPlugin
      * Retrieve all identities from blocks for further cache invalidation
      *
      * @param \Magento\Core\Model\Layout $subject
-     * @param $result
+     * @param mixed $result
      * @return mixed
      */
     public function afterGetOutput(\Magento\Core\Model\Layout $subject, $result)
     {
         if ($this->layout->isCacheable()) {
             $tags = array();
-            foreach($this->layout->getAllBlocks() as $block) {
+            foreach ($this->layout->getAllBlocks() as $block) {
                 if ($block instanceof \Magento\View\Block\IdentityInterface) {
                     $tags = array_merge($tags, $block->getIdentities());
                 }

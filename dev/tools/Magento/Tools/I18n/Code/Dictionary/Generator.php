@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary;
 
 use Magento\Tools\I18n\Code\Factory;
@@ -56,9 +55,9 @@ class Generator
     /**
      * Generator construct
      *
-     * @param \Magento\Tools\I18n\Code\ParserInterface $parser
-     * @param \Magento\Tools\I18n\Code\ParserInterface $contextualParser
-     * @param \Magento\Tools\I18n\Code\Factory $factory
+     * @param ParserInterface $parser
+     * @param ParserInterface $contextualParser
+     * @param Factory $factory
      */
     public function __construct(ParserInterface $parser, ParserInterface $contextualParser, Factory $factory)
     {
@@ -73,6 +72,7 @@ class Generator
      * @param array $filesOptions
      * @param string $outputFilename
      * @param bool $withContext
+     * @return void
      */
     public function generate(array $filesOptions, $outputFilename, $withContext = false)
     {

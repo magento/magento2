@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
 
 /**
  * Adminhtml invoice create
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Invoice;
-
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -53,6 +51,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'order_id';

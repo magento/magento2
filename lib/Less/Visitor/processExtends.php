@@ -1,14 +1,24 @@
 <?php
 
-
+/**
+ * Process Extends Visitor
+ *
+ * @package Less
+ * @subpackage visitor
+ */
 class Less_Visitor_processExtends extends Less_Visitor{
 
 	public $allExtendsStack;
 
-	function run( $root ){
+	/**
+	 * @param Less_Tree_Ruleset $root
+	 */
+	public function run( $root ){
 		$extendFinder = new Less_Visitor_extendFinder();
 		$extendFinder->run( $root );
-		if( !$extendFinder->foundExtends) { return $root; }
+		if( !$extendFinder->foundExtends){
+			return $root;
+		}
 
 		$root->allExtends = $this->doExtendChaining( $root->allExtends, $root->allExtends);
 
@@ -18,7 +28,7 @@ class Less_Visitor_processExtends extends Less_Visitor{
 		return $this->visitObj( $root );
 	}
 
-	function doExtendChaining( $extendsList, $extendsListTarget, $iterationCount = 0){
+	private function doExtendChaining( $extendsList, $extendsListTarget, $iterationCount = 0){
 		//
 		// chaining is different from normal extension.. if we extend an extend then we are not just copying, altering and pasting
 		// the selector we would do normally, but we are also adding an extend with the same target selector
@@ -93,12 +103,15 @@ class Less_Visitor_processExtends extends Less_Visitor{
 			// try to detect circular references to stop a stack overflow.
 			// may no longer be needed.			$this->extendChainCount++;
 			if( $iterationCount > 100) {
-				$selectorOne = "{unable to calculate}";
-				$selectorTwo = "{unable to calculate}";
+
 				try{
 					$selectorOne = $extendsToAdd[0]->selfSelectors[0]->toCSS();
 					$selectorTwo = $extendsToAdd[0]->selector->toCSS();
-				}catch(Exception $e){}
+				}catch(Exception $e){
+					$selectorOne = "{unable to calculate}";
+					$selectorTwo = "{unable to calculate}";
+				}
+
 				throw new Less_Exception_Parser("extend circular reference detected. One of the circular extends is currently:"+$selectorOne+":extend(" + $selectorTwo+")");
 			}
 
@@ -110,50 +123,69 @@ class Less_Visitor_processExtends extends Less_Visitor{
 	}
 
 
-	function visitRule( $ruleNode, &$visitDeeper ){
+	protected function visitRule( $ruleNode, &$visitDeeper ){
 		$visitDeeper = false;
 	}
 
-	function visitMixinDefinition( $mixinDefinitionNode, &$visitDeeper ){
+	protected function visitMixinDefinition( $mixinDefinitionNode, &$visitDeeper ){
 		$visitDeeper = false;
 	}
 
-	function visitSelector( $selectorNode, &$visitDeeper ){
+	protected function visitSelector( $selectorNode, &$visitDeeper ){
 		$visitDeeper = false;
 	}
 
-	function visitRuleset($rulesetNode){
+	protected function visitRuleset($rulesetNode){
 
 
 		if( $rulesetNode->root ){
 			return;
 		}
 
-		$allExtends = end($this->allExtendsStack);
+		$allExtends	= end($this->allExtendsStack);
 		$paths_len = count($rulesetNode->paths);
 
 		// look at each selector path in the ruleset, find any extend matches and then copy, find and replace
-		for( $extendIndex = 0, $all_extend_len = count($allExtends); $extendIndex < $all_extend_len; $extendIndex++ ){
+		foreach($allExtends as $allExtend){
 			for($pathIndex = 0; $pathIndex < $paths_len; $pathIndex++ ){
+
+				// extending extends happens initially, before the main pass
+				if( isset($rulesetNode->extendOnEveryPath) && $rulesetNode->extendOnEveryPath ){
+					continue;
+				}
 
 				$selectorPath = $rulesetNode->paths[$pathIndex];
 
-				// extending extends happens initially, before the main pass
-				if( isset($rulesetNode->extendOnEveryPath) && $rulesetNode->extendOnEveryPath ){ continue; }
-				if( end($selectorPath)->extendList ){ continue; }
-
-				$matches = $this->findMatch($allExtends[$extendIndex], $selectorPath);
-
-				if( $matches ){
-					foreach($allExtends[$extendIndex]->selfSelectors as $selfSelector ){
-						$rulesetNode->paths[] = $this->extendSelector($matches, $selectorPath, $selfSelector);
-					}
+				if( end($selectorPath)->extendList ){
+					continue;
 				}
+
+				$this->ExtendMatch( $rulesetNode, $allExtend, $selectorPath);
+
 			}
 		}
 	}
 
-	function findMatch($extend, $haystackSelectorPath ){
+
+	private function ExtendMatch( $rulesetNode, $extend, $selectorPath ){
+		$matches = $this->findMatch($extend, $selectorPath);
+
+		if( $matches ){
+			foreach($extend->selfSelectors as $selfSelector ){
+				$rulesetNode->paths[] = $this->extendSelector($matches, $selectorPath, $selfSelector);
+			}
+		}
+	}
+
+
+
+	private function findMatch($extend, $haystackSelectorPath ){
+
+
+		if( !$this->HasMatches($extend, $haystackSelectorPath) ){
+			return false;
+		}
+
 
 		//
 		// look through the haystack selector path to try and find the needle - extend.selector
@@ -165,11 +197,15 @@ class Less_Visitor_processExtends extends Less_Visitor{
 		$potentialMatch = null;
 		$matches = array();
 
+
+
 		// loop through the haystack elements
-		for($haystackSelectorIndex = 0, $haystack_path_len = count($haystackSelectorPath); $haystackSelectorIndex < $haystack_path_len; $haystackSelectorIndex++ ){
+		$haystack_path_len = count($haystackSelectorPath);
+		for($haystackSelectorIndex = 0; $haystackSelectorIndex < $haystack_path_len; $haystackSelectorIndex++ ){
 			$hackstackSelector = $haystackSelectorPath[$haystackSelectorIndex];
 
-			for($hackstackElementIndex = 0, $haystack_elements_len = count($hackstackSelector->elements); $hackstackElementIndex < $haystack_elements_len; $hackstackElementIndex++ ){
+			$haystack_elements_len = count($hackstackSelector->elements);
+			for($hackstackElementIndex = 0; $hackstackElementIndex < $haystack_elements_len; $hackstackElementIndex++ ){
 
 				$haystackElement = $hackstackSelector->elements[$hackstackElementIndex];
 
@@ -180,34 +216,20 @@ class Less_Visitor_processExtends extends Less_Visitor{
 				}
 
 				for($i = 0; $i < $potentialMatches_len; $i++ ){
+
 					$potentialMatch = &$potentialMatches[$i];
+					$potentialMatch = $this->PotentialMatch( $potentialMatch, $needleElements, $haystackElement, $hackstackElementIndex );
 
-					// selectors add " " onto the first element. When we use & it joins the selectors together, but if we don't
-					// then each selector in haystackSelectorPath has a space before it added in the toCSS phase. so we need to work out
-					// what the resulting combinator will be
-					$targetCombinator = $haystackElement->combinator->value;
-					if( $targetCombinator === '' && $hackstackElementIndex === 0 ){
-						$targetCombinator = ' ';
-					}
-
-					// if we don't match, null our match to indicate failure
-					if( !$this->isElementValuesEqual( $needleElements[$potentialMatch['matched'] ]->value, $haystackElement->value) ||
-						($potentialMatch['matched'] > 0 && $needleElements[ $potentialMatch['matched'] ]->combinator->value !== $targetCombinator) ){
-						$potentialMatch = null;
-					} else {
-						$potentialMatch['matched']++;
-					}
 
 					// if we are still valid and have finished, test whether we have elements after and whether these are allowed
-					if( $potentialMatch ){
+					if( $potentialMatch && $potentialMatch['matched'] === $extend->selector->elements_len ){
+						$potentialMatch['finished'] = true;
 
-						$potentialMatch['finished'] = ($potentialMatch['matched'] === $extend->selector->elements_len );
-
-						if( $potentialMatch['finished'] &&
-							(!$extend->allowAfter && ($hackstackElementIndex+1 < $haystack_elements_len || $haystackSelectorIndex+1 < $haystack_path_len)) ){
+						if( !$extend->allowAfter && ($hackstackElementIndex+1 < $haystack_elements_len || $haystackSelectorIndex+1 < $haystack_path_len) ){
 							$potentialMatch = null;
 						}
 					}
+
 					// if null we remove, if not, we are still valid, so either push as a valid match or continue
 					if( $potentialMatch ){
 						if( $potentialMatch['finished'] ){
@@ -218,66 +240,151 @@ class Less_Visitor_processExtends extends Less_Visitor{
 							$potentialMatches_len = 0;
 							$matches[] = $potentialMatch;
 						}
-					} else {
-						array_splice($potentialMatches, $i, 1);
-						$potentialMatches_len--;
-						$i--;
+						continue;
 					}
+
+					array_splice($potentialMatches, $i, 1);
+					$potentialMatches_len--;
+					$i--;
 				}
 			}
 		}
+
 		return $matches;
 	}
 
-	function isElementValuesEqual( $elementValue1, $elementValue2 ){
 
-		if( $elementValue1 === $elementValue2 ){
+	// Before going through all the nested loops, lets check to see if a match is possible
+	// Reduces Bootstrap 3.1 compile time from ~6.5s to ~5.6s
+	private function HasMatches($extend, $haystackSelectorPath){
+
+		if( !$extend->selector->cacheable ){
 			return true;
 		}
-		if( is_string($elementValue1) || is_string($elementValue2) ) {
-			return false;
-		}
 
-		if( $elementValue1 instanceof Less_Tree_Attribute ){
+		$first_el = $extend->selector->_oelements[0];
 
-			if( $elementValue1->op !== $elementValue2->op || $elementValue1->key !== $elementValue2->key ){
-				return false;
-			}
-
-			if( !$elementValue1->value || !$elementValue2->value ){
-				if( $elementValue1->value || $elementValue2->value ) {
-					return false;
-				}
+		foreach($haystackSelectorPath as $hackstackSelector){
+			if( !$hackstackSelector->cacheable ){
 				return true;
 			}
-			$elementValue1 = ($elementValue1->value->value ? $elementValue1->value->value : $elementValue1->value );
-			$elementValue2 = ($elementValue2->value->value ? $elementValue2->value->value : $elementValue2->value );
-			return $elementValue1 === $elementValue2;
-		}
 
-		$elementValue1 = $elementValue1->value;
-		if( $elementValue1 instanceof Less_Tree_Selector ){
-			$elementValue2 = $elementValue2->value;
-			if( !($elementValue2 instanceof Less_Tree_Selector) || $elementValue1->elements_len !== $elementValue2->elements_len ){
-				return false;
+			if( in_array($first_el, $hackstackSelector->_oelements) ){
+				return true;
 			}
-			for( $i = 0; $i < $elementValue1->elements_len; $i++ ){
-				if( $elementValue1->elements[$i]->combinator->value !== $elementValue2->elements[$i]->combinator->value ){
-					if( $i !== 0 || ($elementValue1->elements[$i]->combinator->value || ' ') !== ($elementValue2->elements[$i]->combinator->value || ' ') ){
-						return false;
-					}
-				}
-				if( !$this->isElementValuesEqual($elementValue1->elements[$i]->value, $elementValue2->elements[$i]->value) ){
-					return false;
-				}
-			}
-			return true;
 		}
 
 		return false;
 	}
 
-	function extendSelector($matches, $selectorPath, $replacementSelector){
+
+	/**
+	 * @param integer $hackstackElementIndex
+	 */
+	private function PotentialMatch( $potentialMatch, $needleElements, $haystackElement, $hackstackElementIndex ){
+
+
+		if( $potentialMatch['matched'] > 0 ){
+
+			// selectors add " " onto the first element. When we use & it joins the selectors together, but if we don't
+			// then each selector in haystackSelectorPath has a space before it added in the toCSS phase. so we need to work out
+			// what the resulting combinator will be
+			$targetCombinator = $haystackElement->combinator;
+			if( $targetCombinator === '' && $hackstackElementIndex === 0 ){
+				$targetCombinator = ' ';
+			}
+
+			if( $needleElements[ $potentialMatch['matched'] ]->combinator !== $targetCombinator ){
+				return null;
+			}
+		}
+
+		// if we don't match, null our match to indicate failure
+		if( !$this->isElementValuesEqual( $needleElements[$potentialMatch['matched'] ]->value, $haystackElement->value) ){
+			return null;
+		}
+
+		$potentialMatch['finished'] = false;
+		$potentialMatch['matched']++;
+
+		return $potentialMatch;
+	}
+
+
+	private function isElementValuesEqual( $elementValue1, $elementValue2 ){
+
+		if( $elementValue1 === $elementValue2 ){
+			return true;
+		}
+
+		if( is_string($elementValue1) || is_string($elementValue2) ) {
+			return false;
+		}
+
+		if( $elementValue1 instanceof Less_Tree_Attribute ){
+			return $this->isAttributeValuesEqual( $elementValue1, $elementValue2 );
+		}
+
+		$elementValue1 = $elementValue1->value;
+		if( $elementValue1 instanceof Less_Tree_Selector ){
+			return $this->isSelectorValuesEqual( $elementValue1, $elementValue2 );
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * @param Less_Tree_Selector $elementValue1
+	 */
+	private function isSelectorValuesEqual( $elementValue1, $elementValue2 ){
+
+		$elementValue2 = $elementValue2->value;
+		if( !($elementValue2 instanceof Less_Tree_Selector) || $elementValue1->elements_len !== $elementValue2->elements_len ){
+			return false;
+		}
+
+		for( $i = 0; $i < $elementValue1->elements_len; $i++ ){
+
+			if( $elementValue1->elements[$i]->combinator !== $elementValue2->elements[$i]->combinator ){
+				if( $i !== 0 || ($elementValue1->elements[$i]->combinator || ' ') !== ($elementValue2->elements[$i]->combinator || ' ') ){
+					return false;
+				}
+			}
+
+			if( !$this->isElementValuesEqual($elementValue1->elements[$i]->value, $elementValue2->elements[$i]->value) ){
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * @param Less_Tree_Attribute $elementValue1
+	 */
+	private function isAttributeValuesEqual( $elementValue1, $elementValue2 ){
+
+		if( $elementValue1->op !== $elementValue2->op || $elementValue1->key !== $elementValue2->key ){
+			return false;
+		}
+
+		if( !$elementValue1->value || !$elementValue2->value ){
+			if( $elementValue1->value || $elementValue2->value ) {
+				return false;
+			}
+			return true;
+		}
+
+		$elementValue1 = ($elementValue1->value->value ? $elementValue1->value->value : $elementValue1->value );
+		$elementValue2 = ($elementValue2->value->value ? $elementValue2->value->value : $elementValue2->value );
+
+		return $elementValue1 === $elementValue2;
+	}
+
+
+	private function extendSelector($matches, $selectorPath, $replacementSelector){
 
 		//for a set of matches, replace each match with the replacement selector
 
@@ -291,6 +398,7 @@ class Less_Visitor_processExtends extends Less_Visitor{
 
 			$match = $matches[$matchIndex];
 			$selector = $selectorPath[ $match['pathIndex'] ];
+
 			$firstElement = new Less_Tree_Element(
 				$match['initialCombinator'],
 				$replacementSelector->elements[0]->value,
@@ -340,21 +448,21 @@ class Less_Visitor_processExtends extends Less_Visitor{
 	}
 
 
-	function visitMedia( $mediaNode ){
+	protected function visitMedia( $mediaNode ){
 		$newAllExtends = array_merge( $mediaNode->allExtends, end($this->allExtendsStack) );
 		$this->allExtendsStack[] = $this->doExtendChaining($newAllExtends, $mediaNode->allExtends);
 	}
 
-	function visitMediaOut( $mediaNode ){
+	protected function visitMediaOut(){
 		array_pop( $this->allExtendsStack );
 	}
 
-	function visitDirective( $directiveNode ){
+	protected function visitDirective( $directiveNode ){
 		$newAllExtends = array_merge( $directiveNode->allExtends, end($this->allExtendsStack) );
 		$this->allExtendsStack[] = $this->doExtendChaining($newAllExtends, $directiveNode->allExtends);
 	}
 
-	function visitDirectiveOut( $directiveNode ){
+	protected function visitDirectiveOut(){
 		array_pop($this->allExtendsStack);
 	}
 

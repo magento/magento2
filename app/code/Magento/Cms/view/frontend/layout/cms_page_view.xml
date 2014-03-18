@@ -25,9 +25,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <referenceContainer name="content">
-        <block class="Magento\View\Element\Template" name="page_content_heading" template="Magento_Cms::content_heading.phtml"/>
-        <container name="cms.wrapper" label="CMS Content Wrapper" htmlTag="div" htmlClass="std">
-            <block class="Magento\Cms\Block\Page" name="cms_page"/>
-        </container>
+        <block class="Magento\Cms\Block\Page" name="cms_page"/>
     </referenceContainer>
 </layout>

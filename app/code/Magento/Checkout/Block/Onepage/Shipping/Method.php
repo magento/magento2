@@ -35,6 +35,9 @@ namespace Magento\Checkout\Block\Onepage\Shipping;
  */
 class Method extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->getCheckout()->setStepData('shipping_method', array(

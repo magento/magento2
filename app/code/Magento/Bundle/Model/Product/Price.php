@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model\Product;
 
 /**
  * Bundle Price Model
@@ -31,8 +32,6 @@
  * @package  Magento_Bundle
  * @author   Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Product;
-
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     const PRICE_TYPE_FIXED      = 1;
@@ -79,6 +78,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager);
     }
 
+    /**
+     * @return bool
+     */
     public function getIsPricesCalculatedByIndex()
     {
         return $this->_isPricesCalculatedByIndex;
@@ -88,7 +90,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Return product base price
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @return float
      */
     public function getPrice($product)
     {
@@ -136,9 +138,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Get product final price
      *
-     * @param   double                     $qty
+     * @param   float                     $qty
      * @param   \Magento\Catalog\Model\Product $product
-     * @return  double
+     * @return  float
      */
     public function getFinalPrice($qty, $product)
     {
@@ -165,7 +167,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param float                      $productQty
      * @param \Magento\Catalog\Model\Product $childProduct
      * @param float                      $childProductQty
-     * @return decimal
+     * @return float
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
@@ -179,7 +181,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param  string|null                $which
      * @param  bool|null                  $includeTax
      * @param  bool                       $takeTierPrice
-     * @return decimal|array
+     * @return float|array
      */
     public function getTotalPrices($product, $which = null, $includeTax = null, $takeTierPrice = true)
     {
@@ -318,7 +320,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Calculate Minimal price of bundle (counting all required options)
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @return decimal
+     * @return float
      */
     public function getMinimalPrice($product)
     {
@@ -329,7 +331,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Calculate maximal price of bundle
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return decimal
+     * @return float
      */
     public function getMaximalPrice($product)
     {
@@ -362,14 +364,14 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Calculate price of selection
      *
-     * @deprecated after 1.6.2.0
-     * @see \Magento\Bundle\Model\Product\Price::getSelectionFinalTotalPrice()
-     *
      * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param \Magento\Catalog\Model\Product $selectionProduct
      * @param float|null                 $selectionQty
      * @param null|bool                  $multiplyQty      Whether to multiply selection's price by its quantity
      * @return float
+     *
+     * @deprecated after 1.6.2.0
+     * @see \Magento\Bundle\Model\Product\Price::getSelectionFinalTotalPrice()
      */
     public function getSelectionPrice($bundleProduct, $selectionProduct, $selectionQty = null, $multiplyQty = true)
     {
@@ -381,8 +383,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param \Magento\Catalog\Model\Product $selectionProduct
-     * @param decimal                    $qty
-     * @return decimal
+     * @param float                    $qty
+     * @return float
      */
     public function getSelectionPreFinalPrice($bundleProduct, $selectionProduct, $qty = null)
     {
@@ -395,11 +397,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      *
      * @param  \Magento\Catalog\Model\Product $bundleProduct
      * @param  \Magento\Catalog\Model\Product $selectionProduct
-     * @param  decimal                    $bundleQty
-     * @param  decimal                    $selectionQty
+     * @param  float                    $bundleQty
+     * @param  float                    $selectionQty
      * @param  bool                       $multiplyQty
      * @param  bool                       $takeTierPrice
-     * @return decimal
+     * @return float
      */
     public function getSelectionFinalTotalPrice($bundleProduct, $selectionProduct, $bundleQty, $selectionQty,
         $multiplyQty = true, $takeTierPrice = true)
@@ -496,9 +498,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Apply tier price for bundle
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @param   decimal                    $qty
-     * @param   decimal                    $finalPrice
-     * @return  decimal
+     * @param   float                    $qty
+     * @param   float                    $finalPrice
+     * @return  float
      */
     protected function _applyTierPrice($product, $qty, $finalPrice)
     {
@@ -519,9 +521,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Get product tier price by qty
      *
-     * @param   decimal                    $qty
+     * @param   float                    $qty
      * @param   \Magento\Catalog\Model\Product $product
-     * @return  decimal
+     * @return  float|array
      */
     public function getTierPrice($qty, $product)
     {

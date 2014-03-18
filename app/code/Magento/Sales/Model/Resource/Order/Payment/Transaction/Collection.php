@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Payment\Transaction;
 
 /**
  * Payment transactions collection
@@ -32,10 +32,7 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Payment\Transaction;
-
-class Collection
-    extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**
      * Order ID filter
@@ -47,7 +44,7 @@ class Collection
     /**
      * Columns of order info that should be selected
      *
-     * @var array
+     * @var string[]
      */
     protected $_addOrderInformation    = array();
 
@@ -61,7 +58,7 @@ class Collection
     /**
      * Order Store ids
      *
-     * @var array
+     * @var int[]
      */
     protected $_storeIds               = array();
 
@@ -82,7 +79,7 @@ class Collection
     /**
      * Filter by transaction type
      *
-     * @var array
+     * @var string[]
      */
     protected $_txnTypes               = null;
 
@@ -95,6 +92,8 @@ class Collection
 
     /**
      * Initialize collection items factory class
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -105,8 +104,8 @@ class Collection
     /**
      * Join order information
      *
-     * @param array $keys
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @param string[] $keys
+     * @return $this
      */
     public function addOrderInformation(array $keys)
     {
@@ -119,7 +118,7 @@ class Collection
      * Join payment information
      *
      * @param array $keys
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     public function addPaymentInformation(array $keys)
     {
@@ -131,7 +130,7 @@ class Collection
      * Order ID filter setter
      *
      * @param int $orderId
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     public function addOrderIdFilter($orderId)
     {
@@ -144,7 +143,7 @@ class Collection
      * Can take either the integer id or the payment instance
      *
      * @param \Magento\Sales\Model\Order\Payment|int $payment
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     public function addPaymentIdFilter($payment)
     {
@@ -160,7 +159,7 @@ class Collection
      * Parent ID filter setter
      *
      * @param int $parentId
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     public function addParentIdFilter($parentId)
     {
@@ -171,8 +170,8 @@ class Collection
     /**
      * Transaction type filter setter
      *
-     * @param array|string $txnType
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @param string[]|string $txnType
+     * @return $this
      */
     public function addTxnTypeFilter($txnType)
     {
@@ -186,8 +185,8 @@ class Collection
     /**
      * Add filter by store ids
      *
-     * @param int|array $storeIds
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @param int|int[] $storeIds
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {
@@ -199,7 +198,7 @@ class Collection
     /**
      * Prepare filters
      *
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     protected function _beforeLoad()
     {
@@ -246,7 +245,7 @@ class Collection
     /**
      * Unserialize additional_information in each item
      *
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {

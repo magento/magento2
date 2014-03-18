@@ -48,9 +48,8 @@
             <module name="Magento_Review"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Bundle"/>
-            <module name="Magento_CatalogInventory"/>
             <module name="Magento_ImportExport"/>
-            <module name="Magento_Cron"/>
+            <module name="Magento_CatalogInventory"/>
             <module name="Magento_Directory"/>
             <module name="Magento_CatalogRule"/>
             <module name="Magento_Sales"/>

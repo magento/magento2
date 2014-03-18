@@ -23,14 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml\Shipment;
+
+use Magento\App\ResponseInterface;
 
 /**
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml\Shipment;
-
 class AbstractShipment extends \Magento\Backend\App\Action
 {
     /**
@@ -52,7 +53,7 @@ class AbstractShipment extends \Magento\Backend\App\Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return \Magento\Sales\Controller\Adminhtml\Shipment
+     * @return $this
      */
     protected function _initAction()
     {
@@ -65,6 +66,8 @@ class AbstractShipment extends \Magento\Backend\App\Action
 
     /**
      * Shipments grid
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -77,6 +80,8 @@ class AbstractShipment extends \Magento\Backend\App\Action
 
     /**
      * Shipment information page
+     *
+     * @return void
      */
     public function viewAction()
     {
@@ -87,6 +92,9 @@ class AbstractShipment extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return ResponseInterface|void
+     */
     public function pdfshipmentsAction()
     {
         $shipmentIds = $this->getRequest()->getPost('shipment_ids');
@@ -112,6 +120,9 @@ class AbstractShipment extends \Magento\Backend\App\Action
         $this->_redirect('sales/*/');
     }
 
+    /**
+     * @return ResponseInterface|void
+     */
     public function printAction()
     {
         $shipmentId = $this->getRequest()->getParam('shipment_id');
@@ -133,6 +144,9 @@ class AbstractShipment extends \Magento\Backend\App\Action
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Sales::shipment');

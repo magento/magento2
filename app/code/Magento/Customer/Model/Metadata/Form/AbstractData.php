@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 abstract class AbstractData
@@ -80,7 +79,7 @@ abstract class AbstractData
     protected $_logger;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata
+     * @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
      */
     protected $_attribute;
 
@@ -89,13 +88,15 @@ abstract class AbstractData
      */
     protected $_value;
 
-    /** @var  string */
+    /**
+     * @var  string
+     */
     protected $_entityTypeCode;
 
     /**
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Logger $logger
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param string|int|bool $value
      * @param string $entityTypeCode
@@ -104,16 +105,16 @@ abstract class AbstractData
     public function __construct(
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Logger $logger,
-        \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
         \Magento\Locale\ResolverInterface $localeResolver,
         $value = false,
         $entityTypeCode,
         $isAjax = false
     ) {
         $this->_localeDate = $localeDate;
-        $this->_localeResolver = $localeResolver;
         $this->_logger = $logger;
         $this->_attribute = $attribute;
+        $this->_localeResolver = $localeResolver;
         $this->_value = $value;
         $this->_entityTypeCode = $entityTypeCode;
         $this->_isAjax = $isAjax;
@@ -122,8 +123,8 @@ abstract class AbstractData
     /**
      * Return Attribute instance
      *
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
      * @throws \Magento\Core\Exception
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata
      */
     public function getAttribute()
     {
@@ -137,7 +138,7 @@ abstract class AbstractData
      * Set Request scope
      *
      * @param string $scope
-     * @return string
+     * @return $this
      */
     public function setRequestScope($scope)
     {
@@ -150,7 +151,7 @@ abstract class AbstractData
      * Search value only in scope or search value in scope and global
      *
      * @param boolean $flag
-     * @return \Magento\Customer\Model\Metadata\Form\AbstractData
+     * @return $this
      */
     public function setRequestScopeOnly($flag)
     {
@@ -162,7 +163,7 @@ abstract class AbstractData
      * Set array of full extracted data
      *
      * @param array $data
-     * @return \Magento\Customer\Model\Metadata\Form\AbstractData
+     * @return $this
      */
     public function setExtractedData(array $data)
     {
@@ -174,7 +175,7 @@ abstract class AbstractData
      * Return extracted data
      *
      * @param string $index
-     * @return mixed
+     * @return array|null
      */
     public function getExtractedData($index = null)
     {
@@ -231,7 +232,7 @@ abstract class AbstractData
      * Get/Set/Reset date filter format
      *
      * @param string|null|false $format
-     * @return \Magento\Customer\Model\Metadata\Form\AbstractData|string
+     * @return $this|string
      */
     protected function _dateFilterFormat($format = null)
     {
@@ -271,7 +272,7 @@ abstract class AbstractData
      * Validate value by attribute input validation rule
      *
      * @param string $value
-     * @return string|bool
+     * @return array|true
      */
     protected function _validateInputRule($value)
     {
@@ -451,7 +452,7 @@ abstract class AbstractData
                         \Zend_Validate_Date::FALSEFORMAT
                     );
                     if (!$validator->isValid($value)) {
-                       return array_unique($validator->getMessages());
+                        return array_unique($validator->getMessages());
                     }
 
                     break;
@@ -521,8 +522,8 @@ abstract class AbstractData
      * Validate data
      *
      * @param array|string|null $value
-     * @throws \Magento\Core\Exception
      * @return array|bool
+     * @throws \Magento\Core\Exception
      */
     abstract public function validateValue($value);
 

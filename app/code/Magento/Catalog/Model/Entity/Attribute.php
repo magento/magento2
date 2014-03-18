@@ -101,6 +101,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Validator\UniversalFactory $universalFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Catalog\Model\ProductFactory $catalogProductFactory
+     * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param LockValidatorInterface $lockValidator
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection

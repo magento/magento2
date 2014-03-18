@@ -132,13 +132,6 @@ class Checkout
     protected $_customerId;
 
     /**
-     * Recurring payment profiles
-     *
-     * @var array
-     */
-    protected $_recurringPaymentProfiles = array();
-
-    /**
      * Billing agreement that might be created during order placing
      *
      * @var \Magento\Paypal\Model\Billing\Agreement
@@ -244,11 +237,6 @@ class Checkout
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\RecurringProfile\Model\Quote
-     */
-    protected $_quoteImporter;
-
-    /**
      * Set config, session and quote instances
      *
      * @param \Magento\Logger $logger
@@ -269,7 +257,6 @@ class Checkout
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
      * @param \Magento\Object\Copy $objectCopyService
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\RecurringProfile\Model\QuoteImporter $quoteImporter
      * @param array $params
      * @throws \Exception
      */
@@ -292,7 +279,6 @@ class Checkout
         \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory,
         \Magento\Object\Copy $objectCopyService,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\RecurringProfile\Model\QuoteImporter $quoteImporter,
         $params = array()
     ) {
         $this->_customerData = $customerData;
@@ -313,7 +299,6 @@ class Checkout
         $this->_apiTypeFactory = $apiTypeFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->_checkoutSession = $checkoutSession;
-        $this->_quoteImporter = $quoteImporter;
 
         if (isset($params['config']) && $params['config'] instanceof \Magento\Paypal\Model\Config) {
             $this->_config = $params['config'];
@@ -423,7 +408,7 @@ class Checkout
      *
      * @param string $returnUrl
      * @param string $cancelUrl
-     * @return mixed
+     * @return string
      * @throws \Magento\Core\Exception
      */
     public function start($returnUrl, $cancelUrl)
@@ -501,27 +486,16 @@ class Checkout
             }
         }
 
-        // add recurring payment profiles information
-        $profiles = $this->_quoteImporter->prepareRecurringPaymentProfiles($this->_quote);
-        if ($profiles) {
-            foreach ($profiles as $profile) {
-                $profile->setMethodCode(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS);
-                if (!$profile->isValid()) {
-                    throw new \Magento\Core\Exception($profile->getValidationErrors());
-                }
-            }
-            $this->_api->addRecurringPaymentProfiles($profiles);
-        }
-
         $this->_config->exportExpressCheckoutStyleSettings($this->_api);
 
-        // call API and redirect with token
+        /* Temporary solution. @TODO: do not pass quote into Nvp model */
+        $this->_api->setQuote($this->_quote);
         $this->_api->callSetExpressCheckout();
+
         $token = $this->_api->getToken();
         $this->_redirectUrl = $this->_config->getExpressCheckoutStartUrl($token);
 
-        $this->_quote->getPayment()->unsAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
-        $this->_quote->getPayment()->save();
+        $this->_quote->getPayment()->unsAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT)->save();
         return $token;
     }
 

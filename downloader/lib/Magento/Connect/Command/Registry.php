@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Command;
 
 final class Registry
@@ -69,7 +68,7 @@ extends \Magento\Connect\Command
     }
 
     /**
-     * list-files callback
+     * List-files callback
      * @param string $command
      * @param array $options
      * @param array $params
@@ -131,7 +130,7 @@ extends \Magento\Connect\Command
      * @param string $command
      * @param array $options
      * @param array $params
-     * @return
+     * @return void
      */
     public function doInfo($command, $options, $params)
     {
@@ -183,6 +182,7 @@ extends \Magento\Connect\Command
      * @param string $command
      * @param array $options
      * @param array $params
+     * @return void
      */
     public function doSync($command, $options, $params)
     {
@@ -247,6 +247,7 @@ extends \Magento\Connect\Command
      * @param string $command
      * @param array $options
      * @param array $params
+     * @return array|true
      */
     public function doSyncPear($command, $options, $params)
     {
@@ -356,7 +357,7 @@ extends \Magento\Connect\Command
      * Check is need to sync old pear data
      * 
      * @param \Magento\Connect\Config $config
-     * @return boolean
+     * @return bool
      */
     protected function _checkPearData($config) {
         $pearStorage = $config->magento_root . '/' . $config->downloader_path  . '/' . self::PACKAGE_PEAR_DIR;

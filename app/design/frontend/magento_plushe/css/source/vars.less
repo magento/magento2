@@ -1,0 +1,283 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+// Primary colors
+@primary1: #f8f8f8;
+@primary2: #e5e5e5;
+@primary3: #c2c2c2;
+@primary4: #999;
+@primary5: #837d75;
+@primary6: #675f55;
+@primary7: #fff;
+@primeBlack: #7f7f7f;
+@primeBlackOpacity: rgba(0, 0, 0, 0.5);
+@commonBg: #fff;
+
+// Secondary colors
+@secondary1: #da370a;
+@secondary2: #55c2e6;
+
+// Buttons
+@primaryActionBg: @secondary1;
+@primaryActionBgH: darken(@secondary1, 10%);
+@primaryActionColor: #fff;
+
+@secondaryActionBg: @primary3;
+@secondaryActionBgH: darken(@primary3, 10%);
+@secondaryActionColor: #fff;
+
+@actionFont: 600 14px/16px;
+
+// Tooltip
+@optionsBg: rgba(0, 0, 0, .8);
+@optionsColor: #fff;
+
+// Layout
+@LayoutMaxWidth: 1025px;
+@LayoutMinWidth: 1025px;
+
+// Links
+@link: #332e29;
+@linkHover: @secondary1;
+
+// Base font
+@baseFont: "sourcesanspro";
+@baseFontSizeBigger: 16px;
+@base-font-size: 14px; // re-declarate base font size for clearLess
+@baseFontSize: 14px;
+@baseFontSizeMiddle: 12px;
+@baseFontSizeSmall: 10px;
+@baseFontWeight: 400;
+@baseFontWeightLighter: 200;
+@baseFontWeightBolder: 700;
+@baseLineHeight: 1.33;
+@baseColor: @primary6;
+
+@pageMainBg: #fff;
+@headerBg: #d6d7d2;
+@headerBgImage: url("@{baseDir}/images/header-bg.jpg");
+@pageBottomBg: @pageMainBg;
+@footerBg: @pageMainBg;
+@textColor: @primary6;
+@linksColor: @primary6;
+@gutter-width: 0;
+@using-ieclasses: false;
+
+// Headings:
+// H1
+@h1font: 200 30px/1.2 @baseFont;
+@h1color: @primary6;
+
+// H2
+@h2font: 400 20px/1.2 @baseFont;
+@h2color: @primary6;
+
+// H3
+@h3font: 600 18px/1.2 @baseFont;
+@h3color: @primary6;
+
+// H4
+@h4font: 600 16px/1.2 @baseFont;
+@h4color: @primary6;
+
+// H5
+@h5font: 600 14px/1.2 @baseFont;
+@h5color: @primary6;
+
+// H6
+@h6font: 600 12px/1.2 @baseFont;
+@h6color: @primary6;
+
+// Forms
+@legendFontSize: 20px;
+@fieldBg: #fff;
+
+// Required fields and validation
+@requiredField:   #da370a;
+@nonValidHilight: #da370a;
+@validHilight:    #42b649;
+
+// Messages colors
+@messageIconColor: #fff;
+// Success message
+@messageSuccessColor:  #1b6720;
+@messageSuccessBg:     #d3edd5;
+@messageSuccessIconBg: #42b649;
+// Error message
+@messageErrorColor:  #911c00;
+@messageErrorBg:     #ffd9d0;
+@messageErrorIconBg: #ff3200;
+// Notice message, Info message
+@messageNoticeColor:  #926e00;
+@messageNoticeBg:     #ffedb8;
+@messageNoticeIconBg: #ffc000;
+
+@baseDir: ~".."; //default
+@paypalRetinaButton: url("@{baseDir}/images/express-checkout-retina.png");
+
+// # Icons
+//  ```
+//  <span class="icon example" data-icon="&#xe006;">@icon-pencil</span>
+//  <span class="icon example" data-icon="&#xe007;">@icon-menu</span>
+//  <span class="icon example" data-icon="&#xe008;">@icon-location</span>
+//  <span class="icon example" data-icon="&#xe00a;">@icon-info</span>
+//  <span class="icon example" data-icon="&#xe00c;">@icon-flag</span>
+//  <span class="icon example" data-icon="&#xe00d;">@icon-expand</span>
+//  <span class="icon example" data-icon="&#xe00e;">@icon-exclamation</span>
+//  <span class="icon example" data-icon="&#xe010;">@icon-dropdown</span>
+//  <span class="icon example" data-icon="&#xe011;">@icon-collapse</span>
+//  <span class="icon example" data-icon="&#xe012;">@icon-close-thick</span>
+//  <span class="icon example" data-icon="&#xe013;">@icon-checkmark</span>
+//  <span class="icon example" data-icon="&#xe014;">@icon-cart</span>
+//  <span class="icon example" data-icon="&#xe015;">@icon-arrow-up-thin</span>
+//  <span class="icon example" data-icon="&#xe016;">@icon-arrow-right-thin</span>
+//  <span class="icon example" data-icon="&#xe017;">@icon-arrow-left-thin</span>
+//  <span class="icon example" data-icon="&#xe018;">@icon-arrow-down-thin</span>
+//  <span class="icon example" data-icon="&#xe019;">@icon-arrow-up-thick</span>
+//  <span class="icon example" data-icon="&#xe01a;">@icon-arrow-right-thick</span>
+//  <span class="icon example" data-icon="&#xe01b;">@icon-arrow-left-thick</span>
+//  <span class="icon example" data-icon="&#xe01c;">@icon-arrow-down-thick</span>
+//  <span class="icon example" data-icon="&#xe01d;">@icon-wishlist</span>
+//  <span class="icon example" data-icon="&#xe01e;">@icon-comment</span>
+//  <span class="icon example" data-icon="&#xe01f;">@icon-comment-reflected</span>
+//  <span class="icon example" data-icon="&#xe002;">@icon-list</span>
+//  <span class="icon example" data-icon="&#xe003;">@icon-grid</span>
+//  <span class="icon example" data-icon="&#xe004;">@icon-close-thin</span>
+//  <span class="icon example" data-icon="&#xe000;">@icon-trash</span>
+//  <span class="icon example" data-icon="&#xe001;">@icon-envelope</span>
+//  <span class="icon example" data-icon="&#xe005;">@icon-magnifying-glass</span>
+//  <span class="icon example" data-icon="&#xe02b;">@icon-arrow-right-filled</span>
+//  <span class="icon example" data-icon="&#xe02c;">@icon-arrow-bottom-filled</span>
+//  <span class="icon example" data-icon="&#xe02a;">@icon-arrow-left-filled</span>
+//  <span class="icon example" data-icon="&#xe029;">@icon-arrow-up-filled</span>
+//  <span class="icon example" data-icon="&#xe009;">@icon-star</span>
+//  <span class="icon example" data-icon="&#xe00b;">@icon-calendar</span>
+// ```
+
+@icon-pencil: "\e006";
+@icon-menu: "\e007";
+@icon-location: "\e008";
+@icon-info: "\e00a";
+@icon-flag: "\e00c";
+@icon-expand: "\e00d";
+@icon-exclamation: "\e00e";
+@icon-dropdown: "\e010";
+@icon-collapse: "\e011";
+@icon-close-thick: "\e012";
+@icon-checkmark: "\e013";
+@icon-cart: "\e014";
+@icon-arrow-up-thin: "\e015";
+@icon-arrow-right-thin: "\e016";
+@icon-arrow-left-thin: "\e017";
+@icon-arrow-down-thin: "\e018";
+@icon-arrow-up-thick: "\e019";
+@icon-arrow-right-thick: "\e01a";
+@icon-arrow-left-thick: "\e01b";
+@icon-arrow-down-thick: "\e01c";
+@icon-wishlist: "\e01d";
+@icon-comment: "\e01e";
+@icon-comment-reflected: "\e01f";
+@icon-list: "\e002";
+@icon-grid: "\e003";
+@icon-close-thin: "\e004";
+@icon-trash: "\e000";
+@icon-envelope: "\e001";
+@icon-magnifying-glass: "\e005";
+@icon-arrow-right-filled: "\e02b";
+@icon-arrow-bottom-filled: "\e02c";
+@icon-arrow-left-filled: "\e02a";
+@icon-arrow-up-filled: "\e029";
+@icon-star: "\e009";
+@icon-calendar: "\e00b";
+
+// Responsive
+@breakPoint1: 640px;
+@icon-expand-mobile: "+";
+@icon-collapse-mobile: "–";
+
+
+
+
+// Messages variables
+
+@message-border: none;
+@message-border-radius: 3px;
+@message-padding: 13px 20px 12px;
+@message-margin: 3px 0;
+@message-font-size: 14px;
+@message-line-height: 16px;
+@message-icon-font-size: 20px;
+@message-icon-inner-padding-left: 40px;
+@message-icon-lateral-width: 30px;
+
+// Info
+@message-info-color: @messageNoticeColor;
+@message-info-background: @messageNoticeBg;
+@message-info-link-color: @link;
+@message-info-link-color-hover: @linkHover;
+@message-info-icon: @icon-info;
+@message-info-icon-color: #c07600;
+@message-info-icon-background: @messageNoticeIconBg;
+@message-info-border: @message-border;
+
+// Warning
+@message-warning-color: @messageNoticeColor;
+@message-warning-background: @messageNoticeBg;
+@message-warning-link-color: @link;
+@message-warning-link-color-hover: @linkHover;
+@message-warning-icon: @icon-info;
+@message-warning-icon-color: #c07600;
+@message-warning-icon-background: @messageNoticeIconBg;
+@message-warning-border: @message-border;
+
+// Error
+@message-error-color: @messageErrorColor;
+@message-error-background: @messageErrorBg;
+@message-error-link-color: @link;
+@message-error-link-color-hover: @linkHover;
+@message-error-icon: @icon-info;
+@message-error-icon-color: #b30000;
+@message-error-icon-background: @messageErrorIconBg;
+@message-error-border: @message-border;
+
+// Success
+@message-success-color: @messageSuccessColor;
+@message-success-background: @messageSuccessBg;
+@message-success-link-color: @link;
+@message-success-link-color-hover: @linkHover;
+@message-success-icon: @icon-checkmark;
+@message-success-icon-color: #006400;
+@message-success-icon-background: @messageSuccessIconBg;
+@message-success-border: @message-border;
+
+// Notice
+@message-notice-color: @messageNoticeColor;
+@message-notice-background: @messageNoticeBg;
+@message-notice-link-color: @link;
+@message-notice-link-color-hover: @linkHover;
+@message-notice-icon: @icon-info;
+@message-notice-icon-color: #c07600;
+@message-notice-icon-background: @messageNoticeIconBg;
+@message-notice-border: @message-border;

@@ -1,0 +1,155 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.actions.bundle {
+    margin: @indent-s-base 0;
+    .action.primary.customize {
+        .button-primary();
+        .button-l();
+    }
+}
+
+.bundle.options.container {
+    clear: both;
+    margin-bottom: @indent-xl-base;
+
+    .legend.title {
+        .heading(h2);
+    }
+
+    .product.add.form {
+        display: none;
+    }
+
+    .field.option {
+        .form-field(@_type: block);
+    }
+
+    .input-text.qty {
+        .form-element-size(
+            @_width: @button-l-height
+        );
+    }
+
+    .product.options.wrapper {
+        float: left;
+        width: 57%;
+        margin-bottom: @indent-l-base;
+
+        .layout-2-left &,
+        .layout-2-right & {
+            width: 48%;
+        }
+        .layout-3 & {
+            width: 48%;
+        }
+    }
+
+    .product.options.bottom {
+        width: 57%;
+        clear: both;
+        .layout-2-left &,
+        .layout-2-right & {
+            width: 48%;
+        }
+        .layout-3 & {
+            width: 48%;
+        }
+    }
+
+    .price-box {
+        .price {
+            font-weight: @font-weight-bold;
+            font-size: @font-size-l;
+        }
+    }
+
+    .block.bundle.summary {
+        float: right;
+        position: relative;
+        width: 40%;
+        padding: @indent-s-base @indent-base;
+        background: @color-secondary;
+        .box-sizing();
+        .layout-2-left &,
+        .layout-2-right & {
+            width: 48%;
+        }
+        .layout-3 & {
+            width: 48%;
+        }
+
+        > .title > strong{
+            .heading(h2);
+        }
+
+        .bundle.summary {
+            margin-top: @indent-l-base;
+            > .subtitle {
+                .heading(h3);
+                display: block;
+            }
+        }
+
+        .bundle.items {
+            &:extend(.reset-list all);
+            > li {
+                margin-bottom: @indent-s-base;
+            }
+        }
+
+        .tocart {
+            .actions {
+                margin: @indent-s-base 0;
+            }
+            .action.primary {
+                .button-primary();
+            }
+        }
+        .addto.links {
+            .action {
+                .button();
+                margin-bottom: @indent-xs-base;
+            }
+        }
+    }
+    p.required {
+        color: @form-field-label-asterisk-color;
+    }
+}
+
+.responsive(@break) when (@break = @mobile) {
+    .bundle.options.container {
+        .product.add.form {
+            .product.options.wrapper,
+            .product.options.bottom,
+            .block.bundle.summary {
+                &:extend(._rwd_width_float all);
+            }
+            .block.bundle.summary {
+                position: static;
+            }
+        }
+    }
+}

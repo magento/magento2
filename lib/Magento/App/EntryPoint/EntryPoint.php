@@ -69,6 +69,7 @@ class EntryPoint implements EntryPointInterface
      *
      * @param string $applicationName
      * @param array $arguments
+     * @return void
      */
     public function run($applicationName, array $arguments = array())
     {

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
 /**
  * Adminhtml creditmemo view
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
-
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -59,6 +58,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Add & remove control buttons
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -218,7 +218,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Update 'back' button url
      *
-     * @return \Magento\Backend\Block\Widget\Container | \Magento\Sales\Block\Adminhtml\Order\Creditmemo\View
+     * @param bool $flag
+     * @return \Magento\Backend\Block\Widget\Container|$this
      */
     public function updateBackButtonUrl($flag)
     {

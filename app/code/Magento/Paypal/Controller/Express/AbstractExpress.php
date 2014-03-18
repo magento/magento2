@@ -149,10 +149,27 @@ abstract class AbstractExpress extends \Magento\App\Action\Action
             }
 
             $customer = $this->_customerSession->getCustomer();
+            $quoteCheckoutMethod = $this->_getQuote()->getCheckoutMethod();
             if ($customer && $customer->getId()) {
                 $this->_checkout->setCustomerWithAddressChange(
                     $customer, $this->_getQuote()->getBillingAddress(), $this->_getQuote()->getShippingAddress()
                 );
+            } elseif (
+                (!$quoteCheckoutMethod || $quoteCheckoutMethod != \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER)
+                && !$this->_objectManager->get('Magento\Checkout\Helper\Data')->isAllowedGuestCheckout(
+                    $this->_getQuote(),
+                    $this->_getQuote()->getStoreId()
+                )
+            ) {
+
+                $this->messageManager->addNotice(
+                    __('To proceed to Checkout, please log in using your email address.')
+                );
+
+                $this->_objectManager->get('Magento\Checkout\Helper\ExpressRedirect')->redirectLogin($this);
+                $this->_customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', array('_current' => true)));
+
+                return;
             }
 
             // billing agreement

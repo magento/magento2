@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Payment;
 
 /**
  * Sales transaction resource model
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Payment;
-
 class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
 {
     /**
@@ -48,6 +46,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     /**
      * Initialize main table and the primary key field name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -59,6 +58,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      * have to repeat the business logic to avoid accidental injection of wrong transactions
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
+     * @return void
      */
     public function injectAsParent(\Magento\Sales\Model\Order\Payment\Transaction $transaction)
     {
@@ -138,10 +138,9 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      * Lookup for parent_id in already saved transactions of this payment by the order_id
      * Also serialize additional information, if any
      *
-     * @throws \Magento\Core\Exception
-     *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Transaction
+     * @return $this
+     * @throws \Magento\Core\Exception
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $transaction)
     {
@@ -182,7 +181,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      * @param mixed (array|string|object) $columns
      * @param bool $isRow
      * @param string $txnType
-     * @return mixed (array|string)
+     * @return array|string
      */
     private function _lookupByTxnId($orderId, $paymentId, $txnId, $columns, $isRow = false, $txnType = null)
     {
@@ -202,7 +201,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      * @param int $orderId
      * @param int $paymentId
      * @param string $txnId
-     * @param string|array|Zend_Db_Expr $columns
+     * @param string|array|\Zend_Db_Expr $columns
      * @return \Magento\DB\Select
      */
     private function _getLoadByUniqueKeySelect($orderId, $paymentId, $txnId, $columns = '*')

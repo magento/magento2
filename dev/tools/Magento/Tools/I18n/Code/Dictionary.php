@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code;
 
 use Magento\Tools\I18n\Code\Dictionary\Phrase;
@@ -49,6 +48,7 @@ class Dictionary
      * Add phrase to pack container
      *
      * @param \Magento\Tools\I18n\Code\Dictionary\Phrase $phrase
+     * @return void
      */
     public function addPhrase(Phrase $phrase)
     {

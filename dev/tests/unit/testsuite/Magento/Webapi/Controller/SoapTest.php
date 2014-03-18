@@ -108,9 +108,10 @@ class SoapTest extends \PHPUnit_Framework_TestCase
 
         $this->_applicationMock =  $this->getMockBuilder('Magento\Core\Model\App')
             ->disableOriginalConstructor()
-            ->setMethods(array('isDeveloperMode'))
             ->getMock();
         $this->_applicationMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(false));
+        $layoutMock = $this->getMockBuilder('Magento\View\LayoutInterface')->disableOriginalConstructor()->getMock();
+        $this->_applicationMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
 
         $this->_oauthServiceMock = $this->getMockBuilder('Magento\Oauth\Oauth')
             ->disableOriginalConstructor()
@@ -132,23 +133,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $this->_oauthServiceMock,
             $localeResolverMock
         );
-    }
-
-    /**
-     * Clean up Controller and its dependencies.
-     */
-    protected function tearDown()
-    {
-        unset($this->_soapController);
-        unset($this->_requestMock);
-        unset($this->_responseMock);
-        unset($this->_wsdlGeneratorMock);
-        unset($this->_soapServerMock);
-        unset($this->_errorProcessorMock);
-        unset($this->_applicationMock);
-        unset($this->_appStateMock);
-
-        parent::tearDown();
     }
 
     /**
@@ -215,13 +199,11 @@ EXPECTED_MESSAGE;
             ->will($this->returnValue(true));
         $this->_soapServerMock->expects($this->once())
             ->method('handle');
-        $_SERVER['HTTP_AUTHORIZATION'] = 'OAuth access_token';
         $this->_oauthServiceMock->expects($this->once())
             ->method('validateAccessToken')
             ->will($this->returnValue(true));
         $response = $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals(200, $response->getHttpResponseCode());
-        unset($_SERVER['HTTP_AUTHORIZATION']);
     }
 
     /**
@@ -278,4 +260,15 @@ EXPECTED_MESSAGE;
             ->with($param)
             ->will($this->returnValue($value));
     }
+}
+
+/**
+ * The function became available in CLI mode since PHP 5.5.7 which doesn't fit Magento minimal requirement.
+ * @see http://php.net/manual/en/function.getallheaders.php
+ * @return array
+ */
+function getallheaders()
+{
+    // Mixed case on purpose
+    return ['authOrization' => 'OAuth access_token'];
 }

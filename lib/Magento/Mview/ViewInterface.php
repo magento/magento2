@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Mview;
 
 interface ViewInterface
@@ -82,22 +81,29 @@ interface ViewInterface
     /**
      * Materialize view by IDs in changelog
      *
+     * @return void
      * @throws \Exception
      */
     public function update();
 
     /**
      * Pause view updates and set version ID to changelog's end
+     *
+     * @return void
      */
     public function suspend();
 
     /**
      * Resume view updates
+     *
+     * @return void
      */
     public function resume();
 
     /**
      * Clear precessed changelog entries
+     *
+     * @return void
      */
     public function clearChangelog();
 

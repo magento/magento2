@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config\Backend\Address;
 
 /**
  * Line count config model for customer address street attribute
  *
  * @method string getWebsiteCode
  */
-namespace Magento\Customer\Model\Config\Backend\Address;
-
 class Street extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -65,7 +64,7 @@ class Street extends \Magento\Core\Model\Config\Value
     /**
      * Actions after save
      *
-     * @return \Magento\Customer\Model\Config\Backend\Address\Street
+     * @return $this
      */
     protected function _afterSave()
     {

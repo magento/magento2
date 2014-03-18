@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Model\Resource;
 
 /**
  * Product alert for changed price resource model
  */
-namespace Magento\ProductAlert\Model\Resource;
-
 class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
 {
     /**
@@ -51,6 +50,7 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,7 +61,7 @@ class Price extends \Magento\ProductAlert\Model\Resource\AbstractResource
      * Before save process, check exists the same alert
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\ProductAlert\Model\Resource\Price
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {

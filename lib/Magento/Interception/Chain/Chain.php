@@ -24,6 +24,7 @@
  */
 namespace Magento\Interception\Chain;
 
+use Magento\Code\GeneratorTest\SourceClassWithNamespace\Interceptor;
 use Magento\Interception\Definition;
 use Magento\Interception\PluginList;
 
@@ -48,8 +49,8 @@ class Chain implements \Magento\Interception\Chain
      * @param string $type
      * @param string $method
      * @param string $previousPluginCode
-     * @param $subject
-     * @param $arguments
+     * @param Interceptor $subject
+     * @param array $arguments
      * @return mixed|void
      */
     public function invokeNext($type, $method, $subject, array $arguments, $previousPluginCode = null)
@@ -71,7 +72,7 @@ class Chain implements \Magento\Interception\Chain
         if (isset($pluginInfo[Definition::LISTENER_AROUND])) {
             $chain = $this;
             $code = $pluginInfo[Definition::LISTENER_AROUND];
-            $next = function() use ($chain, $type, $method, $subject, $code) {
+            $next = function () use ($chain, $type, $method, $subject, $code) {
                 return $chain->invokeNext($type, $method, $subject, func_get_args(), $code);
             };
             $result = call_user_func_array(

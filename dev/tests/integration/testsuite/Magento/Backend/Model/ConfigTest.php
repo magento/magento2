@@ -18,14 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Backend\Model;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoAppArea adminhtml
@@ -41,38 +40,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithSingleStoreModeEnabled($groups)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
+        Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         /** @var $_configDataObject \Magento\Backend\Model\Config */
-        $_configDataObject = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config');
+        $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config');
         $_configData = $_configDataObject->setSection('dev')
             ->setWebsite('base')
             ->load();
         $this->assertEmpty($_configData);
 
-        $_configDataObject = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config');
+        $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config');
         $_configDataObject->setSection('dev')
             ->setGroups($groups)
             ->save();
 
         /** @var $_configDataObject \Magento\Backend\Model\Config */
-        $_configDataObject = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config');
+        $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config');
         $_configDataObject->setSection('dev')
             ->setWebsite('base');
 
         $_configData = $_configDataObject->load();
-        $this->assertArrayHasKey('dev/debug/template_hints', $_configData);
-        $this->assertArrayHasKey('dev/debug/template_hints_blocks', $_configData);
-
-        $_configDataObject = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config');
-        $_configDataObject->setSection('dev');
-        $_configData = $_configDataObject->load();
         $this->assertArrayNotHasKey('dev/debug/template_hints', $_configData);
         $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
+
+        $_configDataObject = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config');
+        $_configDataObject->setSection('dev');
+        $_configData = $_configDataObject->load();
+        $this->assertArrayHasKey('dev/debug/template_hints', $_configData);
+        $this->assertArrayHasKey('dev/debug/template_hints_blocks', $_configData);
     }
 
     public function saveWithSingleStoreModeEnabledDataProvider()
@@ -90,7 +85,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave($section, $groups, $expected)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
         /** @var $_configDataObject \Magento\Backend\Model\Config */
         $_configDataObject = $objectManager->create('Magento\Backend\Model\Config');

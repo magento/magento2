@@ -29,6 +29,7 @@ namespace Magento\Webapi\Controller;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
+use Magento\ObjectManager;
 use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 
@@ -37,14 +38,21 @@ class ServiceArgsSerializer
     /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
     protected $_typeProcessor;
 
+    /** @var ObjectManager */
+    protected $_objectManager;
+
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
+     * @param ObjectManager $objectManager
      */
-    public function __construct(TypeProcessor $typeProcessor)
-    {
+    public function __construct(
+        TypeProcessor $typeProcessor,
+        ObjectManager $objectManager
+    ) {
         $this->_typeProcessor = $typeProcessor;
+        $this->_objectManager = $objectManager;
     }
 
     /**
@@ -109,7 +117,7 @@ class ServiceArgsSerializer
             /** This pattern will help to skip parameters declarations which precede to the current one */
             $precedingParamsPattern = str_repeat('.*\@param.*', $param->getPosition());
             $paramType = str_replace('\\', '\\\\', $param->getType());
-            if (preg_match("/.*{$precedingParamsPattern}\@param\s+({$paramType}\[\]).*/i", $docBlock->getContents())) {
+            if (preg_match("/.*{$precedingParamsPattern}\@param\s+({$paramType}\[\]).*/is", $docBlock->getContents())) {
                 $isArray = true;
             }
         }
@@ -117,7 +125,9 @@ class ServiceArgsSerializer
     }
 
     /**
-     * Creates a new instance of the given class and populates it with the array of data.
+     * Creates a new instance of the given class and populates it with the array of data. The data can
+     * be in different forms depending on the adapter being used, REST vs. SOAP. For REST, the data is
+     * in snake_case (e.g. tax_class_id) while for SOAP the data is in camelCase (e.g. taxClassId).
      *
      * @param string|\ReflectionClass $class
      * @param array $data
@@ -126,45 +136,69 @@ class ServiceArgsSerializer
     protected function _createFromArray($class, $data)
     {
         $className = is_string($class) ? $class : $class->getName();
-        try {
-            $class = new ClassReflection($className);
-            foreach ($data as $propertyName => $value) {
-                $getterName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $propertyName)));
-                $methodReflection = $class->getMethod($getterName);
-                if ($methodReflection->isPublic()) {
-                    $returnType = $this->_typeProcessor->getGetterReturnType($methodReflection)['type'];
-                    $data[$propertyName] = $this->_convertValue($value, $returnType);
-                }
+        $builder = $this->_objectManager->create($className . "Builder");
+        $class = new ClassReflection($className);
+        foreach ($data as $propertyName => $value) {
+            // Converts snake_case to uppercase CamelCase to help form getter/setter method names
+            $camelCaseProperty = str_replace(' ', '', ucwords(str_replace('_', ' ', $propertyName)));
+            $methodName = $this->_processGetterMethod($class, $camelCaseProperty);
+            $methodReflection = $class->getMethod($methodName);
+            if ($methodReflection->isPublic()) {
+                $returnType = $this->_typeProcessor->getGetterReturnType($methodReflection)['type'];
+                $setterName = 'set' . $camelCaseProperty;
+                $builder->$setterName($this->_convertValue($value, $returnType));
             }
-        } catch (\ReflectionException $e) {
-            // Case where data array contains keys with no matching setter methods
-            // TODO: do we need to do anything here or can we just ignore this and keep going?
         }
-        $obj = new $className($data);
-        return $obj;
+        return $builder->create();
     }
 
     /**
-     * Convert data from array to DTO representation if type is DTO or array of DTOs.
+     * Convert data from array to Data Object representation if type is Data Object or array of Data Objects.
      *
      * @param mixed $value
-     * @param string $type
+     * @param string $type Convert given value to the this type
      * @return mixed
      */
     protected function _convertValue($value, $type)
     {
-        if (!$this->_typeProcessor->isTypeSimple($type)) {
-            if ($this->_typeProcessor->isArrayType($type)) {
-                $itemType = $this->_typeProcessor->getArrayItemType($type);
-                foreach ($value as $key => $item) {
-                    $result[$key] = $this->_createFromArray($itemType, $item);
-                }
-            } else {
-                $result = $this->_createFromArray($type, $value);
+        if ($this->_typeProcessor->isTypeSimple($type)) {
+            $result = $this->_typeProcessor->processSimpleType($value, $type);
+        } elseif ($this->_typeProcessor->isArrayType($type)) {
+            $itemType = $this->_typeProcessor->getArrayItemType($type);
+            // Initializing the result for array type else it will return null for empty array
+            $result = is_array($value) ? [] : null;
+            foreach ($value as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
             }
         } else {
-            $result = $value;
+            $result = $this->_createFromArray($type, $value);
         }
         return $result;
+    }
+
+    /**
+     * Find the getter method for a given property in the Data Object class
+     *
+     * @param ClassReflection $class
+     * @param string $camelCaseProperty
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding getter method
+     */
+    protected function _processGetterMethod(ClassReflection $class, $camelCaseProperty)
+    {
+        $getterName = 'get' . $camelCaseProperty;
+        $boolGetterName = 'is' . $camelCaseProperty;
+        if ($class->hasMethod($getterName)) {
+            $methodName = $getterName;
+        } elseif ($class->hasMethod($boolGetterName)) {
+            $methodName = $boolGetterName;
+        } else {
+            throw new \Exception(sprintf(
+                'Property :"%s" does not exist in the Data Object class: "%s".',
+                $camelCaseProperty,
+                $class->getName()
+            ));
+        }
+        return $methodName;
     }
 }

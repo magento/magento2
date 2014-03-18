@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Form;
 
 /**
  * Customer login form block
@@ -31,10 +32,11 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Form;
-
 class Login extends \Magento\View\Element\Template
 {
+    /**
+     * @var int
+     */
     private $_username = -1;
 
     /**
@@ -48,23 +50,47 @@ class Login extends \Magento\View\Element\Template
     protected $_customerHelper;
 
     /**
+     * Checkout data
+     *
+     * @var \Magento\Checkout\Helper\Data
+     */
+    protected $checkoutData;
+
+    /**
+     * Core url
+     *
+     * @var \Magento\Core\Helper\Url
+     */
+    protected $coreUrl;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Checkout\Helper\Data $checkoutData
+     * @param \Magento\Core\Helper\Url $coreUrl
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Checkout\Helper\Data $checkoutData,
+        \Magento\Core\Helper\Url $coreUrl,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
         $this->_customerSession = $customerSession;
+        $this->checkoutData = $checkoutData;
+        $this->coreUrl = $coreUrl;
+
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->getLayout()->getBlock('head')->setTitle(__('Customer Login'));
@@ -91,6 +117,9 @@ class Login extends \Magento\View\Element\Template
         $url = $this->getData('create_account_url');
         if (is_null($url)) {
             $url = $this->_customerHelper->getRegisterUrl();
+        }
+        if ($this->checkoutData->isContextCheckout()) {
+            $url = $this->coreUrl->addRequestParam($url, array('context' => 'checkout'));
         }
         return $url;
     }

@@ -30,6 +30,7 @@ interface TransportInterface
     /**
      * Send a mail using this transport
      *
+     * @return void
      * @throws \Magento\Mail\Exception
      */
     public function sendMessage();

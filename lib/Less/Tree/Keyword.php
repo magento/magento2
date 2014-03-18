@@ -1,20 +1,37 @@
 <?php
 
-
+/**
+ * Keyword
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Keyword extends Less_Tree{
 
+	public $value;
 	public $type = 'Keyword';
 
-	public function __construct($value=null){
+	/**
+	 * @param string $value
+	 */
+	public function __construct($value){
 		$this->value = $value;
 	}
 
-	public function compile($env){
+	public function compile(){
 		return $this;
 	}
 
-	public function genCSS( $env, &$strs ){
-		self::OutputAdd( $strs, $this->value );
+    /**
+     * @see Less_Tree::genCSS
+     */
+	public function genCSS( $output ){
+
+		if( $this->value === '%') {
+			throw new Less_Exception_Compiler("Invalid % without number");
+		}
+
+		$output->add( $this->value );
 	}
 
 	public function compare($other) {

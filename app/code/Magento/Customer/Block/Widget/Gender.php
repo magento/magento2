@@ -24,9 +24,9 @@
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use Magento\Customer\Service\V1\CustomerServiceInterface;
-use Magento\Customer\Service\V1\Dto\Customer;
-use Magento\Customer\Service\V1\Dto\Eav\Option;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Service\V1\Data\Eav\Option;
 
 /**
  * Block to render customer's gender attribute
@@ -39,9 +39,9 @@ class Gender extends AbstractWidget
     protected $_customerSession;
 
     /**
-     * @var CustomerServiceInterface
+     * @var CustomerAccountServiceInterface
      */
-    protected $_customerService;
+    protected $_customerAccountService;
 
     /**
      * Create an instance of the Gender widget
@@ -49,7 +49,7 @@ class Gender extends AbstractWidget
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataServiceInterface $attributeMetadata
-     * @param CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
@@ -57,18 +57,19 @@ class Gender extends AbstractWidget
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
         CustomerMetadataServiceInterface $attributeMetadata,
-        CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct($context, $addressHelper, $attributeMetadata, $data);
         $this->_isScopePrivate = true;
     }
 
     /**
      * Initialize block
+     *
      * @return void
      */
     public function _construct()
@@ -101,7 +102,7 @@ class Gender extends AbstractWidget
      */
     public function getCustomer()
     {
-        return $this->_customerService->getCustomer($this->_customerSession->getCustomerId());
+        return $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
     }
 
     /**

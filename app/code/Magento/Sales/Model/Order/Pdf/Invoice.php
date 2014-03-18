@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Invoice PDF model
  */
-namespace Magento\Sales\Model\Order\Pdf;
-
-class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
+class Invoice extends AbstractPdf
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -46,8 +45,8 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Stdlib\String $string
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      * @param \Magento\TranslateInterface $translate
-     * @param \Magento\App\Filesystem $filesystem,
-     * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
+     * @param \Magento\App\Filesystem $filesystem
+     * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -63,7 +62,7 @@ class Invoice extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
         \Magento\TranslateInterface $translate,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
+        Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,

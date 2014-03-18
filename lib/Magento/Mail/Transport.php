@@ -48,6 +48,7 @@ class Transport extends \Zend_Mail_Transport_Sendmail implements \Magento\Mail\T
     /**
      * Send a mail using this transport
      *
+     * @return void
      * @throws \Magento\Mail\Exception
      */
     public function sendMessage()

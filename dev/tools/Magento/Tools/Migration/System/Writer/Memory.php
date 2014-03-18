@@ -31,6 +31,7 @@ class Memory implements \Magento\Tools\Migration\System\WriterInterface
     /**
      * @param string $fileName
      * @param string $contents
+     * @return void
      */
     public function write($fileName, $contents)
     {
@@ -40,7 +41,8 @@ class Memory implements \Magento\Tools\Migration\System\WriterInterface
     /**
      * Remove file
      *
-     * @param $fileName
+     * @param string $fileName
+     * @return void
      */
     public function remove($fileName)
     {

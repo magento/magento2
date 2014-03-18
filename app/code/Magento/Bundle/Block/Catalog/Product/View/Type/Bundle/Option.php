@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
 
 /**
  * Bundle option renderer
@@ -32,8 +32,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
-
 class Option extends \Magento\Bundle\Block\Catalog\Product\Price
 {
     /**
@@ -151,7 +149,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
     /**
      * Collect selected options
      *
-     * @return mixed
+     * @return int|array|string
      */
     protected function _getSelectedOptions()
     {
@@ -226,6 +224,11 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
         return $this->getData('product');
     }
 
+    /**
+     * @param mixed $_selection
+     * @param bool $includeContainer
+     * @return string
+     */
     public function getSelectionQtyTitlePrice($_selection, $includeContainer = true)
     {
         $price = $this->getProduct()->getPriceModel()->getSelectionPreFinalPrice($this->getProduct(), $_selection);

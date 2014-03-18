@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Quote\Address\Rate;
 
 /**
  * Quote addresses shipping rates collection
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Quote\Address\Rate;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -49,7 +47,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -69,6 +67,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +78,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set filter by address id
      *
      * @param int $addressId
-     * @return \Magento\Sales\Model\Resource\Quote\Address\Rate\Collection
+     * @return $this
      */
     public function setAddressFilter($addressId)
     {
@@ -96,7 +95,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Setter for loading fixed items only
      *
      * @param bool $value
-     * @return \Magento\Sales\Model\Resource\Quote\Address\Rate\Collection
+     * @return $this
      */
     public function setFixedOnlyFilter($value)
     {
@@ -108,7 +107,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Don't add item to the collection if only fixed are allowed and its carrier is not fixed
      *
      * @param \Magento\Sales\Model\Quote\Address\Rate $rate
-     * @return \Magento\Sales\Model\Resource\Quote\Address\Rate\Collection
+     * @return $this
      */
     public function addItem(\Magento\Object $rate)
     {

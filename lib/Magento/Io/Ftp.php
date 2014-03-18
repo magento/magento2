@@ -23,7 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Io;
 
 /**
  * FTP client
@@ -32,8 +32,6 @@
  * @package    Magento_Io
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Io;
-
 class Ftp extends AbstractIo
 {
     const ERROR_EMPTY_HOST = 1;
@@ -65,6 +63,9 @@ class Ftp extends AbstractIo
      */
     protected $_error;
 
+    /**
+     * @var string
+     */
     protected $_tmpFilename;
 
     /**

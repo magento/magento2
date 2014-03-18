@@ -92,7 +92,6 @@ class Attributes
             'image',
             'media_gallery',
             'quantity_and_stock_status',
-            'recurring_profile',
             'tier_price',
         ));
         $this->_eventManager->dispatch('adminhtml_catalog_product_form_prepare_excluded_field_list', array(

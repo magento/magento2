@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource;
 
 /**
  * Bundle Resource Model
@@ -32,8 +32,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource;
-
 class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     /**
@@ -55,6 +53,8 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -100,6 +100,7 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Removing all quote items for specified product
      *
      * @param int $productId
+     * @return void
      */
     public function dropAllQuoteChildItems($productId)
     {
@@ -123,6 +124,7 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $productId
      * @param array $ids
+     * @return void
      */
     public function dropAllUnneededSelections($productId, $ids)
     {
@@ -141,7 +143,7 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int $parentId
      * @param array $childIds
-     * @return \Magento\Bundle\Model\Resource\Bundle
+     * @return $this
      */
     public function saveProductRelations($parentId, $childIds)
     {

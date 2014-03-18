@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Reorder;
 
 /**
  * Sales order view block
  */
-namespace Magento\Sales\Block\Reorder;
-
 class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Block\IdentityInterface
 {
     /**
@@ -74,6 +73,8 @@ class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Bl
 
     /**
      * Init orders
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -85,6 +86,8 @@ class Sidebar extends \Magento\View\Element\Template implements \Magento\View\Bl
 
     /**
      * Init customer order for display on front
+     *
+     * @return void
      */
     public function initOrders()
     {

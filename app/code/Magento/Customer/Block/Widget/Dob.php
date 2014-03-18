@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
-class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
+class Dob extends AbstractWidget
 {
     /**
      * Constants for borders of date-type customer attributes
@@ -41,24 +40,37 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     protected $_dateInputs = array();
 
+    /**
+     * @return void
+     */
     public function _construct()
     {
         parent::_construct();
         $this->setTemplate('widget/dob.phtml');
     }
 
+    /**
+     * @return bool
+     */
     public function isEnabled()
     {
         $attributeMetadata = $this->_getAttribute('dob');
         return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
     }
 
+    /**
+     * @return bool
+     */
     public function isRequired()
     {
         $attributeMetadata = $this->_getAttribute('dob');
         return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
     }
 
+    /**
+     * @param string $date
+     * @return $this
+     */
     public function setDate($date)
     {
         $this->setTime($date ? strtotime($date) : false);
@@ -66,16 +78,25 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
         return $this;
     }
 
+    /**
+     * @return string|bool
+     */
     public function getDay()
     {
         return $this->getTime() ? date('d', $this->getTime()) : '';
     }
 
+    /**
+     * @return string|bool
+     */
     public function getMonth()
     {
         return $this->getTime() ? date('m', $this->getTime()) : '';
     }
 
+    /**
+     * @return string|bool
+     */
     public function getYear()
     {
         return $this->getTime() ? date('Y', $this->getTime()) : '';
@@ -96,6 +117,7 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      *
      * @param string $code
      * @param string $html
+     * @return void
      */
     public function setDateInput($code, $html)
     {

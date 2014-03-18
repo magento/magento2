@@ -36,6 +36,7 @@ interface WriterInterface
      *
      * @param array $options
      * @param \Magento\Tools\Dependency\Report\Data\ConfigInterface $config
+     * @return void
      */
     public function write(array $options, ConfigInterface $config);
 }

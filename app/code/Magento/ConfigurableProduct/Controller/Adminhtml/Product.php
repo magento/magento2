@@ -47,6 +47,8 @@ class Product extends Action
 
     /**
      * Add "super" attribute from popup window
+     *
+     * @return void
      */
     public function addAttributeAction()
     {

@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Block;
 
-use Magento\Customer\Service\V1\CustomerServiceInterface;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 
 /**
@@ -42,7 +42,7 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param CustomerAddressServiceInterface $addressService
      * @param array $data
      */
@@ -50,16 +50,20 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
         \Magento\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         CustomerAddressServiceInterface $addressService,
         array $data = array()
     ) {
         parent::__construct(
-            $context, $customerSession, $subscriberFactory, $customerService, $addressService, $data
+            $context, $customerSession, $subscriberFactory, $customerAccountService, $addressService, $data
         );
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
     public function getIsSubscribed()
     {
         return $this->getSubscriptionObject()->isSubscribed();

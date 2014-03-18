@@ -32,7 +32,10 @@ require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 /** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
 $quoteShippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Sales\Model\Quote\Address');
-$quoteShippingAddress->importCustomerAddress($customerAddress);
+/** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
+$addressService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
+$quoteShippingAddress->importCustomerAddressData($addressService->getAddressById(1));
 
 /** @var \Magento\Sales\Model\Quote $quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

@@ -159,7 +159,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function generateBackupDownloadName(\Magento\Backup\Model\Backup $backup)
     {
         $additionalExtension = $backup->getType() == \Magento\Backup\Factory::TYPE_DB ? '.sql' : '';
-        return $backup->getType() . '-' . date('YmdHis', $backup->getTime()) . $additionalExtension . '.'
+        return $backup->getTime() . '_' . $backup->getType() . '_' . $backup->getName() . $additionalExtension . '.'
             . $this->getExtensionByType($backup->getType());
     }
 

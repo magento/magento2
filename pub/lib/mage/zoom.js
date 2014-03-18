@@ -45,7 +45,9 @@
                 display: {
                     template: '[data-template=zoom-display]',
                     width: 400,
-                    height: 400
+                    height: 400,
+                    left: 0,
+                    top: 0
                 },
                 notice: {
                     template: '[data-template=notice]',
@@ -161,7 +163,7 @@
             switch(control) {
                 case 'display':
                     position = {
-                        my: 'left+30% top',
+                        my: 'left+'+ this.options.controls.display.left + ' top+'+ this.options.controls.display.top +'',
                         at: 'left+' + $(this.image).outerWidth() + ' top',
                         of: $(this.image)
                     };

@@ -26,7 +26,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <type name="Magento\CatalogInventory\Model\Observer">
         <arguments>
-            <argument name="indexerPrice" xsi:type="object">Magento\Catalog\Model\Resource\Product\Indexer\Price\Proxy</argument>
             <argument name="resourceIndexerStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy</argument>
             <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
             <argument name="indexer" xsi:type="object">Magento\Index\Model\Indexer\Proxy</argument>
@@ -41,5 +40,8 @@
                 <item name="cataloginventory_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer">
+        <plugin name="addStockStatusOnPrepareFrontCollection" type="Magento\CatalogInventory\Model\Plugin\Layer"/>
     </type>
 </config>

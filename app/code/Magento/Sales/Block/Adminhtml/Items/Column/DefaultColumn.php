@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
+use Magento\Sales\Model\Order\Item;
 
 /**
  * Adminhtml sales order column renderer
@@ -32,11 +34,11 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Items\Column;
-
 class DefaultColumn extends \Magento\Backend\Block\Template
 {
     /**
+     * Option factory
+     *
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $_optionFactory;
@@ -55,16 +57,25 @@ class DefaultColumn extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
-
+    /**
+     * Get item
+     *
+     * @return Item
+     */
     public function getItem()
     {
-        if ($this->_getData('item') instanceof \Magento\Sales\Model\Order\Item) {
+        if ($this->_getData('item') instanceof Item) {
             return $this->_getData('item');
         } else {
             return $this->_getData('item')->getOrderItem();
         }
     }
 
+    /**
+     * Get order options
+     *
+     * @return array
+     */
     public function getOrderOptions()
     {
         $result = array();
@@ -103,9 +114,13 @@ class DefaultColumn extends \Magento\Backend\Block\Template
         return $_default;
     }
 
+    /**
+     * Get sku
+     *
+     * @return string
+     */
     public function getSku()
     {
         return $this->getItem()->getSku();
     }
-
 }

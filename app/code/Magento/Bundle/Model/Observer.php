@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model;
 
 /**
  * Bundle Products Observer
@@ -31,8 +32,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model;
-
 class Observer
 {
     /**
@@ -89,7 +88,7 @@ class Observer
      * Append bundles in upsell list for current product
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @return $this
      */
     public function appendUpsellProducts($observer)
     {
@@ -166,7 +165,7 @@ class Observer
      * only for front end
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @return $this
      */
     public function loadProductOptions($observer)
     {
@@ -181,7 +180,7 @@ class Observer
      * Setting attribute tab block for bundle
      *
      * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @return $this
      */
     public function setAttributeTabBlock($observer)
     {
@@ -197,7 +196,7 @@ class Observer
      * Initialize product options renderer with bundle specific params
      *
      * @param \Magento\Event\Observer $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @return $this
      */
     public function initOptionRenderer(\Magento\Event\Observer $observer)
     {

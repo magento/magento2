@@ -23,14 +23,13 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\File\Transfer\Adapter;
 
 /**
  * Csv parse
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\File\Transfer\Adapter;
-
 class Http
 {
     /**
@@ -86,6 +85,7 @@ class Http
      *
      * @param  string|array $options Options for the file(s) to send
      * @return void
+     * @throws \Exception
      */
     public function send($options = null)
     {

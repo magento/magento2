@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Order\Email\Items;
 
 /**
  * Sales Order Email items default renderer
@@ -32,8 +32,6 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Order\Email\Items;
-
 class DefaultItems extends \Magento\View\Element\Template
 {
     /**
@@ -46,6 +44,9 @@ class DefaultItems extends \Magento\View\Element\Template
         return $this->getItem()->getOrder();
     }
 
+    /**
+     * @return array
+     */
     public function getItemOptions()
     {
         $result = array();
@@ -64,6 +65,10 @@ class DefaultItems extends \Magento\View\Element\Template
         return $result;
     }
 
+    /**
+     * @param string|array $value
+     * @return string
+     */
     public function getValueHtml($value)
     {
         if (is_array($value)) {
@@ -74,12 +79,17 @@ class DefaultItems extends \Magento\View\Element\Template
         }
     }
 
+    /**
+     * @param mixed $item
+     * @return mixed
+     */
     public function getSku($item)
     {
-        if ($item->getOrderItem()->getProductOptionByCode('simple_sku'))
+        if ($item->getOrderItem()->getProductOptionByCode('simple_sku')) {
             return $item->getOrderItem()->getProductOptionByCode('simple_sku');
-        else
+        } else {
             return $item->getSku();
+        }
     }
 
     /**

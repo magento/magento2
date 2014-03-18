@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 /**
  * Adminhtml sales order create sidebar cart block
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class Cart
     extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
@@ -43,6 +42,11 @@ class Cart
      */
     protected $_sidebarStorageAction = 'add_cart_item';
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -50,6 +54,11 @@ class Cart
         $this->setDataId('cart');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Shopping Cart');
@@ -70,6 +79,11 @@ class Cart
         return $collection;
     }
 
+    /**
+     * Retrieve display item qty availability
+     *
+     * @return true
+     */
     public function canDisplayItemQty()
     {
         return true;
@@ -89,8 +103,8 @@ class Cart
     /**
      * Retrieve product identifier linked with item
      *
-     * @param   \Magento\Sales\Model\Quote\Item $item
-     * @return  int
+     * @param \Magento\Sales\Model\Quote\Item $item
+     * @return int
      */
     public function getProductId($item)
     {
@@ -102,7 +116,7 @@ class Cart
      *
      * Add button that clears customer's shopping cart
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart
+     * @return $this
      */
     protected function _prepareLayout()
     {

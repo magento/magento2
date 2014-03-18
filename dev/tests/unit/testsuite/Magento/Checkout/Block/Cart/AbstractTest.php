@@ -35,12 +35,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
-    public function testGetItemRenderer()
+    /**
+     * @dataProvider getItemRendererDataProvider
+     * @param string|null $type
+     * @param string $expectedType
+     */
+    public function testGetItemRenderer($type, $expectedType)
     {
         $renderer = $this->getMock('Magento\View\Element\RendererList', array(), array(), '', false);
 
         $renderer->expects($this->once())->method('getRenderer')
-            ->with('some-type', AbstractCart::DEFAULT_TYPE)->will($this->returnValue('rendererObject'));
+            ->with($expectedType, AbstractCart::DEFAULT_TYPE)->will($this->returnValue('rendererObject'));
 
         $layout = $this->getMock('Magento\Core\Model\Layout', array(
             'getChildName', 'getBlock'
@@ -62,7 +67,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 ))
         ));
 
-        $this->assertSame('rendererObject', $block->getItemRenderer('some-type'));
+        $this->assertSame('rendererObject', $block->getItemRenderer($type));
+    }
+
+    /**
+     * @return array
+     */
+    public function getItemRendererDataProvider()
+    {
+        return [[null, AbstractCart::DEFAULT_TYPE], ['some-type', 'some-type']];
     }
 
     /**

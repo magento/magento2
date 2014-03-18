@@ -64,7 +64,7 @@ class AuthorizationServiceV1
      *
      * @param \Magento\Authz\Service\AuthorizationV1 $subject
      * @param callable $proceed
-     * @param $resources
+     * @param mixed $resources
      * @param UserIdentifier $userIdentifier
      *
      * @return bool

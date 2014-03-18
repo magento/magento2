@@ -28,6 +28,10 @@ define('BP', __DIR__ . '/../..');
     BP . '/lib',
 ));
 
+/**
+ * @param string $className
+ * @return bool
+ */
 function tool_autoloader($className)
 {
     if (strpos($className, 'Magento\\Tools\\') === false) {

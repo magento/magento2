@@ -71,6 +71,8 @@ class Edit extends \Magento\Backend\App\AbstractAction
 
     /**
      * Get associated grouped products grid popup
+     *
+     * @return void
      */
     public function popupAction()
     {

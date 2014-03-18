@@ -314,7 +314,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             trim(file_get_contents($this->fileSystem->getViewFile($contentFile, $designParams))),
-            file_get_contents($expectedFile)
+            trim(file_get_contents($expectedFile))
         );
     }
 

@@ -57,4 +57,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Payment\Model\Checks\SpecificationFactory">
+        <arguments>
+            <argument name="mapping" xsi:type="array">
+                <item name="country" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCountry</item>
+                <item name="currency" xsi:type="object">Magento\Payment\Model\Checks\CanUseForCurrency</item>
+                <item name="checkout" xsi:type="object">Magento\Payment\Model\Checks\CanUseCheckout</item>
+                <item name="internal" xsi:type="object">Magento\Payment\Model\Checks\CanUseInternal</item>
+                <item name="total" xsi:type="object">Magento\Payment\Model\Checks\TotalMinMax</item>
+                <item name="zero_total" xsi:type="object">Magento\Payment\Model\Checks\ZeroTotal</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

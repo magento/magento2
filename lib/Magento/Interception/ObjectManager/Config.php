@@ -36,6 +36,7 @@ class Config extends \Magento\ObjectManager\Config\Config
      * Set Interception config
      *
      * @param \Magento\Interception\Config $interceptionConfig
+     * @return void
      */
     public function setInterceptionConfig(\Magento\Interception\Config $interceptionConfig)
     {

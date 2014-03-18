@@ -23,18 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 
 class Statuses
     extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
+     * Dummy element
+     *
      * @var \Magento\Object
      */
     protected $_dummyElement;
 
     /**
+     * Field renderer
+     *
      * @var \Magento\Backend\Block\System\Config\Form\Field
      */
     protected $_fieldRenderer;
@@ -45,6 +48,8 @@ class Statuses
     protected $_values;
 
     /**
+     * Order status collection
+     *
      * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
      */
     protected $_orderStatusCollection;
@@ -68,6 +73,8 @@ class Statuses
     }
 
     /**
+     * Render elemnt
+     *
      * @param \Magento\Data\Form\Element\AbstractElement $element
      * @return string
      */
@@ -84,6 +91,8 @@ class Statuses
     }
 
     /**
+     * Get dummy element
+     *
      * @return \Magento\Object
      */
     protected function _getDummyElement()
@@ -95,6 +104,8 @@ class Statuses
     }
 
     /**
+     * Get field renderer
+     *
      * @return \Magento\Backend\Block\System\Config\Form\Field
      */
     protected function _getFieldRenderer()
@@ -107,6 +118,8 @@ class Statuses
     }
 
     /**
+     * Get field html
+     *
      * @param \Magento\Data\Form\Element\Fieldset $fieldset
      * @param string $id
      * @param string $status

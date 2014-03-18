@@ -1,0 +1,103 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.block.search {
+    float: right;
+    padding-left: 15px;
+    position: relative;
+    width: 250px;
+    z-index: 1;
+    input {
+        padding-right: 35px;
+    }
+    .label {
+        .visually-hidden();
+    }
+    .title {
+        display: none;
+    }
+    .action.search {
+        position: absolute;
+        right: 10px;
+        top: 0;
+        z-index: 1;
+        .button(
+            @_button-margin: 3px,
+            @_button-icon-use: true,
+            @_button-font-content: @icon-search,
+            @_button-icon-font-text-hide: true
+        );
+        .button-reset();
+    }
+    .nested {
+        padding-top: 5px;
+        position: absolute;
+    }
+}
+
+.responsive(@break) when (@break = @mobile) {
+    .block.search {
+        float: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        width: 100%;
+        z-index: 4;
+        .action.search {
+            display: none;
+        }
+        .control {
+            border-top: 1px solid @border-color-base;
+            clear: both;
+            margin: 0 -90px -1px -20px;
+            padding: 0 20px;
+        }
+        .label {
+            .visually-hidden-reset();
+            .icon-font(
+                @icon-search,
+                @_icon-font-size: 35px,
+                @_icon-font-line-height: 33px,
+                @_icon-font-text-hide: true
+                );
+            display: inline-block;
+            float: right;
+            &:active,
+            &:focus {
+                outline: none !important;
+            }
+        }
+        .nested {
+            left: -300%;
+        }
+        input:focus {
+            position: static;
+            margin: 15px 0;
+        }
+        input {
+            left: -300%;
+            position: absolute;
+        }
+    }
+}

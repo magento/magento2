@@ -31,12 +31,9 @@
         <?php echo $this->getChildHtml('buttons') ?>
         <?php echo $this->getStatusHistoryRssUrl($_order) ?>
     </div>
-    <dl class="order info">
-        <dt><?php echo __('About This Order:') ?></dt>
-        <dd>
-            <?php echo $this->getChildHtml('links') ?>
-        </dd>
-    </dl>
+
+    <div class="order info links"><?php echo $this->getChildHtml('links') ?></div>
+
     <p class="order date"><?php echo __('<span class="label">Order Date:</span> %1', '<date>' . $this->formatDate($_order->getCreatedAtStoreDate(), 'long') . '</date>' ) ?></p>
 <?php if (!$_order->getIsVirtual()): ?>
     <div class="block order shipping address">

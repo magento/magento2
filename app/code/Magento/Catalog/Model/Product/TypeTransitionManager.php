@@ -49,6 +49,7 @@ class TypeTransitionManager
      * Process given product and change its type if needed
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      */
     public function processProduct(Product $product)
     {

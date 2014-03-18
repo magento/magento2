@@ -81,7 +81,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         } else { // billing
             $address = $this->_multishippingCheckout->getCustomerDefaultBillingAddress();
         }
-        $this->assertInstanceOf('\Magento\Customer\Service\V1\Dto\Address', $address, "Address was not loaded.");
+        $this->assertInstanceOf('\Magento\Customer\Service\V1\Data\Address', $address, "Address was not loaded.");
         $this->assertEquals($secondFixtureAddressId, $address->getId(), "Invalid address loaded.");
         $this->assertEquals(
             $secondFixtureAddressStreet,
@@ -137,7 +137,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
         } else { // billing
             $address = $this->_multishippingCheckout->getCustomerDefaultBillingAddress();
         }
-        $this->assertInstanceOf('\Magento\Customer\Service\V1\Dto\Address', $address, "Address was not loaded.");
+        $this->assertInstanceOf('\Magento\Customer\Service\V1\Data\Address', $address, "Address was not loaded.");
         $this->assertEquals($firstFixtureAddressId, $address->getId(), "Invalid address loaded.");
         $this->assertEquals(
             $firstFixtureAddressStreet,

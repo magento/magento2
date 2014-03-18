@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rating\Block\Adminhtml\Edit\Tab;
 
 class Options extends \Magento\Backend\Block\Widget\Form\Generic
@@ -53,7 +52,9 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
-
+    /**
+     * @return $this
+     */
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */

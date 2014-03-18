@@ -303,8 +303,8 @@ class Store extends AbstractModel
     protected $_httpContext;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
+     * @param \Magento\Model\Context $context
+     * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\App\Cache\Type\Config $configCacheType
      * @param \Magento\UrlInterface $url
@@ -945,7 +945,7 @@ class Store extends AbstractModel
     /**
      * Set current currency
      *
-     * @param $currency
+     * @param \Magento\Directory\Model\Currency $currency
      * @return $this
      */
     public function setCurrentCurrency($currency)

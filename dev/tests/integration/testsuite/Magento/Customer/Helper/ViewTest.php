@@ -47,7 +47,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Customer\Service\V1\Dto\Customer $customerDto
+     * @param \Magento\Customer\Service\V1\Data\Customer $customerData
      * @param string $expectedCustomerName
      * @param bool $isPrefixAllowed
      * @param bool $isMiddleNameAllowed
@@ -55,18 +55,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getCustomerNameDataProvider
      */
     public function testGetCustomerName(
-        $customerDto,
+        $customerData,
         $expectedCustomerName,
         $isPrefixAllowed = false,
         $isMiddleNameAllowed = false,
         $isSuffixAllowed = false
     ) {
 
-        $visibleAttribute = $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', [], [], '', false);
+        $visibleAttribute = $this->getMock('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata', [], [], '', false);
         $visibleAttribute->expects($this->any())->method('isVisible')->will($this->returnValue(true));
 
         $invisibleAttribute = $this->getMock(
-            'Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata',
+            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
             [],
             [],
             '',
@@ -88,15 +88,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedCustomerName,
-            $this->_helper->getCustomerName($customerDto),
+            $this->_helper->getCustomerName($customerData),
             'Full customer name is invalid'
         );
     }
 
     public function getCustomerNameDataProvider()
     {
-        /** @var \Magento\Customer\Service\V1\Dto\CustomerBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Dto\CustomerBuilder');
+        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
+        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
         return [
             'With disabled prefix, middle name, suffix' => [
                 $customerBuilder->setPrefix('prefix')

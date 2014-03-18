@@ -23,6 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Data\Form\Element;
+
+use Magento\Data\Form;
+use Magento\Data\Form\AbstractForm;
 
 /**
  * Form element collection
@@ -31,11 +35,6 @@
  * @package     Magento_Data
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Data\Form\Element;
-
-use Magento\Data\Form;
-use Magento\Data\Form\AbstractForm;
-
 class Collection implements \ArrayAccess, \IteratorAggregate
 {
 
@@ -137,11 +136,9 @@ class Collection implements \ArrayAccess, \IteratorAggregate
 
         if ($after === false) {
             $this->_elements[] = $element;
-        }
-        elseif ($after === '^') {
+        } elseif ($after === '^') {
             array_unshift($this->_elements, $element);
-        }
-        elseif (is_string($after)) {
+        } elseif (is_string($after)) {
             $newOrderElements = array();
             foreach ($this->_elements as $index => $currElement) {
                 if ($currElement->getId() == $after) {

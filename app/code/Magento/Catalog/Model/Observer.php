@@ -43,7 +43,7 @@ class Observer
      * @var \Magento\Catalog\Helper\Category
      */
     protected $_catalogCategory;
-    
+
     /**
      * @var \Magento\App\ReinitableConfigInterface
      */
@@ -148,20 +148,6 @@ class Observer
         $storeId = $observer->getEvent()->getData('store_id');
         $result  = $observer->getEvent()->getData('result');
         $result->isAllowed = $this->_catalogData->setStoreId($storeId)->isUsingStaticUrlsAllowed();
-    }
-
-    /**
-     * Cron job method for product prices to reindex
-     *
-     * @param \Magento\Cron\Model\Schedule $schedule
-     * @return void
-     */
-    public function reindexProductPrices(\Magento\Cron\Model\Schedule $schedule)
-    {
-        $indexProcess = $this->_indexIndexer->getProcessByCode('catalog_product_price');
-        if ($indexProcess) {
-            $indexProcess->reindexAll();
-        }
     }
 
     /**

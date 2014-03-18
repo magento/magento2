@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Connect;
 
 class Command
@@ -100,7 +98,7 @@ class Command
     public function __construct()
     {
         $class = $this->_class = get_class($this);
-        if(__CLASS__ == $class) {
+        if (__CLASS__ == $class) {
             throw new \Exception("You shouldn't instantiate {$class} directly!");
         }
         $this->commandsInfo = self::$_commandsByClass[$class];
@@ -147,7 +145,7 @@ class Command
     {
         $data = $this->getCommandInfo($command);
         $method = $data['function'];
-        if(! method_exists($this, $method)) {
+        if (! method_exists($this, $method)) {
             throw new \Exception("$method does't exist in class ".$this->_class);
         }
         return $this->$method($command, $options, $params);
@@ -161,10 +159,11 @@ class Command
      * Static
      * @param string $commandName
      * @return object
+     * @throws \UnexpectedValueException
      */
     public static function getInstance($commandName)
     {
-        if(!isset(self::$_commandsAll[$commandName])) {
+        if (!isset(self::$_commandsAll[$commandName])) {
             throw new \UnexpectedValueException("Cannot find command $commandName");
         }
         $currentCommand = self::$_commandsAll[$commandName];
@@ -241,7 +240,7 @@ class Command
      */
     public function validator()
     {
-        if(is_null(self::$_validator)) {
+        if (is_null(self::$_validator)) {
             self::$_validator = new Validator();
         }
         return self::$_validator;
@@ -254,7 +253,7 @@ class Command
      */
     public function rest()
     {
-        if(is_null(self::$_rest)) {
+        if (is_null(self::$_rest)) {
             self::$_rest = new Rest(self::config()->protocol);
         }
         return self::$_rest;
@@ -267,7 +266,7 @@ class Command
      */
     public static function getCommands()
     {
-        if(!count(self::$_commandsAll)) {
+        if (!count(self::$_commandsAll)) {
             self::registerCommands();
         }
         ksort(self::$_commandsAll);
@@ -319,16 +318,16 @@ class Command
     {
         $pathCommands = __DIR__ . '/' . basename(__FILE__, ".php");
         $f = new \DirectoryIterator($pathCommands);
-        foreach($f as $file) {
+        foreach ($f as $file) {
             if (! $file->isFile()) {
                 continue;
             }
             $pattern = preg_match("/(.*)_Header\.php/imsu", $file->getFilename(), $matches);
-            if(! $pattern) {
+            if (! $pattern) {
                 continue;
             }
             include($file->getPathname());
-            if(! isset($commands)) {
+            if (! isset($commands)) {
                 continue;
             }
             $class = __CLASS__."_".$matches[1];

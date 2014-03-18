@@ -96,4 +96,11 @@ interface ListsInterface
      * @return array
      */
     public function getCountryTranslation($value);
+
+    /**
+     * Returns an array with the name of all countries translated to the given language
+     *
+     * @return array
+     */
+    public function getCountryTranslationList();
 }

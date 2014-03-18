@@ -25,7 +25,6 @@ namespace Magento\Multishipping\Controller;
 
 use Magento\App\RequestInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
-use Magento\Customer\Service\V1\CustomerServiceInterface as CustomerService;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
@@ -38,21 +37,18 @@ class Checkout extends \Magento\Checkout\Controller\Action
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerService $customerService
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerService $customerService,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService
     ) {
         parent::__construct(
             $context,
             $customerSession,
-            $customerService,
             $customerAccountService,
             $customerMetadataService
         );
@@ -172,6 +168,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Index action of Multishipping checkout
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -181,6 +179,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout login page
+     *
+     * @return void
      */
     public function loginAction()
     {
@@ -202,6 +202,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout login page
+     *
+     * @return void
      */
     public function registerAction()
     {
@@ -226,6 +228,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout select address page
+     *
+     * @return void
      */
     public function addressesAction()
     {
@@ -249,6 +253,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout process posted addresses
+     *
+     * @return void
      */
     public function addressesPostAction()
     {
@@ -282,6 +288,9 @@ class Checkout extends \Magento\Checkout\Controller\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function backToAddressesAction()
     {
         $this->_getState()->setActiveStep(State::STEP_SELECT_ADDRESSES);
@@ -291,6 +300,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout remove item action
+     *
+     * @return void
      */
     public function removeItemAction()
     {
@@ -321,6 +332,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout shipping information page
+     *
+     * @return  ResponseInterface|void
      */
     public function shippingAction()
     {
@@ -338,6 +351,9 @@ class Checkout extends \Magento\Checkout\Controller\Action
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function backToShippingAction()
     {
         $this->_getState()->setActiveStep(State::STEP_SHIPPING);
@@ -345,6 +361,9 @@ class Checkout extends \Magento\Checkout\Controller\Action
         $this->_redirect('*/*/shipping');
     }
 
+    /**
+     * @return void
+     */
     public function shippingPostAction()
     {
         $shippingMethods = $this->getRequest()->getPost('shipping_method');
@@ -365,6 +384,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout billing information page
+     *
+     * @return void|ResponseInterface
      */
     public function billingAction()
     {
@@ -402,6 +423,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Back to billing action
+     *
+     * @return void
      */
     public function backToBillingAction()
     {
@@ -412,6 +435,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout place order page
+     *
+     * @return void
      */
     public function overviewAction()
     {
@@ -423,10 +448,12 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
         try {
             $payment = $this->getRequest()->getPost('payment', array());
-            $payment['checks'] = \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY
-                | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY
-                | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
-                | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL;
+            $payment['checks'] = [
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
+            ];
             $this->_getCheckout()->setPaymentMethod($payment);
 
             $this->_getState()->setCompleteStep(State::STEP_BILLING);
@@ -446,6 +473,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Overview action
+     *
+     * @return void
      */
     public function overviewPostAction()
     {
@@ -509,6 +538,8 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Multishipping checkout success page
+     *
+     * @return void
      */
     public function successAction()
     {
@@ -526,6 +557,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Returns before_auth_url redirect parameter for customer session
+     *
      * @return string
      */
     public function getCustomerBeforeAuthUrl()
@@ -536,6 +568,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Returns a list of action flags [flag_key] => boolean
+     *
      * @return array
      */
     public function getActionFlagList()
@@ -545,6 +578,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Returns login url parameter for redirect
+     *
      * @return string
      */
     public function getLoginUrl()
@@ -554,6 +588,7 @@ class Checkout extends \Magento\Checkout\Controller\Action
 
     /**
      * Returns action name which requires redirect
+     *
      * @return string
      */
     public function getRedirectActionName()

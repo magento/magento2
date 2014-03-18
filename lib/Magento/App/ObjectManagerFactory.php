@@ -23,12 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
-use Magento\App\Arguments,
-    Magento\Profiler,
-    Magento\App\Filesystem;
+use Magento\App\Filesystem\DirectoryList;
+use Magento\Profiler;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,7 +40,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_locatorClassName = '\Magento\ObjectManager\ObjectManager';
+    protected $_locatorClassName = 'Magento\ObjectManager\ObjectManager';
 
     /**
      * Config class name
@@ -54,31 +52,31 @@ class ObjectManagerFactory
     /**
      * Create object manager
      *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param string $rootDir
      * @param array $arguments
      * @return \Magento\ObjectManager\ObjectManager
      * @throws \Magento\BootstrapException
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function create($rootDir, array $arguments)
     {
-        $directories = isset($arguments[\Magento\App\Filesystem::PARAM_APP_DIRS])
-            ? $arguments[\Magento\App\Filesystem::PARAM_APP_DIRS]
+        $directories = isset($arguments[Filesystem::PARAM_APP_DIRS])
+            ? $arguments[Filesystem::PARAM_APP_DIRS]
             : array();
-        $directoryList = new \Magento\App\Filesystem\DirectoryList($rootDir, $directories);
+        $directoryList = new DirectoryList($rootDir, $directories);
 
         \Magento\Autoload\IncludePath::addIncludePath(
-            array($directoryList->getDir(\Magento\App\Filesystem::GENERATION_DIR))
+            array($directoryList->getDir(Filesystem::GENERATION_DIR))
         );
 
         $appArguments = $this->createAppArguments($directoryList, $arguments);
 
         $definitionFactory = new \Magento\ObjectManager\DefinitionFactory(
             new \Magento\Filesystem\Driver\File(),
-            $directoryList->getDir(\Magento\App\Filesystem::DI_DIR),
-            $directoryList->getDir(\Magento\App\Filesystem::GENERATION_DIR),
+            $directoryList->getDir(Filesystem::DI_DIR),
+            $directoryList->getDir(Filesystem::GENERATION_DIR),
             $appArguments->get('definition.format', 'serialized')
         );
 
@@ -115,7 +113,7 @@ class ObjectManagerFactory
         ));
 
         $argFactory->setObjectManager($objectManager);
-        \Magento\App\ObjectManager::setInstance($objectManager);
+        ObjectManager::setInstance($objectManager);
 
         /** @var \Magento\App\Filesystem\DirectoryList\Verification $verification */
         $verification = $objectManager->get('Magento\App\Filesystem\DirectoryList\Verification');
@@ -138,13 +136,13 @@ class ObjectManagerFactory
     /**
      * Create instance of application arguments
      *
-     * @param Filesystem\DirectoryList $directoryList
+     * @param DirectoryList $directoryList
      * @param array $arguments
      * @return Arguments
      */
-    protected function createAppArguments(\Magento\App\Filesystem\DirectoryList $directoryList, array $arguments)
+    protected function createAppArguments(DirectoryList $directoryList, array $arguments)
     {
-        return new \Magento\App\Arguments(
+        return new Arguments(
             $arguments,
             new \Magento\App\Arguments\Loader(
                 $directoryList,
@@ -160,13 +158,13 @@ class ObjectManagerFactory
      *
      * @param \Magento\Stdlib\BooleanUtils $booleanUtils
      * @param \Magento\ObjectManager\Config\Argument\ObjectFactory $objFactory
-     * @param \Magento\App\Arguments $appArguments
+     * @param Arguments $appArguments
      * @return \Magento\Data\Argument\InterpreterInterface
      */
     protected function createArgumentInterpreter(
         \Magento\Stdlib\BooleanUtils $booleanUtils,
         \Magento\ObjectManager\Config\Argument\ObjectFactory $objFactory,
-        \Magento\App\Arguments $appArguments
+        Arguments $appArguments
     ) {
         $constInterpreter = new \Magento\Data\Argument\Interpreter\Constant();
         $result = new \Magento\Data\Argument\Interpreter\Composite(
@@ -188,6 +186,7 @@ class ObjectManagerFactory
 
     /**
      * @param \Magento\ObjectManager $objectManager
+     * @return void
      */
     protected function configureDirectories(\Magento\ObjectManager $objectManager)
     {
@@ -199,7 +198,7 @@ class ObjectManagerFactory
     /**
      * Load primary config data
      *
-     * @param \Magento\Filesystem\DirectoryList $directoryList
+     * @param DirectoryList $directoryList
      * @param string $appMode
      * @return array
      * @throws \Magento\BootstrapException

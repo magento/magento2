@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 /**
  * Sales Order Create Form Abstract Block
@@ -32,12 +32,12 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
-
 abstract class AbstractForm
     extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
+     * Form factory
+     *
      * @var \Magento\Data\FormFactory
      */
     protected $_formFactory;
@@ -71,7 +71,7 @@ abstract class AbstractForm
      * Prepare global layout
      * Add renderers to \Magento\Data\Form
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -116,7 +116,7 @@ abstract class AbstractForm
     /**
      * Prepare Form and add elements to form
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @return $this
      */
     abstract protected function _prepareForm();
 
@@ -150,7 +150,7 @@ abstract class AbstractForm
      * Add additional data to form element
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @return $this
      */
     protected function _addAdditionalFormElementData(\Magento\Data\Form\Element\AbstractElement $element)
     {
@@ -160,9 +160,9 @@ abstract class AbstractForm
     /**
      * Add rendering EAV attributes to Form element
      *
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[] $attributes
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes
      * @param \Magento\Data\Form\AbstractForm $form
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @return $this
      */
     protected function _addAttributesToForm($attributes, \Magento\Data\Form\AbstractForm $form)
     {
@@ -195,8 +195,8 @@ abstract class AbstractForm
 
                 if ($inputType == 'select' || $inputType == 'multiselect') {
                     $options = array();
-                    foreach ($attribute->getOptions() as $optionDto) {
-                        $options[] = $optionDto->__toArray();
+                    foreach ($attribute->getOptions() as $optionData) {
+                        $options[] = \Magento\Service\DataObjectConverter::toFlatArray($optionData);
                     }
                     $element->setValues($options);
                 } else if ($inputType == 'date') {

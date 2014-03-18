@@ -27,6 +27,9 @@ namespace Magento\GroupedProduct\Block\Product\View\Type;
 
 class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+    /**
+     * @return array
+     */
     public function getAssociatedProducts()
     {
         return $this->getProduct()->getTypeInstance()
@@ -36,7 +39,7 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Set preconfigured values to grouped associated products
      *
-     * @return \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+     * @return $this
      */
     public function setPreconfiguredValue()
     {
@@ -55,7 +58,7 @@ class Grouped extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Returns product tier price block html
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|null $product
      * @return string
      */
     public function getTierPriceHtml($product = null)

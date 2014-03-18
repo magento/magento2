@@ -44,7 +44,7 @@ class RequestFactory
      * Create request
      *
      * @param array $arguments
-     * @return \Magento\App\RequestInterface
+     * @return RequestInterface
      */
     public function create(array $arguments = array())
     {

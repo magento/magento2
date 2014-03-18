@@ -24,7 +24,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerServiceInterface;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Adminhtml customer edit form block
@@ -34,9 +34,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Customer Service.
      *
-     * @var CustomerServiceInterface
+     * @var CustomerAccountServiceInterface
      */
-    protected $_customerService;
+    protected $_customerAccountService;
 
     /**
      * Constructor
@@ -44,24 +44,24 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
-     * @param CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
-        CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * Prepare the form.
      *
-     * @return \Magento\Backend\Block\Widget\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -87,8 +87,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'name' => 'customer_id',
                 ]
             );
-            $customer = $this->_customerService->getCustomer($customerId);
-            $form->setValues($customer->getAttributes())
+            $customer = $this->_customerAccountService->getCustomer($customerId);
+            $form->setValues(\Magento\Service\DataObjectConverter::toFlatArray($customer))
                 ->addValues(['customer_id' => $customerId]);
         }
 

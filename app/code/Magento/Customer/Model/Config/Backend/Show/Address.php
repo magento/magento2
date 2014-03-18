@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config\Backend\Show;
+
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Customer Show Address Model
@@ -31,15 +34,12 @@
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Config\Backend\Show;
-
-class Address
-    extends \Magento\Customer\Model\Config\Backend\Show\Customer
+class Address extends Customer
 {
     /**
      * Retrieve attribute objects
      *
-     * @return array
+     * @return AbstractAttribute[]
      */
     protected function _getAttributeObjects()
     {

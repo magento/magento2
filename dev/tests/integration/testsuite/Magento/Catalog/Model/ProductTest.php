@@ -282,13 +282,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($model->getIsVirtual());
     }
 
-    public function testIsRecurring()
-    {
-        $this->assertFalse($this->_model->isRecurring());
-        $this->_model->setIsRecurring(1);
-        $this->assertTrue($this->_model->isRecurring());
-    }
-
     public function testToArray()
     {
         $this->assertEquals(array(), $this->_model->toArray());

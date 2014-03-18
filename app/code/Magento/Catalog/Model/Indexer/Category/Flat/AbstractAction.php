@@ -143,7 +143,7 @@ class AbstractAction
     /**
      * Return structure for flat catalog table
      *
-     * @param $tableName
+     * @param string $tableName
      * @return \Magento\DB\Ddl\Table
      */
     protected function getFlatTableStructure($tableName)

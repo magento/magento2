@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 /**
@@ -41,21 +40,21 @@ class Messages extends Template
      *
      * @var string
      */
-    protected $firstLevelTagName = 'ul';
+    protected $firstLevelTagName = 'div';
 
     /**
      * Store second level html tag name for messages html output
      *
      * @var string
      */
-    protected $secondLevelTagName = 'li';
+    protected $secondLevelTagName = 'div';
 
     /**
      * Store content wrapper html tag name for messages html output
      *
      * @var string
      */
-    protected $contentWrapTagName = 'span';
+    protected $contentWrapTagName = 'div';
 
     /**
      * Storage for used types of message storages
@@ -174,8 +173,8 @@ class Messages extends Template
     /**
      * Adding new message to message collection
      *
-     * @param   \Magento\Message\AbstractMessage $message
-     * @return  $this
+     * @param \Magento\Message\MessageInterface $message
+     * @return $this
      */
     public function addMessage(\Magento\Message\AbstractMessage $message)
     {
@@ -295,18 +294,14 @@ class Messages extends Template
                 if (!$html) {
                     $html .= '<' . $this->firstLevelTagName . ' class="messages">';
                 }
-                $html .= '<' . $this->secondLevelTagName . ' class="' . $type . '-msg">';
-                $html .= '<' . $this->firstLevelTagName . '>';
 
                 foreach ($messages as $message) {
-                    $html.= '<' . $this->secondLevelTagName . '>';
+                    $html.= '<' . $this->secondLevelTagName . ' class="message ' . $type . '">';
                     $html.= '<' . $this->contentWrapTagName .  $this->getUiId('message', $type) .  '>';
                     $html.= $message->getText();
                     $html.= '</' . $this->contentWrapTagName . '>';
                     $html.= '</' . $this->secondLevelTagName . '>';
                 }
-                $html .= '</' . $this->firstLevelTagName . '>';
-                $html .= '</' . $this->secondLevelTagName . '>';
             }
         }
         if ($html) {

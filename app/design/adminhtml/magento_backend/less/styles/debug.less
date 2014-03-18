@@ -1,21 +1,21 @@
 // /**
-//  * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
 //  *
 //  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
@@ -23,97 +23,9 @@
 
 ///*
 //    This file was created to debug old classes in order to indicate where we must replase it with new ones
-//    The types of messages are generated in file: \app\code\core\Mage\Core\Block\Messages.php like $html .= '<' . $this->_messagesSecondLevelTagName . ' class="' . $type . '-msg">';
-//-------------------------------------- */
 
-///*
-//    All messages to identify and refactor:
-//
-//label.mage-error,
-//.notice,
-//.messages ul,
-//.messages li,
-//.messages ul li,
-//.error-msg,
-//.success-msg,
-//.notice-msg,
-//.warning-msg
-//
-//Done:
-//.notification-global
-//.notification-global-notice
-//-------------------------------------- */
 .debug {
     border: 1px solid red !important;
-}
-
-.messages ul,
-ul.messages {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-ul.messages > li {
-    margin: 20px 0;
-
-}
-
-ul.messages li li {
-    padding: 10px 26px 10px 35px;
-    border-radius: 5px;
-    color: #676056;
-    text-shadow: none;
-    position: relative;
-    background: #fffbf0;
-    border: 1px solid #d87e34;
-    margin-top: -1px;
-}
-
-ul.messages li li:first-child {
-    margin-top: 0;
-}
-
-ul.messages li li:before {
-    position: absolute;
-    left: 11px;
-    top: 50%;
-    margin-top: -11px;
-    background: none;
-    text-shadow: none;
-    width: auto;
-    height: auto;
-    border: 0;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    font-size: 16px;
-    content: '\e046'; /* icon-info  */
-    color: #d87e34;
-}
-
-ul.messages li.error-msg li {
-    color: #963535;
-    border-color: #963535;
-    background: #f3dcd8;
-}
-
-ul.messages li.error-msg li:before {
-    content: '\e069';
-    color: #963535;
-}
-
-ul.messages li.success-msg li {
-    border-color: #ceceb6;
-    background: #e4eecb;
-    color: #185b00;
-}
-
-ul.messages li.success-msg li:before {
-    content: '\e067';
-    color: #185b00;
 }
 
 /*

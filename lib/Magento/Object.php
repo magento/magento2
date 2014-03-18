@@ -446,8 +446,8 @@ class Object implements \ArrayAccess
     /**
      * The "__" style wrapper for toXml method
      *
-     * @param array   $keys array of keys that must be represented
-     * @param string  $rootName root node name
+     * @param array $arrAttributes array of keys that must be represented
+     * @param string $rootName root node name
      * @param bool $addOpenTag flag that allow to add initial xml node
      * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string

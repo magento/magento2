@@ -29,6 +29,13 @@ namespace Magento\View\Asset\MergeStrategy;
  */
 class Direct implements \Magento\View\Asset\MergeStrategyInterface
 {
+    /**#@+
+     * Delimiters for merging files of various content type
+     */
+    const MERGE_DELIMITER_JS = ';';
+    const MERGE_DELIMITER_EMPTY  = '';
+    /**#@-*/
+
     /**
      * Directory Write
      *
@@ -79,6 +86,7 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
     {
         $result = array();
         $isCss = ($contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS) ? true : false;
+        $delimiter = $this->_getFilesContentDelimiter($contentType);
 
         foreach ($publicFiles as $file) {
             if (!$this->_directory->isExist($this->_directory->getRelativePath($file))) {
@@ -90,7 +98,7 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
             }
             $result[] = $content;
         }
-        $result = ltrim(implode($result));
+        $result = ltrim(implode($delimiter, $result));
         if ($isCss) {
             $result = $this->_popCssImportsUp($result);
         }
@@ -122,5 +130,19 @@ class Direct implements \Magento\View\Asset\MergeStrategyInterface
             $result = implode("\n", $imports) . "\n" . "/* Import directives above popped up. */\n" . $result;
         }
         return $result;
+    }
+
+    /**
+     * Return delimiter for separation of merged files content
+     *
+     * @param string $contentType
+     * @return string
+     */
+    protected function _getFilesContentDelimiter($contentType)
+    {
+        if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_JS) {
+            return self::MERGE_DELIMITER_JS;
+        }
+        return self::MERGE_DELIMITER_EMPTY;
     }
 }

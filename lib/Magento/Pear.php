@@ -23,6 +23,11 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
+
+use \Magento\Exception;
+use \Magento\Pear\Frontend;
+use \Magento\Pear\Registry as PearRegistry;
 
 /**
  * Pear package routines
@@ -31,12 +36,6 @@
  * @package    Magento_Pear
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento;
-
-use \Magento\Exception;
-use \Magento\Pear\Frontend;
-use \Magento\Pear\Registry as PearRegistry;
-
 // Looks like PEAR is being developed without E_NOTICE (1.7.0RC1)
 error_reporting(E_ALL & ~E_NOTICE);
 
@@ -94,6 +93,9 @@ class Pear
     static public $reloadOnRegistryUpdate = true;
 
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->getConfig();

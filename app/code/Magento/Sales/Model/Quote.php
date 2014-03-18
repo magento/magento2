@@ -21,12 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model;
 
 use Magento\Sales\Model\Quote\Address;
-use Magento\Customer\Service\V1\Dto\Address as AddressDto;
-use Magento\Customer\Service\V1\Dto\Customer as CustomerDto;
+use Magento\Customer\Service\V1\Data\Address as AddressDataObject;
+use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
+use \Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 
 /**
  * Quote model
@@ -235,9 +235,9 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\GroupFactory
+     * @var CustomerGroupServiceInterface
      */
-    protected $_customerGroupFactory;
+    protected $_customerGroupService;
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
@@ -280,17 +280,23 @@ class Quote extends \Magento\Core\Model\AbstractModel
     protected $_objectCopyService;
 
     /**
-     * @var CustomerDto
+     * @var CustomerDataObject
      */
     protected $_customerData;
 
-    /** @var \Magento\Customer\Model\Converter */
+    /**
+     * @var \Magento\Customer\Model\Converter
+     */
     protected $_converter;
 
-    /** @var \Magento\Customer\Service\V1\CustomerAddressService */
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerAddressService
+     */
     protected $_addressService;
 
-    /** @var \Magento\Customer\Model\Address\Converter */
+    /**
+     * @var \Magento\Customer\Model\Address\Converter
+     */
     protected $_addressConverter;
 
     /**
@@ -303,7 +309,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * @param \Magento\App\ConfigInterface $config
      * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\GroupFactory $customerGroupFactory
+     * @param CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Message\Factory $messageFactory
@@ -329,7 +335,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         \Magento\App\ConfigInterface $config,
         \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\GroupFactory $customerGroupFactory,
+        CustomerGroupServiceInterface $customerGroupService,
         \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Message\Factory $messageFactory,
@@ -352,7 +358,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
         $this->_config = $config;
         $this->_quoteAddressFactory = $quoteAddressFactory;
         $this->_customerFactory = $customerFactory;
-        $this->_customerGroupFactory = $customerGroupFactory;
+        $this->_customerGroupService = $customerGroupService;
         $this->_quoteItemCollectionFactory = $quoteItemCollectionFactory;
         $this->_quoteItemFactory = $quoteItemFactory;
         $this->messageFactory = $messageFactory;
@@ -369,6 +375,8 @@ class Quote extends \Magento\Core\Model\AbstractModel
 
     /**
      * Init resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -552,7 +560,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Assign customer model object data to quote
      *
-     * @param   CustomerDto|\Magento\Customer\Model\Customer $customer
+     * @param   CustomerDataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
      */
     public function assignCustomer($customer)
@@ -564,9 +572,9 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Assign customer model to quote with billing and shipping address change
      *
-     * @param  CustomerDto|\Magento\Customer\Model\Customer $customer
-     * @param  Address $billingAddress
-     * @param  Address $shippingAddress
+     * @param  CustomerDataObject|\Magento\Customer\Model\Customer $customer
+     * @param  Address $billingAddress Quote billing address
+     * @param  Address $shippingAddress Quote shipping address
      * @return $this
      */
     public function assignCustomerWithAddressChange(
@@ -575,29 +583,39 @@ class Quote extends \Magento\Core\Model\AbstractModel
         Address $shippingAddress = null
     ) {
         /* @TODO: refactor this once all the usages of assignCustomerWithAddressChange are refactored MAGETWO-19930 */
-        if ($customer instanceof CustomerDto) {
-            $customer = $this->_converter->createCustomerModel($customer);
+        if ($customer instanceof \Magento\Customer\Model\Customer) {
+            $customer = $this->_converter->createCustomerFromModel($customer);
         }
-
+        /** @var CustomerDataObject $customer */
         if ($customer->getId()) {
-            $this->setCustomer($customer);
+            $this->setCustomerData($customer);
 
             if (null !== $billingAddress) {
                 $this->setBillingAddress($billingAddress);
             } else {
-                $defaultBillingAddress = $customer->getDefaultBillingAddress();
-                if ($defaultBillingAddress && $defaultBillingAddress->getId()) {
-                    $billingAddress = $this->_quoteAddressFactory->create()
-                        ->importCustomerAddress($defaultBillingAddress);
+                try {
+                    $defaultBillingAddress = $this->_addressService->getDefaultBillingAddress($customer->getId());
+                } catch (\Magento\Exception\NoSuchEntityException $e) {
+                    /** Address does not exist */
+                }
+                if (isset($defaultBillingAddress)) {
+                    /** @var \Magento\Sales\Model\Quote\Address $billingAddress */
+                    $billingAddress = $this->_quoteAddressFactory->create();
+                    $billingAddress->importCustomerAddressData($defaultBillingAddress);
                     $this->setBillingAddress($billingAddress);
                 }
             }
 
             if (null === $shippingAddress) {
-                $defaultShippingAddress = $customer->getDefaultShippingAddress();
-                if ($defaultShippingAddress && $defaultShippingAddress->getId()) {
-                    $shippingAddress = $this->_quoteAddressFactory->create()
-                        ->importCustomerAddress($defaultShippingAddress);
+                try {
+                    $defaultShippingAddress = $this->_addressService->getDefaultShippingAddress($customer->getId());
+                } catch (\Magento\Exception\NoSuchEntityException $e) {
+                    /** Address does not exist */
+                }
+                if (isset($defaultShippingAddress)) {
+                    /** @var \Magento\Sales\Model\Quote\Address $shippingAddress */
+                    $shippingAddress = $this->_quoteAddressFactory->create();
+                    $shippingAddress->importCustomerAddressData($defaultShippingAddress);
                 } else {
                     $shippingAddress = $this->_quoteAddressFactory->create();
                 }
@@ -650,7 +668,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve customer data object
      *
-     * @return CustomerDto
+     * @return CustomerDataObject
      */
     public function getCustomerData()
     {
@@ -662,15 +680,15 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Set customer data object
      *
-     * @param CustomerDto $customerData
+     * @param CustomerDataObject $customerData
      * @return $this
      */
-    public function setCustomerData(CustomerDto $customerData)
+    public function setCustomerData(CustomerDataObject $customerData)
     {
-        /* @TODO: remove model usage in favor of DTO in scope of MAGETWO-19930 */
+        /* @TODO: remove model usage in favor of Data Object in scope of MAGETWO-19930 */
         $customer = $this->_customerFactory->create();
-        $customer->setData($customerData->getAttributes());
-        $customer->setId($customerData->getCustomerId());
+        $customer->setData(\Magento\Service\DataObjectConverter::toFlatArray($customerData));
+        $customer->setId($customerData->getId());
         $this->setCustomer($customer);
         return $this;
     }
@@ -678,7 +696,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      * Substitute customer addresses
      *
-     * @param AddressDto[] $addresses
+     * @param AddressDataObject[] $addresses
      * @return $this
      */
     public function setCustomerAddressData(array $addresses)
@@ -692,14 +710,14 @@ class Quote extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Add address to the customer, created out of a DTO
+     * Add address to the customer, created out of a Data Object
      *
      * TODO refactor in scope of MAGETWO-19930
      *
-     * @param AddressDto $address
+     * @param AddressDataObject $address
      * @return $this
      */
-    public function addCustomerAddressData(AddressDto $address)
+    public function addCustomerAddressData(AddressDataObject $address)
     {
         $this->getCustomer()->addAddress($this->_addressConverter->createAddressModel($address));
 
@@ -707,37 +725,37 @@ class Quote extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Get DTO addresses of the customer
+     * Get Data Object addresses of the customer
      *
-     * TODO: Refactor to use addressDto property is used insead of customer model MAGETWO-19930
+     * TODO: Refactor to use addressDataObject property is used insead of customer model MAGETWO-19930
      *
-     * @return AddressDto[]
+     * @return AddressDataObject[]
      */
     public function getCustomerAddressData()
     {
         $customer = $this->getCustomerData();
         $addresses = $this->getCustomer()->getAddresses();
-        $addressDtos = [];
+        $addressDataObjects = [];
         foreach ($addresses as $address) {
-            $addressDtos[] = $this->_addressConverter->createAddressFromModel(
+            $addressDataObjects[] = $this->_addressConverter->createAddressFromModel(
                 $address,
                 $customer->getDefaultBilling(),
                 $customer->getDefaultShipping()
             );
         }
-        return $addressDtos;
+        return $addressDataObjects;
     }
 
     /**
      * Update customer data object
      *
-     * @param CustomerDto $customerData
+     * @param CustomerDataObject $customerData
      * @return $this
      */
-    public function updateCustomerData(CustomerDto $customerData)
+    public function updateCustomerData(CustomerDataObject $customerData)
     {
         $customer = $this->getCustomer();
-        /* @TODO: remove this code in favor of customer DTO usage MAGETWO-19930 */
+        /* @TODO: remove this code in favor of customer Data Object usage MAGETWO-19930 */
         $this->_converter->updateCustomerModel($customer, $customerData);
         $this->setCustomer($customer);
         return $this;
@@ -753,14 +771,15 @@ class Quote extends \Magento\Core\Model\AbstractModel
         if ($this->hasData('customer_group_id')) {
             return $this->getData('customer_group_id');
         } elseif ($this->getCustomerId()) {
-            return $this->getCustomer()->getGroupId();
+            return $this->getCustomerData()->getGroupId();
         } else {
-            /** TODO: Magento\Customer\Model\Group usage should be eliminated in scope of MAGETWO-21105 */
-            return \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+            return CustomerGroupServiceInterface::NOT_LOGGED_IN_ID;
         }
     }
 
     /**
+     * Get customer tax class ID.
+     *
      * @return string
      */
     public function getCustomerTaxClassId()
@@ -770,13 +789,11 @@ class Quote extends \Magento\Core\Model\AbstractModel
          * we need to retrieve from db every time to get the correct tax class
          */
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
-        /**
-         * TODO: Magento\Customer\Model\GroupFactory usage should be eliminated in scope of MAGETWO-21105
-         * _customerGroupFactory should be removed as well
-         */
-        $classId = $this->_customerGroupFactory->create()->getTaxClassId($this->getCustomerGroupId());
-        $this->setCustomerTaxClassId($classId);
-        //}
+        $groupId = $this->getCustomerGroupId();
+        if (!is_null($groupId)) {
+            $taxClassId = $this->_customerGroupService->getGroup($this->getCustomerGroupId())->getTaxClassId();
+            $this->setCustomerTaxClassId($taxClassId);
+        }
 
         return $this->getData('customer_tax_class_id');
     }
@@ -873,7 +890,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
     /**
      *
      * @param int $addressId
-     * @return Address
+     * @return Address|false
      */
     public function getAddressById($addressId)
     {
@@ -887,7 +904,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
 
     /**
      * @param int|string $addressId
-     * @return bool
+     * @return Address|false
      */
     public function getAddressByCustomerAddressId($addressId)
     {
@@ -903,7 +920,7 @@ class Quote extends \Magento\Core\Model\AbstractModel
      * Get quote address by customer address ID.
      *
      * @param int|string $addressId
-     * @return \Magento\Sales\Model\Quote\Address|bool
+     * @return Address|false
      */
     public function getShippingAddressByCustomerAddressId($addressId)
     {

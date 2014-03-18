@@ -157,7 +157,7 @@ class ScheduledStructure
     /**
      * Unset specified element from scheduled elements list
      *
-     * @param $elementName
+     * @param string $elementName
      * @return void
      */
     public function unsetElement($elementName)

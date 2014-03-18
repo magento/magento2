@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cache\Frontend\Adapter;
 
 /**
  * Adapter for Magento -> Zend cache frontend interfaces
  */
-namespace Magento\Cache\Frontend\Adapter;
-
 class Zend implements \Magento\Cache\FrontendInterface
 {
     /**
@@ -77,7 +76,7 @@ class Zend implements \Magento\Cache\FrontendInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException \Exception is thrown when non-supported cleaning mode is specified
+     * @throws \InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = array())
     {

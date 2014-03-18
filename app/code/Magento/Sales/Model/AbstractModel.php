@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model;
 
 /**
  * Sales abstract model
  * Provide date processing functionality
  */
-namespace Magento\Sales\Model;
-
 abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
 {
     /**
@@ -78,7 +77,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Processing object after save data
      * Updates relevant grid table records.
      *
-     * @return \Magento\Sales\Model\AbstractModel
+     * @return $this
      */
     public function afterCommitCallback()
     {

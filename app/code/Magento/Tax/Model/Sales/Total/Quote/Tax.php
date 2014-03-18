@@ -120,9 +120,9 @@ class Tax extends AbstractTotal
         $address->setBaseShippingTaxAmount(0);
 
         $this->_store = $address->getQuote()->getStore();
-        $customer = $address->getQuote()->getCustomer();
-        if ($customer) {
-            $this->_calculator->setCustomer($customer);
+        $customerData = $address->getQuote()->getCustomerData();
+        if ($customerData) {
+            $this->_calculator->setCustomerData($address->getQuote()->getCustomerData());
         }
 
         if (!$address->getAppliedTaxesReset()) {

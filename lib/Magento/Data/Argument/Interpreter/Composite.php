@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
 use Magento\ObjectManager;
@@ -33,7 +32,9 @@ use Magento\Data\Argument\InterpreterInterface;
 class Composite implements InterpreterInterface
 {
     /**
-     * @var InterpreterInterface[] Format: array('<name>' => <instance>, ...)
+     * Format: array('<name>' => <instance>, ...)
+     *
+     * @var InterpreterInterface[]
      */
     private $interpreters;
 
@@ -46,7 +47,7 @@ class Composite implements InterpreterInterface
 
     /**
      * @param InterpreterInterface[] $interpreters
-     * @param $discriminator
+     * @param string $discriminator
      * @throws \InvalidArgumentException
      */
     public function __construct(array $interpreters, $discriminator)
@@ -84,6 +85,7 @@ class Composite implements InterpreterInterface
      *
      * @param string $name
      * @param InterpreterInterface $instance
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function addInterpreter($name, InterpreterInterface $instance)

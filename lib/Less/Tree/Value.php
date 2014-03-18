@@ -1,11 +1,17 @@
 <?php
 
-
+/**
+ * Value
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Value extends Less_Tree{
 
 	public $type = 'Value';
+	public $value;
 
-	public function __construct($value=null){
+	public function __construct($value){
 		$this->value = $value;
 	}
 
@@ -16,6 +22,7 @@ class Less_Tree_Value extends Less_Tree{
 	public function compile($env){
 
 		$ret = array();
+		$i = 0;
 		foreach($this->value as $i => $v){
 			$ret[] = $v->compile($env);
 		}
@@ -25,12 +32,15 @@ class Less_Tree_Value extends Less_Tree{
 		return $ret[0];
 	}
 
-	function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
 		$len = count($this->value);
 		for($i = 0; $i < $len; $i++ ){
-			$this->value[$i]->genCSS( $env, $strs);
+			$this->value[$i]->genCSS( $output );
 			if( $i+1 < $len ){
-				self::OutputAdd( $strs, Less_Environment::$comma_space );
+				$output->add( Less_Environment::$_outputMap[','] );
 			}
 		}
 	}

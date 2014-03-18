@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order;
 
 /**
  * Order payment information
@@ -134,8 +135,6 @@
  * @method string getAddressStatus()
  * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
  */
-namespace Magento\Sales\Model\Order;
-
 class Payment extends \Magento\Payment\Model\Info
 {
     /**
@@ -163,11 +162,19 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Transactions registry to spare resource calls
      * array(txn_id => sales/order_payment_transaction)
+     *
      * @var array
      */
     protected $_transactionsLookup = array();
 
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_payment';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'payment';
 
     /**
@@ -232,6 +239,8 @@ class Payment extends \Magento\Payment\Model\Info
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -241,8 +250,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Declare order model object
      *
-     * @param   \Magento\Sales\Model\Order $order
-     * @return  \Magento\Sales\Model\Order\Payment
+     * @param \Magento\Sales\Model\Order $order
+     * @return $this
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
@@ -309,7 +318,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Authorize or authorize and capture payment on gateway, if applicable
      * This method is supposed to be called only when order is placed
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function place()
     {
@@ -401,16 +410,16 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * TODO: eliminate logic duplication with registerCaptureNotification()
      *
-     * @param null|\Magento\Sales\Model\Order\Invoice $invoice
+     * @param null|Invoice $invoice
      * @throws \Magento\Core\Exception
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function capture($invoice)
     {
         if (is_null($invoice)) {
             $invoice = $this->_invoice();
             $this->setCreatedInvoice($invoice);
-            return $this; // @see \Magento\Sales\Model\Order\Invoice::capture()
+            return $this; // @see Invoice::capture()
         }
         $amountToCapture = $this->_formatAmount($invoice->getBaseGrandTotal());
         $order = $this->getOrder();
@@ -487,7 +496,7 @@ class Payment extends \Magento\Payment\Model\Info
      * TODO: eliminate logic duplication with capture()
      *
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function registerCaptureNotification($amount)
     {
@@ -528,7 +537,7 @@ class Payment extends \Magento\Payment\Model\Info
                 $status = \Magento\Sales\Model\Order::STATUS_FRAUD;
             }
             // register capture for an existing invoice
-            if ($invoice && \Magento\Sales\Model\Order\Invoice::STATE_OPEN == $invoice->getState()) {
+            if ($invoice && Invoice::STATE_OPEN == $invoice->getState()) {
                 $invoice->pay();
                 $this->_updateTotals(array('base_amount_paid_online' => $amount));
                 $order->addRelatedObject($invoice);
@@ -545,9 +554,9 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Process authorization notification
      *
-     * @see self::_authorize()
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
+     * @see self::_authorize()
      */
     public function registerAuthorizationNotification($amount)
     {
@@ -557,8 +566,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Register payment fact: update self totals from the invoice
      *
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
-     * @return \Magento\Sales\Model\Order\Payment
+     * @param Invoice $invoice
+     * @return $this
      */
     public function pay($invoice)
     {
@@ -575,8 +584,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Cancel specified invoice: update self totals from it
      *
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
-     * @return \Magento\Sales\Model\Order\Payment
+     * @param Invoice $invoice
+     * @return $this
      */
     public function cancelInvoice($invoice)
     {
@@ -594,7 +603,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Create new invoice with maximum qty for invoice for each item
      * register this invoice and capture
      *
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return Invoice
      */
     protected function _invoice()
     {
@@ -630,9 +639,9 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Void payment online
      *
-     * @see self::_void()
      * @param \Magento\Object $document
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
+     * @see self::_void()
      */
     public function void(\Magento\Object $document)
     {
@@ -644,9 +653,9 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Process void notification
      *
-     * @see self::_void()
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
+     * @see self::_void()
      */
     public function registerVoidNotification($amount = null)
     {
@@ -661,9 +670,10 @@ class Payment extends \Magento\Payment\Model\Info
      * Updates transactions hierarchy, if required
      * Updates payment totals, updates order status and adds proper comments
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return \Magento\Sales\Model\Order\Payment
-     * @throws \Exception|\Magento\Core\Exception
+     * @param Creditmemo $creditmemo
+     * @return $this
+     * @throws \Exception
+     * @throws \Magento\Core\Exception
      */
     public function refund($creditmemo)
     {
@@ -740,7 +750,7 @@ class Payment extends \Magento\Payment\Model\Info
      * TODO: implement logic of chargebacks reimbursements (via negative amount)
      *
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function registerRefundNotification($amount)
     {
@@ -821,8 +831,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Cancel a creditmemo: substract its totals from the payment
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return \Magento\Sales\Model\Order\Payment
+     * @param Creditmemo $creditmemo
+     * @return $this
      */
     public function cancelCreditmemo($creditmemo)
     {
@@ -841,7 +851,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Order cancellation hook for payment method instance
      * Adds void transaction if needed
-     * @return \Magento\Sales\Model\Order\Payment
+     *
+     * @return $this
      */
     public function cancel()
     {
@@ -886,7 +897,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Accept online a payment that is in review state
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function accept()
     {
@@ -897,7 +908,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Accept order with payment method instance
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function deny()
     {
@@ -912,7 +923,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param string $action
      * @param bool $isOnline
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      * @throws \Exception
      */
     public function registerPaymentReviewAction($action, $isOnline)
@@ -1007,7 +1018,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Updates payment totals, updates order status and adds proper comments
      *
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     protected function _order($amount)
     {
@@ -1051,7 +1062,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param bool $isOnline
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     protected function _authorize($isOnline, $amount)
     {
@@ -1094,9 +1105,10 @@ class Payment extends \Magento\Payment\Model\Info
 
     /**
      * Public access to _authorize method
+     *
      * @param bool $isOnline
      * @param float $amount
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function authorize($isOnline, $amount)
     {
@@ -1112,7 +1124,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param bool $isOnline
      * @param float $amount
      * @param string $gatewayCallback
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     protected function _void($isOnline, $amount = null, $gatewayCallback = 'void')
     {
@@ -1157,8 +1169,8 @@ class Payment extends \Magento\Payment\Model\Info
 
 //    /**
 //     * TODO: implement this
-//     * @param \Magento\Sales\Model\Order\Invoice $invoice
-//     * @return \Magento\Sales\Model\Order\Payment
+//     * @param Invoice $invoice
+//     * @return $this
 //     */
 //    public function cancelCapture($invoice = null)
 //    {
@@ -1274,7 +1286,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Import details data of specified transaction
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transactionTo
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function importTransactionInfo(\Magento\Sales\Model\Order\Payment\Transaction $transactionTo)
     {
@@ -1292,6 +1304,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Updates self totals by keys in data array('key' => $delta)
      *
      * @param array $data
+     * @return void
      */
     protected function _updateTotals($data)
     {
@@ -1465,6 +1478,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param string $type
      * @param bool|\Magento\Sales\Model\Order\Payment\Transaction $transactionBasedOn
+     * @return void
      */
     protected function _generateTransactionId($type, $transactionBasedOn = false)
     {
@@ -1510,7 +1524,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Before object save manipulations
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -1528,6 +1542,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param string $key
      * @param string $value
+     * @return void
      */
     public function setTransactionAdditionalInfo($key, $value)
     {
@@ -1555,7 +1570,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * Reset transaction additional info property
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return $this
      */
     public function resetTransactionAdditionalInfo()
     {
@@ -1567,7 +1582,7 @@ class Payment extends \Magento\Payment\Model\Info
      * Return invoice model for transaction
      *
      * @param string $transactionId
-     * @return \Magento\Sales\Model\Order\Invoice
+     * @return Invoice|false
      */
     protected function _getInvoiceForTransactionId($transactionId)
     {

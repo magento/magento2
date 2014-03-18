@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 class Form
@@ -96,7 +95,7 @@ class Form
     protected $_validator;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
+     * @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
      */
     protected $_attributes;
 
@@ -144,7 +143,7 @@ class Form
     /**
      * Retrieve attributes metadata for the form
      *
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getAttributes()
     {
@@ -159,7 +158,7 @@ class Form
      * Return attribute instance by code or false
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata|false
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|false
      */
     public function getAttribute($attributeCode)
     {
@@ -173,7 +172,7 @@ class Form
     /**
      * Retrieve user defined attributes
      *
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getUserAttributes()
     {
@@ -189,7 +188,7 @@ class Form
     /**
      * Retrieve system required attributes
      *
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getSystemAttributes()
     {
@@ -205,7 +204,7 @@ class Form
     /**
      * Retrieve filtered attributes
      *
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getAllowedAttributes()
     {
@@ -284,7 +283,7 @@ class Form
     /**
      * Return attribute data model by attribute
      *
-     * @param \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     protected function _getAttributeDataModel($attribute)
@@ -388,6 +387,7 @@ class Form
      * Set whether invisible attributes should be ignored.
      *
      * @param bool $ignoreInvisible
+     * @return void
      */
     public function setInvisibleIgnored($ignoreInvisible)
     {

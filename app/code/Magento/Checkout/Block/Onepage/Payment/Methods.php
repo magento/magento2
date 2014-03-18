@@ -44,17 +44,19 @@ class Methods extends \Magento\Payment\Block\Form\Container
     /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $paymentHelper, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
         $this->_isScopePrivate = true;
     }
 

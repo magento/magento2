@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config\Backend\Show;
+
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Customer Show Customer Model
@@ -31,8 +34,6 @@
  * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Config\Backend\Show;
-
 class Customer extends \Magento\Core\Model\Config\Value
 {
     /**
@@ -77,7 +78,7 @@ class Customer extends \Magento\Core\Model\Config\Value
     /**
      * Retrieve attribute objects
      *
-     * @return array
+     * @return AbstractAttribute[]
      */
     protected function _getAttributeObjects()
     {
@@ -89,7 +90,7 @@ class Customer extends \Magento\Core\Model\Config\Value
     /**
      * Actions after save
      *
-     * @return \Magento\Customer\Model\Config\Backend\Show\Customer
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -123,7 +124,7 @@ class Customer extends \Magento\Core\Model\Config\Value
                 $attributeObject->load($attributeObject->getId());
             }
             $attributeObject->setData($dataFieldPrefix . 'is_required', $data['is_required']);
-            $attributeObject->setData($dataFieldPrefix . 'is_visible',  $data['is_visible']);
+            $attributeObject->setData($dataFieldPrefix . 'is_visible', $data['is_visible']);
             $attributeObject->save();
         }
 
@@ -145,7 +146,7 @@ class Customer extends \Magento\Core\Model\Config\Value
                 $attributeObject->setWebsite($website);
                 $attributeObject->load($attributeObject->getId());
                 $attributeObject->setData('scope_is_required', null);
-                $attributeObject->setData('scope_is_visible',  null);
+                $attributeObject->setData('scope_is_visible', null);
                 $attributeObject->save();
             }
         }

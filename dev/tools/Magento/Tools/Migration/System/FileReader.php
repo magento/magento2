@@ -47,7 +47,7 @@ class FileReader
      * Get file list
      *
      * @param string $pattern
-     * @return array
+     * @return string[]
      */
     public function getFileList($pattern)
     {

@@ -235,7 +235,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  int $status
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\GroupedProduct\Model\Product\Type\Grouped
+     * @return $this
      */
     public function addStatusFilter($status, $product)
     {
@@ -254,7 +254,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Set only saleable filter
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\GroupedProduct\Model\Product\Type\Grouped
+     * @return $this
      */
     public function setSaleableStatus($product)
     {
@@ -321,7 +321,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Save type related data
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\GroupedProduct\Model\Product\Type\Grouped
+     * @return $this
      */
     public function save($product)
     {
@@ -450,6 +450,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Delete data specific for Grouped product type
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)

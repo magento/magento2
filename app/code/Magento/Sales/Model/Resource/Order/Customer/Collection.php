@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource\Order\Customer;
 class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
 {
     /**
-     * @return \Magento\Sales\Model\Resource\Order\Customer\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

@@ -72,6 +72,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
 
     /**
      * Send Vary coookie
+     * @return void
      */
     public function sendVary()
     {
@@ -86,6 +87,8 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     /**
      * Send the response, including all headers, rendering exceptions if so
      * requested.
+     *
+     * @return void
      */
     public function sendResponse()
     {
@@ -98,6 +101,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
      * Accepts the time-to-live (max-age) parameter
      *
      * @param int $ttl
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function setPublicHeaders($ttl)
@@ -114,6 +118,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
      * Set headers for private cache
      *
      * @param int $ttl
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function setPrivateHeaders($ttl)
@@ -128,6 +133,8 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
 
     /**
      * Set headers for no-cache responses
+     *
+     * @return void
      */
     public function setNoCacheHeaders()
     {
@@ -137,7 +144,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function __sleep()
     {

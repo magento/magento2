@@ -127,23 +127,23 @@ abstract class AbstractType extends \Magento\Object
     /**
      * Retrieve customer object
      *
-     * @return \Magento\Customer\Service\V1\Dto\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
     public function getCustomer()
     {
-        return $this->_customerSession->getCustomerData();
+        return $this->_customerSession->getCustomerDataObject();
     }
 
     /**
      * Retrieve customer default shipping address
      *
-     * @return \Magento\Customer\Service\V1\Dto\Address|null
+     * @return \Magento\Customer\Service\V1\Data\Address|null
      */
     public function getCustomerDefaultShippingAddress()
     {
         $address = $this->getData('customer_default_shipping_address');
         if (is_null($address)) {
-            $customerId = $this->getCustomer()->getCustomerId();
+            $customerId = $this->getCustomer()->getId();
             $address = $this->_customerAddressService->getDefaultShippingAddress($customerId);
             if (!$address) {
                 /** Default shipping address is not available, try to find any customer address */
@@ -158,13 +158,13 @@ abstract class AbstractType extends \Magento\Object
     /**
      * Retrieve customer default billing address
      *
-     * @return \Magento\Customer\Service\V1\Dto\Address|null
+     * @return \Magento\Customer\Service\V1\Data\Address|null
      */
     public function getCustomerDefaultBillingAddress()
     {
         $address = $this->getData('customer_default_billing_address');
         if (is_null($address)) {
-            $customerId = $this->getCustomer()->getCustomerId();
+            $customerId = $this->getCustomer()->getId();
             $address = $this->_customerAddressService->getDefaultBillingAddress($customerId);
             if (!$address) {
                 /** Default billing address is not available, try to find any customer address */

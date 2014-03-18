@@ -38,6 +38,7 @@ class Boolean extends \Magento\Data\Form\Element\Select
 {
     /**
      * Prepare default SELECT values
+     * @return void
      */
     protected function _construct()
     {

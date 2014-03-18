@@ -91,7 +91,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare the cart collection.
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {

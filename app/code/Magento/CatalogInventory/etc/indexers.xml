@@ -28,7 +28,4 @@
     <indexer name="catalog_product_attribute">
         <depends name="cataloginventory_stock" />
     </indexer>
-    <indexer name="catalog_product_price">
-        <depends name="cataloginventory_stock" />
-    </indexer>
 </config>

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Pack\Writer\File;
 
 use Magento\Tools\I18n\Code\Context;
@@ -80,9 +79,9 @@ abstract class AbstractFile implements WriterInterface
     /**
      * Writer construct
      *
-     * @param \Magento\Tools\I18n\Code\Context $context
-     * @param \Magento\Tools\I18n\Code\Dictionary\Loader\FileInterface $dictionaryLoader
-     * @param \Magento\Tools\I18n\Code\Factory $factory
+     * @param Context $context
+     * @param Dictionary\Loader\FileInterface $dictionaryLoader
+     * @param Factory $factory
      */
     public function __construct(Context $context, Dictionary\Loader\FileInterface $dictionaryLoader, Factory $factory)
     {
@@ -111,6 +110,7 @@ abstract class AbstractFile implements WriterInterface
      *
      * @param string $file
      * @param array $phrases
+     * @return void
      * @throws \RuntimeException
      */
     abstract public function _writeFile($file, $phrases);
@@ -118,7 +118,7 @@ abstract class AbstractFile implements WriterInterface
     /**
      * Build pack files data
      *
-     * @param \Magento\Tools\I18n\Code\Dictionary $dictionary
+     * @param Dictionary $dictionary
      * @return array
      * @throws \RuntimeException
      */
@@ -151,6 +151,7 @@ abstract class AbstractFile implements WriterInterface
      * @param string $destinationPath
      * @param int $mode
      * @param bool $recursive Allows the creation of nested directories specified in the $destinationPath
+     * @return void
      */
     protected function _createDirectoryIfNotExist($destinationPath, $mode = 0755, $recursive = true)
     {

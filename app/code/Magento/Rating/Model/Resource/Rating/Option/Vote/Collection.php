@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Model\Resource\Rating\Option\Vote;
 
 /**
  * Rating votes collection
@@ -31,8 +32,6 @@
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rating\Model\Resource\Rating\Option\Vote;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -75,6 +74,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -85,7 +85,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set review filter
      *
      * @param int $reviewId
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function setReviewFilter($reviewId)
     {
@@ -98,7 +98,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set EntityPk filter
      *
      * @param int $entityId
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function setEntityPkFilter($entityId)
     {
@@ -111,7 +111,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set store filter
      *
      * @param int $storeId
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function setStoreFilter($storeId)
     {
@@ -131,7 +131,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add rating info to select
      *
      * @param int $storeId
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function addRatingInfo($storeId=null)
     {
@@ -172,7 +172,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add option info to select
      *
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function addOptionInfo()
     {
@@ -185,7 +185,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add rating options
      *
-     * @return \Magento\Rating\Model\Resource\Rating\Option\Vote\Collection
+     * @return $this
      */
     public function addRatingOptions()
     {

@@ -1,0 +1,4106 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  # List of Global Variables
+//  ## Typography
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Predefined font family and font colors</th>
+//        </tr>
+//        <tr>
+//            <th>@font-family-sans-serif</th>
+//            <td class="vars_value">'Helvetica Neue', Helvetica, Arial, sans-serif</td>
+//            <td>Sans-seriffont family</td>
+//        </tr>
+//        <tr>
+//            <th>@font-family-serif</th>
+//            <td class="vars_value">Georgia, 'Times New Roman', Times, serif</td>
+//            <td>Seriffont family</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@font-family-monospace</th>
+//            <td class="vars_value">Menlo, Monaco, Consolas, 'Courier New', monospace</td>
+//            <td>Monospace font family</td>
+//        </tr>
+//        <tr>
+//            <th>@font-path</th>
+//            <td class="vars_value">&quot;../../fonts/&quot;</td>
+//            <td>Path to custom font</td>
+//        </tr>
+//        <tr>
+//            <th>@color-primary</th>
+//            <td class="vars_value">#555</td>
+//            <td>Primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@color-primary-dark</th>
+//            <td class="vars_value">darken(@color-primary, 35%)</td>
+//            <td>Dark primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@color-primary-darker</th>
+//            <td class="vars_value">darken(@color-primary, 13.5%)</td>
+//            <td>Darker primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@color-primary-lighter</th>
+//            <td class="vars_value">lighten(@color-primary, 23%)</td>
+//            <td>Lighter primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@color-primary-light</th>
+//            <td class="vars_value">lighten(@color-primary, 45%)</td>
+//            <td>Light primary color</td>
+//        </tr>
+//        <tr>
+//            <th>@border-color-base</th>
+//            <td class="vars_value">@color-primary-lighter</td>
+//            <td>Base border color</td>
+//        </tr>
+//        <tr>
+//            <th>@border-width-base</th>
+//            <td class="vars_value">2px</td>
+//            <td>Base border width</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Fonts settings</th>
+//        </tr>
+//        <tr>
+//            <th>@font-family-base</th>
+//            <td class="vars_value">@font-family-sans-serif</td>
+//            <td>Basic font family</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-root</th>
+//            <td class="vars_value">62.5%</td>
+//            <td>Setting font-size for HTML tag, use % units</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-base-ratio</th>
+//            <td class="vars_value">1.4</td>
+//            <td>Defines ratio between root font size and base font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-base</th>
+//            <td class="vars_value">unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px)</td>
+//            <td>Base font size value in px</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-xl</th>
+//            <td class="vars_value">ceil(1.5 * @font-size-base)</td>
+//            <td>Extra large font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-l</th>
+//            <td class="vars_value">ceil(1.25 * @font-size-base)</td>
+//            <td>Large font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-s</th>
+//            <td class="vars_value">ceil(0.85 * @font-size-base)</td>
+//            <td>Samll font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-size-xs</th>
+//            <td class="vars_value">floor(0.75 * @font-size-base)</td>
+//            <td>Extra small font size</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight-base</th>
+//            <td class="vars_value">400</td>
+//            <td>Basic font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight-light</th>
+//            <td class="vars_value">200</td>
+//            <td>Light font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight-semibold</th>
+//            <td class="vars_value">600</td>
+//            <td>Semibold font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-weight-bold</th>
+//            <td class="vars_value">700</td>
+//            <td>Bold font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@font-style-base</th>
+//            <td class="vars_value">normal</td>
+//            <td>Font style</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@font-style-emphasis</th>
+//            <td class="vars_value">italic</td>
+//            <td>Emphasis font style</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height-base</th>
+//            <td class="vars_value">1.428571429</td>
+//            <td>Base line height</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height-computed</th>
+//            <td class="vars_value">floor(@font-size-base * @line-height-base)</td>
+//            <td>Computed line height depending on base font size</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height-l</th>
+//            <td class="vars_value">1.5</td>
+//            <td>Large line height</td>
+//        </tr>
+//        <tr>
+//            <th>@line-height-s</th>
+//            <td class="vars_value">1.33</td>
+//            <td>Small line height</td>
+//        </tr>
+//        <tr>
+//            <th>@text-color</th>
+//            <td class="vars_value">@color-primary</td>
+//            <td>Primary text color</td>
+//        </tr>
+//        <tr>
+//            <th>@text-color-intense</th>
+//            <td class="vars_value">@color-primary-darker</td>
+//            <td>Darker text color</td>
+//        </tr>
+//        <tr>
+//            <th>@text-color-muted</th>
+//            <td class="vars_value">@color-primary-lighter</td>
+//            <td>Lighter text color</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-base</th>
+//            <td class="vars_value">@line-height-computed</td>
+//            <td>Base text ident (20px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-xl-base</th>
+//            <td class="vars_value">@line-height-computed * 2</td>
+//            <td>Extra large text ident (40px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-l-base</th>
+//            <td class="vars_value">@line-height-computed * 1.5</td>
+//            <td>Large text ident (30px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-m-base</th>
+//            <td class="vars_value">@indent-base * 1.25</td>
+//            <td>Extra large text ident (25px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-s-base</th>
+//            <td class="vars_value">@line-height-computed / 2</td>
+//            <td>Small text ident (10px)</td>
+//        </tr>
+//        <tr>
+//            <th>@indent-xs-base</th>
+//            <td class="vars_value">@line-height-computed / 4</td>
+//            <td>Extra small text ident (5px)</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Links</th>
+//        </tr>
+//        <tr>
+//            <th>@link-color</th>
+//            <td class="vars_value">#1979c3</td>
+//            <td>Links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link-text-decoration </th>
+//            <td class="vars_value">none</td>
+//            <td>Links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link-color-visited</th>
+//            <td class="vars_value">#800080</td>
+//            <td>Visited links color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@link-text-decoration-visited</th>
+//            <td class="vars_value">none</td>
+//            <td>Visited links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link-color-hover</th>
+//            <td class="vars_value">#006bb4</td>
+//            <td>Hovered links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link-text-decoration-hover</th>
+//            <td class="vars_value">underline</td>
+//            <td>Hovered links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@link-color-active</th>
+//            <td class="vars_value">#ff5501</td>
+//            <td>Active links color</td>
+//        </tr>
+//        <tr>
+//            <th>@link-text-decoration-active</th>
+//            <td class="vars_value">underline</td>
+//            <td>Active links text decoration</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Lists</th>
+//        </tr>
+//        <tr>
+//            <th>@list-color-base</th>
+//            <td class="vars_value">@text-color-intense</td>
+//            <td>List text color</td>
+//        </tr>
+//        <tr>
+//            <th>@list-font-size-base</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>List font size</td>
+//        </tr>
+//        <tr>
+//            <th>@list-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>List margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@list-margin-bottom</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>List margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@list-item-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>List item margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@list-item-margin-bottom</th>
+//            <td class="vars_value">0</td>
+//            <td>List item margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Definition list</th>
+//        </tr>
+//        <tr>
+//            <th>@dl-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Definition list margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dl-margin-bottom</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Definition list margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@dt-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Description term margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dt-margin-bottom</th>
+//            <td class="vars_value">@indent-xs-base</td>
+//            <td>Description term margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@dt-font-weight</th>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>Description term </td>
+//        </tr>
+//        <tr>
+//            <th>@dd-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Description margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@dd-margin-bottom</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Description margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Paragraphs</th>
+//        </tr>
+//        <tr>
+//            <th>@p-margin-top</th>
+//            <td class="vars_value">0</td>
+//            <td>Paragraph margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@p-margin-bottom</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Paragraph margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Headings</th>
+//        </tr>
+//        <tr>
+//            <th>@heading-font-family-base</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Heading base font family</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-font-style-base</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Heading base font style</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-font-weight-base</th>
+//            <td class="vars_value">500</td>
+//            <td>Heading base font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-line-height-base</th>
+//            <td class="vars_value">1.1</td>
+//            <td>Heading base line height</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-color-base</th>
+//            <td class="vars_value">@text-color-intense</td>
+//            <td>Heading base color</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-margin-top-base</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Heading base margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-margin-bottom-base</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Heading base margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H1</th>
+//        </tr>
+//        <tr>
+//            <th>@h1-font-size</th>
+//            <td class="vars_value">floor((@font-size-base * 2.6))</td>
+//            <td>H1 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H1 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H1 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-font-weight</th>
+//            <td class="vars_value">@heading-font-weight-base</td>
+//            <td>H1 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H1 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H1 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H1 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h1-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H1 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H2</th>
+//        </tr>
+//        <tr>
+//            <th>@h2-font-size</th>
+//            <td class="vars_value">floor((@font-size-base * 2.15))</td>
+//            <td>H2 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H2 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H2 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-font-weight</th>
+//            <td class="vars_value">@heading-font-weight-base</td>
+//            <td>H2 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H2 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H2 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H2 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h2-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H2 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H3</th>
+//        </tr>
+//        <tr>
+//            <th>@h3-font-size</th>
+//            <td class="vars_value">ceil((@font-size-base * 1.7))</td>
+//            <td>H3 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H3 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H3 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-font-weight</th>
+//            <td class="vars_value">@heading-font-weight-base</td>
+//            <td>H3 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H3 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H3 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H3 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h3-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H3 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H4</th>
+//        </tr>
+//        <tr>
+//            <th>@h4-font-size</th>
+//            <td class="vars_value">ceil((@font-size-base * 1.25))</td>
+//            <td>H4 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H4 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H4 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-font-weight</th>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>H4 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H4 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H4 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H4 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h4-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H4 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H5</th>
+//        </tr>
+//        <tr>
+//            <th>@h5-font-size</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>H5 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H5 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H5 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-font-weight</th>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>H5 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H5 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H5 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H5 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h5-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H5 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">H6</th>
+//        </tr>
+//        <tr>
+//            <th>@h6-font-size</th>
+//            <td class="vars_value">ceil((@font-size-base * 0.85))</td>
+//            <td>H6 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-font-color</th>
+//            <td class="vars_value">@heading-color-base</td>
+//            <td>H6 color</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-font-family</th>
+//            <td class="vars_value">@heading-font-family-base</td>
+//            <td>H6 font family</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-font-weight</th>
+//            <td class="vars_value">@heading-font-weight-base</td>
+//            <td>H6 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-font-style</th>
+//            <td class="vars_value">@heading-font-style-base</td>
+//            <td>H6 font style</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-line-height</th>
+//            <td class="vars_value">@heading-line-height-base</td>
+//            <td>H6 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-margin-top</th>
+//            <td class="vars_value">@heading-margin-top-base</td>
+//            <td>H6 margin top</td>
+//        </tr>
+//        <tr>
+//            <th>@h6-margin-bottom</th>
+//            <td class="vars_value">@heading-margin-bottom-base</td>
+//            <td>H6 margin bottom</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">&lt;small&gt; tags and tags with class .small placed in H1-H6 headings</th>
+//        </tr>
+//        <tr>
+//            <th>@heading-small-color</th>
+//            <td class="vars_value">@color-primary</td>
+//            <td>&lt;small&gt; and .small heading element color</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-small-line-height</th>
+//            <td class="vars_value">1</td>
+//            <td>&lt;small&gt; and .small heading element line height</td>
+//        </tr>
+//        <tr>
+//            <th>@heading-small-size</th>
+//            <td class="vars_value">(@font-size-xs/@font-size-base) * 100%</td>
+//            <td>&lt;small&gt; and .small heading element font size</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Code blocks</th>
+//        </tr>
+//        <tr>
+//            <th>@code-bg</th>
+//            <td class="vars_value">@color-primary-light</td>
+//            <td>Code block background</td>
+//        </tr>
+//        <tr>
+//            <th>@code-color</th>
+//            <td class="vars_value">@color-primary-darker</td>
+//            <td>Code text color</td>
+//        </tr>
+//        <tr>
+//            <th>@code-font-size</th>
+//            <td class="vars_value">@font-size-s</td>
+//            <td>Code font size</td>
+//        </tr>
+//        <tr>
+//            <th>@code-padding</th>
+//            <td class="vars_value">2px 4px</td>
+//            <td>Code padding</td>
+//        </tr>
+//        <tr>
+//            <th>@pre-bg</th>
+//            <td class="vars_value">@color-primary-light</td>
+//            <td>Preformatted text background color</td>
+//        </tr>
+//        <tr>
+//            <th>@pre-border-color</th>
+//            <td class="vars_value">@border-color-base</td>
+//            <td>Preformatted text border color</td>
+//        </tr>
+//        <tr>
+//            <th>@pre-border-width</th>
+//            <td class="vars_value">@border-width-base</td>
+//            <td>Preformatted text border width</td>
+//        </tr>
+//        <tr>
+//            <th>@pre-color</th>
+//            <td class="vars_value">@color-primary-darker</td>
+//            <td>Preformatted text color</td>
+//        </tr>
+//        <tr>
+//            <th>@kbd-bg</th>
+//            <td class="vars_value">@color-primary-light</td>
+//            <td>Keyboard input background</td>
+//        </tr>
+//        <tr>
+//            <th>@kbd-color</th>
+//            <td class="vars_value">@color-primary-darker</td>
+//            <td>Keyboard input text color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Blockquote</th>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-border-color</th>
+//            <td class="vars_value">@border-color-base</td>
+//            <td>Blockquote border color</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-border-width</th>
+//            <td class="vars_value">@border-width-base</td>
+//            <td>Blockquote border width</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-before-content</th>
+//            <td class="vars_value">'\2014 \00A0'</td>
+//            <td>&quot;-&quot; and space symbols</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-font-size</th>
+//            <td class="vars_value">@font-size-l</td>
+//            <td>Blockquote font size</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-small-color</th>
+//            <td class="vars_value">@color-primary</td>
+//            <td>Blockquote &lt;small&gt; and .small text color</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-small-font-size</th>
+//            <td class="vars_value">@font-size-xs</td>
+//            <td>Blockquote &lt;small&gt; and .small font size</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-margin</th>
+//            <td class="vars_value">0 0 @indent-base</td>
+//            <td>Blockquote margin</td>
+//        </tr>
+//        <tr>
+//            <th>@blockquote-padding</th>
+//            <td class="vars_value">@indent-s-base @indent-base</td>
+//            <td>Blockquote padding</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Other elements</th>
+//        </tr>
+//        <tr>
+//            <th>@hr-border-color</th>
+//            <td class="vars_value">@border-color-base</td>
+//            <td>HR border color</td>
+//        </tr>
+//        <tr>
+//            <th>@hr-border-style</th>
+//            <td class="vars_value">solid</td>
+//            <td>HR border style</td>
+//        </tr>
+//        <tr>
+//            <th>@hr-border-width</th>
+//            <td class="vars_value">1px</td>
+//            <td>HR border width</td>
+//        </tr>
+//        <tr>
+//            <th>@mark-color</th>
+//            <td class="vars_value">@color-primary-dark</td>
+//            <td>&lt;mark&gt; color</td>
+//        </tr>
+//        <tr>
+//            <th>@mark-bg</th>
+//            <td class="vars_value">@color-primary-light</td>
+//            <td>&lt;mark&gt; background</td>
+//        </tr>
+//        <tr>
+//            <th>@abbr-border-color</th>
+//            <td class="vars_value">@border-color-base</td>
+//            <td>&lt;abbr&gt; border color</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Actions Toolbar
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-actions-position</th>
+//        <td class="vars_value">justify</td>
+//        <td>position for actions in Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-actions-reverse</th>
+//        <td class="vars_value">false</td>
+//        <td>reverse primary and secondary blocks position in Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>margins of the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-padding</th>
+//        <td class="vars_value">''</td>
+//        <td>paddings of the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-actions-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>margins of all .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-primary-actions-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>margins of primary .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th>@actions-toolbar-secondary-actions-margin</th>
+//        <td class="vars_value">''</td>
+//        
+//        <td> margins of secondary .actions in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@actions-toolbar-actions-links-margin-top</th>
+//        <td class="vars_value">''</td>
+//        <td>margin-top for links with class .action in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@actions-toolbar-primary-actions-links-margin-top</th>
+//        <td class="vars_value">''</td>
+//        <td>margin-top for primary links with class .action in the Actions toolbar</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@actions-toolbar-secondary-actions-links-margin-top</th>
+//        <td class="vars_value">''</td>
+//        <td>margin-top for secondary links with class .action in the Actions toolbar</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Breadcrumbs variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-font-size</th>
+//        <td class="vars_value">@font-size-s</td>
+//        <td>breadcrumbs font size</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-separator-symbol</th>
+//        <td class="vars_value">'&gt;'</td>
+//        <td>separating symbol between breadcrumbs</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-separator-color</th>
+//        <td class="vars_value">@breadcrumbs-current-color</td>
+//        <td>separating symbol color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-display</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs display</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-padding</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs items padding</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs - current page</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-color</th>
+//        <td class="vars_value">#a3a3a3</td>
+//        <td>breadcrumbs current page color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-font-weight</th>
+//        <td class="vars_value">@font-weight-base</td>
+//        <td>breadcrumbs current page font weight</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-background</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs current page background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-border</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs current page border</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-gradient</th>
+//        <td class="vars_value">false</td>
+//        <td>does breadcrumbs current page have gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-gradient-direction</th>
+//        <td class="vars_value">''</td>
+//        <td>direction of breadcrumbs current page background gradient (if there is any)</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-gradient-start-color</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs current page gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-current-gradient-end-color</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs current page gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs link</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient</th>
+//        <td class="vars_value">false</td>
+//        <td>does breadcrumbs item have gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-direction</th>
+//        <td class="vars_value">'' | vertical | horizontal</td>
+//        <td>direction of breadcrumbs item background gradient (if there is any)</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs link - default</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-color</th>
+//        <td class="vars_value">@color-primary</td>
+//        <td>breadcrumbs item color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-background</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item border</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-border</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-text-decoration</th>
+//        <td class="vars_value">none</td>
+//        <td>breadcrumbs item background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-start-color</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item  gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-end-color</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item  gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs link - visited</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-color-visited</th>
+//        <td class="vars_value">@color-primary</td>
+//        <td>breadcrumbs item visited color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-background-visited</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item visited border</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-border-visited</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item visited background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-text-decoration-visited</th>
+//        <td class="vars_value">none</td>
+//        <td>breadcrumbs item text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-start-color-visited</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item visited gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-end-color-visited</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item visited gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs link - hover</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-color-hover</th>
+//        <td class="vars_value">@color-primary</td>
+//        <td>breadcrumbs item hover color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-background-hover</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item hover border</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-border-hover</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item hover text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-text-decoration-hover</th>
+//        <td class="vars_value">underline</td>
+//        <td>breadcrumbs item hover background</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-start-color-hover</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item  hover gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-end-color-hover</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item  hover gradient end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Breadcrumbs link - active</th>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-color-active</th>
+//        <td class="vars_value">@color-primary</td>
+//        <td>breadcrumbs item active color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-background-active</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item active border</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-border-active</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item active text decoration</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-text-decoration-active</th>
+//        <td class="vars_value">none</td>
+//        <td>breadcrumbs item active background</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@breadcrumbs-link-gradient-start-color-active</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item active gradient start color</td>
+//      </tr>
+//      <tr>
+//        <th>@breadcrumbs-link-gradient-end-color-active</th>
+//        <td class="vars_value">''</td>
+//        <td>breadcrumbs item active gradient end color</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Button variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@button-font-family</th>
+//        <td class="vars_value">@font-family-base</td>
+//        <td>button font family</td>
+//      </tr>
+//      <tr>
+//        <th>@button-font-size</th>
+//        <td class="vars_value">@font-size-base</td>
+//        <td>button font size</td>
+//      </tr>
+//      <tr>
+//        <th>@button-font-weight</th>
+//        <td class="vars_value">@font-weight-bold</td>
+//        <td>button font weight</td>
+//      </tr>
+//      <tr>
+//        <th>@button-cursor</th>
+//        <td class="vars_value">pointer</td>
+//        <td>button cursor</td>
+//      </tr>
+//      <tr>
+//        <th>@button-display</th>
+//        <td class="vars_value">inline-block</td>
+//        <td>button display</td>
+//      </tr>
+//      <tr>
+//        <th>@button-disabled-opacity</th>
+//        <td class="vars_value">0.5</td>
+//        <td>button disabled opacity</td>
+//      </tr>
+//      <tr>
+//        <th>@button-height</th>
+//        <td class="vars_value">36px</td>
+//        <td>button height</td>
+//      </tr>
+//      <tr>
+//        <th>@button-width</th>
+//        <td class="vars_value">''</td>
+//        <td>button height</td>
+//      </tr>
+//      <tr>
+//        <th>@button-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>button margin</td>
+//      </tr>
+//      <tr>
+//        <th>@button-padding</th>
+//        <td class="vars_value">0 15px</td>
+//        <td>button padding</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient</th>
+//        <td class="vars_value">false</td>
+//        <td>does the button have gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-direction</th>
+//        <td class="vars_value">''</td>
+//        <td>gradient direction the button</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button default state</th>
+//      </tr>
+//      <tr>
+//        <th>@button-color</th>
+//        <td class="vars_value">#333</td>
+//        <td>text color of the button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-background</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td>background of the button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-border</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td>border of the button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-start-color</th>
+//        <td class="vars_value">#1979c3</td>
+//        <td>gradient background start color</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-end-color</th>
+//        <td class="vars_value">#006bb4</td>
+//        <td>gradient background end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button hover state</th>
+//      </tr>
+//      <tr>
+//        <th>@button-color-hover</th>
+//        <td class="vars_value">#555</td>
+//        <td>text color of the hovered button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-background-hover</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td>background of the hovered button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-border-hover</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td>border of the hovered button</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@button-gradient-start-color-hover<br /></th>
+//        <td class="vars_value">#006bb4</td>
+//        <td>gradient background start color of the hovered button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-end-color-hover</th>
+//        <td class="vars_value">#1979c3</td>
+//        <td>gradient background end color of the hovered button</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button active state</th>
+//      </tr>
+//      <tr>
+//        <th>@button-color-active</th>
+//        <td class="vars_value">#333</td>
+//        <td>text color of the active button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-background-active</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td>background of the active button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-border-active</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td>border of the active button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-start-color-active<br /></th>
+//        <td class="vars_value">#006bb4</td>
+//        <td>gradient background start color of the active button</td>
+//      </tr>
+//      <tr>
+//        <th>@button-gradient-end-color-active</th>
+//        <td class="vars_value">#006bb4</td>
+//        <td>gradient background end color of the active button</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button with icon</th>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-use</th>
+//        <td class="vars_value">true</td>
+//        <td>does button have icons</td>
+//      </tr>
+//      <tr>
+//        <th>@button-font-content</th>
+//        <td class="vars_value">@icon-settings</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font</th>
+//        <td class="vars_value">@icon-font</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-size</th>
+//        <td class="vars_value">22px</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-line-height</th>
+//        <td class="vars_value" nowrap="nowrap">@icon-font-line-height</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-color</th>
+//        <td class="vars_value">inherit</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-color-hover</th>
+//        <td class="vars_value">inherit</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-color-active</th>
+//        <td class="vars_value">inherit</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-margin</th>
+//        <td class="vars_value">0</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-vertical-align</th>
+//        <td class="vars_value">top</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-position</th>
+//        <td class="vars_value">@icon-position</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@button-icon-font-text-hide</th>
+//        <td class="vars_value">false</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Dropdown variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-actions-padding</th>
+//            <td class="vars_value">0 5px</td>
+//            <td>Dropdown toggle element padding</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Dropdown list</th>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-position-top</th>
+//            <td class="vars_value">''</td>
+//            <td>Dropdown list position: top</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-position-bottom</th>
+//            <td class="vars_value">''</td>
+//            <td>Dropdown list position: bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-position-left</th>
+//            <td class="vars_value">''</td>
+//            <td>Dropdown list position: left</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-position-right</th>
+//            <td class="vars_value">''</td>
+//            <td>Dropdown list position: right</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-background</th>
+//            <td class="vars_value">#fff</td>
+//            <td>Dropdown background</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-border</th>
+//            <td class="vars_value">1px solid #bbb</td>
+//            <td>Dropdown border</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-pointer</th>
+//            <td class="vars_value">true</td>
+//            <td>Dropdown list pointer</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-pointer-border</th>
+//            <td class="vars_value">#bbb</td>
+//            <td>Dropdown list pointer border</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-item-border</th>
+//            <td class="vars_value">0</td>
+//            <td>Dropdown list item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-item-padding</th>
+//            <td class="vars_value">3px 5px</td>
+//            <td>Dropdown list item padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-item-hover</th>
+//            <td class="vars_value">#e8e8e8</td>
+//            <td>Dropdown list item hovered background</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-shadow</th>
+//            <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
+//            <td>Dropdown list shadow</td>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-list-z-index</th>
+//            <td class="vars_value">100</td>
+//            <td>Dropdown list z-index</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Dropdown icon</th>
+//        </tr>
+//        <tr>
+//            <th>@_dropdown-toggle-icon-content</th>
+//            <td class="vars_value">@icon-pointer-down</td>
+//            <td>Dropdown toggle icon - default state</td>
+//        </tr>
+//        <tr>
+//            <th nowrap>@_dropdown-toggle-active-icon-content</th>
+//            <td class="vars_value">@icon-pointer-up</td>
+//            <td>Dropdown toggle icon - active state</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font</th>
+//            <td class="vars_value">@button-icon-font</td>
+//            <td>Dropdown toggle icon font</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-size</th>
+//            <td class="vars_value">@button-icon-font-size</td>
+//            <td>Dropdown toggle icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-line-height</th>
+//            <td class="vars_value">@button-icon-font-line-height</td>
+//            <td>Dropdown toggle icon line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-color</th>
+//            <td class="vars_value">@button-icon-font-color</td>
+//            <td>Dropdown toggle icon color</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-color-hover</th>
+//            <td class="vars_value">@button-icon-font-color-hover</td>
+//            <td>Dropdown toggle icon hovered color</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-color-active</th>
+//            <td class="vars_value">@button-icon-font-color-active</td>
+//            <td>Dropdown toggle icon active color</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-margin</th>
+//            <td class="vars_value">@button-icon-font-margin</td>
+//            <td>Dropdown toggle icon margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-position</th>
+//            <td class="vars_value">after</td>
+//            <td>Dropdown toggle icon position</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-vertical-align</th>
+//            <td class="vars_value" nowrap="nowrap">@button-icon-font-vertical-align</td>
+//            <td>Dropdown toggle icon vertical align</td>
+//        </tr>
+//        <tr>
+//            <th>@_icon-font-text-hide</th>
+//            <td class="vars_value">@button-icon-font-text-hide</td>
+//            <td>Should the text in the tag be hidden</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Fieldsets & fields variables
+//  ####.form-fieldset();
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-fieldset-border</td>
+//            <td class="vars_value">0</td>
+//            <td>Fieldset border</td>
+//        </tr>
+//        <tr>
+//            <th>@_margin</th>
+//            <td class="vars_value">@form-fieldset-margin</td>
+//            <td class="vars_value">0 0 40px</td>
+//            <td>Fieldset margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">@form-fieldset-padding</td>
+//            <td class="vars_value">0</td>
+//            <td>Fieldset padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-color</th>
+//            <td class="vars_value">@form-fieldset-legend-color</td>
+//            <td class="vars_value">inherit</td>
+//            <td>Legend color</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-size</th>
+//            <td class="vars_value">@form-fieldset-legend-font-size</td>
+//            <td class="vars_value">20px</td>
+//            <td>Legend font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-family</th>
+//            <td class="vars_value">@form-fieldset-legend-font-family</td>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Legend font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-weight:</th>
+//            <td class="vars_value">@form-fieldset-legend-font-weight</td>
+//            <td class="vars_value"> @font-weight-base</td>
+//            <td>Legend font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-font-style</th>
+//            <td class="vars_value">@form-fieldset-legend-font-style</td>
+//            <td class="vars_value">normal</td>
+//            <td>Legend font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-line-height</th>
+//            <td class="vars_value">@form-fieldset-legend-line-height</td>
+//            <td class="vars_value">1.2</td>
+//            <td>Legend line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-margin</th>
+//            <td class="vars_value">@form-fieldset-legend-margin</td>
+//            <td class="vars_value">0 0 25px @form-field-type-inline-label-width</td>
+//            <td>Legend margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-padding</th>
+//            <td class="vars_value"> @_legend-padding: @form-fieldset-legend-padding,<br></td>
+//            <td class="vars_value">0</td>
+//            <td>Legend padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_legend-width</th>
+//            <td class="vars_value">@form-fieldset-legend-width</td>
+//            <td class="vars_value"> 0 0 25px @form-field-type-inline-label-width</td>
+//            <td>Legend width</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+// ####.form-field();
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//        </tr>
+//        <tr>
+//            <th>@_type</th>
+//            <td class="vars_value">@form-field-column</td>
+//            <td class="vars_value">inline</td>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-field-border</td>
+//            <td class="vars_value">none</td>
+//        </tr>
+//
+//        <tr>
+//            <th>@_column</th>
+//            <td class="vars_value">@form-field-column</td>
+//            <td class="vars_value">false</td>
+//        </tr>
+//        <tr>
+//            <th>@_column-padding</th>
+//            <td class="vars_value">@form-field-column-padding</td>
+//            <td class="vars_value">0 20px 0 0</td>
+//        </tr>
+//        <tr>
+//            <th>@_column-width</th>
+//            <td class="vars_value">@form-field-column-width</td>
+//            <td class="vars_value">50%</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-block-margin</th>
+//            <td class="vars_value">@form-field-type-block-margin</td>
+//            <td class="vars_value">0 0 20px</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-margin</th>
+//            <td class="vars_value">@form-field-type-inline-margin</td>
+//            <td class="vars_value">0 0 @form-field-type-inline-vertical-margin</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Form field label</th>
+//        </tr>
+//        <tr>
+//            <th>@_label-color</th>
+//            <td class="vars_value">@form-field-label-color</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-size</th>
+//            <td class="vars_value">@form-field-label-font-size</td>
+//            <td class="vars_value">@font-size-base</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-family</th>
+//            <td class="vars_value">@form-field-label-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-font-weight</th>
+//            <td class="vars_value">@form-field-label-font-weight</td>
+//            <td class="vars_value">@font-weight-bold</td>
+//        </tr>
+//        <tr>
+//            <th> @_label-font-style</th>
+//            <td class="vars_value">@form-field-label-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-line-height</th>
+//            <td class="vars_value">@form-field-label-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-block-label-margin</th>
+//            <td class="vars_value">@form-field-type-block-label-margin</td>
+//            <td class="vars_value">0 0 5px</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-label-padding</th>
+//            <td class="vars_value">@form-field-type-inline-label-padding</td>
+//            <td class="vars_value">6px 15px 0 0</td>
+//        </tr>
+//
+//        <tr>
+//            <th>@_type-inline-label-width</th>
+//            <td class="vars_value">@form-field-type-inline-label-width</td>
+//            <td class="vars_value">25.8%</td>
+//        </tr>
+//        <tr>
+//            <th>@_type-inline-control-width</th>
+//            <td class="vars_value">@form-field-type-inline-control-width</td>
+//            <td class="vars_value">74.2%</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Label asterisk</th>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-color</th>
+//            <td class="vars_value">@form-field-label-asterisk-color</td>
+//            <td class="vars_value">#da370a</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-size</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-size</td>
+//            <td class="vars_value">@font-size-s</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-family</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-weight</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-weight,</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-font-style</th>
+//            <td class="vars_value">@form-field-label-asterisk-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-line-height</th>
+//            <td class="vars_value">@form-field-label-asterisk-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-asterisk-margin</th>
+//            <td class="vars_value">@form-field-label-asterisk-margin</td>
+//            <td class="vars_value">0 0 0 5px</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Field note</th>
+//        </tr>
+//        <tr>
+//            <th>@_note-color</th>
+//            <td class="vars_value">@form-field-note-color</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-size</th>
+//            <td class="vars_value">@form-field-note-font-size</td>
+//            <td class="vars_value">@font-size-s</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-family</th>
+//            <td class="vars_value">@form-field-note-font-family</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-weight</th>
+//            <td class="vars_value">@form-field-note-font-weight</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-line-height</th>
+//            <td class="vars_value">@form-field-note-line-height</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-font-style</th>
+//            <td class="vars_value">@form-field-note-font-style</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-margin</th>
+//            <td class="vars_value">@form-field-note-margin</td>
+//            <td class="vars_value">3px 0 0</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-padding</th>
+//            <td class="vars_value">@form-field-note-padding</td>
+//            <td class="vars_value">0</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-content</th>
+//            <td class="vars_value">@form-field-note-icon-font-content</td>
+//            <td class="vars_value">@icon-pointer-up</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font</th>
+//            <td class="vars_value">@form-field-note-icon-font</td>
+//            <td class="vars_value">@icon-font</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-size</th>
+//            <td class="vars_value">@form-field-note-icon-font-size</td>
+//            <td class="vars_value">@form-field-note-font-size * 2</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-line-height</th>
+//            <td class="vars_value">@form-field-note-icon-font-line-height</td>
+//            <td class="vars_value">@form-field-note-font-size</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color</th>
+//            <td class="vars_value">@form-field-note-icon-font-color</td>
+//            <td class="vars_value">@form-field-note-color</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color-hover</th>
+//            <td class="vars_value">@form-field-note-icon-font-color-hover</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-color-active</th>
+//            <td class="vars_value">@form-field-note-icon-font-color-active</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-margin</th>
+//            <td class="vars_value">@form-field-note-icon-font-margin</td>
+//            <td class="vars_value">''</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-vertical-align</th>
+//            <td class="vars_value">@form-field-note-icon-font-vertical-align</td>
+//            <td class="vars_value">@icon-font-vertical-align</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-position</th>
+//            <td class="vars_value">@form-field-note-icon-font-position</td>
+//            <td class="vars_value">@icon-font-position</td>
+//        </tr>
+//        <tr>
+//            <th>@_note-icon-font-text-hide</th>
+//            <td class="vars_value">@form-field-note-icon-font-text-hide</td>
+//            <td class="vars_value">@icon-font-text-hide</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+// ####.form-hasrequired();
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowable values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_position</th>
+//            <td class="vars_value">@form-hasrequired-position</td>
+//            <td class="vars_value">top</td>
+//            <td>top | bottom</td>
+//            <td>The position of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_color</th>
+//            <td class="vars_value">@form-hasrequired-color</td>
+//            <td class="vars_value">#da370a</td>
+//            <td>&nbsp;</td>
+//            <td>Text color of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-size</th>
+//            <td class="vars_value">@form-hasrequired-font-size</td>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>&nbsp;</td>
+//            <td>Font size of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-family</th>
+//            <td class="vars_value">@form-hasrequired-font-family</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font family of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-weight</th>
+//            <td class="vars_value">@form-hasrequired-font-weight</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font weight of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_font-style</th>
+//            <td class="vars_value">@form-hasrequired-font-style</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Font style of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_line-height</th>
+//            <td class="vars_value">@form-hasrequired-line-height</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Line height of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_border</th>
+//            <td class="vars_value">@form-hasrequired-border</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Border of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_margin</th>
+//            <td class="vars_value">@form-hasrequired-margin</td>
+//            <td class="vars_value">10px 0 0</td>
+//            <td>&nbsp;</td>
+//            <td>Margin of &quot;required fields&quot; notice</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">@form-hasrequired-padding</td>
+//            <td class="vars_value">''</td>
+//            <td>&nbsp;</td>
+//            <td>Padding of &quot;required fields&quot; notice</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Font icon variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-font</th>
+//        <td class="vars_value">'icons-blank-theme'</td>
+//        <td>the icon font</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-font-size</th>
+//        <td class="vars_value">inherit</td>
+//        <td>font icon size</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-font-line-height</th>
+//        <td class="vars_value">@icon-font-size</td>
+//        <td>font icon line height</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-font-color</th>
+//        <td class="vars_value">inherit</td>
+//        <td>font icon color</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-font-color-hover</th>
+//        <td class="vars_value">''</td>
+//        <td>font icon color - hover state</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-font-color-active</th>
+//        <td class="vars_value">''</td>
+//        <td>font icon color - active state</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-font-margin</th>
+//        <td class="vars_value">@icon-margin</td>
+//        <td>font icon margin</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-font-vertical-align</th>
+//        <td class="vars_value" nowrap="nowrap">@icon-vertical-align</td>
+//        <td>font icon vertical align</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-font-position</th>
+//        <td class="vars_value">@icon-position</td>
+//        <td>font icon position</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-font-text-hide</th>
+//        <td class="vars_value">@icon-text-hide</td>
+//        <td>Should text of the element be replaced with the icon(true) or the icon is on the side of the text (false)</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Icon using image or sprite variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-height</th>
+//        <td class="vars_value">26px</td>
+//        <td>icon image height</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-width</th>
+//        <td class="vars_value">26px</td>
+//        <td>icon image width</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-margin</th>
+//        <td class="vars_value">0</td>
+//        <td>icon image margin</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-image-vertical-align</th>
+//        <td class="vars_value">middle</td>
+//        <td>icon image vertical align</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-position-x</th>
+//        <td class="vars_value">0</td>
+//        <td>horizontal image position</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-position-y</th>
+//        <td class="vars_value">0</td>
+//        <td>vertical image position</td>
+//      </tr>
+//      <tr>
+//        <th>@_icon-image-position</th>
+//        <td class="vars_value">before</td>
+//        <td>icon image position</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-text-hide</th>
+//        <td class="vars_value">false</td>
+//        <td>should the text in the &lt;span&gt; tag be hidden</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Icon sprite position variables
+//  <pre>
+//    <table class="vars_list">
+//    <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@icon-sprite-position-x</th>
+//        <td class="vars_value">0</td>
+//        <td>the x coordinate of the desired image on the grid</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-sprite-position-y</th>
+//        <td class="vars_value">0</td>
+//        <td>the y coordinate of the desired image on the grid</td>
+//      </tr>
+//      <tr>
+//        <th>@icon-sprite-grid</th>
+//        <td class="vars_value">26px</td>
+//        <td>the size of the grid (in pixels) that the individal images are placed on</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Icon position for an icon using image or sprite Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@icon-image-position-x</th>
+//        <td class="vars_value">0</td>
+//        <td>horizontal starting position of icon image</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@icon-image-position-y</th>
+//        <td class="vars_value">0</td>
+//        <td>vertical starting position of icon image</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Layout variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@layout-min-width</th>
+//            <td class="vars_value">1000px</td>
+//            <td>Page minimum width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-max-width</th>
+//            <td class="vars_value">1280px</td>
+//            <td>Page maximum width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-indent</th>
+//            <td class="vars_value">20px</td>
+//            <td>Page indentation on the left and right</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Classnames defining different layouts</th>
+//        </tr>
+//        <tr>
+//            <th>@layout-class-1column</th>
+//            <td class="vars_value">layout-1</td>
+//            <td>Classname for one column layout</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-class-2columns-left</th>
+//            <td class="vars_value">layout-2-left</td>
+//            <td>Classname for two columns layout with left sidebar</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@layout-class-2columns-right</th>
+//            <td class="vars_value">layout-2-right</td>
+//            <td>Classname for two columns layout with right sidebar</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-class-3columns</th>
+//            <td class="vars_value">layout-3</td>
+//            <td>Classname for three columns layout with left sidebar</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Variables used for layout grid</th>
+//        </tr>
+//        <tr>
+//            <th>@total-columns</th>
+//            <td class="vars_value">12</td>
+//            <td>Number of total columns in layout (i.e. <em>1, 2, 3</em>)</td>
+//        </tr>
+//        <tr>
+//            <th>@gutter-width</th>
+//            <td class="vars_value">0</td>
+//            <td>Distanse between columns</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Variables for layout columns</th>
+//        </tr>
+//        <tr>
+//            <th>@layout-columns-width</th>
+//            <td class="vars_value">@total-columns</td>
+//            <td>Sets base columns number</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-sidebar-width</th>
+//            <td class="vars_value">2</td>
+//            <td>Sets sidebar width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-left-width</th>
+//            <td class="vars_value">@layout-column-sidebar-width</td>
+//            <td>Sets left column width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-right-width</th>
+//            <td class="vars_value">@layout-column-sidebar-width</td>
+//            <td>Sets right column width</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Variables for layout columns depending on layout used</th>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-main-width-1</th>
+//            <td class="vars_value">100%</td>
+//            <td>Sets one column width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-main-width-2-left</th>
+//            <td class="vars_value">@layout-columns-width - @layout-column-left-width</td>
+//            <td>Sets left column width</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@layout-column-main-width-2-right</th>
+//            <td class="vars_value">@layout-columns-width - @layout-column-right-width</td>
+//            <td>Sets right column width</td>
+//        </tr>
+//        <tr>
+//            <th>@layout-column-main-width-3</th>
+//            <td class="vars_value">@layout-columns-width - @layout-column-left-width - @layout-column-right-width</td>
+//            <td>Sets three columns layout main column width</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Settings variables</th>
+//        </tr>
+//        <tr>
+//            <th>@no-flex</th>
+//            <td class="vars_value">true</td>
+//            <td>Sets compatibility for browsers not supporting flex</td>
+//        </tr>
+//        <tr>
+//            <th>@responsive</th>
+//            <td class="vars_value">true</td>
+//            <td>Sets if default transformation rules needs to be generated for smaller screens</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Loader variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@loader-overlay-background-color</th>
+//        <td class="vars_value">rgba(255, 255, 255, 0.5)</td>
+//        <td>Loader overlay background color</td>
+//      </tr>
+//      <tr>
+//        <th>@loader-overlay-z-index</th>
+//        <td class="vars_value">9999</td>
+//        <td>Loader overlay background z-index</td>
+//      </tr>
+//      <tr>
+//        <th>@loader-icon-width</th>
+//        <td class="vars_value">160px</td>
+//        <td>Loader icon width</td>
+//      </tr>
+//      <tr>
+//        <th>@loader-icon-height</th>
+//        <td class="vars_value">160px</td>
+//        <td>Loader icon height</td>
+//      </tr>
+//      <tr>
+//        <th>@loader-icon-background-color</th>
+//        <td class="vars_value">@color-secondary</td>
+//        <td>Loader icon background color</td>
+//      </tr>
+//      <tr>
+//        <th>@loader-icon-background-image</th>
+//        <td class="vars_value">url('@{baseDir}images/loader-1.gif')</td>
+//        <td>Loader icon ackground image</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-icon-background-position</th>
+//        <td class="vars_value">50% 40%</td>
+//        <td>Loader icon background position</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-icon-border-radius</th>
+//        <td class="vars_value">5px</td>
+//        <td>Loader icon border radius</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-icon-padding</th>
+//        <td class="vars_value">''</td>
+//        <td>Loader icon icon padding</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-color</th>
+//        <td class="vars_value">@color-primary</td>
+//        <td>Loader text color</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-font-size</th>
+//        <td class="vars_value">@font-size-base</td>
+//        <td>Loader text font size</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-font-family</th>
+//        <td class="vars_value">@font-family-base</td>
+//        <td>Loader text font family</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-font-weight</th>
+//        <td class="vars_value">@font-weight-base</td>
+//        <td>Loader text font weight</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-font-style</th>
+//        <td class="vars_value">@font-style-base</td>
+//        <td>Loader text font style</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@loader-text-padding</th>
+//        <td class="vars_value">130px 0 0</td>
+//        <td>Loader text padding</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Messages variables
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@message-padding</th>
+//            <td class="vars_value">@indent-s-base @indent-base</td>
+//            <td>Message padding</td>
+//        </tr>
+//        <tr>
+//            <th>@message-margin</th>
+//            <td class="vars_value">@indent-xs-base 0</td>
+//            <td>Message margin</td>
+//        </tr>
+//        <tr>
+//            <th>@message-color</th>
+//            <td class="vars_value">false</td>
+//            <td>Each message type has its own message color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Messages font style</th>
+//        </tr>
+//        <tr>
+//            <th>@message-font-size</th>
+//            <td class="vars_value">13px</td>
+//            <td>Message font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Message font family</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Message font style</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>Message font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@message-line-height</th>
+//            <td class="vars_value">1.2em</td>
+//            <td>Message line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message icon setup</th>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-font-size</th>
+//            <td class="vars_value">ceil(@message-font-size * 2 + 2)</td>
+//            <td>Message icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-font-line-height</th>
+//            <td class="vars_value">@message-icon-font-size</td>
+//            <td>Message icon line height</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-inner-padding-left</th>
+//            <td class="vars_value">40px</td>
+//            <td>Message icon padding left</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-lateral-width</th>
+//            <td class="vars_value">30px</td>
+//            <td>Message icon lateral width</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-lateral-arrow-size</th>
+//            <td class="vars_value">5px</td>
+//            <td>Message icon arrow size</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message border</th>
+//        </tr>
+//        <tr>
+//            <th>@message-border-width</th>
+//            <td class="vars_value">0</td>
+//            <td>Message border width</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-color</th>
+//            <td class="vars_value">transparent</td>
+//            <td>Message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-style</th>
+//            <td class="vars_value">none</td>
+//            <td>Message border style</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-radius</th>
+//            <td class="vars_value">0</td>
+//            <td>Message border radius</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Information message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-info-color</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td>Information message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-background</th>
+//            <td class="vars_value">#fdf0d5</td>
+//            <td>Information message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>Information message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Information message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Information message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td>Information message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td>Information message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-color-inner</th>
+//            <td class="vars_value">#c07600</td>
+//            <td>Information message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td>Information message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-background</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td>Information message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Warning message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-color</th>
+//            <td class="vars_value">@message-info-color</td>
+//            <td>Warning message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-background</th>
+//            <td class="vars_value">@message-info-background</td>
+//            <td>Warning message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color</th>
+//            <td class="vars_value">@message-info-link-color</td>
+//            <td>Warning message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color-hover</th>
+//            <td class="vars_value">@message-info-link-color-hover</td>
+//            <td>Warning message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color-active</th>
+//            <td class="vars_value">@message-info-link-color-active</td>
+//            <td>Warning message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-border-color</th>
+//            <td class="vars_value">@message-info-border-color</td>
+//            <td>Warning message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td>Warning message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon-color-inner</th>
+//            <td class="vars_value">@message-info-icon-color-inner</td>
+//            <td>Warning message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@message-warning-icon-color-lateral</th>
+//            <td class="vars_value" nowrap="nowrap">@message-info-icon-color-lateral</td>
+//            <td>Warning message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon-background</th>
+//            <td class="vars_value">@message-info-icon-background</td>
+//            <td>Warning message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Error message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-error-color</th>
+//            <td class="vars_value">#b30000</td>
+//            <td>Error message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-background</th>
+//            <td class="vars_value">#fae5e5</td>
+//            <td>Error message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>Error message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Error message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Error message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td>Error message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td>Error message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-color-inner</th>
+//            <td class="vars_value">#b30000</td>
+//            <td>Error message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td>Error message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-background</th>
+//            <td class="vars_value">#b30000</td>
+//            <td>Error message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Success message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-success-color</th>
+//            <td class="vars_value">#006400</td>
+//            <td>Success message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-background</th>
+//            <td class="vars_value">#e5efe5</td>
+//            <td>Success message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>Success message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Success message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Success message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td>Success message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon</th>
+//            <td class="vars_value">@icon-checkmark</td>
+//            <td>Success message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-color-inner</th>
+//            <td class="vars_value">#006400</td>
+//            <td>Success message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td>Success message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-background</th>
+//            <td class="vars_value">#006400</td>
+//            <td>Success message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Notice message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-color</th>
+//            <td class="vars_value">@message-info-color</td>
+//            <td>Notice message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-background</th>
+//            <td class="vars_value">@message-info-background</td>
+//            <td>Notice message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color</th>
+//            <td class="vars_value">@message-info-link-color</td>
+//            <td>Notice message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color-hover</th>
+//            <td class="vars_value">@message-info-link-color-hover</td>
+//            <td>Notice message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color-active</th>
+//            <td class="vars_value">@message-info-link-color-active</td>
+//            <td>Notice message active link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-border-color</th>
+//            <td class="vars_value">@message-info-border-color</td>
+//            <td>Notice message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td>Notice message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-color-inner</th>
+//            <td class="vars_value">@message-info-icon-color-inner</td>
+//            <td>Notice message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-color-lateral</th>
+//            <td class="vars_value">@message-info-icon-color-lateral</td>
+//            <td>Notice message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-background</th>
+//            <td class="vars_value">@message-info-icon-background</td>
+//            <td>Notice message icon background</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Pagination variables
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-label-display</th>
+//            <td class="vars_value">none</td>
+//            <td>how do we have to display 'page' label</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-item-display</th>
+//            <td class="vars_value">inline-block</td>
+//            <td>how do we have to display pager item</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-reset-spaces</th>
+//            <td class="vars_value">true</td>
+//            <td>reset spaces between inline-block elements if elements 'display' is set to 'inline-block'</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-font-size</th>
+//            <td class="vars_value">@font-size-s</td>
+//            <td>pager font size</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>pager font weight</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-line-height</th>
+//            <td class="vars_value">32px</td>
+//            <td>pager line height</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-item-margin</th>
+//            <td class="vars_value">0 1px</td>
+//            <td>pager item margin</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-item-padding</th>
+//            <td class="vars_value">0 10px</td>
+//            <td>pager item padding</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-actions-padding</th>
+//            <td class="vars_value">0</td>
+//            <td>pager actions padding</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Pager current page</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-font-weight</th>
+//            <td class="vars_value">@font-weight-bold;</td>
+//            <td>current page number font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-color</th>
+//            <td class="vars_value">@color-primary</td>
+//            <td>current page number color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-border</th>
+//            <td class="vars_value">''</td>
+//            <td>current page number border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-background</th>
+//            <td class="vars_value">''</td>
+//            <td>current page number background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td>does current page number have gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-gradient-direction</th>
+//            <td class="vars_value">''</td>
+//            <td>direction of current page number background gradient  (if there is any)</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-gradient-start-color</th>
+//            <td class="vars_value">''</td>
+//            <td>current page number gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-current-gradient-end-color</th>
+//            <td class="vars_value">''</td>
+//            <td>current page number gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Link to page number</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td>do pager items have gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-direction</th>
+//            <td class="vars_value">''</td>
+//            <td>direction of background gradient (if there is any) of pager item</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Link to page number - default</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>pager item color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-border</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-text-decoration</th>
+//            <td class="vars_value">none</td>
+//            <td>pager item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-background</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-start-color</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item  gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-end-color</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item  gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Link to page number - visited</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-color-visited</th>
+//            <td class="vars_value">@link-color-visited</td>
+//            <td>pager item visited color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-border-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item visited border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-background-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item visited background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-start-color-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item visited  gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-end-color-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item visited  gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Link to page number - hover</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>pager item hover color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-border-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item hover border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-text-decoration-hover</th>
+//            <td class="vars_value">none</td>
+//            <td>pager item hover text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-background-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item hover background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-start-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item  hover gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-end-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item  hover gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Link to page number - active</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>pager item active color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-border-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item active border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-background-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item active background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-start-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item active  gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-gradient-end-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager item active  gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td>do previous/next links  have gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-gradient-direction</th>
+//            <td class="vars_value">''</td>
+//            <td>direction of background gradient (if there is any) of previous/next links</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links - icons</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-use</th>
+//            <td class="vars_value">true</td>
+//            <td>do previous/next links have icons</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-previous-content</th>
+//            <td class="vars_value">@icon-pointer-left</td>
+//            <td>&quot;previous&quot; link icon</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-next-content</th>
+//            <td class="vars_value">@icon-pointer-right</td>
+//            <td>&quot;next&quot; link icon</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-text-hide</th>
+//            <td class="vars_value">true</td>
+//            <td>does the &quot;previous&quot; and &quot;next&quot; words should be hidden</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-position</th>
+//            <td class="vars_value">before</td>
+//            <td>icon position</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-font</th>
+//            <td class="vars_value">@icon-font</td>
+//            <td>icon font</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-font-margin</th>
+//            <td class="vars_value">@icon-margin</td>
+//            <td>icon font margin</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-font-vertical-align</th>
+//            <td class="vars_value">top</td>
+//            <td>icon font vertical align</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-font-size</th>
+//            <td class="vars_value">32px</td>
+//            <td>icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-icon-font-line-height</th>
+//            <td class="vars_value">@icon-font-line-height</td>
+//            <td>icon font ine height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links - default</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-color</th>
+//            <td class="vars_value">@pager-color</td>
+//            <td>pager action color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-border</th>
+//            <td class="vars_value">1px solid @border-color-base</td>
+//            <td>pager action border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-text-decoration</th>
+//            <td class="vars_value">@pager-text-decoration</td>
+//            <td>pager action text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-background</th>
+//            <td class="vars_value">@pager-background</td>
+//            <td>pager action background</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-gradient-start-color</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-gradient-end-color</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links - visited</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-color-visited</th>
+//            <td class="vars_value">@pager-color-visited</td>
+//            <td>pager action visited color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-border-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action visited border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-background-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action visited background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-action-gradient-start-color-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action visited gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-gradient-end-color-visited</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action visited gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links - hover</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-color-hover</th>
+//            <td class="vars_value">@pager-color-hover</td>
+//            <td>pager action hover color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-border-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action hover border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-text-decoration-hover</th>
+//            <td nowrap="nowrap">@pager-text-decoration-hover</td>
+//            <td>pager action hover text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-background-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action hover background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-action-gradient-start-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action hover gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-action-gradient-end-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action hover gradient end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Previous/next action links - active</th>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-color-active</th>
+//            <td class="vars_value">@pager-color-active</td>
+//            <td>pager action active color</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-border-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action active border</td>
+//        </tr>
+//        <tr>
+//            <th>@pager-action-background-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action active background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-action-gradient-start-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action active gradient start color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@pager-action-gradient-end-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td>pager action active  gradient end color</td>
+//        </tr>
+//      </table>
+//  </pre>
+//
+//  ##  Popup variables
+//
+//  <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@popup-width</th>
+//        <td class="vars_value">380px</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-height</th>
+//        <td class="vars_value">auto</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-padding</th>
+//        <td class="vars_value">22px</td>
+//        <td>Inner popup padding</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-background</th>
+//        <td class="vars_value">#fff</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-border</th>
+//        <td class="vars_value">1px solid #aeaeae</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-shadow</th>
+//        <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-fade</th>
+//        <td class="vars_value">opacity 0.3s linear</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-z-index</th>
+//        <td class="vars_value">1001</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th colspan="3" class="vars_section">Popup position</th>
+//      </tr>
+//      <tr>
+//        <th>@popup-position</th>
+//        <td class="vars_value">fixed</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-position-top</th>
+//        <td class="vars_value">20%</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-position-right</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-position-bottom</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-position-left</th>
+//        <td class="vars_value">50%</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th colspan="3" class="vars_section">Popup margin</th>
+//      </tr>
+//
+//      <tr>
+//        <th>@popup-margin-top</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-margin-right</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-margin-bottom</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-margin-left</th>
+//        <td class="vars_value">-((@popup-width+(@popup-padding*2))/2)</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>&nbsp;</th>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-content-height</th>
+//        <td class="vars_value">auto</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-header-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-content-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-footer-margin</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-title-headings</th>
+//        <td class="vars_value">true</td>
+//        <td>Should popup title have the same style as onte of page headings</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-title-headings-level</th>
+//        <td class="vars_value">h3</td>
+//        <td>What heading style should be applyed to the popup title</td>
+//      </tr>
+//      <tr>
+//        <th colspan="3" class="vars_section">Popup close button</th>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-icon</th>
+//        <td class="vars_value">true</td>
+//        <td>Does popup close button have an icon</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-reset</th>
+//        <td class="vars_value">true</td>
+//        <td>Should popup close button default styles be reset</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-position</th>
+//        <td class="vars_value">absolute</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-position-top</th>
+//        <td class="vars_value">10px</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-position-right</th>
+//        <td class="vars_value">10px</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-position-bottom</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-button-close-position-left</th>
+//        <td class="vars_value">''</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th colspan="3" class="vars_section">Popup icons parameters</th>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-content</th>
+//        <td class="vars_value">@icon-remove</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font</th>
+//        <td class="vars_value">@button-icon-font</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-size</th>
+//        <td class="vars_value">@button-icon-font-size</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-line-height</th>
+//        <td class="vars_value">@button-icon-font-line-height</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-color</th>
+//        <td class="vars_value">@button-icon-font-color</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-color-hover</th>
+//        <td class="vars_value">@button-icon-font-color-hover</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-color-active</th>
+//        <td class="vars_value">@popup-icon-font-color-active</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-margin</th>
+//        <td class="vars_value">@button-icon-font-margin</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-vertical-align</th>
+//        <td class="vars_value">@button-icon-font-vertical-align</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-position</th>
+//        <td class="vars_value">@button-icon-font-position</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-icon-font-text-hide</th>
+//        <td class="vars_value">true</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th colspan="3" class="vars_section">Actions toolbar parameters</th>
+//      </tr>
+//      <tr>
+//        <th>@popup-action-toolbar</th>
+//        <td class="vars_value">false</td>
+//        <td>Should action toolbar be displayed</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-actions-positio</th>
+//        <td class="vars_value">@actions-toolbar-actions-position</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-actions-reverse</th>
+//        <td class="vars_value">@actions-toolbar-actions-reverse</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-margin</th>
+//        <td class="vars_value">@actions-toolbar-margin</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-padding</th>
+//        <td class="vars_value">@actions-toolbar-padding</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-actions-margin</th>
+//        <td class="vars_value">@actions-toolbar-actions-margin</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-primary-actions-margin</th>
+//        <td class="vars_value">@actions-toolbar-primary-actions-margin</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@popup-actions-toolbar-secondary-actions-margin</th>
+//        <td class="vars_value"nowrap="nowrap">@actions-toolbar-secondary-actions-margin</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-actions-links-margin-top</th>
+//        <td class="vars_value">@actions-toolbar-actions-links-margin-top</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-primary-actions-links-margin-top</th>
+//        <td class="vars_value">@actions-toolbar-primary-actions-links-margin-top</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//      <tr>
+//        <th>@popup-actions-toolbar-secondary-links-margin-top</th>
+//        <td class="vars_value">@actions-toolbar-secondary-actions-links-margin-top</td>
+//        <td>&nbsp;</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Window overlay variables
+//   <pre>
+//    <table class="vars_list">
+//      <tr>
+//        <th class="vars_head">Variable name</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@overlay-background</th>
+//        <td class="vars_value">#000</td>
+//        <td>Overlay background color</td>
+//      </tr>
+//      <tr>
+//        <th>@overlay-opacity</th>
+//        <td class="vars_value">0.5</td>
+//        <td>Overlay opacity</td>
+//      </tr>
+//      <tr>
+//        <th>@overlay-opacity-old</th>
+//        <td class="vars_value">50</td>
+//        <td>Overlay opacity for old browsers</td>
+//      </tr>
+//      <tr>
+//        <th>@overlay-fade</th>
+//        <td class="vars_value">opacity 0.15s linear</td>
+//        <td>Overlay fade</td>
+//      </tr>
+//      <tr>
+//        <th>@overlay-z-index</th>
+//        <td class="vars_value">1000</td>
+//        <td>Overlay z-index</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  ## Global rating variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-content</th>
+//            <td class="vars_value">@icon-star</td>
+//            <td>How many icons should be in therating</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-count</th>
+//            <td class="vars_value">5</td>
+//            <td>Rating icon symbol</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-font</th>
+//            <td class="vars_value">@icon-font</td>
+//            <td>Icon font</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-font-size</th>
+//            <td class="vars_value">28px</td>
+//            <td>Icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-letter-spacing</th>
+//            <td class="vars_value">0</td>
+//            <td>&nbsp;</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-color</th>
+//            <td class="vars_value">#ccc</td>
+//            <td>Unselected icons color</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-icon-color-active</th>
+//            <td class="vars_value">#ff5601</td>
+//            <td>Selected and hovered icons color</td>
+//        </tr>
+//        <tr>
+//            <th>@rating-label-hide</th>
+//            <td class="vars_value">false</td>
+//            <td>Should the label be displayed</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Tabs variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Tabs font family</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-font-size</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>Tabs font size</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Tabs font style</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>Tabs font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-line-height</th>
+//            <td class="vars_value">@tab-control-height</td>
+//            <td>Tabs line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Tabs controls settings</th>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-bg</th>
+//            <td class="vars_value">@panel-bg</td>
+//            <td>Current tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>Current tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-text-decoration</th>
+//            <td class="vars_value">none</td>
+//            <td>Current tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-color-visited</th>
+//            <td class="vars_value">@link-color</td>
+//            <td>Tab visited link color</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-text-decoration-visited</th>
+//            <td class="vars_value">none</td>
+//            <td>Tab visited link text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-bg-hover</th>
+//            <td class="vars_value">lighten(@tab-control-bg, 5%)</td>
+//            <td>Hovered tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td>Hovered tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-text-decoration-hover</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td>Hovered tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-bg-active</th>
+//            <td class="vars_value">lighten(@tab-control-bg, 15%)</td>
+//            <td>Active tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-color-active</th>
+//            <td class="vars_value">@link-color-active</td>
+//            <td>Active tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-text-decoration-active</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td>Active tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-height</th>
+//            <td class="vars_value">@indent-l-base</td>
+//            <td>Height of tab control</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-margin-right</th>
+//            <td class="vars_value">@indent-xs-base</td>
+//            <td>Right margin of tab title block</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-padding-top</th>
+//            <td class="vars_value">@indent-xs-base</td>
+//            <td>Tab control padding top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@tab-control-padding-right</th>
+//            <td class="vars_value">@indent-xl-base</td>
+//            <td>Tab control padding right</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-padding-bottom</th>
+//            <td class="vars_value">@tab-control-padding-bottom</td>
+//            <td>Tab control padding bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-control-padding-left</th>
+//            <td class="vars_value">@tab-control-padding-left</td>
+//            <td>Tab control padding left</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Tab content settings</th>
+//        </tr>
+//        <tr>
+//            <th>@tab-content-bg</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td>Tab content background</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-content-border</th>
+//            <td class="vars_value">@tab-control-border-width solid @tab-control-border-color</td>
+//            <td>Tab content border</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-content-border-top-status</th>
+//            <td class="vars_value">false</td>
+//            <td>Tab content border top status: when set to true - tab content will only have top border. When set to false, tab content will have all 4 borders</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-content-margin-top</th>
+//            <td class="vars_value">@tab-control-height + @tab-control-border-width + @tab-control-padding-top + @tab-control-padding-bottom</td>
+//            <td>Tab content top margin (it is the sum of tabs height and top border width)</td>
+//        </tr>
+//        <tr>
+//            <th>@tab-content-padding</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Tab content padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Accordion variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-font-family</th>
+//            <td class="vars_value">@tab-control-font-family</td>
+//            <td>Accordion font family</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-font-size</th>
+//            <td class="vars_value">@font-size-l</td>
+//            <td>Accordion font size</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-font-style</th>
+//            <td class="vars_value">@tab-control-font-style</td>
+//            <td>Accordion font style</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-font-weight</th>
+//            <td class="vars_value">@tab-control-font-weight</td>
+//            <td>Accordion font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-line-height</th>
+//            <td class="vars_value">@accordion-control-height</td>
+//            <td>Accordion line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Accordion tabs controls settings</th>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-border</th>
+//            <td class="vars_value">@tab-control-border-width solid @tab-control-border-color</td>
+//            <td>Accordion control border</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-bg</th>
+//            <td class="vars_value">@tab-control-bg</td>
+//            <td>Accordion control background</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-color</th>
+//            <td class="vars_value">@tab-control-color</td>
+//            <td>Accordion control color</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-text-decoration</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td>Accordion control text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-color-visited</th>
+//            <td class="vars_value">@accordion-control-color</td>
+//            <td>Accordion control visited link color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@accordion-control-text-decoration-visited</th>
+//            <td class="vars_value">@accordion-control-text-decoration</td>
+//            <td>Accordion control visited link text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-bg-hover</th>
+//            <td class="vars_value">@tab-control-bg-hover</td>
+//            <td>Hovered accordion controlbackground</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-color-hover</th>
+//            <td class="vars_value">@tab-control-color-hover</td>
+//            <td>Hovered accordion control text color</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-text-decoration-hover</th>
+//            <td class="vars_value">@tab-control-text-decoration-hover</td>
+//            <td>Hovered accordion control text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-bg-active</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td>Active accordion control background</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-color-active</th>
+//            <td class="vars_value">@tab-control-color-active</td>
+//            <td>Active accordion control text color</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-text-decoration-active</th>
+//            <td class="vars_value">@tab-control-text-decoration-active</td>
+//            <td>Active accordion control text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-height</th>
+//            <td class="vars_value">@indent-xl-base</td>
+//            <td>Height of accordion control</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-margin-bottom</th>
+//            <td class="vars_value">@accordion-control-margin-bottom</td>
+//            <td>Bottom margin of the accordion control</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-padding-top</th>
+//            <td class="vars_value">@tab-control-padding-top</td>
+//            <td>Accordion tab control padding top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@accordion-control-padding-right</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Accordion tab control padding right</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-padding-bottom</th>
+//            <td class="vars_value">@tab-control-padding-bottom</td>
+//            <td>Accordion tab control padding bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-control-padding-left</th>
+//            <td class="vars_value">@accordion-control-padding-right</td>
+//            <td>Accordion tab control padding left</td>
+//        </tr>
+//        <tr>
+//            <th colspan="3" class="vars_section">Accordion content settings</th>
+//        </tr>
+//        <tr>
+//            <th>@accordion-content-bg</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td>Accordion tab content background</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-content-border</th>
+//            <td class="vars_value">@tab-content-border</td>
+//            <td>Accordion tab content border</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-content-margin</th>
+//            <td class="vars_value">0</td>
+//            <td>Accordion tab content margin</td>
+//        </tr>
+//        <tr>
+//            <th>@accordion-content-padding</th>
+//            <td class="vars_value">@tab-content-padding-top @tab-content-padding-right @tab-content-padding-bottom @tab-content-padding-left</td>
+//            <td>Accordion tab content padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-width</th>
+//            <td class="vars_value">100%</td>
+//            <td>Table width</td>
+//        </tr>
+//        <tr>
+//            <th>@table-cell-padding-vertical</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Table cell vertical padding</td>
+//        </tr>
+//        <tr>
+//            <th>@table-cell-padding-horizontal</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Table cell horizontal padding</td>
+//        </tr>
+//        <tr>
+//            <th>@table-margin-bottom</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Table margin bottom</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table typography Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-td-font-size</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>Table cell font size</td>
+//        </tr>
+//        <tr>
+//            <th>@table-td-color</th>
+//            <td class="vars_value">@text-color</td>
+//            <td>Table cell font color</td>
+//        </tr>
+//        <tr>
+//            <th>@table-td-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Table cell font family</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_value" nowrap="nowrap">@table-td-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>Table cell font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@table-td-line-height</th>
+//            <td class="vars_value">@line-height-base</td>
+//            <td>Table cell line height</td>
+//        </tr>
+//        <tr>
+//            <th>@table-td-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Table cell font style</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-font-size</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td>Table header cell font size</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-color</th>
+//            <td class="vars_value">@text-color-intense</td>
+//            <td>Table header cell font color</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-font-family</th>
+//            <td class="vars_value"> @font-family-base</td>
+//            <td>Table header cell font family</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-font-weight</th>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>Table header cell font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-line-height</th>
+//            <td class="vars_value">@line-height-base</td>
+//            <td>Table header cell line height</td>
+//        </tr>
+//        <tr>
+//            <th>@table-th-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Table header cell font style</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table caption Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-hide</th>
+//            <td class="vars_value">false</td>
+//            <td>Should table caption be visible</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-font-size</th>
+//            <td class="vars_value">@font-size-l</td>
+//            <td>Table caption font size</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-color</th>
+//            <td class="vars_value">@text-color-intense</td>
+//            <td>Table caption text color</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_value" nowrap="nowrap">@table-caption-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Table caption font family</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>Table caption font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Table caption font style</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-line-height</th>
+//            <td class="vars_value">@line-height-base</td>
+//            <td>Table caption line height</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-alignment</th>
+//            <td class="vars_value">left</td>
+//            <td>Table caption alignment</td>
+//        </tr>
+//        <tr>
+//            <th>@table-caption-margin-top</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td>Table caption margin top</td>
+//        </tr>
+//        <tr>
+//            <td class="vars_value" nowrap="nowrap">@table-caption-margin-bottom</th>
+//            <td class="vars_value">@indent-s-base</td>
+//            <td>Table caption margin bottom</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table cells resize variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-cell-padding-vertical / 2</th>
+//            <td class="vars_value">@indent-s-base / 2</td>
+//            <td>Table cell top padding</td>
+//        </tr>
+//        <tr>
+//            <th>@table-cell-padding-horizontal / 2</th>
+//            <td class="vars_value">@indent-s-base / 2</td>
+//            <td>Table cell right padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-top</th>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td>Table cell bottom padding</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_td-padding-right</th>
+//            <td class="vars_value">@_td-padding-right</td>
+//            <td>Table cell left padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-top</th>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td>Table header cell top padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-right</th>
+//            <td class="vars_value">@_td-padding-right</td>
+//            <td>Table header cell right padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-top</th>
+//            <td class="vars_value">@_td-padding-top</td>
+//            <td>Table header cell bottom padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_td-padding-right</th>
+//            <td class="vars_value">@_td-padding-right</td>
+//            <td>Table header cell left padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table background Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-bg</th>
+//            <td class="vars_value">transparent</td>
+//            <td>Table background</td>
+//        </tr>
+//        <tr>
+//            <th>@table-head-bg</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table thead background</td>
+//        </tr>
+//        <tr>
+//            <th>@table-foot-bg</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table tfoot background</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@table-td-bg</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table cells background</td>
+//        </tr>
+//        <tr>
+//            <th>@table-body-th-bg</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table header cells background</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Table with rows hover Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-cell-bg-hover</th>
+//            <td class="vars_value">@panel-bg</td>
+//            <td>Hovered table row background</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Responsive table technics #2 Variable names
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variables list names</th>
+//            <th class="vars_head">Variables value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@table-bg-responsive</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table background</td>
+//        </tr>
+//        <tr>
+//            <th>@table-head-bg</th>
+//            <td class="vars_value">@table-bg</td>
+//            <td>Table header background</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  ## Tooltips variables
+//
+//  <pre>
+//    <table class="vars_list">
+//        <tr>
+//            <th class="vars_head">Variable name</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-background</th>
+//            <td class="vars_value">#fff</td>
+//            <td>Tooltip background color</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-color</th>
+//            <td class="vars_value">#bbb</td>
+//            <td>Tooltip text color</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-font-size</th>
+//            <td class="vars_value">14px</td>
+//            <td>Tooltip font size</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td>Tooltip font family</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td>Tooltip font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td>Tooltip font style</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-line-height</th>
+//            <td class="vars_value">1.4</td>
+//            <td>Tooltip line height</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-margin</th>
+//            <td class="vars_value">''</td>
+//            <td>Tooltip margin</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-padding</th>
+//            <td class="vars_value">12px 16px</td>
+//            <td>Tooltip padding</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-min-width</th>
+//            <td class="vars_value">210px</td>
+//            <td>Tooltip minimal width</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-max-width</th>
+//            <td class="vars_value">360px</td>
+//            <td>Tooltip maximal width</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-cursor</th>
+//            <td class="vars_value">help</td>
+//            <td>Tooltip cursor</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-border-radius</th>
+//            <td class="vars_value">''</td>
+//            <td>Tooltip border radius</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-border-color</th>
+//            <td class="vars_value">#333</td>
+//            <td>Tooltip border color</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-border-width</th>
+//            <td class="vars_value">1px</td>
+//            <td>Tooltip border width</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-arrow-size</th>
+//            <td class="vars_value">5px</td>
+//            <td>Tooltip arrow size</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-arrow-offset</th>
+//            <td class="vars_value">10px</td>
+//            <td>Tooltip arrow offset</td>
+//        </tr>
+//        <tr>
+//            <th>@tooltip-z-index</th>
+//            <td class="vars_value">100</td>
+//            <td>Tooltip z-index</td>
+//        </tr>
+//    </table>
+//  </pre>

@@ -23,6 +23,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento;
 
 /**
  * Image handler library
@@ -31,8 +32,6 @@
  * @package    Magento_Image
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento;
-
 class Image
 {
     /**
@@ -65,12 +64,13 @@ class Image
      *
      * @access public
      * @return void
+     * @throws \Exception
      */
     public function open()
     {
         $this->_adapter->checkDependencies();
 
-        if( !file_exists($this->_fileName) ) {
+        if ( !file_exists($this->_fileName) ) {
             throw new \Exception("File '{$this->_fileName}' does not exists.");
         }
 
@@ -221,7 +221,7 @@ class Image
      */
     public function watermark($watermarkImage, $positionX=0, $positionY=0, $watermarkImageOpacity=30, $repeat=false)
     {
-        if( !file_exists($watermarkImage) ) {
+        if ( !file_exists($watermarkImage) ) {
             throw new \Exception("Required file '{$watermarkImage}' does not exists.");
         }
         $this->_adapter->watermark($watermarkImage, $positionX, $positionY, $watermarkImageOpacity, $repeat);

@@ -203,6 +203,10 @@ class RequireAnnotatedAttributesSniff extends PHP_CodeSniffer_Standards_Abstract
     public function processMemberVar(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $this->helper = new Helper($phpcsFile);
+        // if we should skip this type we should do that
+        if ($this->helper->shouldFilter()) {
+            return;
+        }
         $tokens = $phpcsFile->getTokens();
         $commentToken = array(T_COMMENT, T_DOC_COMMENT);
 

@@ -53,10 +53,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerAddressServiceInterface'
         );
         $fixtureAddressId = 1;
-        $address = $addressService->getAddressById($fixtureAddressId);
+        $address = $addressService->getAddress($fixtureAddressId);
         $addressAsHtml = $this->_selectBlock->getAddressAsHtml($address);
         $this->assertEquals(
-            "John Smith<br/>Green str, 67<br />CityM,  Alabama, 75477<br/><br/>T: 3468676",
+            "John Smith<br/>Green str, 67<br />CityM,  Alabama, 75477<br/>United States<br/>T: 3468676",
             str_replace("\n", '', $addressAsHtml),
             "Address was represented as HTML incorrectly"
         );

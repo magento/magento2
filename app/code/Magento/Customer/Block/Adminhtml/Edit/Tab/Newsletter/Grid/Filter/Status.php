@@ -35,6 +35,9 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      */
     protected static $_statuses;
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         self::$_statuses = [

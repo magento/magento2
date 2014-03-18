@@ -99,7 +99,7 @@ class XmlInterceptorScanner implements ScannerInterface
      * Include file with controller declaration if needed
      *
      * @param string $className
-     * @todo this method must be removed when controllers become PSR-0 compliant
+     * @return void
      */
     protected function _handleControllerClassName($className)
     {

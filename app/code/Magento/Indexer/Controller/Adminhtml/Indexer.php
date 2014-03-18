@@ -29,6 +29,8 @@ class Indexer extends \Magento\Backend\App\Action
 {
     /**
      * Display processes grid action
+     *
+     * @return void
      */
     public function listAction()
     {
@@ -41,6 +43,8 @@ class Indexer extends \Magento\Backend\App\Action
 
     /**
      * Turn mview off for the given indexers
+     *
+     * @return void
      */
     public function massOnTheFlyAction()
     {
@@ -72,6 +76,8 @@ class Indexer extends \Magento\Backend\App\Action
 
     /**
      * Turn mview on for the given indexers
+     *
+     * @return void
      */
     public function massChangelogAction()
     {

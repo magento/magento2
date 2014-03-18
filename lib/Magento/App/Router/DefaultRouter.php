@@ -31,17 +31,17 @@ use \Magento\App\ActionFactory,
 class DefaultRouter extends AbstractRouter
 {
     /**
-     * @var \Magento\App\Router\NoRouteHandlerList
+     * @var NoRouteHandlerList
      */
     protected $_noRouteHandlerList;
 
     /**
      * @param ActionFactory $actionFactory
-     * @param \Magento\App\Router\NoRouteHandlerList $noRouteHandlerList
+     * @param NoRouteHandlerList $noRouteHandlerList
      */
     public function __construct(
         ActionFactory $actionFactory,
-        \Magento\App\Router\NoRouteHandlerList $noRouteHandlerList
+        NoRouteHandlerList $noRouteHandlerList
     ) {
         parent::__construct($actionFactory);
         $this->_noRouteHandlerList = $noRouteHandlerList;

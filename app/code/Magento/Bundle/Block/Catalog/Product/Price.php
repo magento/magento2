@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Block\Catalog\Product;
 
 /**
  * Bundle product price block
@@ -31,8 +31,6 @@
  * @category   Magento
  * @package    Magento_Bundle
  */
-namespace Magento\Bundle\Block\Catalog\Product;
-
 class Price extends \Magento\Catalog\Block\Product\Price
 {
     /**
@@ -78,6 +76,9 @@ class Price extends \Magento\Catalog\Block\Product\Price
         $this->_taxCalc = $taxCalc;
     }
 
+    /**
+     * @return bool
+     */
     public function isRatesGraterThenZero()
     {
         $_request = $this->_taxCalc->getRateRequest(false, false, false);

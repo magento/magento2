@@ -25,6 +25,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
+use Exception;
+use Magento\Core\Exception as CoreException;
+
 /**
  * Catalog composite product configuration controller
  */
@@ -48,13 +51,13 @@ class Wishlist extends \Magento\Backend\App\Action
      * Loads wishlist and wishlist item.
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws CoreException
      */
     protected function _initData()
     {
         $wishlistItemId = (int) $this->getRequest()->getParam('id');
         if (!$wishlistItemId) {
-            throw new \Magento\Core\Exception(__('No wishlist item ID is defined.'));
+            throw new CoreException(__('No wishlist item ID is defined.'));
         }
 
         /* @var $wishlistItem \Magento\Wishlist\Model\Item */
@@ -62,7 +65,7 @@ class Wishlist extends \Magento\Backend\App\Action
             ->loadWithOptions($wishlistItemId);
 
         if (!$wishlistItem->getWishlistId()) {
-            throw new \Magento\Core\Exception(__('Please load the wish list item.'));
+            throw new CoreException(__('Please load the wish list item.'));
         }
 
         $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
@@ -90,7 +93,7 @@ class Wishlist extends \Magento\Backend\App\Action
             $configureResult->setCurrentCustomerId($this->_wishlist->getCustomerId());
 
             $configureResult->setOk(true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());
         }
@@ -118,7 +121,7 @@ class Wishlist extends \Magento\Backend\App\Action
                 ->save();
 
             $updateResult->setOk(true);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $updateResult->setError(true);
             $updateResult->setMessage($e->getMessage());
         }

@@ -1,3 +1,57 @@
+2.0.0.0-dev69
+=============
+* Themes update:
+  * LESS styles library added in pub/lib/css/
+  * A new Blank theme set as default
+* GitHub requests:
+  * [#491](https://github.com/magento/magento2/pull/491) -- Fixed bug, incorrect auto-generation Category URL for some groups of symbols (idish, cirrilic, é, ä, and other).
+  * [#480](https://github.com/magento/magento2/pull/480) -- Fixing a bug for loading config from local.xml
+  * [#472](https://github.com/magento/magento2/issues/472) -- Params passed in pub/index.php being overwritten
+  * [#461](https://github.com/magento/magento2/pull/461) -- Use translates for Quote\Address\Total\Shipping
+  * [#235](https://github.com/magento/magento2/issues/235) -- Translation escaping
+  * [#463](https://github.com/magento/magento2/pull/463) -- allow _resolveArguments to do sequential lookups
+  * [#499](https://github.com/magento/magento2/issues/499) Deleted unclosed comment in calendar.css
+* Fixed bugs:
+  * Fixed a fatal error that occurred with a dependency in pub/errors/report.php
+  * Fixed an issue where code coverage failed for Magento\SalesRule\Model\Rule\Action\Discount\CartFixedTest
+  * Fixed an issue where PayPal Express Checkout redirected to the PayPal site even though the Allow Guest Checkout option was set to 'No'
+  * Fixed an issue where invalid password reset link was sent when resetting customer password from the backend
+  * Fixed an issue where it was not possible to download a previously created backup
+  * Fixed a security issue with possibility of a XSS injection in the Integration re-authorization flow
+  * Fixed an issue where Billing Agreement cancellation from the backend did not work
+  * Fixed an issue with the debug section in the developer settings
+  * Fixed the unreliable implementation of the fetching authorization header via SOAP
+  * Fixed issues with WSDL generation error reporting
+  * Fixed an issue with incorrect order of the Recurring Profile tab in Account Customer on the frontend
+  * Fixed an issue when the information about a custom option of the 'File' type was not displayed correctly on the recurring profile page
+  * Fixed an issue with editing Product template
+  * Fixed an issue with duplicated shipping method options during checkout
+  * Fixed an issue where flat indexers were re-indexed in shell when they were disabled
+  * Fixed an issue where adding a wrong/nonexistent SKU using 'Order by SKU' from My Account caused a fatal error
+  * Fixed an issue with the JS/CSS merging functionality
+  * Fixed an issue with static view files publication tool used for the 'production' mode
+* Modularity improvements:
+  * Removed the deprecated GoogleCheckout functionality
+  * Removed all dependencies on the RecurringPayment module
+  * Removed the Sales module dependencies on Customer models/blocks
+  * Renamed the RecurringProfile module to RecurringPayment
+  * Resolved dependencies between the Email Templates functionality and other modules
+  * Moved Core module lib-only depended components to library
+  * Moved CSS URL resolving logic from publisher to the separate CSS pre-processor
+  * Re-factored the View publisher
+* Framework improvements:
+  * Added restrictions on the data populated to the Service Data Object
+  * Renamed Data Transfer Object to Service Data Object
+  * Updated the view files population tool to support LESS
+* Customer Service usage:
+  * Refactored the Tax module to use Customer service layer
+  * Refactored Customer module Adminhtml internal controllers and helper to use Customer services
+  * Added and updated the Customer service APIs
+  * Exposed Customer services as REST APIs
+* Indexer implementation:
+  * Implemented a new optimized Product Price Indexer
+* Updated various PHPDoc with the parameter and return types
+
 2.0.0.0-dev68
 =============
 * Cache:

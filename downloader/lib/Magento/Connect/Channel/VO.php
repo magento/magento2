@@ -23,41 +23,65 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Connect\Channel;
+
+use Magento\Connect\Validator;
 
 class VO implements \Iterator
 {
-
+    /**
+     * @var Validator|null
+     */
     private $_validator = null;
 
+    /**
+     * @var array
+     */
     protected $properties = array(
         'name' => '',
         'uri' => '',
         'summary' => '',
     );
 
+    /**
+     * @return void
+     */
     public function rewind() {
         reset($this->properties);
     }
 
+    /**
+     * @return bool
+     */
     public function valid() {
         return current($this->properties) !== false;
     }
 
+    /**
+     * @return mixed
+     */
     public function key() {
         return key($this->properties);
     }
 
+    /**
+     * @return mixed
+     */
     public function current() {
         return current($this->properties);
     }
 
+    /**
+     * @return void
+     */
     public function next() {
         next($this->properties);
     }
 
+    /**
+     * @param string $var
+     * @return null|string
+     */
     public function __get($var)
     {
         if (isset($this->properties[$var])) {
@@ -66,6 +90,11 @@ class VO implements \Iterator
         return null;
     }
 
+    /**
+     * @param string $var
+     * @param string $value
+     * @return void
+     */
     public function __set($var, $value)
     {
         if (is_string($value)) {
@@ -79,11 +108,18 @@ class VO implements \Iterator
         }
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return array('channel' => $this->properties);
     }
 
+    /**
+     * @param array $arr
+     * @return void
+     */
     public function fromArray(array $arr)
     {
         foreach($arr as $k=>$v) {
@@ -91,17 +127,21 @@ class VO implements \Iterator
         }
     }
 
-
+    /**
+     * @return Validator|null
+     */
     private function validator()
     {
         if(is_null($this->_validator)) {
-            $this->_validator = new \Magento\Connect\Validator();
+            $this->_validator = new Validator();
         }
         return $this->_validator;
     }
 
     /**
-     Stub for validation result
+     * Stub for validation result
+     *
+     * @return bool
      */
     public function validate()
     {
@@ -111,5 +151,4 @@ class VO implements \Iterator
         }
         return true;
     }
-
 }

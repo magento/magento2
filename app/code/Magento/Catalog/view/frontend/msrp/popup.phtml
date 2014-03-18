@@ -30,32 +30,44 @@
 ?>
 <?php if ($this->helper('Magento\Catalog\Helper\Data')->isMsrpEnabled()): ?>
 <div id="map-popup" class="map popup">
-    <a href="#" class="action close" id="map-popup-close"><span><?php echo __('Close') ?></span></a>
-    <div class="title" id="map-popup-heading"></div>
-    <div class="content" id="map-popup-content">
-        <form action="" method="POST" id="product_addtocart_form_from_popup" class="form map checkout">
-            <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
-            <div class="additional-addtocart-box">
-                <?php echo $this->getChildHtml(); ?>
-            </div>
-            <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart" id="map-popup-button">
-                <span><?php echo __('Add to Cart') ?></span>
+    <div class="popup actions">
+        <div class="secondary">
+            <button type="button" class="action close" id="map-popup-close">
+                <span><?php echo __('Close') ?></span>
             </button>
-        </form>
-        <div class="map msrp" id="map-popup-msrp-box">
-            <span class="label"><?php echo __('Price'); ?></span>
-            <div class="old price" id="map-popup-msrp"></div>
-        </div>
-        <div class="map price" id="map-popup-price-box">
-            <span class="label"><?php echo __('Actual Price'); ?></span>
-            <div id="map-popup-price" class="actual price"></div>
         </div>
     </div>
-    <div class="content" id="map-popup-text">
-        <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessage(); ?>
+    <div class="popup header">
+        <strong class="title" id="map-popup-heading"></strong>
     </div>
-    <div class="content" id="map-popup-text-what-this">
-        <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessageWhatsThis(); ?>
+    <div class="popup content">
+        <div class="map add form" id="map-popup-content">
+            <form action="" method="POST" id="product_addtocart_form_from_popup" class="form map checkout">
+                <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
+                <div class="additional-addtocart-box">
+                    <?php echo $this->getChildHtml(); ?>
+                </div>
+                <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart" id="map-popup-button">
+                    <span><?php echo __('Add to Cart') ?></span>
+                </button>
+            </form>
+            <div class="price-box">
+                <div class="map msrp" id="map-popup-msrp-box">
+                    <span class="label"><?php echo __('Price'); ?></span>
+                    <div class="old price" id="map-popup-msrp"></div>
+                </div>
+                <div class="map price" id="map-popup-price-box">
+                    <span class="label"><?php echo __('Actual Price'); ?></span>
+                    <div id="map-popup-price" class="actual price"></div>
+                </div>
+            </div>
+        </div>
+        <div class="map text" id="map-popup-text">
+            <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessage(); ?>
+        </div>
+        <div class="map help text" id="map-popup-text-what-this">
+            <?php echo $this->helper('Magento\Catalog\Helper\Data')->getMsrpExplanationMessageWhatsThis(); ?>
+        </div>
     </div>
 </div>
 <?php endif; ?>

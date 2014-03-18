@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to validate string resources
@@ -31,9 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Connect;
-
 class Validator
 {
     /**
@@ -59,7 +57,7 @@ class Validator
      *
      * @param int $s1
      * @param int $s2
-     * @return int
+     * @return int|void
      * @throws \Exception
      */
     public function compareStabilities($s1, $s2)

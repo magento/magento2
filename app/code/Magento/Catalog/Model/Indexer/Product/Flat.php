@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product;
 
 class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\ActionInterface
@@ -60,6 +59,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\Act
      * Execute materialization on ids entities
      *
      * @param int[] $ids
+     * @return void
      */
     public function execute($ids)
     {
@@ -68,6 +68,8 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\Act
 
     /**
      * Execute full indexation
+     *
+     * @return void
      */
     public function executeFull()
     {
@@ -78,6 +80,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\Act
      * Execute partial indexation by ID list
      *
      * @param int[] $ids
+     * @return void
      */
     public function executeList($ids)
     {
@@ -88,6 +91,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Mview\Act
      * Execute partial indexation by ID
      *
      * @param int $id
+     * @return void
      */
     public function executeRow($id)
     {

@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Catalog\Product;
+
+use Magento\Downloadable\Model\Link;
 
 /**
  * Downloadable Product Links part block
@@ -31,8 +34,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Catalog\Product;
-
 class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -147,7 +148,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * @param \Magento\Downloadable\Model\Link $link
+     * @param Link $link
      * @return string
      */
     public function getFormattedLinkPrice($link)
@@ -212,6 +213,10 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         return $this->jsonEncoder->encode($config);
     }
 
+    /**
+     * @param Link $link
+     * @return string
+     */
     public function getLinkSamlpeUrl($link)
     {
         $store = $this->getProduct()->getStore();
@@ -228,7 +233,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         if ($this->getProduct()->getLinksTitle()) {
             return $this->getProduct()->getLinksTitle();
         }
-        return $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE);
+        return $this->_storeConfig->getConfig(Link::XML_PATH_LINKS_TITLE);
     }
 
     /**
@@ -238,13 +243,13 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getIsOpenInNewWindow()
     {
-        return $this->_storeConfig->getConfigFlag(\Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW);
+        return $this->_storeConfig->getConfigFlag(Link::XML_PATH_TARGET_NEW_WINDOW);
     }
 
     /**
      * Returns whether link checked by default or not
      *
-     * @param \Magento\Downloadable\Model\Link $link
+     * @param Link $link
      * @return bool
      */
     public function getIsLinkChecked($link)
@@ -260,7 +265,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Returns value for link's input checkbox - either 'checked' or ''
      *
-     * @param \Magento\Downloadable\Model\Link $link
+     * @param Link $link
      * @return string
      */
     public function getLinkCheckedValue($link)

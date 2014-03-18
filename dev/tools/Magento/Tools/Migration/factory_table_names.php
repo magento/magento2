@@ -67,8 +67,8 @@ exit(0);
 /**
  * Get combined array from similar files by pattern
  *
- * @param $dirPath
- * @param $filePattern
+ * @param string $dirPath
+ * @param string $filePattern
  * @return array
  */
 function getFilesCombinedArray($dirPath, $filePattern)
@@ -85,9 +85,9 @@ function getFilesCombinedArray($dirPath, $filePattern)
  * Replace table names in all files
  *
  * @param array $files
- * @param array $tablesAssociation
- * @param $outputWithErrors
- * @param $isDryRunMode
+ * @param array &$tablesAssociation
+ * @param bool $outputWithErrors
+ * @param bool $isDryRunMode
  * @return bool
  */
 function replaceTableNames(array $files, array &$tablesAssociation, $outputWithErrors, $isDryRunMode)
@@ -135,10 +135,11 @@ function replaceTableNames(array $files, array &$tablesAssociation, $outputWithE
 /**
  * Replace table names in an file
  *
- * @param $filePath
- * @param $search
- * @param $replace
- * @param $isDryRunMode
+ * @param string $filePath
+ * @param string $search
+ * @param string $replace
+ * @param bool $isDryRunMode
+ * @return void
  */
 function replaceTableNamesInFile($filePath, $search, $replace, $isDryRunMode)
 {
@@ -157,8 +158,8 @@ function replaceTableNamesInFile($filePath, $search, $replace, $isDryRunMode)
  * Looking for table names which not defined in current config
  *
  * @param array $files
- * @param array $tablesAssociation
- * @param array $blackList
+ * @param array &$tablesAssociation
+ * @param array &$blackList
  * @return bool
  */
 function searchTableNamesNotInReplacedList(array $files, array &$tablesAssociation, array &$blackList)

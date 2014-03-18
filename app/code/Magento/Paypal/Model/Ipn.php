@@ -18,62 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Paypal\Model;
 
+use Exception;
+
 /**
  * PayPal Instant Payment Notification processor model
  */
-class Ipn
+class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
 {
     /**
-     * Default log filename
-     */
-    const DEFAULT_LOG_FILE = 'paypal_unknown_ipn.log';
-
-    /**
-     * Sales order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
-
-    /**
-     * Recurring profile instance
-     *
-     * @var \Magento\RecurringProfile\Model\Profile
-     */
-    protected $_recurringProfile;
-
-    /**
-     * @var \Magento\Paypal\Model\Config
-     */
-    protected $_config;
-
-    /**
-     * PayPal info instance
-     *
-     * @var \Magento\Paypal\Model\Info
-     */
-    protected $_info;
-
-    /**
-     * IPN request data
-     *
-     * @var array
-     */
-    protected $_request = array();
-
-    /**
-     * Collected debug information
-     *
-     * @var array
-     */
-    protected $_debugData = array();
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -81,88 +41,49 @@ class Ipn
     protected $_orderFactory;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * PayPal info instance
+     *
+     * @var Info
      */
-    protected $_responseHttp;
+    protected $_paypalInfo;
 
     /**
-     * @var \Magento\Paypal\Model\ConfigFactory
-     */
-    protected $_configFactory;
-
-    /**
-     * @var \Magento\RecurringProfile\Model\ProfileFactory
-     */
-    protected $_recurringProfileFactory;
-
-    /**
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\App\ResponseInterface $responseHttp
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory
-     * @param \Magento\Paypal\Model\Info $paypalInfo
      * @param \Magento\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\HTTP\Adapter\CurlFactory $curlFactory
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param Info $paypalInfo
+     * @param array $data
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\App\ResponseInterface $responseHttp,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\RecurringProfile\Model\ProfileFactory $recurringProfileFactory,
-        \Magento\Paypal\Model\Info $paypalInfo,
-        \Magento\Logger\AdapterFactory $logAdapterFactory
+        \Magento\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\HTTP\Adapter\CurlFactory $curlFactory,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        Info $paypalInfo,
+        array $data = array()
     ) {
+        parent::__construct($configFactory, $logAdapterFactory, $curlFactory, $data);
         $this->_orderFactory = $orderFactory;
-        $this->_responseHttp = $responseHttp;
-        $this->_configFactory = $configFactory;
-        $this->_recurringProfileFactory = $recurringProfileFactory;
-        $this->_info = $paypalInfo;
-        $this->_logAdapterFactory = $logAdapterFactory;
-    }
-
-    /**
-     * IPN request data getter
-     *
-     * @param string|null $key
-     * @return array|string
-     */
-    public function getRequestData($key = null)
-    {
-        if (null === $key) {
-            return $this->_request;
-        }
-        return isset($this->_request[$key]) ? $this->_request[$key] : null;
+        $this->_paypalInfo = $paypalInfo;
     }
 
     /**
      * Get ipn data, send verification to PayPal, run corresponding handler
      *
-     * @param array $request
-     * @param \Zend_Http_Client_Adapter_Interface|null $httpAdapter
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function processIpnRequest(array $request, \Zend_Http_Client_Adapter_Interface $httpAdapter = null)
+    public function processIpnRequest()
     {
-        $this->_request = $request;
-        $this->_debugData = array('ipn' => $request);
-        ksort($this->_debugData['ipn']);
+        $this->_addDebugData('ipn', $this->getRequestData());
 
         try {
-            if (isset($this->_request['txn_type']) && 'recurring_payment' == $this->_request['txn_type']) {
-                $this->_getRecurringProfile();
-                if ($httpAdapter) {
-                    $this->_postBack($httpAdapter);
-                }
-                $this->_processRecurringProfile();
-            } else {
-                $this->_getOrder();
-                if ($httpAdapter) {
-                    $this->_postBack($httpAdapter);
-                }
-                $this->_processOrder();
-            }
-        } catch (\Exception $e) {
-            $this->_debugData['exception'] = $e->getMessage();
+            $this->_getConfig();
+            $this->_postBack();
+            $this->_processOrder();
+        } catch (Exception $e) {
+            $this->_addDebugData('exception', $e->getMessage());
             $this->_debug();
             throw $e;
         }
@@ -170,120 +91,50 @@ class Ipn
     }
 
     /**
-     * Post back to PayPal to check whether this request is a valid one
+     * Get config with the method code and store id and validate
      *
-     * @param \Zend_Http_Client_Adapter_Interface $httpAdapter
-     * @return void
-     * @throws \Exception
+     * @return \Magento\Paypal\Model\Config
+     * @throws Exception
      */
-    protected function _postBack(\Zend_Http_Client_Adapter_Interface $httpAdapter)
+    protected function _getConfig()
     {
-        $postbackQuery = http_build_query($this->_request) . '&cmd=_notify-validate';
-        $postbackUrl = $this->_config->getPaypalUrl();
-        $this->_debugData['postback_to'] = $postbackUrl;
-
-        $httpAdapter->setConfig(array('verifypeer' => $this->_config->verifyPeer));
-        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', array('Connection: close'), $postbackQuery);
-        try {
-            $postbackResult = $httpAdapter->read();
-        } catch (\Exception $e) {
-            $this->_debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-            throw $e;
+        $order = $this->_getOrder();
+        $methodCode = $order->getPayment()->getMethod();
+        $parameters = array('params' => array($methodCode, $order->getStoreId()));
+        $this->_config = $this->_configFactory->create($parameters);
+        if (!$this->_config->isMethodActive($methodCode) || !$this->_config->isMethodAvailable()) {
+            throw new Exception(sprintf('Method "%s" is not available.', $methodCode));
+        }
+        /** @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro */
+        // verify merchant email intended to receive notification
+        $merchantEmail = $this->_config->businessAccount;
+        if (!$merchantEmail) {
+            return $this->_config;
+        }
+        $receiver = $this->getRequestData('business') ? : $this->getRequestData('receiver_email');
+        if (strtolower($merchantEmail) != strtolower($receiver)) {
+            throw new Exception(
+                sprintf('The requested %s and configured %s merchant emails do not match.', $receiver, $merchantEmail)
+            );
         }
 
-        $response = preg_split('/^\r?$/m', $postbackResult, 2);
-        $response = trim($response[1]);
-        if ($response != 'VERIFIED') {
-            $this->_debugData['postback'] = $postbackQuery;
-            $this->_debugData['postback_result'] = $postbackResult;
-            throw new \Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
-        }
+        return $this->_config;
     }
 
     /**
-     * Load and validate order, instantiate proper configuration
+     * Load order
      *
      * @return \Magento\Sales\Model\Order
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _getOrder()
     {
-        if (empty($this->_order)) {
-            // get proper order
-            $id = $this->_request['invoice'];
-            $this->_order = $this->_orderFactory->create()->loadByIncrementId($id);
-            if (!$this->_order->getId()) {
-                $this->_debugData['exception'] = sprintf('Wrong order ID: "%s".', $id);
-                $this->_debug();
-                $this->_responseHttp->setHeader('HTTP/1.1', '503 Service Unavailable')->sendResponse();
-                exit;
-            }
-            // re-initialize config with the method code and store id
-            $method = $this->_order->getPayment()->getMethod();
-            $parameters = array('params' => array($method, $this->_order->getStoreId()));
-            $this->_config = $this->_configFactory->create($parameters);
-            if (!$this->_config->isMethodActive($method) || !$this->_config->isMethodAvailable()) {
-                throw new \Exception(sprintf('Method "%s" is not available.', $method));
-            }
-
-            $this->_verifyOrder();
+        $incrementId = $this->getRequestData('invoice');
+        $this->_order = $this->_orderFactory->create()->loadByIncrementId($incrementId);
+        if (!$this->_order->getId()) {
+            throw new Exception(sprintf('Wrong order ID: "%s".', $incrementId));
         }
         return $this->_order;
-    }
-
-    /**
-     * Load recurring profile
-     *
-     * @return \Magento\RecurringProfile\Model\Profile
-     * @throws \Exception
-     */
-    protected function _getRecurringProfile()
-    {
-        if (empty($this->_recurringProfile)) {
-            // get proper recurring profile
-            $internalReferenceId = $this->_request['rp_invoice_id'];
-            $this->_recurringProfile = $this->_recurringProfileFactory->create()
-                ->loadByInternalReferenceId($internalReferenceId);
-            if (!$this->_recurringProfile->getId()) {
-                throw new \Exception(
-                    sprintf('Wrong recurring profile INTERNAL_REFERENCE_ID: "%s".', $internalReferenceId)
-                );
-            }
-            // re-initialize config with the method code and store id
-            $methodCode = $this->_recurringProfile->getMethodCode();
-            $parameters = array('params' => array($methodCode, $this->_recurringProfile->getStoreId()));
-            $this->_config = $this->_configFactory->create($parameters);
-            if (!$this->_config->isMethodActive($methodCode) || !$this->_config->isMethodAvailable()) {
-                throw new \Exception(sprintf('Method "%s" is not available.', $methodCode));
-            }
-        }
-        return $this->_recurringProfile;
-    }
-
-    /**
-     * Validate incoming request data, as PayPal recommends
-     *
-     * @throws \Exception
-     * @return void
-     * @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro
-     */
-    protected function _verifyOrder()
-    {
-        // verify merchant email intended to receive notification
-        $merchantEmail = $this->_config->businessAccount;
-        if ($merchantEmail) {
-            $receiverEmail = $this->getRequestData('business');
-            if (!$receiverEmail) {
-                $receiverEmail = $this->getRequestData('receiver_email');
-            }
-            if (strtolower($merchantEmail) != strtolower($receiverEmail)) {
-                throw new \Exception(sprintf(
-                    'The requested %s and configured %s merchant emails do not match.',
-                    $receiverEmail,
-                    $merchantEmail
-                ));
-            }
-        }
     }
 
     /**
@@ -292,25 +143,23 @@ class Ipn
      * Admin will be notified on errors.
      *
      * @return void
+     * @throws \Magento\Core\Exception
      */
     protected function _processOrder()
     {
-        $this->_order = null;
-        $this->_getOrder();
+        $this->_getConfig();
         try {
             // Handle payment_status
-            $transactionType = isset($this->_request['txn_type']) ? $this->_request['txn_type'] : null;
+            $transactionType = $this->getRequestData('txn_type');
             switch ($transactionType) {
                 // handle new case created
-                case \Magento\Paypal\Model\Info::TXN_TYPE_NEW_CASE:
+                case Info::TXN_TYPE_NEW_CASE:
                     $this->_registerDispute();
                     break;
-
                 // handle new adjustment is created
-                case \Magento\Paypal\Model\Info::TXN_TYPE_ADJUSTMENT:
+                case Info::TXN_TYPE_ADJUSTMENT:
                     $this->_registerAdjustment();
                     break;
-
                 //handle new transaction created
                 default:
                     $this->_registerTransaction();
@@ -324,44 +173,17 @@ class Ipn
     }
 
     /**
-     * Process adjustment notification
-     *
-     * @return void
-     */
-    protected function _registerAdjustment()
-    {
-        $reasonCode = isset($this->_request['reason_code']) ? $this->_request['reason_code'] : null;
-        $reasonComment = $this->_info->explainReasonCode($reasonCode);
-        $notificationAmount = $this->_order->getBaseCurrency()->formatTxt($this->_request['mc_gross']);
-        /**
-         *  Add IPN comment about registered dispute
-         */
-        $message = __(
-            'IPN "%1". A dispute has been resolved and closed. %2 Transaction amount %3.',
-            ucfirst($reasonCode),
-            $notificationAmount,
-            $reasonComment
-        );
-        $this->_order->addStatusHistoryComment($message)
-            ->setIsCustomerNotified(false)
-            ->save();
-    }
-
-    /**
      * Process dispute notification
      *
      * @return void
      */
     protected function _registerDispute()
     {
-        $reasonCode = isset($this->_request['reason_code']) ? $this->_request['reason_code'] : null;
-        $reasonComment = $this->_info->explainReasonCode($reasonCode);
-        $caseType = isset($this->_request['case_type']) ? $this->_request['case_type'] : null;
-        $caseTypeLabel = $this->_info->getCaseTypeLabel($caseType);
-        $caseId = isset($this->_request['case_id']) ? $this->_request['case_id'] : null;
-        /**
-         *  Add IPN comment about registered dispute
-         */
+        $reasonComment = $this->_paypalInfo->explainReasonCode($this->getRequestData('reason_code'));
+        $caseType = $this->getRequestData('case_type');
+        $caseTypeLabel = $this->_paypalInfo->getCaseTypeLabel($caseType);
+        $caseId = $this->getRequestData('case_id');
+        //Add IPN comment about registered dispute
         $message = __(
             'IPN "%1". Case type "%2". Case ID "%3" %4',
             ucfirst($caseType),
@@ -375,38 +197,23 @@ class Ipn
     }
 
     /**
-     * Process payment reversal and cancelled reversal notification
+     * Process adjustment notification
      *
      * @return void
      */
-    protected function _registerPaymentReversal()
+    protected function _registerAdjustment()
     {
-        $reasonCode = isset($this->_request['reason_code']) ? $this->_request['reason_code'] : null;
-        $reasonComment = $this->_info->explainReasonCode($reasonCode);
-        $notificationAmount = $this->_order
-            ->getBaseCurrency()
-            ->formatTxt($this->_request['mc_gross'] + $this->_request['mc_fee']);
-        $paymentStatus = $this->_filterPaymentStatus(
-            isset($this->_request['payment_status'])
-                ? $this->_request['payment_status']
-                : null
-        );
-        $orderStatus = ($paymentStatus == \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED)
-            ? \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
-            : \Magento\Paypal\Model\Info::ORDER_STATUS_CANCELED_REVERSAL;
-        /**
-         * Change order status to PayPal Reversed/PayPal Cancelled Reversal if it is possible.
-         */
+        $reasonCode = $this->getRequestData('reason_code');
+        $reasonComment = $this->_paypalInfo->explainReasonCode($reasonCode);
+        $notificationAmount = $this->_order->getBaseCurrency()->formatTxt($this->getRequestData('mc_gross'));
+        // Add IPN comment about registered dispute
         $message = __(
-            'IPN "%1". %2 Transaction amount %3. Transaction ID: "%4"',
-            $this->_request['payment_status'],
-            $reasonComment,
+            'IPN "%1". A dispute has been resolved and closed. %2 Transaction amount %3.',
+            ucfirst($reasonCode),
             $notificationAmount,
-            $this->_request['txn_id']
+            $reasonComment
         );
-        $this->_order->setStatus($orderStatus);
-        $this->_order->save();
-        $this->_order->addStatusHistoryComment($message, $orderStatus)
+        $this->_order->addStatusHistoryComment($message)
             ->setIsCustomerNotified(false)
             ->save();
     }
@@ -415,116 +222,53 @@ class Ipn
      * Process regular IPN notifications
      *
      * @return void
+     * @throws \Magento\Core\Exception
+     * @throws Exception
      */
     protected function _registerTransaction()
     {
         try {
             // Handle payment_status
-            $paymentStatus = $this->_filterPaymentStatus($this->_request['payment_status']);
+            $paymentStatus = $this->_filterPaymentStatus($this->getRequestData('payment_status'));
             switch ($paymentStatus) {
                 // paid
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED:
+                case Info::PAYMENTSTATUS_COMPLETED:
                     $this->_registerPaymentCapture();
                     break;
-
                 // the holded payment was denied on paypal side
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_DENIED:
+                case Info::PAYMENTSTATUS_DENIED:
                     $this->_registerPaymentDenial();
                     break;
-
                 // customer attempted to pay via bank account, but failed
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_FAILED:
+                case Info::PAYMENTSTATUS_FAILED:
                     // cancel order
                     $this->_registerPaymentFailure();
                     break;
-
                 // payment was obtained, but money were not captured yet
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_PENDING:
+                case Info::PAYMENTSTATUS_PENDING:
                     $this->_registerPaymentPending();
                     break;
-
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_PROCESSED:
+                case Info::PAYMENTSTATUS_PROCESSED:
                     $this->_registerMasspaymentsSuccess();
                     break;
-
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED: //break is intentionally omitted
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_UNREVERSED:
+                case Info::PAYMENTSTATUS_REVERSED: //break is intentionally omitted
+                case Info::PAYMENTSTATUS_UNREVERSED:
                     $this->_registerPaymentReversal();
                     break;
-
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDED:
+                case Info::PAYMENTSTATUS_REFUNDED:
                     $this->_registerPaymentRefund();
                     break;
                 // authorization expire/void
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_EXPIRED: // break is intentionally omitted
-                case \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED:
+                case Info::PAYMENTSTATUS_EXPIRED: // break is intentionally omitted
+                case Info::PAYMENTSTATUS_VOIDED:
                     $this->_registerPaymentVoid();
                     break;
-
                 default:
-                    throw new \Exception("Cannot handle payment status '{$paymentStatus}'.");
+                    throw new Exception("Cannot handle payment status '{$paymentStatus}'.");
             }
         } catch (\Magento\Core\Exception $e) {
             $comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);
             $comment->save();
-            throw $e;
-        }
-    }
-
-    /**
-     * Process notification from recurring profile payments
-     *
-     * @return void
-     */
-    protected function _processRecurringProfile()
-    {
-        $this->_recurringProfile = null;
-        $this->_getRecurringProfile();
-
-        try {
-            // handle payment_status
-            $paymentStatus = $this->_filterPaymentStatus($this->_request['payment_status']);
-            if ($paymentStatus != \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED) {
-                throw new \Exception("Cannot handle payment status '{$paymentStatus}'.");
-            }
-            // Register recurring payment notification, create and process order
-            $price = $this->getRequestData('mc_gross') - $this->getRequestData('tax')
-                - $this->getRequestData('shipping');
-            $productItemInfo = new \Magento\Object;
-            $type = trim($this->getRequestData('period_type'));
-            if ($type == 'Trial') {
-                $productItemInfo->setPaymentType(\Magento\RecurringProfile\Model\PaymentTypeInterface::TRIAL);
-            } elseif ($type == 'Regular') {
-                $productItemInfo->setPaymentType(\Magento\RecurringProfile\Model\PaymentTypeInterface::REGULAR);
-            }
-            $productItemInfo->setTaxAmount($this->getRequestData('tax'));
-            $productItemInfo->setShippingAmount($this->getRequestData('shipping'));
-            $productItemInfo->setPrice($price);
-
-            $order = $this->_recurringProfile->createOrder($productItemInfo);
-
-            $payment = $order->getPayment();
-            $payment->setTransactionId($this->getRequestData('txn_id'))
-                ->setCurrencyCode($this->getRequestData('mc_currency'))
-                ->setPreparedMessage($this->_createIpnComment(''))
-                ->setIsTransactionClosed(0);
-            $order->save();
-            $this->_recurringProfile->addOrderRelation($order->getId());
-            $payment->registerCaptureNotification($this->getRequestData('mc_gross'));
-            $order->save();
-
-            // notify customer
-            $invoice = $payment->getCreatedInvoice();
-            if ($invoice) {
-                $message = __('You notified customer about invoice #%1.', $invoice->getIncrementId());
-                $order->sendNewOrderEmail()->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified(true)
-                    ->save();
-            }
-        } catch (\Magento\Core\Exception $e) {
-            //TODO: add to payment profile comments
-            //$comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);
-            //$comment->save();
             throw $e;
         }
     }
@@ -584,45 +328,14 @@ class Ipn
     protected function _registerPaymentFailure()
     {
         $this->_importPaymentInformation();
-        $this->_order
-            ->registerCancellation($this->_createIpnComment(''), false)
-            ->save();
-    }
-
-    /**
-     * Process a refund
-     *
-     * @return void
-     */
-    protected function _registerPaymentRefund()
-    {
-        $this->_importPaymentInformation();
-        $reason = $this->getRequestData('reason_code');
-        $isRefundFinal = !$this->_info->isReversalDisputable($reason);
-        $payment = $this->_order->getPayment()
-            ->setPreparedMessage($this->_createIpnComment($this->_info->explainReasonCode($reason)))
-            ->setTransactionId($this->getRequestData('txn_id'))
-            ->setParentTransactionId($this->getRequestData('parent_txn_id'))
-            ->setIsTransactionClosed($isRefundFinal)
-            ->registerRefundNotification(-1 * $this->getRequestData('mc_gross'));
-        $this->_order->save();
-
-        // TODO: there is no way to close a capture right now
-
-        $creditMemo = $payment->getCreatedCreditmemo();
-        if ($creditMemo) {
-            $creditMemo->sendEmail();
-            $this->_order->addStatusHistoryComment(
-                __('You notified customer about creditmemo #%1.', $creditMemo->getIncrementId())
-            )->setIsCustomerNotified(true)->save();
-        }
+        $this->_order->registerCancellation($this->_createIpnComment(''))->save();
     }
 
     /**
      * Process payment pending notification
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function _registerPaymentPending()
     {
@@ -632,9 +345,8 @@ class Ipn
             return;
         }
         if ('order' === $reason) {
-            throw new \Exception('The "order" authorizations are not implemented.');
+            throw new Exception('The "order" authorizations are not implemented.');
         }
-
         // case when was placed using PayPal standard
         if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()) {
             $this->_registerPaymentCapture();
@@ -644,7 +356,7 @@ class Ipn
         $this->_importPaymentInformation();
 
         $this->_order->getPayment()
-            ->setPreparedMessage($this->_createIpnComment($this->_info->explainPendingReason($reason)))
+            ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainPendingReason($reason)))
             ->setTransactionId($this->getRequestData('txn_id'))
             ->setIsTransactionClosed(0)
             ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, false);
@@ -664,8 +376,7 @@ class Ipn
             $payment->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, true);
         } else {
             $this->_importPaymentInformation();
-            $payment
-                ->setPreparedMessage($this->_createIpnComment(''))
+            $payment->setPreparedMessage($this->_createIpnComment(''))
                 ->setTransactionId($this->getRequestData('txn_id'))
                 ->setParentTransactionId($this->getRequestData('parent_txn_id'))
                 ->setIsTransactionClosed(0)
@@ -674,26 +385,6 @@ class Ipn
         if (!$this->_order->getEmailSent()) {
             $this->_order->sendNewOrderEmail();
         }
-        $this->_order->save();
-    }
-
-    /**
-     * Process voided authorization
-     *
-     * @return void
-     */
-    protected function _registerPaymentVoid()
-    {
-        $this->_importPaymentInformation();
-
-        $parentTxnId = $this->getRequestData('transaction_entity') == 'auth'
-            ? $this->getRequestData('txn_id') : $this->getRequestData('parent_txn_id');
-
-        $this->_order->getPayment()
-            ->setPreparedMessage($this->_createIpnComment(''))
-            ->setParentTransactionId($parentTxnId)
-            ->registerVoidNotification();
-
         $this->_order->save();
     }
 
@@ -709,25 +400,83 @@ class Ipn
     }
 
     /**
-     * Generate an "IPN" comment with additional explanation.
-     * Returns the generated comment or order status history object
+     * Process payment reversal and cancelled reversal notification
      *
-     * @param string $comment
-     * @param bool $addToHistory
-     * @return string|\Magento\Sales\Model\Order\Status\History
+     * @return void
      */
-    protected function _createIpnComment($comment = '', $addToHistory = false)
+    protected function _registerPaymentReversal()
     {
-        $paymentStatus = $this->getRequestData('payment_status');
-        $message = __('IPN "%1"', $paymentStatus);
-        if ($comment) {
-            $message .= ' ' . $comment;
+        $reasonCode = $this->getRequestData('reason_code');
+        $reasonComment = $this->_paypalInfo->explainReasonCode($reasonCode);
+        $notificationAmount = $this->_order->getBaseCurrency()
+            ->formatTxt($this->getRequestData('mc_gross') + $this->getRequestData('mc_fee'));
+        $paymentStatus = $this->_filterPaymentStatus($this->getRequestData('payment_status'));
+        $orderStatus = ($paymentStatus == Info::PAYMENTSTATUS_REVERSED)
+            ? Info::ORDER_STATUS_REVERSED
+            : Info::ORDER_STATUS_CANCELED_REVERSAL;
+        //Change order status to PayPal Reversed/PayPal Cancelled Reversal if it is possible.
+        $message = __(
+            'IPN "%1". %2 Transaction amount %3. Transaction ID: "%4"',
+            $this->getRequestData('payment_status'),
+            $reasonComment,
+            $notificationAmount,
+            $this->getRequestData('txn_id')
+        );
+        $this->_order->setStatus($orderStatus);
+        $this->_order->save();
+        $this->_order->addStatusHistoryComment($message, $orderStatus)
+            ->setIsCustomerNotified(false)
+            ->save();
+    }
+
+    /**
+     * Process a refund
+     *
+     * @return void
+     */
+    protected function _registerPaymentRefund()
+    {
+        $this->_importPaymentInformation();
+        $reason = $this->getRequestData('reason_code');
+        $isRefundFinal = !$this->_paypalInfo->isReversalDisputable($reason);
+        $payment = $this->_order->getPayment()
+            ->setPreparedMessage($this->_createIpnComment($this->_paypalInfo->explainReasonCode($reason)))
+            ->setTransactionId($this->getRequestData('txn_id'))
+            ->setParentTransactionId($this->getRequestData('parent_txn_id'))
+            ->setIsTransactionClosed($isRefundFinal)
+            ->registerRefundNotification(-1 * $this->getRequestData('mc_gross'));
+        $this->_order->save();
+
+        // TODO: there is no way to close a capture right now
+
+        $creditMemo = $payment->getCreatedCreditmemo();
+        if ($creditMemo) {
+            $creditMemo->sendEmail();
+            $this->_order->addStatusHistoryComment(
+                __('You notified customer about creditmemo #%1.', $creditMemo->getIncrementId())
+            )->setIsCustomerNotified(true)->save();
         }
-        if ($addToHistory) {
-            $message = $this->_order->addStatusHistoryComment($message);
-            $message->setIsCustomerNotified(null);
-        }
-        return $message;
+    }
+
+    /**
+     * Process voided authorization
+     *
+     * @return void
+     */
+    protected function _registerPaymentVoid()
+    {
+        $this->_importPaymentInformation();
+
+        $parentTxnId = $this->getRequestData('transaction_entity') == 'auth'
+            ? $this->getRequestData('txn_id')
+            : $this->getRequestData('parent_txn_id');
+
+        $this->_order->getPayment()
+            ->setPreparedMessage($this->_createIpnComment(''))
+            ->setParentTransactionId($parentTxnId)
+            ->registerVoidNotification();
+
+        $this->_order->save();
     }
 
     /**
@@ -744,14 +493,14 @@ class Ipn
         // collect basic information
         $from = array();
         foreach (array(
-            \Magento\Paypal\Model\Info::PAYER_ID,
-            'payer_email' => \Magento\Paypal\Model\Info::PAYER_EMAIL,
-            \Magento\Paypal\Model\Info::PAYER_STATUS,
-            \Magento\Paypal\Model\Info::ADDRESS_STATUS,
-            \Magento\Paypal\Model\Info::PROTECTION_EL,
-            \Magento\Paypal\Model\Info::PAYMENT_STATUS,
-            \Magento\Paypal\Model\Info::PENDING_REASON,
-        ) as $privateKey => $publicKey) {
+                     Info::PAYER_ID,
+                     'payer_email' => Info::PAYER_EMAIL,
+                     Info::PAYER_STATUS,
+                     Info::ADDRESS_STATUS,
+                     Info::PROTECTION_EL,
+                     Info::PAYMENT_STATUS,
+                     Info::PENDING_REASON,
+                 ) as $privateKey => $publicKey) {
             if (is_int($privateKey)) {
                 $privateKey = $publicKey;
             }
@@ -770,25 +519,25 @@ class Ipn
             $fraudFilters[] = $value;
         }
         if ($fraudFilters) {
-            $from[\Magento\Paypal\Model\Info::FRAUD_FILTERS] = $fraudFilters;
+            $from[Info::FRAUD_FILTERS] = $fraudFilters;
         }
 
-        $this->_info->importToPayment($from, $payment);
+        $this->_paypalInfo->importToPayment($from, $payment);
 
         /**
          * Detect pending payment, frauds
          * TODO: implement logic in one place
          * @see \Magento\Paypal\Model\Pro::importPaymentInfo()
          */
-        if ($this->_info->isPaymentReviewRequired($payment)) {
+        if ($this->_paypalInfo->isPaymentReviewRequired($payment)) {
             $payment->setIsTransactionPending(true);
             if ($fraudFilters) {
                 $payment->setIsFraudDetected(true);
             }
         }
-        if ($this->_info->isPaymentSuccessful($payment)) {
+        if ($this->_paypalInfo->isPaymentSuccessful($payment)) {
             $payment->setIsTransactionApproved(true);
-        } elseif ($this->_info->isPaymentFailed($payment)) {
+        } elseif ($this->_paypalInfo->isPaymentFailed($payment)) {
             $payment->setIsTransactionDenied(true);
         }
 
@@ -796,45 +545,23 @@ class Ipn
     }
 
     /**
-     * Filter payment status from NVP into paypal/info format
+     * Generate an "IPN" comment with additional explanation.
+     * Returns the generated comment or order status history object
      *
-     * @param string $ipnPaymentStatus
-     * @return string
+     * @param string $comment
+     * @param bool $addToHistory
+     * @return string|\Magento\Sales\Model\Order\Status\History
      */
-    protected function _filterPaymentStatus($ipnPaymentStatus)
+    protected function _createIpnComment($comment = '', $addToHistory = false)
     {
-        switch ($ipnPaymentStatus) {
-            case 'Created': // break is intentionally omitted
-            case 'Completed': return \Magento\Paypal\Model\Info::PAYMENTSTATUS_COMPLETED;
-            case 'Denied':    return \Magento\Paypal\Model\Info::PAYMENTSTATUS_DENIED;
-            case 'Expired':   return \Magento\Paypal\Model\Info::PAYMENTSTATUS_EXPIRED;
-            case 'Failed':    return \Magento\Paypal\Model\Info::PAYMENTSTATUS_FAILED;
-            case 'Pending':   return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PENDING;
-            case 'Refunded':  return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REFUNDED;
-            case 'Reversed':  return \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVERSED;
-            case 'Canceled_Reversal': return \Magento\Paypal\Model\Info::PAYMENTSTATUS_UNREVERSED;
-            case 'Processed': return \Magento\Paypal\Model\Info::PAYMENTSTATUS_PROCESSED;
-            case 'Voided':    return \Magento\Paypal\Model\Info::PAYMENTSTATUS_VOIDED;
+        $message = __('IPN "%1"', $this->getRequestData('payment_status'));
+        if ($comment) {
+            $message .= ' ' . $comment;
         }
-        return '';
-        // documented in NVP, but not documented in IPN:
-        //Magento_Paypal_Model_Info::PAYMENTSTATUS_NONE
-        //Magento_Paypal_Model_Info::PAYMENTSTATUS_INPROGRESS
-        //Magento_Paypal_Model_Info::PAYMENTSTATUS_REFUNDEDPART
-    }
-
-    /**
-     * Log debug data to file
-     *
-     * @return void
-     */
-    protected function _debug()
-    {
-        if ($this->_config && $this->_config->debug) {
-            $file = $this->_config->getMethodCode()
-                ? "payment_{$this->_config->getMethodCode()}.log"
-                : self::DEFAULT_LOG_FILE;
-            $this->_logAdapterFactory->create(array('fileName' => $file))->log($this->_debugData);
+        if ($addToHistory) {
+            $message = $this->_order->addStatusHistoryComment($message);
+            $message->setIsCustomerNotified(null);
         }
+        return $message;
     }
 }

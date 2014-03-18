@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Collection;
 
 /**
  * Flat sales order collection
@@ -32,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Collection;
-
 abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
 {
     /**
@@ -54,7 +52,7 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
      * Set sales order model as parent collection object
      *
      * @param \Magento\Sales\Model\Order $order
-     * @return \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+     * @return $this
      */
     public function setSalesOrder($order)
     {
@@ -84,7 +82,7 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
      * Add order filter
      *
      * @param int|\Magento\Sales\Model\Order $order
-     * @return \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+     * @return $this
      */
     public function setOrderFilter($order)
     {

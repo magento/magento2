@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
 
 /**
  * Bundle selection product grid
@@ -31,8 +32,6 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
-
 class Grid
     extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -67,6 +66,9 @@ class Grid
         parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -80,6 +82,8 @@ class Grid
 
     /**
      * Prepare grid filter buttons
+     *
+     * @return void
      */
     protected function _prepareFilterButtons()
     {
@@ -183,6 +187,9 @@ class Grid
         return $this->getUrl('adminhtml/bundle_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
     }
 
+    /**
+     * @return mixed
+     */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost(
@@ -192,6 +199,9 @@ class Grid
         return $products;
     }
 
+    /**
+     * @return array
+     */
     protected function _getProducts()
     {
         if ($products = $this->getRequest()->getPost('products', null)) {

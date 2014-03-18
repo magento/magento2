@@ -92,12 +92,12 @@ if (typeof Mage.GoogleShopping == 'undefined') {
 
         addMessage: function() {
             var messageBox = $('messages');
-            var messageList = $(messageBox).down('ul.messages');
+            var messageList = $(messageBox).down('.messages');
             if (!messageList) {
-                messageList = new Element('ul', {class: 'messages'});
+                messageList = new Element('div', {class: 'messages'});
                 messageBox.update(messageList);
             }
-            var message = '<li class="notice-msg">' + this.runningMessage + '</li>';
+            var message = '<div class="message notice"><div>' + this.runningMessage + '</div></div>';
             messageList.update(message);
         },
 

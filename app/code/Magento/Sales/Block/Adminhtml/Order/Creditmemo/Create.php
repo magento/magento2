@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
 /**
  * Adminhtml creditmemo create
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
-
 class Create extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -53,6 +51,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'order_id';
@@ -75,6 +78,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_coreRegistry->registry('current_creditmemo');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->getCreditmemo()->getInvoice()) {
@@ -86,6 +94,11 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         return $header;
     }
 
+    /**
+     * Get back url
+     *
+     * @return string
+     */
     public function getBackUrl()
     {
         return $this->getUrl(

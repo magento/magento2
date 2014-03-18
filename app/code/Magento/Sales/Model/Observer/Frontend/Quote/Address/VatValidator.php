@@ -56,10 +56,10 @@ class VatValidator
      * Validate VAT number
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Core\Model\Store|int $store
      * @return \Magento\Object
      */
-    public function validate(\Magento\Sales\Model\Quote\Address $quoteAddress, \Magento\Core\Model\Store $store)
+    public function validate(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)
     {
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
@@ -68,7 +68,7 @@ class VatValidator
         $merchantVatNumber = $this->customerData->getMerchantVatNumber();
 
         $validationResult = null;
-        if ($this->customerAddress->getValidateOnEachTransaction($store)
+        if ($this->customerAddress->hasValidateOnEachTransaction($store)
             || $customerCountryCode != $quoteAddress->getValidatedCountryCode()
             || $customerVatNumber != $quoteAddress->getValidatedVatNumber()
         ) {
@@ -105,17 +105,13 @@ class VatValidator
      * Check whether VAT ID validation is enabled
      *
      * @param \Magento\Sales\Model\Quote\Address $quoteAddress
-     * @param \Magento\Core\Model\Store $store
+     * @param \Magento\Core\Model\Store|int $store
      * @return bool
      */
     public function isEnabled(\Magento\Sales\Model\Quote\Address $quoteAddress, $store)
     {
         $configAddressType = $this->customerAddress->getTaxCalculationAddressType($store);
 
-        /**
-         * TODO: References to Magento\Customer\Model\Address\AbstractAddress will be eliminated
-         * in scope of MAGETWO-21105
-         */
         // When VAT is based on billing address then Magento have to handle only billing addresses
         $additionalBillingAddressCondition =
             $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING

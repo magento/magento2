@@ -66,13 +66,9 @@
     </div>
     <div class="fieldset-wrapper-content" id="remove-products-to-website-content">
         <fieldset class="fieldset" id="grop_fields">
-            <ul class="messages">
-                <li class="notice-msg">
-                    <ul>
-                        <li><?php echo __("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></li>
-                    </ul>
-                </li>
-            </ul>
+            <div class="message info">
+                <div><?php echo __("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
+            </div>
             <?php foreach ($this->getWebsiteCollection() as $_website): ?>
                 <div class="website-name">
                     <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox"/>

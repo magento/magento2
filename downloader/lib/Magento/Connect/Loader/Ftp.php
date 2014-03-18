@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Loader;
 
 /**
  * Class for ftp loader which using in the Rest
@@ -31,8 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Loader;
-
 class Ftp
 {
 
@@ -83,6 +82,9 @@ class Ftp
         $this->_ftpPassword = self::FTP_PASS;
     }
 
+    /**
+     * @return \Magento\Connect\Ftp|null
+     */
     public function getFtp()
     {
         return $this->_ftp;

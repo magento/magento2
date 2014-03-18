@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup;
 
 /**
  * Class to work media folder and database backups
@@ -31,9 +32,7 @@
  * @package     Magento_Backup
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup;
-
-class Media extends \Magento\Backup\Snapshot
+class Media extends Snapshot
 {
     /**
      * Implementation Rollback functionality for Media
@@ -63,7 +62,7 @@ class Media extends \Magento\Backup\Snapshot
      * Overlap getType
      *
      * @return string
-     * @see \Magento\Backup\BackupInterface::getType()
+     * @see BackupInterface::getType()
      */
     public function getType()
     {
@@ -73,7 +72,7 @@ class Media extends \Magento\Backup\Snapshot
     /**
      * Add all folders and files except media and db backup to ignore list
      *
-     * @return \Magento\Backup\Media
+     * @return $this
      */
     protected function _prepareIgnoreList()
     {

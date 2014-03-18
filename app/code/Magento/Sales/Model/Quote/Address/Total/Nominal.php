@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote\Address\Total;
 
 /**
  * Nominal items total
@@ -30,8 +31,6 @@
  * Collects only items segregated by isNominal property
  * Aggregates row totals per item
  */
-namespace Magento\Sales\Model\Quote\Address\Total;
-
 class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -51,8 +50,7 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      * Invoke collector for nominal items
      *
      * @param \Magento\Sales\Model\Quote\Address $address
-     * @param \Magento\Sales\Model\Quote\Address\Total\Nominal
-     * @return $this|\Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
@@ -96,7 +94,7 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      * Fetch collected nominal items
      *
      * @param \Magento\Sales\Model\Quote\Address $address
-     * @return \Magento\Sales\Model\Quote\Address\Total\Nominal
+     * @return $this
      */
     public function fetch(\Magento\Sales\Model\Quote\Address $address)
     {

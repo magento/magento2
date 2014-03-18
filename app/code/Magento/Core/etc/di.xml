@@ -51,6 +51,7 @@
     <preference for="Magento\View\Design\Theme\FileProviderInterface" type="Magento\Core\Model\Theme\FileProvider" />
     <preference for="Magento\View\Design\Theme\Customization\ConfigInterface" type="Magento\Core\Model\Theme\Customization\Config" />
     <preference for="Magento\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
+    <preference for="Magento\View\Asset\MergeStrategyInterface" type="Magento\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\App\ViewInterface" type="Magento\App\View" />
     <preference for="Magento\TranslateInterface" type="Magento\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
@@ -88,6 +89,7 @@
         <arguments>
             <argument name="templateFileName" xsi:type="string">Magento_Core::translate_inline.phtml</argument>
             <argument name="translatorRoute" xsi:type="string">core/ajax/translate</argument>
+            <argument name="layout" xsi:type="object">Magento\View\LayoutInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\App\DefaultPath\DefaultPath">
@@ -315,7 +317,7 @@
     <type name="Magento\Core\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">
-                <item name="frontend" xsi:type="string">magento_plushe</item>
+                <item name="frontend" xsi:type="string">magento_blank</item>
                 <item name="adminhtml" xsi:type="string">magento_backend</item>
                 <item name="install" xsi:type="string">magento_basic</item>
             </argument>

@@ -172,6 +172,7 @@ class Factory implements \Magento\ObjectManager\Factory
      *
      * @param string $type
      * @throws \LogicException
+     * @return void
      */
     private function _assertNoCircularDependency($type)
     {

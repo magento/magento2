@@ -23,7 +23,6 @@
  */
 namespace Magento\Checkout\Controller;
 
-use Magento\Customer\Service\V1\CustomerServiceInterface as CustomerService;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 use Magento\Exception\NoSuchEntityException;
@@ -39,11 +38,6 @@ abstract class Action extends \Magento\App\Action\Action
     protected $_customerSession;
 
     /**
-     * @var CustomerService
-     */
-    protected $_customerService;
-
-    /**
      * @var CustomerAccountService
      */
     protected $_customerAccountService;
@@ -56,19 +50,16 @@ abstract class Action extends \Magento\App\Action\Action
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerService $customerService
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      */
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerService $customerService,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService
     ) {
         $this->_customerSession = $customerSession;
-        $this->_customerService = $customerService;
         $this->_customerAccountService = $customerAccountService;
         $this->_customerMetadataService = $customerMetadataService;
         parent::__construct($context);
@@ -87,7 +78,7 @@ abstract class Action extends \Magento\App\Action\Action
     {
         try {
             $customerId = $this->_customerSession->getCustomerId();
-            $customer = $this->_customerService->getCustomer($customerId);
+            $customer = $this->_customerAccountService->getCustomer($customerId);
         } catch (NoSuchEntityException $e) {
             return true;
         }

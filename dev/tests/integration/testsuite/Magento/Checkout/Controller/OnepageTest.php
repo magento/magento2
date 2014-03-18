@@ -108,6 +108,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         $html = $this->getResponse()->getBody();
         $this->assertEquals(
             '{"success":false,"error":true,"error_messages":"Please specify a shipping method."}',
+            $html,
             $html
         );
     }

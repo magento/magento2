@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
 /**
  * Product attribute edit page
  */
-
-namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -60,6 +58,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'attribute_id';

@@ -771,7 +771,6 @@ END;
         return true;
     }
 
-
     /**
      * Check PHP extensions availability
      * @throws \Exception On failure
@@ -791,7 +790,6 @@ END;
         }
         return true;
     }
-
 
     /**
      * Set dependency from php extensions.

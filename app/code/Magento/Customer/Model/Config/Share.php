@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config;
 
 /**
  * Customer sharing config model
@@ -31,8 +32,6 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Config;
-
 class Share extends \Magento\Core\Model\Config\Value
     implements \Magento\Option\ArrayInterface
 {
@@ -124,9 +123,9 @@ class Share extends \Magento\Core\Model\Config\Value
     }
 
     /**
-     * Check for email dublicates before saving customers sharing options
+     * Check for email duplicates before saving customers sharing options
      *
-     * @return \Magento\Customer\Model\Config\Share
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function _beforeSave()

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Helper;
 
 /**
  * Sales module base helper
  */
-namespace Magento\Sales\Helper;
-
 class Reorder extends \Magento\Core\Helper\Data
 {
     const XML_PATH_SALES_REORDER_ALLOW = 'sales/reorder/allow';

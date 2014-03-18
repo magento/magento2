@@ -167,6 +167,17 @@ class DirectoryList
     }
 
     /**
+     * Check whether configured directory
+     *
+     * @param string $code
+     * @return bool
+     */
+    public function isConfigured($code)
+    {
+        return isset($this->directories[$code]);
+    }
+
+    /**
      * Get configuration for directory code
      *
      * @param string $code

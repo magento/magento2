@@ -56,23 +56,31 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
+     * @var \Magento\Filter\FilterManager
+     */
+    protected $filter;
+
+    /**
      * Construct
      *
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Filter\FilterManager $filter
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Filter\FilterManager $filter
     ) {
         parent::__construct($resource);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
+        $this->filter = $filter;
     }
 
     /**
@@ -118,6 +126,10 @@ class Page extends \Magento\Core\Model\Resource\Db\AbstractDb
         foreach (array('custom_theme_from', 'custom_theme_to') as $field) {
             $value = !$object->getData($field) ? null : $object->getData($field);
             $object->setData($field, $this->dateTime->formatDate($value));
+        }
+
+        if (!$object->getData('identifier')) {
+            $object->setData('identifier', $this->filter->translitUrl($object->getData('title')));
         }
 
         if (!$this->getIsUniquePageToStores($object)) {

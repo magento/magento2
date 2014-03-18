@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Config;
 
 /**
  * Configuration class for ordered items
@@ -31,8 +32,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Config;
-
 abstract class Ordered extends \Magento\Core\Model\Config\Base
 {
     /**
@@ -113,7 +112,7 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
     /**
      * Initialize total models configuration and objects
      *
-     * @return \Magento\Sales\Model\Config\Ordered
+     * @return $this
      */
     protected function _initModels()
     {
@@ -130,11 +129,11 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
     /**
      * Init model class by configuration
      *
-     * @abstract
      * @param string $class
      * @param string $totalCode
      * @param array $totalConfig
      * @return mixed
+     * @abstract
      */
     abstract protected function _initModelInstance($class, $totalCode, $totalConfig);
 
@@ -174,7 +173,7 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
      * Initialize collectors array.
      * Collectors array is array of total models ordered based on configuration settings
      *
-     * @return  \Magento\Sales\Model\Config\Ordered
+     * @return $this
      */
     protected function _initCollectors()
     {

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Order\Pdf\Items;
 
 /**
@@ -113,7 +112,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
      * Set order model
      *
      * @param  \Magento\Sales\Model\Order $order
-     * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+     * @return $this
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
@@ -125,7 +124,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
      * Set Source model
      *
      * @param  \Magento\Core\Model\AbstractModel $source
-     * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+     * @return $this
      */
     public function setSource(\Magento\Core\Model\AbstractModel $source)
     {
@@ -137,7 +136,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
      * Set item object
      *
      * @param  \Magento\Object $item
-     * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+     * @return $this
      */
     public function setItem(\Magento\Object $item)
     {
@@ -149,7 +148,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
      * Set Pdf model
      *
      * @param  \Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf
-     * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+     * @return $this
      */
     public function setPdf(\Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf)
     {
@@ -161,7 +160,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
      * Set current page
      *
      * @param  \Zend_Pdf_Page $page
-     * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
+     * @return $this
      */
     public function setPage(\Zend_Pdf_Page $page)
     {
@@ -242,13 +241,14 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     /**
      * Draw item line
      *
+     * @return void
      */
     abstract public function draw();
 
     /**
      * Format option value process
      *
-     * @param  $value
+     * @param array|string $value
      * @return string
      */
     protected function _formatOptionValue($value)
@@ -275,7 +275,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     /**
      * Get array of arrays with item prices information for display in PDF
      *
-     * array(
+     * Format: array(
      *  $index => array(
      *      'label'    => $label,
      *      'price'    => $price,
@@ -387,7 +387,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     /**
      * Return item Sku
      *
-     * @param  $item
+     * @param mixed $item
      * @return mixed
      */
     public function getSku($item)

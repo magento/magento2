@@ -30,12 +30,10 @@ $count = $_helper->getItemCount();
 ?>
 <div class="block compare">
     <div class="title">
-        <strong>
-            <span class="text"><?php echo __('Compare Products') ?></span>
-            <?php if($count > 0): ?>
-                <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
-            <?php endif; ?>
-        </strong>
+        <strong><?php echo __('Compare Products') ?></strong>
+        <?php if($count > 0): ?>
+        <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
+        <?php endif; ?>
     </div>
     <div class="content">
         <?php if($_helper->getItemCount() > 0): ?>
@@ -56,7 +54,7 @@ $count = $_helper->getItemCount();
             </li>
         <?php endforeach; ?>
     </ol>
-    <div class="actions">
+    <div class="actions toolbar">
         <div class="primary">
             <a href="<?php echo $_helper->getListUrl() ?>" class="action compare"><span><?php echo __('Compare') ?></span></a>
         </div>

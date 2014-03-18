@@ -738,7 +738,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $product->addCustomOption('product_qty_'.$subProduct->getId(), 1, $subProduct);
                     $product->addCustomOption('simple_product', $subProduct->getId(), $subProduct);
 
-                    $_result = $subProduct->getTypeInstance()->_prepareProduct(
+                    $_result = $subProduct->getTypeInstance()->processConfiguration(
                         $buyRequest,
                         $subProduct,
                         $processMode

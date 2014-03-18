@@ -25,10 +25,11 @@
 ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php echo $this->getChildHtml('info');?>
-<div class="order toolbar"><?php echo $this->getPagerHtml(); ?></div>
+<div class="order products toolbar"><?php echo $this->getPagerHtml(); ?></div>
 <?php if($_orders->getSize()): ?>
 <div class="wrapper table orders history">
     <table class="data table orders history" id="my-orders-table">
+        <caption class="table caption"><?php echo __('Orders') ?></caption>
         <thead>
             <tr>
                 <th class="col id"><?php echo __('Order #') ?></th>
@@ -62,7 +63,7 @@
         </tbody>
     </table>
 </div>
-<div class="order toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
+<div class="order products toolbar bottom"><?php echo $this->getPagerHtml(); ?></div>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('You have placed no orders.'); ?></span></div>
 <?php endif ?>

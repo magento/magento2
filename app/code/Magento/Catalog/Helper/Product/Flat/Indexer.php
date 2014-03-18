@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Helper\Product\Flat;
 
 /**
  * Catalog Product Flat Indexer Helper
@@ -30,8 +31,6 @@
  * @category   Magento
  * @package    Magento_Catalog
  */
-namespace Magento\Catalog\Helper\Product\Flat;
-
 class Indexer extends \Magento\App\Helper\AbstractHelper
 {
     /**
@@ -506,6 +505,8 @@ class Indexer extends \Magento\App\Helper\AbstractHelper
 
     /**
      * Delete all product flat tables for not existing stores
+     *
+     * @return void
      */
     public function deleteAbandonedStoreFlatTables()
     {

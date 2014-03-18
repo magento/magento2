@@ -70,6 +70,8 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
 
     /**
      * Remove index entries before reindexation
+     *
+     * @return void
      */
     protected function removeEntries()
     {

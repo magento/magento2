@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Adminhtml billing agreement info tab
@@ -44,24 +45,24 @@ class Info extends \Magento\Backend\Block\Template
     /**
      * Customer service
      *
-     * @var \Magento\Customer\Service\V1\CustomerServiceInterface
+     * @var CustomerAccountServiceInterface
      */
-    protected $_customerService;
+    protected $_customerAccountService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Customer\Service\V1\CustomerServiceInterface $customerService
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Registry $registry,
-        \Magento\Customer\Service\V1\CustomerServiceInterface $customerService,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_customerService = $customerService;
+        $this->_customerAccountService = $customerAccountService;
         parent::__construct($context, $data);
     }
 
@@ -117,7 +118,7 @@ class Info extends \Magento\Backend\Block\Template
         $agreement = $this->_getBillingAgreement();
         $this->setReferenceId($agreement->getReferenceId());
         $customerId = $agreement->getCustomerId();
-        $customer = $this->_customerService->getCustomer($customerId);
+        $customer = $this->_customerAccountService->getCustomer($customerId);
 
         $this->setCustomerEmail($customer->getEmail());
         $this->setCustomerUrl(

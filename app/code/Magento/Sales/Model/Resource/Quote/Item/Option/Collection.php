@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Quote\Item\Option;
 
+use Magento\Sales\Model\Quote\Item;
 
 /**
  * Item option collection
@@ -32,8 +34,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Quote\Item\Option;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -53,6 +53,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define resource model for collection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -62,7 +63,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Fill array of options by item and product
      *
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Option\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -90,8 +91,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Apply quote item(s) filter to collection
      *
-     * @param int | array $item
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Option\Collection
+     * @param int|array|Item $item
+     * @return $this
      */
     public function addItemFilter($item)
     {
@@ -101,7 +102,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             //$this->addFieldToFilter('item_id', '');
         } elseif (is_array($item)) {
             $this->addFieldToFilter('item_id', array('in' => $item));
-        } elseif ($item instanceof \Magento\Sales\Model\Quote\Item) {
+        } elseif ($item instanceof Item) {
             $this->addFieldToFilter('item_id', $item->getId());
         } else {
             $this->addFieldToFilter('item_id', $item);
@@ -130,7 +131,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function getOptionsByItem($item)
     {
-        if ($item instanceof \Magento\Sales\Model\Quote\Item) {
+        if ($item instanceof Item) {
             $itemId = $item->getId();
         } else {
             $itemId = $item;

@@ -61,7 +61,6 @@
   -webkit-font-smoothing: antialiased;
   content: '\e07d';
   /* close icon */
-
   font-size: 16px;
 }
 [class^=" catalog-product-"] .page-actions .action-back span,
@@ -191,7 +190,6 @@
 }
 .address-list address:first-line {
   /*  its not work  if First Name and Last Name in two lines */
-
   font-weight: bold;
 }
 .address-list address {
@@ -1010,7 +1008,6 @@
 }
 .dashboard-container .dashboard-diagram .store-switcher + div {
   /* loader under a diagram */
-
   background: url(../mui/images/ajax-loader-small.gif) no-repeat 50% 50%;
   min-height: 75px;
   text-align: center;
@@ -1020,7 +1017,6 @@
 }
 .dashboard-container .dashboard-diagram .store-switcher + div.dashboard-diagram-nodata {
   /* when there is no data to display the diagram */
-
   background-image: none;
   min-height: 15px;
 }
@@ -1254,8 +1250,8 @@
   margin: 0 0 0 12px;
   padding: 3px 0 3px 6px;
 }
-.sales-order-create-index #order-message ul.messages > li,
-.sales-order-edit-index #order-message ul.messages > li {
+.sales-order-create-index #order-message .messages .message,
+.sales-order-edit-index #order-message .messages .message {
   margin: 0 0 60px;
 }
 .sales-order-create-index thead .col-entity_id,
@@ -2360,67 +2356,6 @@ table.items-to-invoice tbody tr:hover td {
 .debug {
   border: 1px solid red !important;
 }
-.messages ul,
-ul.messages {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-ul.messages > li {
-  margin: 20px 0;
-}
-ul.messages li li {
-  padding: 10px 26px 10px 35px;
-  border-radius: 5px;
-  color: #676056;
-  text-shadow: none;
-  position: relative;
-  background: #fffbf0;
-  border: 1px solid #d87e34;
-  margin-top: -1px;
-}
-ul.messages li li:first-child {
-  margin-top: 0;
-}
-ul.messages li li:before {
-  position: absolute;
-  left: 11px;
-  top: 50%;
-  margin-top: -11px;
-  background: none;
-  text-shadow: none;
-  width: auto;
-  height: auto;
-  border: 0;
-  font-family: 'MUI-Icons';
-  font-style: normal;
-  speak: none;
-  font-weight: normal;
-  -webkit-font-smoothing: antialiased;
-  font-size: 16px;
-  content: '\e046';
-  /* icon-info  */
-
-  color: #d87e34;
-}
-ul.messages li.error-msg li {
-  color: #963535;
-  border-color: #963535;
-  background: #f3dcd8;
-}
-ul.messages li.error-msg li:before {
-  content: '\e069';
-  color: #963535;
-}
-ul.messages li.success-msg li {
-  border-color: #ceceb6;
-  background: #e4eecb;
-  color: #185b00;
-}
-ul.messages li.success-msg li:before {
-  content: '\e067';
-  color: #185b00;
-}
 /*
     Accordion
 ------------------------*/
@@ -2496,7 +2431,6 @@ ul.messages li.success-msg li:before {
   -webkit-font-smoothing: antialiased;
   content: '\e02a';
   /* arrow right icon */
-
   color: #b2b0ad;
 }
 .section-config.active > .collapseable > a:before,
@@ -2504,7 +2438,6 @@ ul.messages li.success-msg li:before {
 .accordion .collapseable.open a:before {
   content: '\e02c';
   /* arrow down icon */
-
 }
 .section-config > .collapseable > a:hover:before,
 .accordion > dt a:hover:before,

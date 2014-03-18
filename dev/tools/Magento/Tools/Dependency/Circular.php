@@ -79,6 +79,7 @@ class Circular
      * Init data before building
      *
      * @param array $dependencies
+     * @return void
      */
     protected function init($dependencies)
     {
@@ -92,6 +93,7 @@ class Circular
      *
      * @param string $vertex
      * @param array $path nesting path
+     * @return void
      */
     protected function expandDependencies($vertex, $path = [])
     {
@@ -126,6 +128,7 @@ class Circular
      * Build all circular dependencies based on chain
      *
      * @param array $modules
+     * @return void
      */
     protected function buildCircular($modules)
     {

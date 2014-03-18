@@ -126,11 +126,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined.php
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_address.php
      */
     public function testGetUserAttributes()
     {
-        $expectedAttributes = ['user_attribute'];
+        $expectedAttributes = ['address_user_attribute'];
         $this->assertEquals($expectedAttributes, array_keys($this->_form->getUserAttributes()));
     }
 

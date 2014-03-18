@@ -127,6 +127,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      *
      * @param \Magento\Core\Model\Store $store
      * @param bool $useTempTable
+     * @return void
      */
     protected function deleteNonStoreCategories(\Magento\Core\Model\Store $store, $useTempTable)
     {

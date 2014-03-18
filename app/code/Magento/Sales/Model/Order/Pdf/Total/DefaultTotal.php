@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Pdf\Total;
 
 /**
  * Sales Order Total PDF model
  *
  * @method \Magento\Sales\Model\Order getOrder()
  */
-namespace Magento\Sales\Model\Order\Pdf\Total;
-
 class DefaultTotal extends \Magento\Object
 {
     /**
@@ -77,6 +76,7 @@ class DefaultTotal extends \Magento\Object
      *      'font_size'=> $font_size
      *  )
      * )
+     *
      * @return array
      */
     public function getTotalsForDisplay()
@@ -111,6 +111,7 @@ class DefaultTotal extends \Magento\Object
      *      'font_size'=> $font_size
      *  )
      * )
+     *
      * @return array
      */
     public function getFullTaxInfo()

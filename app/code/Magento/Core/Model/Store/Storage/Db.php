@@ -171,9 +171,9 @@ class Db implements StorageInterface
      * @param State $appState
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\App\Http\Context $httpContext
-     * @param $isSingleStoreAllowed
-     * @param $scopeCode
-     * @param $scopeType
+     * @param bool $isSingleStoreAllowed
+     * @param string $scopeCode
+     * @param string $scopeType
      * @param null $currentStore
      */
     public function __construct(

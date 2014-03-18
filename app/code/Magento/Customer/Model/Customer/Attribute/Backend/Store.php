@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Store attribute backend
@@ -31,8 +32,6 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Backend;
-
 class Store
     extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
@@ -57,7 +56,7 @@ class Store
      * Before save
      *
      * @param \Magento\Object $object
-     * @return \Magento\Customer\Model\Customer\Attribute\Backend\Store
+     * @return $this
      */
     public function beforeSave($object)
     {

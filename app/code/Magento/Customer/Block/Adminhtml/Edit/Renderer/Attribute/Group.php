@@ -21,20 +21,22 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
 
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Renderer for customer group ID
  *
- * @method \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata getDisableAutoGroupChangeAttribute()
+ * @method \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata getDisableAutoGroupChangeAttribute()
  * @method mixed getDisableAutoGroupChangeAttributeValue()
  */
-class Group
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Group extends Element
 {
+    /**
+     * @var string
+     */
     protected $_template = 'edit/tab/account/form/renderer/group.phtml';
 
     /**
@@ -96,7 +98,7 @@ class Group
     public function getDisableAutoGroupChangeCheckboxState()
     {
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $checkedByDefault = ($customerId) ? false : $this->_addressHelper->getDisableAutoGroupAssignDefaultValue();
+        $checkedByDefault = ($customerId) ? false : $this->_addressHelper->isDisableAutoGroupAssignDefaultValue();
 
         $value = $this->getDisableAutoGroupChangeAttributeValue();
         $state = '';

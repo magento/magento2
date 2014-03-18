@@ -62,6 +62,8 @@ class Translate extends \Magento\Core\Model\Resource\Db\AbstractDb implements \M
 
     /**
      * Define main table
+     *
+     * @return void
      */
     protected function _construct()
     {

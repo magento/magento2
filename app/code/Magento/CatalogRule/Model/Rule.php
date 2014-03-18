@@ -389,20 +389,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         $this->_getResource()->applyAllRulesForDateRange(null, null, $product);
         $this->_invalidateCache();
-
-        if ($product instanceof Product) {
-            $productId = $product->getId();
-        } else {
-            $productId = $product;
-        }
-
-        if ($productId) {
-            $this->_indexer->processEntityAction(
-                new \Magento\Object(array('id' => $productId)),
-                Product::ENTITY,
-                \Magento\Catalog\Model\Product\Indexer\Price::EVENT_TYPE_REINDEX_PRICE
-            );
-        }
     }
 
     /**

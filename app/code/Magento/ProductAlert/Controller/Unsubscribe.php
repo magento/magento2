@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Controller;
 
 /**
  * ProductAlert unsubscribe controller
@@ -32,8 +32,6 @@
  * @package    Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Controller;
-
 use Magento\App\Action\NotFoundException;
 use Magento\App\RequestInterface;
 
@@ -57,6 +55,9 @@ class Unsubscribe extends \Magento\App\Action\Action
         return parent::dispatch($request);
     }
 
+    /**
+     * @return void
+     */
     public function priceAction()
     {
         $productId = (int)$this->getRequest()->getParam('product');
@@ -93,6 +94,9 @@ class Unsubscribe extends \Magento\App\Action\Action
         $this->getResponse()->setRedirect($product->getProductUrl());
     }
 
+    /**
+     * @return void
+     */
     public function priceAllAction()
     {
         $session = $this->_objectManager->get('Magento\Customer\Model\Session');
@@ -111,6 +115,9 @@ class Unsubscribe extends \Magento\App\Action\Action
         $this->_redirect('customer/account/');
     }
 
+    /**
+     * @return void
+     */
     public function stockAction()
     {
         $productId  = (int) $this->getRequest()->getParam('product');
@@ -147,6 +154,9 @@ class Unsubscribe extends \Magento\App\Action\Action
         $this->getResponse()->setRedirect($product->getProductUrl());
     }
 
+    /**
+     * @return void
+     */
     public function stockAllAction()
     {
         $session = $this->_objectManager->get('Magento\Customer\Model\Session');

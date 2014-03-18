@@ -57,7 +57,7 @@ class Attribute extends \Magento\Core\Model\AbstractModel
         'use_config_email_template',
         'tier_price',
         'minimal_price',
-        'recurring_profile',
+        'recurring_payment',
         'shipment_type'
     );
 

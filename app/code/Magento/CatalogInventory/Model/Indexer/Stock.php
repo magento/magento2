@@ -236,8 +236,6 @@ class Stock extends \Magento\Index\Model\Indexer\AbstractIndexer
                 if ($event->getEntity() == \Magento\App\Config\ValueInterface::ENTITY) {
                     $configData = $event->getDataObject();
                     if ($configData->getPath() == \Magento\CatalogInventory\Helper\Data::XML_PATH_SHOW_OUT_OF_STOCK) {
-                        $this->_indexer->getProcessByCode('catalog_product_price')
-                            ->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
                         $this->_indexer->getProcessByCode('catalog_product_attribute')
                             ->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
                     }

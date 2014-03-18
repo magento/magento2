@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
 class AbstractWidget extends \Magento\View\Element\Template
@@ -56,11 +55,18 @@ class AbstractWidget extends \Magento\View\Element\Template
         $this->_isScopePrivate = true;
     }
 
+    /**
+     * @param string $key
+     * @return null|string
+     */
     public function getConfig($key)
     {
         return $this->_addressHelper->getConfig($key);
     }
 
+    /**
+     * @return string
+     */
     public function getFieldIdFormat()
     {
         if (!$this->hasData('field_id_format')) {
@@ -69,6 +75,9 @@ class AbstractWidget extends \Magento\View\Element\Template
         return $this->getData('field_id_format');
     }
 
+    /**
+     * @return string
+     */
     public function getFieldNameFormat()
     {
         if (!$this->hasData('field_name_format')) {
@@ -77,11 +86,19 @@ class AbstractWidget extends \Magento\View\Element\Template
         return $this->getData('field_name_format');
     }
 
+    /**
+     * @param string $field
+     * @return string
+     */
     public function getFieldId($field)
     {
         return sprintf($this->getFieldIdFormat(), $field);
     }
 
+    /**
+     * @param string $field
+     * @return string
+     */
     public function getFieldName($field)
     {
         return sprintf($this->getFieldNameFormat(), $field);
@@ -91,7 +108,7 @@ class AbstractWidget extends \Magento\View\Element\Template
      * Retrieve customer attribute instance
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata|null
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|null
      */
     protected function _getAttribute($attributeCode)
     {

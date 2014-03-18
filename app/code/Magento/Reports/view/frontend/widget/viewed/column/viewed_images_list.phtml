@@ -30,7 +30,6 @@
 <?php
 if ($exist = $this->getRecentlyViewedProducts()) {
     $type = 'widget-viewed';
-    $class = 'widget viewed mini products images';
 
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_images_only_widget';
@@ -45,7 +44,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-    <div class="block <?php echo $class; ?>">
+    <div class="block widget viewed mini products images">
         <div class="title">
             <strong><?php echo $title; ?></strong>
         </div>

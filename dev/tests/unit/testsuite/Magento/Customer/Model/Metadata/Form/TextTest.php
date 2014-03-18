@@ -25,6 +25,9 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Service\V1\Data\Eav\ValidationRule;
+use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
+
 class TextTest extends AbstractFormTestCase
 {
     /** @var \Magento\Stdlib\String */
@@ -124,10 +127,19 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueLength($value, $expected)
     {
+        $validationRules = [
+            'min_text_length' => new ValidationRule(
+                    (new ValidationRuleBuilder())->populateWithArray(['name' => 'min_text_length', 'value' => 4])
+                ),
+            'max_text_length' => new ValidationRule(
+                    (new ValidationRuleBuilder())->populateWithArray(['name' => 'max_text_length', 'value' => 8])
+                )
+        ];
+
         $this->attributeMetadataMock
             ->expects($this->any())
             ->method('getValidationRules')
-            ->will($this->returnValue(['min_text_length' => 4, 'max_text_length' => 8]));
+            ->will($this->returnValue($validationRules));
 
         $sut = $this->getClass($value);
         $actual = $sut->validateValue($value);

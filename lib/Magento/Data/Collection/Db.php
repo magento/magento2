@@ -807,6 +807,8 @@ class Db extends \Magento\Data\Collection
 
     /**
      * Clone $this->_select during cloning collection, otherwise both collections will share the same $this->_select
+     *
+     * @return void
      */
     public function __clone()
     {

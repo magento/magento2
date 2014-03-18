@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Downloadable\Model\Resource\Indexer;
 
 /**
  * Downloadable products Price indexer resource model
@@ -32,14 +32,12 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Resource\Indexer;
-
 class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products
      *
-     * @return \Magento\Downloadable\Model\Resource\Indexer\Price
+     * @return $this
      */
     public function reindexAll()
     {
@@ -62,7 +60,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return \Magento\Downloadable\Model\Resource\Indexer\Price
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {
@@ -92,7 +90,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
     /**
      * Prepare downloadable links price temporary index table
      *
-     * @return \Magento\Downloadable\Model\Resource\Indexer\Price
+     * @return $this
      */
     protected function _prepareDownloadableLinkPriceTable()
     {
@@ -103,7 +101,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
     /**
      * Calculate and apply Downloadable links price to index
      *
-     * @return \Magento\Downloadable\Model\Resource\Indexer\Price
+     * @return $this
      */
     protected function _applyDownloadableLink()
     {

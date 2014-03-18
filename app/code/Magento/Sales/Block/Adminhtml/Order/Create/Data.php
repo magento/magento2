@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 /**
  * Order create data
@@ -31,11 +32,11 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
 class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
+     * Currency factory
+     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -69,7 +70,7 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve avilable currency codes
      *
-     * @return unknown
+     * @return string[]
      */
     public function getAvailableCurrencies()
     {
@@ -92,8 +93,8 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve curency name by code
      *
-     * @param   string $code
-     * @return  string
+     * @param string $code
+     * @return string
      */
     public function getCurrencyName($code)
     {
@@ -103,8 +104,8 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve curency name by code
      *
-     * @param   string $code
-     * @return  string
+     * @param string $code
+     * @return string
      */
     public function getCurrencySymbol($code)
     {
@@ -121,5 +122,4 @@ class Data extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         return $this->getStore()->getCurrentCurrencyCode();
     }
-
 }

@@ -23,12 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order\PrintOrder;
+
+use Magento\View\Element\AbstractBlock;
 
 /**
  * Sales order details block
  */
-namespace Magento\Sales\Block\Order\PrintOrder;
-
 class Invoice extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
@@ -60,6 +61,9 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
         $headBlock = $this->getLayout()->getBlock('head');
@@ -96,17 +100,27 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
         return $this->getChildHtml('payment_info');
     }
 
+    /**
+     * @return array|null
+     */
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_order');
     }
 
+    /**
+     * @return array|null
+     */
     public function getInvoice()
     {
         return $this->_coreRegistry->registry('current_invoice');
     }
 
-    protected function _prepareItem(\Magento\View\Element\AbstractBlock $renderer)
+    /**
+     * @param AbstractBlock $renderer
+     * @return $this
+     */
+    protected function _prepareItem(AbstractBlock $renderer)
     {
         $renderer->setPrintStatus(true);
         return parent::_prepareItem($renderer);

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Model\Resource\Rating;
 
 /**
  * Rating collection resource model
@@ -31,8 +32,6 @@
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rating\Model\Resource\Rating;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -84,6 +83,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -94,7 +94,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add entity filter
      *
      * @param   int|string $entity
-     * @return  \Magento\Rating\Model\Resource\Rating\Collection
+     * @return  $this
      */
     public function addEntityFilter($entity)
     {
@@ -121,7 +121,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set order by position field
      *
      * @param   string $dir
-     * @return  \Magento\Rating\Model\Resource\Rating\Collection
+     * @return  $this
      */
     public function setPositionOrder($dir='ASC')
     {
@@ -133,7 +133,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set store filter
      *
      * @param int $storeId
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function setStoreFilter($storeId)
     {
@@ -170,7 +170,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add options to ratings in collection
      *
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function addOptionToItems()
     {
@@ -196,7 +196,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int $entityPkValue
      * @param int $storeId
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function addEntitySummaryToItem($entityPkValue, $storeId)
     {
@@ -259,7 +259,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add rating store name
      *
      * @param int $storeId
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function addRatingPerStoreName($storeId)
     {
@@ -276,7 +276,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add stores data to collection
      *
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function addStoreData()
     {
@@ -296,7 +296,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -314,7 +314,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store data
      *
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     protected function _addStoreData()
     {
@@ -351,7 +351,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set Active Filter
      *
      * @param bool $isActive
-     * @return \Magento\Rating\Model\Resource\Rating\Collection
+     * @return $this
      */
     public function setActiveFilter($isActive = true)
     {

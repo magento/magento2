@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Report;
 
 /**
  * Order entity resource model
  */
-namespace Magento\Sales\Model\Resource\Report;
-
-class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
+class Order extends AbstractReport
 {
     /**
      * @var \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory
@@ -60,7 +59,6 @@ class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Sales\Model\Resource\Report\Order\CreatedatFactory $createDatFactory,
         \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory
-
     ) {
         parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
         $this->_createDatFactory = $createDatFactory;
@@ -69,6 +67,8 @@ class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
     /**
      * Model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -78,9 +78,9 @@ class Order extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Aggregate Orders data
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\Sales\Model\Resource\Report\Order
+     * @param string|int|\Zend_Date|array|null $from
+     * @param string|int|\Zend_Date|array|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

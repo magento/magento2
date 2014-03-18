@@ -45,6 +45,7 @@ class Request implements \Magento\App\RequestInterface
      * Initialize console parameters
      *
      * @param array $parameters
+     * @return void
      */
     public function setParam($parameters)
     {
@@ -54,7 +55,7 @@ class Request implements \Magento\App\RequestInterface
     /**
      * Retrieve module name
      *
-     * @return string
+     * @return void
      */
     public function getModuleName()
     {
@@ -65,6 +66,7 @@ class Request implements \Magento\App\RequestInterface
      * Set Module name
      *
      * @param string $name
+     * @return void
      */
     public function setModuleName($name)
     {
@@ -73,7 +75,7 @@ class Request implements \Magento\App\RequestInterface
     /**
      * Retrieve action name
      *
-     * @return string
+     * @return void
      */
     public function getActionName()
     {
@@ -84,6 +86,7 @@ class Request implements \Magento\App\RequestInterface
      * Set action name
      *
      * @param string $name
+     * @return void
      */
     public function setActionName($name)
     {

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Framework;
 
 use Magento\Tools\Dependency\ParserInterface;
@@ -43,9 +42,9 @@ class Builder extends AbstractBuilder
     /**
      * Builder constructor
      *
-     * @param \Magento\Tools\Dependency\ParserInterface $dependenciesParser
-     * @param \Magento\Tools\Dependency\Report\WriterInterface $reportWriter
-     * @param \Magento\Tools\Dependency\ParserInterface $configParser
+     * @param ParserInterface $dependenciesParser
+     * @param WriterInterface $reportWriter
+     * @param ParserInterface $configParser
      */
     public function __construct(
         ParserInterface $dependenciesParser,
@@ -61,6 +60,7 @@ class Builder extends AbstractBuilder
      * Template method. Check passed options step
      *
      * @param array $options
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function checkOptions($options)

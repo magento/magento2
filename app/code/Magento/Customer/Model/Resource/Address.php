@@ -66,6 +66,8 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 
     /**
      * Resource initialization.
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -80,7 +82,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
      * Set default shipping to address
      *
      * @param \Magento\Object $address
-     * @return \Magento\Customer\Model\Resource\Address
+     * @return $this
      */
     protected function _afterSave(\Magento\Object $address)
     {
@@ -105,7 +107,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
      * Check customer address before saving
      *
      * @param \Magento\Object $address
-     * @return \Magento\Customer\Model\Resource\Address
+     * @return $this
      */
     protected function _beforeSave(\Magento\Object $address)
     {
@@ -119,8 +121,9 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Validate customer address entity
      *
-     * @param \Magento\Customer\Model\Customer $address
-     * @throws \Magento\Validator\ValidatorException when validation failed
+     * @param \Magento\Object $address
+     * @return void
+     * @throws \Magento\Validator\ValidatorException When validation failed
      */
     protected function _validate($address)
     {

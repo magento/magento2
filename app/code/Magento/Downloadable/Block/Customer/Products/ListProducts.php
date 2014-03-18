@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Downloadable\Block\Customer\Products;
+
+use Magento\Downloadable\Model\Link\Purchased\Item;
 
 /**
  * Block to display downloadable links bought by customer
@@ -31,8 +34,6 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Block\Customer\Products;
-
 class ListProducts extends \Magento\View\Element\Template
 {
     /**
@@ -73,6 +74,8 @@ class ListProducts extends \Magento\View\Element\Template
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -93,8 +96,8 @@ class ListProducts extends \Magento\View\Element\Template
             ->addFieldToFilter('status',
                 array(
                     'nin' => array(
-                        \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING_PAYMENT,
-                        \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PAYMENT_REVIEW
+                        Item::LINK_STATUS_PENDING_PAYMENT,
+                        Item::LINK_STATUS_PAYMENT_REVIEW
                     )
                 )
             )
@@ -105,7 +108,7 @@ class ListProducts extends \Magento\View\Element\Template
     /**
      * Enter description here...
      *
-     * @return \Magento\Downloadable\Block\Customer\Products\ListProducts
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -148,6 +151,7 @@ class ListProducts extends \Magento\View\Element\Template
     /**
      * Return number of left downloads or unlimited
      *
+     * @param Item $item
      * @return string
      */
     public function getRemainingDownloads($item)
@@ -162,7 +166,7 @@ class ListProducts extends \Magento\View\Element\Template
     /**
      * Return url to download link
      *
-     * @param \Magento\Downloadable\Model\Link\Purchased\Item $item
+     * @param Item $item
      * @return string
      */
     public function getDownloadUrl($item)

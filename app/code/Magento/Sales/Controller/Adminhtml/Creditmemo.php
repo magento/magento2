@@ -23,18 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml;
+
+use Magento\App\ResponseInterface;
 
 /**
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml;
-
 class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo
 {
     /**
      * Export credit memo grid to CSV format
+     *
+     * @return ResponseInterface
      */
     public function exportCsvAction()
     {
@@ -44,7 +47,9 @@ class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstract
     }
 
     /**
-     *  Export credit memo grid to Excel XML format
+     * Export credit memo grid to Excel XML format
+     *
+     * @return ResponseInterface
      */
     public function exportExcelAction()
     {
@@ -54,7 +59,9 @@ class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstract
     }
 
     /**
-     *  Index page
+     * Index page
+     *
+     * @return void
      */
     public function indexAction()
     {

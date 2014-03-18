@@ -1,0 +1,565 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @package     magento2_reference
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+// Simple messages
+
+.message(
+@_message-type: info,
+@_message-color: @message-info-color,
+@_message-background: @message-info-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-info-link-color,
+@_message-link-color-hover: @message-info-link-color-hover,
+@_message-border: @message-border
+) when (@_message-type = info) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message(
+@_message-type: info,
+@_message-color: @message-warning-color,
+@_message-background: @message-warning-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-warning-link-color,
+@_message-link-color-hover: @message-warning-link-color-hover,
+@_message-border: @message-border
+) when (@_message-type = warning) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message(
+@_message-type: info,
+@_message-color: @message-error-color,
+@_message-background: @message-error-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-error-link-color,
+@_message-link-color-hover: @message-error-link-color-hover,
+@_message-border: @message-border
+) when (@_message-type = error) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message(
+@_message-type: info,
+@_message-color: @message-success-color,
+@_message-background: @message-success-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-success-link-color,
+@_message-link-color-hover: @message-success-link-color-hover,
+@_message-border: @message-border
+) when (@_message-type = success) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message(
+@_message-type: info,
+@_message-color: @message-notice-color,
+@_message-background: @message-notice-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-notice-link-color,
+@_message-link-color-hover: @message-notice-link-color-hover,
+@_message-border: @message-border
+) when (@_message-type = notice) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+._message(
+@_message-color: @message-info-color,
+@_message-background: @message-info-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-info-link-color,
+@_message-link-color-hover: @message-info-link-color-hover,
+@_message-border: @message-border
+) {
+    display: block;
+    color: @_message-color;
+    background: @_message-background;
+    padding: @_message-padding;
+    margin: @message-margin;
+    border-radius: @_message-border-radius;
+    ._message-border(@_message-border);
+    font-size: @message-font-size;
+    line-height: @message-line-height;
+
+    a {
+        color: @_message-link-color;
+
+        &:hover {
+            color: @_message-link-color-hover;
+        }
+    }
+}
+
+._message-border(@_message-border) when not (@_message-border = none) {
+    border: @_message-border;
+}
+
+// Simple messages aliases
+
+.message-info(
+@_message-color: @message-info-color,
+@_message-background: @message-info-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-info-link-color,
+@_message-link-color-hover: @message-info-link-color-hover,
+@_message-border: @message-border
+) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message-warning(
+@_message-color: @message-warning-color,
+@_message-background: @message-warning-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-warning-link-color,
+@_message-link-color-hover: @message-warning-link-color-hover,
+@_message-border: @message-border
+) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message-error(
+@_message-color: @message-error-color,
+@_message-background: @message-error-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-error-link-color,
+@_message-link-color-hover: @message-error-link-color-hover,
+@_message-border: @message-border
+) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message-success(
+@_message-color: @message-success-color,
+@_message-background: @message-success-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-success-link-color,
+@_message-link-color-hover: @message-success-link-color-hover,
+@_message-border: @message-border
+) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+.message-notice(
+@_message-color: @message-notice-color,
+@_message-background: @message-notice-background,
+@_message-padding: @message-padding,
+@_message-margin: @message-margin,
+@_message-border-radius: @message-border-radius,
+@_message-link-color: @message-notice-link-color,
+@_message-link-color-hover: @message-notice-link-color-hover,
+@_message-border: @message-border
+) {
+    ._message(
+        @_message-color: @_message-color,
+        @_message-background: @_message-background,
+        @_message-padding: @_message-padding,
+        @_message-margin: @_message-margin,
+        @_message-border-radius: @_message-border-radius,
+        @_message-link-color: @_message-link-color,
+        @_message-link-color-hover: @_message-link-color-hover,
+        @_message-border: @_message-border
+    );
+}
+
+// Messages with lateral icon
+
+.message-info-icon-lateral(
+@_message-icon-position: right,
+@_message-icon: @message-info-icon,
+@_message-icon-color: @message-info-icon-color,
+@_message-icon-background: @message-info-icon-background
+) {
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background
+    );
+}
+
+.message-warning-icon-lateral(
+@_message-icon-position: right,
+@_message-icon: @message-warning-icon,
+@_message-icon-color: @message-warning-icon-color,
+@_message-icon-background: @message-warning-icon-background
+) {
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background
+    );
+}
+
+.message-error-icon-lateral(
+@_message-icon-position: right,
+@_message-icon: @message-error-icon,
+@_message-icon-color: @message-error-icon-color,
+@_message-icon-background: @message-error-icon-background
+) {
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background
+    );
+}
+
+.message-success-icon-lateral(
+@_message-icon-position: right,
+@_message-icon: @message-success-icon,
+@_message-icon-color: @message-success-icon-color,
+@_message-icon-background: @message-success-icon-background
+) {
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background
+    );
+}
+
+.message-notice-icon-lateral(
+@_message-icon-position: right,
+@_message-icon: @message-notice-icon,
+@_message-icon-color: @message-notice-icon-color,
+@_message-icon-background: @message-notice-icon-background
+) {
+    ._message-icon-lateral(
+        @_message-icon-position,
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background
+    );
+}
+
+// Messages with inner icon
+
+.message-info-icon-inner(
+@_message-icon: @message-info-icon,
+@_message-icon-color: @message-info-icon-color,
+@_message-icon-background: @message-info-icon-background,
+@_message-padding-left: @message-icon-inner-padding-left
+) {
+    ._message-icon-inner(
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background,
+        @_message-padding-left
+    );
+}
+
+.message-warning-icon-inner(
+@_message-icon: @message-warning-icon,
+@_message-icon-color: @message-warning-icon-color,
+@_message-icon-background: @message-warning-icon-background,
+@_message-padding-left: @message-icon-inner-padding-left
+) {
+    ._message-icon-inner(
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background,
+        @_message-padding-left
+    );
+}
+
+.message-error-icon-inner(
+@_message-icon: @message-error-icon,
+@_message-icon-color: @message-error-icon-color,
+@_message-icon-background: @message-error-icon-background,
+@_message-padding-left: @message-icon-inner-padding-left
+) {
+    ._message-icon-inner(
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background,
+        @_message-padding-left
+    );
+}
+
+.message-success-icon-inner(
+@_message-icon: @message-success-icon,
+@_message-icon-color: @message-success-icon-color,
+@_message-icon-background: @message-success-icon-background,
+@_message-padding-left: @message-icon-inner-padding-left
+) {
+    ._message-icon-inner(
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background,
+        @_message-padding-left
+    );
+}
+
+.message-notice-icon-inner(
+@_message-icon: @message-notice-icon,
+@_message-icon-color: @message-notice-icon-color,
+@_message-icon-background: @message-notice-icon-background,
+@_message-padding-left: @message-icon-inner-padding-left
+) {
+    ._message-icon-inner(
+        @_message-icon,
+        @_message-icon-color,
+        @_message-icon-background,
+        @_message-padding-left
+    );
+}
+
+// Private mixins
+
+._message-icon-lateral(
+@_message-icon-position,
+@_message-icon,
+@_message-icon-color,
+@_message-icon-background
+) {
+    position: relative;
+
+    &:before {
+        content: '';
+        position: absolute;
+        width: @message-icon-lateral-width;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        display: block;
+        padding: 0;
+        border-radius: @message-border-radius;
+        background: @_message-icon-background;
+    }
+
+    > *:first-child:before {
+        content: '';
+        position: absolute;
+        overflow: hidden;
+        top: 50%;
+        margin-top: -3px;
+    }
+
+    > *:first-child:after {
+        content: @_message-icon;
+        font-family: "icons";
+        color: #fff;
+        font-size: @message-icon-font-size;
+        position: absolute;
+        top: 50%;
+        margin-top: ceil(-@message-icon-font-size / 3 - 2);
+        width: @message-icon-lateral-width;
+        text-align: center;
+        display: block;
+    }
+
+    ._message-icon-lateral-position(
+        @_message-icon-position,
+        @_message-icon-background
+    );
+}
+
+._message-icon-lateral-position(
+@_message-icon-position,
+@_message-icon-background
+) when (@_message-icon-position = right) {
+    padding-right: 60px;
+
+    &:before {
+        right: 0;
+    }
+    > *:first-child:before {
+        .arrow(left, 5px, @_message-icon-background);
+        right: @message-icon-lateral-width;
+    }
+    > *:first-child:after {
+        right: 0;
+    }
+}
+
+._message-icon-lateral-position(
+@_message-icon-position,
+@_message-icon-background
+) when (@_message-icon-position = left) {
+    padding-left: 60px;
+
+    &:before {
+        left: 0;
+    }
+    > *:first-child:before {
+        .arrow(right, 5px, @_message-icon-background);
+        left: @message-icon-lateral-width;
+    }
+    > *:first-child:after {
+        left: 0;
+    }
+}
+
+._message-icon-inner(
+@_message-icon,
+@_message-icon-color,
+@_message-icon-background,
+@_message-padding-left
+) {
+    position: relative;
+    padding-left: @_message-padding-left;
+
+    > *:first-child:before {
+        content: @_message-icon;
+        font-family: "icons";
+        color: @_message-icon-color;
+        position: absolute;
+        left: 0;
+        width: @_message-padding-left;
+        text-align: center;
+        font-size: @message-icon-font-size;
+    }
+}
+
+
+
+
+.message.info {
+    .message-info();
+    .message-info-icon-lateral();
+}
+
+.message.error {
+    .message-error();
+    .message-error-icon-lateral();
+}
+
+.message.warning {
+    .message-warning();
+    .message-warning-icon-lateral();
+}
+
+.message.notice {
+    .message-notice();
+    .message-notice-icon-lateral();
+}
+
+.message.success {
+    .message-success();
+    .message-success-icon-lateral();
+}

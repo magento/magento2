@@ -78,7 +78,7 @@ class Observer
 
     /**
      * Construct
-     * 
+     *
      * @var \Magento\Index\Model\Indexer
      */
     protected $_indexer;
@@ -104,24 +104,29 @@ class Observer
     protected $_resourceIndexerStock;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Price
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
      */
-    protected $_indexerPrice;
+    protected $typeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice
-     * @param \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock
-     * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    protected $_priceIndexer;
+
+    /**
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @param Resource\Indexer\Stock $resourceIndexerStock
+     * @param Resource\Stock $resourceStock
      * @param \Magento\Index\Model\Indexer $indexer
      * @param Stock $stock
-     * @param \Magento\CatalogInventory\Model\Stock\Status $stockStatus
+     * @param Stock\Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+     * @param Stock\ItemFactory $stockItemFactory
      * @param StockFactory $stockFactory
-     * @param \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
+     * @param Stock\StatusFactory $stockStatusFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice,
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
         \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock,
         \Magento\CatalogInventory\Model\Resource\Stock $resourceStock,
         \Magento\Index\Model\Indexer $indexer,
@@ -132,7 +137,7 @@ class Observer
         StockFactory $stockFactory,
         \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
     ) {
-        $this->_indexerPrice = $indexerPrice;
+        $this->_priceIndexer = $priceIndexer;
         $this->_resourceIndexerStock = $resourceIndexerStock;
         $this->_resourceStock = $resourceStock;
         $this->_indexer = $indexer;
@@ -446,7 +451,9 @@ class Observer
             $productIds[] = $item->getProductId();
         }
 
-        $this->_indexerPrice->reindexProductIds($productIds);
+        if (!empty($productIds)) {
+            $this->_priceIndexer->reindexList($productIds);
+        }
 
         $this->_itemsForReindex = array(); // Clear list of remembered items - we don't need it anymore
 

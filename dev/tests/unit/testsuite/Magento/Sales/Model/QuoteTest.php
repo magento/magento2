@@ -86,6 +86,31 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Customer group ID is not set to quote object and customer data is not available.
+     */
+    public function testGetCustomerGroupIdNotSet()
+    {
+        $this->assertEquals(
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+            $this->quote->getCustomerGroupId(),
+            "Customer group ID is invalid"
+        );
+    }
+
+    /**
+     * Customer group ID is set to quote object.
+     */
+    public function testGetCustomerGroupId()
+    {
+        /** Preconditions */
+        $customerGroupId = 33;
+        $this->quote->setCustomerGroupId($customerGroupId);
+
+        /** SUT execution */
+        $this->assertEquals($customerGroupId, $this->quote->getCustomerGroupId(), "Customer group ID is invalid");
+    }
+
+    /**
      * @return array
      */
     public function dataProviderForTestIsMultipleShippingAddresses()

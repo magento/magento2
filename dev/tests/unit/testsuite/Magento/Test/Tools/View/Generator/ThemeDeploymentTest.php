@@ -86,12 +86,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     public function testConstructorException($permitted, $forbidden, $exceptionMessage)
     {
         $this->setExpectedException('Magento\Exception', $exceptionMessage);
-        new \Magento\Tools\View\Generator\ThemeDeployment(
-            $this->_cssUrlResolver,
-            $this->_tmpDir,
-            $permitted,
-            $forbidden
-        );
+        $this->_createThemeDeployment($permitted, $forbidden);
     }
 
     public static function constructorExceptionDataProvider()
@@ -124,8 +119,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden.php';
         $fixture = include __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new \Magento\Tools\View\Generator\ThemeDeployment($this->_cssUrlResolver, $this->_tmpDir, $permitted,
-            $forbidden);
+        $object = $this->_createThemeDeployment($permitted, $forbidden);
         $object->run($fixture['copyRules']);
 
         // Verify expected paths
@@ -181,8 +175,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden.php';
         $fixture = include __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new \Magento\Tools\View\Generator\ThemeDeployment($this->_cssUrlResolver, $this->_tmpDir, $permitted,
-            $forbidden, true);
+        $object = $this->_createThemeDeployment($permitted, $forbidden, true);
         $object->run($fixture['copyRules']);
 
         $actualPaths = $this->_getRelativePaths($this->_tmpDir);
@@ -199,8 +192,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
         $forbidden = __DIR__ . '/_files/ThemeDeployment/run/forbidden_without_php.php';
         $fixture = include __DIR__ . '/_files/ThemeDeployment/run/fixture.php';
 
-        $object = new \Magento\Tools\View\Generator\ThemeDeployment($this->_cssUrlResolver, $this->_tmpDir, $permitted,
-            $forbidden, true);
+        $object = $this->_createThemeDeployment($permitted, $forbidden, true);
         $object->run($fixture['copyRules']);
     }
 
@@ -208,7 +200,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     {
         $permitted = __DIR__ . '/_files/ThemeDeployment/run/permitted_cased_js.php';
 
-        $object = new \Magento\Tools\View\Generator\ThemeDeployment($this->_cssUrlResolver, $this->_tmpDir, $permitted);
+        $object = $this->_createThemeDeployment($permitted);
         $copyRules = array(
             array(
                 'source' => __DIR__ . '/_files/ThemeDeployment/run/source_cased_js',
@@ -224,5 +216,42 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists(
             $this->_tmpDir . '/frontend/theme_path/file.JS'
         );
+    }
+
+    /**
+     * Create Theme Deployment instance
+     *
+     * @param string $permitted
+     * @param string|null $forbidden
+     * @param bool $isDryRun
+     * @return \Magento\Tools\View\Generator\ThemeDeployment
+     */
+    protected function _createThemeDeployment($permitted, $forbidden = null, $isDryRun = false)
+    {
+        $filesystem     = $this->getMock('Magento\App\Filesystem', [], [], '', false);
+        $preProcessor   = $this->getMock('Magento\View\Asset\PreProcessor\PreProcessorInterface', [], [], '', false);
+        $fileFactory    = $this->getMock('Magento\View\Publisher\FileFactory', [], [], '', false);
+        $appState       = $this->getMock('Magento\App\State', [], [], '', false);
+        $themeFactory   = $this->getMock('Magento\Core\Model\Theme\DataFactory', ['create'], [], '', false);
+
+        $object = new \Magento\Tools\View\Generator\ThemeDeployment(
+            $this->_cssUrlResolver,
+            $filesystem,
+            $preProcessor,
+            $fileFactory,
+            $appState,
+            $themeFactory,
+            $this->_tmpDir,
+            $permitted,
+            $forbidden,
+            $isDryRun
+        );
+
+        $fileObject = $this->getMock('Magento\View\Publisher\File', [], [], '', false);
+        $fileFactory->expects($this->any())->method('create')->will($this->returnValue($fileObject));
+        $appState->expects($this->any())->method('emulateAreaCode')->will($this->returnValue($fileObject));
+        $fileObject->expects($this->any())->method('getSourcePath')->will($this->returnValue(false));
+
+        return $object;
     }
 }

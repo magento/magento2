@@ -34,8 +34,6 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 
     $type = $type . '-' . $mode;
 
-    $class = 'widget viewed' . ' ' . $mode;
-
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_images_names_widget';
     $title = __('Recently Viewed');
@@ -49,7 +47,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block <?php echo $class; ?>">
+<div class="block widget viewed <?php echo $mode; ?>">
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>

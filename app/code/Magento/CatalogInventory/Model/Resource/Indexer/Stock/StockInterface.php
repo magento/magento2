@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
 /**
  * CatalogInventory Stock Indexer Interface
@@ -32,12 +32,12 @@
  * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
-
 interface StockInterface
 {
     /**
      * Reindex all stock status data
+     *
+     * @return $this
      */
     public function reindexAll();
 
@@ -45,6 +45,7 @@ interface StockInterface
      * Reindex stock status data for defined ids
      *
      * @param int|array $entityIds
+     * @return $this
      */
     public function reindexEntity($entityIds);
 
@@ -52,6 +53,7 @@ interface StockInterface
      * Set Product Type Id for indexer
      *
      * @param string $typeId
+     * @return $this
      */
     public function setTypeId($typeId);
 
@@ -59,6 +61,7 @@ interface StockInterface
     /**
      * Retrieve Product Type Id for indexer
      *
+     * @return string
      * @throws \Magento\Core\Exception
      */
     public function getTypeId();

@@ -28,10 +28,8 @@
     <legend class="legend"><span><?php echo __('Product In Websites') ?></span></legend>
     <br>
     <?php if ($this->getProductId()): ?>
-    <div class="message message-info">
-        <div class="message-inner">
-            <div class="message-content"><?php echo __("Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
-        </div>
+    <div class="message info">
+        <div><?php echo __("Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
     </div>
     <?php endif; ?>
     <div class="store-scope">

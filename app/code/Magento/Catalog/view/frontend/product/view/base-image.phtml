@@ -46,7 +46,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
 <div data-role="media-gallery">
     <div class="product photo main">
         <div data-role="gallery-base-image-container">
-            <a href="#" class="product photo magento-zoom<?php echo (!$_hasImage) ? ' isPlaceholder' : ''; ?>"
+            <a <?php echo ($_hasImage) ? 'href="#" class="product photo magento-zoom"' : ' class="placeholder"'; ?>
                id="base-image" data-role="zoom-image"
                data-large="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($_product, 'image'); ?>">
                 <?php echo $this->getChildBlock('product.image.main')->setAddAttribute('itemprop="image"')->init($_product, $image)->toHtml() ?>
@@ -92,7 +92,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
 </div>
 <?php if ($_hasImage): ?>
     <script data-template="gallery-wrapper" type="text/x-jQuery-tmpl">
-        <div class="product photo main">
+        <div class="product photo main" style="bottom: <?php echo $thumbWidth ?>px;">
             <div data-role="gallery-base-image-container"></div>
             <div data-role="gallery-notice-container"></div>
         </div>
@@ -106,19 +106,19 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
         <a class="gallery control next" data-role="gallery-next" href="#"></a>
     </script>
     <script data-template="gallery-base-image" type="text/x-jQuery-tmpl">
-        <a class="product photo{{if typeof hasImg !== 'undefined'}} isPlaceholder{{/if}}" href="#">
-            <span class="img photo container" style="width:${width}px; height:${height}px; display: block; position: relative; overflow: hidden">
-                <img data-role="zoom-image" class="photo image" width="${width}" itemprop="image" {{if !fullSizeMode}}data-large="${large}" src="${medium}"{{else}}src="${large}"{{/if}} alt="${title}"/>
+        <a class="product photo{{if typeof hasImg !== 'undefined'}} placeholder{{/if}}" href="${large}">
+            <span class="img photo container">
+                <img data-role="zoom-image" class="photo image" itemprop="image" {{if !fullSizeMode}}data-large="${large}" src="${medium}"{{else}}src="${large}"{{/if}} alt="${title}"/>
             </span>
         </a>
     </script>
     <script data-template="gallery-thumbs" type="text/x-jQuery-tmpl">
-        <strong class="title">${tumbsTitle}</strong>
+        {{if tumbsTitle}}<strong class="title">${tumbsTitle}</strong>{{/if}}
         <ul class="items thumbs">
             {{each(index, img) images}}
             <li class="item thumb">
-                <a title="${img.title}" data-index="${index}" data-role="gallery-thumb" href="#">
-                        <span style="position:relative; z-index:1; display:block; width:${size.width}px; height:${size.height}px;" class="img">
+                <a title="${img.title}" {{if img.selected}}class="active"{{/if}} data-index="${index}" data-role="gallery-thumb" href="#">
+                        <span class="img">
                             <img alt="${img.title}" src="${img.small}" itemprop="image" width="${size.width}">
                         </span>
                 </a>
@@ -127,8 +127,8 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
         </ul>
     </script>
     <script data-template="zoom-display" type="text/x-jQuery-tmpl">
-        <div class="magento-zoom-enlarged" data-role="zoom-container">
-            <div data-role="zoom-inner"></div>
+        <div class="zoom lense" data-role="zoom-container">
+            <div data-role="zoom-inner" class="zoom inner"></div>
         </div>
     </script>
     <script data-template="zoom-enlarged-image" type="text/x-jQuery-tmpl">
@@ -169,6 +169,10 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
                         })
                         .zoom({
                             controls: {
+                                display: {
+                                    left: 20,
+                                    top: 65
+                                },
                                 notice: {
                                     text: '<?php echo $this->escapeJsQuote(__("Click on image to zoom")) ?>'
                                 }

@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Rating\Model\Resource;
 
 /**
  * Rating resource model
@@ -31,8 +32,6 @@
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Rating\Model\Resource;
-
 class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
     const RATING_STATUS_APPROVED = 'Approved';
@@ -79,6 +78,8 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -88,7 +89,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize unique fields
      *
-     * @return \Magento\Rating\Model\Resource\Rating
+     * @return $this
      */
     protected function _initUniqueFields()
     {
@@ -128,7 +129,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Actions after load
      *
      * @param \Magento\Core\Model\AbstractModel|\Magento\Rating\Model\Rating $object
-     * @return \Magento\Rating\Model\Resource\Rating
+     * @return $this
      */
     protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
     {
@@ -174,7 +175,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Actions after save
      *
      * @param \Magento\Core\Model\AbstractModel|\Magento\Rating\Model\Rating $object
-     * @return \Magento\Rating\Model\Resource\Rating
+     * @return $this
      */
     protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
     {
@@ -270,7 +271,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Prepare rating data for reaggregate all data for reviews
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return $this|\Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
     {
@@ -469,7 +470,7 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete ratings by product id
      *
      * @param int $productId
-     * @return \Magento\Rating\Model\Resource\Rating
+     * @return $this
      */
     public function deleteAggregatedRatingsByProductId($productId)
     {

@@ -23,13 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 /**
  * Order creditmemo shipping total calculation model
  */
-namespace Magento\Sales\Model\Order\Creditmemo\Total;
-
-class Shipping extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
+class Shipping extends AbstractTotal
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -56,6 +55,11 @@ class Shipping extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         $this->_taxConfig = $taxConfig;
     }
 
+    /**
+     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return $this
+     * @throws \Magento\Core\Exception
+     */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
         $order = $creditmemo->getOrder();

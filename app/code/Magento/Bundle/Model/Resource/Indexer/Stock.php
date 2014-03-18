@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Bundle\Model\Resource\Indexer;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -32,15 +32,13 @@
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Resource\Indexer;
-
 class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
 {
     /**
      * Reindex temporary (price result data) for defined product(s)
      *
      * @param int|array $entityIds
-     * @return \Magento\Bundle\Model\Resource\Indexer\Stock
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {
@@ -64,7 +62,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
      *
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
-     * @return \Magento\Bundle\Model\Resource\Indexer\Stock
+     * @return $this
      */
     protected function _prepareBundleOptionStockData($entityIds = null, $usePrimaryTable = false)
     {
@@ -194,7 +192,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
      * Prepare stock status data in temporary index table
      *
      * @param int|array $entityIds  the product limitation
-     * @return \Magento\Bundle\Model\Resource\Indexer\Stock
+     * @return $this
      */
     protected function _prepareIndexTable($entityIds = null)
     {
@@ -208,7 +206,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
      * Update Stock status index by product ids
      *
      * @param array|int $entityIds
-     * @return \Magento\Bundle\Model\Resource\Indexer\Stock
+     * @return $this
      */
     protected function _updateIndex($entityIds)
     {
@@ -221,7 +219,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     /**
      * Clean temporary bundle options stock data
      *
-     * @return \Magento\Bundle\Model\Resource\Indexer\Stock
+     * @return $this
      */
     protected function _cleanBundleOptionStockData()
     {

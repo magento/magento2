@@ -32,6 +32,7 @@ interface MethodInterface
      * Init billing agreement
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
+     * @return $this
      */
     public function initBillingAgreementToken(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -39,6 +40,7 @@ interface MethodInterface
      * Retrieve billing agreement details
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
+     * @return array
      */
     public function getBillingAgreementTokenInfo(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -46,6 +48,7 @@ interface MethodInterface
      * Create billing agreement
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
+     * @return $this
      */
     public function placeBillingAgreement(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 
@@ -53,6 +56,7 @@ interface MethodInterface
      * Update billing agreement status
      *
      * @param \Magento\Paypal\Model\Billing\AbstractAgreement $agreement
+     * @return $this
      */
     public function updateBillingAgreementStatus(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement);
 }

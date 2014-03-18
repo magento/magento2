@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Status;
 
 /**
  * Service model for managing statuses information. Statuses are just records with code, message and any
@@ -33,8 +34,6 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Status;
-
 class ListStatus
 {
     /**
@@ -51,7 +50,7 @@ class ListStatus
      * @param int|null $code Code of status, unique for origin, that sets it
      * @param string|null $message Status message
      * @param \Magento\Object|null $additionalData Any additional data, that caller would like to store
-     * @return \Magento\Sales\Model\Status\ListStatus
+     * @return $this
      */
     public function addItem($origin = null, $code = null, $message = null, $additionalData = null)
     {
@@ -149,7 +148,7 @@ class ListStatus
     /**
      * Clears list from all items
      *
-     * @return \Magento\Sales\Model\Status\ListStatus
+     * @return $this
      */
     public function clear()
     {

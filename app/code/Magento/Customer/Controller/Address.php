@@ -28,6 +28,8 @@ use Magento\Exception\InputException;
 
 /**
  * Customer address controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\App\Action\Action
 {
@@ -42,7 +44,9 @@ class Address extends \Magento\App\Action\Action
     protected $_formKeyValidator;
 
 
-    /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface */
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     */
     protected $_addressService;
 
     /**
@@ -51,12 +55,12 @@ class Address extends \Magento\App\Action\Action
     protected $_formFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\RegionBuilder
+     * @var \Magento\Customer\Service\V1\Data\RegionBuilder
      */
     protected $_regionBuilder;
 
     /**
-     * @var \Magento\Customer\Service\V1\Dto\AddressBuilder
+     * @var \Magento\Customer\Service\V1\Data\AddressBuilder
      */
     protected $_addressBuilder;
 
@@ -66,8 +70,8 @@ class Address extends \Magento\App\Action\Action
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder
-     * @param \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
+     * @param \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder
+     * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
      * @internal param \Magento\Customer\Helper\Data $customerData
      * @internal param \Magento\Customer\Model\AddressFactory $addressFactory
      * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
@@ -78,8 +82,8 @@ class Address extends \Magento\App\Action\Action
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Customer\Service\V1\Dto\RegionBuilder $regionBuilder,
-        \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder
+        \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder,
+        \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
@@ -116,6 +120,8 @@ class Address extends \Magento\App\Action\Action
 
     /**
      * Customer addresses list
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -134,11 +140,17 @@ class Address extends \Magento\App\Action\Action
         }
     }
 
+    /**
+     * @return void
+     */
     public function editAction()
     {
         $this->_forward('form');
     }
 
+    /**
+     * @return void
+     */
     public function newAction()
     {
         $this->_forward('form');
@@ -146,6 +158,8 @@ class Address extends \Magento\App\Action\Action
 
     /**
      * Address book form
+     *
+     * @return void
      */
     public function formAction()
     {
@@ -200,16 +214,18 @@ class Address extends \Magento\App\Action\Action
     /**
      * Extract address from request
      *
-     * @return \Magento\Customer\Service\V1\Dto\Address
+     * @return \Magento\Customer\Service\V1\Data\Address
      */
     protected function _extractAddress()
     {
         $addressId = $this->getRequest()->getParam('id');
         $existingAddressData = [];
         if ($addressId) {
-            $existingAddress = $this->_addressService->getAddressById($addressId);
+            $existingAddress = $this->_addressService->getAddress($addressId);
             if ($existingAddress->getId()) {
-                $existingAddressData = $existingAddress->__toArray();
+                $existingAddressData = \Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray(
+                    $existingAddress
+                );
             }
         }
 
@@ -233,13 +249,16 @@ class Address extends \Magento\App\Action\Action
             ->create();
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         $addressId = $this->getRequest()->getParam('id', false);
 
         if ($addressId) {
             try {
-                $address = $this->_addressService->getAddressById($addressId);
+                $address = $this->_addressService->getAddress($addressId);
                 if ($address->getCustomerId() === $this->_getSession()->getCustomerId()) {
                     $this->_addressService->deleteAddress($addressId);
                     $this->messageManager->addSuccess(__('The address has been deleted.'));

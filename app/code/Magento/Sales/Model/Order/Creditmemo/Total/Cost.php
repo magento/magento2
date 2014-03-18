@@ -23,17 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
-class Cost extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
+class Cost extends AbstractTotal
 {
     /**
      * Collect total cost of refunded items
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return \Magento\Sales\Model\Order\Creditmemo\Total\Cost
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

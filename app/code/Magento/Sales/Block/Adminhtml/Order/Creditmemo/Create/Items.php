@@ -23,14 +23,16 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
 /**
  * Adminhtml creditmemo items grid
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
-
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
+    /**
+     * @var bool
+     */
     protected $_canReturnToStock;
 
     /**
@@ -61,7 +63,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Prepare child blocks
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -155,6 +157,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $this->_coreRegistry->registry('current_creditmemo');
     }
 
+    /**
+     * Check if allow to edit qty
+     *
+     * @return bool
+     */
     public function canEditQty()
     {
         if ($this->getCreditmemo()->getOrder()->getPayment()->canRefund()) {
@@ -163,11 +170,21 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return true;
     }
 
+    /**
+     * Get update button html
+     *
+     * @return string
+     */
     public function getUpdateButtonHtml()
     {
         return $this->getChildHtml('update_button');
     }
 
+    /**
+     * Get update url
+     *
+     * @return string
+     */
     public function getUpdateUrl()
     {
         return $this->getUrl('sales/*/updateQty', array(
@@ -176,6 +193,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         ));
     }
 
+    /**
+     * Check if allow to return stock
+     *
+     * @return bool
+     */
     public function canReturnToStock()
     {
         $canReturnToStock = $this->_storeConfig->getConfig(
@@ -190,6 +212,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Whether to show 'Return to stock' column in creaditmemo grid
+     *
      * @return bool
      */
     public function canReturnItemsToStock()
@@ -214,6 +237,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $this->_canReturnToStock;
     }
 
+    /**
+     * Check allow to send new creditmemo email
+     *
+     * @return bool
+     */
     public function canSendCreditmemoEmail()
     {
         return $this->_salesData->canSendNewCreditmemoEmail($this->getOrder()->getStore()->getId());

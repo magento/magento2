@@ -40,7 +40,7 @@ interface ConverterInterface
      * Decode data
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @param $filedName
+     * @param string $filedName
      * @return mixed
      */
     public function decode(\Magento\Core\Model\AbstractModel $object, $filedName);
@@ -49,7 +49,7 @@ interface ConverterInterface
      * Encode data
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @param $filedName
+     * @param string $filedName
      * @return mixed
      */
     public function encode(\Magento\Core\Model\AbstractModel $object, $filedName);

@@ -31,7 +31,7 @@ interface ProcessorInterface
      * Process config value
      *
      * @param string $value
-     * @return mixed
+     * @return string
      */
     public function processValue($value);
 }

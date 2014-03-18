@@ -87,7 +87,7 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Apply various selection filters to prepare the sales order grid collection.
      *
-     * @return \Magento\Backend\Block\Widget\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {

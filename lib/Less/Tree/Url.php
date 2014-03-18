@@ -1,43 +1,76 @@
 <?php
 
-
+/**
+ * Url
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Url extends Less_Tree{
 
 	public $attrs;
 	public $value;
 	public $currentFileInfo;
+	public $isEvald;
 	public $type = 'Url';
 
-	public function __construct($value, $currentFileInfo = null){
+	public function __construct($value, $currentFileInfo = null, $isEvald = null){
 		$this->value = $value;
 		$this->currentFileInfo = $currentFileInfo;
+		$this->isEvald = $isEvald;
 	}
 
 	function accept( $visitor ){
 		$this->value = $visitor->visitObj($this->value);
 	}
 
-	function genCSS( $env, &$strs ){
-		self::OutputAdd( $strs, 'url(' );
-		$this->value->genCSS( $env, $strs );
-		self::OutputAdd( $strs, ')' );
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
+		$output->add( 'url(' );
+		$this->value->genCSS( $output );
+		$output->add( ')' );
 	}
 
+	/**
+	 * @param Less_Functions $ctx
+	 */
 	public function compile($ctx){
 		$val = $this->value->compile($ctx);
 
-		// Add the base path if the URL is relative
-		if( $this->currentFileInfo && is_string($val->value) && Less_Environment::isPathRelative($val->value) ){
-			$rootpath = $this->currentFileInfo['uri_root'];
-			if ( !$val->quote ){
-				$rootpath = preg_replace('/[\(\)\'"\s]/', '\\$1', $rootpath );
+		if( !$this->isEvald ){
+			// Add the base path if the URL is relative
+			if( Less_Parser::$options['relativeUrls']
+				&& $this->currentFileInfo
+				&& is_string($val->value)
+				&& Less_Environment::isPathRelative($val->value)
+			){
+				$rootpath = $this->currentFileInfo['uri_root'];
+				if ( !$val->quote ){
+					$rootpath = preg_replace('/[\(\)\'"\s]/', '\\$1', $rootpath );
+				}
+				$val->value = $rootpath . $val->value;
 			}
-			$val->value = $rootpath . $val->value;
+
+			$val->value = Less_Environment::normalizePath( $val->value);
 		}
 
-		$val->value = Less_Environment::normalizePath( $val->value);
+		// Add cache buster if enabled
+		if( Less_Parser::$options['urlArgs'] ){
+			if( !preg_match('/^\s*data:/',$val->value) ){
+				$delimiter = strpos($val->value,'?') === false ? '?' : '&';
+				$urlArgs = $delimiter . Less_Parser::$options['urlArgs'];
+				$hash_pos = strpos($val->value,'#');
+				if( $hash_pos !== false ){
+					$val->value = substr_replace($val->value,$urlArgs, $hash_pos, 0);
+				} else {
+					$val->value .= $urlArgs;
+				}
+			}
+		}
 
-		return new Less_Tree_URL($val, null);
+		return new Less_Tree_URL($val, $this->currentFileInfo, true);
 	}
 
 }

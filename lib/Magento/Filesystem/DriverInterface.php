@@ -327,7 +327,7 @@ interface DriverInterface
     /**
      * Lock file in selected mode
      *
-     * @param $resource
+     * @param resource $resource
      * @param int $lockMode
      * @return bool
      * @throws FilesystemException
@@ -337,7 +337,7 @@ interface DriverInterface
     /**
      * Unlock file
      *
-     * @param $resource
+     * @param resource $resource
      * @return bool
      * @throws FilesystemException
      */
@@ -352,7 +352,7 @@ interface DriverInterface
     public function getAbsolutePath($basePath, $path, $scheme = null);
 
     /**
-     * @param $path
+     * @param string $path
      * @return mixed
      */
     public function getRealPath($path);

@@ -29,6 +29,7 @@
         <?php echo $this->getChildHtml('pager'); ?>
         <div class="wrapper table billing agreements">
             <table id="billing-agreements" class="data table billing agreements">
+                <caption class="table caption"><?php echo __('Billing Agreements') ?></caption>
                 <thead>
                 <tr>
                     <th class="col id"><?php echo __('Reference ID'); ?></th>
@@ -77,17 +78,25 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="primary action create">
-                    <span><?php echo __('Create...') ?></span>
-                </button>
+                <div class="actions toolbar">
+                    <div class="primary">
+                        <button type="submit" class="primary action create">
+                            <span><?php echo __('Create...') ?></span>
+                        </button>
+                    </div>
+                    <div class="secondary">
+                        <a href="<?php echo $this->escapeHtml($this->getBackUrl()) ?>"
+                           class="action back"><span><?php echo __('Back') ?></span></a>
+                    </div>
+                </div>
             </fieldset>
         </form>
-    <?php endif; ?>
-
-    <div class="actions">
+    <?php else: ?>
+    <div class="actions toolbar">
         <div class="secondary">
             <a href="<?php echo $this->escapeHtml($this->getBackUrl()) ?>"
                class="action back"><span><?php echo __('Back') ?></span></a>
         </div>
     </div>
+    <?php endif; ?>
 </div>

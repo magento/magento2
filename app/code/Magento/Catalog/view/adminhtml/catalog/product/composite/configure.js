@@ -93,7 +93,7 @@ ProductConfigure.prototype = {
         this.blockIFrame                = $('product_composite_configure_iframe');
         this.blockCancelBtn             = $('product_composite_configure_form_cancel');
         this.blockMsg                   = $('product_composite_configure_messages');
-        this.blockMsgError              = this.blockMsg.select('.error-msg')[0];
+        this.blockMsgError              = this.blockMsg.select('.message.error div')[0];
         this.iFrameJSVarname            = this.blockForm.select('input[name="as_js_varname"]')[0].value;
     },
 

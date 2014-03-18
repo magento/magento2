@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Oauth\Token;
 
 use Magento\Oauth\OauthInterface;
@@ -233,7 +232,7 @@ class Provider implements TokenProviderInterface
     /**
      * Get consumer by consumer_id for a given token.
      *
-     * @param $consumerId
+     * @param int $consumerId
      * @return \Magento\Oauth\ConsumerInterface
      * @throws \Magento\Oauth\Exception
      */
@@ -295,9 +294,9 @@ class Provider implements TokenProviderInterface
     /**
      * Check if token belongs to the same consumer.
      *
-     * @param $token \Magento\Integration\Model\Oauth\Token
-     * @param $consumer \Magento\Oauth\ConsumerInterface
-     * @return boolean
+     * @param \Magento\Integration\Model\Oauth\Token $token
+     * @param \Magento\Oauth\ConsumerInterface $consumer
+     * @return bool
      */
     protected function _isTokenAssociatedToConsumer($token, $consumer)
     {

@@ -23,12 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Model\Resource;
 
 /**
  * Product alert for back in stock resource model
  */
-namespace Magento\ProductAlert\Model\Resource;
-
 class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
 {
     /**
@@ -51,6 +50,7 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -61,7 +61,7 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
      * Before save action
      *
      * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {

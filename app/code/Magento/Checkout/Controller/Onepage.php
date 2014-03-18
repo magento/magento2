@@ -27,7 +27,6 @@ namespace Magento\Checkout\Controller;
 
 use Magento\App\Action\NotFoundException;
 use Magento\App\RequestInterface;
-use Magento\Customer\Service\V1\CustomerServiceInterface as CustomerService;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
@@ -67,7 +66,6 @@ class Onepage extends Action
     /**
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerService $customerService
      * @param CustomerAccountService $customerAccountService
      * @param CustomerMetadataService $customerMetadataService
      * @param \Magento\Registry $coreRegistry
@@ -77,7 +75,6 @@ class Onepage extends Action
     public function __construct(
         \Magento\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerService $customerService,
         CustomerAccountService $customerAccountService,
         CustomerMetadataService $customerMetadataService,
         \Magento\Registry $coreRegistry,
@@ -90,7 +87,6 @@ class Onepage extends Action
         parent::__construct(
             $context,
             $customerSession,
-            $customerService,
             $customerAccountService,
             $customerMetadataService
         );
@@ -308,25 +304,16 @@ class Onepage extends Action
     public function successAction()
     {
         $session = $this->getOnepage()->getCheckout();
-        if (!$session->getLastSuccessQuoteId()) {
+        if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid($session)) {
             $this->_redirect('checkout/cart');
             return;
         }
-
-        $lastQuoteId = $session->getLastQuoteId();
-        $lastOrderId = $session->getLastOrderId();
-        $lastRecurringProfiles = $session->getLastRecurringProfileIds();
-        if (!$lastQuoteId || (!$lastOrderId && empty($lastRecurringProfiles))) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-
-        $session->clearQuote();
+        $session->clearQuote(); //@todo: Refactor it to match CQRS
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
-            array('order_ids' => array($lastOrderId))
+            array('order_ids' => array($session->getLastOrderId()))
         );
         $this->_view->renderLayout();
     }
@@ -460,8 +447,8 @@ class Onepage extends Action
             // $result will contain error data if shipping method is empty
             if (!$result) {
                 $this->_eventManager->dispatch('checkout_controller_onepage_save_shipping_method',
-                        array('request'=>$this->getRequest(),
-                            'quote'=>$this->getOnepage()->getQuote()));
+                    array('request'=>$this->getRequest(),
+                        'quote'=>$this->getOnepage()->getQuote()));
                 $this->getOnepage()->getQuote()->collectTotals();
                 $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
 
@@ -597,11 +584,13 @@ class Onepage extends Action
 
             $data = $this->getRequest()->getPost('payment', array());
             if ($data) {
-                $data['checks'] = \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT
-                    | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY
-                    | \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY
-                    | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
-                    | \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL;
+                $data['checks'] = [
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
+                ];
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
 
@@ -676,8 +665,8 @@ class Onepage extends Action
     protected function _canShowForUnregisteredUsers()
     {
         return $this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()
-            || $this->getRequest()->getActionName() == 'index'
-            || $this->_objectManager->get('Magento\Checkout\Helper\Data')->isAllowedGuestCheckout($this->getOnepage()->getQuote())
-            || !$this->_objectManager->get('Magento\Checkout\Helper\Data')->isCustomerMustBeLogged();
+        || $this->getRequest()->getActionName() == 'index'
+        || $this->_objectManager->get('Magento\Checkout\Helper\Data')->isAllowedGuestCheckout($this->getOnepage()->getQuote())
+        || !$this->_objectManager->get('Magento\Checkout\Helper\Data')->isCustomerMustBeLogged();
     }
 }

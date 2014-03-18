@@ -23,8 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
+
+use Magento\Core\Exception;
 
 /**
  * Customer password attribute backend
@@ -61,6 +62,8 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * b) transform temporary attribute 'password' into real attribute 'password_hash'
      *
      * @param \Magento\Object $object
+     * @return void
+     * @throws Exception
      */
     public function beforeSave($object)
     {
@@ -69,14 +72,14 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         $length = $this->string->strlen($password);
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
-                throw new \Magento\Core\Exception(
+                throw new Exception(
                     __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
                 );
             }
 
             if ($this->string->substr($password, 0, 1) == ' ' ||
                 $this->string->substr($password, $length - 1, 1) == ' ') {
-                throw new \Magento\Core\Exception(__('The password can not begin or end with a space.'));
+                throw new Exception(__('The password can not begin or end with a space.'));
             }
 
             $object->setPasswordHash($object->hashPassword($password));

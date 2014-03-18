@@ -32,7 +32,7 @@
             selectors: {
                 trigger: '[data-role=zoom-image], [data-role=zoom-track]'
             },
-            fullscreenClass: 'magento-zoom-enlarged lightbox'
+            fullscreenClass: 'zoom lightbox'
         },
 
         /**
@@ -62,6 +62,8 @@
                 .gallery('option', {showNotice: false, fullSizeMode: true, showButtons: true})
                 .dialog({
                     resizable: false,
+                    draggable: false,
+                    modal: true,
                     dialogClass: this.options.fullscreenClass,
                     close: $.proxy(function() {
                         this.element

@@ -89,6 +89,10 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $this->helper = new Helper($phpcsFile);
+        // if we should skip this type we should do that
+        if ($this->helper->shouldFilter()) {
+            return;
+        }
 
         $tokens = $phpcsFile->getTokens();
 
@@ -341,10 +345,9 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         }
 
         $methodName = strtolower(ltrim($this->_methodName, '_'));
-        $isSpecialMethod = $this->_methodName === '__construct' || $this->_methodName === '__destruct';
         $return = $this->commentParser->getReturn();
 
-        if ($isSpecialMethod === false && $methodName !== $className) {
+        if ($this->_methodName !== '__construct' && $this->_methodName !== '__destruct') {
             if ($return !== null) {
                 $tagOrder = $this->commentParser->getTagOrders();
                 $index = array_keys($tagOrder, 'return');
@@ -370,6 +373,9 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                         Helper::MISSING_RETURN_TYPE
                     );
                 } else {
+                    // Strip off any comments attached to our content
+                    $parts = explode(' ', $content);
+                    $content = $parts[0];
                     // Check return type (can be multiple, separated by '|').
                     $typeNames = explode('|', $content);
                     $suggestedNames = array();

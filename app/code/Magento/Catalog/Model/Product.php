@@ -254,6 +254,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
     protected $_productFlatIndexerProcessor;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    protected $_productPriceIndexerProcessor;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -277,6 +282,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
      * @param Indexer\Product\Flat\Processor $productFlatIndexerProcessor
+     * @param Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -305,6 +311,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
         \Magento\App\Filesystem $filesystem,
         \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         array $data = array()
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -325,6 +332,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
         $this->_filesystem = $filesystem;
         $this->categoryIndexer = $categoryIndexer;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
+        $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         parent::__construct($context, $registry, $storeManager, $resource, $resourceCollection, $data);
     }
 
@@ -685,6 +693,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
             $this->setRequiredOptions(false);
         }
 
+        if (!$this->getOrigData('website_ids')) {
+            $websiteIds = $this->_getResource()->getWebsiteIds($this);
+            $this->setOrigData('website_ids', $websiteIds);
+        }
+
         parent::_beforeSave();
     }
 
@@ -713,6 +726,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
         $this->getLinkInstance()->saveProductRelations($this);
         $this->getTypeInstance()->save($this);
 
+        $this->_getResource()->addCommitCallback(array($this, 'priceReindexCallback'));
+
         /**
          * Product Options
          */
@@ -730,9 +745,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
 
 
     /**
+     * Callback for entity reindex
+     *
+     * @return void
+     */
+    public function priceReindexCallback()
+    {
+        if ($this->isObjectNew() || $this->_catalogProduct->isDataForPriceIndexerWasChanged($this)) {
+            $this->_productPriceIndexerProcessor->reindexRow($this->getEntityId());
+        }
+    }
+
+    /**
      * Init indexing process after product save
      *
-     * @return $this
+     * @return void
      */
     public function reindex()
     {
@@ -766,6 +793,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
     protected function _afterDeleteCommit()
     {
         $this->reindex();
+        $this->_productPriceIndexerProcessor->reindexRow($this->getId());
         parent::_afterDeleteCommit();
         $this->_indexIndexer->indexEvents(
             self::ENTITY, \Magento\Index\Model\Event::TYPE_DELETE
@@ -789,6 +817,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
                 $this->addOption($option);
             }
         }
+
         return $this;
     }
 
@@ -1356,16 +1385,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements \Magento\O
     public function isVirtual()
     {
         return $this->getIsVirtual();
-    }
-
-    /**
-     * Whether the product is a recurring payment
-     *
-     * @return bool
-     */
-    public function isRecurring()
-    {
-        return $this->getIsRecurring() == '1';
     }
 
     /**

@@ -33,7 +33,6 @@
             <module name="Magento_Core"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Centinel"/>
-            <module name="Magento_RecurringProfile"/>
             <module name="Magento_Checkout"/>
         </depends>
     </module>

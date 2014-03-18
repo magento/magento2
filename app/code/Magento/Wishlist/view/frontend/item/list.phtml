@@ -28,12 +28,13 @@ $columns = $this->getColumns();
 ?>
 <div class="wishlist table wrapper">
     <table class="table data wishlist" id="wishlist-table">
+        <caption class="table caption"><?php echo __('Wish List') ?></caption>
         <thead>
-        <tr>
-            <?php foreach ($columns as $column): ?>
-                <th class="col <?php echo $column->getColClass(); ?>"><?php echo $column->getTitle();?></th>
-            <?php endforeach; ?>
-        </tr>
+            <tr>
+                <?php foreach ($columns as $column): ?>
+                    <th class="col <?php echo $column->getColClass(); ?>"><?php echo $column->getTitle();?></th>
+                <?php endforeach; ?>
+            </tr>
         </thead>
         <tbody>
         <?php if (count($this->getItems())): ?>

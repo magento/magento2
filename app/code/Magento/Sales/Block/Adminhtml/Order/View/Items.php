@@ -23,6 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View;
+
+use Magento\Sales\Model\Resource\Order\Item\Collection;
 
 /**
  * Adminhtml order items grid
@@ -31,12 +34,13 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View;
-
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * Retrieve required options from parent
+     *
+     * @return void
+     * @throws \Magento\Core\Exception
      */
     protected function _beforeToHtml()
     {
@@ -50,7 +54,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Retrieve order items collection
      *
-     * @return unknown
+     * @return Collection
      */
     public function getItemsCollection()
     {

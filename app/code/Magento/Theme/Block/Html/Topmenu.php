@@ -188,14 +188,14 @@ class Topmenu extends \Magento\View\Element\Template implements \Magento\View\Bl
     /**
      * Recursively generates top menu html from data that is specified in $menuTree
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param \Magento\Data\Tree\Node $menuTree
      * @param string $childrenWrapClass
      * @param int $limit
      * @param array $colBrakes
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getHtml(\Magento\Data\Tree\Node $menuTree, $childrenWrapClass, $limit, $colBrakes = array())
     {
@@ -313,7 +313,8 @@ class Topmenu extends \Magento\View\Element\Template implements \Magento\View\Bl
     /**
      * Add identity
      *
-     * @param $identity
+     * @param array $identity
+     * @return void
      */
     public function addIdentity($identity)
     {

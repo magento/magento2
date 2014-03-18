@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 /**
  * Adminhtml sales order create sidebar recently compared block
@@ -31,17 +32,18 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
+     * Product factory
+     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
+     * Event
+     *
      * @var \Magento\Reports\Model\Resource\Event
      */
     protected $_event;
@@ -69,6 +71,11 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
         parent::__construct($context, $sessionQuote, $orderCreate, $salesConfig, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -76,6 +83,11 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
         $this->setDataId('pcompared');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Recently Compared Products');
@@ -123,7 +135,7 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
     /**
      * Retrieve availability removing items in block
      *
-     * @return bool
+     * @return false
      */
     public function canRemoveItems()
     {
@@ -144,8 +156,8 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
     /**
      * Retrieve product identifier of block item
      *
-     * @param   mixed $item
-     * @return  int
+     * @param \Magento\Object $item
+     * @return int
      */
     public function getProductId($item) {
         return $item->getId();

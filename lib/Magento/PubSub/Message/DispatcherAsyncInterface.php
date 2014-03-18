@@ -34,6 +34,7 @@ interface DispatcherAsyncInterface
      *
      * @param string $topic
      * @param array $data should only contain primitives, no objects.
+     * @return void
      */
     public function dispatch($topic, $data);
 }

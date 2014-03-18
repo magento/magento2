@@ -62,6 +62,8 @@ class Extend
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -146,6 +148,9 @@ class Extend
         return $html;
     }
 
+    /**
+     * @return mixed
+     */
     public function getProduct()
     {
         if (!$this->getData('product')){

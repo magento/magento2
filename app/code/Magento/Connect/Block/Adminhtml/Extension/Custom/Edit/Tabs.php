@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Block\Adminhtml\Extension\Custom\Edit;
 
 /**
  * Block for tabs in extension info
@@ -31,13 +32,13 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Block\Adminhtml\Extension\Custom\Edit;
-
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
-    * Constructor
-    */
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -47,10 +48,10 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-    * Set tabs
-    *
-    * @return \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tabs
-    */
+     * Set tabs
+     *
+     * @return \Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tabs
+     */
     protected function _beforeToHtml()
     {
 //        $this->addTab('package', array(
@@ -89,11 +90,11 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-    * Retrieve HTML for tab
-    *
-    * @param string $tab
-    * @return string
-    */
+     * Retrieve HTML for tab
+     *
+     * @param string $tab
+     * @return string
+     */
     protected function _getTabHtml($tab)
     {
 //        $classNameParts = explode('_', $tab);

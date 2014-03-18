@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser\Adapter;
 
 use Magento\Tools\I18n\Code\Context;
@@ -59,6 +58,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Template method
+     *
+     * @return void
      */
     abstract protected function _parse();
 
@@ -75,6 +76,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $phrase
      * @param string|int $line
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _addPhrase($phrase, $line = '')

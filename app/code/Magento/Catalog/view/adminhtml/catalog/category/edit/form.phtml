@@ -38,8 +38,8 @@
 <?php if ($this->hasStoreRootCategory()): ?>
     <?php echo $this->getTabsHtml() ?>
 <?php else: ?>
-<div class="messages warning-msg">
-    <?php echo __('Set root category for this store in the <a href="%1">configuration</a>.', $this->getStoreConfigurationUrl()) ?>
+<div class="message info">
+    <div><?php echo __('Set root category for this store in the <a href="%1">configuration</a>.', $this->getStoreConfigurationUrl()) ?></div>
 </div>
 <?php endif; ?>
 <iframe name="iframeSave" style="display:none; width:100%;"

@@ -178,9 +178,11 @@ class Request
      */
     protected function _fetchProtocolParamsFromQuery(&$protocolParams, $queryString)
     {
-        foreach ($queryString as $queryParamName => $queryParamValue) {
-            if ($this->_isProtocolParameter($queryParamName)) {
-                $protocolParams[$queryParamName] = $queryParamValue;
+        if (is_array($queryString)) {
+            foreach ($queryString as $queryParamName => $queryParamValue) {
+                if ($this->_isProtocolParameter($queryParamName)) {
+                    $protocolParams[$queryParamName] = $queryParamValue;
+                }
             }
         }
     }

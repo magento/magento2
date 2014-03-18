@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Checkout\Block\Onepage\Shipping\Method;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
+use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Sales\Model\Quote\Address;
 
 /**
  * One page checkout status
- *
- * @category   Magento
- * @category   Magento
- * @package    Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -62,6 +58,9 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Checkout\Model\Session $resourceSession
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerAddressService $customerAddressService
+     * @param AddressConfig $addressConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
@@ -73,6 +72,9 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Checkout\Model\Session $resourceSession,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        CustomerAccountService $customerAccountService,
+        CustomerAddressService $customerAddressService,
+        AddressConfig $addressConfig,
         \Magento\Tax\Helper\Data $taxData,
         array $data = array()
     ) {
@@ -85,6 +87,9 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $resourceSession,
             $countryCollectionFactory,
             $regionCollectionFactory,
+            $customerAccountService,
+            $customerAddressService,
+            $addressConfig,
             $data
         );
         $this->_isScopePrivate = true;

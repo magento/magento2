@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Paren
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Paren extends Less_Tree{
 
 	public $value;
@@ -13,10 +19,13 @@ class Less_Tree_Paren extends Less_Tree{
 		$this->value = $visitor->visitObj($this->value);
 	}
 
-	function genCSS( $env, &$strs ){
-		self::OutputAdd( $strs, '(' );
-		$this->value->genCSS( $env, $strs );
-		self::OutputAdd( $strs, ')' );
+    /**
+     * @see Less_Tree::genCSS
+     */
+	function genCSS( $output ){
+		$output->add( '(' );
+		$this->value->genCSS( $output );
+		$output->add( ')' );
 	}
 
 	public function compile($env) {

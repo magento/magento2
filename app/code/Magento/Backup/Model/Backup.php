@@ -400,11 +400,11 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
             return ;
         }
 
-        /** @var \Magento\Filesystem\Directory\ReadInterface $zlibDirectory */
-        $zlibDirectory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB);
-        $zlibDirectory = $zlibDirectory->readFile($this->_getFilePath());
+        /** @var \Magento\Filesystem\Directory\ReadInterface $directory */
+        $directory = $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::VAR_DIR);
+        $directory = $directory->readFile($this->_getFilePath());
 
-        echo $zlibDirectory;
+        echo $directory;
     }
 
     /**

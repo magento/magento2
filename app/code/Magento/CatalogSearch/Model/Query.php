@@ -23,6 +23,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model;
+
+use Magento\CatalogSearch\Model\Resource\Query\Collection as QueryCollection;
+use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
+use Magento\CatalogSearch\Model\Resource\Search\Collection;
+use Magento\CatalogSearch\Model\Resource\Search\CollectionFactory;
+use Magento\Core\Model\AbstractModel;
+use Magento\Model\Context;
+use Magento\Registry;
+use Magento\Core\Model\Resource\AbstractResource;
+use Magento\Core\Model\Store\Config;
+use Magento\Core\Model\StoreManagerInterface;
+use Magento\Data\Collection\Db;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
  * Catalog search query model
@@ -52,21 +66,6 @@
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model;
-
-use Magento\CatalogSearch\Model\Resource\Query\Collection as QueryCollection;
-use Magento\CatalogSearch\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
-use Magento\CatalogSearch\Model\Resource\Search\Collection;
-use Magento\CatalogSearch\Model\Resource\Search\CollectionFactory;
-use Magento\Core\Model\AbstractModel;
-use Magento\Model\Context;
-use Magento\Registry;
-use Magento\Core\Model\Resource\AbstractResource;
-use Magento\Core\Model\Store\Config;
-use Magento\Core\Model\StoreManagerInterface;
-use Magento\Data\Collection\Db;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-
 class Query extends AbstractModel
 {
     /**
@@ -150,6 +149,7 @@ class Query extends AbstractModel
     /**
      * Init resource model
      *
+     * @return void
      */
     protected function _construct()
     {

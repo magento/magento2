@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect;
 
 /**
  * Class to manipulate with packages
@@ -31,8 +32,6 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect;
-
 class Packager
 {
     /**
@@ -232,6 +231,7 @@ class Packager
      *
      * @param string $dir
      * @param \Magento\Connect\Ftp $ftp
+     * @return void
      */
     protected function removeEmptyDirectory($dir, $ftp = null)
     {
@@ -281,8 +281,8 @@ class Packager
     /**
      * Uninstall Package over FTP
      *
-     * @param $chanName
-     * @param $package
+     * @param string $chanName
+     * @param string $package
      * @param \Magento\Connect\Singleconfig $cacheObj
      * @param \Magento\Connect\Ftp $ftp
      * @return void

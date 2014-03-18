@@ -27,9 +27,9 @@
 namespace Magento\Backend\Model\Config\Source\Website;
 
 use Magento\Core\Model\System\Store;
+use Magento\Option\ArrayInterface;
 
-class OptionHash
-    implements \Magento\Option\ArrayInterface
+class OptionHash implements ArrayInterface
 {
     /**
      * System Store Model
@@ -39,11 +39,18 @@ class OptionHash
     protected $_systemStore;
 
     /**
-     * @param Store $systemStore
+     * @var bool True if the default website (Admin) should be included
      */
-    public function __construct(Store $systemStore)
+    protected $_withDefaultWebsite;
+
+    /**
+     * @param Store $systemStore
+     * @param bool $withDefaultWebsite
+     */
+    public function __construct(Store $systemStore, $withDefaultWebsite = false)
     {
         $this->_systemStore = $systemStore;
+        $this->_withDefaultWebsite = $withDefaultWebsite;
     }
 
     /**
@@ -53,7 +60,7 @@ class OptionHash
      */
     public function toOptionArray()
     {
-        return $this->_systemStore->getWebsiteOptionHash();
+        return $this->_systemStore->getWebsiteOptionHash($this->_withDefaultWebsite);
     }
 }
 

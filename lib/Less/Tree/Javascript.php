@@ -1,24 +1,30 @@
 <?php
 
+/**
+ * Javascript
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Javascript extends Less_Tree{
 
 	public $type = 'Javascript';
+	public $escaped;
+	public $expression;
+	public $index;
 
+	/**
+	 * @param boolean $index
+	 * @param boolean $escaped
+	 */
 	public function __construct($string, $index, $escaped){
 		$this->escaped = $escaped;
 		$this->expression = $string;
 		$this->index = $index;
 	}
 
-	public function compile($env){
-		return $this;
+	public function compile(){
+		return new Less_Tree_Anonymous('/* Sorry, can not do JavaScript evaluation in PHP... :( */');
 	}
 
-	function genCSS( $env, &$strs ){
-		self::OutputAdd( $strs, '/* Sorry, can not do JavaScript evaluation in PHP... :( */' );
-	}
-
-	public function toCSS($env = null){
-		return Less_Environment::$compress ? '' : '/* Sorry, can not do JavaScript evaluation in PHP... :( */';
-	}
 }

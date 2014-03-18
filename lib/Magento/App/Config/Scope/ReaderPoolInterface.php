@@ -29,7 +29,7 @@ interface ReaderPoolInterface
      * Retrieve reader by scope
      *
      * @param string $scopeType
-     * @return mixed
+     * @return ReaderInterface|null
      */
     public function getReader($scopeType);
 }

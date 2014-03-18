@@ -1,6 +1,11 @@
 <?php
 
-
+/**
+ * Alpha
+ *
+ * @package Less
+ * @subpackage tree
+ */
 class Less_Tree_Alpha extends Less_Tree{
 	public $value;
 	public $type = 'Alpha';
@@ -15,25 +20,30 @@ class Less_Tree_Alpha extends Less_Tree{
 
 	public function compile($env){
 
-		if( !is_string($this->value) ){ return new Less_Tree_Alpha( $this->value->compile($env) ); }
+		if( is_object($this->value) ){
+			$this->value = $this->value->compile($env);
+		}
 
 		return $this;
 	}
 
-	public function genCSS( $env, &$strs ){
+    /**
+     * @see Less_Tree::genCSS
+     */
+	public function genCSS( $output ){
 
-		self::OutputAdd( $strs, "alpha(opacity=" );
+		$output->add( "alpha(opacity=" );
 
 		if( is_string($this->value) ){
-			self::OutputAdd( $strs, $this->value );
+			$output->add( $this->value );
 		}else{
-			$this->value->genCSS($env, $strs);
+			$this->value->genCSS( $output);
 		}
 
-		self::OutputAdd( $strs, ')' );
+		$output->add( ')' );
 	}
 
-	public function toCSS($env = null){
+	public function toCSS(){
 		return "alpha(opacity=" . (is_string($this->value) ? $this->value : $this->value->toCSS()) . ")";
 	}
 

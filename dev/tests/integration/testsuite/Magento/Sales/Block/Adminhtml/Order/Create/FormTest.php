@@ -116,23 +116,23 @@ ORDER_DATA_JSON;
 
     private function setUpMockAddress()
     {
-        /** @var \Magento\Customer\Service\V1\Dto\AddressBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Dto\AddressBuilder');
+        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
+        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
         /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
         $addressService = $this->_objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
 
-        $addressDto1 = $addressBuilder->setId(1)
+        $addressData1 = $addressBuilder->setId(1)
             ->setCountryId('US')
             ->setCustomerId(1)
             ->setDefaultBilling(true)
             ->setDefaultShipping(true)
             ->setPostcode('75477')
             ->setRegion(
-                new V1\Dto\Region([
+                new V1\Data\Region((new V1\Data\RegionBuilder())->populateWithArray([
                     'region_code' => 'AL',
                     'region' => 'Alabama',
                     'region_id' => 1
-                ])
+                ]))
             )
             ->setStreet(['Green str, 67'])
             ->setTelephone('3468676')
@@ -141,18 +141,18 @@ ORDER_DATA_JSON;
             ->setLastname('Smith')
             ->create();
 
-        $addressDto2 = $addressBuilder->setId(2)
+        $addressData2 = $addressBuilder->setId(2)
             ->setCountryId('US')
             ->setCustomerId(1)
             ->setDefaultBilling(false)
             ->setDefaultShipping(false)
             ->setPostcode('47676')
             ->setRegion(
-                new V1\Dto\Region([
+                new V1\Data\Region((new V1\Data\RegionBuilder())->populateWithArray([
                     'region_code' => 'AL',
                     'region' => 'Alabama',
                     'region_id' => 1
-                ])
+                ]))
             )
             ->setStreet(['Black str, 48'])
             ->setCity('CityX')
@@ -161,6 +161,6 @@ ORDER_DATA_JSON;
             ->setLastname('Smith')
             ->create();
 
-        return $addressService->saveAddresses(1, [$addressDto1, $addressDto2]);
+        return $addressService->saveAddresses(1, [$addressData1, $addressData2]);
     }
 }

@@ -704,7 +704,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
     /**
      * Process "delta" rounding
      *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data
+     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @return $this
      */
@@ -740,6 +740,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
      * @param Rule\Action\Discount\Data $discountData
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @param float $qty
+     * @return void
      */
     protected function minFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,

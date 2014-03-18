@@ -40,15 +40,15 @@ class Reader extends \Magento\Config\Reader\Filesystem
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\App\Route\Config\Converter $converter
-     * @param \Magento\App\Route\Config\SchemaLocator $schemaLocator
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      * @param string $fileName
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\App\Route\Config\Converter $converter,
-        \Magento\App\Route\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'routes.xml'
     ) {

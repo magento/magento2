@@ -53,7 +53,7 @@
             <?php endforeach; ?>
             </ol>
             <div id="cart-sidebar-reorder-advice-container"></div>
-            <div class="actions">
+            <div class="actions toolbar">
                 <?php if ($_showAddButtonFlag): ?>
                     <div class="primary">
                         <button type="submit" title="<?php echo __('Add to Cart') ?>" class="action tocart">
@@ -61,7 +61,11 @@
                         </button>
                     </div>
                 <?php endif; ?>
-                <div class="secondary"><a class="action view" href="<?php echo $this->getUrl('customer/account') ?>"><span><?php echo __('View All'); ?></span></a></div>
+                <div class="secondary">
+                    <a class="action view" href="<?php echo $this->getUrl('customer/account') ?>">
+                        <span><?php echo __('View All'); ?></span>
+                    </a>
+                </div>
             </div>
         </form>
     </div>

@@ -40,6 +40,8 @@ class Link extends \Magento\Core\Model\AbstractModel
 {
     /**
      * Layout Update model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {

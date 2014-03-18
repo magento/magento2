@@ -23,16 +23,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
 /**
  * Tax Total Row Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
-
 class Tax extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'order/create/totals/tax.phtml';
 }

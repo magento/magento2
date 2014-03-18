@@ -18,12 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
+use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * One page checkout status
@@ -50,6 +52,9 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Checkout\Model\Session $resourceSession
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerAddressService $customerAddressService
+     * @param AddressConfig $addressConfig
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param array $data
      */
@@ -61,6 +66,9 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Checkout\Model\Session $resourceSession,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        CustomerAccountService $customerAccountService,
+        CustomerAddressService $customerAddressService,
+        AddressConfig $addressConfig,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         array $data = array()
     ) {
@@ -73,6 +81,9 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $resourceSession,
             $countryCollectionFactory,
             $regionCollectionFactory,
+            $customerAccountService,
+            $customerAddressService,
+            $addressConfig,
             $data
         );
         $this->_isScopePrivate = true;

@@ -82,11 +82,19 @@
                     productInfoMain.addClass("responsive");
 
                 })();
-
                 var galleryElement = $('[data-role=media-gallery]');
-                if (galleryElement.length && galleryElement.data('zoom')) {
-                    galleryElement.zoom('disable');
-                }
+                setTimeout(function(){
+                    if (galleryElement.length && galleryElement.data('zoom')) {
+                        galleryElement.zoom('disable');
+                    }
+                    if (galleryElement.length && galleryElement.data('gallery')) {
+                        galleryElement.gallery("option","disableLinks",false);
+                    }
+                    if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
+                        galleryElement.galleryFullScreen('disable');
+                    }
+                }, 2000);
+
             },
 
             // Switch to Desktop Version
@@ -109,6 +117,12 @@
                 var galleryElement = $('[data-role=media-gallery]');
                 if (galleryElement.length && galleryElement.data('zoom')) {
                     galleryElement.zoom('enable');
+                                    }
+                if (galleryElement.length && galleryElement.data('gallery')) {
+                    galleryElement.gallery("option","disableLinks",true);
+                }
+                if (galleryElement.length && galleryElement.data('galleryFullScreen')) {
+                    galleryElement.galleryFullScreen('enable');
                 }
             }
         });

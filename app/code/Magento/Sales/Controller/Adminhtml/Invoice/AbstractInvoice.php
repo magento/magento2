@@ -23,14 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Controller\Adminhtml\Invoice;
+
+use Magento\App\ResponseInterface;
 
 /**
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Controller\Adminhtml\Invoice;
-
 class AbstractInvoice
     extends \Magento\Backend\App\Action
 {
@@ -50,6 +51,7 @@ class AbstractInvoice
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
+
     /**
      * Init layout, menu and breadcrumb
      *
@@ -66,6 +68,8 @@ class AbstractInvoice
 
     /**
      * Order grid
+     *
+     * @return void
      */
     public function gridAction()
     {
@@ -77,6 +81,8 @@ class AbstractInvoice
 
     /**
      * Invoices grid
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -89,6 +95,8 @@ class AbstractInvoice
 
     /**
      * Invoice information page
+     *
+     * @return void
      */
     public function viewAction()
     {
@@ -101,6 +109,8 @@ class AbstractInvoice
 
     /**
      * Notify user
+     *
+     * @return void
      */
     public function emailAction()
     {
@@ -122,6 +132,9 @@ class AbstractInvoice
         }
     }
 
+    /**
+     * @return ResponseInterface|void
+     */
     public function printAction()
     {
         $invoiceId = $this->getRequest()->getParam('invoice_id');
@@ -142,6 +155,9 @@ class AbstractInvoice
         }
     }
 
+    /**
+     * @return ResponseInterface|void
+     */
     public function pdfinvoicesAction()
     {
         $invoicesIds = $this->getRequest()->getPost('invoice_ids');
@@ -168,6 +184,9 @@ class AbstractInvoice
         $this->_redirect('sales/*/');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');

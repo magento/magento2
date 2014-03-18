@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Controller;
 
 /**
  * Customer reviews controller
@@ -31,17 +32,20 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Customer\Controller;
-
 class Review extends \Magento\App\Action\Action
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }
 
+    /**
+     * @return void
+     */
     public function viewAction()
     {
         $this->_view->loadLayout();

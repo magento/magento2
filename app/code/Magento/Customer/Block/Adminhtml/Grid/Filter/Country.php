@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Grid\Filter;
 
 /**
  * Country customer grid column filter
@@ -31,10 +32,7 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Grid\Filter;
-
-class Country
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
@@ -57,6 +55,9 @@ class Country
         parent::__construct($context, $resourceHelper, $data);
     }
 
+    /**
+     * @return array
+     */
     protected function _getOptions()
     {
         $options = $this->_collectionFactory->load()->toOptionArray();

@@ -50,6 +50,9 @@ class Validator
      */
     protected $_validators = array();
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $idValidator = new \Zend_Validate();
@@ -83,7 +86,7 @@ class Validator
     /**
      * Validate menu item params
      *
-     * @param $data
+     * @param array $data
      * @return void
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException

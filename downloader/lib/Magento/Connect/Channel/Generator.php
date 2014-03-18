@@ -23,14 +23,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Connect\Channel;
 
 class Generator extends \Magento\Xml\Generator
 {
+    /**
+     * @var string
+     */
     protected $_file      = 'channel.xml';
+
+    /**
+     * @var \Magento\Xml\Generator|null
+     */
     protected $_generator = null;
 
+    /**
+     * @param string $file
+     */
     public function __construct($file='')
     {
         if ($file) {
@@ -39,11 +48,17 @@ class Generator extends \Magento\Xml\Generator
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getFile()
     {
         return $this->_file;
     }
 
+    /**
+     * @return \Magento\Xml\Generator|null
+     */
     public function getGenerator()
     {
         if (is_null($this->_generator)) {
@@ -54,6 +69,7 @@ class Generator extends \Magento\Xml\Generator
 
     /**
      * @param array $content
+     * @return $this
      */
     public function save($content)
     {

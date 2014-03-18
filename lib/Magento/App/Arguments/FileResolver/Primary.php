@@ -40,7 +40,7 @@ class Primary implements \Magento\Config\FileResolverInterface
     protected $configDirectory;
 
     /**
-     * @var FileIteratorFactory
+     * @var \Magento\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
 
@@ -57,7 +57,7 @@ class Primary implements \Magento\Config\FileResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function get($filename, $scope)

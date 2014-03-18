@@ -25,7 +25,6 @@
  */
 namespace Magento\Paypal\Model;
 
-use Magento\RecurringProfile\Model\RecurringProfile;
 use Magento\Paypal\Model\Api\AbstractApi;
 
 /**
@@ -382,113 +381,6 @@ class Pro
         $this->importPaymentInfo($api, $payment);
         $data = $api->getRawSuccessResponseData();
         return ($data) ? $data : array();
-    }
-
-    /**
-     * Validate RP data
-     *
-     * @param RecurringProfile $profile
-     * @return void
-     * @throws \Magento\Core\Exception
-     */
-    public function validateRecurringProfile(RecurringProfile $profile)
-    {
-        $errors = array();
-        if (strlen($profile->getSubscriberName()) > 32) { // up to 32 single-byte chars
-            $errors[] = __('The subscriber name is too long.');
-        }
-        $refId = $profile->getInternalReferenceId(); // up to 127 single-byte alphanumeric
-        if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $refId)
-            $errors[] = __('The merchant\'s reference ID format is not supported.');
-        }
-        $profile->getScheduleDescription(); // up to 127 single-byte alphanumeric
-        if (strlen($refId) > 127) { //  || !preg_match('/^[a-z\d\s]+$/i', $scheduleDescr)
-            $errors[] = __('The schedule description is too long.');
-        }
-        if ($errors) {
-            throw new \Magento\Core\Exception(implode(' ', $errors));
-        }
-    }
-
-    /**
-     * Submit RP to the gateway
-     *
-     * @param RecurringProfile $profile
-     * @param \Magento\Payment\Model\Info $paymentInfo
-     * @return void
-     * @throws \Magento\Core\Exception
-     */
-    public function submitRecurringProfile(RecurringProfile $profile,
-        \Magento\Payment\Model\Info $paymentInfo
-    ) {
-        $api = $this->getApi();
-        \Magento\Object\Mapper::accumulateByMap($profile, $api, array(
-            'token', // EC fields
-            // TODO: DP fields
-            // profile fields
-            'subscriber_name', 'start_datetime', 'internal_reference_id', 'schedule_description',
-            'suspension_threshold', 'bill_failed_later', 'period_unit', 'period_frequency', 'period_max_cycles',
-            'billing_amount' => 'amount', 'trial_period_unit', 'trial_period_frequency', 'trial_period_max_cycles',
-            'trial_billing_amount', 'currency_code', 'shipping_amount', 'tax_amount', 'init_amount', 'init_may_fail',
-        ));
-        $api->callCreateRecurringPaymentsProfile();
-        $profile->setReferenceId($api->getRecurringProfileId());
-        if ($api->getIsProfileActive()) {
-            $profile->setState(\Magento\RecurringProfile\Model\States::ACTIVE);
-        } elseif ($api->getIsProfilePending()) {
-            $profile->setState(\Magento\RecurringProfile\Model\States::PENDING);
-        }
-    }
-
-    /**
-     * Fetch RP details
-     *
-     * @param string $referenceId
-     * @param \Magento\Object $result
-     * @return void
-     */
-    public function getRecurringProfileDetails($referenceId, \Magento\Object $result)
-    {
-        $api = $this->getApi();
-        $api->setRecurringProfileId($referenceId)
-            ->callGetRecurringPaymentsProfileDetails($result)
-        ;
-    }
-
-    /**
-     * Update RP data
-     *
-     * @param RecurringProfile $profile
-     * @return void
-     */
-    public function updateRecurringProfile(RecurringProfile $profile)
-    {
-
-    }
-
-    /**
-     * Manage status
-     *
-     * @param RecurringProfile $profile
-     * @return void
-     */
-    public function updateRecurringProfileStatus(RecurringProfile $profile)
-    {
-        $api = $this->getApi();
-        $action = null;
-        switch ($profile->getNewState()) {
-            case \Magento\RecurringProfile\Model\States::CANCELED: $action = 'cancel'; break;
-            case \Magento\RecurringProfile\Model\States::SUSPENDED: $action = 'suspend'; break;
-            case \Magento\RecurringProfile\Model\States::ACTIVE: $action = 'activate'; break;
-        }
-        $state = $profile->getState();
-        $api->setRecurringProfileId($profile->getReferenceId())
-            ->setIsAlreadyCanceled($state == \Magento\RecurringProfile\Model\States::CANCELED)
-            ->setIsAlreadySuspended($state == \Magento\RecurringProfile\Model\States::SUSPENDED)
-            ->setIsAlreadyActive($state == \Magento\RecurringProfile\Model\States::ACTIVE)
-            ->setAction($action)
-            ->callManageRecurringPaymentsProfileStatus()
-        ;
     }
 
     /**

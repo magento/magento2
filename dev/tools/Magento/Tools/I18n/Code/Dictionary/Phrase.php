@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary;
 
 /**
@@ -100,6 +99,7 @@ class Phrase
      * Set phrase
      *
      * @param string $phrase
+     * @return void
      * @throws \DomainException
      */
     public function setPhrase($phrase)
@@ -124,6 +124,7 @@ class Phrase
      * Set quote type
      *
      * @param string $quote
+     * @return void
      */
     public function setQuote($quote)
     {
@@ -146,6 +147,7 @@ class Phrase
      * Set translation
      *
      * @param string $translation
+     * @return void
      * @throws \DomainException
      */
     public function setTranslation($translation)
@@ -170,6 +172,7 @@ class Phrase
      * Set context type
      *
      * @param string $contextType
+     * @return void
      */
     public function setContextType($contextType)
     {
@@ -190,6 +193,7 @@ class Phrase
      * Add context value
      *
      * @param string $contextValue
+     * @return void
      * @throws \DomainException
      */
     public function addContextValue($contextValue)
@@ -206,6 +210,7 @@ class Phrase
      * Set context type
      *
      * @param string $contextValue
+     * @return void
      * @throws \DomainException
      */
     public function setContextValue($contextValue)

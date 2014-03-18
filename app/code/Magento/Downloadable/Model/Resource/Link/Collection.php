@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Downloadable\Model\Resource\Link;
 
 /**
  * Downloadable links resource collection
@@ -32,12 +32,12 @@
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Resource\Link;
-
 class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Init resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +48,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Method for product filter
      *
      * @param \Magento\Catalog\Model\Product|array|integer|null $product
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @return $this
      */
     public function addProductToFilter($product)
     {
@@ -66,8 +66,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Retrieve title for for current store
      *
-     * @param integer $storeId
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @param int $storeId
+     * @return $this
      */
     public function addTitleToResult($storeId = 0)
     {
@@ -89,8 +89,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Retrieve price for for current website
      *
-     * @param integer $websiteId
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @param int $websiteId
+     * @return $this
      */
     public function addPriceToResult($websiteId)
     {

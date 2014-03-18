@@ -102,10 +102,6 @@ class Set extends \Magento\Backend\App\Action
             __('Manage Product Sets'),
             __('Manage Product Sets'));
 
-        $this->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main')
-        );
-
         $this->_view->renderLayout();
     }
 

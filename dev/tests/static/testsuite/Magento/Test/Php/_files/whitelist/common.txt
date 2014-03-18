@@ -55,6 +55,7 @@ app/code/Magento/Cron/Model/ConfigInterface.php
 app/code/Magento/Directory/Helper
 app/code/Magento/Customer/Block
 app/code/Magento/Customer/Controller
+app/code/Magento/Customer/Helper
 app/code/Magento/Customer/Model/Address/Config
 app/code/Magento/Customer/Model/Address/Config.php
 app/code/Magento/Customer/Service
@@ -90,7 +91,7 @@ app/code/Magento/Log/Model/Shell.php
 app/code/Magento/Log/Model/Shell
 app/code/Magento/Theme/Block/Html/Head
 app/code/Magento/ProductAlert/Block/Product/View
-app/code/Magento/RecurringProfile
+app/code/Magento/RecurringPayment
 app/code/Magento/Reports/Block/Adminhtml/Customer
 app/code/Magento/Reports/Block/Adminhtml/Product
 app/code/Magento/Reports/Controller/Adminhtml/Report/Customer.php

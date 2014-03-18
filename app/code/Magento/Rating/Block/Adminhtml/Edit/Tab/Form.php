@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rating\Block\Adminhtml\Edit\Tab;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -77,7 +76,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare rating edit form
      *
-     * @return \Magento\Rating\Block\Adminhtml\Edit\Tab\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
@@ -179,6 +178,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         return parent::_prepareForm();
     }
 
+    /**
+     * @param array $ratingCodes
+     * @return void
+     */
     protected function _setRatingCodes($ratingCodes)
     {
         foreach($ratingCodes as $store=>$value) {
@@ -189,21 +192,25 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         return $this->_getWarningHtml() . parent::_toHtml();
     }
 
+    /**
+     * @return string
+     */
     protected function _getWarningHtml()
     {
         return '<div>
-<ul class="messages">
-    <li class="notice-msg">
-        <ul>
-            <li>' . __('Please specify a rating title for a store, or we\'ll just use the default value.') . '</li>
-        </ul>
-    </li>
-</ul>
+<div class="messages">
+    <div class="message notice">
+        <div>' . __('Please specify a rating title for a store, or we\'ll just use the default value.') . '</div>
+    </div>
+</div>
 </div>';
     }
 }

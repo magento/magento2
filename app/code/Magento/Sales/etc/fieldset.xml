@@ -848,8 +848,8 @@
             <field name="id">
                 <aspect name="to_quote_address" targetField="customer_address_id" />
             </field>
-            <field name="parent_id">
-                <aspect name="to_quote_address" targetField="customer_id" />
+            <field name="customer_id">
+                <aspect name="to_quote_address" />
             </field>
             <field name="prefix">
                 <aspect name="to_quote_address" />

@@ -42,15 +42,14 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
     const STATUS_SUCCESS    = 'SUCCESS';
 
     /**
-     * Bit masks to specify different payment method checks.
-     * @see \Magento\Payment\Model\Method\AbstractMethod::isApplicableToQuote
+     * Different payment method checks.
      */
-    const CHECK_USE_FOR_COUNTRY       = 1;
-    const CHECK_USE_FOR_CURRENCY      = 2;
-    const CHECK_USE_CHECKOUT          = 4;
-    const CHECK_USE_INTERNAL          = 16;
-    const CHECK_ORDER_TOTAL_MIN_MAX   = 32;
-    const CHECK_ZERO_TOTAL            = 64;
+    const CHECK_USE_FOR_COUNTRY       = 'country';
+    const CHECK_USE_FOR_CURRENCY      = 'currency';
+    const CHECK_USE_CHECKOUT          = 'checkout';
+    const CHECK_USE_INTERNAL          = 'internal';
+    const CHECK_ORDER_TOTAL_MIN_MAX   = 'total';
+    const CHECK_ZERO_TOTAL            = 'zero_total';
 
     /**
      * @var string
@@ -157,13 +156,6 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
      * @var bool
      */
     protected $_canReviewPayment            = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canManageRecurringProfiles  = true;
 
     /**
      * TODO: whether a captured transaction may be voided by this gateway
@@ -735,54 +727,6 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
     }
 
     /**
-     * Check whether payment method is applicable to quote
-     * Purposed to allow use in controllers some logic that was implemented in blocks only before
-     *
-     * @param \Magento\Sales\Model\Quote $quote
-     * @param int|null $checksBitMask
-     * @return bool
-     */
-    public function isApplicableToQuote($quote, $checksBitMask)
-    {
-        if ($checksBitMask & self::CHECK_USE_FOR_COUNTRY) {
-            if (!$this->canUseForCountry($quote->getBillingAddress()->getCountry())) {
-                return false;
-            }
-        }
-        if ($checksBitMask & self::CHECK_USE_FOR_CURRENCY) {
-            if (!$this->canUseForCurrency($quote->getStore()->getBaseCurrencyCode())) {
-                return false;
-            }
-        }
-        if ($checksBitMask & self::CHECK_USE_CHECKOUT) {
-            if (!$this->canUseCheckout()) {
-                return false;
-            }
-        }
-        if ($checksBitMask & self::CHECK_USE_INTERNAL) {
-            if (!$this->canUseInternal()) {
-                return false;
-            }
-        }
-        if ($checksBitMask & self::CHECK_ORDER_TOTAL_MIN_MAX) {
-            $total = $quote->getBaseGrandTotal();
-            $minTotal = $this->getConfigData('min_order_total');
-            $maxTotal = $this->getConfigData('max_order_total');
-            if (!empty($minTotal) && $total < $minTotal || !empty($maxTotal) && $total > $maxTotal) {
-                return false;
-            }
-        }
-
-        if ($checksBitMask & self::CHECK_ZERO_TOTAL) {
-            $total = $quote->getBaseSubtotal() + $quote->getShippingAddress()->getBaseShippingAmount();
-            if ($total < 0.0001 && $this->getCode() != 'free') {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Method that will be executed instead of authorize or capture
      * if flag isInitializeNeeded set to true
      *
@@ -818,8 +762,8 @@ abstract class AbstractMethod extends \Magento\Object implements \Magento\Paymen
         if ($this->getDebugFlag()) {
             $this->_logAdapterFactory
                 ->create(array('fileName' => 'payment_' . $this->getCode() . '.log'))
-               ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
-               ->log($debugData);
+                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys)
+                ->log($debugData);
         }
     }
 

@@ -138,7 +138,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
          * reset quote shipping addresses and items
          */
         $quote = $this->getQuote();
-        if (!$this->getCustomer()->getCustomerId()) {
+        if (!$this->getCustomer()->getId()) {
             return $this;
         }
 
@@ -386,7 +386,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             $quoteItem->setMultishippingQty((int)$quoteItem->getMultishippingQty()+$qty);
             $quoteItem->setQty($quoteItem->getMultishippingQty());
             try {
-                $address = $this->_customerAddressService->getAddressById($addressId);
+                $address = $this->_customerAddressService->getAddress($addressId);
             } catch (\Exception $e) {
                 /** Customer address does not exist. */
             }
@@ -421,7 +421,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     public function updateQuoteCustomerShippingAddress($addressId)
     {
         try {
-            $address = $this->_customerAddressService->getAddressById($addressId);
+            $address = $this->_customerAddressService->getAddress($addressId);
         } catch (\Exception $e) {
             /** Customer address does not exist. */
         }
@@ -444,7 +444,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
     public function setQuoteCustomerBillingAddress($addressId)
     {
         try {
-            $address = $this->_customerAddressService->getAddressById($addressId);
+            $address = $this->_customerAddressService->getAddress($addressId);
         } catch (\Exception $e) {
             /** Customer address does not exist. */
         }

@@ -44,7 +44,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     const YEAR_HTML =
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
     private $_attribute;
 
     /** @var Dob */
@@ -81,7 +81,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock('Magento\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
 
-        $this->_attribute = $this->getMock('Magento\Customer\Service\V1\Dto\Eav\AttributeMetadata', [], [], '', false);
+        $this->_attribute = $this->getMock('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata', [], [], '', false);
         $this->_metadataService =
             $this->getMockForAbstractClass(
                 'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false

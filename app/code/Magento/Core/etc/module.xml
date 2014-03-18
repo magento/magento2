@@ -39,7 +39,6 @@
             <module name="Magento_CurrencySymbol"/>
             <module name="Magento_GiftMessage"/>
             <module name="Magento_GoogleAnalytics"/>
-            <module name="Magento_GoogleCheckout"/>
             <module name="Magento_ImportExport"/>
             <module name="Magento_ProductAlert"/>
             <module name="Magento_SalesRule"/>

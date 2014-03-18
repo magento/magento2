@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Report\Filter;
 
 /**
  * Sales Adminhtml report filter form
@@ -31,11 +32,11 @@
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Report\Filter;
-
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {
     /**
+     * Order config
+     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_orderConfig;
@@ -61,7 +62,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
     /**
      * Add fields to base fieldset which are general to sales reports
      *
-     * @return \Magento\Sales\Block\Adminhtml\Report\Filter\Form
+     * @return $this
      */
     protected function _prepareForm()
     {

@@ -124,7 +124,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
         $this->customerDataMock->expects($this->never())->method('checkVatNumber');
 
         $this->customerAddressMock->expects($this->once())
-            ->method('getValidateOnEachTransaction')
+            ->method('hasValidateOnEachTransaction')
             ->with($this->storeMock)
             ->will($this->returnValue(false));
 
@@ -147,7 +147,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->validationResult));
 
         $this->customerAddressMock->expects($this->once())
-            ->method('getValidateOnEachTransaction')
+            ->method('hasValidateOnEachTransaction')
             ->with($this->storeMock)
             ->will($this->returnValue(true));
 
@@ -170,7 +170,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->validationResult));
 
         $this->customerAddressMock->expects($this->once())
-            ->method('getValidateOnEachTransaction')
+            ->method('hasValidateOnEachTransaction')
             ->with($this->storeMock)
             ->will($this->returnValue(false));
 
@@ -193,7 +193,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->validationResult));
 
         $this->customerAddressMock->expects($this->once())
-            ->method('getValidateOnEachTransaction')
+            ->method('hasValidateOnEachTransaction')
             ->with($this->storeMock)
             ->will($this->returnValue(false));
 

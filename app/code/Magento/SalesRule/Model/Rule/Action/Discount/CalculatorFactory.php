@@ -35,6 +35,9 @@ class CalculatorFactory
      */
     private $_objectManager;
 
+    /**
+     * @var array
+     */
     protected $classByType = array(
         \Magento\SalesRule\Model\Rule::TO_PERCENT_ACTION  => 'Magento\SalesRule\Model\Rule\Action\Discount\ToPercent',
         \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION  => 'Magento\SalesRule\Model\Rule\Action\Discount\ByPercent',

@@ -24,6 +24,9 @@
 
 namespace Magento\Customer\Block\Address;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 class BookTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,10 +47,10 @@ class BookTest extends \PHPUnit_Framework_TestCase
         $blockMock->expects($this->any())
             ->method('setTitle');
 
-        $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $this->_customerSession = Bootstrap::getObjectManager()
             ->get('\Magento\Customer\Model\Session');
         /** @var \Magento\View\LayoutInterface $layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $layout->setBlock('head', $blockMock);
         $this->_block = $layout
             ->createBlock(
@@ -103,7 +106,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->_block->getAdditionalAddresses());
         $this->assertCount(1, $this->_block->getAdditionalAddresses());
         $this->assertInstanceOf(
-            '\Magento\Customer\Service\V1\Dto\Address',
+            '\Magento\Customer\Service\V1\Data\Address',
             $this->_block->getAdditionalAddresses()[0]
         );
         $this->assertEquals(2, $this->_block->getAdditionalAddresses()[0]->getId());
@@ -135,10 +138,11 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressHtml()
     {
-        $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>\n<br/>\nT: 3468676\n\n";
-        $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
+                  . "\nUnited States<br/>\nT: 3468676\n\n";
+        $address = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Service\V1\CustomerAddressServiceInterface')
-            ->getAddressById(1);
+            ->getAddress(1);
         $html = $this->_block->getAddressHtml($address);
         $this->assertEquals($expected, $html);
     }
@@ -153,8 +157,10 @@ class BookTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerServiceInterface')->getCustomer(1);
+        /** @var CustomerAccountServiceInterface $customerAccountService */
+        $customerAccountService = Bootstrap::getObjectManager()
+        ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $customer = $customerAccountService->getCustomer(1);
 
         $this->_customerSession->setCustomerId(1);
         $object = $this->_block->getCustomer();
@@ -183,9 +189,9 @@ class BookTest extends \PHPUnit_Framework_TestCase
     public function getDefaultBillingDataProvider()
     {
         return [
-            '0' => [0, Null],
+            '0' => [0, null],
             '1' => [1, 1],
-            '5' => [5, Null],
+            '5' => [5, null],
         ];
     }
 
@@ -206,9 +212,9 @@ class BookTest extends \PHPUnit_Framework_TestCase
     public function getDefaultShippingDataProvider()
     {
         return [
-            '0' => [0, Null],
+            '0' => [0, null],
             '1' => [1, 1],
-            '5' => [5, Null],
+            '5' => [5, null],
         ];
     }
 
@@ -219,7 +225,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressById()
     {
         $this->assertInstanceOf(
-            '\Magento\Customer\Service\V1\Dto\Address',
+            '\Magento\Customer\Service\V1\Data\Address',
             $this->_block->getAddressById(1)
         );
         $this->assertNull($this->_block->getAddressById(5));

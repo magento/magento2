@@ -62,7 +62,7 @@ class Factory
     /**
      * List of supported a backup types
      *
-     * @var array
+     * @var string[]
      */
     protected $_allowedTypes;
 
@@ -85,7 +85,7 @@ class Factory
      * Create new backup instance
      *
      * @param string $type
-     * @return \Magento\Backup\BackupInterface
+     * @return BackupInterface
      * @throws \Magento\Exception
      */
     public function create($type)

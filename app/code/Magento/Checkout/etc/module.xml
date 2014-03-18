@@ -35,7 +35,6 @@
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Catalog"/>
-            <module name="Magento_RecurringProfile"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Directory"/>
@@ -45,6 +44,7 @@
             <module name="Magento_Weee"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Service"/>
         </depends>
     </module>
 </config>

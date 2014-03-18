@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Comments;
 
 /**
  * Invoice view  comments form
@@ -31,8 +32,6 @@
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Comments;
-
 class View extends \Magento\Backend\Block\Template
 {
     /**
@@ -58,6 +57,9 @@ class View extends \Magento\Backend\Block\Template
 
     /**
      * Retrieve required options from parent
+     *
+     * @return void
+     * @throws \Magento\Core\Exception
      */
     protected function _beforeToHtml()
     {
@@ -69,9 +71,9 @@ class View extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Prepare child blocks
+     * Preparing global layout
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -83,11 +85,19 @@ class View extends \Magento\Backend\Block\Template
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get submit url
+     *
+     * @return string|true
+     */
     public function getSubmitUrl()
     {
         return $this->getUrl('*/*/addComment', array('id' => $this->getEntity()->getId()));
     }
 
+    /**
+     * @return bool
+     */
     public function canSendCommentEmail()
     {
         switch ($this->getParentType()) {

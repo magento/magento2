@@ -29,14 +29,14 @@ class Reader extends \Magento\Config\Reader\Filesystem
 {
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Customer\Model\Address\Config\Converter $converter
-     * @param \Magento\Customer\Model\Address\Config\SchemaLocator $schemaLocator
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
      * @param \Magento\Config\ValidationStateInterface $validationState
      */
     public function __construct(
         \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Customer\Model\Address\Config\Converter $converter,
-        \Magento\Customer\Model\Address\Config\SchemaLocator $schemaLocator,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
         \Magento\Config\ValidationStateInterface $validationState
     ) {
         parent::__construct(

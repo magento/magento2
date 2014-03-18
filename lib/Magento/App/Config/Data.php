@@ -25,7 +25,7 @@
  */
 namespace Magento\App\Config;
 
-class Data implements \Magento\App\Config\DataInterface
+class Data implements DataInterface
 {
     /**
      * Config data
@@ -42,10 +42,10 @@ class Data implements \Magento\App\Config\DataInterface
     protected $_source = array();
 
     /**
-     * @param \Magento\App\Config\MetadataProcessor $processor
+     * @param MetadataProcessor $processor
      * @param array $data
      */
-    public function __construct(\Magento\App\Config\MetadataProcessor $processor, array $data)
+    public function __construct(MetadataProcessor $processor, array $data)
     {
         $this->_data = $processor->process($data);
         $this->_source = $data;
@@ -87,6 +87,7 @@ class Data implements \Magento\App\Config\DataInterface
      *
      * @param string $path
      * @param mixed $value
+     * @return void
      */
     public function setValue($path, $value)
     {

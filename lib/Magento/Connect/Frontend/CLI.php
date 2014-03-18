@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Connect\Frontend;
 
 /**
  * CLI Frontend implementation
@@ -31,10 +32,7 @@
  * @package     Magento_Connect
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Connect\Frontend;
-
-class CLI
-extends \Magento\Connect\Frontend
+class CLI extends \Magento\Connect\Frontend
 {
 
     /**
@@ -67,10 +65,10 @@ extends \Magento\Connect\Frontend
      */
     public function outputConfigHelp($data)
     {
-        foreach($data['data'] as $k=>$v) {
-            if(is_scalar($v)) {
+        foreach ($data['data'] as $k=>$v) {
+            if (is_scalar($v)) {
                 $this->writeln($v);
-            } elseif(is_array($v)) {
+            } elseif (is_array($v)) {
                 $this->writeln(implode(": ", $v));
             }
         }
@@ -85,7 +83,7 @@ extends \Magento\Connect\Frontend
      */
     public function outputRemoteInfo($data)
     {
-        if(!is_array($data['releases'])) {
+        if (!is_array($data['releases'])) {
             return;
         }
         foreach ($data['releases'] as $r) {
@@ -103,7 +101,7 @@ extends \Magento\Connect\Frontend
         $methodMap = array(
             'list-upgrades'=> 'outputUpgrades',
             'list-available' => 'outputChannelsPackages',
-            'list-installed' => 'writeInstalledList',
+            'list-installed' => 'writeInstalledList',   
             'package-dependencies' => 'outputPackageDeps',
             'list-files' => 'outputPackageContents',
             'config-help' => 'outputConfigHelp',
@@ -116,7 +114,7 @@ extends \Magento\Connect\Frontend
             'uninstall' => 'outputDeleted',
             'list-channels' => 'outputListChannels',
         );
-        if(isset($methodMap[$type])) {
+        if (isset($methodMap[$type])) {
             return $methodMap[$type];
         }
         return $defaultMethod;
@@ -128,11 +126,11 @@ extends \Magento\Connect\Frontend
      */
     public function outputDeleted($data)
     {
-        if(!count($data['data'])) {
-            return;
-        }
-        $this->writeln($data['title']);
-        foreach($data['data'] as $row) {
+        if (!count($data['data'])) {
+            return;            
+        }        
+        $this->writeln($data['title']);        
+        foreach ($data['data'] as $row) {
             $this->writeln("$row[0]/$row[1]");
         }
     }
@@ -146,15 +144,15 @@ extends \Magento\Connect\Frontend
         $this->writeln($data['title']);
 
         $channels =& $data['data'][\Magento\Connect\Singleconfig::K_CHAN];
-        foreach($channels as $name => $v) {
+        foreach ($channels as $name => $v) {
             $this->writeln("$name: {$v[\Magento\Connect\Singleconfig::K_URI]}");
         }
         $aliases =& $data['data'][\Magento\Connect\Singleconfig::K_CHAN_ALIAS];
-        if(count($aliases)) {
+        if (count($aliases)) {
             $this->writeln();
             $this->writeln($data['title_aliases']);
-            foreach($aliases as $k=>$v) {
-                $this->writeln("$k => $v");
+            foreach ($aliases as $k=>$v) {
+                $this->writeln("$k => $v");                       
             }
         }
 
@@ -168,12 +166,12 @@ extends \Magento\Connect\Frontend
      */
     public function outputInstallResult($data)
     {
-        if(isset($data['title'])) {
+        if (isset($data['title'])) {
             $title = trim($data['title'])." ";
         } else {
             $title = '';
         }
-        foreach($data['assoc'] as $row) {
+        foreach ($data['assoc'] as $row) {
             $this->printf("%s%s/%s %s\n", $title, $row['channel'], $row['name'], $row['version']);
         }
     }
@@ -187,7 +185,7 @@ extends \Magento\Connect\Frontend
     public function outputPackageContents($data)
     {
         $this->writeln($data['title']);
-        foreach($data['data'] as $file) {
+        foreach ($data['data'] as $file) {
             $this->writeln($file);
         }
     }
@@ -202,7 +200,7 @@ extends \Magento\Connect\Frontend
     {
         $title = $data['title'];
         $this->writeln($title);
-        foreach($data['data'] as $package) {
+        foreach ($data['data'] as $package) {
             $this->printf("%-20s %-20s %-20s %-20s\n", $package['channel'], $package['name'], $package['min'], $package['max']);
         }
     }
@@ -215,17 +213,17 @@ extends \Magento\Connect\Frontend
      */
     public function outputChannelsPackages($data)
     {
-        foreach($data['data'] as $channelInfo) {
+        foreach ($data['data'] as $channelInfo) {
             $title =& $channelInfo['title'];
             $packages =& $channelInfo['packages'];
             $this->writeln($title);
-            foreach($packages as $name=>$package) {
+            foreach ($packages as $name=>$package) {
                 $releases =& $package['releases'];
                 $tmp = array();
-                foreach($releases as $ver=>$state) {
+                foreach ($releases as $ver=>$state) {
                     $tmp[] = "$ver $state";
                 }
-                $tmp = implode(',',$tmp);
+                $tmp = implode(',', $tmp);
                 $this->writeln($name.": ".$tmp);
             }
         }
@@ -241,15 +239,15 @@ extends \Magento\Connect\Frontend
     public function output($data)
     {
         $capture = $this->isCapture();
-        if($capture) {
+        if ($capture) {
             $this->_output[] = $data;
             return;
         }
 
-        if(is_array($data)) {
-            foreach($data as $type=>$params) {
+        if (is_array($data)) {
+            foreach ($data as $type=>$params) {
                 $method = $this->detectMethodByType($type);
-                if($method) {
+                if ($method) {
                     $this->$method($params);
                 } else {
                     $this->writeln(__METHOD__." handler not found for {$type}");
@@ -278,15 +276,15 @@ extends \Magento\Connect\Frontend
             'Authors' => 'authors',
         );
 
-        foreach($fields as $title => $fld) {
+        foreach ($fields as $title => $fld) {
             $method = "get".ucfirst($fld);
             $data =  $package->$method();
-            if(empty($data)) {
+            if (empty($data)) {
                 continue;
             }
             $this->write($title.": ");
-            if(is_array($data)) {
-                $this->write(print_r($data,true));
+            if (is_array($data)) {
+                $this->write(print_r($data, true));
             } else {
                 $this->write($data);
             }
@@ -307,7 +305,7 @@ extends \Magento\Connect\Frontend
         $this->writeln("===================");
         $out = $data['byName'];
         ksort($out);
-        foreach($out as $k=>$v)   {
+        foreach ($out as $k=>$v) {
             $this->printf ("%-20s %-20s\n", $k, $v);
         }
     }
@@ -321,19 +319,19 @@ extends \Magento\Connect\Frontend
     public function writeInstalledList($data)
     {
         $totalCount = 0;
-        foreach($data['data'] as $channel=>$packages) {
+        foreach ($data['data'] as $channel=>$packages) {
             $title = sprintf($data['channel-title'], $channel);
             $c = count($packages);
-            $totalCount += $c;
-            if(!$c) {
+            $totalCount += $c;          
+            if (!$c) {
                 continue;
             }
             $this->writeln($title);
-            foreach($packages as $name=>$row) {
+            foreach ($packages as $name=>$row) {
                 $this->printf("%-20s %-20s\n", $name, $row['version']." ".$row['stability']);
             }
         }
-        if($totalCount === 0) {
+        if ($totalCount === 0) {
             $this->writeln("No installed packages");
         }
     }
@@ -360,9 +358,9 @@ extends \Magento\Connect\Frontend
      */
     public function outputConfig($data)
     {
-        foreach($data['data'] as $name=>$row) {
+        foreach ($data['data'] as $name=>$row) {
             $value = $row['value'] === '' ? "<not set>" : strval($row['value']);
-            $this->printf("%-30s %-20s %-20s\n",  $row['prompt'], $name, $value);
+            $this->printf("%-30s %-20s %-20s\n", $row['prompt'], $name, $value);
         }
     }
 
@@ -375,7 +373,7 @@ extends \Magento\Connect\Frontend
      */
     public function outputConfigVariable($key, $value)
     {
-        if($value === '') {
+        if ($value === '') {
             $value = '<not set>';
         }
         $this->writeln("Config variable '{$key}': {$value}");
@@ -394,15 +392,15 @@ extends \Magento\Connect\Frontend
 
 
     /**
-     * get output, clear if needed
+     * Get output, clear if needed
      *
-     * @param bool $clearPrevoius optional, true by default
+     * @param bool $clearPrevious optional, true by default
      * @return array
      */
     public function getOutput($clearPrevious = true)
     {
         $out = $this->_output;
-        if($clearPrevious) {
+        if ($clearPrevious) {
             $this->_output = array();
         }
         return $out;
@@ -416,7 +414,7 @@ extends \Magento\Connect\Frontend
      */
     public function write($data)
     {
-        if($this->isSilent()) {
+        if ($this->isSilent()) {
             return;
         }
         echo $data;
@@ -457,9 +455,9 @@ extends \Magento\Connect\Frontend
      */
     public function outputUpgrades($data)
     {
-        foreach($data['data'] as $chan => $packages) {
+        foreach ($data['data'] as $chan => $packages) {
             $this->writeln("Updates for ".$chan.": ");
-            foreach($packages as $name => $data) {
+            foreach ($packages as $name => $data) {
                 $this->writeln("  $name: {$data['from']} => {$data['to']}");
             }
         }

@@ -57,6 +57,7 @@ interface ParserInterface
      * Sets the body content that is being parsed passed upon the passed in string.
      *
      * @param $content string
+     * @return void
      */
     public function setContent($content);
 

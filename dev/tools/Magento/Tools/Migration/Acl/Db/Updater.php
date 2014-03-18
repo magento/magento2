@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\Acl\Db;
 
 class Updater
@@ -80,6 +79,7 @@ class Updater
      * Migrate old keys to new
      *
      * @param array $map
+     * @return void
      */
     public function migrate($map)
     {

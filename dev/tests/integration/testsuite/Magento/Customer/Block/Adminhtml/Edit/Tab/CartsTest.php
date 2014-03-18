@@ -35,8 +35,8 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     /** @var Carts */
     private $_block;
 
-    /** @var \Magento\Customer\Service\V1\CustomerServiceInterface */
-    private $_customerService;
+    /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
+    private $_customerAccountService;
 
     /** @var \Magento\Backend\Block\Template\Context */
     private $_context;
@@ -47,7 +47,8 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerServiceInterface');
+        $this->_customerAccountService = $this->_objectManager
+            ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
         $storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManager');
         $this->_context = $this->_objectManager
             ->get(
@@ -62,7 +63,7 @@ class CartsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHtml()
     {
-        $customer = $this->_customerService->getCustomer(1);
+        $customer = $this->_customerAccountService->getCustomer(1);
         $data = ['account' => $customer->__toArray()];
         $this->_context->getBackendSession()->setCustomerData($data);
 
@@ -93,4 +94,3 @@ class CartsTest extends \PHPUnit_Framework_TestCase
 
 
 }
- 

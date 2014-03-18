@@ -40,17 +40,17 @@
     <div class="review details">
 
         <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
-        <div class="ratings summary">
+        <div class="ratings summary items">
             <strong><?php echo ($this->isReviewOwner()) ? __('Your Rating:') : __('Rating:'); ?></strong>
 
             <?php foreach ($this->getRating() as $_rating): ?>
             <?php if($_rating->getPercent()): ?>
                 <?php $rating = ceil($_rating->getPercent()) ?>
-                <div class="reviews summary item">
-                    <div class="label"><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></div>
-                    <div class="rating" title="<?php echo $rating; ?>%">
+                <div class="rating summary item">
+                    <span class="label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?>:</span></span>
+                    <div class="rating result" title="<?php echo $rating; ?>%">
                         <span style="width:<?php echo $rating; ?>%">
-                            <?php echo $rating; ?>
+                            <span><?php echo $rating; ?>%</span>
                         </span>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
         <div class="review content"><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></div>
     </div>
 </div>
-<div class="actions">
+<div class="actions toolbar">
     <div class="secondary">
         <a class="action back" href="<?php echo $this->getBackUrl() ?>"><span><?php echo __('Back to My Reviews') ?></span></a>
     </div>

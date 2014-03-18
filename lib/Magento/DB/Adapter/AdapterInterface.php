@@ -23,7 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DB\Adapter;
 
+use Magento\DB\Ddl\Table;
 
 /**
  * Magento Database Adapter Interface
@@ -32,8 +34,6 @@
  * @package     Magento_DB
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\DB\Adapter;
-
 interface AdapterInterface
 {
     const INDEX_TYPE_PRIMARY    = 'primary';
@@ -106,18 +106,18 @@ interface AdapterInterface
      *
      * @param string $tableName the table name
      * @param string $schemaName the database or schema name
-     * @return \Magento\DB\Ddl\Table
+     * @return Table
      */
     public function newTable($tableName = null, $schemaName = null);
 
     /**
      * Create table from DDL object
      *
-     * @param \Magento\DB\Ddl\Table $table
+     * @param Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Interface
      */
-    public function createTable(\Magento\DB\Ddl\Table $table);
+    public function createTable(Table $table);
 
     /**
      * Drop table from database
@@ -131,11 +131,11 @@ interface AdapterInterface
     /**
      * Create temporary table from DDL object
      *
-     * @param \Magento\DB\Ddl\Table $table
+     * @param Table $table
      * @throws \Zend_Db_Exception
      * @return \Zend_Db_Statement_Interface
      */
-    public function createTemporaryTable(\Magento\DB\Ddl\Table $table);
+    public function createTemporaryTable(Table $table);
 
     /**
      * Drop temporary table from database
@@ -216,9 +216,9 @@ interface AdapterInterface
     /**
      * Create \Magento\DB\Ddl\Table object by data from describe table
      *
-     * @param $tableName
-     * @param $newTableName
-     * @return \Magento\DB\Ddl\Table
+     * @param string $tableName
+     * @param string $newTableName
+     * @return Table
      */
     public function createTableByDdl($tableName, $newTableName);
 
@@ -325,7 +325,7 @@ interface AdapterInterface
      * @param string $tableName
      * @param string $keyName
      * @param string $schemaName
-     * @return bool|Zend_Db_Statement_Interface
+     * @return bool|\Zend_Db_Statement_Interface
      */
     public function dropIndex($tableName, $keyName, $schemaName = null);
 
@@ -516,7 +516,7 @@ interface AdapterInterface
      * Fetches all SQL result rows as a sequential array.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|Zend_Db_Select $sql  An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql  An SQL SELECT statement.
      * @param mixed                 $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
@@ -527,7 +527,7 @@ interface AdapterInterface
      * Fetches the first row of the SQL result.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
@@ -543,7 +543,7 @@ interface AdapterInterface
      * rows with duplicate values in the first column will
      * overwrite previous data.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -554,7 +554,7 @@ interface AdapterInterface
      *
      * The first column in each row is used as the array key.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -566,7 +566,7 @@ interface AdapterInterface
      * The first column is the key, the second column is the
      * value.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -575,7 +575,7 @@ interface AdapterInterface
     /**
      * Fetches the first column of the first row of the SQL result.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
      */
@@ -632,7 +632,7 @@ interface AdapterInterface
      * The actual quote character surrounding the identifiers may vary depending on
      * the adapter.
      *
-     * @param string|array|Zend_Db_Expr $ident The identifier.
+     * @param string|array|\Zend_Db_Expr $ident The identifier.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier.
      */
@@ -641,7 +641,7 @@ interface AdapterInterface
     /**
      * Quote a column identifier and alias.
      *
-     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string|array|\Zend_Db_Expr $ident The identifier or expression.
      * @param string $alias An alias for the column.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
@@ -651,7 +651,7 @@ interface AdapterInterface
     /**
      * Quote a table identifier and alias.
      *
-     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string|array|\Zend_Db_Expr $ident The identifier or expression.
      * @param string $alias An alias for the table.
      * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
@@ -889,8 +889,8 @@ interface AdapterInterface
      * Prepare substring sql function
      *
      * @param \Zend_Db_Expr|string $stringExpression quoted field name or SQL statement
-     * @param int|string|Zend_Db_Expr $pos
-     * @param int|string|Zend_Db_Expr|null $len
+     * @param int|string|\Zend_Db_Expr $pos
+     * @param int|string|\Zend_Db_Expr|null $len
      * @return \Zend_Db_Expr
      */
     public function getSubstringSql($stringExpression, $pos, $len = null);
@@ -1074,9 +1074,9 @@ interface AdapterInterface
     /**
      * Drop trigger from database
      *
-     * @param $triggerName
-     * @param null $schemaName
-     * @return mixed
+     * @param string $triggerName
+     * @param string|null $schemaName
+     * @return bool
      */
     public function dropTrigger($triggerName, $schemaName = null);
 
@@ -1087,4 +1087,15 @@ interface AdapterInterface
      * @return array
      */
     public function getTables($likeCondition = null);
+
+    /**
+     * Generate fragment of SQL, that check value against multiple condition cases
+     * and return different result depends on them
+     *
+     * @param string $valueName Name of value to check
+     * @param array $casesResults Cases and results
+     * @param string $defaultValue value to use if value doesn't confirm to any cases
+     * @return \Zend_Db_Expr
+     */
+    public function getCaseSql($valueName, $casesResults, $defaultValue = null);
 }

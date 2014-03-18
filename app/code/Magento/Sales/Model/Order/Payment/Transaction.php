@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Payment;
 
 /**
  * Payment transaction model
@@ -48,11 +49,9 @@
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Payment;
-
 class Transaction extends \Magento\Core\Model\AbstractModel
 {
-    /**
+    /**#@+
      * Supported transaction types
      * @var string
      */
@@ -62,19 +61,19 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     const TYPE_CAPTURE = 'capture';
     const TYPE_VOID    = 'void';
     const TYPE_REFUND  = 'refund';
+    /**#@-*/
 
     /**
      * Raw details key in additional info
-     *
      */
     const RAW_DETAILS = 'raw_details_info';
 
     /**
      * Payment instance. Required for most transaction writing and search operations
+     *
      * @var \Magento\Sales\Model\Order\Payment
      */
     protected $_paymentObject = null;
-
 
     /**
      * Order instance
@@ -91,6 +90,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Child transactions, assoc array of transaction_id => instance
+     *
      * @var array
      */
     protected $_children = null;
@@ -99,12 +99,14 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Child transactions, assoc array of txn_id => instance
      * Filled only in case when all child transactions have txn_id
      * Used for quicker search of child transactions using isset() as opposite to foreaching $_children
+     *
      * @var array
      */
     protected $_identifiedChildren = null;
 
     /**
      * Whether to perform automatic actions on transactions, such as auto-closing and putting as a parent
+     *
      * @var bool
      */
     protected $_transactionsAutoLinking = true;
@@ -118,6 +120,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Whether transaction has children
+     *
      * @var bool
      */
     protected $_hasChild = null;
@@ -125,16 +128,16 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Event object prefix
      *
-     * @see \Magento\Core\Model\Absctract::$_eventPrefix
      * @var string
+     * @see \Magento\Core\Model\Absctract::$_eventPrefix
      */
     protected $_eventPrefix = 'sales_order_payment_transaction';
 
     /**
      * Event object prefix
      *
-     * @see \Magento\Core\Model\Absctract::$_eventObject
      * @var string
+     * @see \Magento\Core\Model\Absctract::$_eventObject
      */
     protected $_eventObject = 'order_payment_transaction';
 
@@ -188,6 +191,8 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -197,8 +202,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Payment instance setter
+     *
      * @param \Magento\Sales\Model\Order\Payment $payment
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      */
     public function setOrderPaymentObject(\Magento\Sales\Model\Order\Payment $payment)
     {
@@ -209,8 +215,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Transaction ID setter
+     *
      * @param string $txnId
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      */
     public function setTxnId($txnId)
     {
@@ -221,9 +228,10 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Parent transaction ID setter
      * Can set the transaction id as well
+     *
      * @param string $parentTxnId
      * @param string $txnId
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setParentTxnId($parentTxnId, $txnId = null)
@@ -242,8 +250,8 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Transaction type setter
      *
-     * @param $txnType
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @param string $txnType
+     * @return $this
      */
     public function setTxnType($txnType)
     {
@@ -256,7 +264,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * May attempt to load it.
      *
      * @param bool $shouldLoad
-     * @return \Magento\Sales\Model\Order\Payment\Transaction|false
+     * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
      */
     public function getParentTransaction($shouldLoad = true)
     {
@@ -294,7 +302,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @param array|string $types
      * @param string $txnId
      * @param bool $recursive
-     * @return \Magento\Sales\Model\Order\Payment\Transaction|array|null
+     * @return array|void
      */
     public function getChildTransactions($types = null, $txnId = null, $recursive = false)
     {
@@ -351,7 +359,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param bool $shouldSave
      * @param bool $dryRun
-     * @return \Magento\Sales\Model\Order\Payment\Transaction|false
+     * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
      * @throws \Exception
      */
     public function closeAuthorization($shouldSave = true, $dryRun = false)
@@ -391,9 +399,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Close a capture transaction
      * Logic is similar to closeAuthorization(), but for a capture transaction
      *
-     * @see self::closeAuthorization()
      * @param bool $shouldSave
-     * @return bool|false|\Magento\Sales\Model\Order\Payment\Transaction
+     * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
+     * @see self::closeAuthorization()
      */
     public function closeCapture($shouldSave = true)
     {
@@ -439,7 +447,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Getter/Setter of whether current transaction has a child transaction
      *
      * @param bool $whetherHasChild
-     * @return bool|\Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this|bool
      */
     public function hasChildTransaction($whetherHasChild = null)
     {
@@ -458,8 +466,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Check object before loading by by specified transaction ID
-     * @param $txnId
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     *
+     * @param mixed $txnId
+     * @return $this
      */
     protected function _beforeLoadByTxnId($txnId)
     {
@@ -475,7 +484,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Load self by specified transaction ID. Requires the valid payment object to be set
      *
      * @param string $txnId
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      */
     public function loadByTxnId($txnId)
     {
@@ -490,7 +499,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Check object after loading by by specified transaction ID
      *
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      */
     protected function _afterLoadByTxnId()
     {
@@ -506,7 +515,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param string $key
      * @param mixed $value
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setAdditionalInformation($key, $value)
@@ -524,6 +533,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Getter for entire additional_information value or one of its element by key
+     *
      * @param string $key
      * @return array|null|mixed
      */
@@ -543,7 +553,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Unsetter for entire additional_information value or one of its element by key
      *
      * @param string $key
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      */
     public function unsAdditionalInformation($key = null)
     {
@@ -562,8 +572,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Close this transaction
      *
      * @param bool $shouldSave
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @throws \Magento\Core\Exception|Exception
+     * @return $this
+     * @throws \Magento\Core\Exception
+     * @throws \Exception
      */
     public function close($shouldSave = true)
     {
@@ -597,6 +608,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Order Payment instance getter
      * Will attempt to load by payment_id if it is set in data
+     *
      * @param bool $shouldLoad
      * @return \Magento\Sales\Model\Order\Payment
      */
@@ -615,6 +627,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Order ID getter
      * Attempts to get ID from set order payment object, if any, or from data by key 'order_id'
+     *
      * @return int|null
      */
     public function getOrderId()
@@ -649,7 +662,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * If $order equals to true, method isn't loading new order instance.
      *
      * @param \Magento\Sales\Model\Order|null|boolean $order
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
+     * @return $this
      * @throws \Magento\Core\Exception
      */
     public function setOrder($order = null)
@@ -689,8 +702,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Verify data required for saving
      *
-     * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @throws \Magento\Core\Exception
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -714,6 +726,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Load child transactions
      *
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _loadChildren()
@@ -819,7 +832,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Check whether specified or set transaction type is supported
+     *
      * @param string $txnType
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _verifyTxnType($txnType = null)
@@ -843,6 +858,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Check whether the payment object is set and it has order object or there is an order_id is set
      * $dryRun allows to not throw exception
+     *
      * @param bool $dryRun
      * @return \Magento\Sales\Model\Order\Payment|null|false
      * @throws \Magento\Core\Exception
@@ -859,7 +875,9 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
     /**
      * Check whether specified transaction ID is valid
+     *
      * @param string $txnId
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _verifyTxnId($txnId)
@@ -872,6 +890,8 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     /**
      * Make sure this object is a valid transaction
      * TODO for more restriction we can check for data consistency
+     *
+     * @return void
      * @throws \Magento\Core\Exception
      */
     protected function _verifyThisTransactionExists()

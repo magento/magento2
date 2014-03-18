@@ -23,7 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Model;
 
 /**
  * ProductAlert observer
@@ -32,8 +32,6 @@
  * @package    Magento_ProductAlert
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model;
-
 class Observer
 {
     /**
@@ -197,7 +195,7 @@ class Observer
      * Process price emails
      *
      * @param \Magento\ProductAlert\Model\Email $email
-     * @return \Magento\ProductAlert\Model\Observer
+     * @return $this
      */
     protected function _processPrice(\Magento\ProductAlert\Model\Email $email)
     {
@@ -283,7 +281,7 @@ class Observer
      * Process stock emails
      *
      * @param \Magento\ProductAlert\Model\Email $email
-     * @return \Magento\ProductAlert\Model\Observer
+     * @return $this
      */
     protected function _processStock(\Magento\ProductAlert\Model\Email $email)
     {
@@ -371,7 +369,7 @@ class Observer
     /**
      * Send email to administrator if error
      *
-     * @return \Magento\ProductAlert\Model\Observer
+     * @return $this
      */
     protected function _sendErrorEmail()
     {
@@ -404,7 +402,7 @@ class Observer
     /**
      * Run process send product alerts
      *
-     * @return \Magento\ProductAlert\Model\Observer
+     * @return $this
      */
     public function process()
     {

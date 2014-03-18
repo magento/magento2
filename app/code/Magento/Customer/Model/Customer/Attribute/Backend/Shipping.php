@@ -23,6 +23,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Customer default shipping address backend
@@ -31,10 +32,12 @@
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Backend;
-
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
+    /**
+     * @param \Magento\Object $object
+     * @return void
+     */
     public function beforeSave($object)
     {
         $defaultShipping = $object->getDefaultShipping();
@@ -42,11 +45,14 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             $object->unsetDefaultShipping();
         }
     }
-    
+
+    /**
+     * @param \Magento\Object $object
+     * @return void
+     */
     public function afterSave($object)
     {
-        if ($defaultShipping = $object->getDefaultShipping()) 
-        {
+        if ($defaultShipping = $object->getDefaultShipping()) {
             $addressId = false;
             /**
              * post_index set in customer save action for address
