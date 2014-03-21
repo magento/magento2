@@ -120,6 +120,6 @@
 "Welcome","Welkom"
 "Welcome to Magento's Installation Wizard","Welkom bij Magento's Installatiewizard"
 "You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","U kunt een serverpoort specificeren, bv.: localhost:3307<br />Als u niet de standaard UNIX-socket gebruikt, kunt u deze hier specificeren in plaats van host, bv.: /var/run/mysqld/mysqld.sock"
-"You could enable this option to use web server rewrites functionality for improved search engines optimization.","U zou deze optie kunnen inschakelen om webserver herschrijving functionaliteit te gebruiken voor verbeterde zoekmachines optimalisatie."
+"You could enable this option to use web server rewrites functionality for improved search engine optimization.","U zou deze optie kunnen inschakelen om webserver herschrijving functionaliteit te gebruiken voor verbeterde zoekmachines optimalisatie."
 "You're All Set","U Bent Klaar"
 "You're All Set!","U Bent Klaar!"

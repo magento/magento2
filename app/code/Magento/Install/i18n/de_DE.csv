@@ -120,6 +120,6 @@
 "Welcome","Wilkommen"
 "Welcome to Magento's Installation Wizard","Wilkommen zum Magento Installationsassistenten"
 "You can specify server port, ex.: localhost:3307<br />If you are not using default UNIX socket, you can specify it here instead of host, ex.: /var/run/mysqld/mysqld.sock","Sie können den Server-Port spezifizieren, Ex.: Lokalhost:3307<br />Wenn Sie nicht den Standard-UNIX-Anschluss verwenden, können Sie dies hier anstelle des Host spezifizieren, Ex.: /var/run/mysqld/mysqld.sock"
-"You could enable this option to use web server rewrites functionality for improved search engines optimization.","Sie können diese Option aktivieren, um die Webserver Rewrites Funktionalität für verbesserte Suchmachinenoptimierung zu verwenden."
+"You could enable this option to use web server rewrites functionality for improved search engine optimization.","Sie können diese Option aktivieren, um die Webserver Rewrites Funktionalität für verbesserte Suchmachinenoptimierung zu verwenden."
 "You're All Set","Sie sind bereit"
 "You're All Set!","Sie sind bereit!"
