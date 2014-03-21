@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Controller\Adminhtml;
 
 /**
@@ -54,10 +53,13 @@ class AuthTest extends \Magento\Backend\Utility\Controller
     {
         $this->getRequest()->setPost('email', 'test@test.com');
         $this->dispatch('backend/admin/auth/forgotpassword');
-        $this->assertRedirect($this->equalTo(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Backend\Helper\Data')->getHomePageUrl()
-        ));
+        $this->assertRedirect(
+            $this->equalTo(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Backend\Helper\Data'
+                )->getHomePageUrl()
+            )
+        );
     }
 
     /**
@@ -70,18 +72,19 @@ class AuthTest extends \Magento\Backend\Utility\Controller
     public function testResetPasswordAction()
     {
         /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User')->loadByUsername('dummy_username');
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\User\Model\User'
+        )->loadByUsername(
+            'dummy_username'
+        );
         $this->assertNotEmpty($user->getId(), 'Broken fixture');
-        $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\User\Helper\Data')
-            ->generateResetPasswordLinkToken();
+        $resetPasswordToken = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\User\Helper\Data'
+        )->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
         $user->save();
 
-        $this->getRequest()
-            ->setQuery('token', $resetPasswordToken)
-            ->setQuery('id', $user->getId());
+        $this->getRequest()->setQuery('token', $resetPasswordToken)->setQuery('id', $user->getId());
         $this->dispatch('backend/admin/auth/resetpassword');
 
         $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
@@ -128,11 +131,19 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $newDummyPassword = 'new_dummy_password2';
 
-        $this->getRequest()
-            ->setQuery('token', $resetPasswordToken)
-            ->setQuery('id', $user->getId())
-            ->setPost('password', $newDummyPassword)
-            ->setPost('confirmation', $newDummyPassword);
+        $this->getRequest()->setQuery(
+            'token',
+            $resetPasswordToken
+        )->setQuery(
+            'id',
+            $user->getId()
+        )->setPost(
+            'password',
+            $newDummyPassword
+        )->setPost(
+            'confirmation',
+            $newDummyPassword
+        );
 
         $this->dispatch('backend/admin/auth/resetpasswordpost');
 
@@ -194,11 +205,19 @@ class AuthTest extends \Magento\Backend\Utility\Controller
 
         $newDummyPassword = 'new_dummy_password2';
 
-        $this->getRequest()
-            ->setQuery('token', $resetPasswordToken)
-            ->setQuery('id', $user->getId())
-            ->setPost('password', $newDummyPassword)
-            ->setPost('confirmation', 'invalid');
+        $this->getRequest()->setQuery(
+            'token',
+            $resetPasswordToken
+        )->setQuery(
+            'id',
+            $user->getId()
+        )->setPost(
+            'password',
+            $newDummyPassword
+        )->setPost(
+            'confirmation',
+            'invalid'
+        );
 
         $this->dispatch('backend/admin/auth/resetpasswordpost');
 

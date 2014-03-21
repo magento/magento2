@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Captcha\Helper\Adminhtml;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -39,14 +38,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $backendConfig = $this->getMockBuilder('Magento\Backend\App\ConfigInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getValue', 'setValue', 'reinit', 'isSetFlag'))
-            ->getMock();
-        $backendConfig->expects($this->any())
-            ->method('getValue')
-            ->with('admin/captcha/qwe')
-            ->will($this->returnValue('1'));
+        $backendConfig = $this->getMockBuilder(
+            'Magento\Backend\App\ConfigInterface'
+        )->disableOriginalConstructor()->setMethods(
+            array('getValue', 'setValue', 'reinit', 'isSetFlag')
+        )->getMock();
+        $backendConfig->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            'admin/captcha/qwe'
+        )->will(
+            $this->returnValue('1')
+        );
 
         $filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);

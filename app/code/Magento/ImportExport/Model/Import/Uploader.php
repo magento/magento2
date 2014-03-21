@@ -34,11 +34,10 @@ namespace Magento\ImportExport\Model\Import;
  */
 class Uploader extends \Magento\Core\Model\File\Uploader
 {
-
     /**
      * @var string
      */
-    protected $_tmpDir  = '';
+    protected $_tmpDir = '';
 
     /**
      * @var string
@@ -181,7 +180,7 @@ class Uploader extends \Magento\Core\Model\File\Uploader
         //run validate callbacks
         foreach ($this->_validateCallbacks as $params) {
             if (is_object($params['object']) && method_exists($params['object'], $params['method'])) {
-                $params['object']->$params['method']($filePath);
+                $params['object']->{$params['method']}($filePath);
             }
         }
     }
@@ -265,5 +264,4 @@ class Uploader extends \Magento\Core\Model\File\Uploader
             return false;
         }
     }
-
 }

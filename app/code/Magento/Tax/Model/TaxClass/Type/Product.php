@@ -64,9 +64,7 @@ class Product extends \Magento\Tax\Model\TaxClass\AbstractType
      */
     public function getAssignedToObjects()
     {
-        return $this->_modelProduct
-            ->getCollection()
-            ->addAttributeToFilter('tax_class_id', $this->getId());
+        return $this->_modelProduct->getCollection()->addAttributeToFilter('tax_class_id', $this->getId());
     }
 
     /**

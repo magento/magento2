@@ -114,7 +114,7 @@ class Tokenizer
      */
     private function _isInnerArgumentClosed()
     {
-        return ($this->_openBrackets - 1) == $this->_closeBrackets;
+        return $this->_openBrackets - 1 == $this->_closeBrackets;
     }
 
     /**
@@ -163,7 +163,7 @@ class Tokenizer
      */
     public function isLastToken()
     {
-        return 0 == $this->_tokensCount || ((key($this->_tokens) + 1) == $this->_tokensCount);
+        return 0 == $this->_tokensCount || key($this->_tokens) + 1 == $this->_tokensCount;
     }
 
     /**

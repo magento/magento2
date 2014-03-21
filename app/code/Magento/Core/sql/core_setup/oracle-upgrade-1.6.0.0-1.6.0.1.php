@@ -41,41 +41,10 @@ if ($installer->tableExists($fileStorageTable)) {
             'type' => \Magento\DB\Ddl\Table::TYPE_VARBINARY,
             'size' => \Magento\DB\Ddl\Table::MAX_VARBINARY_SIZE,
             'nullable' => true,
-            'comment' => 'File Content',
+            'comment' => 'File Content'
         )
     );
-    $queryString = "
-        DECLARE
-          v_clob Clob;
-          v_blob Blob;
-          v_in Pls_Integer := 1;
-          v_out Pls_Integer := 1;
-          v_lang Pls_Integer := 0;
-          v_warning Pls_Integer := 0;
-        BEGIN
-          FOR row IN (SELECT file_id, {$originColumnName} from {$fileStorageTable})
-          LOOP
-            if row.{$originColumnName} is null then v_blob:=null;
-            else
-              v_clob:=row.{$originColumnName};
-              v_in:=1;
-              v_out:=1;
-              dbms_lob.createtemporary(v_blob,TRUE);
-              dbms_lob.convertToBlob(
-                v_blob,
-                v_clob,
-                DBMS_lob.getlength(v_clob),
-                v_in,
-                v_out,
-                DBMS_LOB.default_csid,
-                v_lang,
-                v_warning
-              );
-            end if;
-            update {$fileStorageTable} set {$temporaryColumnName}=v_blob where file_id=row.file_id;
-          END LOOP;
-          commit;
-        END;";
+    $queryString = "\n        DECLARE\n          v_clob Clob;\n          v_blob Blob;\n          v_in Pls_Integer := 1;\n          v_out Pls_Integer := 1;\n          v_lang Pls_Integer := 0;\n          v_warning Pls_Integer := 0;\n        BEGIN\n          FOR row IN (SELECT file_id, {$originColumnName} from {$fileStorageTable})\n          LOOP\n            if row.{$originColumnName} is null then v_blob:=null;\n            else\n              v_clob:=row.{$originColumnName};\n              v_in:=1;\n              v_out:=1;\n              dbms_lob.createtemporary(v_blob,TRUE);\n              dbms_lob.convertToBlob(\n                v_blob,\n                v_clob,\n                DBMS_lob.getlength(v_clob),\n                v_in,\n                v_out,\n                DBMS_LOB.default_csid,\n                v_lang,\n                v_warning\n              );\n            end if;\n            update {$fileStorageTable} set {$temporaryColumnName}=v_blob where file_id=row.file_id;\n          END LOOP;\n          commit;\n        END;";
     $connection->query(trim($queryString));
     $connection->dropColumn($fileStorageTable, $originColumnName);
     $connection->query("ALTER TABLE {$fileStorageTable} RENAME COLUMN {$temporaryColumnName} TO {$originColumnName}");

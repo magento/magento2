@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
-class Helper 
+class Helper
 {
     /**
      * @var \Magento\App\RequestInterface
@@ -136,10 +135,9 @@ class Helper
         }
 
         $product->setCanSaveCustomOptions(
-            (bool)$this->request->getPost('affect_product_custom_options')
-            && !$product->getOptionsReadonly()
+            (bool)$this->request->getPost('affect_product_custom_options') && !$product->getOptionsReadonly()
         );
 
         return $product;
     }
-} 
+}

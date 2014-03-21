@@ -50,11 +50,17 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_expectedObject = $this->getMockBuilder('\Magento\App\ResponseInterface')->getMock();
         $arguments = array(array('property' => 'value'));
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\App\ResponseInterface', $arguments)->will($this->returnValue($this->_expectedObject));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\App\ResponseInterface',
+            $arguments
+        )->will(
+            $this->returnValue($this->_expectedObject)
+        );
 
         $this->assertEquals($this->_expectedObject, $this->_model->create($arguments));
-
     }
 }

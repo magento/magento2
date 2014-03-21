@@ -28,8 +28,7 @@ namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 /**
  * Files controller
  */
-class Files
-    extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
+class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
 {
     /**
      * Tree json action
@@ -40,8 +39,11 @@ class Files
     {
         try {
             $this->getResponse()->setBody(
-                $this->_view->getLayout()->createBlock('Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree')
-                    ->getTreeJson($this->_getStorage()->getTreeArray())
+                $this->_view->getLayout()->createBlock(
+                    'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree'
+                )->getTreeJson(
+                    $this->_getStorage()->getTreeArray()
+                )
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);

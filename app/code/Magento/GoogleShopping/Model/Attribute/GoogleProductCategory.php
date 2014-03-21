@@ -101,9 +101,8 @@ class GoogleProductCategory extends \Magento\GoogleShopping\Model\Attribute\Defa
         $targetCountry = $this->_config->getTargetCountry($product->getStoreId());
         $value = $this->_typeFactory->create()->loadByAttributeSetId($product->getAttributeSetId(), $targetCountry);
 
-        $val = ($value->getCategory() == \Magento\GoogleShopping\Helper\Category::CATEGORY_OTHER)
-            ? ''
-            : $value->getCategory();
+        $val = $value->getCategory() ==
+            \Magento\GoogleShopping\Helper\Category::CATEGORY_OTHER ? '' : $value->getCategory();
 
         $this->_setAttribute(
             $entry,

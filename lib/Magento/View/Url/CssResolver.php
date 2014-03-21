@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Url;
 
 /**
@@ -32,8 +31,8 @@ class CssResolver
     /**
      * PCRE that matches non-absolute URLs in CSS content
      */
-    const REGEX_CSS_RELATIVE_URLS
-        = '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
+    const REGEX_CSS_RELATIVE_URLS =
+        '#url\s*\(\s*(?(?=\'|").)(?!http\://|https\://|/|data\:)(.+?)(?:[\#\?].*?|[\'"])?\s*\)#';
 
     /**
      * File system
@@ -55,10 +54,8 @@ class CssResolver
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\View\FileSystem $viewFileSystem
      */
-    public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        \Magento\View\FileSystem $viewFileSystem
-    ) {
+    public function __construct(\Magento\App\Filesystem $filesystem, \Magento\View\FileSystem $viewFileSystem)
+    {
         $this->filesystem = $filesystem;
         $this->viewFileSystem = $viewFileSystem;
     }

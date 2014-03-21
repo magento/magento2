@@ -23,13 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="content.bottom">
-        <block class="Magento\Reports\Block\Product\Widget\Viewed" name="product.viewed.products" template="Magento_Catalog::product/list/items.phtml">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
+    <referenceContainer name="content">
+        <block class="Magento\Reports\Block\Product\Widget\Viewed\Item" name="product.widget.viewed.item" template="Magento_Reports::product/widget/viewed/item.phtml">
             <arguments>
                 <argument name="type" xsi:type="string">widget-viewed</argument>
                 <argument name="view_mode" xsi:type="string">grid</argument>
                 <argument name="image_type" xsi:type="string">recently_viewed_products_grid_content_widget</argument>
+            </arguments>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="content.bottom">
+        <block class="Magento\Reports\Block\Product\Widget\Viewed" name="product.viewed.products" template="Magento_Reports::product/widget/viewed.phtml">
+            <arguments>
+                <argument name="type" xsi:type="string">widget-viewed</argument>
+                <argument name="view_mode" xsi:type="string">grid</argument>
             </arguments>
         </block>
     </referenceContainer>

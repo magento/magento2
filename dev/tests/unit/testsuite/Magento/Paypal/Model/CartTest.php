@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model;
 
 class CartTest extends \PHPUnit_Framework_TestCase
@@ -46,27 +45,35 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->_validItem = new \Magento\Object([
-            'parent_item' => null,
-            'price' => 2.0,
-            'qty' => 3,
-            'name' => 'valid item',
-            'original_item' => new \Magento\Object(['base_row_total' => 6.0])
-        ]);
+        $this->_validItem = new \Magento\Object(
+            array(
+                'parent_item' => null,
+                'price' => 2.0,
+                'qty' => 3,
+                'name' => 'valid item',
+                'original_item' => new \Magento\Object(array('base_row_total' => 6.0))
+            )
+        );
     }
 
     protected function setUp()
     {
-        $this->_salesModel = $this
-            ->getMockForAbstractClass('Magento\Payment\Model\Cart\SalesModel\SalesModelInterface');
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', [], [], '', false);
-        $factoryMock->expects($this->once())
-            ->method('create')
-            ->with('sales model')
-            ->will($this->returnValue($this->_salesModel));
+        $this->_salesModel = $this->getMockForAbstractClass(
+            'Magento\Payment\Model\Cart\SalesModel\SalesModelInterface'
+        );
+        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', array(), array(), '', false);
+        $factoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'sales model'
+        )->will(
+            $this->returnValue($this->_salesModel)
+        );
         $eventManagerMock = $this->getMockForAbstractClass('Magento\Event\ManagerInterface');
 
         $this->_model = new \Magento\Paypal\Model\Cart($factoryMock, $eventManagerMock, 'sales model');
@@ -78,10 +85,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidGetAllItems($items)
     {
-        $taxContainer = new \Magento\Object([
-            'base_hidden_tax_amount' => 0.2,
-            'base_shipping_hidden_tax_amnt' => 0.1,
-        ]);
+        $taxContainer = new \Magento\Object(
+            array('base_hidden_tax_amount' => 0.2, 'base_shipping_hidden_tax_amnt' => 0.1)
+        );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
         $this->_salesModel->expects($this->once())->method('getBaseSubtotal')->will($this->returnValue(2.1));
@@ -97,33 +103,42 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function invalidGetAllItemsDataProvider()
     {
-        return [
-            [[]],
-            [[new \Magento\Object([
-                'parent_item' => new \Magento\Object(),
-                'price' => 2.0,
-                'qty' => 3,
-                'name' => 'item 1',
-            ])]],
-            [[
-                $this->_validItem,
-                new \Magento\Object([
-                    'price' => 2.0,
-                    'qty' => 3,
-                    'name' => 'item 2',
-                    'original_item' => new \Magento\Object(['base_row_total' => 6.01])
-                ])
-            ]],
-            [[
-                $this->_validItem,
-                new \Magento\Object([
-                    'price' => sqrt(2),
-                    'qty' =>  sqrt(2),
-                    'name' => 'item 3',
-                    'original_item' => new \Magento\Object(['base_row_total' => 2])
-                ])
-            ]],
-        ];
+        return array(
+            array(array()),
+            array(
+                array(
+                    new \Magento\Object(
+                        array('parent_item' => new \Magento\Object(), 'price' => 2.0, 'qty' => 3, 'name' => 'item 1')
+                    )
+                )
+            ),
+            array(
+                array(
+                    $this->_validItem,
+                    new \Magento\Object(
+                        array(
+                            'price' => 2.0,
+                            'qty' => 3,
+                            'name' => 'item 2',
+                            'original_item' => new \Magento\Object(array('base_row_total' => 6.01))
+                        )
+                    )
+                )
+            ),
+            array(
+                array(
+                    $this->_validItem,
+                    new \Magento\Object(
+                        array(
+                            'price' => sqrt(2),
+                            'qty' => sqrt(2),
+                            'name' => 'item 3',
+                            'original_item' => new \Magento\Object(array('base_row_total' => 2))
+                        )
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -146,37 +161,47 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function invalidTotalsGetAllItemsDataProvider()
     {
-        return [
-            [[
-                'base_hidden_tax_amount' => 0,
-                'base_shipping_hidden_tax_amnt' => 0,
-                'base_subtotal' => 0,
-                'base_tax_amount' => 0,
-                'base_shipping_amount' => 0,
-                'base_discount_amount' => 6.1,
-                'base_grand_total' => 0,
-            ], false],
-            [[
-                'base_hidden_tax_amount' => 1,
-                'base_shipping_hidden_tax_amnt' => 2,
-                'base_subtotal' => 3,
-                'base_tax_amount' => 4,
-                'base_shipping_amount' => 5,
-                'base_discount_amount' => 100,
-                'base_grand_total' => 5.5,
-            ], true],
-        ];
+        return array(
+            array(
+                array(
+                    'base_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amnt' => 0,
+                    'base_subtotal' => 0,
+                    'base_tax_amount' => 0,
+                    'base_shipping_amount' => 0,
+                    'base_discount_amount' => 6.1,
+                    'base_grand_total' => 0
+                ),
+                false
+            ),
+            array(
+                array(
+                    'base_hidden_tax_amount' => 1,
+                    'base_shipping_hidden_tax_amnt' => 2,
+                    'base_subtotal' => 3,
+                    'base_tax_amount' => 4,
+                    'base_shipping_amount' => 5,
+                    'base_discount_amount' => 100,
+                    'base_grand_total' => 5.5
+                ),
+                true
+            )
+        );
     }
 
     public function testGetAllItems()
     {
         $totals = $this->_prepareValidModelData();
         $this->assertEquals(
-            [new \Magento\Object([
-                'name' => $this->_validItem->getName(),
-                'qty' => $this->_validItem->getQty(),
-                'amount' => $this->_validItem->getPrice(),
-            ])],
+            array(
+                new \Magento\Object(
+                    array(
+                        'name' => $this->_validItem->getName(),
+                        'qty' => $this->_validItem->getQty(),
+                        'amount' => $this->_validItem->getPrice()
+                    )
+                )
+            ),
             $this->_model->getAllItems()
         );
         $this->assertEquals($totals['subtotal'], $this->_model->getSubtotal());
@@ -203,16 +228,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
         if (!$transferDiscount) {
             $expectedSubtotal -= $this->_model->getDiscount();
         }
-        $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
+        $this->assertEquals(array(Cart::AMOUNT_SUBTOTAL => $expectedSubtotal), $result);
     }
 
     public function invalidGetAmountsDataProvider()
     {
-        $data = [];
+        $data = array();
         $invalidTotalsData = $this->invalidTotalsGetAllItemsDataProvider();
         foreach ($invalidTotalsData as $dataItem) {
-            $data[] = [$dataItem[0], $dataItem[1], true];
-            $data[] = [$dataItem[0], $dataItem[1], false];
+            $data[] = array($dataItem[0], $dataItem[1], true);
+            $data[] = array($dataItem[0], $dataItem[1], false);
         }
         return $data;
     }
@@ -226,45 +251,69 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareInvalidModelData($values, $transferDiscount)
     {
-        $taxContainer = new \Magento\Object([
-            'base_hidden_tax_amount' => $values['base_hidden_tax_amount'],
-            'base_shipping_hidden_tax_amnt' => $values['base_shipping_hidden_tax_amnt'],
-        ]);
+        $taxContainer = new \Magento\Object(
+            array(
+                'base_hidden_tax_amount' => $values['base_hidden_tax_amount'],
+                'base_shipping_hidden_tax_amnt' => $values['base_shipping_hidden_tax_amnt']
+            )
+        );
         $expectedSubtotal = $values['base_subtotal'];
         if ($transferDiscount) {
             $this->_model->setTransferDiscountAsItem();
             $expectedSubtotal -= $values['base_discount_amount'];
         }
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
-        $this->_salesModel->expects($this->once())
-            ->method('getAllItems')
-            ->will($this->returnValue([$this->_validItem]));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseSubtotal')
-            ->will($this->returnValue($values['base_subtotal']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseTaxAmount')
-            ->will($this->returnValue($values['base_tax_amount']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseShippingAmount')
-            ->will($this->returnValue($values['base_shipping_amount']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseDiscountAmount')
-            ->will($this->returnValue($values['base_discount_amount']));
-        $this->_salesModel->expects($this->once())
-            ->method('getDataUsingMethod')
-            ->with('base_grand_total')
-            ->will($this->returnValue($values['base_grand_total']));
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getAllItems'
+        )->will(
+            $this->returnValue(array($this->_validItem))
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseSubtotal'
+        )->will(
+            $this->returnValue($values['base_subtotal'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseTaxAmount'
+        )->will(
+            $this->returnValue($values['base_tax_amount'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseShippingAmount'
+        )->will(
+            $this->returnValue($values['base_shipping_amount'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseDiscountAmount'
+        )->will(
+            $this->returnValue($values['base_discount_amount'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getDataUsingMethod'
+        )->with(
+            'base_grand_total'
+        )->will(
+            $this->returnValue($values['base_grand_total'])
+        );
         return $expectedSubtotal;
     }
 
     public function testGetAmounts()
     {
         $totals = $this->_prepareValidModelData();
-        $this->assertEquals(
-            $totals,
-            $this->_model->getAmounts()
-        );
+        $this->assertEquals($totals, $this->_model->getAmounts());
     }
 
     /**
@@ -274,36 +323,55 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareValidModelData()
     {
-        $totals = [
-            'discount' => 0.1,
-            'shipping' => 0.2,
-            'subtotal' => 0.3,
-            'tax' => 0.4,
-        ];
-        $taxContainer = new \Magento\Object([
-            'base_hidden_tax_amount' => 0,
-            'base_shipping_hidden_tax_amnt' => 0,
-        ]);
+        $totals = array('discount' => 0.1, 'shipping' => 0.2, 'subtotal' => 0.3, 'tax' => 0.4);
+        $taxContainer = new \Magento\Object(
+            array('base_hidden_tax_amount' => 0, 'base_shipping_hidden_tax_amnt' => 0)
+        );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
-        $this->_salesModel->expects($this->once())
-            ->method('getAllItems')
-            ->will($this->returnValue([$this->_validItem]));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseSubtotal')
-            ->will($this->returnValue($totals['subtotal']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseTaxAmount')
-            ->will($this->returnValue($totals['tax']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseShippingAmount')
-            ->will($this->returnValue($totals['shipping']));
-        $this->_salesModel->expects($this->once())
-            ->method('getBaseDiscountAmount')
-            ->will($this->returnValue($totals['discount']));
-        $this->_salesModel->expects($this->once())
-            ->method('getDataUsingMethod')
-            ->with('base_grand_total')
-            ->will($this->returnValue(6.0 + $totals['tax'] + $totals['shipping'] - $totals['discount']));
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getAllItems'
+        )->will(
+            $this->returnValue(array($this->_validItem))
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseSubtotal'
+        )->will(
+            $this->returnValue($totals['subtotal'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseTaxAmount'
+        )->will(
+            $this->returnValue($totals['tax'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseShippingAmount'
+        )->will(
+            $this->returnValue($totals['shipping'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getBaseDiscountAmount'
+        )->will(
+            $this->returnValue($totals['discount'])
+        );
+        $this->_salesModel->expects(
+            $this->once()
+        )->method(
+            'getDataUsingMethod'
+        )->with(
+            'base_grand_total'
+        )->will(
+            $this->returnValue(6.0 + $totals['tax'] + $totals['shipping'] - $totals['discount'])
+        );
         return $totals;
     }
 }

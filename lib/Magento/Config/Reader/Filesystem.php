@@ -115,9 +115,8 @@ class Filesystem implements \Magento\Config\ReaderInterface
         $this->_idAttributes = array_replace($this->_idAttributes, $idAttributes);
         $this->_schemaFile = $schemaLocator->getSchema();
         $this->_isValidated = $validationState->isValidated();
-        $this->_perFileSchema = $schemaLocator->getPerFileSchema() && $this->_isValidated
-            ? $schemaLocator->getPerFileSchema()
-            : null;
+        $this->_perFileSchema = $schemaLocator->getPerFileSchema() &&
+            $this->_isValidated ? $schemaLocator->getPerFileSchema() : null;
         $this->_domDocumentClass = $domDocumentClass;
         $this->_defaultScope = $defaultScope;
     }
@@ -191,9 +190,9 @@ class Filesystem implements \Magento\Config\ReaderInterface
     protected function _createConfigMerger($mergerClass, $initialContents)
     {
         $result = new $mergerClass($initialContents, $this->_idAttributes, null, $this->_perFileSchema);
-        if (!($result instanceof \Magento\Config\Dom)) {
+        if (!$result instanceof \Magento\Config\Dom) {
             throw new \UnexpectedValueException(
-                "Instance of the DOM config merger is expected, got $mergerClass instead."
+                "Instance of the DOM config merger is expected, got {$mergerClass} instead."
             );
         }
         return $result;

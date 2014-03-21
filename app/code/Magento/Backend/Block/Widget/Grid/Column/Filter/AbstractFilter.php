@@ -29,8 +29,8 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
-class AbstractFilter extends \Magento\Backend\Block\AbstractBlock
-    implements \Magento\Backend\Block\Widget\Grid\Column\Filter\FilterInterface
+class AbstractFilter extends \Magento\Backend\Block\AbstractBlock implements
+    \Magento\Backend\Block\Widget\Grid\Column\Filter\FilterInterface
 {
     /**
      * Column related to filter

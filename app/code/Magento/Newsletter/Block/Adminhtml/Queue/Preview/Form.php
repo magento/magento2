@@ -43,12 +43,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id' => 'preview_form',
-                'action' => $this->getUrl('*/*/drop', array('_current' => true)),
-                'method' => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'preview_form',
+                    'action' => $this->getUrl('*/*/drop', array('_current' => true)),
+                    'method' => 'post'
+                )
+            )
         );
 
         if ($data = $this->getFormData()) {

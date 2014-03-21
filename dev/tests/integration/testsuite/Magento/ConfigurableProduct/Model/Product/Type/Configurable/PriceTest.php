@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class PriceTest extends \PHPUnit_Framework_TestCase
@@ -32,13 +31,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testGetFinalPrice()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $product->load(1); // fixture
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->load(1);
+        // fixture
 
         /** @var $model \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
+        );
 
         // without configurable options
         $this->assertEquals(100.0, $model->getFinalPrice(1, $product));

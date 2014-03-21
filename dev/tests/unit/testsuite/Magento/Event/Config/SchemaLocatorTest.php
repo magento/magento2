@@ -45,7 +45,6 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $expected = str_replace('\\', '/', BP . '/lib/Magento/Event/etc/events.xsd');
         $actual = str_replace('\\', '/', $this->_model->getSchema());
         $this->assertEquals($expected, $actual);
-
     }
 
     public function testGetPerFileSchema()

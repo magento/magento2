@@ -43,16 +43,32 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTypes()
     {
-        $this->_storage->expects($this->once())->method('get')->with('types', array())
-            ->will($this->returnValue(array('val1' , 'val2')));
+        $this->_storage->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'types',
+            array()
+        )->will(
+            $this->returnValue(array('val1', 'val2'))
+        );
         $result = $this->_model->getTypes();
         $this->assertCount(2, $result);
     }
 
     public function testGetType()
     {
-        $this->_storage->expects($this->once())->method('get')->with('types/someType', array())
-            ->will($this->returnValue(array('someTypeValue')));
+        $this->_storage->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'types/someType',
+            array()
+        )->will(
+            $this->returnValue(array('someTypeValue'))
+        );
         $result = $this->_model->getType('someType');
         $this->assertCount(1, $result);
     }

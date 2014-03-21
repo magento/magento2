@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GoogleOptimizer\Block\Code;
 
 class CategoryTest extends \PHPUnit_Framework_TestCase
@@ -55,16 +54,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $categoryTags = array('catalog_category_1');
         $category = $this->getMock('Magento\Catalog\Model\Category', array(), array(), '', false);
-        $category->expects($this->once())
-            ->method('getIdentities')
-            ->will($this->returnValue($categoryTags));
-        $this->registry->expects($this->once())
-            ->method('registry')
-            ->with('current_category')
-            ->will($this->returnValue($category));
-        $this->assertEquals(
-            $categoryTags,
-            $this->block->getIdentities()
+        $category->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTags));
+        $this->registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_category'
+        )->will(
+            $this->returnValue($category)
         );
+        $this->assertEquals($categoryTags, $this->block->getIdentities());
     }
 }

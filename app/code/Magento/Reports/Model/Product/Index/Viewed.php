@@ -49,7 +49,7 @@ class Viewed extends \Magento\Reports\Model\Product\Index\AbstractIndex
      *
      * @var string
      */
-    protected $_countCacheKey   = 'product_index_viewed_count';
+    protected $_countCacheKey = 'product_index_viewed_count';
 
     /**
      * Initialize resource model

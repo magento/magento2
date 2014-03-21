@@ -23,8 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+
 use Magento\Catalog\Model\Resource\Category\Collection;
 
 /**
@@ -99,10 +99,7 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $options = array();
 
         foreach ($collection as $category) {
-            $options[] = array(
-                'label' => $category->getName(),
-                'value' => $category->getId()
-            );
+            $options[] = array('label' => $category->getName(), 'value' => $category->getId());
         }
         return $options;
     }
@@ -129,15 +126,17 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $selectorOptions = $this->_jsonEncoder->encode($this->_getSelectorOptions());
         $newCategoryCaption = __('New Category');
 
-        $button = $this->_layout
-            ->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
+        $button = $this->_layout->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
                 'id' => 'add_category_button',
                 'label' => $newCategoryCaption,
                 'title' => $newCategoryCaption,
                 'onclick' => 'jQuery("#new-category").dialog("open")',
-                'disabled' => $this->getDisabled(),
-            ));
+                'disabled' => $this->getDisabled()
+            )
+        );
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
     <script>
@@ -155,8 +154,7 @@ HTML;
     protected function _getSelectorOptions()
     {
         return array(
-            'source' => $this->_backendData
-                ->getUrl('catalog/category/suggestCategories'),
+            'source' => $this->_backendData->getUrl('catalog/category/suggestCategories'),
             'valueField' => '#' . $this->getHtmlId(),
             'className' => 'category-select',
             'multiselect' => true,

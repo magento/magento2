@@ -218,7 +218,7 @@ $map = array(
     'admin/xmlconnect/templates' => 'Magento_XmlConnect::templates',
     'admin/xmlconnect' => 'Magento_XmlConnect::xmlconnect',
     'admin/xmlconnect/queue' => 'Magento_XmlConnect::xmlconnect_queue',
-    'admin/system/config/facebook' => 'Social_Facebook::facebook',
+    'admin/system/config/facebook' => 'Social_Facebook::facebook'
 );
 
 $tableName = $installer->getTable('admin_rule');
@@ -226,9 +226,7 @@ $tableName = $installer->getTable('admin_rule');
 $connection = $installer->getConnection();
 
 $select = $connection->select();
-$select->from($tableName, array())
-    ->columns(array('resource_id' => 'resource_id'))
-    ->group('resource_id');
+$select->from($tableName, array())->columns(array('resource_id' => 'resource_id'))->group('resource_id');
 
 foreach ($connection->fetchCol($select) as $oldKey) {
     /**
@@ -243,4 +241,3 @@ foreach ($connection->fetchCol($select) as $oldKey) {
     $connection->update($tableName, array('resource_id' => $map[$oldKey]), array('resource_id = ?' => $oldKey));
 }
 $installer->endSetup();
-

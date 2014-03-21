@@ -40,7 +40,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     {
         $expectedErrors = array(
             "Element 'layouts': No match found for key-sequence ['bad_ref'] of keyref 'layout-ref'.",
-            "Element 'layout': Missing child element(s). Expected is ( label ).",
+            "Element 'layout': Missing child element(s). Expected is ( label )."
         );
         parent::testSchemaUsingInvalidXml($expectedErrors);
     }

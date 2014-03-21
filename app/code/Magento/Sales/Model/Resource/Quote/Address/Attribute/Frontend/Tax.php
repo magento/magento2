@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax
-    extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
+class Tax extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
 {
     /**
      * Fetch totals
@@ -45,11 +44,7 @@ class Tax
     {
         $amount = $address->getTaxAmount();
         if ($amount != 0) {
-            $address->addTotal(array(
-                'code'  => 'tax',
-                'title' => __('Tax'),
-                'value' => $amount
-            ));
+            $address->addTotal(array('code' => 'tax', 'title' => __('Tax'), 'value' => $amount));
         }
         return $this;
     }

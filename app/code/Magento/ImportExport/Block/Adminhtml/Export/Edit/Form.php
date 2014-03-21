@@ -74,30 +74,40 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'     => 'edit_form',
-                'action' => $this->getUrl('adminhtml/*/getFilter'),
-                'method' => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'edit_form',
+                    'action' => $this->getUrl('adminhtml/*/getFilter'),
+                    'method' => 'post'
+                )
+            )
         );
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Export Settings')));
-        $fieldset->addField('entity', 'select', array(
-            'name'     => 'entity',
-            'title'    => __('Entity Type'),
-            'label'    => __('Entity Type'),
-            'required' => false,
-            'onchange' => 'varienExport.getFilter();',
-            'values'   => $this->_entityFactory->create()->toOptionArray()
-        ));
-        $fieldset->addField('file_format', 'select', array(
-            'name'     => 'file_format',
-            'title'    => __('Export File Format'),
-            'label'    => __('Export File Format'),
-            'required' => false,
-            'values'   => $this->_formatFactory->create()->toOptionArray()
-        ));
+        $fieldset->addField(
+            'entity',
+            'select',
+            array(
+                'name' => 'entity',
+                'title' => __('Entity Type'),
+                'label' => __('Entity Type'),
+                'required' => false,
+                'onchange' => 'varienExport.getFilter();',
+                'values' => $this->_entityFactory->create()->toOptionArray()
+            )
+        );
+        $fieldset->addField(
+            'file_format',
+            'select',
+            array(
+                'name' => 'file_format',
+                'title' => __('Export File Format'),
+                'label' => __('Export File Format'),
+                'required' => false,
+                'values' => $this->_formatFactory->create()->toOptionArray()
+            )
+        );
 
         $form->setUseContainer(true);
         $this->setForm($form);

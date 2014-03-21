@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
 class ArrayTypeTest extends \PHPUnit_Framework_TestCase
@@ -55,19 +54,18 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateExceptionDataProvider()
     {
-        return array(
-            'no item' => array(array()),
-            'non-array item' => array(array('item' => 'non-array')),
-        );
+        return array('no item' => array(array()), 'non-array item' => array(array('item' => 'non-array')));
     }
 
     public function testEvaluate()
     {
-        $this->_interpreter->expects($this->any())
-            ->method('evaluate')
-            ->will($this->returnCallback(function ($input) {
-                return '-' . $input['value'] . '-';
-            }));
+        $this->_interpreter->expects($this->any())->method('evaluate')->will(
+            $this->returnCallback(
+                function ($input) {
+                    return '-' . $input['value'] . '-';
+                }
+            )
+        );
         $input = array(array('value' => 'value 1'), array('value' => 'value 2'), array('value' => 'value 3'));
         $expected = array('-value 1-', '-value 2-', '-value 3-');
         $actual = $this->_model->evaluate(array('item' => $input));

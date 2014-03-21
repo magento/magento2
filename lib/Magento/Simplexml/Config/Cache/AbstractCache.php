@@ -43,14 +43,14 @@ abstract class AbstractCache extends \Magento\Object
      *
      * @param array $data
      */
-    public function __construct($data=array())
+    public function __construct($data = array())
     {
         parent::__construct($data);
 
         $this->setComponents(array());
         $this->setIsAllowedToSave(true);
     }
-    
+
     /**
      * Add configuration component to stats
      *
@@ -61,13 +61,13 @@ abstract class AbstractCache extends \Magento\Object
     {
         $comps = $this->getComponents();
         if (is_readable($component)) {
-            $comps[$component] = array('mtime'=>filemtime($component));
+            $comps[$component] = array('mtime' => filemtime($component));
         }
         $this->setComponents($comps);
-        
+
         return $this;
     }
-    
+
     /**
      * Validate components in the stats
      *
@@ -76,12 +76,12 @@ abstract class AbstractCache extends \Magento\Object
      */
     public function validateComponents($data)
     {
-    	if (empty($data) || !is_array($data)) {
-    		return false;
-    	}
+        if (empty($data) || !is_array($data)) {
+            return false;
+        }
         // check that no source files were changed or check file exsists
-        foreach ($data as $sourceFile=>$stat) {
-            if (empty($stat['mtime']) || !is_file($sourceFile) || filemtime($sourceFile)!==$stat['mtime']) {
+        foreach ($data as $sourceFile => $stat) {
+            if (empty($stat['mtime']) || !is_file($sourceFile) || filemtime($sourceFile) !== $stat['mtime']) {
                 return false;
             }
         }
@@ -95,7 +95,7 @@ abstract class AbstractCache extends \Magento\Object
     {
         $sum = '';
         foreach ($this->getComponents() as $comp) {
-            $sum .= $comp['mtime'].':';
+            $sum .= $comp['mtime'] . ':';
         }
         $hash = md5($sum);
         return $hash;

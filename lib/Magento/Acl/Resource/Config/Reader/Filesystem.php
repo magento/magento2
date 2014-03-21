@@ -30,9 +30,7 @@ class Filesystem extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/acl/resources(/resource)+' => 'id',
-    );
+    protected $_idAttributes = array('/config/acl/resources(/resource)+' => 'id');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver

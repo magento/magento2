@@ -30,7 +30,6 @@ namespace Magento\Cms\Helper\Wysiwyg;
  */
 class Images extends \Magento\App\Helper\AbstractHelper
 {
-
     /**
      * Current directory path
      * @var string
@@ -177,12 +176,12 @@ class Images extends \Magento\App\Helper\AbstractHelper
      */
     public function isUsingStaticUrlsAllowed()
     {
-        $checkResult = new \StdClass;
+        $checkResult = new \StdClass();
         $checkResult->isAllowed = false;
-        $this->_eventManager->dispatch('cms_wysiwyg_images_static_urls_allowed', array(
-            'result'   => $checkResult,
-            'store_id' => $this->_storeId
-        ));
+        $this->_eventManager->dispatch(
+            'cms_wysiwyg_images_static_urls_allowed',
+            array('result' => $checkResult, 'store_id' => $this->_storeId)
+        );
         return $checkResult->isAllowed;
     }
 
@@ -206,10 +205,7 @@ class Images extends \Magento\App\Helper\AbstractHelper
                 $html = $fileurl; // $mediaPath;
             } else {
                 $directive = $this->_coreData->urlEncode($directive);
-                $html = $this->_backendData->getUrl(
-                    'cms/wysiwyg/directive',
-                    array('___directive' => $directive)
-                );
+                $html = $this->_backendData->getUrl('cms/wysiwyg/directive', array('___directive' => $directive));
             }
         }
         return $html;
@@ -256,8 +252,11 @@ class Images extends \Magento\App\Helper\AbstractHelper
     {
         if (!$this->_currentUrl) {
             $path = $this->getCurrentPath();
-            $mediaUrl = $this->_storeManager->getStore($this->_storeId)
-                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA);
+            $mediaUrl = $this->_storeManager->getStore(
+                $this->_storeId
+            )->getBaseUrl(
+                \Magento\UrlInterface::URL_TYPE_MEDIA
+            );
             $this->_currentUrl = $mediaUrl . $this->_directory->getRelativePath($path) . '/';
         }
         return $this->_currentUrl;

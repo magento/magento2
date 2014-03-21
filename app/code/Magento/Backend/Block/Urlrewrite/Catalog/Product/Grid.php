@@ -51,33 +51,21 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id',
-            array(
-                'header'=> __('ID'),
-                'width' => 50,
-                'index' => 'entity_id',
-        ));
+        $this->addColumn('entity_id', array('header' => __('ID'), 'width' => 50, 'index' => 'entity_id'));
 
-        $this->addColumn('name',
-            array(
-                'header'=> __('Name'),
-                'index' => 'name',
-        ));
+        $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
 
-        $this->addColumn('sku',
+        $this->addColumn('sku', array('header' => __('SKU'), 'width' => 80, 'index' => 'sku'));
+        $this->addColumn(
+            'status',
             array(
-                'header'=> __('SKU'),
-                'width' => 80,
-                'index' => 'sku',
-        ));
-        $this->addColumn('status',
-            array(
-                'header'=> __('Status'),
+                'header' => __('Status'),
                 'width' => 50,
                 'index' => 'status',
-                'type'  => 'options',
-                'options' => $this->_status->getOptionArray(),
-        ));
+                'type' => 'options',
+                'options' => $this->_status->getOptionArray()
+            )
+        );
         return $this;
     }
 

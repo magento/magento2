@@ -39,6 +39,7 @@ class Image extends \Magento\Data\Form\Element\AbstractElement
      * @var \Magento\UrlInterface
      */
     protected $_urlBuilder;
+
     /**
      * @param \Magento\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
@@ -70,15 +71,33 @@ class Image extends \Magento\Data\Form\Element\AbstractElement
         if ((string)$this->getValue()) {
             $url = $this->_getUrl();
 
-            if( !preg_match("/^http\:\/\/|https\:\/\//", $url) ) {
+            if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
                 $url = $this->_urlBuilder->getBaseUrl('media') . $url;
             }
 
-            $html = '<a href="' . $url . '"'
-                . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;" ' . $this->_getUiId('link') . '>'
-                . '<img src="' . $url . '" id="' . $this->getHtmlId() . '_image" title="' . $this->getValue() . '"'
-                . ' alt="' . $this->getValue() . '" height="22" width="22" class="small-image-preview v-middle"  ' . $this->_getUiId() . ' />'
-                . '</a> ';
+            $html = '<a href="' .
+                $url .
+                '"' .
+                ' onclick="imagePreview(\'' .
+                $this->getHtmlId() .
+                '_image\'); return false;" ' .
+                $this->_getUiId(
+                    'link'
+                ) .
+                '>' .
+                '<img src="' .
+                $url .
+                '" id="' .
+                $this->getHtmlId() .
+                '_image" title="' .
+                $this->getValue() .
+                '"' .
+                ' alt="' .
+                $this->getValue() .
+                '" height="22" width="22" class="small-image-preview v-middle"  ' .
+                $this->_getUiId() .
+                ' />' .
+                '</a> ';
         }
         $this->setClass('input-file');
         $html .= parent::getElementHtml();
@@ -98,12 +117,22 @@ class Image extends \Magento\Data\Form\Element\AbstractElement
         if ($this->getValue()) {
             $label = __('Delete Image');
             $html .= '<span class="delete-image">';
-            $html .= '<input type="checkbox"'
-                . ' name="' . parent::getName() . '[delete]" value="1" class="checkbox"'
-                . ' id="' . $this->getHtmlId() . '_delete"' . ($this->getDisabled() ? ' disabled="disabled"': '')
-                . '/>';
-            $html .= '<label for="' . $this->getHtmlId() . '_delete"'
-                . ($this->getDisabled() ? ' class="disabled"' : '') . '> ' . $label . '</label>';
+            $html .= '<input type="checkbox"' .
+                ' name="' .
+                parent::getName() .
+                '[delete]" value="1" class="checkbox"' .
+                ' id="' .
+                $this->getHtmlId() .
+                '_delete"' .
+                ($this->getDisabled() ? ' disabled="disabled"' : '') .
+                '/>';
+            $html .= '<label for="' .
+                $this->getHtmlId() .
+                '_delete"' .
+                ($this->getDisabled() ? ' class="disabled"' : '') .
+                '> ' .
+                $label .
+                '</label>';
             $html .= $this->_getHiddenInput();
             $html .= '</span>';
         }
@@ -138,6 +167,6 @@ class Image extends \Magento\Data\Form\Element\AbstractElement
      */
     public function getName()
     {
-        return  $this->getData('name');
+        return $this->getData('name');
     }
 }

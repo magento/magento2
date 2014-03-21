@@ -64,7 +64,7 @@ abstract class AbstractObject
     {
         $data = $this->_data;
         foreach ($data as $key => $value) {
-            if (method_exists($value, '__toArray')) {
+            if (is_object($value) && method_exists($value, '__toArray')) {
                 $data[$key] = $value->__toArray();
             } elseif (is_array($value)) {
                 foreach ($value as $nestedArrayKey => $nestedArrayValue) {

@@ -32,8 +32,16 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $saveHandler = $this->getMock($saveClass, array(), array(), '', false);
         $objectManager = $this->getMock('\Magento\ObjectManager\ObjectManager', array('create'), array(), '', false);
-        $objectManager->expects($this->once())->method('create')
-            ->with($this->equalTo($saveClass), $this->equalTo(array()))->will($this->returnValue($saveHandler));
+        $objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo($saveClass),
+            $this->equalTo(array())
+        )->will(
+            $this->returnValue($saveHandler)
+        );
         $model = new SaveHandlerFactory($objectManager, $handlers);
         $result = $model->create($saveMethod);
         $this->assertInstanceOf($saveClass, $result);
@@ -46,10 +54,6 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public static function createDataProvider()
     {
-        return array(
-            array(
-                array(), 'Magento\Session\SaveHandler\Native', 'files'
-            )
-        );
+        return array(array(array(), 'Magento\Session\SaveHandler\Native', 'files'));
     }
 }

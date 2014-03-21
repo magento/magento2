@@ -22,9 +22,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Test\Tools\Di\Code\Scanner;
-require_once __DIR__  . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
-require_once __DIR__ .  '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
 
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
 class PhpScannerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,29 +53,29 @@ class PhpScannerTest extends \PHPUnit_Framework_TestCase
             $this->_logMock = $this->getMock('\Magento\Tools\Di\Compiler\Log\Log', array(), array(), '', false)
         );
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
-        $this->_testFiles = array(
-            $this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php'
-        );
+        $this->_testFiles = array($this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php');
     }
 
     public function testCollectEntities()
     {
-        $this->_logMock
-            ->expects($this->at(0))
-            ->method('add')
-            ->with(
-                4,
-                'Magento\SomeModule\Module\Factory',
-                'Invalid Factory for nonexistent class Magento\SomeModule\Module in file ' . $this->_testFiles[0]
-            );
-        $this->_logMock
-            ->expects($this->at(1))
-            ->method('add')
-            ->with(
-                4,
-                'Magento\SomeModule\Element\Factory',
-                'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $this->_testFiles[0]
-            );
+        $this->_logMock->expects(
+            $this->at(0)
+        )->method(
+            'add'
+        )->with(
+            4,
+            'Magento\SomeModule\Module\Factory',
+            'Invalid Factory for nonexistent class Magento\SomeModule\Module in file ' . $this->_testFiles[0]
+        );
+        $this->_logMock->expects(
+            $this->at(1)
+        )->method(
+            'add'
+        )->with(
+            4,
+            'Magento\SomeModule\Element\Factory',
+            'Invalid Factory declaration for class Magento\SomeModule\Element in file ' . $this->_testFiles[0]
+        );
 
         $this->assertEquals(array(), $this->_model->collectEntities($this->_testFiles));
     }

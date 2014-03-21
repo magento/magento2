@@ -76,18 +76,19 @@ class AttributeFactory
      */
     public function createAttribute($name)
     {
-        $modelName = 'Magento\GoogleShopping\Model\Attribute\\'
-            . $this->_string->upperCaseWords($this->_gsData->normalizeName($name));
+        $modelName = 'Magento\GoogleShopping\Model\Attribute\\' . $this->_string->upperCaseWords(
+            $this->_gsData->normalizeName($name)
+        );
         try {
             /** @var \Magento\GoogleShopping\Model\Attribute\DefaultAttribute $attributeModel */
             $attributeModel = $this->_objectManager->create($modelName);
             if (!$attributeModel) {
-                $attributeModel = $this->_objectManager
-                    ->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
+                $attributeModel = $this->_objectManager->create(
+                    'Magento\GoogleShopping\Model\Attribute\DefaultAttribute'
+                );
             }
         } catch (\Exception $e) {
-            $attributeModel = $this->_objectManager
-                ->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
+            $attributeModel = $this->_objectManager->create('Magento\GoogleShopping\Model\Attribute\DefaultAttribute');
         }
 
         $attributeModel->setName($name);

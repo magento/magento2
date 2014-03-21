@@ -112,6 +112,11 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
     protected $productTypeConfig;
 
     /**
+     * @var \Magento\Customer\Service\V1\CustomerCurrentService
+     */
+    protected $currentCustomer;
+
+    /**
      * @var \Magento\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -126,6 +131,7 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
@@ -140,6 +146,7 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Math\Random $mathRandom,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = array()
@@ -156,6 +163,7 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
         $this->_localeResolver = $localeResolver;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->currentCustomer = $currentCustomer;
     }
 
     /**
@@ -167,11 +175,11 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
         $params = array($this->_paymentMethodCode);
         $config = $this->_paypalConfigFactory->create(array('params' => $params));
         $isInCatalog = $this->getIsInCatalogProduct();
-        $quote = ($isInCatalog || !$this->_checkoutSession) ? null : $this->_checkoutSession->getQuote();
+        $quote = $isInCatalog || !$this->_checkoutSession ? null : $this->_checkoutSession->getQuote();
 
         // check visibility on cart or product page
         $context = $isInCatalog ? 'visible_on_product' : 'visible_on_cart';
-        if (!$config->$context) {
+        if (!$config->{$context}) {
             $this->_shouldRender = false;
             return $result;
         }
@@ -181,7 +189,7 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
             /** @var $currentProduct \Magento\Catalog\Model\Product */
             $currentProduct = $this->_registry->registry('current_product');
             if (!is_null($currentProduct)) {
-                $productPrice = (float)$currentProduct->getFinalPrice();
+                $productPrice = (double)$currentProduct->getFinalPrice();
                 if (empty($productPrice) && !$this->productTypeConfig->isProductSet($currentProduct->getTypeId())) {
                     $this->_shouldRender = false;
                     return $result;
@@ -189,8 +197,9 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
             }
         }
         // validate minimum quote amount and validate quote for zero grandtotal
-        if (null !== $quote && (!$quote->validateMinimumAmount()
-            || (!$quote->getGrandTotal() && !$quote->hasNominalItems()))) {
+        if (null !== $quote && (!$quote->validateMinimumAmount() ||
+            !$quote->getGrandTotal() && !$quote->hasNominalItems())
+        ) {
             $this->_shouldRender = false;
             return $result;
         }
@@ -203,34 +212,33 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
         }
 
         // set misc data
-        $this->setShortcutHtmlId($this->mathRandom->getUniqueHash('ec_shortcut_'))
-            ->setCheckoutUrl($this->getUrl($this->_startAction))
-        ;
+        $this->setShortcutHtmlId(
+            $this->mathRandom->getUniqueHash('ec_shortcut_')
+        )->setCheckoutUrl(
+            $this->getUrl($this->_startAction)
+        );
 
         // use static image if in catalog
         if ($isInCatalog || null === $quote) {
-            $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl(
-                $this->_localeResolver->getLocaleCode())
-            );
+            $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl($this->_localeResolver->getLocaleCode()));
         } else {
-            $parameters = array(
-                'params' => array(
-                    'quote' => $quote,
-                    'config' => $config,
-                ),
-            );
+            $parameters = array('params' => array('quote' => $quote, 'config' => $config));
             $checkoutModel = $this->_checkoutFactory->create($this->_checkoutType, $parameters);
             $this->setImageUrl($checkoutModel->getCheckoutShortcutImageUrl());
         }
 
         // ask whether to create a billing agreement
-        $customerId = $this->_customerSession->getCustomerId(); // potential issue for caching
+        $customerId = $this->currentCustomer->getCustomerId(); // potential issue for caching
         if ($this->_paypalData->shouldAskToCreateBillingAgreement($config, $customerId)) {
-            $this->setConfirmationUrl($this->getUrl($this->_startAction,
-                array(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1)
-            ));
-            $this->setConfirmationMessage(__('Would you like to sign a billing agreement '
-                . 'to streamline further purchases with PayPal?'));
+            $this->setConfirmationUrl(
+                $this->getUrl(
+                    $this->_startAction,
+                    array(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1)
+                )
+            );
+            $this->setConfirmationMessage(
+                __('Would you like to sign a billing agreement ' . 'to streamline further purchases with PayPal?')
+            );
         }
 
         return $result;
@@ -257,7 +265,6 @@ class Shortcut extends \Magento\View\Element\Template implements CatalogBlock\Sh
     public function isOrPositionBefore()
     {
         return $this->getShowOrPosition() == CatalogBlock\ShortcutButtons::POSITION_BEFORE;
-
     }
 
     /**

@@ -34,8 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Index\Collection;
 
-abstract class AbstractCollection
-    extends \Magento\Catalog\Model\Resource\Product\Collection
+abstract class AbstractCollection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
      * Customer id
@@ -137,11 +136,7 @@ abstract class AbstractCollection
             $this->joinTable(
                 array('idx_table' => $this->_getTableName()),
                 'product_id=entity_id',
-                array(
-                    'product_id'    => 'product_id',
-                    'item_store_id' => 'store_id',
-                    'added_at'      => 'added_at'
-                ),
+                array('product_id' => 'product_id', 'item_store_id' => 'store_id', 'added_at' => 'added_at'),
                 $this->_getWhereCondition()
             );
             $this->setFlag('is_idx_table_joined', true);

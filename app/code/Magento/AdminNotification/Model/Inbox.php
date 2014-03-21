@@ -52,9 +52,12 @@ namespace Magento\AdminNotification\Model;
 class Inbox extends \Magento\Core\Model\AbstractModel
 {
     const SEVERITY_CRITICAL = 1;
-    const SEVERITY_MAJOR    = 2;
-    const SEVERITY_MINOR    = 3;
-    const SEVERITY_NOTICE   = 4;
+
+    const SEVERITY_MAJOR = 2;
+
+    const SEVERITY_MINOR = 3;
+
+    const SEVERITY_NOTICE = 4;
 
     /**
      * @return void
@@ -74,9 +77,9 @@ class Inbox extends \Magento\Core\Model\AbstractModel
     {
         $severities = array(
             self::SEVERITY_CRITICAL => __('critical'),
-            self::SEVERITY_MAJOR    => __('major'),
-            self::SEVERITY_MINOR    => __('minor'),
-            self::SEVERITY_NOTICE   => __('notice'),
+            self::SEVERITY_MAJOR => __('major'),
+            self::SEVERITY_MINOR => __('minor'),
+            self::SEVERITY_NOTICE => __('notice')
         );
 
         if (!is_null($severity)) {
@@ -142,14 +145,18 @@ class Inbox extends \Magento\Core\Model\AbstractModel
             $description = '<ul><li>' . implode('</li><li>', $description) . '</li></ul>';
         }
         $date = date('Y-m-d H:i:s');
-        $this->parse(array(array(
-            'severity'    => $severity,
-            'date_added'  => $date,
-            'title'       => $title,
-            'description' => $description,
-            'url'         => $url,
-            'internal'    => $isInternal
-        )));
+        $this->parse(
+            array(
+                array(
+                    'severity' => $severity,
+                    'date_added' => $date,
+                    'title' => $title,
+                    'description' => $description,
+                    'url' => $url,
+                    'internal' => $isInternal
+                )
+            )
+        );
         return $this;
     }
 

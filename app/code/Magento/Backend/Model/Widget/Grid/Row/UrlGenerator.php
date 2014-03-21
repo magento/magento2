@@ -61,12 +61,12 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
             throw new \InvalidArgumentException('Not all required parameters passed');
         }
         $this->_urlModel = isset($args['urlModel']) ? $args['urlModel'] : $backendUrl;
-        $this->_path = (string) $args['path'];
+        $this->_path = (string)$args['path'];
         if (isset($args['params'])) {
-            $this->_params = (array) $args['params'];
+            $this->_params = (array)$args['params'];
         }
         if (isset($args['extraParamsTemplate'])) {
-            $this->_extraParamsTemplate = (array) $args['extraParamsTemplate'];
+            $this->_extraParamsTemplate = (array)$args['extraParamsTemplate'];
         }
     }
 
@@ -95,7 +95,7 @@ class UrlGenerator implements \Magento\Backend\Model\Widget\Grid\Row\GeneratorIn
     {
         $params = array();
         foreach ($this->_extraParamsTemplate as $paramKey => $paramValueMethod) {
-            $params[$paramKey] = $item->$paramValueMethod();
+            $params[$paramKey] = $item->{$paramValueMethod}();
         }
         return array_merge($this->_params, $params);
     }

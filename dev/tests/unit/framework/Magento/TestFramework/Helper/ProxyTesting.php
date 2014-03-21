@@ -44,8 +44,14 @@ class ProxyTesting
      * @param null $expectedParams Expected parameters, to be passed to the proxied method
      * @return mixed
      */
-    public function invokeWithExpectations($object, \PHPUnit_Framework_MockObject_MockObject $proxiedObject, $method,
-        $params = array(), $proxiedResult = null, $expectedMethod = null, $expectedParams = null
+    public function invokeWithExpectations(
+        $object,
+        \PHPUnit_Framework_MockObject_MockObject $proxiedObject,
+        $method,
+        $params = array(),
+        $proxiedResult = null,
+        $expectedMethod = null,
+        $expectedParams = null
     ) {
         if ($expectedMethod === null) {
             $expectedMethod = $method;
@@ -53,8 +59,11 @@ class ProxyTesting
         if ($expectedParams === null) {
             $expectedParams = $params;
         }
-        $builder = $proxiedObject->expects(new \PHPUnit_Framework_MockObject_Matcher_InvokedCount(1))
-            ->method($expectedMethod);
+        $builder = $proxiedObject->expects(
+            new \PHPUnit_Framework_MockObject_Matcher_InvokedCount(1)
+        )->method(
+            $expectedMethod
+        );
         $builder = call_user_func_array(array($builder, 'with'), $expectedParams);
         $builder->will(new \PHPUnit_Framework_MockObject_Stub_Return($proxiedResult));
 

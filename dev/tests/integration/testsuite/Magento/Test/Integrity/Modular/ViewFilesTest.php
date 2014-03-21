@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
 
 class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
@@ -38,14 +37,19 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $file
              */
             function ($application, $file) {
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-                    ->loadArea($application);
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\View\DesignInterface')
-                    ->setDefaultDesignTheme();
-                $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\View\FileSystem')
-                    ->getViewFile($file);
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Core\Model\App'
+                )->loadArea(
+                    $application
+                );
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\View\DesignInterface'
+                )->setDefaultDesignTheme();
+                $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\View\FileSystem'
+                )->getViewFile(
+                    $file
+                );
                 $this->assertFileExists($result);
             },
             $this->viewFilesFromModulesViewDataProvider()
@@ -61,8 +65,9 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $files = array();
         /** @var $configModelReader \Magento\Module\Dir\Reader */
-        $configModelReader =
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Module\Dir\Reader');
+        $configModelReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Module\Dir\Reader'
+        );
         foreach ($this->_getEnabledModules() as $moduleName) {
             $moduleViewDir = $configModelReader->getModuleDir('view', $moduleName);
             if (!is_dir($moduleViewDir)) {
@@ -143,13 +148,17 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $file
              */
             function ($application, $file) {
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-                    ->setAreaCode($application);
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\View\DesignInterface')
-                    ->setDefaultDesignTheme();
-                $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\View\FileSystem');
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\App\State'
+                )->setAreaCode(
+                    $application
+                );
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\View\DesignInterface'
+                )->setDefaultDesignTheme();
+                $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\View\FileSystem'
+                );
                 $this->assertFileExists($filesystem->getViewFile($file));
             },
             $this->viewFilesFromModulesCodeDataProvider()
@@ -163,7 +172,7 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
     {
         $allFiles = array();
         foreach (glob(__DIR__ . '/_files/view_files*.php') as $file) {
-            $allFiles = array_merge($allFiles, include($file));
+            $allFiles = array_merge($allFiles, include $file);
         }
         return $this->_removeDisabledModulesFiles($allFiles);
     }

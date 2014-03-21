@@ -50,10 +50,8 @@ class Plugin
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetOptionArray(
-        \Magento\Catalog\Model\Product\Type $subject,
-        array $result
-    ) {
+    public function afterGetOptionArray(\Magento\Catalog\Model\Product\Type $subject, array $result)
+    {
         if (!$this->moduleManager->isOutputEnabled('Magento_ConfigurableProduct')) {
             unset($result[Configurable::TYPE_CODE]);
         }

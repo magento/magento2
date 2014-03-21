@@ -36,6 +36,7 @@ namespace Magento\Core\Model\Source\Urlrewrite;
 class Options implements \Magento\Option\ArrayInterface
 {
     const TEMPORARY = 'R';
+
     const PERMANENT = 'RP';
 
     /**
@@ -52,7 +53,7 @@ class Options implements \Magento\Option\ArrayInterface
     {
         if (is_null($this->_options)) {
             $this->_options = array(
-                ''              => __('No'),
+                '' => __('No'),
                 self::TEMPORARY => __('Temporary (302)'),
                 self::PERMANENT => __('Permanent (301)')
             );

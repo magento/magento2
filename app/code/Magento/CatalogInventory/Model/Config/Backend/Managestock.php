@@ -34,8 +34,7 @@
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
-class Managestock
-    extends \Magento\Core\Model\Config\Value
+class Managestock extends \Magento\Core\Model\Config\Value
 {
     /**
      * @var \Magento\CatalogInventory\Model\Stock\Status

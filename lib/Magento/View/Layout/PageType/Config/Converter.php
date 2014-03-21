@@ -40,10 +40,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $id = $typeAttributes->getNamedItem('id')->nodeValue;
             $label = $typeAttributes->getNamedItem('label')->nodeValue;
 
-            $pageArray = [
-                "id" => $id,
-                "label" => $label
-            ];
+            $pageArray = array("id" => $id, "label" => $label);
 
             $page_types[$id] = $pageArray;
         }

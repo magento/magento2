@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 /**
@@ -84,7 +83,7 @@ class Redirect extends Template
      *
      * @return string
      */
-    public function getRedirectOutput ()
+    public function getRedirectOutput()
     {
         if ($this->isHtmlFormRedirect()) {
             return $this->getHtmlFormRedirect();
@@ -102,7 +101,9 @@ class Redirect extends Template
     {
         return '<script type="text/javascript">
             (function($){
-                $($.mage.redirect("' . $this->getTargetURL() . '"));
+                $($.mage.redirect("' .
+            $this->getTargetURL() .
+            '"));
             })(jQuery);
         </script>';
     }
@@ -116,12 +117,20 @@ class Redirect extends Template
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->formFactory->create();
-        $form->setAction($this->getTargetURL())
-            ->setId($this->getFormId())
-            ->setName($this->getFormId())
-            ->setAttr('data-auto-submit', 'true')
-            ->setMethod($this->getFormMethod())
-            ->setUseContainer(true);
+        $form->setAction(
+            $this->getTargetURL()
+        )->setId(
+            $this->getFormId()
+        )->setName(
+            $this->getFormId()
+        )->setAttr(
+            'data-auto-submit',
+            'true'
+        )->setMethod(
+            $this->getFormMethod()
+        )->setUseContainer(
+            true
+        );
         foreach ($this->_getFormFields() as $field => $value) {
             $form->addField($field, 'hidden', array('name' => $field, 'value' => $value));
         }

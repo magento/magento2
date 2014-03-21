@@ -30,12 +30,12 @@ namespace Magento\Customer\Block\Widget;
  */
 class TaxvatTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testToHtml()
     {
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Block\Widget\Taxvat');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Block\Widget\Taxvat'
+        );
 
         $this->assertContains('title="Tax/VAT number"', $block->toHtml());
         $this->assertNotContains('required', $block->toHtml());
@@ -47,14 +47,16 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     public function testToHtmlRequired()
     {
         /** @var \Magento\Customer\Model\Attribute $model */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Attribute');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Attribute'
+        );
         $model->loadByCode('customer', 'taxvat')->setIsRequired(true);
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Block\Widget\Taxvat');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Block\Widget\Taxvat'
+        );
 
         $this->assertContains('title="Tax/VAT number"', $block->toHtml());
         $this->assertContains('required', $block->toHtml());

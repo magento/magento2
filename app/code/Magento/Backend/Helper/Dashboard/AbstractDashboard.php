@@ -38,14 +38,14 @@ abstract class AbstractDashboard extends HelperData
      *
      * @var AbstractCollection|array
      */
-    protected  $_collection;
+    protected $_collection;
 
     /**
      * Parameters for helper
      *
      * @var array
      */
-    protected  $_params = array();
+    protected $_params = array();
 
     /**
      * @return array|AbstractCollection
@@ -61,7 +61,7 @@ abstract class AbstractDashboard extends HelperData
     /**
      * @return void
      */
-    abstract protected  function _initCollection();
+    abstract protected function _initCollection();
 
     /**
      * Returns collection items

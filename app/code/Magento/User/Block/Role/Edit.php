@@ -74,20 +74,21 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
 
         $this->addTab(
             'info',
-            $this->getLayout()
-                ->createBlock('Magento\User\Block\Role\Tab\Info')
-                ->setRole($role)
-                ->setActive(true)
+            $this->getLayout()->createBlock('Magento\User\Block\Role\Tab\Info')->setRole($role)->setActive(true)
         );
 
         if ($role->getId()) {
-            $this->addTab('roles', array(
-                'label'     => __('Role Users'),
-                'title'     => __('Role Users'),
-                'content'   => $this->getLayout()
-                    ->createBlock('Magento\User\Block\Role\Tab\Users', 'role.users.grid')
-                    ->toHtml(),
-            ));
+            $this->addTab(
+                'roles',
+                array(
+                    'label' => __('Role Users'),
+                    'title' => __('Role Users'),
+                    'content' => $this->getLayout()->createBlock(
+                        'Magento\User\Block\Role\Tab\Users',
+                        'role.users.grid'
+                    )->toHtml()
+                )
+            );
         }
 
         return parent::_prepareLayout();

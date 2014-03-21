@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Log\Model;
 
 /**
@@ -41,8 +40,10 @@ namespace Magento\Log\Model;
 class Visitor extends \Magento\Core\Model\AbstractModel
 {
     const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
     const VISITOR_TYPE_CUSTOMER = 'c';
-    const VISITOR_TYPE_VISITOR  = 'v';
+
+    const VISITOR_TYPE_VISITOR = 'v';
 
     /**
      * @var bool
@@ -114,11 +115,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     protected $dateTime;
 
     /**
-     * @var \Magento\Module\Manager
-     */
-    protected $moduleManager;
-
-    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
@@ -131,7 +127,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      * @param \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Core\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $ignoredUserAgents
@@ -151,7 +146,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         \Magento\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\HTTP\PhpEnvironment\ServerAddress $serverAddress,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Module\Manager $moduleManager,
         \Magento\Core\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $ignoredUserAgents = array(),
@@ -169,7 +163,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
         $this->_remoteAddress = $remoteAddress;
         $this->_serverAddress = $serverAddress;
         $this->dateTime = $dateTime;
-        $this->moduleManager = $moduleManager;
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_ignores = $ignores;
@@ -189,9 +182,6 @@ class Visitor extends \Magento\Core\Model\AbstractModel
                 $this->_skipRequestLogging = true;
             }
         }
-        if ($this->moduleManager->isEnabled('Magento_PageCache')) {
-            $this->_skipRequestLogging = true;
-        }
     }
 
     /**
@@ -205,6 +195,17 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * Skip request logging
+     *
+     * @param bool $skipRequestLogging
+     * @return void
+     */
+    public function setSkipRequestLogging($skipRequestLogging)
+    {
+        $this->_skipRequestLogging = (bool)$skipRequestLogging;
+    }
+
+    /**
      * Initialize visitor information from server data
      *
      * @return $this
@@ -212,18 +213,20 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function initServerData()
     {
         $clean = true;
-        $this->addData(array(
-            'server_addr'           => $this->_serverAddress->getServerAddress(true),
-            'remote_addr'           => $this->_remoteAddress->getRemoteAddress(true),
-            'http_secure'           => $this->_storeManager->getStore()->isCurrentlySecure(),
-            'http_host'             => $this->_httpHeader->getHttpHost($clean),
-            'http_user_agent'       => $this->_httpHeader->getHttpUserAgent($clean),
-            'http_accept_language'  => $this->_httpHeader->getHttpAcceptLanguage($clean),
-            'http_accept_charset'   => $this->_httpHeader->getHttpAcceptCharset($clean),
-            'request_uri'           => $this->_httpHeader->getRequestUri($clean),
-            'session_id'            => $this->_getSession()->getSessionId(),
-            'http_referer'          => $this->_httpHeader->getHttpReferer($clean),
-        ));
+        $this->addData(
+            array(
+                'server_addr' => $this->_serverAddress->getServerAddress(true),
+                'remote_addr' => $this->_remoteAddress->getRemoteAddress(true),
+                'http_secure' => $this->_storeManager->getStore()->isCurrentlySecure(),
+                'http_host' => $this->_httpHeader->getHttpHost($clean),
+                'http_user_agent' => $this->_httpHeader->getHttpUserAgent($clean),
+                'http_accept_language' => $this->_httpHeader->getHttpAcceptLanguage($clean),
+                'http_accept_charset' => $this->_httpHeader->getHttpAcceptCharset($clean),
+                'request_uri' => $this->_httpHeader->getRequestUri($clean),
+                'session_id' => $this->_getSession()->getSessionId(),
+                'http_referer' => $this->_httpHeader->getHttpReferer($clean)
+            )
+        );
 
         return $this;
     }
@@ -236,9 +239,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getOnlineMinutesInterval()
     {
         $configValue = $this->_coreStoreConfig->getConfig('customer/online_customers/online_minutes_interval');
-        return intval($configValue) > 0
-            ? intval($configValue)
-            : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
+        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 
     /**
@@ -249,7 +250,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
     public function getUrl()
     {
         $url = 'http' . ($this->getHttpSecure() ? 's' : '') . '://';
-        $url .= $this->getHttpHost().$this->getRequestUri();
+        $url .= $this->getHttpHost() . $this->getRequestUri();
         return $url;
     }
 
@@ -339,7 +340,7 @@ class Visitor extends \Magento\Core\Model\AbstractModel
      */
     public function bindCustomerLogin($observer)
     {
-        if (!$this->getCustomerId() && $customer = $observer->getEvent()->getCustomer()) {
+        if (!$this->getCustomerId() && ($customer = $observer->getEvent()->getCustomer())) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
         }

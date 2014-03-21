@@ -84,6 +84,6 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         );
         $iteratorFactory = new \Magento\Config\FileIteratorFactory();
 
-        return  new \Magento\Module\Declaration\FileResolver($filesystem, $iteratorFactory);
+        return new \Magento\Module\Declaration\FileResolver($filesystem, $iteratorFactory);
     }
 }

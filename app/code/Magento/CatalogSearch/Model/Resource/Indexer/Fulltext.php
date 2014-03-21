@@ -53,9 +53,13 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getRelationsByChild($childIds)
     {
         $write = $this->_getWriteAdapter();
-        $select = $write->select()
-            ->from($this->getTable('catalog_product_relation'), 'parent_id')
-            ->where('child_id IN(?)', $childIds);
+        $select = $write->select()->from(
+            $this->getTable('catalog_product_relation'),
+            'parent_id'
+        )->where(
+            'child_id IN(?)',
+            $childIds
+        );
 
         return $write->fetchCol($select);
     }

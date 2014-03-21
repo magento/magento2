@@ -32,8 +32,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
  * @package    Magento_GiftMessage
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config
-    extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
+class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
 {
     /**
      * Core store config

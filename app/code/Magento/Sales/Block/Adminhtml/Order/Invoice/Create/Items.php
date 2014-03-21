@@ -69,12 +69,12 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     protected function _beforeToHtml()
     {
-        $onclick = "submitAndReloadArea($('invoice_item_container'),'".$this->getUpdateUrl()."')";
-        $this->addChild('update_button', 'Magento\Backend\Block\Widget\Button', array(
-            'class'     => 'update-button',
-            'label'     => __('Update Qty\'s'),
-            'onclick'   => $onclick,
-        ));
+        $onclick = "submitAndReloadArea($('invoice_item_container'),'" . $this->getUpdateUrl() . "')";
+        $this->addChild(
+            'update_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('class' => 'update-button', 'label' => __('Update Qty\'s'), 'onclick' => $onclick)
+        );
         $this->_disableSubmitButton = true;
         $_submitButtonClass = ' disabled';
         foreach ($this->getInvoice()->getAllItems() as $item) {
@@ -92,12 +92,16 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         } else {
             $_submitLabel = __('Submit Invoice');
         }
-        $this->addChild('submit_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => $_submitLabel,
-            'class'     => 'save submit-button' . $_submitButtonClass,
-            'onclick'   => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
-            'disabled'  => $this->_disableSubmitButton
-        ));
+        $this->addChild(
+            'submit_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => $_submitLabel,
+                'class' => 'save submit-button' . $_submitButtonClass,
+                'onclick' => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
+                'disabled' => $this->_disableSubmitButton
+            )
+        );
 
         return parent::_prepareLayout();
     }
@@ -198,7 +202,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getUpdateUrl()
     {
-        return $this->getUrl('sales/*/updateQty', array('order_id'=>$this->getInvoice()->getOrderId()));
+        return $this->getUrl('sales/*/updateQty', array('order_id' => $this->getInvoice()->getOrderId()));
     }
 
     /**

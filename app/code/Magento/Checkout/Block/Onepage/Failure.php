@@ -60,7 +60,7 @@ class Failure extends \Magento\View\Element\Template
      *
      *  @return	string
      */
-    public function getErrorMessage ()
+    public function getErrorMessage()
     {
         $error = $this->_checkoutSession->getErrorMessage();
         return $error;

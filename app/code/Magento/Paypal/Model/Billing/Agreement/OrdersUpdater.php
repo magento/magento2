@@ -52,7 +52,7 @@ class OrdersUpdater implements \Magento\View\Layout\Argument\UpdaterInterface
         $this->_registryManager = isset($data['registry']) ? $data['registry'] : $coreRegistry;
         $this->_agreementResource = $agreementResource;
 
-        if (false === ($this->_registryManager instanceof \Magento\Registry)) {
+        if (false === $this->_registryManager instanceof \Magento\Registry) {
             throw new \InvalidArgumentException('registry object has to be an instance of \Magento\Registry');
         }
     }

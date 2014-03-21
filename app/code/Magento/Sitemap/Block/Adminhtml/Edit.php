@@ -66,23 +66,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_addButton('generate', array(
-            'label'   => __('Save & Generate'),
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'save',
-                        'target' => '#edit_form',
-                        'eventData' => array(
-                            'action' => array('args' => array(
-                                'generate' => '1'
-                            )),
-                        ),
-                    ),
+        $this->_addButton(
+            'generate',
+            array(
+                'label' => __('Save & Generate'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => array('action' => array('args' => array('generate' => '1')))
+                        )
+                    )
                 ),
-            ),
-            'class'   => 'add',
-        ));
+                'class' => 'add'
+            )
+        );
     }
 
     /**

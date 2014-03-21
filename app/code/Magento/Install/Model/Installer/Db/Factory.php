@@ -34,9 +34,7 @@ class Factory
     /**
      * @var array
      */
-    protected $_types = array(
-        'mysql4' => 'Magento\Install\Model\Installer\Db\Mysql4'
-    );
+    protected $_types = array('mysql4' => 'Magento\Install\Model\Installer\Db\Mysql4');
 
     /**
      * @var \Magento\ObjectManager
@@ -65,7 +63,4 @@ class Factory
         }
         return false;
     }
-
-
-
 }

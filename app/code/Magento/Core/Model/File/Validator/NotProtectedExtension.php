@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File\Validator;
 
 /**
@@ -39,7 +38,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     /**
      * Protected files config path
      */
-    const XML_PATH_PROTECTED_FILE_EXTENSIONS    = 'general/file/protected_extensions';
+    const XML_PATH_PROTECTED_FILE_EXTENSIONS = 'general/file/protected_extensions';
 
     /**
      * The file extension
@@ -83,7 +82,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = array(
-                self::PROTECTED_EXTENSION => __('File with an extension "%value%" is protected and cannot be uploaded'),
+                self::PROTECTED_EXTENSION => __('File with an extension "%value%" is protected and cannot be uploaded')
             );
         }
         return $this;
@@ -104,7 +103,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
             foreach ($extensions as &$ext) {
                 $ext = strtolower(trim($ext));
             }
-            $this->_protectedFileExtensions = (array) $extensions;
+            $this->_protectedFileExtensions = (array)$extensions;
         }
         return $this;
     }

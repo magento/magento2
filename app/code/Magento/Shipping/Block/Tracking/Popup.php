@@ -82,8 +82,7 @@ class Popup extends \Magento\View\Element\Template
     public function formatDeliveryDate($date)
     {
         $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
-        return $this->_localeDate->date(strtotime($date), \Zend_Date::TIMESTAMP, null, false)
-            ->toString($format);
+        return $this->_localeDate->date(strtotime($date), \Zend_Date::TIMESTAMP, null, false)->toString($format);
     }
 
     /**
@@ -100,8 +99,7 @@ class Popup extends \Magento\View\Element\Template
         }
 
         $format = $this->_localeDate->getTimeFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-        return $this->_localeDate->date(strtotime($time), \Zend_Date::TIMESTAMP, null, false)
-            ->toString($format);
+        return $this->_localeDate->date(strtotime($time), \Zend_Date::TIMESTAMP, null, false)->toString($format);
     }
 
     /**
@@ -111,7 +109,7 @@ class Popup extends \Magento\View\Element\Template
      */
     public function getContactUsEnabled()
     {
-        return (bool) $this->_storeConfig->getConfig('contacts/contacts/enabled');
+        return (bool)$this->_storeConfig->getConfig('contacts/contacts/enabled');
     }
 
     /**
@@ -129,5 +127,4 @@ class Popup extends \Magento\View\Element\Template
     {
         return $this->getUrl('contacts');
     }
-
 }

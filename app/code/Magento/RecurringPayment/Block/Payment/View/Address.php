@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Block\Payment\View;
 
 /**
@@ -66,8 +65,6 @@ class Address extends \Magento\RecurringPayment\Block\Payment\View
         }
         $this->setIsAddress(true);
         $address = $this->_addressFactory->create(array('data' => $this->_recurringPayment->getData($key)));
-        $this->_addInfo(array(
-            'value' => preg_replace('/\\n{2,}/', "\n", $address->format('text')),
-        ));
+        $this->_addInfo(array('value' => preg_replace('/\\n{2,}/', "\n", $address->format('text'))));
     }
 }

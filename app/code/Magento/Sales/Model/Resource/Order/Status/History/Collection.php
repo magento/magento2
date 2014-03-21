@@ -42,14 +42,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_status_history_collection';
+    protected $_eventPrefix = 'sales_order_status_history_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_status_history_collection';
+    protected $_eventObject = 'order_status_history_collection';
 
     /**
      * Model initialization
@@ -71,18 +71,28 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      *
      * @return \Magento\Sales\Model\Order\Status\History|null
      */
-    public function getUnnotifiedForInstance($instance, $historyEntityName= Order::HISTORY_ENTITY_NAME)
+    public function getUnnotifiedForInstance($instance, $historyEntityName = Order::HISTORY_ENTITY_NAME)
     {
         if (!$instance instanceof Order) {
             $instance = $instance->getOrder();
         }
-        $this->setOrderFilter($instance)->setOrder('created_at', 'desc')
-            ->addFieldToFilter('entity_name', $historyEntityName)
-            ->addFieldToFilter('is_customer_notified', 0)->setPageSize(1);
+        $this->setOrderFilter(
+            $instance
+        )->setOrder(
+            'created_at',
+            'desc'
+        )->addFieldToFilter(
+            'entity_name',
+            $historyEntityName
+        )->addFieldToFilter(
+            'is_customer_notified',
+            0
+        )->setPageSize(
+            1
+        );
         foreach ($this as $historyItem) {
             return $historyItem;
         }
         return null;
     }
-
 }

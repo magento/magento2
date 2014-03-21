@@ -50,23 +50,27 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $pageAssets = $objectManager->get('Magento\View\Asset\GroupedCollection');
 
         $fixtureAssets = array(
-            array('name'   => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                  'params' => array()),
-            array('name'   => 'test_css_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                  'params' => array('flag_name' => 'vde_design_mode')),
-            array('name'   => 'test_js', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
-                  'params' => array()),
-            array('name'   => 'test_js_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
-                  'params' => array('flag_name' => 'vde_design_mode')),
+            array('name' => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS, 'params' => array()),
+            array(
+                'name' => 'test_css_vde',
+                'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
+                'params' => array('flag_name' => 'vde_design_mode')
+            ),
+            array('name' => 'test_js', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS, 'params' => array()),
+            array(
+                'name' => 'test_js_vde',
+                'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
+                'params' => array('flag_name' => 'vde_design_mode')
+            )
         );
 
         foreach ($fixtureAssets as $asset) {
             $pageAssets->add(
                 $asset['name'],
-                $objectManager->create('Magento\View\Asset\ViewFile', array(
-                    'file' => 'some_file',
-                    'contentType' => $asset['type'],
-                )),
+                $objectManager->create(
+                    'Magento\View\Asset\ViewFile',
+                    array('file' => 'some_file', 'contentType' => $asset['type'])
+                ),
                 $asset['params']
             );
         }
@@ -91,12 +95,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'vde area - design mode' => array('vde', '1', array('test_css', 'test_css_vde', 'test_js_vde')),
-            'vde area - non design mode' => array('vde', '0',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
-            'default area - design mode' => array('default', '1',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
-            'default area - non design mode' => array('default', '0',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
+            'vde area - non design mode' => array(
+                'vde',
+                '0',
+                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')
+            ),
+            'default area - design mode' => array(
+                'default',
+                '1',
+                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')
+            ),
+            'default area - non design mode' => array(
+                'default',
+                '0',
+                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')
+            )
         );
     }
 }

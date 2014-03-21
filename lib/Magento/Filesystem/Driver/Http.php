@@ -70,20 +70,20 @@ class Http extends File
         $headers = array_change_key_case(get_headers($this->getScheme() . $path, 1), CASE_LOWER);
 
         $result = array(
-            'dev'         => 0,
-            'ino'         => 0,
-            'mode'        => 0,
-            'nlink'       => 0,
-            'uid'         => 0,
-            'gid'         => 0,
-            'rdev'        => 0,
-            'atime'       => 0,
-            'ctime'       => 0,
-            'blksize'     => 0,
-            'blocks'      => 0,
-            'size'        => isset($headers['content-length']) ? $headers['content-length'] : 0,
-            'type'        => isset($headers['content-type']) ? $headers['content-type'] : '',
-            'mtime'       => isset($headers['last-modified']) ? $headers['last-modified'] : 0,
+            'dev' => 0,
+            'ino' => 0,
+            'mode' => 0,
+            'nlink' => 0,
+            'uid' => 0,
+            'gid' => 0,
+            'rdev' => 0,
+            'atime' => 0,
+            'ctime' => 0,
+            'blksize' => 0,
+            'blocks' => 0,
+            'size' => isset($headers['content-length']) ? $headers['content-length'] : 0,
+            'type' => isset($headers['content-type']) ? $headers['content-type'] : '',
+            'mtime' => isset($headers['last-modified']) ? $headers['last-modified'] : 0,
             'disposition' => isset($headers['content-disposition']) ? $headers['content-disposition'] : null
         );
         return $result;
@@ -104,11 +104,8 @@ class Http extends File
         $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
         if (false === $result) {
             throw new FilesystemException(
-                sprintf(
-                    'Cannot read contents from file "%s" %s',
-                    $path,
-                    $this->getWarningMessage()
-                ));
+                sprintf('Cannot read contents from file "%s" %s', $path, $this->getWarningMessage())
+            );
         }
         return $result;
     }
@@ -128,11 +125,8 @@ class Http extends File
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode, $context);
         if (!$result) {
             throw new FilesystemException(
-                sprintf(
-                    'The specified "%s" file could not be written %s',
-                    $path,
-                    $this->getWarningMessage()
-                ));
+                sprintf('The specified "%s" file could not be written %s', $path, $this->getWarningMessage())
+            );
         }
         return $result;
     }
@@ -154,7 +148,7 @@ class Http extends File
         }
 
         $hostname = $urlProp['host'];
-        $port     = 80;
+        $port = 80;
         if (isset($urlProp['port'])) {
             $port = (int)$urlProp['port'];
         }
@@ -177,11 +171,20 @@ class Http extends File
             );
         }
 
-        $headers = 'GET ' . $path . $query . ' HTTP/1.0' . "\r\n"
-            . 'Host: ' . $hostname . "\r\n"
-            . 'User-Agent: Magento ver/' . \Magento\Core\Model\App::VERSION . "\r\n"
-            . 'Connection: close' . "\r\n"
-            . "\r\n";
+        $headers = 'GET ' .
+            $path .
+            $query .
+            ' HTTP/1.0' .
+            "\r\n" .
+            'Host: ' .
+            $hostname .
+            "\r\n" .
+            'User-Agent: Magento ver/' .
+            \Magento\Core\Model\App::VERSION .
+            "\r\n" .
+            'Connection: close' .
+            "\r\n" .
+            "\r\n";
 
         fwrite($result, $headers);
 

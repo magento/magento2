@@ -35,9 +35,11 @@ namespace Magento\TestFramework\TestCase;
  */
 abstract class AbstractController extends \PHPUnit_Framework_TestCase
 {
-    protected $_runCode     = '';
-    protected $_runScope    = 'store';
-    protected $_runOptions  = array();
+    protected $_runCode = '';
+
+    protected $_runScope = 'store';
+
+    protected $_runOptions = array();
 
     /**
      * @var \Magento\TestFramework\Request
@@ -80,7 +82,6 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_objectManager->removeSharedInstance('Magento\App\ResponseInterface');
         $this->_objectManager->removeSharedInstance('Magento\App\RequestInterface');
-
     }
 
     protected function tearDown()
@@ -207,7 +208,9 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * @param string $messageManager Class of the session model that manages messages
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint, $messageType = null, $messageManager = 'Magento\Message\Manager'
+        \PHPUnit_Framework_Constraint $constraint,
+        $messageType = null,
+        $messageManager = 'Magento\Message\Manager'
     ) {
         $this->_assertSessionErrors = false;
         /** @var $messages \Magento\Message\ManagerInterface */

@@ -48,7 +48,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->assertEmpty(
                     $result,
-                    "3rd parameter is not needed anymore for getChildHtml() in '$file': " . print_r($result, true)
+                    "3rd parameter is not needed anymore for getChildHtml() in '{$file}': " . print_r($result, true)
                 );
                 $result = \Magento\TestFramework\Utility\Classes::getAllMatches(
                     file_get_contents($file),
@@ -56,7 +56,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->assertEmpty(
                     $result,
-                    "4th parameter is not needed anymore for getChildChildHtml() in '$file': " . print_r($result, true)
+                    "4th parameter is not needed anymore for getChildChildHtml() in '{$file}': " . print_r(
+                        $result,
+                        true
+                    )
                 );
             },
             \Magento\TestFramework\Utility\Files::init()->getPhpFiles()

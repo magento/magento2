@@ -94,9 +94,7 @@ class Attribute extends \Magento\Backend\Helper\Data
         $this->_eavConfig = $eavConfig;
         $this->_session = $session;
         $this->_productsFactory = $productsFactory;
-        parent::__construct(
-            $context, $routeConfig, $locale, $backendUrl, $auth, $frontNameResolver, $mathRandom
-        );
+        parent::__construct($context, $routeConfig, $locale, $backendUrl, $auth, $frontNameResolver, $mathRandom);
     }
 
     /**
@@ -114,9 +112,11 @@ class Attribute extends \Magento\Backend\Helper\Data
                 $productsIds = array(0);
             }
 
-            $this->_products = $this->_productsFactory->create()
-                ->setStoreId($this->getSelectedStoreId())
-                ->addIdFilter($productsIds);
+            $this->_products = $this->_productsFactory->create()->setStoreId(
+                $this->getSelectedStoreId()
+            )->addIdFilter(
+                $productsIds
+            );
         }
 
         return $this->_products;
@@ -164,17 +164,18 @@ class Attribute extends \Magento\Backend\Helper\Data
     public function getAttributes()
     {
         if (is_null($this->_attributes)) {
-            $this->_attributes  = $this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
-                ->getAttributeCollection()
-                ->addIsNotUniqueFilter()
-                ->setInAllAttributeSetsFilter($this->getProductsSetIds());
+            $this->_attributes = $this->_eavConfig->getEntityType(
+                \Magento\Catalog\Model\Product::ENTITY
+            )->getAttributeCollection()->addIsNotUniqueFilter()->setInAllAttributeSetsFilter(
+                $this->getProductsSetIds()
+            );
 
             if ($this->_excludedAttributes) {
                 $this->_attributes->addFieldToFilter('attribute_code', array('nin' => $this->_excludedAttributes));
             }
 
             // check product type apply to limitation and remove attributes that impossible to change in mass-update
-            $productTypeIds  = $this->getProducts()->getProductTypeIds();
+            $productTypeIds = $this->getProducts()->getProductTypeIds();
             foreach ($this->_attributes as $attribute) {
                 /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
                 foreach ($productTypeIds as $productTypeId) {

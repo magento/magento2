@@ -24,8 +24,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Profiler;
+
 
 /**
  * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
@@ -53,10 +53,12 @@ class OutputBambooTest extends \PHPUnit_Framework_TestCase
         /**
          * @link http://php.net/manual/en/wrappers.php.php
          */
-        $this->_output = new \Magento\TestFramework\Profiler\OutputBamboo(array(
-            'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
-            'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
-        ));
+        $this->_output = new \Magento\TestFramework\Profiler\OutputBamboo(
+            array(
+                'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
+                'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
+            )
+        );
     }
 
     public function testDisplay()

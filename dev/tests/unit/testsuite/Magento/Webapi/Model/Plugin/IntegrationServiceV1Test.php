@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Authz\Model\UserIdentifier;
@@ -57,12 +56,16 @@ class IntegrationServiceV1Test extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->authzServiceMock = $this->getMockBuilder('\Magento\Authz\Service\AuthorizationV1')
-            ->disableOriginalConstructor()
-            ->setMethods(['removePermissions'])->getMock();
-        $this->userIdentifierFactoryMock = $this->getMockBuilder('\Magento\Authz\Model\UserIdentifier\Factory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $this->authzServiceMock = $this->getMockBuilder(
+            '\Magento\Authz\Service\AuthorizationV1'
+        )->disableOriginalConstructor()->setMethods(
+            array('removePermissions')
+        )->getMock();
+        $this->userIdentifierFactoryMock = $this->getMockBuilder(
+            '\Magento\Authz\Model\UserIdentifier\Factory'
+        )->disableOriginalConstructor()->setMethods(
+            array('create')
+        )->getMock();
         $this->subjectMock = $this->getMock('Magento\Integration\Service\IntegrationV1', array(), array(), '', false);
         $this->integrationV1Plugin = new \Magento\Webapi\Model\Plugin\IntegrationServiceV1(
             $this->authzServiceMock,
@@ -77,20 +80,23 @@ class IntegrationServiceV1Test extends \PHPUnit_Framework_TestCase
             Integration::NAME => 'TestIntegration1',
             Integration::EMAIL => 'test-integration1@magento.com',
             Integration::ENDPOINT => 'http://endpoint.com',
-            Integration::SETUP_TYPE => 1,
+            Integration::SETUP_TYPE => 1
         );
-        $userIdentifierMock = $this->getMockBuilder('\Magento\Authz\Model\UserIdentifier')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->authzServiceMock->expects($this->once())
-            ->method('removePermissions')->with($userIdentifierMock);
-        $this->userIdentifierFactoryMock->expects($this->at(0))
-            ->method('create')
-            ->with(UserIdentifier::USER_TYPE_INTEGRATION, 1)
-            ->will($this->returnValue($userIdentifierMock));
-        $this->authzServiceMock->expects($this->once())
-            ->method('removePermissions')
-            ->with($userIdentifierMock);
+        $userIdentifierMock = $this->getMockBuilder(
+            '\Magento\Authz\Model\UserIdentifier'
+        )->disableOriginalConstructor()->getMock();
+        $this->authzServiceMock->expects($this->once())->method('removePermissions')->with($userIdentifierMock);
+        $this->userIdentifierFactoryMock->expects(
+            $this->at(0)
+        )->method(
+            'create'
+        )->with(
+            UserIdentifier::USER_TYPE_INTEGRATION,
+            1
+        )->will(
+            $this->returnValue($userIdentifierMock)
+        );
+        $this->authzServiceMock->expects($this->once())->method('removePermissions')->with($userIdentifierMock);
         $this->integrationV1Plugin->afterDelete($this->subjectMock, $integrationsData);
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report;
 
 use Magento\Tools\Dependency\ServiceLocator;
@@ -59,45 +58,36 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $this->builder->build([
-            'parse' => [
-                'files_for_parse' => [
-                    $this->fixtureDirModule . 'Helper/Helper.php',
-                    $this->fixtureDirModule . 'Model/Model.php',
-                    $this->fixtureDirModule . 'view/frontend/template.phtml',
-                ],
-                'config_files' => [
-                    $this->fixtureDirModule . 'etc/module.xml',
-                ],
-                'declared_namespaces' => ['Magento'],
-            ],
-            'write' => [
-                'report_filename' => $this->sourceFilename,
-            ],
-        ]);
-
-        $this->assertFileEquals(
-            $this->fixtureDir . 'expected/framework-dependencies.csv',
-            $this->sourceFilename
+        $this->builder->build(
+            array(
+                'parse' => array(
+                    'files_for_parse' => array(
+                        $this->fixtureDirModule . 'Helper/Helper.php',
+                        $this->fixtureDirModule . 'Model/Model.php',
+                        $this->fixtureDirModule . 'view/frontend/template.phtml'
+                    ),
+                    'config_files' => array($this->fixtureDirModule . 'etc/module.xml'),
+                    'declared_namespaces' => array('Magento')
+                ),
+                'write' => array('report_filename' => $this->sourceFilename)
+            )
         );
+
+        $this->assertFileEquals($this->fixtureDir . 'expected/framework-dependencies.csv', $this->sourceFilename);
     }
 
     public function testBuildWithoutDependencies()
     {
-        $this->builder->build([
-            'parse' => [
-                'files_for_parse' => [
-                    $this->fixtureDirModule . 'Model/WithoutDependencies.php',
-                ],
-                'config_files' => [
-                    $this->fixtureDirModule . 'etc/module.xml',
-                ],
-                'declared_namespaces' => ['Magento'],
-            ],
-            'write' => [
-                'report_filename' => $this->sourceFilename,
-            ],
-        ]);
+        $this->builder->build(
+            array(
+                'parse' => array(
+                    'files_for_parse' => array($this->fixtureDirModule . 'Model/WithoutDependencies.php'),
+                    'config_files' => array($this->fixtureDirModule . 'etc/module.xml'),
+                    'declared_namespaces' => array('Magento')
+                ),
+                'write' => array('report_filename' => $this->sourceFilename)
+            )
+        );
 
         $this->assertFileEquals(
             $this->fixtureDir . 'expected/without-framework-dependencies.csv',

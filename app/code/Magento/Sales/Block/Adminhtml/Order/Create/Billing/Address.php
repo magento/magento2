@@ -32,8 +32,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Address
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
+class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
     /**
      * Return header text

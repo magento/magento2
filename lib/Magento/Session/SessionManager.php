@@ -39,10 +39,7 @@ class SessionManager implements SessionManagerInterface
      *
      * @var array
      */
-    protected $defaultDestroyOptions = array(
-        'send_expire_cookie' => true,
-        'clear_storage'      => true,
-    );
+    protected $defaultDestroyOptions = array('send_expire_cookie' => true, 'clear_storage' => true);
 
     /**
      * URL host cache
@@ -377,7 +374,7 @@ class SessionManager implements SessionManagerInterface
     {
         $hostArr = explode(':', $host);
         $hosts = $this->_getHosts();
-        return (!empty($hosts[$hostArr[0]]));
+        return !empty($hosts[$hostArr[0]]);
     }
 
     /**

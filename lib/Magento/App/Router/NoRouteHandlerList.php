@@ -48,10 +48,8 @@ class NoRouteHandlerList
      * @param \Magento\ObjectManager $objectManager
      * @param array $handlerClassesList
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        array $handlerClassesList
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager, array $handlerClassesList)
+    {
         $this->_handlerList = $handlerClassesList;
         $this->_objectManager = $objectManager;
     }

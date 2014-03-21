@@ -24,9 +24,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Price;
-
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,24 +73,35 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Core\Model\StoreManagerInterface', array(), array(), '', false
+            'Magento\Core\Model\StoreManagerInterface',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false);
         $this->_dateTimeMock = $this->getMock('Magento\Stdlib\DateTime', array(), array(), '', false);
         $this->_localeDateMock = $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface');
         $this->_eavConfigMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
         $this->_priceProcessorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor', array(), array(), '', false
+            'Magento\Catalog\Model\Indexer\Product\Price\Processor',
+            array(),
+            array(),
+            '',
+            false
         );
 
-        $this->_model = $this->_objectManager->getObject('\Magento\Catalog\Model\Indexer\Product\Price\Observer', array(
-            'storeManager' => $this->_storeManagerMock,
-            'resource' => $this->_resourceMock,
-            'dateTime' => $this->_dateTimeMock,
-            'localeDate' => $this->_localeDateMock,
-            'eavConfig' => $this->_eavConfigMock,
-            'processor' => $this->_priceProcessorMock
-        ));
+        $this->_model = $this->_objectManager->getObject(
+            '\Magento\Catalog\Model\Indexer\Product\Price\Observer',
+            array(
+                'storeManager' => $this->_storeManagerMock,
+                'resource' => $this->_resourceMock,
+                'dateTime' => $this->_dateTimeMock,
+                'localeDate' => $this->_localeDateMock,
+                'eavConfig' => $this->_eavConfigMock,
+                'processor' => $this->_priceProcessorMock
+            )
+        );
     }
 
     public function testRefreshSpecialPrices()
@@ -100,63 +109,79 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $idsToProcess = array(1, 2, 3);
 
         $selectMock = $this->getMock('Magento\DB\Select', array(), array(), '', false);
-        $selectMock->expects($this->any())
-            ->method('from')
-            ->will($this->returnSelf());
-        $selectMock->expects($this->any())
-            ->method('where')
-            ->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('where')->will($this->returnSelf());
 
         $connectionMock = $this->getMock('Magento\DB\Adapter\AdapterInterface', array(), array(), '', false);
-        $connectionMock->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($selectMock));
-        $connectionMock->expects($this->any())
-            ->method('fetchCol')
-            ->with($selectMock, array('entity_id'))
-            ->will($this->returnValue($idsToProcess));
+        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
+        $connectionMock->expects(
+            $this->any()
+        )->method(
+            'fetchCol'
+        )->with(
+            $selectMock,
+            array('entity_id')
+        )->will(
+            $this->returnValue($idsToProcess)
+        );
 
-        $this->_resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($connectionMock));
+        $this->_resourceMock->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($connectionMock)
+        );
 
         $storeMock = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $storeMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
+        $storeMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $this->_storeManagerMock->expects($this->once())
-            ->method('getStores')
-            ->with(true)
-            ->will($this->returnValue(array($storeMock)));
+        $this->_storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStores'
+        )->with(
+            true
+        )->will(
+            $this->returnValue(array($storeMock))
+        );
 
-        $this->_localeDateMock->expects($this->once())
-            ->method('scopeTimeStamp')
-            ->with($storeMock)
-            ->will($this->returnValue(32000));
+        $this->_localeDateMock->expects(
+            $this->once()
+        )->method(
+            'scopeTimeStamp'
+        )->with(
+            $storeMock
+        )->will(
+            $this->returnValue(32000)
+        );
 
         $indexerMock = $this->getMock('Magento\Indexer\Model\Indexer', array(), array(), '', false);
-        $indexerMock->expects($this->exactly(2))
-            ->method('reindexList');
+        $indexerMock->expects($this->exactly(2))->method('reindexList');
 
-        $this->_priceProcessorMock->expects($this->exactly(2))
-            ->method('getIndexer')
-            ->will($this->returnValue($indexerMock));
+        $this->_priceProcessorMock->expects(
+            $this->exactly(2)
+        )->method(
+            'getIndexer'
+        )->will(
+            $this->returnValue($indexerMock)
+        );
 
         $attributeMock = $this->getMockForAbstractClass(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array(), '', false, true, true, array('__wakeup', 'getAttributeId')
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('__wakeup', 'getAttributeId')
         );
-        $attributeMock->expects($this->any())
-            ->method('getAttributeId')
-            ->will($this->returnValue(1));
+        $attributeMock->expects($this->any())->method('getAttributeId')->will($this->returnValue(1));
 
-        $this->_eavConfigMock->expects($this->any())
-            ->method('getAttribute')
-            ->will($this->returnValue($attributeMock));
+        $this->_eavConfigMock->expects($this->any())->method('getAttribute')->will($this->returnValue($attributeMock));
 
         $this->_model->refreshSpecialPrices();
     }
-
 }

@@ -99,10 +99,10 @@ class Attribute extends Action
         }
 
         /* Collect Data */
-        $inventoryData      = $this->getRequest()->getParam('inventory', array());
-        $attributesData     = $this->getRequest()->getParam('attributes', array());
-        $websiteRemoveData  = $this->getRequest()->getParam('remove_website_ids', array());
-        $websiteAddData     = $this->getRequest()->getParam('add_website_ids', array());
+        $inventoryData = $this->getRequest()->getParam('inventory', array());
+        $attributesData = $this->getRequest()->getParam('attributes', array());
+        $websiteRemoveData = $this->getRequest()->getParam('remove_website_ids', array());
+        $websiteAddData = $this->getRequest()->getParam('add_website_ids', array());
 
         /* Prepare inventory data item options (use config settings) */
         $options = $this->_objectManager->get('Magento\CatalogInventory\Helper\Data')->getConfigItemOptions();
@@ -114,25 +114,30 @@ class Attribute extends Action
 
         try {
             if ($attributesData) {
-                $dateFormat = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')
-                    ->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-                $storeId    = $this->_helper->getSelectedStoreId();
+                $dateFormat = $this->_objectManager->get(
+                    'Magento\Stdlib\DateTime\TimezoneInterface'
+                )->getDateFormat(
+                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                );
+                $storeId = $this->_helper->getSelectedStoreId();
 
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
-                        ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                    $attribute = $this->_objectManager->get(
+                        'Magento\Eav\Model\Config'
+                    )->getAttribute(
+                        \Magento\Catalog\Model\Product::ENTITY,
+                        $attributeCode
+                    );
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;
                     }
                     if ($attribute->getBackendType() == 'datetime') {
                         if (!empty($value)) {
-                            $filterInput    = new \Zend_Filter_LocalizedToNormalized(array(
-                                'date_format' => $dateFormat
-                            ));
-                            $filterInternal = new \Zend_Filter_NormalizedToLocalized(array(
-                                'date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT
-                            ));
+                            $filterInput = new \Zend_Filter_LocalizedToNormalized(array('date_format' => $dateFormat));
+                            $filterInternal = new \Zend_Filter_NormalizedToLocalized(
+                                array('date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
+                            );
                             $value = $filterInternal->filter($filterInput->filter($value));
                         } else {
                             $value = null;
@@ -152,8 +157,13 @@ class Attribute extends Action
                     }
                 }
 
-                $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-                    ->updateAttributes($this->_helper->getProductIds(), $attributesData, $storeId);
+                $this->_objectManager->get(
+                    'Magento\Catalog\Model\Product\Action'
+                )->updateAttributes(
+                    $this->_helper->getProductIds(),
+                    $attributesData,
+                    $storeId
+                );
             }
             if ($inventoryData) {
                 $stockItem = $this->_objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
@@ -162,8 +172,7 @@ class Attribute extends Action
 
                 foreach ($this->_helper->getProductIds() as $productId) {
                     $stockItem->setData(array());
-                    $stockItem->loadByProduct($productId)
-                        ->setProductId($productId);
+                    $stockItem->loadByProduct($productId)->setProductId($productId);
 
                     $stockDataChanged = false;
                     foreach ($inventoryData as $k => $v) {
@@ -179,7 +188,9 @@ class Attribute extends Action
                 }
 
                 if ($stockItemSaved) {
-                    $this->_objectManager->get('Magento\Index\Model\Indexer')->indexEvents(
+                    $this->_objectManager->get(
+                        'Magento\Index\Model\Indexer'
+                    )->indexEvents(
                         \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
                         \Magento\Index\Model\Event::TYPE_SAVE
                     );
@@ -189,7 +200,7 @@ class Attribute extends Action
             if ($websiteAddData || $websiteRemoveData) {
                 /* @var $actionModel \Magento\Catalog\Model\Product\Action */
                 $actionModel = $this->_objectManager->get('Magento\Catalog\Model\Product\Action');
-                $productIds  = $this->_helper->getProductIds();
+                $productIds = $this->_helper->getProductIds();
 
                 if ($websiteRemoveData) {
                     $actionModel->updateWebsites($productIds, $websiteRemoveData, 'remove');
@@ -198,13 +209,14 @@ class Attribute extends Action
                     $actionModel->updateWebsites($productIds, $websiteAddData, 'add');
                 }
 
-                $this->_eventManager->dispatch('catalog_product_to_website_change', array(
-                    'products' => $productIds
-                ));
+                $this->_eventManager->dispatch('catalog_product_to_website_change', array('products' => $productIds));
 
                 $this->messageManager->addNotice(
-                    __('Please refresh "Catalog URL Rewrites" and "Product Attributes" in System -> '
-                        . '<a href="%1">Index Management</a>.', $this->getUrl('adminhtml/process/list'))
+                    __(
+                        'Please refresh "Catalog URL Rewrites" and "Product Attributes" in System -> ' .
+                        '<a href="%1">Index Management</a>.',
+                        $this->getUrl('adminhtml/process/list')
+                    )
                 );
             }
 
@@ -214,8 +226,10 @@ class Attribute extends Action
 
             $this->_productFlatIndexerProcessor->reindexList($this->_helper->getProductIds());
 
-            if ($this->_catalogProduct->isDataForPriceIndexerWasChanged($attributesData)
-                || !empty($websiteRemoveData) || !empty($websiteAddData)) {
+            if ($this->_catalogProduct->isDataForPriceIndexerWasChanged(
+                $attributesData
+            ) || !empty($websiteRemoveData) || !empty($websiteAddData)
+            ) {
                 $this->_productPriceIndexerProcessor->reindexList($this->_helper->getProductIds());
             }
         } catch (\Magento\Core\Exception $e) {
@@ -227,7 +241,7 @@ class Attribute extends Action
             );
         }
 
-        $this->_redirect('catalog/product/', array('store'=>$this->_helper->getSelectedStoreId()));
+        $this->_redirect('catalog/product/', array('store' => $this->_helper->getSelectedStoreId()));
     }
 
     /**
@@ -247,7 +261,7 @@ class Attribute extends Action
 
         if ($error) {
             $this->messageManager->addError($error);
-            $this->_redirect('catalog/product/', array('_current'=>true));
+            $this->_redirect('catalog/product/', array('_current' => true));
         }
 
         return !$error;
@@ -276,8 +290,12 @@ class Attribute extends Action
         try {
             if ($attributesData) {
                 foreach ($attributesData as $attributeCode => $value) {
-                    $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
-                        ->getAttribute('catalog_product', $attributeCode);
+                    $attribute = $this->_objectManager->get(
+                        'Magento\Eav\Model\Config'
+                    )->getAttribute(
+                        'catalog_product',
+                        $attributeCode
+                    );
                     if (!$attribute->getAttributeId()) {
                         unset($attributesData[$attributeCode]);
                         continue;
@@ -294,8 +312,10 @@ class Attribute extends Action
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager
-                ->addException($e, __('Something went wrong while updating the product(s) attributes.'));
+            $this->messageManager->addException(
+                $e,
+                __('Something went wrong while updating the product(s) attributes.')
+            );
             $this->_view->getLayout()->initMessages();
             $response->setError(true);
             $response->setMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());

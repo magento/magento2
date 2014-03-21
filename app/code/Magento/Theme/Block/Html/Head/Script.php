@@ -21,8 +21,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html\Head;
+
 use Magento\Theme\Block\Html\Head\AssetBlockInterface;
 
 /**
@@ -42,10 +42,9 @@ class Script extends \Magento\View\Element\AbstractBlock implements AssetBlockIn
     ) {
         parent::__construct($context, $data);
         $this->setAsset(
-            $viewFileFactory->create(array(
-                'file' => (string)$this->getFile(),
-                'contentType' => \Magento\View\Publisher::CONTENT_TYPE_JS
-            ))
+            $viewFileFactory->create(
+                array('file' => (string)$this->getFile(), 'contentType' => \Magento\View\Publisher::CONTENT_TYPE_JS)
+            )
         );
     }
 

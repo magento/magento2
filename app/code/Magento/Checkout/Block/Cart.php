@@ -34,6 +34,11 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_catalogUrlBuilder;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @var \Magento\Checkout\Helper\Cart
      */
     protected $_cartHelper;
@@ -45,6 +50,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -54,12 +60,14 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder,
         \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_cartHelper = $cartHelper;
         $this->_catalogUrlBuilder = $catalogUrlBuilder;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
     }
 
     /**
@@ -83,16 +91,16 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         $products = array();
         /* @var $item \Magento\Sales\Model\Quote\Item */
         foreach ($this->getItems() as $item) {
-            $product    = $item->getProduct();
-            $option     = $item->getOptionByCode('product_type');
+            $product = $item->getProduct();
+            $option = $item->getOptionByCode('product_type');
             if ($option) {
                 $product = $option->getProduct();
             }
 
-            if ($item->getStoreId() != $this->_storeManager->getStore()->getId()
-                && !$item->getRedirectUrl()
-                && !$product->isVisibleInSiteVisibility())
-            {
+            if ($item->getStoreId() != $this->_storeManager->getStore()->getId() &&
+                !$item->getRedirectUrl() &&
+                !$product->isVisibleInSiteVisibility()
+            ) {
                 $products[$product->getId()] = $item->getStoreId();
             }
         }
@@ -100,8 +108,8 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         if ($products) {
             $products = $this->_catalogUrlBuilder->getRewriteByProductStore($products);
             foreach ($this->getItems() as $item) {
-                $product    = $item->getProduct();
-                $option     = $item->getOptionByCode('product_type');
+                $product = $item->getProduct();
+                $option = $item->getOptionByCode('product_type');
                 if ($option) {
                     $product = $option->getProduct();
                 }
@@ -137,8 +145,9 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         $isActive = $this->_getData('is_wishlist_active');
         if ($isActive === null) {
-            $isActive = $this->_storeConfig->getConfig('wishlist/general/active')
-                && $this->_customerSession->isLoggedIn();
+            $isActive = $this->_storeConfig->getConfig(
+                'wishlist/general/active'
+            ) && $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
             $this->setIsWishlistActive($isActive);
         }
         return $isActive;
@@ -149,7 +158,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage', array('_secure'=>true));
+        return $this->getUrl('checkout/onepage', array('_secure' => true));
     }
 
     /**

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="catalog_category_view" label="Catalog Category"/>
     <type id="catalog_product_compare_index" label="Catalog Product Compare List"/>
     <type id="catalog_product_gallery" label="Catalog Product Image Gallery Popup"/>

@@ -36,7 +36,7 @@ class Converter implements \Magento\Config\ConverterInterface
         return array(
             'credit_cards' => $this->convertCreditCards($xpath),
             'groups' => $this->convertGroups($xpath),
-            'methods' => $this->convertMethods($xpath),
+            'methods' => $this->convertMethods($xpath)
         );
     }
 
@@ -71,7 +71,7 @@ class Converter implements \Magento\Config\ConverterInterface
         }
         uasort($creditCards, array($this, '_compareCcTypes'));
         $config = array();
-        foreach ($creditCards as $code=>$data) {
+        foreach ($creditCards as $code => $data) {
             $config[$code] = $data['name'];
         }
         return $config;

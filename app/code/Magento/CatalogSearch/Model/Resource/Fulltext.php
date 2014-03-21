@@ -35,35 +35,35 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_searchableAttributes     = null;
+    protected $_searchableAttributes = null;
 
     /**
      * Index values separator
      *
      * @var string
      */
-    protected $_separator                = '|';
+    protected $_separator = '|';
 
     /**
      * Array of \Magento\Stdlib\DateTime\DateInterface objects per store
      *
      * @var array
      */
-    protected $_dates                    = array();
+    protected $_dates = array();
 
     /**
      * Product Type Instances cache
      *
      * @var array
      */
-    protected $_productTypes             = array();
+    protected $_productTypes = array();
 
     /**
      * Product Emulators cache
      *
      * @var array
      */
-    protected $_productEmulators         = array();
+    protected $_productEmulators = array();
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
@@ -262,17 +262,17 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             $staticFields[] = $attribute->getAttributeCode();
         }
         $dynamicFields = array(
-            'int'       => array_keys($this->_getSearchableAttributes('int')),
-            'varchar'   => array_keys($this->_getSearchableAttributes('varchar')),
-            'text'      => array_keys($this->_getSearchableAttributes('text')),
-            'decimal'   => array_keys($this->_getSearchableAttributes('decimal')),
-            'datetime'  => array_keys($this->_getSearchableAttributes('datetime')),
+            'int' => array_keys($this->_getSearchableAttributes('int')),
+            'varchar' => array_keys($this->_getSearchableAttributes('varchar')),
+            'text' => array_keys($this->_getSearchableAttributes('text')),
+            'decimal' => array_keys($this->_getSearchableAttributes('decimal')),
+            'datetime' => array_keys($this->_getSearchableAttributes('datetime'))
         );
 
         // status and visibility filter
-        $visibility     = $this->_getSearchableAttribute('visibility');
-        $status         = $this->_getSearchableAttribute('status');
-        $statusVals     = $this->_catalogProductStatus->getVisibleStatusIds();
+        $visibility = $this->_getSearchableAttribute('visibility');
+        $status = $this->_getSearchableAttribute('status');
+        $statusVals = $this->_catalogProductStatus->getVisibleStatusIds();
         $allowedVisibility = $this->_engineProvider->get()->getAllowedVisibility();
 
         $lastProductId = 0;
@@ -283,7 +283,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             $productAttributes = array();
-            $productRelations  = array();
+            $productRelations = array();
             foreach ($products as $productData) {
                 $lastProductId = $productData['entity_id'];
                 $productAttributes[$productData['entity_id']] = $productData['entity_id'];
@@ -296,7 +296,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
                 }
             }
 
-            $productIndexes    = array();
+            $productIndexes = array();
             $productAttributes = $this->_getProductAttributes($storeId, $productAttributes, $dynamicFields);
             foreach ($products as $productData) {
                 if (!isset($productAttributes[$productData['entity_id']])) {
@@ -304,8 +304,12 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
                 }
 
                 $productAttr = $productAttributes[$productData['entity_id']];
-                if (!isset($productAttr[$visibility->getId()])
-                    || !in_array($productAttr[$visibility->getId()], $allowedVisibility)
+                if (!isset(
+                    $productAttr[$visibility->getId()]
+                ) || !in_array(
+                    $productAttr[$visibility->getId()],
+                    $allowedVisibility
+                )
                 ) {
                     continue;
                 }
@@ -313,9 +317,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
                     continue;
                 }
 
-                $productIndex = array(
-                    $productData['entity_id'] => $productAttr
-                );
+                $productIndex = array($productData['entity_id'] => $productAttr);
 
                 $productChildren = $productRelations[$productData['entity_id']];
                 if ($productChildren) {
@@ -350,42 +352,36 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param int $limit
      * @return array
      */
-    protected function _getSearchableProducts($storeId, array $staticFields, $productIds = null, $lastProductId = 0,
+    protected function _getSearchableProducts(
+        $storeId,
+        array $staticFields,
+        $productIds = null,
+        $lastProductId = 0,
         $limit = 100
     ) {
-        $websiteId      = $this->_storeManager->getStore($storeId)->getWebsiteId();
-        $writeAdapter   = $this->_getWriteAdapter();
+        $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
+        $writeAdapter = $this->_getWriteAdapter();
 
-        $select = $writeAdapter->select()
-            ->useStraightJoin(true)
-            ->from(
-                array('e' => $this->getTable('catalog_product_entity')),
-                array_merge(array('entity_id', 'type_id'), $staticFields)
-            )
-            ->join(
-                array('website' => $this->getTable('catalog_product_website')),
-                $writeAdapter->quoteInto(
-                    'website.product_id=e.entity_id AND website.website_id=?',
-                    $websiteId
-                ),
-                array()
-            )
-            ->join(
-                array('stock_status' => $this->getTable('cataloginventory_stock_status')),
-                $writeAdapter->quoteInto(
-                    'stock_status.product_id=e.entity_id AND stock_status.website_id=?',
-                    $websiteId
-                ),
-                array('in_stock' => 'stock_status')
-            );
+        $select = $writeAdapter->select()->useStraightJoin(
+            true
+        )->from(
+            array('e' => $this->getTable('catalog_product_entity')),
+            array_merge(array('entity_id', 'type_id'), $staticFields)
+        )->join(
+            array('website' => $this->getTable('catalog_product_website')),
+            $writeAdapter->quoteInto('website.product_id=e.entity_id AND website.website_id=?', $websiteId),
+            array()
+        )->join(
+            array('stock_status' => $this->getTable('cataloginventory_stock_status')),
+            $writeAdapter->quoteInto('stock_status.product_id=e.entity_id AND stock_status.website_id=?', $websiteId),
+            array('in_stock' => 'stock_status')
+        );
 
         if (!is_null($productIds)) {
             $select->where('e.entity_id IN(?)', $productIds);
         }
 
-        $select->where('e.entity_id>?', $lastProductId)
-            ->limit($limit)
-            ->order('e.entity_id');
+        $select->where('e.entity_id>?', $lastProductId)->limit($limit)->order('e.entity_id');
 
         $result = $writeAdapter->fetchAll($select);
 
@@ -412,17 +408,17 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
         } else {
             // Optimized deletion only product-related records
             /** @var $select \Magento\DB\Select */
-            $select  = $adapter->select()
-                ->from(array('r' => $this->getTable('catalogsearch_result')), null)
-                ->join(
-                    array('q' => $this->getTable('catalogsearch_query')),
-                    'q.query_id=r.query_id',
-                    array()
-                )
-                ->join(
-                    array('res' => $this->getTable('catalogsearch_result')),
-                    'q.query_id=res.query_id',
-                    array()
+            $select = $adapter->select()->from(
+                array('r' => $this->getTable('catalogsearch_result')),
+                null
+            )->join(
+                array('q' => $this->getTable('catalogsearch_query')),
+                'q.query_id=r.query_id',
+                array()
+            )->join(
+                array('res' => $this->getTable('catalogsearch_result')),
+                'q.query_id=res.query_id',
+                array()
             );
             if (!empty($storeId)) {
                 $select->where('q.store_id = ?', $storeId);
@@ -434,7 +430,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             $adapter->query($query);
 
             /** @var $select \Magento\DB\Select */
-            $select  = $adapter->select();
+            $select = $adapter->select();
             $subSelect = $adapter->select()->from(array('res' => $this->getTable('catalogsearch_result')), null);
             $select->exists($subSelect, 'res.query_id=' . $this->getTable('catalogsearch_query') . '.query_id', false);
 
@@ -480,14 +476,14 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
 
             $bind = array();
             $like = array();
-            $likeCond  = '';
-            if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE
-                || $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
+            $likeCond = '';
+            if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE ||
+                $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
             ) {
-                $words = $this->filter->splitWords($queryText, array(
-                    'uniqueOnly' => true,
-                    'wordsQty' => $query->getMaxQueryWords()
-                ));
+                $words = $this->filter->splitWords(
+                    $queryText,
+                    array('uniqueOnly' => true, 'wordsQty' => $query->getMaxQueryWords())
+                );
                 foreach ($words as $word) {
                     $like[] = $this->_resourceHelper->getCILike('s.data_index', $word, array('position' => 'any'));
                 }
@@ -496,20 +492,22 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
                 }
             }
             $mainTableAlias = 's';
-            $fields = array(
-                'query_id' => new \Zend_Db_Expr($query->getId()),
-                'product_id',
+            $fields = array('query_id' => new \Zend_Db_Expr($query->getId()), 'product_id');
+            $select = $adapter->select()->from(
+                array($mainTableAlias => $this->getMainTable()),
+                $fields
+            )->joinInner(
+                array('e' => $this->getTable('catalog_product_entity')),
+                'e.entity_id = s.product_id',
+                array()
+            )->where(
+                $mainTableAlias . '.store_id = ?',
+                (int)$query->getStoreId()
             );
-            $select = $adapter->select()
-                ->from(array($mainTableAlias => $this->getMainTable()), $fields)
-                ->joinInner(array('e' => $this->getTable('catalog_product_entity')),
-                    'e.entity_id = s.product_id',
-                    array())
-                ->where($mainTableAlias.'.store_id = ?', (int)$query->getStoreId());
 
             $where = '';
-            if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_FULLTEXT
-                || $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
+            if ($searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_FULLTEXT ||
+                $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE
             ) {
                 $preparedTerms = $this->_resourceHelper->prepareTerms($queryText, $query->getMaxQueryWords());
                 $bind[':query'] = implode(' ', $preparedTerms[0]);
@@ -517,9 +515,9 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             if ($likeCond != '' && $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE) {
-                    $where .= ($where ? ' OR ' : '') . $likeCond;
+                $where .= ($where ? ' OR ' : '') . $likeCond;
             } elseif ($likeCond != '' && $searchType == \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE) {
-                $select->columns(array('relevance'  => new \Zend_Db_Expr(0)));
+                $select->columns(array('relevance' => new \Zend_Db_Expr(0)));
                 $where = $likeCond;
             }
 
@@ -527,10 +525,12 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $select->where($where);
             }
 
-            $sql = $adapter->insertFromSelect($select,
+            $sql = $adapter->insertFromSelect(
+                $select,
                 $this->getTable('catalogsearch_result'),
                 array(),
-                \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE);
+                \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+            );
             $adapter->query($sql, $bind);
 
             $query->setIsProcessed(1);
@@ -569,14 +569,12 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
             $attributes = $productAttributes->getItems();
 
-            $this->_eventManager->dispatch('catelogsearch_searchable_attributes_load_after', array(
-                'engine' => $this->_engineProvider->get(),
-                'attributes' => $attributes
-            ));
+            $this->_eventManager->dispatch(
+                'catelogsearch_searchable_attributes_load_after',
+                array('engine' => $this->_engineProvider->get(), 'attributes' => $attributes)
+            );
 
-            $entity = $this->getEavConfig()
-                ->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
-                ->getEntity();
+            $entity = $this->getEavConfig()->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntity();
 
             foreach ($attributes as $attribute) {
                 $attribute->setEntity($entity);
@@ -650,28 +648,35 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getProductAttributes($storeId, array $productIds, array $attributeTypes)
     {
-        $result  = array();
+        $result = array();
         $selects = array();
         $adapter = $this->_getWriteAdapter();
         $ifStoreValue = $adapter->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $adapter->select()
-                    ->from(
-                        array('t_default' => $tableName),
-                        array('entity_id', 'attribute_id')
-                    )->joinLeft(
-                        array('t_store' => $tableName),
-                        $adapter->quoteInto(
-                            't_default.entity_id=t_store.entity_id' .
-                                ' AND t_default.attribute_id=t_store.attribute_id' .
-                                ' AND t_store.store_id=?',
-                            $storeId),
-                        array('value' => $this->_unifyField($ifStoreValue, $backendType))
-                    )->where('t_default.store_id=?', 0)
-                    ->where('t_default.attribute_id IN (?)', $attributeIds)
-                    ->where('t_default.entity_id IN (?)', $productIds);
+                $selects[] = $adapter->select()->from(
+                    array('t_default' => $tableName),
+                    array('entity_id', 'attribute_id')
+                )->joinLeft(
+                    array('t_store' => $tableName),
+                    $adapter->quoteInto(
+                        't_default.entity_id=t_store.entity_id' .
+                        ' AND t_default.attribute_id=t_store.attribute_id' .
+                        ' AND t_store.store_id=?',
+                        $storeId
+                    ),
+                    array('value' => $this->_unifyField($ifStoreValue, $backendType))
+                )->where(
+                    't_default.store_id=?',
+                    0
+                )->where(
+                    't_default.attribute_id IN (?)',
+                    $attributeIds
+                )->where(
+                    't_default.entity_id IN (?)',
+                    $productIds
+                );
             }
         }
 
@@ -712,16 +717,18 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _getProductChildIds($productId, $typeId)
     {
         $typeInstance = $this->_getProductTypeInstance($typeId);
-        $relation = $typeInstance->isComposite($this->_getProductEmulator($typeId))
-            ? $typeInstance->getRelationInfo()
-            : false;
+        $relation = $typeInstance->isComposite(
+            $this->_getProductEmulator($typeId)
+        ) ? $typeInstance->getRelationInfo() : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
-            $select = $this->_getReadAdapter()->select()
-                ->from(
-                    array('main' => $this->getTable($relation->getTable())),
-                    array($relation->getChildFieldName())
-                )->where($relation->getParentFieldName() . '=?', $productId);
+            $select = $this->_getReadAdapter()->select()->from(
+                array('main' => $this->getTable($relation->getTable())),
+                array($relation->getChildFieldName())
+            )->where(
+                $relation->getParentFieldName() . '=?',
+                $productId
+            );
             if (!is_null($relation->getWhere())) {
                 $select->where($relation->getWhere());
             }
@@ -741,8 +748,7 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         if (!isset($this->_productEmulators[$typeId])) {
             $productEmulator = new \Magento\Object();
-            $productEmulator->setIdFieldName('entity_id')
-                ->setTypeId($typeId);
+            $productEmulator->setIdFieldName('entity_id')->setTypeId($typeId);
             $this->_productEmulators[$typeId] = $productEmulator;
         }
         return $this->_productEmulators[$typeId];
@@ -794,9 +800,13 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         if (!$this->_engineProvider->get()->allowAdvancedIndex()) {
-            $product = $this->_getProductEmulator($productData['type_id'])
-                ->setId($productData['entity_id'])
-                ->setStoreId($storeId);
+            $product = $this->_getProductEmulator(
+                $productData['type_id']
+            )->setId(
+                $productData['entity_id']
+            )->setStoreId(
+                $storeId
+            );
             $typeInstance = $this->_getProductTypeInstance($productData['type_id']);
             $data = $typeInstance->getSearchableData($product);
             if ($data) {
@@ -830,10 +840,10 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
             if ($this->_engineProvider->get()->allowAdvancedIndex()) {
                 if ($attribute->getAttributeCode() == 'visibility') {
                     return $value;
-                } elseif (!($attribute->getIsVisibleInAdvancedSearch()
-                    || $attribute->getIsFilterable()
-                    || $attribute->getIsFilterableInSearch()
-                    || $attribute->getUsedForSortBy())
+                } elseif (!($attribute->getIsVisibleInAdvancedSearch() ||
+                    $attribute->getIsFilterable() ||
+                    $attribute->getIsFilterableInSearch() ||
+                    $attribute->getUsedForSortBy())
                 ) {
                     return null;
                 }
@@ -916,10 +926,8 @@ class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         if (!isset($this->_dates[$storeId])) {
             $timezone = $this->_coreStoreConfig->getConfig($this->_localeDate->getDefaultTimezonePath(), $storeId);
-            $locale   = $this->_coreStoreConfig->getConfig(
-                $this->_localeResolver->getDefaultLocalePath(), $storeId
-            );
-            $locale   = new \Zend_Locale($locale);
+            $locale = $this->_coreStoreConfig->getConfig($this->_localeResolver->getDefaultLocalePath(), $storeId);
+            $locale = new \Zend_Locale($locale);
 
             $dateObj = new \Magento\Stdlib\DateTime\Date(null, null, $locale);
             $dateObj->setTimezone($timezone);

@@ -59,15 +59,25 @@ class File extends \Magento\Data\Form\Element\File
         if ((string)$this->getValue()) {
             $label = __('Delete File');
             $html .= '<div>' . $this->getValue() . ' ';
-            $html .= '<input type="checkbox" name="' . parent::getName()
-                . '[delete]" value="1" class="checkbox" id="'
-                . $this->getHtmlId() . '_delete"'
-                . ($this->getDisabled() ? ' disabled="disabled"': '') . '/>';
-            $html .= '<label for="' . $this->getHtmlId() . '_delete"'
-                . ($this->getDisabled() ? ' class="disabled"' : '').'> '
-                . $label . '</label>';
-            $html .= '<input type="hidden" name="' . parent::getName()
-                . '[value]" value="' . $this->getValue() . '" />';
+            $html .= '<input type="checkbox" name="' .
+                parent::getName() .
+                '[delete]" value="1" class="checkbox" id="' .
+                $this->getHtmlId() .
+                '_delete"' .
+                ($this->getDisabled() ? ' disabled="disabled"' : '') .
+                '/>';
+            $html .= '<label for="' .
+                $this->getHtmlId() .
+                '_delete"' .
+                ($this->getDisabled() ? ' class="disabled"' : '') .
+                '> ' .
+                $label .
+                '</label>';
+            $html .= '<input type="hidden" name="' .
+                parent::getName() .
+                '[value]" value="' .
+                $this->getValue() .
+                '" />';
             $html .= '</div>';
         }
         return $html;

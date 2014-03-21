@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Config;
 
 /**
@@ -71,10 +70,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testDependenceHtml()
     {
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout', array('area' => 'adminhtml'));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Layout',
+            array('area' => 'adminhtml')
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
         /** @var $block \Magento\Backend\Block\System\Config\Form */
         $block = $layout->createBlock('Magento\Backend\Block\System\Config\Form', 'block');
 
@@ -96,47 +100,75 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @param bool $expectedUseDefault
      * @dataProvider initFieldsUseDefaultCheckboxDataProvider
      */
-    public function testInitFieldsUseDefaultCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue,
+    public function testInitFieldsUseDefaultCheckbox(
+        $useConfigField,
+        $isConfigDataEmpty,
+        $configDataValue,
         $expectedUseDefault
     ) {
         $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\System\Config\FormStub');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\System\Config\FormStub'
+        );
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_WEBSITES);
         $block->setStubConfigData($this->_configData);
         $block->initFields($fieldset, $this->_group, $this->_section);
 
         $fieldsetSel = 'fieldset';
-        $valueSel = sprintf('input#%s_%s_%s', $this->_section->getId(), $this->_group->getId(), $this->_field->getId());
+        $valueSel = sprintf(
+            'input#%s_%s_%s',
+            $this->_section->getId(),
+            $this->_group->getId(),
+            $this->_field->getId()
+        );
         $valueDisabledSel = sprintf('%s[disabled="disabled"]', $valueSel);
-        $useDefaultSel = sprintf('input#%s_%s_%s_inherit.checkbox', $this->_section->getId(), $this->_group->getId(),
-            $this->_field->getId());
+        $useDefaultSel = sprintf(
+            'input#%s_%s_%s_inherit.checkbox',
+            $this->_section->getId(),
+            $this->_group->getId(),
+            $this->_field->getId()
+        );
         $useDefaultCheckedSel = sprintf('%s[checked="checked"]', $useDefaultSel);
         $fieldsetHtml = $fieldset->getElementHtml();
 
         $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
         $this->assertSelectCount($valueSel, true, $fieldsetHtml, 'Field input not found in fieldset HTML');
-        $this->assertSelectCount($useDefaultSel, true, $fieldsetHtml,
-            '"Use Default" checkbox not found in fieldset HTML');
+        $this->assertSelectCount(
+            $useDefaultSel,
+            true,
+            $fieldsetHtml,
+            '"Use Default" checkbox not found in fieldset HTML'
+        );
 
         if ($expectedUseDefault) {
-            $this->assertSelectCount($useDefaultCheckedSel, true, $fieldsetHtml,
-                '"Use Default" checkbox should be checked');
-            $this->assertSelectCount($valueDisabledSel, true, $fieldsetHtml,
-                'Field input should be disabled');
+            $this->assertSelectCount(
+                $useDefaultCheckedSel,
+                true,
+                $fieldsetHtml,
+                '"Use Default" checkbox should be checked'
+            );
+            $this->assertSelectCount($valueDisabledSel, true, $fieldsetHtml, 'Field input should be disabled');
         } else {
-            $this->assertSelectCount($useDefaultCheckedSel, false, $fieldsetHtml,
-                '"Use Default" checkbox should not be checked');
-            $this->assertSelectCount($valueDisabledSel, false, $fieldsetHtml,
-                'Field input should not be disabled');
+            $this->assertSelectCount(
+                $useDefaultCheckedSel,
+                false,
+                $fieldsetHtml,
+                '"Use Default" checkbox should not be checked'
+            );
+            $this->assertSelectCount($valueDisabledSel, false, $fieldsetHtml, 'Field input should not be disabled');
         }
     }
 
@@ -166,21 +198,32 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
         $form = $this->_formFactory->create();
         $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\System\Config\FormStub');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\System\Config\FormStub'
+        );
         $block->setScope(\Magento\Backend\Block\System\Config\Form::SCOPE_DEFAULT);
         $block->setStubConfigData($this->_configData);
         $block->initFields($fieldset, $this->_group, $this->_section);
 
         $fieldsetSel = 'fieldset';
-        $valueSel = sprintf('input#%s_%s_%s', $this->_section->getId(), $this->_group->getId(), $this->_field->getId());
+        $valueSel = sprintf(
+            'input#%s_%s_%s',
+            $this->_section->getId(),
+            $this->_group->getId(),
+            $this->_field->getId()
+        );
         $fieldsetHtml = $fieldset->getElementHtml();
 
         $this->assertSelectCount($fieldsetSel, true, $fieldsetHtml, 'Fieldset HTML is invalid');
@@ -208,43 +251,51 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function _setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Core\Model\App::PARAM_BAN_CACHE => true,
-        ));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->loadAreaPart(
-                \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-                \Magento\Core\Model\App\Area::PART_CONFIG
-            );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(\Magento\Core\Model\App::PARAM_BAN_CACHE => true)
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\App'
+        )->loadAreaPart(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+            \Magento\Core\Model\App\Area::PART_CONFIG
+        );
 
-        $fileResolverMock = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
-                                ->disableOriginalConstructor()
-                                ->getMock();
+        $fileResolverMock = $this->getMockBuilder(
+            'Magento\Core\Model\Config\FileResolver'
+        )->disableOriginalConstructor()->getMock();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem');
         /** @var $directory  \Magento\Filesystem\Directory\Read */
         $directory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
-        $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Config\FileIteratorFactory');
-        $fileIterator = $fileIteratorFactory->create($directory, array(
-            $directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml')));
-        $fileResolverMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($fileIterator));
+        $fileIteratorFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\FileIteratorFactory'
+        );
+        $fileIterator = $fileIteratorFactory->create(
+            $directory,
+            array($directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml'))
+        );
+        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $structureReader = $objectManager->create(
-            'Magento\Backend\Model\Config\Structure\Reader', array('fileResolver' => $fileResolverMock)
+            'Magento\Backend\Model\Config\Structure\Reader',
+            array('fileResolver' => $fileResolverMock)
         );
         $structureData = $objectManager->create(
-            'Magento\Backend\Model\Config\Structure\Data', array('reader' => $structureReader)
+            'Magento\Backend\Model\Config\Structure\Data',
+            array('reader' => $structureReader)
         );
         /** @var \Magento\Backend\Model\Config\Structure $structure  */
-        $structure = $objectManager->create('Magento\Backend\Model\Config\Structure',
-            array('structureData' => $structureData));
+        $structure = $objectManager->create(
+            'Magento\Backend\Model\Config\Structure',
+            array('structureData' => $structureData)
+        );
 
         $this->_section = $structure->getElement('test_section');
 
@@ -266,13 +317,21 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testInitFormAddsFieldsets()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\ResponseInterface')->headersSentThrowsException = false;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface')
-            ->setParam('section', 'general');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\ResponseInterface'
+        )->headersSentThrowsException = false;
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\RequestInterface'
+        )->setParam(
+            'section',
+            'general'
+        );
         /** @var $block \Magento\Backend\Block\System\Config\Form */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\System\Config\Form');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\System\Config\Form'
+        );
         $block->initForm();
         $expectedIds = array(
             'general_country' => array(
@@ -304,11 +363,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'general_store_information_merchant_country' => 'select',
                 'general_store_information_merchant_vat_number' => 'text',
                 'general_store_information_validate_vat_number' => 'text',
-                'general_store_information_address' => 'textarea',
+                'general_store_information_address' => 'textarea'
             ),
-            'general_single_store_mode' => array(
-                'general_single_store_mode_enabled' => 'select',
-            )
+            'general_single_store_mode' => array('general_single_store_mode_enabled' => 'select')
         );
         $elements = $block->getForm()->getElements();
         foreach ($elements as $element) {
@@ -321,6 +378,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 $this->assertArrayHasKey($field->getId(), $expectedIds[$element->getId()]);
                 $this->assertEquals($expectedIds[$element->getId()][$field->getId()], $field->getType());
             }
-        };
+        }
     }
 }

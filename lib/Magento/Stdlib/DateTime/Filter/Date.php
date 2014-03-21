@@ -51,16 +51,15 @@ class Date implements \Zend_Filter_Interface
     /**
      * @param TimezoneInterface $localeDate
      */
-    public function __construct(
-        TimezoneInterface $localeDate
-    ) {
+    public function __construct(TimezoneInterface $localeDate)
+    {
         $this->_localeDate = $localeDate;
-        $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(array(
-            'date_format' => $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT)
-        ));
-        $this->_normalToLocalFilter = new \Zend_Filter_NormalizedToLocalized(array(
-            'date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT
-        ));
+        $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
+            array('date_format' => $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT))
+        );
+        $this->_normalToLocalFilter = new \Zend_Filter_NormalizedToLocalized(
+            array('date_format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT)
+        );
     }
 
     /**

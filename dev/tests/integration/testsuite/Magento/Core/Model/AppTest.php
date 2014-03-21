@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class AppTest extends \PHPUnit_Framework_TestCase
@@ -92,7 +91,6 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(\Magento\Core\Model\App::DISTRO_LOCALE_CODE, $this->_model->getDistroLocaleCode());
     }
 
-
     public function testGetBaseCurrencyCode()
     {
         $this->assertEquals('USD', $this->_model->getBaseCurrencyCode());
@@ -141,17 +139,15 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetResponse()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\ResponseInterface')->headersSentThrowsException = false;
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\ResponseInterface'
+        )->headersSentThrowsException = false;
         $this->assertInstanceOf('Magento\App\ResponseInterface', $this->_model->getResponse());
-        $expectedHeader = array(
-            'name' => 'Content-Type',
-            'value' => 'text/html; charset=UTF-8',
-            'replace' => false
-        );
+        $expectedHeader = array('name' => 'Content-Type', 'value' => 'text/html; charset=UTF-8', 'replace' => false);
         $this->assertContains($expectedHeader, $this->_model->getResponse()->getHeaders());
-        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\ResponseInterface');
+        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\ResponseInterface'
+        );
         $this->_model->setResponse($response);
         $this->assertSame($response, $this->_model->getResponse());
         $this->assertEmpty($this->_model->getResponse()->getHeaders());

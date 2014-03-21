@@ -25,26 +25,25 @@
  */
 require __DIR__ . '/../../../bootstrap.php';
 $rootDir = realpath(__DIR__ . '/../../../../../');
-use Magento\Tools\Di\Compiler\Log\Log,
-    Magento\Tools\Di\Compiler\Log\Writer,
-    Magento\Tools\Di\Compiler\Directory,
-    Magento\Tools\Di\Code\Scanner,
-    Magento\Tools\Di\Definition\Compressor,
-    Magento\Tools\Di\Definition\Serializer;
+use Magento\Tools\Di\Compiler\Log\Log;
+use Magento\Tools\Di\Compiler\Log\Writer;
+use Magento\Tools\Di\Compiler\Directory;
+use Magento\Tools\Di\Code\Scanner;
+use Magento\Tools\Di\Definition\Compressor;
+use Magento\Tools\Di\Definition\Serializer;
 
-$filePatterns = array(
-    'php' => '/.*\.php$/',
-    'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/',
-);
+$filePatterns = array('php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/');
 $codeScanDir = realpath($rootDir . '/app');
 try {
-    $opt = new Zend_Console_Getopt(array(
-        'serializer=w' => 'serializer function that should be used (serialize|binary) default = serialize',
-        'verbose|v' => 'output report after tool run',
-        'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
-        'generation=s' => 'absolute path to generated classes, <magento_root>/var/generation by default',
-        'di=s' => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
-    ));
+    $opt = new Zend_Console_Getopt(
+        array(
+            'serializer=w' => 'serializer function that should be used (serialize|binary) default = serialize',
+            'verbose|v' => 'output report after tool run',
+            'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
+            'generation=s' => 'absolute path to generated classes, <magento_root>/var/generation by default',
+            'di=s' => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
+        )
+    );
     $opt->parse();
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
@@ -55,19 +54,16 @@ try {
     $relationsFile = $diDir . '/relations.php';
     $pluginDefFile = $diDir . '/plugins.php';
 
-    $compilationDirs = array(
-        $rootDir . '/app/code',
-        $rootDir . '/lib/Magento',
-    );
+    $compilationDirs = array($rootDir . '/app/code', $rootDir . '/lib/Magento');
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
-    $logWriter   = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
+    $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
 
     /** @var Writer\WriterInterface $logWriter Writer model for error messages */
     $errorWriter = new Writer\Console();
 
     $log = new Log($logWriter, $errorWriter);
-    $serializer = ($opt->getOption('serializer') == 'binary') ? new Serializer\Igbinary() : new Serializer\Standard();
+    $serializer = $opt->getOption('serializer') == 'binary' ? new Serializer\Igbinary() : new Serializer\Standard();
 
     $validator = new \Magento\Code\Validator();
     $validator->add(new \Magento\Code\Validator\ConstructorIntegrity());
@@ -90,19 +86,17 @@ try {
     $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
 
     // 1.2 Generation of Factory and Additional Classes
-    $generatorIo = new \Magento\Code\Generator\Io(
-        new \Magento\Filesystem\Driver\File(),
+    $generatorIo = new \Magento\Code\Generator\Io(new \Magento\Filesystem\Driver\File(), null, $generationDir);
+    $generator = new \Magento\Code\Generator(
         null,
-        $generationDir
+        $generatorIo,
+        array(
+            \Magento\Interception\Code\Generator\Interceptor::ENTITY_TYPE =>
+                'Magento\Interception\Code\Generator\Interceptor',
+            \Magento\ObjectManager\Code\Generator\Proxy::ENTITY_TYPE => 'Magento\ObjectManager\Code\Generator\Proxy',
+            \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE => 'Magento\ObjectManager\Code\Generator\Factory'
+        )
     );
-    $generator = new \Magento\Code\Generator(null, $generatorIo, array(
-        \Magento\Interception\Code\Generator\Interceptor::ENTITY_TYPE
-            => 'Magento\Interception\Code\Generator\Interceptor',
-        \Magento\ObjectManager\Code\Generator\Proxy::ENTITY_TYPE
-            => 'Magento\ObjectManager\Code\Generator\Proxy',
-        \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
-            => 'Magento\ObjectManager\Code\Generator\Factory',
-    ));
     foreach (array('php', 'additional') as $type) {
         sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {
@@ -133,7 +127,10 @@ try {
     }
 
     $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
-    $entities['interceptors'] = $inheritanceScanner->collectEntities(get_declared_classes(), $entities['interceptors']);
+    $entities['interceptors'] = $inheritanceScanner->collectEntities(
+        get_declared_classes(),
+        $entities['interceptors']
+    );
 
     // 2.1.1 Generation of Proxy and Interceptor Classes
     foreach (array('interceptors', 'di') as $type) {
@@ -197,7 +194,6 @@ try {
     if ($log->hasError()) {
         exit(1);
     }
-
 } catch (Zend_Console_Getopt_Exception $e) {
     echo $e->getUsageMessage();
     echo 'Please, use quotes(") for wrapping strings.' . "\n";

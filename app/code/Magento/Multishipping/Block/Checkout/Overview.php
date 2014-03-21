@@ -78,9 +78,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     {
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
-            $headBlock->setTitle(
-                __('Review Order - %1', $headBlock->getDefaultTitle())
-            );
+            $headBlock->setTitle(__('Review Order - %1', $headBlock->getDefaultTitle()));
         }
         return parent::_prepareLayout();
     }
@@ -205,11 +203,10 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     {
         $totals = $address->getTotals();
         foreach ($totals as $total) {
-            if ($total->getCode()=='grand_total') {
+            if ($total->getCode() == 'grand_total') {
                 if ($address->getAddressType() == Address::TYPE_BILLING) {
                     $total->setTitle(__('Total'));
-                }
-                else {
+                } else {
                     $total->setTitle(__('Total for this address'));
                 }
             }
@@ -239,7 +236,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getEditShippingAddressUrl($address)
     {
-        return $this->getUrl('*/checkout_address/editShipping', array('id'=>$address->getCustomerAddressId()));
+        return $this->getUrl('*/checkout_address/editShipping', array('id' => $address->getCustomerAddressId()));
     }
 
     /**
@@ -248,7 +245,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getEditBillingAddressUrl($address)
     {
-        return $this->getUrl('*/checkout_address/editBilling', array('id'=>$address->getCustomerAddressId()));
+        return $this->getUrl('*/checkout_address/editBilling', array('id' => $address->getCustomerAddressId()));
     }
 
     /**
@@ -341,8 +338,21 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         if ($colspan === null) {
             $colspan = $this->_taxHelper->displayCartBothPrices() ? 5 : 3;
         }
-        $totals = $this->getChildBlock('totals')->setTotals($totals)->renderTotals('', $colspan)
-            . $this->getChildBlock('totals')->setTotals($totals)->renderTotals('footer', $colspan);
+        $totals = $this->getChildBlock(
+            'totals'
+        )->setTotals(
+            $totals
+        )->renderTotals(
+            '',
+            $colspan
+        ) . $this->getChildBlock(
+            'totals'
+        )->setTotals(
+            $totals
+        )->renderTotals(
+            'footer',
+            $colspan
+        );
         return $totals;
     }
 

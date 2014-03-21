@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Controller;
 
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -46,8 +45,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function listActionDesignDataProvider()
     {
-        return array(
-            'custom product design' => array(2, 'magento_blank'),
-        );
+        return array('custom product design' => array(2, 'magento_blank'));
     }
 }

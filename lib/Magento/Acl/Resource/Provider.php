@@ -39,10 +39,8 @@ class Provider implements ProviderInterface
      * @param \Magento\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
      */
-    public function __construct(
-        \Magento\Config\ReaderInterface $configReader,
-        TreeBuilder $resourceTreeBuilder
-    ) {
+    public function __construct(\Magento\Config\ReaderInterface $configReader, TreeBuilder $resourceTreeBuilder)
+    {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
     }
@@ -59,5 +57,4 @@ class Provider implements ProviderInterface
         }
         return array();
     }
-
 }

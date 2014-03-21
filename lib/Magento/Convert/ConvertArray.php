@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Convert;
 
 use Magento\Exception;
@@ -89,23 +88,21 @@ XML;
     private function _assocToXml(array $array, $rootName, \SimpleXMLElement &$xml)
     {
         $hasNumericKey = false;
-        $hasStringKey  = false;
+        $hasStringKey = false;
         foreach ($array as $key => $value) {
             if (!is_array($value)) {
                 if (is_string($key)) {
                     if ($key === $rootName) {
-                        throw new Exception(
-                            'Associative key must not be the same as its parent associative key.'
-                        );
+                        throw new Exception('Associative key must not be the same as its parent associative key.');
                     }
                     $hasStringKey = true;
-                    $xml->$key = $value;
+                    $xml->{$key} = $value;
                 } elseif (is_int($key)) {
                     $hasNumericKey = true;
                     $xml->{$rootName}[$key] = $value;
                 }
             } else {
-                self::_assocToXml($value, $key, $xml->$key);
+                self::_assocToXml($value, $key, $xml->{$key});
             }
         }
         if ($hasNumericKey && $hasStringKey) {

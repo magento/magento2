@@ -87,10 +87,7 @@ class Cctype implements \Magento\Option\ArrayInterface
 
         foreach ($this->_paymentConfig->getCcTypes() as $code => $name) {
             if (in_array($code, $allowed) || !count($allowed)) {
-                $options[] = array(
-                   'value' => $code,
-                   'label' => $name
-                );
+                $options[] = array('value' => $code, 'label' => $name);
             }
         }
 

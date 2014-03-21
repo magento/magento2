@@ -85,9 +85,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      */
     public function getSecureToken()
     {
-        return $this->_getOrder()
-            ->getPayment()
-            ->getAdditionalInformation('secure_token');
+        return $this->_getOrder()->getPayment()->getAdditionalInformation('secure_token');
     }
 
     /**
@@ -97,9 +95,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      */
     public function getSecureTokenId()
     {
-        return $this->_getOrder()
-            ->getPayment()
-            ->getAdditionalInformation('secure_token_id');
+        return $this->_getOrder()->getPayment()->getAdditionalInformation('secure_token_id');
     }
 
     /**
@@ -119,9 +115,7 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      */
     public function isTestMode()
     {
-        $mode = $this->_paymentData
-            ->getMethodInstance($this->_paymentMethodCode)
-            ->getConfigData('sandbox_flag');
-        return (bool) $mode;
+        $mode = $this->_paymentData->getMethodInstance($this->_paymentMethodCode)->getConfigData('sandbox_flag');
+        return (bool)$mode;
     }
 }

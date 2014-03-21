@@ -23,18 +23,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl\Db\Logger;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/AbstractLogger.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Logger/Factory.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Logger/Console.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Logger/File.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/AbstractLogger.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/Logger/Factory.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/Logger/Console.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/Logger/File.php';
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -57,10 +60,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function getLoggerDataProvider()
     {
-        return array(
-            array('console', null),
-            array('file', realpath(__DIR__ . '/../../../../../') . '/tmp') ,
-        );
+        return array(array('console', null), array('file', realpath(__DIR__ . '/../../../../../') . '/tmp'));
     }
 
     /**
@@ -71,7 +71,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetLogger($loggerType, $file)
     {
         $this->assertInstanceOf(
-            'Magento\Tools\Migration\Acl\Db\AbstractLogger', $this->_model->getLogger($loggerType, $file));
+            'Magento\Tools\Migration\Acl\Db\AbstractLogger',
+            $this->_model->getLogger($loggerType, $file)
+        );
     }
 
     /**
@@ -82,4 +84,3 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->_model->getLogger('invalid type');
     }
 }
-

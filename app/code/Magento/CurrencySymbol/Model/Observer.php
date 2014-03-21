@@ -45,9 +45,8 @@ class Observer
     /**
      * @param \Magento\CurrencySymbol\Helper\Data $currencySymbolData
      */
-    public function __construct(
-        \Magento\CurrencySymbol\Helper\Data $currencySymbolData
-    ) {
+    public function __construct(\Magento\CurrencySymbol\Helper\Data $currencySymbolData)
+    {
         $this->_currencySymbolData = $currencySymbolData;
     }
 

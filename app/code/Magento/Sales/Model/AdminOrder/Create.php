@@ -87,7 +87,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      *
      * @var boolean
      */
-    protected $_isValidate              = false;
+    protected $_isValidate = false;
 
     /**
      * Array of validate errors
@@ -284,11 +284,16 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      */
     public function initRuleData()
     {
-        $this->_coreRegistry->register('rule_data', new \Magento\Object(array(
-                'store_id'  => $this->_session->getStore()->getId(),
-                'website_id'  => $this->_session->getStore()->getWebsiteId(),
-                'customer_group_id' => $this->getCustomerGroupId(),
-            )));
+        $this->_coreRegistry->register(
+            'rule_data',
+            new \Magento\Object(
+                array(
+                    'store_id' => $this->_session->getStore()->getId(),
+                    'website_id' => $this->_session->getStore()->getWebsiteId(),
+                    'customer_group_id' => $this->getCustomerGroupId()
+                )
+            )
+        );
         return $this;
     }
 
@@ -313,9 +318,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     public function recollectCart()
     {
         if ($this->_needCollectCart === true) {
-            $this->getCustomerCart()
-                ->collectTotals()
-                ->save();
+            $this->getCustomerCart()->collectTotals()->save();
         }
         $this->setRecollect(true);
         return $this;
@@ -498,9 +501,11 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     protected function _initShippingAddressFromOrder(\Magento\Sales\Model\Order $order)
     {
         $orderShippingAddress = $order->getShippingAddress();
-        $quoteShippingAddress = $this->getQuote()->getShippingAddress()
-            ->setCustomerAddressId('')
-            ->setSameAsBilling($orderShippingAddress && $orderShippingAddress->getSameAsBilling());
+        $quoteShippingAddress = $this->getQuote()->getShippingAddress()->setCustomerAddressId(
+            ''
+        )->setSameAsBilling(
+            $orderShippingAddress && $orderShippingAddress->getSameAsBilling()
+        );
         $this->_objectCopyService->copyFieldsetToTarget(
             'sales_copy_order_shipping_address',
             'to_order',
@@ -522,9 +527,13 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             return $this;
         }
 
-        $product = $this->_objectManager->create('Magento\Catalog\Model\Product')
-            ->setStoreId($this->getSession()->getStoreId())
-            ->load($orderItem->getProductId());
+        $product = $this->_objectManager->create(
+            'Magento\Catalog\Model\Product'
+        )->setStoreId(
+            $this->getSession()->getStoreId()
+        )->load(
+            $orderItem->getProductId()
+        );
 
         if ($product->getId()) {
             $product->setSkipCheckRequiredOption(true);
@@ -538,19 +547,21 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             }
 
             if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
-                $item->addOption(new \Magento\Object(
+                $item->addOption(
+                    new \Magento\Object(
                         array(
                             'product' => $item->getProduct(),
                             'code' => 'additional_options',
                             'value' => serialize($additionalOptions)
                         )
-                    ));
+                    )
+                );
             }
 
-            $this->_eventManager->dispatch('sales_convert_order_item_to_quote_item', array(
-                    'order_item' => $orderItem,
-                    'quote_item' => $item
-                ));
+            $this->_eventManager->dispatch(
+                'sales_convert_order_item_to_quote_item',
+                array('order_item' => $orderItem, 'quote_item' => $item)
+            );
             return $item;
         }
 
@@ -573,8 +584,11 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         if ($customerId) {
             $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist');
             $this->_wishlist->loadByCustomer($customerId, true);
-            $this->_wishlist->setStore($this->getSession()->getStore())
-                ->setSharedStoreIds($this->getSession()->getStore()->getWebsite()->getStoreIds());
+            $this->_wishlist->setStore(
+                $this->getSession()->getStore()
+            )->setSharedStoreIds(
+                $this->getSession()->getStore()->getWebsite()->getStoreIds()
+            );
         } else {
             $this->_wishlist = false;
         }
@@ -659,12 +673,15 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             switch ($moveTo[0]) {
                 case 'order':
                     $info = $item->getBuyRequest();
-                    $info->setOptions($this->_prepareOptionsForRequest($item))
-                        ->setQty($qty);
+                    $info->setOptions($this->_prepareOptionsForRequest($item))->setQty($qty);
 
-                    $product = $this->_objectManager->create('Magento\Catalog\Model\Product')
-                        ->setStoreId($this->getQuote()->getStoreId())
-                        ->load($item->getProduct()->getId());
+                    $product = $this->_objectManager->create(
+                        'Magento\Catalog\Model\Product'
+                    )->setStoreId(
+                        $this->getQuote()->getStoreId()
+                    )->load(
+                        $item->getProduct()->getId()
+                    );
 
                     $product->setSkipCheckRequiredOption(true);
                     $newItem = $this->getQuote()->addProduct($product, $info);
@@ -680,23 +697,27 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                     $cart = $this->getCustomerCart();
                     if ($cart && is_null($item->getOptionByCode('additional_options'))) {
                         //options and info buy request
-                        $product = $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($this->getQuote()->getStoreId())
-                            ->load($item->getProduct()->getId());
+                        $product = $this->_objectManager->create(
+                            'Magento\Catalog\Model\Product'
+                        )->setStoreId(
+                            $this->getQuote()->getStoreId()
+                        )->load(
+                            $item->getProduct()->getId()
+                        );
 
                         $info = $item->getOptionByCode('info_buyRequest');
                         if ($info) {
-                            $info = new \Magento\Object(
-                                unserialize($info->getValue())
-                            );
+                            $info = new \Magento\Object(unserialize($info->getValue()));
                             $info->setQty($qty);
                             $info->setOptions($this->_prepareOptionsForRequest($item));
                         } else {
-                            $info = new \Magento\Object(array(
-                                'product_id' => $product->getId(),
-                                'qty' => $qty,
-                                'options' => $this->_prepareOptionsForRequest($item)
-                            ));
+                            $info = new \Magento\Object(
+                                array(
+                                    'product_id' => $product->getId(),
+                                    'qty' => $qty,
+                                    'options' => $this->_prepareOptionsForRequest($item)
+                                )
+                            );
                         }
 
                         $cartItem = $cart->addProduct($product, $info);
@@ -711,25 +732,37 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                 case 'wishlist':
                     $wishlist = null;
                     if (!isset($moveTo[1])) {
-                        $wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
-                            ->loadByCustomer($this->getSession()->getCustomerId(), true);
+                        $wishlist = $this->_objectManager->create(
+                            'Magento\Wishlist\Model\Wishlist'
+                        )->loadByCustomer(
+                            $this->getSession()->getCustomerId(),
+                            true
+                        );
                     } else {
                         $wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')->load($moveTo[1]);
-                        if (!$wishlist->getId() || $wishlist->getCustomerId() != $this->getSession()->getCustomerId()) {
+                        if (!$wishlist->getId() || $wishlist->getCustomerId() != $this->getSession()->getCustomerId()
+                        ) {
                             $wishlist = null;
                         }
                     }
                     if (!$wishlist) {
                         throw new \Magento\Core\Exception(__('We couldn\'t find this wish list.'));
                     }
-                    $wishlist->setStore($this->getSession()->getStore())
-                        ->setSharedStoreIds($this->getSession()->getStore()->getWebsite()->getStoreIds());
+                    $wishlist->setStore(
+                        $this->getSession()->getStore()
+                    )->setSharedStoreIds(
+                        $this->getSession()->getStore()->getWebsite()->getStoreIds()
+                    );
 
                     if ($wishlist->getId() && $item->getProduct()->isVisibleInSiteVisibility()) {
                         $info = $item->getBuyRequest();
-                        $info->setOptions($this->_prepareOptionsForRequest($item))
-                            ->setQty($qty)
-                            ->setStoreId($this->getSession()->getStoreId());
+                        $info->setOptions(
+                            $this->_prepareOptionsForRequest($item)
+                        )->setQty(
+                            $qty
+                        )->setStoreId(
+                            $this->getSession()->getStoreId()
+                        );
                         $wishlist->addNewItem($item->getProduct(), $info);
                         $removeItem = true;
                     }
@@ -778,8 +811,12 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         }
         if (isset($data['add_wishlist_item'])) {
             foreach ($data['add_wishlist_item'] as $itemId => $qty) {
-                $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')
-                    ->loadWithOptions($itemId, 'info_buyRequest');
+                $item = $this->_objectManager->create(
+                    'Magento\Wishlist\Model\Item'
+                )->loadWithOptions(
+                    $itemId,
+                    'info_buyRequest'
+                );
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
                 }
@@ -818,8 +855,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                 $cart = $this->getCustomerCart();
                 if ($cart) {
                     $cart->removeItem($itemId);
-                    $cart->collectTotals()
-                        ->save();
+                    $cart->collectTotals()->save();
                 }
                 break;
             case 'wishlist':
@@ -830,9 +866,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                 }
                 break;
             case 'compared':
-                $this->_objectManager->create('Magento\Catalog\Model\Product\Compare\Item')
-                    ->load($itemId)
-                    ->delete();
+                $this->_objectManager->create('Magento\Catalog\Model\Product\Compare\Item')->load($itemId)->delete();
                 break;
         }
         return $this;
@@ -863,17 +897,22 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      */
     public function addProduct($product, $config = 1)
     {
-        if (!is_array($config) && !($config instanceof \Magento\Object)) {
+        if (!is_array($config) && !$config instanceof \Magento\Object) {
             $config = array('qty' => $config);
         }
         $config = new \Magento\Object($config);
 
-        if (!($product instanceof \Magento\Catalog\Model\Product)) {
+        if (!$product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product;
-            $product = $this->_objectManager->create('Magento\Catalog\Model\Product')
-                ->setStore($this->getSession()->getStore())
-                ->setStoreId($this->getSession()->getStoreId())
-                ->load($product);
+            $product = $this->_objectManager->create(
+                'Magento\Catalog\Model\Product'
+            )->setStore(
+                $this->getSession()->getStore()
+            )->setStoreId(
+                $this->getSession()->getStoreId()
+            )->load(
+                $product
+            );
             if (!$product->getId()) {
                 throw new \Magento\Core\Exception(
                     __('We could not add a product to cart by the ID "%1".', $productId)
@@ -901,12 +940,12 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (double)$config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
-            } catch (\Magento\Core\Exception $e){
+            } catch (\Magento\Core\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e){
+            } catch (\Exception $e) {
                 return $e;
             }
         }
@@ -927,10 +966,10 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                 foreach ($data as $itemId => $info) {
                     if (!empty($info['configured'])) {
                         $item = $this->getQuote()->updateItem($itemId, new \Magento\Object($info));
-                        $itemQty = (float)$item->getQty();
+                        $itemQty = (double)$item->getQty();
                     } else {
-                        $item       = $this->getQuote()->getItemById($itemId);
-                        $itemQty    = (float)$info['qty'];
+                        $item = $this->getQuote()->getItemById($itemId);
+                        $itemQty = (double)$info['qty'];
                     }
 
                     if ($item) {
@@ -941,9 +980,9 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                                 $item->setIsQtyDecimal(1);
                             }
                         }
-                        $itemQty    = $itemQty > 0 ? $itemQty : 1;
+                        $itemQty = $itemQty > 0 ? $itemQty : 1;
                         if (isset($info['custom_price'])) {
-                            $itemPrice  = $this->_parseCustomPrice($info['custom_price']);
+                            $itemPrice = $this->_parseCustomPrice($info['custom_price']);
                         } else {
                             $itemPrice = null;
                         }
@@ -984,9 +1023,11 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
      */
     protected function _parseOptions(\Magento\Sales\Model\Quote\Item $item, $additionalOptions)
     {
-        $productOptions = $this->_objectManager->get('Magento\Catalog\Model\Product\Option\Type\DefaultType')
-            ->setProduct($item->getProduct())
-            ->getProductOptions();
+        $productOptions = $this->_objectManager->get(
+            'Magento\Catalog\Model\Product\Option\Type\DefaultType'
+        )->setProduct(
+            $item->getProduct()
+        )->getProductOptions();
 
         $newOptions = array();
         $newAdditionalOptions = array();
@@ -995,11 +1036,9 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             if (strlen(trim($_additionalOption))) {
                 try {
                     if (strpos($_additionalOption, ':') === false) {
-                        throw new \Magento\Core\Exception(
-                            __('There is an error in one of the option rows.')
-                        );
+                        throw new \Magento\Core\Exception(__('There is an error in one of the option rows.'));
                     }
-                    list($label,$value) = explode(':', $_additionalOption, 2);
+                    list($label, $value) = explode(':', $_additionalOption, 2);
                 } catch (\Exception $e) {
                     throw new \Magento\Core\Exception(__('There is an error in one of the option rows.'));
                 }
@@ -1013,34 +1052,30 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                     $optionId = $productOptions[$label]['option_id'];
                     $option = $item->getProduct()->getOptionById($optionId);
 
-                    $group = $this->_objectManager->get('Magento\Catalog\Model\Product\Option')
-                        ->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setProduct($item->getProduct());
+                    $group = $this->_objectManager->get(
+                        'Magento\Catalog\Model\Product\Option'
+                    )->groupFactory(
+                        $option->getType()
+                    )->setOption(
+                        $option
+                    )->setProduct(
+                        $item->getProduct()
+                    );
 
                     $parsedValue = $group->parseOptionValue($value, $productOptions[$label]['values']);
 
                     if ($parsedValue !== null) {
                         $newOptions[$optionId] = $parsedValue;
                     } else {
-                        $newAdditionalOptions[] = array(
-                            'label' => $label,
-                            'value' => $value
-                        );
+                        $newAdditionalOptions[] = array('label' => $label, 'value' => $value);
                     }
                 } else {
-                    $newAdditionalOptions[] = array(
-                        'label' => $label,
-                        'value' => $value
-                    );
+                    $newAdditionalOptions[] = array('label' => $label, 'value' => $value);
                 }
             }
         }
 
-        return array(
-            'options' => $newOptions,
-            'additional_options' => $newAdditionalOptions
-        );
+        return array('options' => $newOptions, 'additional_options' => $newAdditionalOptions);
     }
 
     /**
@@ -1055,7 +1090,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         $optionIds = $item->getOptionByCode('option_ids');
         if ($optionIds) {
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
-                $item->removeOption('option_'.$optionId);
+                $item->removeOption('option_' . $optionId);
             }
             $item->removeOption('option_ids');
         }
@@ -1064,32 +1099,38 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         }
         $item->save();
         if (!empty($options['options'])) {
-            $item->addOption(new \Magento\Object(
+            $item->addOption(
+                new \Magento\Object(
                     array(
                         'product' => $item->getProduct(),
                         'code' => 'option_ids',
                         'value' => implode(',', array_keys($options['options']))
                     )
-                ));
+                )
+            );
 
             foreach ($options['options'] as $optionId => $optionValue) {
-                $item->addOption(new \Magento\Object(
+                $item->addOption(
+                    new \Magento\Object(
                         array(
                             'product' => $item->getProduct(),
-                            'code' => 'option_'.$optionId,
+                            'code' => 'option_' . $optionId,
                             'value' => $optionValue
                         )
-                    ));
+                    )
+                );
             }
         }
         if (!empty($options['additional_options'])) {
-            $item->addOption(new \Magento\Object(
+            $item->addOption(
+                new \Magento\Object(
                     array(
                         'product' => $item->getProduct(),
                         'code' => 'additional_options',
                         'value' => serialize($options['additional_options'])
                     )
-                ));
+                )
+            );
         }
 
         return $this;
@@ -1108,12 +1149,17 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         if ($optionIds) {
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 $option = $item->getProduct()->getOptionById($optionId);
-                $optionValue = $item->getOptionByCode('option_'.$optionId)->getValue();
+                $optionValue = $item->getOptionByCode('option_' . $optionId)->getValue();
 
-                $group = $this->_objectManager->get('Magento\Catalog\Model\Product\Option')
-                    ->groupFactory($option->getType())
-                    ->setOption($option)
-                    ->setQuoteItem($item);
+                $group = $this->_objectManager->get(
+                    'Magento\Catalog\Model\Product\Option'
+                )->groupFactory(
+                    $option->getType()
+                )->setOption(
+                    $option
+                )->setQuoteItem(
+                    $item
+                );
 
                 $newInfoOptions[$optionId] = $group->prepareOptionValueForRequest($optionValue);
             }
@@ -1179,9 +1225,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         // need to merge region data with address data. This is going to be removed when we switch to use address Data
         // Object instead of the address model.
         // Note: if we use getRegion() here it will pull region from db using the region_id
-        $data = isset($data['region']) && is_array($data['region'])
-            ? array_merge($data, $data['region'])
-            : $data;
+        $data = isset($data['region']) && is_array($data['region']) ? array_merge($data, $data['region']) : $data;
 
         $addressForm = $this->_metadataFormFactory->create(
             CustomerMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
@@ -1189,13 +1233,13 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             $data,
             $isAjax,
             CustomerForm::DONT_IGNORE_INVISIBLE,
-            []
+            array()
         );
 
         // prepare request
         // save original request structure for files
         if ($address->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING) {
-            $requestData  = array('order' => array('shipping_address' => $data));
+            $requestData = array('order' => array('shipping_address' => $data));
             $requestScope = 'order/shipping_address';
         } else {
             $requestData = array('order' => array('billing_address' => $data));
@@ -1233,9 +1277,13 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     public function setShippingAddress($address)
     {
         if (is_array($address)) {
-            $shippingAddress = $this->_objectManager->create('Magento\Sales\Model\Quote\Address')
-                ->setData($address)
-                ->setAddressType(\Magento\Sales\Model\Quote\Address::TYPE_SHIPPING);
+            $shippingAddress = $this->_objectManager->create(
+                'Magento\Sales\Model\Quote\Address'
+            )->setData(
+                $address
+            )->setAddressType(
+                \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
+            );
             if (!$this->getQuote()->isVirtual()) {
                 $this->_setQuoteAddress($shippingAddress, $address);
             }
@@ -1243,7 +1291,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
              * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
              * that is why it should be added after _setQuoteAddress call
              */
-            $saveInAddressBook = (int)!empty($address['save_in_address_book']);
+            $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $shippingAddress->setData('save_in_address_book', $saveInAddressBook);
         }
         if ($address instanceof \Magento\Sales\Model\Quote\Address) {
@@ -1266,10 +1314,10 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     {
         if ($flag) {
             $tmpAddress = clone $this->getBillingAddress();
-            $tmpAddress->unsAddressId()
-                ->unsAddressType();
+            $tmpAddress->unsAddressId()->unsAddressType();
             $data = $tmpAddress->getData();
-            $data['save_in_address_book'] = 0; // Do not duplicate address (billing address will do saving too)
+            $data['save_in_address_book'] = 0;
+            // Do not duplicate address (billing address will do saving too)
             $this->getShippingAddress()->addData($data);
         }
         $this->getShippingAddress()->setSameAsBilling($flag);
@@ -1296,15 +1344,19 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     public function setBillingAddress($address)
     {
         if (is_array($address)) {
-            $billingAddress = $this->_objectManager->create('Magento\Sales\Model\Quote\Address')
-                ->setData($address)
-                ->setAddressType(\Magento\Sales\Model\Quote\Address::TYPE_BILLING);
+            $billingAddress = $this->_objectManager->create(
+                'Magento\Sales\Model\Quote\Address'
+            )->setData(
+                $address
+            )->setAddressType(
+                \Magento\Sales\Model\Quote\Address::TYPE_BILLING
+            );
             $this->_setQuoteAddress($billingAddress, $address);
             /**
              * save_in_address_book is not a valid attribute and is filtered out by _setQuoteAddress,
              * that is why it should be added after _setQuoteAddress call
              */
-            $saveInAddressBook = (int)!empty($address['save_in_address_book']);
+            $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $billingAddress->setData('save_in_address_book', $saveInAddressBook);
 
             if ($this->getShippingAddress()->getSameAsBilling()) {
@@ -1424,14 +1476,14 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         $data = $form->extractData($request);
         $data = $form->restoreData($data);
         $this->getQuote()->updateCustomerData($this->_customerBuilder->mergeDataObjectWithArray($customer, $data));
-        $data = [];
+        $data = array();
 
         $customerData = \Magento\Service\DataObjectConverter::toFlatArray($customer);
         foreach ($form->getAttributes() as $attribute) {
             $code = sprintf('customer_%s', $attribute->getAttributeCode());
-            $data[$code] = isset($customerData[$attribute->getAttributeCode()])
-                ? $customerData[$attribute->getAttributeCode()]
-                : null;
+            $data[$code] = isset(
+                $customerData[$attribute->getAttributeCode()]
+            ) ? $customerData[$attribute->getAttributeCode()] : null;
         }
 
         if (isset($data['customer_group_id'])) {
@@ -1503,8 +1555,10 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
     {
         $customerId = (int)$this->getSession()->getCustomerId();
         $customerData = $this->_customerAccountService->getCustomer($customerId);
-        return $customerData->getWebsiteId() == $store->getWebsiteId() ||
-            $this->_customerHelper->isCustomerInStore($customerData->getWebsiteId(), $store->getId());
+        return $customerData->getWebsiteId() == $store->getWebsiteId() || $this->_customerHelper->isCustomerInStore(
+            $customerData->getWebsiteId(),
+            $store->getId()
+        );
     }
 
     /**
@@ -1555,26 +1609,39 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         $customerDataObject = $this->getQuote()->getCustomerData();
         if ($customerDataObject->getId() && !$this->_customerIsInStore($store)) {
             /** Create a new customer record if it is not available in the specified store */
-            $customerDataObject = $this->_customerBuilder->populate($customerDataObject)
+            $customerDataObject = $this->_customerBuilder->populate(
+                $customerDataObject
                 /** Unset customer ID to ensure that new customer will be created */
-                ->setId(null)
-                ->setStoreId($store->getId())
-                ->setWebsiteId($store->getWebsiteId())
-                ->setCreatedAt(null)
-                ->create();
+            )->setId(
+                null
+            )->setStoreId(
+                $store->getId()
+            )->setWebsiteId(
+                $store->getWebsiteId()
+            )->setCreatedAt(
+                null
+            )->create();
             $customerDataObject = $this->_validateCustomerData($customerDataObject);
         } else if (!$customerDataObject->getId()) {
             /** Create new customer */
             $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddressData();
-            $customerDataObject = $this->_customerBuilder->populate($customerDataObject)
-                ->setSuffix($customerBillingAddressDataObject->getSuffix())
-                ->setFirstname($customerBillingAddressDataObject->getFirstname())
-                ->setLastname($customerBillingAddressDataObject->getLastname())
-                ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
-                ->setPrefix($customerBillingAddressDataObject->getPrefix())
-                ->setStoreId($store->getId())
-                ->setEmail($this->_getNewCustomerEmail())
-                ->create();
+            $customerDataObject = $this->_customerBuilder->populate(
+                $customerDataObject
+            )->setSuffix(
+                $customerBillingAddressDataObject->getSuffix()
+            )->setFirstname(
+                $customerBillingAddressDataObject->getFirstname()
+            )->setLastname(
+                $customerBillingAddressDataObject->getLastname()
+            )->setMiddlename(
+                $customerBillingAddressDataObject->getMiddlename()
+            )->setPrefix(
+                $customerBillingAddressDataObject->getPrefix()
+            )->setStoreId(
+                $store->getId()
+            )->setEmail(
+                $this->_getNewCustomerEmail()
+            )->create();
             $customerDataObject = $this->_validateCustomerData($customerDataObject);
         }
         if ($this->getBillingAddress()->getSaveInAddressBook()) {
@@ -1616,9 +1683,10 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             $existingAddressDataObject = $this->_customerAddressService->getAddress($quoteAddressId);
             /** Update customer address data */
             $customerAddressDataObject = $this->_customerAddressBuilder->mergeDataObjects(
-                $existingAddressDataObject, $customerAddressDataObject
+                $existingAddressDataObject,
+                $customerAddressDataObject
             );
-        } else if ($addressType == CustomerAddressDataObject::ADDRESS_TYPE_SHIPPING ) {
+        } elseif ($addressType == CustomerAddressDataObject::ADDRESS_TYPE_SHIPPING) {
             try {
                 $billingAddressDataObject = $this->_customerAddressService->getDefaultBillingAddress($customerId);
             } catch (\Exception $e) {
@@ -1627,28 +1695,31 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
             $isShippingAsBilling = $quoteCustomerAddress->getSameAsBilling();
             if (isset($billingAddressDataObject) && $isShippingAsBilling) {
                 /** Set existing billing address as default shipping */
-                $customerAddressDataObject = $this->_customerAddressBuilder
-                    ->populate($billingAddressDataObject)
-                    ->setDefaultShipping(true)
-                    ->create();
+                $customerAddressDataObject = $this->_customerAddressBuilder->populate(
+                    $billingAddressDataObject
+                )->setDefaultShipping(
+                    true
+                )->create();
             }
         }
 
         switch ($addressType) {
             case CustomerAddressDataObject::ADDRESS_TYPE_BILLING:
                 if (is_null($customerDataObject->getDefaultBilling())) {
-                    $customerAddressDataObject = $this->_customerAddressBuilder
-                        ->populate($customerAddressDataObject)
-                        ->setDefaultBilling(true)
-                        ->create();
+                    $customerAddressDataObject = $this->_customerAddressBuilder->populate(
+                        $customerAddressDataObject
+                    )->setDefaultBilling(
+                        true
+                    )->create();
                 }
                 break;
             case CustomerAddressDataObject::ADDRESS_TYPE_SHIPPING:
                 if (is_null($customerDataObject->getDefaultShipping())) {
-                    $customerAddressDataObject = $this->_customerAddressBuilder
-                        ->populate($customerAddressDataObject)
-                        ->setDefaultShipping(true)
-                        ->create();
+                    $customerAddressDataObject = $this->_customerAddressBuilder->populate(
+                        $customerAddressDataObject
+                    )->setDefaultShipping(
+                        true
+                    )->create();
                 }
                 break;
             default:
@@ -1701,11 +1772,11 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
                 $originalId = $oldOrder->getIncrementId();
             }
             $orderData = array(
-                'original_increment_id'     => $originalId,
-                'relation_parent_id'        => $oldOrder->getId(),
-                'relation_parent_real_id'   => $oldOrder->getIncrementId(),
-                'edit_increment'            => $oldOrder->getEditIncrement()+1,
-                'increment_id'              => $originalId.'-'.($oldOrder->getEditIncrement()+1)
+                'original_increment_id' => $originalId,
+                'relation_parent_id' => $oldOrder->getId(),
+                'relation_parent_real_id' => $oldOrder->getIncrementId(),
+                'edit_increment' => $oldOrder->getEditIncrement() + 1,
+                'increment_id' => $originalId . '-' . ($oldOrder->getEditIncrement() + 1)
             );
             $quote->setReservedOrderId($orderData['increment_id']);
             $service->setOrderData($orderData);
@@ -1802,7 +1873,7 @@ class Create extends \Magento\Object implements \Magento\Checkout\Model\Cart\Car
         if (empty($email)) {
             $host = $this->getSession()->getStore()->getConfig(self::XML_PATH_DEFAULT_EMAIL_DOMAIN);
             $account = time();
-            $email = $account.'@'. $host;
+            $email = $account . '@' . $host;
             $account = $this->getData('account');
             $account['email'] = $email;
             $this->setData('account', $account);

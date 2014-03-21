@@ -45,20 +45,33 @@ class Api
     public static function call(\PHPUnit_Framework_TestCase $testCase, $path, $params = array())
     {
         $soapAdapterMock = $testCase->getMock('Magento\Api\Model\Server\Adapter\Soap', array('fault'));
-        $soapAdapterMock->expects($testCase->any())->method('fault')->will(
+        $soapAdapterMock->expects(
+            $testCase->any()
+        )->method(
+            'fault'
+        )->will(
             $testCase->returnCallback(array(__CLASS__, 'soapAdapterFaultCallback'))
         );
 
         $serverMock = $testCase->getMock('Magento\Api\Model\Server', array('getAdapter'));
         $serverMock->expects($testCase->any())->method('getAdapter')->will($testCase->returnValue($soapAdapterMock));
 
-        $apiSessionMock = $testCase->getMock('Magento\Api\Model\Session', array('isAllowed', 'isLoggedIn'),
-            array(), '', false);
+        $apiSessionMock = $testCase->getMock(
+            'Magento\Api\Model\Session',
+            array('isAllowed', 'isLoggedIn'),
+            array(),
+            '',
+            false
+        );
         $apiSessionMock->expects($testCase->any())->method('isAllowed')->will($testCase->returnValue(true));
         $apiSessionMock->expects($testCase->any())->method('isLoggedIn')->will($testCase->returnValue(true));
 
-        $handlerMock = $testCase->getMock('Magento\Api\Model\Server\Handler\Soap',
-            array('_getServer', '_getSession'), array(), '', false
+        $handlerMock = $testCase->getMock(
+            'Magento\Api\Model\Server\Handler\Soap',
+            array('_getServer', '_getSession'),
+            array(),
+            '',
+            false
         );
         self::$_previousHandler = set_error_handler(array($handlerMock, 'handlePhpError'));
 
@@ -162,7 +175,7 @@ class Api
             foreach (get_object_vars($xml->children()) as $key => $node) {
                 $arrKey = $key;
                 if ($isTrimmed) {
-                    $arrKey = str_replace($keyTrimmer, '', $key); //, &$isTrimmed);
+                    $arrKey = str_replace($keyTrimmer, '', $key);
                 }
                 if (is_numeric($arrKey)) {
                     $arrKey = 'Obj' . $arrKey;
@@ -172,10 +185,7 @@ class Api
                 } elseif (is_array($node)) {
                     $result[$arrKey] = array();
                     foreach ($node as $nodeValue) {
-                        $result[$arrKey][] = self::simpleXmlToArray(
-                            $nodeValue,
-                            $keyTrimmer
-                        );
+                        $result[$arrKey][] = self::simpleXmlToArray($nodeValue, $keyTrimmer);
                     }
                 } else {
                     $result[$arrKey] = (string)$node;

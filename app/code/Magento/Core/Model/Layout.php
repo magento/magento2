@@ -261,7 +261,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         $this->argumentInterpreter = $argumentInterpreter;
         $this->_elementClass = 'Magento\View\Layout\Element';
         $this->setXml(simplexml_load_string('<layout/>', $this->_elementClass));
-        $this->_renderingOutput = new \Magento\Object;
+        $this->_renderingOutput = new \Magento\Object();
         $this->_scheduledStructure = $scheduledStructure;
         $this->_processorFactory = $processorFactory;
         $this->themeFactory = $themeFactory;
@@ -374,7 +374,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         while (false === $this->_scheduledStructure->isStructureEmpty()) {
             $this->_scheduleElement(key($this->_scheduledStructure->getStructure()));
-        };
+        }
         $this->_scheduledStructure->flushPaths();
 
         foreach ($this->_scheduledStructure->getListToMove() as $elementToMove) {
@@ -438,7 +438,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      */
     protected function _moveElementInStructure($element)
     {
-        list ($destination, $siblingName, $isAfter, $alias) = $this->_scheduledStructure->getElementToMove($element);
+        list($destination, $siblingName, $isAfter, $alias) = $this->_scheduledStructure->getElementToMove($element);
         if (!$alias && false === $this->_structure->getChildId($destination, $this->getElementAlias($element))) {
             $alias = $this->getElementAlias($element);
         }
@@ -532,7 +532,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                 Element::CONTAINER_OPT_HTML_TAG => (string)$node[Element::CONTAINER_OPT_HTML_TAG],
                 Element::CONTAINER_OPT_HTML_ID => (string)$node[Element::CONTAINER_OPT_HTML_ID],
                 Element::CONTAINER_OPT_HTML_CLASS => (string)$node[Element::CONTAINER_OPT_HTML_CLASS],
-                Element::CONTAINER_OPT_LABEL => (string)$node[Element::CONTAINER_OPT_LABEL],
+                Element::CONTAINER_OPT_LABEL => (string)$node[Element::CONTAINER_OPT_LABEL]
             );
         }
         $this->_scheduledStructure->setStructureElement($containerName, $element);
@@ -632,12 +632,12 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         // type, alias, parentName, siblingName, isAfter, node
         $row = array(
-            self::SCHEDULED_STRUCTURE_INDEX_NAME            => $node->getName(),
-            self::SCHEDULED_STRUCTURE_INDEX_ALIAS           => '',
-            self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME     => '',
-            self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME    => null,
-            self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER        => true,
-            self::SCHEDULED_STRUCTURE_INDEX_LAYOUT_ELEMENT  => $node
+            self::SCHEDULED_STRUCTURE_INDEX_NAME => $node->getName(),
+            self::SCHEDULED_STRUCTURE_INDEX_ALIAS => '',
+            self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME => '',
+            self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME => null,
+            self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER => true,
+            self::SCHEDULED_STRUCTURE_INDEX_LAYOUT_ELEMENT => $node
         );
 
         $parentName = $parent->getElementName();
@@ -645,10 +645,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             $row[self::SCHEDULED_STRUCTURE_INDEX_ALIAS] = (string)$node->getAttribute('as');
             $row[self::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME] = $parentName;
 
-            list(
-                $row[self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME],
-                $row[self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER]
-                ) = $this->_beforeAfterToSibling($node);
+            list($row[self::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME],
+                $row[self::SCHEDULED_STRUCTURE_INDEX_IS_AFTER]) = $this->_beforeAfterToSibling(
+                    $node
+                );
 
             // materialized path for referencing nodes in the plain array of _scheduledStructure
             if ($this->_scheduledStructure->hasPath($parentName)) {
@@ -739,12 +739,17 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
                 $this->_scheduleElement($parentName, $this->_scheduledStructure->getStructureElement($parentName));
             }
             if ($this->_structure->hasElement($parentName)) {
-                $this->_structure->setAsChild($name, $parentName, $alias);
+                try {
+                    $this->_structure->setAsChild($name, $parentName, $alias);
+                } catch (\Exception $e) {
+                    $this->_logger->log($e->getMessage());
+                }
             } else {
-                $this->_logger
-                    ->log("Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', "
-                        . 'because the latter doesn\'t exist', \Zend_Log::CRIT
-                    );
+                $this->_logger->log(
+                    "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
+                    'because the latter doesn\'t exist',
+                    \Zend_Log::CRIT
+                );
             }
         }
         $this->_scheduledStructure->unsetStructureElement($key);
@@ -847,8 +852,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         $arguments = $this->_evaluateArguments($args);
 
-        $block = $this->_createBlock($className, $elementName,
-            array('data' => $arguments));
+        $block = $this->_createBlock($className, $elementName, array('data' => $arguments));
 
         if (!empty($node['template'])) {
             $templateFileName = (string)$node['template'];
@@ -886,17 +890,35 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         unset($options[Element::CONTAINER_OPT_LABEL]);
         unset($options['type']);
         $allowedTags = array(
-            'dd', 'div', 'dl', 'fieldset', 'header', 'footer', 'hgroup', 'ol', 'p', 'section','table', 'tfoot', 'ul'
+            'dd',
+            'div',
+            'dl',
+            'fieldset',
+            'header',
+            'footer',
+            'hgroup',
+            'ol',
+            'p',
+            'section',
+            'table',
+            'tfoot',
+            'ul'
         );
-        if (!empty($options[Element::CONTAINER_OPT_HTML_TAG])
-            && !in_array($options[Element::CONTAINER_OPT_HTML_TAG], $allowedTags)
+        if (!empty($options[Element::CONTAINER_OPT_HTML_TAG]) && !in_array(
+            $options[Element::CONTAINER_OPT_HTML_TAG],
+            $allowedTags
+        )
         ) {
             throw new \Magento\Exception(
-                __('Html tag "%1" is forbidden for usage in containers. Consider to use one of the allowed: %2.',
-                $options[Element::CONTAINER_OPT_HTML_TAG], implode(', ', $allowedTags)));
+                __(
+                    'Html tag "%1" is forbidden for usage in containers. Consider to use one of the allowed: %2.',
+                    $options[Element::CONTAINER_OPT_HTML_TAG],
+                    implode(', ', $allowedTags)
+                )
+            );
         }
-        if (empty($options[Element::CONTAINER_OPT_HTML_TAG])
-            && (!empty($options[Element::CONTAINER_OPT_HTML_ID]) || !empty($options[Element::CONTAINER_OPT_HTML_CLASS]))
+        if (empty($options[Element::CONTAINER_OPT_HTML_TAG]) && (!empty($options[Element::CONTAINER_OPT_HTML_ID]) ||
+            !empty($options[Element::CONTAINER_OPT_HTML_CLASS]))
         ) {
             throw new \Magento\Exception('HTML ID or class will not have effect, if HTML tag is not specified.');
         }
@@ -994,11 +1016,11 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             if ($childName !== $sibling) {
                 $siblingParentName = $this->_structure->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
-                    $this->_logger
-                        ->log("Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but "
-                            . "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively.",
-                            \Zend_Log::CRIT
-                        );
+                    $this->_logger->log(
+                        "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
+                        "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively.",
+                        \Zend_Log::CRIT
+                    );
                     return;
                 }
                 $this->_structure->reorderToSibling($parentName, $childName, $sibling, $after ? 1 : -1);
@@ -1101,11 +1123,10 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             $this->_renderElementCache[$name] = $result;
         }
         $this->_renderingOutput->setData('output', $this->_renderElementCache[$name]);
-        $this->_eventManager->dispatch('core_layout_render_element', array(
-            'element_name' => $name,
-            'layout'       => $this,
-            'transport'    => $this->_renderingOutput,
-        ));
+        $this->_eventManager->dispatch(
+            'core_layout_render_element',
+            array('element_name' => $name, 'layout' => $this, 'transport' => $this->_renderingOutput)
+        );
         return $this->_renderingOutput->getData('output');
     }
 
@@ -1146,7 +1167,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
 
         $htmlClass = $this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_CLASS);
         if ($htmlClass) {
-            $htmlClass = ' class="'. $htmlClass . '"';
+            $htmlClass = ' class="' . $htmlClass . '"';
         }
 
         $htmlTag = $this->_structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG);
@@ -1546,9 +1567,8 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * @param array $data
      * @return $this
      */
-    public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template,
-        $data = array()
-    ) {
+    public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = array())
+    {
         if (!isset($namespace)) {
             $this->_renderers[$namespace] = array();
         }
@@ -1595,11 +1615,18 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
         if ($options = $this->getRendererOptions($namespace, $staticType, $dynamicType)) {
             $dictionary = array();
             /** @var $block \Magento\View\Element\Template */
-            $block = $this->createBlock($options['type'], '')
-                ->setData($data)
-                ->assign($dictionary)
-                ->setTemplate($options['template'])
-                ->assign($data);
+            $block = $this->createBlock(
+                $options['type'],
+                ''
+            )->setData(
+                $data
+            )->assign(
+                $dictionary
+            )->setTemplate(
+                $options['template']
+            )->assign(
+                $data
+            );
 
             echo $this->_renderBlock($block->getNameInLayout());
         }
@@ -1644,7 +1671,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      */
     public function isCacheable()
     {
-        return !(boolean)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
+        return !(bool)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
     }
 
     /**
@@ -1665,7 +1692,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      */
     public function setIsPrivate($isPrivate = true)
     {
-        $this->isPrivate = (bool) $isPrivate;
+        $this->isPrivate = (bool)$isPrivate;
         return $this;
     }
 }

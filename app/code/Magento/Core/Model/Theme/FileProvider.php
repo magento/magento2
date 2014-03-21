@@ -41,7 +41,7 @@ class FileProvider implements \Magento\View\Design\Theme\FileProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(\Magento\View\Design\ThemeInterface $theme, array $filters  = array())
+    public function getItems(\Magento\View\Design\ThemeInterface $theme, array $filters = array())
     {
         /** @var \Magento\View\Design\Theme\File\CollectionInterface $themeFiles */
         $themeFiles = $this->fileFactory->create();

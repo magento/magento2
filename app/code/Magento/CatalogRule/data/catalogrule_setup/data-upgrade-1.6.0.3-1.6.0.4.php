@@ -28,12 +28,16 @@
 $installer = $this->createMigrationSetup(array('resourceName' => 'core_setup'));
 $installer->startSetup();
 
-$installer->appendClassAliasReplace('catalogrule', 'conditions_serialized',
+$installer->appendClassAliasReplace(
+    'catalogrule',
+    'conditions_serialized',
     \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
     \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
     array('rule_id')
 );
-$installer->appendClassAliasReplace('catalogrule', 'actions_serialized',
+$installer->appendClassAliasReplace(
+    'catalogrule',
+    'actions_serialized',
     \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
     \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
     array('rule_id')

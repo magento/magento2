@@ -45,13 +45,12 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             array('/root/node_one/subnode')
         );
         $this->_model = new \Magento\Config\Converter\Dom\Flat($arrayNodeConfig);
-        $this->_fixturePath = realpath(__DIR__ . '/../../')
-            . '/_files/converter/dom/flat/';
+        $this->_fixturePath = realpath(__DIR__ . '/../../') . '/_files/converter/dom/flat/';
     }
 
     public function testConvert()
     {
-        $expected = require ($this->_fixturePath . 'result.php');
+        $expected = require $this->_fixturePath . 'result.php';
 
         $dom = new \DOMDocument();
         $dom->load($this->_fixturePath . 'source.xml');

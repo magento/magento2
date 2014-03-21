@@ -126,27 +126,28 @@ class Account extends GenericMetadata
         $form->setHtmlIdPrefix('_account');
         $form->setFieldNameSuffix('account');
 
-        $fieldset = $form->addFieldset('base_fieldset', array(
-            'legend' => __('Account Information')
-        ));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Account Information')));
 
         $customerData = $this->_backendSession->getCustomerData();
         $customerId = isset($customerData['customer_id']) ? $customerData['customer_id'] : false;
-        $accountData = isset($customerData['account']) ? $customerData['account'] : [];
+        $accountData = isset($customerData['account']) ? $customerData['account'] : array();
         $customerDataObject = $this->_customerBuilder->populateWithArray($accountData)->create();
 
         $customerForm = $this->_initCustomerForm($customerDataObject);
         $attributes = $this->_initCustomerAttributes($customerForm);
         $this->_setFieldset($attributes, $fieldset, array(self::DISABLE_ATTRIBUTE_NAME));
 
-        $form->getElement('group_id')
-            ->setRenderer(
-                $this->getLayout()
-                    ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
-                    ->setDisableAutoGroupChangeAttribute($customerForm->getAttribute(self::DISABLE_ATTRIBUTE_NAME))
-                    ->setDisableAutoGroupChangeAttributeValue($customerDataObject
-                            ->getCustomAttribute(self::DISABLE_ATTRIBUTE_NAME))
-            );
+        $form->getElement(
+            'group_id'
+        )->setRenderer(
+            $this->getLayout()->createBlock(
+                'Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group'
+            )->setDisableAutoGroupChangeAttribute(
+                $customerForm->getAttribute(self::DISABLE_ATTRIBUTE_NAME)
+            )->setDisableAutoGroupChangeAttributeValue(
+                $customerDataObject->getCustomAttribute(self::DISABLE_ATTRIBUTE_NAME)
+            )
+        );
 
         $customerStoreId = $customerDataObject->getStoreId();
 
@@ -212,9 +213,9 @@ class Account extends GenericMetadata
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'file'      => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
-            'image'     => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
-            'boolean'   => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean',
+            'file' => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
+            'image' => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
+            'boolean' => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean'
         );
     }
 
@@ -244,8 +245,11 @@ class Account extends GenericMetadata
      */
     protected function _initCustomerForm(\Magento\Customer\Service\V1\Data\Customer $customer)
     {
-        return $this->_customerFormFactory->create('customer', 'adminhtml_customer',
-            \Magento\Service\DataObjectConverter::toFlatArray($customer));
+        return $this->_customerFormFactory->create(
+            'customer',
+            'adminhtml_customer',
+            \Magento\Service\DataObjectConverter::toFlatArray($customer)
+        );
     }
 
     /**
@@ -283,21 +287,20 @@ class Account extends GenericMetadata
         if ($sendEmail) {
             $_disableStoreField = '';
             if (!$this->_storeManager->isSingleStoreMode()) {
-                $_disableStoreField = "$('{$prefix}sendemail_store_id').disabled=(''==this.value || '0'==this.value);";
+                $_disableStoreField = "\$('{$prefix}sendemail_store_id').disabled=(''==this.value || '0'==this.value);";
             }
             $sendEmail->setAfterElementHtml(
-                '<script type="text/javascript">'
-                . "
-                document.observe('dom:loaded', function(){
-                    $('{$prefix}website_id').disableSendemail = function() {
-                        $('{$prefix}sendemail').disabled = ('' == this.value || '0' == this.value);".
-                        $_disableStoreField
-                    ."\n}.bind($('{$prefix}website_id'));
-                    Event.observe('{$prefix}website_id', 'change', $('{$prefix}website_id').disableSendemail);
-                    $('{$prefix}website_id').disableSendemail();
-                });
-                "
-                . '</script>'
+                '<script type="text/javascript">' .
+                "\n                document.observe('dom:loaded', function()".
+                "{\n                    \$('{$prefix}website_id').disableSendemail = function() ".
+                "{\n                        \$('{$prefix}sendemail').disabled = ('' == this.value || ".
+                "'0' == this.value);" .
+                $_disableStoreField .
+                "\n}.bind(\$('{$prefix}website_id'));\n                    ".
+                "Event.observe('{$prefix}website_id', 'change', \$('{$prefix}website_id').disableSendemail);".
+                "\n                    \$('{$prefix}website_id').disableSendemail();\n                });".
+                "\n                " .
+                '</script>'
             );
         }
     }
@@ -314,11 +317,11 @@ class Account extends GenericMetadata
         $fieldset->removeField('created_in');
 
         // Prepare send welcome email checkbox
-        $fieldset->addField('sendemail', 'checkbox', array(
-            'label' => __('Send Welcome Email'),
-            'name'  => 'sendemail',
-            'id'    => 'sendemail',
-        ));
+        $fieldset->addField(
+            'sendemail',
+            'checkbox',
+            array('label' => __('Send Welcome Email'), 'name' => 'sendemail', 'id' => 'sendemail')
+        );
         if (!$this->_storeManager->isSingleStoreMode()) {
             $form->getElement('website_id')->addClass('validate-website-has-store');
 
@@ -329,35 +332,41 @@ class Account extends GenericMetadata
             $prefix = $form->getHtmlIdPrefix();
 
             $note = __('Please select a website which contains store view');
-            $form->getElement('website_id')->setAfterElementJs(
-                '<script type="text/javascript">'
-                . "
-                var {$prefix}_websites = " . $this->_jsonEncoder->encode($websites) . ";
-                jQuery.validator.addMethod('validate-website-has-store', function(v, elem){
-                        return {$prefix}_websites[elem.value] == true;
-                    },
-                    '" . $note . "'
-                );
-                Element.observe('{$prefix}website_id', 'change', function(){
-                    jQuery.validator.validateElement('#{$prefix}website_id');
-                }.bind($('{$prefix}website_id')));
-                "
-                . '</script>'
+            $form->getElement(
+                'website_id'
+            )->setAfterElementJs(
+                '<script type="text/javascript">' .
+                "\n                var {$prefix}_websites = " .
+                $this->_jsonEncoder->encode(
+                    $websites
+                ) .
+                ";\n                jQuery.validator.addMethod('validate-website-has-store', function(v, elem)".
+                "{\n                        return {$prefix}_websites[elem.value] == true;\n                    },".
+                "\n                    '" .
+                $note .
+                "'\n                );\n                ".
+                "Element.observe('{$prefix}website_id', 'change', function()".
+                "{\n                    jQuery.validator.validateElement('#{$prefix}website_id');".
+                "\n                }.bind(\$('{$prefix}website_id')));\n                " .
+                '</script>'
             );
-            $renderer = $this->getLayout()
-                ->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $renderer = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+            );
             $form->getElement('website_id')->setRenderer($renderer);
 
-            $fieldset->addField('sendemail_store_id', 'select', array(
-                'label' => __('Send From'),
-                'name' => 'sendemail_store_id',
-                'values' => $this->_systemStore->getStoreValuesForForm()
-            ));
+            $fieldset->addField(
+                'sendemail_store_id',
+                'select',
+                array(
+                    'label' => __('Send From'),
+                    'name' => 'sendemail_store_id',
+                    'values' => $this->_systemStore->getStoreValuesForForm()
+                )
+            );
         } else {
             $fieldset->removeField('website_id');
-            $fieldset->addField('website_id', 'hidden', array(
-                'name' => 'website_id'
-            ));
+            $fieldset->addField('website_id', 'hidden', array('name' => 'website_id'));
         }
     }
 
@@ -374,17 +383,16 @@ class Account extends GenericMetadata
         $form->getElement('created_in')->setDisabled('disabled');
         if (!$this->_storeManager->isSingleStoreMode()) {
             $form->getElement('website_id')->setDisabled('disabled');
-            $renderer = $this->getLayout()
-                ->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $renderer = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+            );
             $form->getElement('website_id')->setRenderer($renderer);
         } else {
             $fieldset->removeField('website_id');
         }
 
-        if ($customerDataObject->getId()
-            && !$this->_customerAccountService->canModify($customerDataObject->getId())
-        ) {
-            return [];
+        if ($customerDataObject->getId() && !$this->_customerAccountService->canModify($customerDataObject->getId())) {
+            return array();
         }
 
 
@@ -397,27 +405,26 @@ class Account extends GenericMetadata
                 $confirmationKey = $this->getRandomConfirmationKey();
             }
 
-            $element = $fieldset->addField('confirmation', 'select', array(
-                'name'  => 'confirmation',
-                'label' => __($confirmationAttr->getFrontendLabel()),
-            ));
+            $element = $fieldset->addField(
+                'confirmation',
+                'select',
+                array('name' => 'confirmation', 'label' => __($confirmationAttr->getFrontendLabel()))
+            );
             $element->setEntityAttribute($confirmationAttr);
-            $element->setValues(array(
-                '' => 'Confirmed',
-                $confirmationKey => 'Not confirmed'
-            ));
+            $element->setValues(array('' => 'Confirmed', $confirmationKey => 'Not confirmed'));
 
             // Prepare send welcome email checkbox if customer is not confirmed
             // no need to add it, if website ID is empty
             if ($customerDataObject->getConfirmation() && $customerDataObject->getWebsiteId()) {
-                $fieldset->addField('sendemail', 'checkbox', array(
-                    'name'  => 'sendemail',
-                    'label' => __('Send Welcome Email after Confirmation')
-                ));
-                return ['sendemail' => '1'];
+                $fieldset->addField(
+                    'sendemail',
+                    'checkbox',
+                    array('name' => 'sendemail', 'label' => __('Send Welcome Email after Confirmation'))
+                );
+                return array('sendemail' => '1');
             }
         }
-        return [];
+        return array();
     }
 
     /**

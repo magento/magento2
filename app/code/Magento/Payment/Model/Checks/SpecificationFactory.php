@@ -60,6 +60,9 @@ class SpecificationFactory
     public function create($data)
     {
         $specifications = array_intersect_key($this->mapping, array_flip((array)$data));
-        return $this->objectManager->create('Magento\Payment\Model\Checks\Composite', ['list' => $specifications]);
+        return $this->objectManager->create(
+            'Magento\Payment\Model\Checks\Composite',
+            array('list' => $specifications)
+        );
     }
 }

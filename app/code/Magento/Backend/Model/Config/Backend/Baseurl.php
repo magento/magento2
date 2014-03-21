@@ -51,15 +51,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
         array $data = array()
     ) {
         $this->_mergeService = $mergeService;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -77,7 +69,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
             }
         } catch (\Magento\Core\Exception $e) {
             $field = $this->getFieldConfig();
-            $label = ($field && is_array($field) ? $field['label'] : 'value');
+            $label = $field && is_array($field) ? $field['label'] : 'value';
             $msg = __('Invalid %1. %2', $label, $e->getMessage());
             $error = new \Magento\Core\Exception($msg, 0, $e);
             throw $error;
@@ -151,8 +143,9 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     private function _assertValuesOrUrl(array $values, $value)
     {
         if (!in_array($value, $values) && !$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Core\Exception(__('Value must be a URL or one of placeholders: %1',
-                implode(',', $values)));
+            throw new \Magento\Core\Exception(
+                __('Value must be a URL or one of placeholders: %1', implode(',', $values))
+            );
         }
     }
 
@@ -167,9 +160,14 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     private function _assertStartsWithValuesOrUrl(array $values, $value)
     {
         $quoted = array_map('preg_quote', $values, array_fill(0, count($values), '/'));
-        if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)) {
+        if (!preg_match('/^(' . implode('|', $quoted) . ')(.+\/)?$/', $value) && !$this->_isFullyQualifiedUrl($value)
+        ) {
             throw new \Magento\Core\Exception(
-                __('Specify a URL or path that starts with placeholder(s): %1, and ends with "/".', implode(', ', $values)));
+                __(
+                    'Specify a URL or path that starts with placeholder(s): %1, and ends with "/".',
+                    implode(', ', $values)
+                )
+            );
         }
     }
 
@@ -205,9 +203,7 @@ class Baseurl extends \Magento\Core\Model\Config\Value
     private function _validateFullyQualifiedUrl($value)
     {
         if (!$this->_isFullyQualifiedUrl($value)) {
-            throw new \Magento\Core\Exception(
-                __('Specify a fully qualified URL.')
-            );
+            throw new \Magento\Core\Exception(__('Specify a fully qualified URL.'));
         }
     }
 

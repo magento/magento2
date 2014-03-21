@@ -62,8 +62,17 @@ class Context extends \Magento\Core\Model\Resource\Setup\Context
     ) {
         $this->attributeMapper = $attributeMapper;
         parent::__construct(
-            $logger, $eventManager, $resource, $modulesReader, $moduleList, $resourceResource,
-            $migrationFactory, $themeResourceFactory, $themeFactory, $encryptor, $filesystem
+            $logger,
+            $eventManager,
+            $resource,
+            $modulesReader,
+            $moduleList,
+            $resourceResource,
+            $migrationFactory,
+            $themeResourceFactory,
+            $themeFactory,
+            $encryptor,
+            $filesystem
         );
     }
 

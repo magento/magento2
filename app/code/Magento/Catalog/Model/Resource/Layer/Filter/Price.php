@@ -90,11 +90,11 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
         $oldAlias = array(
             \Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
+            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.'
         );
         $newAlias = array(
             \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
+            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.'
         );
         return str_replace($oldAlias, $newAlias, $conditionString);
     }
@@ -124,8 +124,11 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         // remove join with main table
         $fromPart = $select->getPart(\Zend_Db_Select::FROM);
-        if (!isset($fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS])
-            || !isset($fromPart[\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS])
+        if (!isset(
+            $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS]
+        ) || !isset(
+            $fromPart[\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS]
+        )
         ) {
             return $select;
         }
@@ -204,10 +207,10 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _getPriceExpression($filter, $select, $replaceAlias = true)
     {
         $priceExpression = $filter->getLayer()->getProductCollection()->getPriceExpression($select);
-        $additionalPriceExpression = $filter->getLayer()->getProductCollection()->getAdditionalPriceExpression($select);
-        $result = empty($additionalPriceExpression)
-            ? $priceExpression
-            : "({$priceExpression} {$additionalPriceExpression})";
+        $additionalPriceExpression = $filter->getLayer()->getProductCollection()->getAdditionalPriceExpression(
+            $select
+        );
+        $result = empty($additionalPriceExpression) ? $priceExpression : "({$priceExpression} {$additionalPriceExpression})";
         if ($replaceAlias) {
             $result = $this->_replaceTableAlias($result);
         }
@@ -227,9 +230,9 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $currencyRate = $filter->getLayer()->getProductCollection()->getCurrencyRate();
         if ($decrease) {
-            return ($price - (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate;
+            return ($price - self::MIN_POSSIBLE_PRICE / 2) / $currencyRate;
         }
-        return ($price + (self::MIN_POSSIBLE_PRICE / 2)) / $currencyRate;
+        return ($price + self::MIN_POSSIBLE_PRICE / 2) / $currencyRate;
     }
 
     /**
@@ -241,8 +244,12 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getFullPriceExpression($filter, $select)
     {
-        return new \Zend_Db_Expr('ROUND((' . $this->_getPriceExpression($filter, $select) . ') * '
-            . $filter->getLayer()->getProductCollection()->getCurrencyRate() . ', 2)');
+        return new \Zend_Db_Expr(
+            'ROUND((' . $this->_getPriceExpression(
+                $filter,
+                $select
+            ) . ') * ' . $filter->getLayer()->getProductCollection()->getCurrencyRate() . ', 2)'
+        );
     }
 
     /**
@@ -267,11 +274,8 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
         $countExpr = new \Zend_Db_Expr('COUNT(*)');
         $rangeExpr = new \Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1");
 
-        $select->columns(array(
-            'range' => $rangeExpr,
-            'count' => $countExpr
-        ));
-        $select->group($rangeExpr)->order("$rangeExpr ASC");
+        $select->columns(array('range' => $rangeExpr, 'count' => $countExpr));
+        $select->group($rangeExpr)->order("{$rangeExpr} ASC");
 
         return $this->_getReadAdapter()->fetchPairs($select);
     }
@@ -290,10 +294,11 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $select = $filter->getLayer()->getProductCollection()->getSelect();
         $priceExpr = $this->_getPriceExpression($filter, $select);
-        $filter->getLayer()->getProductCollection()
-            ->getSelect()
-            ->where($priceExpr . ' >= ' . $this->_getComparingValue(($range * ($index - 1)), $filter))
-            ->where($priceExpr . ' < ' . $this->_getComparingValue(($range * $index), $filter));
+        $filter->getLayer()->getProductCollection()->getSelect()->where(
+            $priceExpr . ' >= ' . $this->_getComparingValue($range * ($index - 1), $filter)
+        )->where(
+            $priceExpr . ' < ' . $this->_getComparingValue($range * $index, $filter)
+        );
 
         return $this;
     }
@@ -312,16 +317,14 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $select = $this->_getSelect($filter);
         $priceExpression = $this->_getPriceExpression($filter, $select);
-        $select->columns(array(
-            'min_price_expr' => $this->_getFullPriceExpression($filter, $select)
-        ));
+        $select->columns(array('min_price_expr' => $this->_getFullPriceExpression($filter, $select)));
         if (!is_null($lowerPrice)) {
-            $select->where("$priceExpression >= " . $this->_getComparingValue($lowerPrice, $filter));
+            $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice, $filter));
         }
         if (!is_null($upperPrice)) {
-            $select->where("$priceExpression < " . $this->_getComparingValue($upperPrice, $filter));
+            $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice, $filter));
         }
-        $select->order("$priceExpression ASC")->limit($limit, $offset);
+        $select->order("{$priceExpression} ASC")->limit($limit, $offset);
 
         return $this->_getReadAdapter()->fetchCol($select);
     }
@@ -339,9 +342,9 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $select = $this->_getSelect($filter);
         $priceExpression = $this->_getPriceExpression($filter, $select);
-        $select->columns('COUNT(*)')->where("$priceExpression < " . $this->_getComparingValue($price, $filter));
+        $select->columns('COUNT(*)')->where("{$priceExpression} < " . $this->_getComparingValue($price, $filter));
         if (!is_null($lowerPrice)) {
-            $select->where("$priceExpression >= " . $this->_getComparingValue($lowerPrice, $filter));
+            $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice, $filter));
         }
         $offset = $this->_getReadAdapter()->fetchOne($select);
         if (!$offset) {
@@ -367,24 +370,28 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
         $pricesSelect = clone $select;
         $priceExpression = $this->_getPriceExpression($filter, $pricesSelect);
 
-        $select->columns('COUNT(*)')->where("$priceExpression > " . $this->_getComparingValue($price, $filter, false));
+        $select->columns(
+            'COUNT(*)'
+        )->where(
+            "{$priceExpression} > " . $this->_getComparingValue($price, $filter, false)
+        );
         if (!is_null($upperPrice)) {
-            $select->where("$priceExpression < " . $this->_getComparingValue($upperPrice, $filter));
+            $select->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice, $filter));
         }
         $offset = $this->_getReadAdapter()->fetchOne($select);
         if (!$offset) {
             return false;
         }
 
-        $pricesSelect
-            ->columns(array(
-                'min_price_expr' => $this->_getFullPriceExpression($filter, $pricesSelect)
-            ))
-            ->where("$priceExpression >= " . $this->_getComparingValue($price, $filter));
+        $pricesSelect->columns(
+            array('min_price_expr' => $this->_getFullPriceExpression($filter, $pricesSelect))
+        )->where(
+            "{$priceExpression} >= " . $this->_getComparingValue($price, $filter)
+        );
         if (!is_null($upperPrice)) {
-            $pricesSelect->where("$priceExpression < " . $this->_getComparingValue($upperPrice, $filter));
+            $pricesSelect->where("{$priceExpression} < " . $this->_getComparingValue($upperPrice, $filter));
         }
-        $pricesSelect->order("$priceExpression DESC")->limit($rightIndex - $offset + 1, $offset - 1);
+        $pricesSelect->order("{$priceExpression} DESC")->limit($rightIndex - $offset + 1, $offset - 1);
 
         return array_reverse($this->_getReadAdapter()->fetchCol($pricesSelect));
     }
@@ -411,7 +418,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
         $priceExpr = $this->_getPriceExpression($filter, $select, false);
 
         if ($to !== '') {
-            $to = (float)$to;
+            $to = (double)$to;
             if ($from == $to) {
                 $to += self::MIN_POSSIBLE_PRICE;
             }

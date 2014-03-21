@@ -57,8 +57,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_filePath = __DIR__ . '/_files/';
         $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $this->_converterMock = $this->getMock('Magento\App\Config\Initial\Converter');
-        $schemaLocatorMock =
-            $this->getMock('Magento\App\Config\Initial\SchemaLocator', array(), array(), '', false);
+        $schemaLocatorMock = $this->getMock('Magento\App\Config\Initial\SchemaLocator', array(), array(), '', false);
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
         $validationStateMock->expects($this->once())->method('isValidated')->will($this->returnValue(true));
         $schemaFile = $this->_filePath . 'config.xsd';
@@ -66,7 +65,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->rootDirectory = $this->getMock(
             'Magento\Filesystem\Directory\Read',
             array('readFile', 'getRelativePath'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $this->_model = new \Magento\App\Config\Initial\Reader(
             $this->_fileResolverMock,
@@ -81,15 +82,27 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadNoFiles()
     {
-        $this->_fileResolverMock->expects($this->at(0))
-            ->method('get')
-            ->with('config.xml', 'primary')
-            ->will($this->returnValue(array()));
+        $this->_fileResolverMock->expects(
+            $this->at(0)
+        )->method(
+            'get'
+        )->with(
+            'config.xml',
+            'primary'
+        )->will(
+            $this->returnValue(array())
+        );
 
-        $this->_fileResolverMock->expects($this->at(1))
-            ->method('get')
-            ->with('config.xml', 'global')
-            ->will($this->returnValue(array()));
+        $this->_fileResolverMock->expects(
+            $this->at(1)
+        )->method(
+            'get'
+        )->with(
+            'config.xml',
+            'global'
+        )->will(
+            $this->returnValue(array())
+        );
 
         $this->assertEquals(array(), $this->_model->read());
     }
@@ -103,33 +116,43 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             file_get_contents($this->_filePath . 'initial_config1.xml'),
             file_get_contents($this->_filePath . 'initial_config2.xml')
         );
-        $expectedConfig = array(
-            'data' => array(),
-            'metadata' => array()
+        $expectedConfig = array('data' => array(), 'metadata' => array());
+
+        $this->_fileResolverMock->expects(
+            $this->at(0)
+        )->method(
+            'get'
+        )->with(
+            'config.xml',
+            'primary'
+        )->will(
+            $this->returnValue(array())
         );
 
-        $this->_fileResolverMock->expects($this->at(0))
-            ->method('get')
-            ->with('config.xml', 'primary')
-            ->will($this->returnValue(array()));
+        $this->_fileResolverMock->expects(
+            $this->at(1)
+        )->method(
+            'get'
+        )->with(
+            'config.xml',
+            'global'
+        )->will(
+            $this->returnValue($testXmlFilesList)
+        );
 
-        $this->_fileResolverMock->expects($this->at(1))
-            ->method('get')
-            ->with('config.xml', 'global')
-            ->will($this->returnValue($testXmlFilesList));
+        $this->_converterMock->expects(
+            $this->once()
+        )->method(
+            'convert'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnValue($expectedConfig)
+        );
 
-        $this->_converterMock->expects($this->once())
-            ->method('convert')
-            ->with($this->anything())
-            ->will($this->returnValue($expectedConfig));
+        $this->rootDirectory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
 
-        $this->rootDirectory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-
-        $this->rootDirectory->expects($this->any())
-            ->method('readFile')
-            ->will($this->returnValue('<config></config>'));
+        $this->rootDirectory->expects($this->any())->method('readFile')->will($this->returnValue('<config></config>'));
 
         $this->assertEquals($expectedConfig, $this->_model->read());
     }

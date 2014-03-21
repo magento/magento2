@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Convert;
 
 use Magento\Convert\ConvertArray;
@@ -37,18 +36,12 @@ class ConvertArrayTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new ConvertArray;
+        $this->_model = new ConvertArray();
     }
 
     public function testAssocToXml()
     {
-        $data = array(
-            'one' => 1,
-            'two' => array(
-                'three' => 3,
-                'four' => '4',
-            ),
-        );
+        $data = array('one' => 1, 'two' => array('three' => 3, 'four' => '4'));
         $result = $this->_model->assocToXml($data);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -72,13 +65,13 @@ XML;
 
     public function testToFlatArray()
     {
-        $input = [
+        $input = array(
             'key1' => 'value1',
-            'key2' => ['key21' => 'value21', 'key22' => 'value22', 'key23' => ['key231' => 'value231']],
-            'key3' => ['key31' => 'value31', 'key3' => 'value3'],
-            'key4' => ['key4' => 'value4']
-        ];
-        $expectedOutput = [
+            'key2' => array('key21' => 'value21', 'key22' => 'value22', 'key23' => array('key231' => 'value231')),
+            'key3' => array('key31' => 'value31', 'key3' => 'value3'),
+            'key4' => array('key4' => 'value4')
+        );
+        $expectedOutput = array(
             'key1' => 'value1',
             'key21' => 'value21',
             'key22' => 'value22',
@@ -86,7 +79,7 @@ XML;
             'key31' => 'value31',
             'key3' => 'value3',
             'key4' => 'value4'
-        ];
+        );
         $output = ConvertArray::toFlatArray($input);
         $this->assertEquals($expectedOutput, $output, 'Array is converted to flat structure incorrectly.');
     }
@@ -96,11 +89,6 @@ XML;
      */
     public function assocToXmlExceptionDataProvider()
     {
-        return array(
-            array(array(), ''),
-            array(array(), 0),
-            array(array(1, 2, 3)),
-            array(array('root' => 1), 'root'),
-        );
+        return array(array(array(), ''), array(array(), 0), array(array(1, 2, 3)), array(array('root' => 1), 'root'));
     }
 }

@@ -80,9 +80,13 @@ class CronTest extends \PHPUnit_Framework_TestCase
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->_storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
-        $this->_filesystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->_directory));
+        $this->_filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->will(
+            $this->returnValue($this->_directory)
+        );
 
         $this->_model = new \Magento\Captcha\Model\Cron(
             $this->getMock('Magento\Captcha\Model\Resource\LogFactory', array(), array(), '', false),
@@ -98,32 +102,46 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteExpiredImages($website, $isFile, $filename, $mTime, $timeout, $mustDelete)
     {
-        $this->_storeManager->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnValue(isset($website) ? array($website) : array()));
+        $this->_storeManager->expects(
+            $this->once()
+        )->method(
+            'getWebsites'
+        )->will(
+            $this->returnValue(isset($website) ? array($website) : array())
+        );
         if (isset($website)) {
-            $this->_helper->expects($this->once())
-            ->method('getConfig')
-            ->with(
+            $this->_helper->expects(
+                $this->once()
+            )->method(
+                'getConfig'
+            )->with(
                 $this->equalTo('timeout'),
                 new \PHPUnit_Framework_Constraint_IsIdentical($website->getDefaultStore())
-            )
-            ->will($this->returnValue($timeout));
+            )->will(
+                $this->returnValue($timeout)
+            );
         } else {
             $this->_helper->expects($this->never())->method('getConfig');
         }
-        $this->_adminHelper->expects($this->once())
-            ->method('getConfig')
-            ->with(
-                $this->equalTo('timeout'),
-                new \PHPUnit_Framework_Constraint_IsNull()
-            )
-            ->will($this->returnValue($timeout));
+        $this->_adminHelper->expects(
+            $this->once()
+        )->method(
+            'getConfig'
+        )->with(
+            $this->equalTo('timeout'),
+            new \PHPUnit_Framework_Constraint_IsNull()
+        )->will(
+            $this->returnValue($timeout)
+        );
 
         $timesToCall = isset($website) ? 2 : 1;
-        $this->_directory->expects($this->exactly($timesToCall))
-            ->method('read')
-            ->will($this->returnValue(array($filename)));
+        $this->_directory->expects(
+            $this->exactly($timesToCall)
+        )->method(
+            'read'
+        )->will(
+            $this->returnValue(array($filename))
+        );
         $this->_directory->expects($this->exactly($timesToCall))->method('isFile')->will($this->returnValue($isFile));
         $this->_directory->expects($this->any())->method('stat')->will($this->returnValue(array('mtime' => $mTime)));
         if ($mustDelete) {
@@ -153,7 +171,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
             array(null, true, 'test.png', 50, ($time - 60) / 60, true),
             array($website, false, 'test.png', 50, ($time - 60) / 60, false),
             array($website, true, 'test.jpg', 50, ($time - 60) / 60, false),
-            array($website, true, 'test.png', 50,  ($time - 20) / 60, false)
+            array($website, true, 'test.png', 50, ($time - 20) / 60, false)
         );
     }
 }

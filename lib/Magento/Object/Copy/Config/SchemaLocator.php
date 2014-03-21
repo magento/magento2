@@ -49,7 +49,7 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     public function __construct(\Magento\App\Filesystem $filesystem, $schema, $perFileSchema)
     {
         $this->_schema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $schema;
-        $this->_perFileSchemaschema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $perFileSchema;
+        $this->_perFileSchema = $filesystem->getPath(\Magento\App\Filesystem::ROOT_DIR) . '/' . $perFileSchema;
     }
 
     /**

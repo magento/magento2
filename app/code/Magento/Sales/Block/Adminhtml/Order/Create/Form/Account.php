@@ -96,13 +96,10 @@ class Account extends AbstractForm
     protected function _prepareForm()
     {
         /** @var \Magento\Customer\Model\Metadata\Form $customerForm */
-        $customerForm = $this->_metadataFormFactory->create(
-            'customer',
-            'adminhtml_checkout'
-        );
+        $customerForm = $this->_metadataFormFactory->create('customer', 'adminhtml_checkout');
 
         // prepare customer attributes to show
-        $attributes = [];
+        $attributes = array();
 
         // add system required attributes
         foreach ($customerForm->getSystemAttributes() as $attribute) {
@@ -159,7 +156,7 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? \Magento\Service\DataObjectConverter::toFlatArray($customer) : [];
+        $data = isset($customer) ? \Magento\Service\DataObjectConverter::toFlatArray($customer) : array();
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;
@@ -167,7 +164,7 @@ class Account extends AbstractForm
         }
 
         if ($this->getQuote()->getCustomerEmail()) {
-            $data['email']  = $this->getQuote()->getCustomerEmail();
+            $data['email'] = $this->getQuote()->getCustomerEmail();
         }
 
         return $data;

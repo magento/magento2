@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code\Parser\Adapter;
 
 class XmlTest extends \PHPUnit_Framework_TestCase
@@ -48,24 +47,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     public function testParse()
     {
         $expectedResult = array(
-            array(
-                'phrase' => 'Phrase 2',
-                'file' => $this->_testFile,
-                'line' => '',
-                'quote' => '',
-            ),
-            array(
-                'phrase' => 'Phrase 3',
-                'file' => $this->_testFile,
-                'line' => '',
-                'quote' => '',
-            ),
-            array(
-                'phrase' => 'Phrase 1',
-                'file' => $this->_testFile,
-                'line' => '',
-                'quote' => '',
-            ),
+            array('phrase' => 'Phrase 2', 'file' => $this->_testFile, 'line' => '', 'quote' => ''),
+            array('phrase' => 'Phrase 3', 'file' => $this->_testFile, 'line' => '', 'quote' => ''),
+            array('phrase' => 'Phrase 1', 'file' => $this->_testFile, 'line' => '', 'quote' => '')
         );
 
         $this->_adapter->parse($this->_testFile);

@@ -36,10 +36,13 @@ namespace Magento\Log\Model;
 
 class Cron extends \Magento\Core\Model\AbstractModel
 {
-    const XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE     = 'system/log/error_email_template';
-    const XML_PATH_EMAIL_LOG_CLEAN_IDENTITY     = 'system/log/error_email_identity';
-    const XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT    = 'system/log/error_email';
-    const XML_PATH_LOG_CLEAN_ENABLED            = 'system/log/enabled';
+    const XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE = 'system/log/error_email_template';
+
+    const XML_PATH_EMAIL_LOG_CLEAN_IDENTITY = 'system/log/error_email_identity';
+
+    const XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT = 'system/log/error_email';
+
+    const XML_PATH_LOG_CLEAN_ENABLED = 'system/log/enabled';
 
     /**
      * Error messages
@@ -123,16 +126,20 @@ class Cron extends \Magento\Core\Model\AbstractModel
 
         $this->_translate->setTranslateInline(false);
 
-        $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE))
-            ->setTemplateOptions(array(
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE)
+        )->setTemplateOptions(
+            array(
                 'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                 'store' => $this->_storeManager->getStore()->getId()
-            ))
-            ->setTemplateVars(array('warnings' => join("\n", $this->_errors)))
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY))
-            ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT))
-            ->getTransport();
+            )
+        )->setTemplateVars(
+            array('warnings' => join("\n", $this->_errors))
+        )->setFrom(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY)
+        )->addTo(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT)
+        )->getTransport();
 
         $transport->sendMessage();
 

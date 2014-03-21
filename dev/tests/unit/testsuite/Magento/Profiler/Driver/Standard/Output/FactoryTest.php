@@ -80,29 +80,22 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        $defaultOutputClass = $this->getMockClass('Magento\Profiler\Driver\Standard\OutputInterface',
-            array(), array(), 'Magento_Profiler_Driver_Standard_Output_Test_Default'
+        $defaultOutputClass = $this->getMockClass(
+            'Magento\Profiler\Driver\Standard\OutputInterface',
+            array(),
+            array(),
+            'Magento_Profiler_Driver_Standard_Output_Test_Default'
         );
-        $testOutputClass = $this->getMockClass('Magento\Profiler\Driver\Standard\OutputInterface',
-            array(), array(), 'Magento_Profiler_Driver_Standard_Output_Test_Test'
+        $testOutputClass = $this->getMockClass(
+            'Magento\Profiler\Driver\Standard\OutputInterface',
+            array(),
+            array(),
+            'Magento_Profiler_Driver_Standard_Output_Test_Test'
         );
         return array(
-            'Prefix and concrete type' => array(
-                array(
-                    'type' => 'test'
-                ),
-                $testOutputClass
-            ),
-            'Prefix and default type' => array(
-                array(),
-                $defaultOutputClass
-            ),
-            'Concrete class' => array(
-                array(
-                    'type' => $testOutputClass
-                ),
-                $testOutputClass
-            )
+            'Prefix and concrete type' => array(array('type' => 'test'), $testOutputClass),
+            'Prefix and default type' => array(array(), $defaultOutputClass),
+            'Concrete class' => array(array('type' => $testOutputClass), $testOutputClass)
         );
     }
 
@@ -115,9 +108,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento_Profiler_Driver_Standard_Output_Test_Baz'
             )
         );
-        $this->_factory->create(array(
-            'type' => 'baz'
-        ));
+        $this->_factory->create(array('type' => 'baz'));
     }
 
     public function testCreateInvalidClass()
@@ -126,8 +117,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'Output class "stdClass" must implement \Magento\Profiler\Driver\Standard\OutputInterface.'
         );
-        $this->_factory->create(array(
-            'type' => 'stdClass'
-        ));
+        $this->_factory->create(array('type' => 'stdClass'));
     }
 }

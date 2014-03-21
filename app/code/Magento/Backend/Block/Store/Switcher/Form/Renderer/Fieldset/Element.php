@@ -28,9 +28,8 @@ namespace Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset;
 /**
  * Form fieldset renderer
  */
-class Element
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements
+    \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element which re-rendering

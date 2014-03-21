@@ -43,15 +43,11 @@ class RowCustomizer implements RowCustomizerInterface
     {
         $collection->addAttributeToFilter(
             'entity_id',
-            array(
-                'in'    => $productIds
-            )
+            array('in' => $productIds)
         )->addAttributeToFilter(
-                'type_id',
-                array(
-                    'eq'    => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
-                )
-            );
+            'type_id',
+            array('eq' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        );
 
         while ($product = $collection->fetchItem()) {
             $productAttributesOptions = $product->getTypeInstance()->getConfigurableOptions($product);
@@ -61,10 +57,10 @@ class RowCustomizer implements RowCustomizerInterface
                 foreach ($productAttributeOption as $optionValues) {
                     $priceType = $optionValues['pricing_is_percent'] ? '%' : '';
                     $this->configurableData[$product->getId()][] = array(
-                        '_super_products_sku'           => $optionValues['sku'],
-                        '_super_attribute_code'         => $optionValues['attribute_code'],
-                        '_super_attribute_option'       => $optionValues['option_title'],
-                        '_super_attribute_price_corr'   => $optionValues['pricing_value'] . $priceType
+                        '_super_products_sku' => $optionValues['sku'],
+                        '_super_attribute_code' => $optionValues['attribute_code'],
+                        '_super_attribute_option' => $optionValues['option_title'],
+                        '_super_attribute_price_corr' => $optionValues['pricing_value'] . $priceType
                     );
                 }
             }
@@ -81,10 +77,15 @@ class RowCustomizer implements RowCustomizerInterface
     {
         // have we merge configurable products data
         if (!empty($this->configurableData)) {
-            $columns =  array_merge($columns, array(
-                '_super_products_sku', '_super_attribute_code',
-                '_super_attribute_option', '_super_attribute_price_corr'
-            ));
+            $columns = array_merge(
+                $columns,
+                array(
+                    '_super_products_sku',
+                    '_super_attribute_code',
+                    '_super_attribute_option',
+                    '_super_attribute_price_corr'
+                )
+            );
         }
         return $columns;
     }
@@ -100,7 +101,6 @@ class RowCustomizer implements RowCustomizerInterface
     {
         if (!empty($this->configurableData[$productId])) {
             $dataRow = array_merge($dataRow, array_shift($this->configurableData[$productId]));
-
         }
         return $dataRow;
     }

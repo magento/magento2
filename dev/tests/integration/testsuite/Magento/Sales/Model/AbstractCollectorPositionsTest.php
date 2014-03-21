@@ -49,8 +49,11 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
             if ($compareWithPos === false) {
                 continue;
             }
-            $this->assertLessThan($compareWithPos, $collectorPos,
-                "The '{$collectorCode}' collector must go before '{$compareWithCode}'");
+            $this->assertLessThan(
+                $compareWithPos,
+                $collectorPos,
+                "The '{$collectorCode}' collector must go before '{$compareWithCode}'"
+            );
         }
 
         foreach ($after as $compareWithCode) {
@@ -58,8 +61,11 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
             if ($compareWithPos === false) {
                 continue;
             }
-            $this->assertGreaterThan($compareWithPos, $collectorPos,
-                "The '{$collectorCode}' collector must go after '{$compareWithCode}'");
+            $this->assertGreaterThan(
+                $compareWithPos,
+                $collectorPos,
+                "The '{$collectorCode}' collector must go after '{$compareWithCode}'"
+            );
         }
     }
 
@@ -88,9 +94,8 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
             default:
                 throw new \InvalidArgumentException('Unknown config type: ' . $configType);
         }
-        $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create($configClass);
-        return $config->$methodGetCollectors();
+        $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($configClass);
+        return $config->{$methodGetCollectors}();
     }
 
     /**

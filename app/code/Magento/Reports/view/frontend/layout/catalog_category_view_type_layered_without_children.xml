@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <remove name="right.reports.product.viewed"/>
     <referenceContainer name="right">
         <block class="Magento\Reports\Block\Product\Viewed" name="left.reports.product.viewed" template="product_viewed.phtml"/>

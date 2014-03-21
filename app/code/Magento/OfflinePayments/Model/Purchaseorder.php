@@ -28,7 +28,7 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_code  = 'purchaseorder';
+    protected $_code = 'purchaseorder';
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function assignData($data)
     {
-        if (!($data instanceof \Magento\Object)) {
+        if (!$data instanceof \Magento\Object) {
             $data = new \Magento\Object($data);
         }
 

@@ -50,9 +50,10 @@ class Html extends AbstractOutput
         foreach ($this->_getTimerIds($stat) as $timerId) {
             $out[] = '<tr>';
             foreach ($this->_columns as $column) {
-                $out[] = '<td title="' . $timerId . '">'
-                    . $this->_renderColumnValue($stat->fetch($timerId, $column), $column)
-                    . '</td>';
+                $out[] = '<td title="' . $timerId . '">' . $this->_renderColumnValue(
+                    $stat->fetch($timerId, $column),
+                    $column
+                ) . '</td>';
             }
             $out[] = '</tr>';
         }

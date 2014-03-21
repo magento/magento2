@@ -140,11 +140,15 @@ class Product extends \Magento\Backend\App\Action
         \Magento\Backend\Block\Widget\Grid $gridBlock,
         $productsArray
     ) {
-        return $this->_view->getLayout()
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer')
-            ->setGridBlock($gridBlock)
-            ->setProducts($productsArray)
-            ->setInputElementName($inputName);
+        return $this->_view->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Ajax\Serializer'
+        )->setGridBlock(
+            $gridBlock
+        )->setProducts(
+            $productsArray
+        )->setInputElementName(
+            $inputName
+        );
     }
 
     /**
@@ -204,11 +208,13 @@ class Product extends \Magento\Backend\App\Action
         if ($this->getRequest()->getParam('popup')) {
             $this->_view->loadLayout('popup');
         } else {
-            $this->_view->loadLayout(array(
-                'default',
-                strtolower($this->_request->getFullActionName()),
-                'catalog_product_' . $product->getTypeId()
-            ));
+            $this->_view->loadLayout(
+                array(
+                    'default',
+                    strtolower($this->_request->getFullActionName()),
+                    'catalog_product_' . $product->getTypeId()
+                )
+            );
             $this->_setActiveMenu('Magento_Catalog::catalog_products');
         }
 
@@ -230,13 +236,11 @@ class Product extends \Magento\Backend\App\Action
     public function editAction()
     {
         $this->_title->add(__('Products'));
-        $productId  = (int)$this->getRequest()->getParam('id');
+        $productId = (int)$this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
         if ($productId && !$product->getId()) {
-            $this->messageManager->addError(
-                __('This product no longer exists.')
-            );
+            $this->messageManager->addError(__('This product no longer exists.'));
             $this->_redirect('catalog/*/');
             return;
         }
@@ -245,27 +249,32 @@ class Product extends \Magento\Backend\App\Action
 
         $this->_eventManager->dispatch('catalog_product_edit_action', array('product' => $product));
 
-        $this->_view->loadLayout(array(
-            'default',
-            strtolower($this->_request->getFullActionName()),
-            'catalog_product_'.$product->getTypeId()
-        ));
+        $this->_view->loadLayout(
+            array(
+                'default',
+                strtolower($this->_request->getFullActionName()),
+                'catalog_product_' . $product->getTypeId()
+            )
+        );
 
         $this->_setActiveMenu('Magento_Catalog::catalog_products');
 
-        if (
-            !$this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->isSingleStoreMode()
-            && ($switchBlock = $this->_view->getLayout()->getBlock('store_switcher'))
+        if (!$this->_objectManager->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->isSingleStoreMode() && ($switchBlock = $this->_view->getLayout()->getBlock(
+            'store_switcher'
+        ))
         ) {
-            $switchBlock->setDefaultStoreName(__('Default Values'))
-                ->setWebsiteIds($product->getWebsiteIds())
-                ->setSwitchUrl(
-                    $this->getUrl('catalog/*/*', array(
-                        '_current' => true,
-                        'active_tab' => null,
-                        'tab' => null,
-                        'store' => null
-            )));
+            $switchBlock->setDefaultStoreName(
+                __('Default Values')
+            )->setWebsiteIds(
+                $product->getWebsiteIds()
+            )->setSwitchUrl(
+                $this->getUrl(
+                    'catalog/*/*',
+                    array('_current' => true, 'active_tab' => null, 'tab' => null, 'store' => null)
+                )
+            );
         }
 
         $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
@@ -287,8 +296,13 @@ class Product extends \Magento\Backend\App\Action
     {
         $elementId = $this->getRequest()->getParam('element_id', md5(microtime()));
         $storeId = $this->getRequest()->getParam('store_id', 0);
-        $storeMediaUrl = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore($storeId)->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA);
+        $storeMediaUrl = $this->_objectManager->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore(
+            $storeId
+        )->getBaseUrl(
+            \Magento\UrlInterface::URL_TYPE_MEDIA
+        );
 
         $content = $this->_view->getLayout()->createBlock(
             'Magento\Catalog\Block\Adminhtml\Helper\Form\Wysiwyg\Content',
@@ -296,8 +310,8 @@ class Product extends \Magento\Backend\App\Action
             array(
                 'data' => array(
                     'editor_element_id' => $elementId,
-                    'store_id'          => $storeId,
-                    'store_media_url'   => $storeMediaUrl,
+                    'store_id' => $storeId,
+                    'store_media_url' => $storeMediaUrl
                 )
             )
         );
@@ -331,12 +345,11 @@ class Product extends \Magento\Backend\App\Action
         $blockClassSuffix = str_replace(' ', '_', ucwords(str_replace('_', ' ', $block)));
 
         $this->getResponse()->setBody(
-            $this->_view->getLayout()
-                ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\\' . $blockClassSuffix)
-                ->toHtml()
+            $this->_view->getLayout()->createBlock(
+                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\\' . $blockClassSuffix
+            )->toHtml()
         );
     }
-
 
     /**
      * Get categories fieldset block
@@ -371,8 +384,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.related')
-            ->setProductsRelated($this->getRequest()->getPost('products_related', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.related'
+        )->setProductsRelated(
+            $this->getRequest()->getPost('products_related', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -385,8 +401,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.upsell')
-            ->setProductsUpsell($this->getRequest()->getPost('products_upsell', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.upsell'
+        )->setProductsUpsell(
+            $this->getRequest()->getPost('products_upsell', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -399,8 +418,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.crosssell')
-            ->setProductsCrossSell($this->getRequest()->getPost('products_crosssell', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.crosssell'
+        )->setProductsCrossSell(
+            $this->getRequest()->getPost('products_crosssell', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -413,8 +435,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.related')
-            ->setProductsRelated($this->getRequest()->getPost('products_related', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.related'
+        )->setProductsRelated(
+            $this->getRequest()->getPost('products_related', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -427,8 +452,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.upsell')
-            ->setProductsRelated($this->getRequest()->getPost('products_upsell', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.upsell'
+        )->setProductsRelated(
+            $this->getRequest()->getPost('products_upsell', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -441,8 +469,11 @@ class Product extends \Magento\Backend\App\Action
     {
         $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('catalog.product.edit.tab.crosssell')
-            ->setProductsRelated($this->getRequest()->getPost('products_crosssell', null));
+        $this->_view->getLayout()->getBlock(
+            'catalog.product.edit.tab.crosssell'
+        )->setProductsRelated(
+            $this->getRequest()->getPost('products_crosssell', null)
+        );
         $this->_view->renderLayout();
     }
 
@@ -455,9 +486,13 @@ class Product extends \Magento\Backend\App\Action
     {
         $product = $this->productBuilder->build($this->getRequest());
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('admin.product.reviews')
-            ->setProductId($product->getId())
-            ->setUseAjax(true);
+        $this->_view->getLayout()->getBlock(
+            'admin.product.reviews'
+        )->setProductId(
+            $product->getId()
+        )->setUseAjax(
+            true
+        );
         $this->_view->renderLayout();
     }
 
@@ -512,12 +547,9 @@ class Product extends \Magento\Backend\App\Action
 
             /* set restrictions for date ranges */
             $resource = $product->getResource();
-            $resource->getAttribute('special_from_date')
-                ->setMaxValue($product->getSpecialToDate());
-            $resource->getAttribute('news_from_date')
-                ->setMaxValue($product->getNewsToDate());
-            $resource->getAttribute('custom_design_from')
-                ->setMaxValue($product->getCustomDesignTo());
+            $resource->getAttribute('special_from_date')->setMaxValue($product->getSpecialToDate());
+            $resource->getAttribute('news_from_date')->setMaxValue($product->getNewsToDate());
+            $resource->getAttribute('custom_design_from')->setMaxValue($product->getCustomDesignTo());
 
             $this->productValidator->validate($product, $this->getRequest(), $response);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
@@ -567,12 +599,16 @@ class Product extends \Magento\Backend\App\Action
                  * Do copying data to stores
                  */
                 if (isset($data['copy_to_stores'])) {
-                    foreach ($data['copy_to_stores'] as $storeTo=>$storeFrom) {
-                        $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($storeFrom)
-                            ->load($productId)
-                            ->setStoreId($storeTo)
-                            ->save();
+                    foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
+                        $this->_objectManager->create(
+                            'Magento\Catalog\Model\Product'
+                        )->setStoreId(
+                            $storeFrom
+                        )->load(
+                            $productId
+                        )->setStoreId(
+                            $storeTo
+                        )->save();
                     }
                 }
 
@@ -580,9 +616,12 @@ class Product extends \Magento\Backend\App\Action
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
-                    $this->messageManager->addNotice(__('SKU for product %1 has been changed to %2.',
+                    $this->messageManager->addNotice(
+                        __(
+                            'SKU for product %1 has been changed to %2.',
                             $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getName()),
-                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getSku()))
+                            $this->_objectManager->get('Magento\Escaper')->escapeHtml($product->getSku())
+                        )
                     );
                 }
 
@@ -595,7 +634,6 @@ class Product extends \Magento\Backend\App\Action
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
-
             } catch (\Magento\Core\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
@@ -608,26 +646,19 @@ class Product extends \Magento\Backend\App\Action
         }
 
         if ($redirectBack === 'new') {
-            $this->_redirect('catalog/*/new', array(
-                'set'  => $product->getAttributeSetId(),
-                'type' => $product->getTypeId()
-            ));
+            $this->_redirect(
+                'catalog/*/new',
+                array('set' => $product->getAttributeSetId(), 'type' => $product->getTypeId())
+            );
         } elseif ($redirectBack === 'duplicate' && isset($newProduct)) {
             $this->_redirect(
                 'catalog/*/edit',
-                array(
-                    'id' => $newProduct->getId(),
-                    'back' => null,
-                    '_current' => true
-                )
+                array('id' => $newProduct->getId(), 'back' => null, '_current' => true)
             );
         } elseif ($redirectBack) {
-            $this->_redirect('catalog/*/edit', array(
-                'id'       => $productId,
-                '_current' => true
-            ));
+            $this->_redirect('catalog/*/edit', array('id' => $productId, '_current' => true));
         } else {
-            $this->_redirect('catalog/*/', array('store'=>$storeId));
+            $this->_redirect('catalog/*/', array('store' => $storeId));
         }
     }
 
@@ -642,11 +673,11 @@ class Product extends \Magento\Backend\App\Action
         try {
             $newProduct = $this->productCopier->copy($product);
             $this->messageManager->addSuccess(__('You duplicated the product.'));
-            $this->_redirect('catalog/*/edit', array('_current'=>true, 'id'=>$newProduct->getId()));
+            $this->_redirect('catalog/*/edit', array('_current' => true, 'id' => $newProduct->getId()));
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $this->messageManager->addError($e->getMessage());
-            $this->_redirect('catalog/*/edit', array('_current'=>true));
+            $this->_redirect('catalog/*/edit', array('_current' => true));
         }
     }
 
@@ -706,17 +737,20 @@ class Product extends \Magento\Backend\App\Action
     public function massStatusAction()
     {
         $productIds = (array)$this->getRequest()->getParam('product');
-        $storeId    = (int)$this->getRequest()->getParam('store', 0);
-        $status     = (int)$this->getRequest()->getParam('status');
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $status = (int)$this->getRequest()->getParam('status');
 
         try {
             $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-                ->updateAttributes($productIds, array('status' => $status), $storeId);
-
-            $this->messageManager->addSuccess(
-                __('A total of %1 record(s) have been updated.', count($productIds))
+            $this->_objectManager->get(
+                'Magento\Catalog\Model\Product\Action'
+            )->updateAttributes(
+                $productIds,
+                array('status' => $status),
+                $storeId
             );
+
+            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
 
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Core\Model\Exception $e) {
@@ -724,11 +758,10 @@ class Product extends \Magento\Backend\App\Action
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_getSession()
-                ->addException($e, __('Something went wrong while updating the product(s) status.'));
+            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
         }
 
-        $this->_redirect('catalog/*/', array('store'=> $storeId));
+        $this->_redirect('catalog/*/', array('store' => $storeId));
     }
 
     /**
@@ -769,10 +802,13 @@ class Product extends \Magento\Backend\App\Action
     public function showUpdateResultAction()
     {
         $session = $this->_objectManager->get('Magento\Backend\Model\Session');
-        if ($session->hasCompositeProductResult()
-            && $session->getCompositeProductResult() instanceof \Magento\Object) {
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-                ->renderUpdateResult($session->getCompositeProductResult());
+        if ($session->hasCompositeProductResult() && $session->getCompositeProductResult() instanceof \Magento\Object
+        ) {
+            $this->_objectManager->get(
+                'Magento\Catalog\Helper\Product\Composite'
+            )->renderUpdateResult(
+                $session->getCompositeProductResult()
+            );
             $session->unsCompositeProductResult();
         } else {
             $session->unsCompositeProductResult();
@@ -811,10 +847,17 @@ class Product extends \Magento\Backend\App\Action
     public function suggestProductTemplatesAction()
     {
         $this->productBuilder->build($this->getRequest());
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Product\TemplateSelector')
-                ->getSuggestedTemplates($this->getRequest()->getParam('label_part'))
-        ));
+        $this->getResponse()->setBody(
+            $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                $this->_view->getLayout()->createBlock(
+                    'Magento\Catalog\Block\Product\TemplateSelector'
+                )->getSuggestedTemplates(
+                    $this->getRequest()->getParam('label_part')
+                )
+            )
+        );
     }
 
     /**
@@ -824,10 +867,17 @@ class Product extends \Magento\Backend\App\Action
      */
     public function suggestAttributesAction()
     {
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search')
-                ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
-        ));
+        $this->getResponse()->setBody(
+            $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonEncode(
+                $this->_view->getLayout()->createBlock(
+                    'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
+                )->getSuggestedAttributes(
+                    $this->getRequest()->getParam('label_part')
+                )
+            )
+        );
     }
 
     /**
@@ -840,15 +890,22 @@ class Product extends \Magento\Backend\App\Action
         $request = $this->getRequest();
         try {
             /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
-            $attribute = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute')
-                ->load($request->getParam('attribute_id'));
+            $attribute = $this->_objectManager->create(
+                'Magento\Eav\Model\Entity\Attribute'
+            )->load(
+                $request->getParam('attribute_id')
+            );
 
-            $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
-                ->load($request->getParam('template_id'));
+            $attributeSet = $this->_objectManager->create(
+                'Magento\Eav\Model\Entity\Attribute\Set'
+            )->load(
+                $request->getParam('template_id')
+            );
 
             /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection $attributeGroupCollection */
-            $attributeGroupCollection = $this->_objectManager
-                ->get('Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection');
+            $attributeGroupCollection = $this->_objectManager->get(
+                'Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection'
+            );
             $attributeGroupCollection->setAttributeSetFilter($attributeSet->getId());
             $attributeGroupCollection->addFilter('attribute_group_code', $request->getParam('group'));
             $attributeGroupCollection->setPageSize(1);
@@ -857,11 +914,15 @@ class Product extends \Magento\Backend\App\Action
 
             $attribute->setAttributeSetId($attributeSet->getId())->loadEntityAttributeIdBySet();
 
-            $attribute->setEntityTypeId($attributeSet->getEntityTypeId())
-                ->setAttributeSetId($request->getParam('template_id'))
-                ->setAttributeGroupId($attributeGroup->getId())
-                ->setSortOrder('0')
-                ->save();
+            $attribute->setEntityTypeId(
+                $attributeSet->getEntityTypeId()
+            )->setAttributeSetId(
+                $request->getParam('template_id')
+            )->setAttributeGroupId(
+                $attributeGroup->getId()
+            )->setSortOrder(
+                '0'
+            )->save();
 
             $this->getResponse()->setBody($attribute->toJson());
         } catch (\Exception $e) {

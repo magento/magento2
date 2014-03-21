@@ -39,20 +39,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(
-                'Magento\App\Filesystem\DirectoryList',
-                array(
-                    'root' => \Magento\App\Filesystem::ROOT_DIR,
-                    'directories' => array(
-                        \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
-                    ),
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Filesystem\DirectoryList',
+            array(
+                'root' => \Magento\App\Filesystem::ROOT_DIR,
+                'directories' => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
                 )
-            );
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Filesystem', array('directoryList' => $directoryList));
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme\Collection', array('filesystem' => $filesystem));
+            )
+        );
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Filesystem',
+            array('directoryList' => $directoryList)
+        );
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Theme\Collection',
+            array('filesystem' => $filesystem)
+        );
     }
 
     /**
@@ -87,17 +90,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'themePath'    => implode('/', array('frontend', 'magento_default', 'theme.xml')),
+                'themePath' => implode('/', array('frontend', 'magento_default', 'theme.xml')),
                 'expectedData' => array(
-                    'area'                 => 'frontend',
-                    'theme_title'          => 'Default',
-                    'theme_version'        => '2.0.0.0',
-                    'parent_id'            => null,
-                    'parent_theme_path'    => null,
-                    'theme_path'           => 'magento_default',
-                    'code'                 => 'magento_default',
-                    'preview_image'        => null,
-                    'type'                 => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
+                    'area' => 'frontend',
+                    'theme_title' => 'Default',
+                    'theme_version' => '2.0.0.0',
+                    'parent_id' => null,
+                    'parent_theme_path' => null,
+                    'theme_path' => 'magento_default',
+                    'code' => 'magento_default',
+                    'preview_image' => null,
+                    'type' => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
                 )
             )
         );
@@ -113,18 +116,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testHasThemeInCollection()
     {
         /** @var $themeModel \Magento\View\Design\ThemeInterface */
-        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface');
-        $themeModel->setData(array(
-            'area'                 => 'space_area',
-            'theme_title'          => 'Space theme',
-            'theme_version'        => '2.0.0.0',
-            'parent_id'            => null,
-            'is_featured'          => false,
-            'theme_path'           => 'default_space',
-            'preview_image'        => 'images/preview.png',
-            'type'                 => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
-        ));
+        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\ThemeInterface'
+        );
+        $themeModel->setData(
+            array(
+                'area' => 'space_area',
+                'theme_title' => 'Space theme',
+                'theme_version' => '2.0.0.0',
+                'parent_id' => null,
+                'is_featured' => false,
+                'theme_path' => 'default_space',
+                'preview_image' => 'images/preview.png',
+                'type' => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
+            )
+        );
 
         $this->_model->addDefaultPattern('*');
         $this->assertFalse($this->_model->hasTheme($themeModel));

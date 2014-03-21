@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class DateTest extends AbstractFormTestCase
@@ -34,15 +33,27 @@ class DateTest extends AbstractFormTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->attributeMetadataMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('date'));
-        $this->attributeMetadataMock->expects($this->any())
-            ->method('getStoreLabel')
-            ->will($this->returnValue('Space Date'));
-        $this->attributeMetadataMock->expects($this->any())
-            ->method('getInputFilter')
-            ->will($this->returnValue('date'));
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getAttributeCode'
+        )->will(
+            $this->returnValue('date')
+        );
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getStoreLabel'
+        )->will(
+            $this->returnValue('Space Date')
+        );
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getInputFilter'
+        )->will(
+            $this->returnValue('date')
+        );
         $this->date = new Date(
             $this->localeMock,
             $this->loggerMock,
@@ -55,9 +66,7 @@ class DateTest extends AbstractFormTestCase
 
     public function testExtractValue()
     {
-        $requestMock = $this->getMockBuilder('Magento\App\RequestInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestMock = $this->getMockBuilder('Magento\App\RequestInterface')->disableOriginalConstructor()->getMock();
         $requestMock->expects($this->once())->method('getParam')->will($this->returnValue('1999-1-2'));
 
         // yyyy-MM-dd
@@ -75,13 +84,15 @@ class DateTest extends AbstractFormTestCase
      */
     public function testValidateValue($value, $validation, $required, $expected)
     {
-        $this->attributeMetadataMock->expects($this->any())
-            ->method('getValidationRules')
-            ->will($this->returnValue(array_merge(['input_validation' => 'date'], $validation)));
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getValidationRules'
+        )->will(
+            $this->returnValue(array_merge(array('input_validation' => 'date'), $validation))
+        );
 
-        $this->attributeMetadataMock->expects($this->any())
-            ->method('isRequired')
-            ->will($this->returnValue($required));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue($required));
 
         $actual = $this->date->validateValue($value);
         $this->assertEquals($expected, $actual);
@@ -89,42 +100,42 @@ class DateTest extends AbstractFormTestCase
 
     public function validateValueDataProvider()
     {
-        return [
-            'false value, load original' => [false, [], false, true],
-            'Empty value, not required' => ['', [], false, true],
-            'Empty value, required' => ['', [], true, ['"Space Date" is a required value.']],
-            'Valid date, min set' => ['1961-5-5', ['date_range_min' => strtotime('4/12/1961')], false, true],
-            'Below min, only min set' => [
+        return array(
+            'false value, load original' => array(false, array(), false, true),
+            'Empty value, not required' => array('', array(), false, true),
+            'Empty value, required' => array('', array(), true, array('"Space Date" is a required value.')),
+            'Valid date, min set' => array('1961-5-5', array('date_range_min' => strtotime('4/12/1961')), false, true),
+            'Below min, only min set' => array(
                 '1957-10-4',
-                ['date_range_min' => strtotime('1961/04/12')],
+                array('date_range_min' => strtotime('1961/04/12')),
                 false,
-                ['Please enter a valid date equal to or greater than 12/04/1961 at Space Date.'],
-            ],
-            'Below min, min and max set' => [
+                array('Please enter a valid date equal to or greater than 12/04/1961 at Space Date.')
+            ),
+            'Below min, min and max set' => array(
                 '1957-10-4',
-                ['date_range_min' => strtotime('1961/04/12'), 'date_range_max' => strtotime('12/1/2013')],
+                array('date_range_min' => strtotime('1961/04/12'), 'date_range_max' => strtotime('12/1/2013')),
                 false,
-                ['Please enter a valid date between 12/04/1961 and 01/12/2013 at Space Date.'],
-            ],
-            'Above max, only max set' => [
+                array('Please enter a valid date between 12/04/1961 and 01/12/2013 at Space Date.')
+            ),
+            'Above max, only max set' => array(
                 '2014-1-30',
-                ['date_range_max' => strtotime('12/1/2013')],
+                array('date_range_max' => strtotime('12/1/2013')),
                 false,
-                ['Please enter a valid date less than or equal to 01/12/2013 at Space Date.'],
-            ],
-            'Valid, min and max' => [
+                array('Please enter a valid date less than or equal to 01/12/2013 at Space Date.')
+            ),
+            'Valid, min and max' => array(
                 '1961-5-5',
-                [ 'date_range_min' => strtotime('4/12/1961'), 'date_range_max' => strtotime('12/1/2013')],
+                array('date_range_min' => strtotime('4/12/1961'), 'date_range_max' => strtotime('12/1/2013')),
                 false,
-                true,
-            ],
-            'Invalid date' => [
+                true
+            ),
+            'Invalid date' => array(
                 'abc',
-                [],
+                array(),
                 false,
-                ['dateFalseFormat' => '"Space Date" does not fit the entered date format.']
-            ],
-        ];
+                array('dateFalseFormat' => '"Space Date" does not fit the entered date format.')
+            )
+        );
     }
 
     /**
@@ -140,13 +151,13 @@ class DateTest extends AbstractFormTestCase
 
     public function compactAndRestoreValueDataProvider()
     {
-        return [
-            [1, 1],
-            [false, false],
-            ['', null],
-            ['test', 'test'],
-            [['element1', 'element2'], ['element1', 'element2']],
-        ];
+        return array(
+            array(1, 1),
+            array(false, false),
+            array('', null),
+            array('test', 'test'),
+            array(array('element1', 'element2'), array('element1', 'element2'))
+        );
     }
 
     /**
@@ -172,6 +183,5 @@ class DateTest extends AbstractFormTestCase
             0
         );
         $this->assertEquals('2012-12-31', $date->outputValue());
-
     }
 }

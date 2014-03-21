@@ -94,7 +94,7 @@ class Dashboard extends \Magento\Backend\App\Action
      */
     public function ajaxBlockAction()
     {
-        $output   = '';
+        $output = '';
         $blockTab = $this->getRequest()->getParam('block');
         $blockClassSuffix = str_replace(
             ' ',
@@ -102,8 +102,9 @@ class Dashboard extends \Magento\Backend\App\Action
             ucwords(str_replace('_', ' ', $blockTab))
         );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
-            $output = $this->_view->getLayout()->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
-                ->toHtml();
+            $output = $this->_view->getLayout()->createBlock(
+                'Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix
+            )->toHtml();
         }
         $this->getResponse()->setBody($output);
         return;
@@ -132,15 +133,24 @@ class Dashboard extends \Magento\Backend\App\Action
                     try {
                         /** @var $httpClient \Magento\HTTP\ZendClient */
                         $httpClient = $this->_objectManager->create('Magento\HTTP\ZendClient');
-                        $response = $httpClient->setUri(\Magento\Backend\Block\Dashboard\Graph::API_URL)
-                            ->setParameterGet($params)
-                            ->setConfig(array('timeout' => 5))
-                            ->request('GET');
+                        $response = $httpClient->setUri(
+                            \Magento\Backend\Block\Dashboard\Graph::API_URL
+                        )->setParameterGet(
+                            $params
+                        )->setConfig(
+                            array('timeout' => 5)
+                        )->request(
+                            'GET'
+                        );
 
                         $headers = $response->getHeaders();
 
-                        $this->_response->setHeader('Content-type', $headers['Content-type'])
-                            ->setBody($response->getBody());
+                        $this->_response->setHeader(
+                            'Content-type',
+                            $headers['Content-type']
+                        )->setBody(
+                            $response->getBody()
+                        );
                         return;
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -150,9 +160,14 @@ class Dashboard extends \Magento\Backend\App\Action
                 }
             }
         }
-        $this->_response->setBody(__('Service unavailable: %1', $error))
-            ->setHeader('Content-Type', 'text/plain; charset=UTF-8')
-            ->setHttpResponseCode($httpCode);
+        $this->_response->setBody(
+            __('Service unavailable: %1', $error)
+        )->setHeader(
+            'Content-Type',
+            'text/plain; charset=UTF-8'
+        )->setHttpResponseCode(
+            $httpCode
+        );
     }
 
     /**

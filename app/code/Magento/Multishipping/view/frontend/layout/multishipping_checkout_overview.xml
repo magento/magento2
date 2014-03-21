@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="multishipping_checkout"/>
     <update handle="checkout_cart_item_renderers" />
     <referenceBlock name="page.main.title">
@@ -32,7 +32,7 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Multishipping\Block\Checkout\Overview" name="checkout_overview" template="checkout/overview.phtml" cacheable="false">
+        <block class="Magento\Multishipping\Block\Checkout\Overview" name="checkout_overview" template="checkout/overview.phtml">
             <arguments>
                 <argument name="renderer_template" xsi:type="string">Magento_Multishipping::checkout/item/default.phtml</argument>
                 <argument name="row_renderer_template" xsi:type="string">Magento_Multishipping::checkout/overview/item.phtml</argument>
@@ -45,7 +45,7 @@
                 </action>
             </block>
             <block class="Magento\Checkout\Block\Agreements" name="checkout.multishipping.agreements" as="agreements" template="agreements.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Totals" name="totals" cacheable="false"/>
+            <block class="Magento\Checkout\Block\Cart\Totals" name="totals"/>
             <container name="checkout.multishipping.overview.items.after" as="items_after" label="Overview Items After"/>
         </block>
     </referenceContainer>

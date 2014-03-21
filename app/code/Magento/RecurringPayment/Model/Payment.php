@@ -324,6 +324,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
      * Takes arbitrary number of \Magento\Object instances to be treated as items for new order
      *
      * @return \Magento\Sales\Model\Order
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function createOrder()
     {
@@ -350,25 +351,38 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
 
         $order = $this->_orderFactory->create();
 
-        $billingAddress = $this->_addressFactory->create()
-            ->setData($this->getBillingAddressInfo())
-            ->setId(null);
+        $billingAddress = $this->_addressFactory->create()->setData($this->getBillingAddressInfo())->setId(null);
 
         $shippingInfo = $this->getShippingAddressInfo();
-        $shippingAddress = $this->_addressFactory->create()
-            ->setData($shippingInfo)
-            ->setId(null);
+        $shippingAddress = $this->_addressFactory->create()->setData($shippingInfo)->setId(null);
 
-        $payment = $this->_paymentFactory->create()
-            ->setMethod($this->getMethodCode());
+        $payment = $this->_paymentFactory->create()->setMethod($this->getMethodCode());
 
         $transferDataKeys = array(
-            'store_id',             'store_name',           'customer_id',          'customer_email',
-            'customer_firstname',   'customer_lastname',    'customer_middlename',  'customer_prefix',
-            'customer_suffix',      'customer_taxvat',      'customer_gender',      'customer_is_guest',
-            'customer_note_notify', 'customer_group_id',    'customer_note',        'shipping_method',
-            'shipping_description', 'base_currency_code',   'global_currency_code', 'order_currency_code',
-            'store_currency_code',  'base_to_global_rate',  'base_to_order_rate',   'store_to_base_rate',
+            'store_id',
+            'store_name',
+            'customer_id',
+            'customer_email',
+            'customer_firstname',
+            'customer_lastname',
+            'customer_middlename',
+            'customer_prefix',
+            'customer_suffix',
+            'customer_taxvat',
+            'customer_gender',
+            'customer_is_guest',
+            'customer_note_notify',
+            'customer_group_id',
+            'customer_note',
+            'shipping_method',
+            'shipping_description',
+            'base_currency_code',
+            'global_currency_code',
+            'order_currency_code',
+            'store_currency_code',
+            'base_to_global_rate',
+            'base_to_order_rate',
+            'store_to_base_rate',
             'store_to_order_rate'
         );
 
@@ -381,25 +395,45 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
             }
         }
 
-        $order->setStoreId($this->getStoreId())
-            ->setState(\Magento\Sales\Model\Order::STATE_NEW)
-            ->setBaseToOrderRate($this->getInfoValue('order_info', 'base_to_quote_rate'))
-            ->setStoreToOrderRate($this->getInfoValue('order_info', 'store_to_quote_rate'))
-            ->setOrderCurrencyCode($this->getInfoValue('order_info', 'quote_currency_code'))
-            ->setBaseSubtotal($billingAmount)
-            ->setSubtotal($billingAmount)
-            ->setBaseShippingAmount($shippingAmount)
-            ->setShippingAmount($shippingAmount)
-            ->setBaseTaxAmount($taxAmount)
-            ->setTaxAmount($taxAmount)
-            ->setBaseGrandTotal($grandTotal)
-            ->setGrandTotal($grandTotal)
-            ->setIsVirtual($isVirtual)
-            ->setWeight($weight)
-            ->setTotalQtyOrdered($this->getInfoValue('order_info', 'items_qty'))
-            ->setBillingAddress($billingAddress)
-            ->setShippingAddress($shippingAddress)
-            ->setPayment($payment);
+        $order->setStoreId(
+            $this->getStoreId()
+        )->setState(
+            \Magento\Sales\Model\Order::STATE_NEW
+        )->setBaseToOrderRate(
+            $this->getInfoValue('order_info', 'base_to_quote_rate')
+        )->setStoreToOrderRate(
+            $this->getInfoValue('order_info', 'store_to_quote_rate')
+        )->setOrderCurrencyCode(
+            $this->getInfoValue('order_info', 'quote_currency_code')
+        )->setBaseSubtotal(
+            $billingAmount
+        )->setSubtotal(
+            $billingAmount
+        )->setBaseShippingAmount(
+            $shippingAmount
+        )->setShippingAmount(
+            $shippingAmount
+        )->setBaseTaxAmount(
+            $taxAmount
+        )->setTaxAmount(
+            $taxAmount
+        )->setBaseGrandTotal(
+            $grandTotal
+        )->setGrandTotal(
+            $grandTotal
+        )->setIsVirtual(
+            $isVirtual
+        )->setWeight(
+            $weight
+        )->setTotalQtyOrdered(
+            $this->getInfoValue('order_info', 'items_qty')
+        )->setBillingAddress(
+            $billingAddress
+        )->setShippingAddress(
+            $shippingAddress
+        )->setPayment(
+            $payment
+        );
 
         foreach ($items as $item) {
             $order->addItem($item);
@@ -437,9 +471,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
 
         if ($quote->getPayment() && $quote->getPayment()->getMethod()) {
             $this->setManager(
-                $this->_managerFactory->create(
-                    array('paymentMethod' => $quote->getPayment()->getMethodInstance())
-                )
+                $this->_managerFactory->create(array('paymentMethod' => $quote->getPayment()->getMethodInstance()))
             );
         }
 
@@ -474,9 +506,13 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         $this->setQuoteItemInfo($item);
 
         // TODO: make it abstract from amounts
-        $this->setBillingAmount($item->getBaseRowTotal())
-            ->setTaxAmount($item->getBaseTaxAmount())
-            ->setShippingAmount($item->getBaseShippingAmount());
+        $this->setBillingAmount(
+            $item->getBaseRowTotal()
+        )->setTaxAmount(
+            $item->getBaseTaxAmount()
+        )->setShippingAmount(
+            $item->getBaseShippingAmount()
+        );
         if (!$this->getScheduleDescription()) {
             $this->setScheduleDescription($item->getName());
         }
@@ -532,8 +568,8 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         } else {
             if ($info instanceof \Magento\Object) {
                 return $info->getDataUsingMethod($infoValueKey);
-            } elseif (isset($info->$infoValueKey)) {
-                return $info->$infoValueKey;
+            } elseif (isset($info->{$infoValueKey})) {
+                return $info->{$infoValueKey};
             }
         }
     }
@@ -578,7 +614,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
                 'active' => array('suspended', 'canceled'),
                 'suspended' => array('active', 'canceled'),
                 'canceled' => array(),
-                'expired' => array(),
+                'expired' => array()
             );
         }
     }
@@ -595,11 +631,9 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
     {
         $this->_initWorkflow();
         $state = $this->getState();
-        $result = (!empty($this->_workflow[$state])) && in_array($againstState, $this->_workflow[$state]);
+        $result = !empty($this->_workflow[$state]) && in_array($againstState, $this->_workflow[$state]);
         if (!$soft && !$result) {
-            throw new \Magento\Core\Exception(
-                __('This payment state cannot be changed to "%1".', $againstState)
-            );
+            throw new \Magento\Core\Exception(__('This payment state cannot be changed to "%1".', $againstState));
         }
         return $result;
     }
@@ -669,17 +703,27 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         $shippingAmount = $itemInfo->getShippingAmount() ? $itemInfo->getShippingAmount() : $this->getShippingAmount();
         $taxAmount = $itemInfo->getTaxAmount() ? $itemInfo->getTaxAmount() : $this->getTaxAmount();
 
-        $item = $this->_orderItemFactory->create()
-            ->setData($this->getOrderItemInfo())
-            ->setQtyOrdered($this->getInfoValue('order_item_info', 'qty'))
-            ->setBaseOriginalPrice($this->getInfoValue('order_item_info', 'price'))
-            ->setPrice($price)
-            ->setBasePrice($price)
-            ->setRowTotal($price)
-            ->setBaseRowTotal($price)
-            ->setTaxAmount($taxAmount)
-            ->setShippingAmount($shippingAmount)
-            ->setId(null);
+        $item = $this->_orderItemFactory->create()->setData(
+            $this->getOrderItemInfo()
+        )->setQtyOrdered(
+            $this->getInfoValue('order_item_info', 'qty')
+        )->setBaseOriginalPrice(
+            $this->getInfoValue('order_item_info', 'price')
+        )->setPrice(
+            $price
+        )->setBasePrice(
+            $price
+        )->setRowTotal(
+            $price
+        )->setBaseRowTotal(
+            $price
+        )->setTaxAmount(
+            $taxAmount
+        )->setShippingAmount(
+            $shippingAmount
+        )->setId(
+            null
+        );
         return $item;
     }
 
@@ -694,14 +738,9 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
     {
         $item = $this->_getRegularItem($itemInfo);
 
-        $item->setName(
-            __('Trial ') . $item->getName()
-        );
+        $item->setName(__('Trial ') . $item->getName());
 
-        $option = array(
-            'label' => __('Payment type'),
-            'value' => __('Trial period payment')
-        );
+        $option = array('label' => __('Payment type'), 'value' => __('Trial period payment'));
 
         $this->_addAdditionalOptionToItem($item, $option);
 
@@ -720,28 +759,41 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         $price = $itemInfo->getPrice() ? $itemInfo->getPrice() : $this->getInitAmount();
         $shippingAmount = $itemInfo->getShippingAmount() ? $itemInfo->getShippingAmount() : 0;
         $taxAmount = $itemInfo->getTaxAmount() ? $itemInfo->getTaxAmount() : 0;
-        $item = $this->_orderItemFactory->create()
-            ->setStoreId($this->getStoreId())
-            ->setProductType(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
-            ->setIsVirtual(1)
-            ->setSku('initial_fee')
-            ->setName(__('Recurring Payment Initial Fee'))
-            ->setDescription('')
-            ->setWeight(0)
-            ->setQtyOrdered(1)
-            ->setPrice($price)
-            ->setOriginalPrice($price)
-            ->setBasePrice($price)
-            ->setBaseOriginalPrice($price)
-            ->setRowTotal($price)
-            ->setBaseRowTotal($price)
-            ->setTaxAmount($taxAmount)
-            ->setShippingAmount($shippingAmount);
-
-        $option = array(
-            'label' => __('Payment type'),
-            'value' => __('Initial period payment')
+        $item = $this->_orderItemFactory->create()->setStoreId(
+            $this->getStoreId()
+        )->setProductType(
+            \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+        )->setIsVirtual(
+            1
+        )->setSku(
+            'initial_fee'
+        )->setName(
+            __('Recurring Payment Initial Fee')
+        )->setDescription(
+            ''
+        )->setWeight(
+            0
+        )->setQtyOrdered(
+            1
+        )->setPrice(
+            $price
+        )->setOriginalPrice(
+            $price
+        )->setBasePrice(
+            $price
+        )->setBaseOriginalPrice(
+            $price
+        )->setRowTotal(
+            $price
+        )->setBaseRowTotal(
+            $price
+        )->setTaxAmount(
+            $taxAmount
+        )->setShippingAmount(
+            $shippingAmount
         );
+
+        $option = array('label' => __('Payment type'), 'value' => __('Initial period payment'));
 
         $this->_addAdditionalOptionToItem($item, $option);
         return $item;

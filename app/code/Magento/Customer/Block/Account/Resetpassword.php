@@ -36,10 +36,8 @@ class Resetpassword extends \Magento\View\Element\Template
      * @param Context $context
      * @param array $data
      */
-    public function __construct(
-        Context $context,
-        array $data = []
-    ) {
+    public function __construct(Context $context, array $data = array())
+    {
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }

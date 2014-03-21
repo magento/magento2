@@ -110,10 +110,12 @@ class GenerateVariations extends Action
                     $attribute->load($attributeData['attribute_id']);
                     $optionsBefore = $attribute->getSource()->getAllOptions(false);
 
-                    $attribute->setOption(array(
-                        'value' => array('option_0' => array($priceData['label'])),
-                        'order' => array('option_0' => count($optionsBefore) + 1),
-                    ));
+                    $attribute->setOption(
+                        array(
+                            'value' => array('option_0' => array($priceData['label'])),
+                            'order' => array('option_0' => count($optionsBefore) + 1)
+                        )
+                    );
                     $attribute->save();
 
                     $attribute = $this->attributeFactory->create();
@@ -134,4 +136,3 @@ class GenerateVariations extends Action
         $this->getRequest()->setParam('product', $productData);
     }
 }
-

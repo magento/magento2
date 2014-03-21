@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Order;
 
 /**
@@ -65,12 +64,7 @@ class Link extends \Magento\View\Element\Html\Link\Current
      */
     public function getHref()
     {
-        return $this->getUrl(
-            $this->getPath(),
-            array(
-                'order_id' => $this->getOrder()->getId(),
-            )
-        );
+        return $this->getUrl($this->getPath(), array('order_id' => $this->getOrder()->getId()));
     }
 
     /**
@@ -80,9 +74,10 @@ class Link extends \Magento\View\Element\Html\Link\Current
      */
     protected function _toHtml()
     {
-        if ($this->hasKey()
-            && method_exists($this->getOrder(), 'has' . $this->getKey())
-            && !$this->getOrder()->{'has' . $this->getKey()}()
+        if ($this->hasKey() && method_exists(
+            $this->getOrder(),
+            'has' . $this->getKey()
+        ) && !$this->getOrder()->{'has' . $this->getKey()}()
         ) {
             return '';
         }

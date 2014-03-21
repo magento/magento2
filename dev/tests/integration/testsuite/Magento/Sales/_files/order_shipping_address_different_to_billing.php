@@ -30,24 +30,22 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
     'Magento\Sales\Model\Order\Address',
     array(
         'data' => array(
-            'firstname'  => 'guest',
-            'lastname'   => 'guest',
-            'email'      => 'customer@example.com',
-            'street'     => 'street',
-            'city'       => 'Los Angeles',
-            'region'     => 'CA',
-            'postcode'   => '1',
+            'firstname' => 'guest',
+            'lastname' => 'guest',
+            'email' => 'customer@example.com',
+            'street' => 'street',
+            'city' => 'Los Angeles',
+            'region' => 'CA',
+            'postcode' => '1',
             'country_id' => 'US',
-            'telephone'  => '1',
+            'telephone' => '1'
         )
     )
 );
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
-$shippingAddress->setId(null)
-    ->setPostcode('2')
-    ->setAddressType('shipping');
+$shippingAddress->setId(null)->setPostcode('2')->setAddressType('shipping');
 
 /** @var $order \Magento\Sales\Model\Order */
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
@@ -61,8 +59,5 @@ $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $payment->setMethod('checkmo');
 
 $order = $clonedOrder;
-$order->setId(null)
-    ->setBillingAddress($billingAddress)
-    ->setShippingAddress($shippingAddress)
-    ->setPayment($payment);
+$order->setId(null)->setBillingAddress($billingAddress)->setShippingAddress($shippingAddress)->setPayment($payment);
 $order->save();

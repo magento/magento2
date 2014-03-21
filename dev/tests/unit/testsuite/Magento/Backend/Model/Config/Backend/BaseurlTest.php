@@ -32,18 +32,10 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $cacheManager = $this->getMock('Magento\App\CacheInterface');
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $context = new \Magento\Model\Context(
-            $logger,
-            $eventDispatcher,
-            $cacheManager,
-            $appState,
-            $storeManager
-        );
+        $context = new \Magento\Model\Context($logger, $eventDispatcher, $cacheManager, $appState, $storeManager);
 
         $resource = $this->getMock('Magento\Core\Model\Resource\Config\Data', array(), array(), '', false);
-        $resource->expects($this->any())
-            ->method('addCommitCallback')
-            ->will($this->returnValue($resource));
+        $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));
         $resourceCollection = $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false);
         $mergeService = $this->getMock('Magento\View\Asset\MergeService', array(), array(), '', false);
         $coreRegistry = $this->getMock('Magento\Registry', array(), array(), '', false);
@@ -53,21 +45,11 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMock(
             'Magento\Backend\Model\Config\Backend\Baseurl',
             array('getOldValue'),
-            array(
-                $context,
-                $coreRegistry,
-                $storeManager,
-                $coreConfig,
-                $mergeService,
-                $resource,
-                $resourceCollection
-            )
+            array($context, $coreRegistry, $storeManager, $coreConfig, $mergeService, $resource, $resourceCollection)
         );
-        $mergeService->expects($this->once())
-            ->method('cleanMergedJsCss');
+        $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
-        $model->setValue('http://example.com/')
-            ->setPath(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL);
+        $model->setValue('http://example.com/')->setPath(\Magento\Core\Model\Store::XML_PATH_UNSECURE_BASE_URL);
         $model->save();
     }
 }

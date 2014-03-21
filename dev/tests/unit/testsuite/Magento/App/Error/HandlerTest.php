@@ -70,8 +70,13 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessExceptionPrint()
     {
-        $this->appState->expects($this->any())->method('getMode')
-            ->will($this->returnValue(\Magento\App\State::MODE_DEVELOPER));
+        $this->appState->expects(
+            $this->any()
+        )->method(
+            'getMode'
+        )->will(
+            $this->returnValue(\Magento\App\State::MODE_DEVELOPER)
+        );
         $exception = new \Exception('TestMessage');
 
         ob_start();
@@ -89,12 +94,22 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessExceptionReport()
     {
-        $this->appState->expects($this->any())->method('getMode')
-            ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
-        $this->filesystem->expects($this->atLeastOnce())
-            ->method('getPath')
-            ->with(\Magento\App\Filesystem::PUB_DIR)
-            ->will($this->returnValue(dirname(__DIR__) . '/../_files'));
+        $this->appState->expects(
+            $this->any()
+        )->method(
+            'getMode'
+        )->will(
+            $this->returnValue(\Magento\App\State::MODE_DEFAULT)
+        );
+        $this->filesystem->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getPath'
+        )->with(
+            \Magento\App\Filesystem::PUB_DIR
+        )->will(
+            $this->returnValue(dirname(__DIR__) . '/../_files')
+        );
 
         $exception = new \Exception('TestMessage');
         $this->handler->processException($exception);
@@ -108,11 +123,21 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorHandlerLogging()
     {
-        $this->appState->expects($this->any())->method('getMode')
-            ->will($this->returnValue(\Magento\App\State::MODE_DEFAULT));
-        $this->logger->expects($this->once())
-            ->method('log')
-            ->with($this->stringContains('testErrorHandlerLogging'), \Zend_Log::ERR);
+        $this->appState->expects(
+            $this->any()
+        )->method(
+            'getMode'
+        )->will(
+            $this->returnValue(\Magento\App\State::MODE_DEFAULT)
+        );
+        $this->logger->expects(
+            $this->once()
+        )->method(
+            'log'
+        )->with(
+            $this->stringContains('testErrorHandlerLogging'),
+            \Zend_Log::ERR
+        );
         set_error_handler(array($this->handler, 'handler'));
         try {
             trigger_error('testErrorHandlerLogging', E_USER_NOTICE);
@@ -132,8 +157,13 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorHandlerPrint()
     {
-        $this->appState->expects($this->any())->method('getMode')
-            ->will($this->returnValue(\Magento\App\State::MODE_DEVELOPER));
+        $this->appState->expects(
+            $this->any()
+        )->method(
+            'getMode'
+        )->will(
+            $this->returnValue(\Magento\App\State::MODE_DEVELOPER)
+        );
         set_error_handler(array($this->handler, 'handler'));
         try {
             trigger_error('testErrorHandlerPrint', E_USER_NOTICE);

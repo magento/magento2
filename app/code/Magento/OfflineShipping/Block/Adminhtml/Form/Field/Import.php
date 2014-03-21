@@ -50,7 +50,7 @@ class Import extends \Magento\Data\Form\Element\AbstractElement
     {
         $html = '';
 
-        $html .= '<input id="time_condition" type="hidden" name="' . $this->getName() . '" value="'.time().'" />';
+        $html .= '<input id="time_condition" type="hidden" name="' . $this->getName() . '" value="' . time() . '" />';
 
         $html .= <<<EndHTML
         <script type="text/javascript">

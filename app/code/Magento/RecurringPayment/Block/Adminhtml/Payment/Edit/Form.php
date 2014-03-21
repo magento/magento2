@@ -147,8 +147,11 @@ class Form extends \Magento\Backend\Block\AbstractBlock
          * It is needed to maintain HTML consistency of the parent element's form
          */
         if ($this->_parentElement) {
-            $form->setHtmlIdPrefix($this->_parentElement->getHtmlId())
-                ->setFieldNameSuffix($this->_parentElement->getName());
+            $form->setHtmlIdPrefix(
+                $this->_parentElement->getHtmlId()
+            )->setFieldNameSuffix(
+                $this->_parentElement->getName()
+            );
             $form->addField('', 'hidden', array('name' => ''));
         }
 
@@ -157,10 +160,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
         // schedule
         $schedule = $form->addFieldset(
             'schedule_fieldset',
-            array(
-                'legend' => __('Schedule'),
-                'disabled' => $this->_isReadOnly
-            )
+            array('legend' => __('Schedule'), 'disabled' => $this->_isReadOnly)
         );
         $schedule->addField(
             'start_date_is_editable',
@@ -180,17 +180,12 @@ class Form extends \Magento\Backend\Block\AbstractBlock
         // billing
         $billing = $form->addFieldset(
             'billing_fieldset',
-            array(
-                'legend' => __('Billing'),
-                'disabled' => $this->_isReadOnly
-            )
+            array('legend' => __('Billing'), 'disabled' => $this->_isReadOnly)
         );
         $this->_addField(
             $billing,
             'period_unit',
-            array(
-                'options' => $this->_getPeriodUnitOptions(__('-- Please Select --')),
-            ),
+            array('options' => $this->_getPeriodUnitOptions(__('-- Please Select --'))),
             'select'
         );
         $this->_addField($billing, 'period_frequency');
@@ -199,17 +194,12 @@ class Form extends \Magento\Backend\Block\AbstractBlock
         // trial
         $trial = $form->addFieldset(
             'trial_fieldset',
-            array(
-                'legend' => __('Trial Period'),
-                'disabled' => $this->_isReadOnly
-            )
+            array('legend' => __('Trial Period'), 'disabled' => $this->_isReadOnly)
         );
         $this->_addField(
             $trial,
             'trial_period_unit',
-            array(
-                'options' => $this->_getPeriodUnitOptions(__('-- Not Selected --')),
-            ),
+            array('options' => $this->_getPeriodUnitOptions(__('-- Not Selected --'))),
             'select'
         );
         $this->_addField($trial, 'trial_period_frequency');
@@ -219,10 +209,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
         // initial fees
         $initial = $form->addFieldset(
             'initial_fieldset',
-            array(
-                'legend' => __('Initial Fees'),
-                'disabled' => $this->_isReadOnly
-            )
+            array('legend' => __('Initial Fees'), 'disabled' => $this->_isReadOnly)
         );
         $this->_addField($initial, 'init_amount');
         $this->_addField($initial, 'init_may_fail', array('options' => $noYes), 'select');
@@ -248,7 +235,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
                 'name' => $elementName,
                 'label' => $this->_recurringPaymentFields->getFieldLabel($elementName),
                 'note' => $this->_recurringPaymentFields->getFieldComment($elementName),
-                'disabled' => $this->_isReadOnly,
+                'disabled' => $this->_isReadOnly
             )
         );
         if (in_array($elementName, array('period_unit', 'period_frequency'))) {
@@ -265,10 +252,7 @@ class Form extends \Magento\Backend\Block\AbstractBlock
      */
     protected function _getPeriodUnitOptions($emptyLabel)
     {
-        return array_merge(
-            array('' => $emptyLabel),
-            $this->_periodUnits->toOptionArray()
-        );
+        return array_merge(array('' => $emptyLabel), $this->_periodUnits->toOptionArray());
     }
 
     /**

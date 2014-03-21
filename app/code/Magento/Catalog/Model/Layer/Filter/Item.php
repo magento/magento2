@@ -76,9 +76,7 @@ class Item extends \Magento\Object
     {
         $filter = $this->getData('filter');
         if (!is_object($filter)) {
-            throw new \Magento\Core\Exception(
-                __('The filter must be an object. Please set correct filter.')
-            );
+            throw new \Magento\Core\Exception(__('The filter must be an object. Please set correct filter.'));
         }
         return $filter;
     }
@@ -91,10 +89,11 @@ class Item extends \Magento\Object
     public function getUrl()
     {
         $query = array(
-            $this->getFilter()->getRequestVar()=>$this->getValue(),
-            $this->_htmlPagerBlock->getPageVarName() => null // exclude current page from urls
+            $this->getFilter()->getRequestVar() => $this->getValue(),
+            // exclude current page from urls
+            $this->_htmlPagerBlock->getPageVarName() => null
         );
-        return $this->_url->getUrl('*/*/*', array('_current'=>true, '_use_rewrite'=>true, '_query'=>$query));
+        return $this->_url->getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true, '_query' => $query));
     }
 
     /**
@@ -104,11 +103,11 @@ class Item extends \Magento\Object
      */
     public function getRemoveUrl()
     {
-        $query = array($this->getFilter()->getRequestVar()=>$this->getFilter()->getResetValue());
-        $params['_current']     = true;
+        $query = array($this->getFilter()->getRequestVar() => $this->getFilter()->getResetValue());
+        $params['_current'] = true;
         $params['_use_rewrite'] = true;
-        $params['_query']       = $query;
-        $params['_escape']      = true;
+        $params['_query'] = $query;
+        $params['_escape'] = true;
         return $this->_url->getUrl('*/*/*', $params);
     }
 
@@ -128,7 +127,7 @@ class Item extends \Magento\Object
             '_current' => true,
             '_use_rewrite' => true,
             '_query' => array($this->getFilter()->getRequestVar() => null),
-            '_escape' => true,
+            '_escape' => true
         );
         return $this->_url->getUrl('*/*/*', $urlParams);
     }

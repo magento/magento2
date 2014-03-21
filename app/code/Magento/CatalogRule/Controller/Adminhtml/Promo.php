@@ -55,5 +55,4 @@ class Promo extends Action
     {
         return $this->_authorization->isAllowed('Magento_CatalogRule::promo');
     }
-
 }

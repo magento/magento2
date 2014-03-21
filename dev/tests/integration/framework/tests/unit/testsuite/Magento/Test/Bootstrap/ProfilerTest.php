@@ -57,21 +57,25 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testRegisterFileProfiler()
     {
-        $this->_driver
-            ->expects($this->once())
-            ->method('registerOutput')
-            ->with($this->isInstanceOf('Magento\Profiler\Driver\Standard\Output\Csvfile'))
-        ;
+        $this->_driver->expects(
+            $this->once()
+        )->method(
+            'registerOutput'
+        )->with(
+            $this->isInstanceOf('Magento\Profiler\Driver\Standard\Output\Csvfile')
+        );
         $this->_object->registerFileProfiler('php://output');
     }
 
     public function testRegisterBambooProfiler()
     {
-        $this->_driver
-            ->expects($this->once())
-            ->method('registerOutput')
-            ->with($this->isInstanceOf('Magento\TestFramework\Profiler\OutputBamboo'))
-        ;
+        $this->_driver->expects(
+            $this->once()
+        )->method(
+            'registerOutput'
+        )->with(
+            $this->isInstanceOf('Magento\TestFramework\Profiler\OutputBamboo')
+        );
         $this->_object->registerBambooProfiler('php://output', __DIR__ . '/_files/metrics.php');
     }
 }

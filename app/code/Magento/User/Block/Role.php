@@ -74,8 +74,10 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
                 'grid',
                 $this->getLayout()->createBlock(
                     $this->_blockGroup . '\\Block\\Role\\Grid',
-                    $this->_controller . '.grid')
-                    ->setSaveParametersInSession(true)
+                    $this->_controller . '.grid'
+                )->setSaveParametersInSession(
+                    true
+                )
             );
         }
         return \Magento\Backend\Block\Widget\Container::_prepareLayout();

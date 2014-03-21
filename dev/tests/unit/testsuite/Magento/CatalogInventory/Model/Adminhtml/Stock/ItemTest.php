@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
@@ -39,13 +38,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $resourceMock = $this->getMock(
             'Magento\Core\Model\Resource\AbstractResource',
             array('_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_model = $objectHelper->getObject('\Magento\CatalogInventory\Model\Adminhtml\Stock\Item', array(
-            'resource' => $resourceMock
-        ));
+        $this->_model = $objectHelper->getObject(
+            '\Magento\CatalogInventory\Model\Adminhtml\Stock\Item',
+            array('resource' => $resourceMock)
+        );
     }
 
     public function testGetCustomerGroupId()

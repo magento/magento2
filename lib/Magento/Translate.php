@@ -34,17 +34,17 @@ class Translate implements \Magento\TranslateInterface
     /**
      * CSV separator
      */
-    const CSV_SEPARATOR     = ',';
+    const CSV_SEPARATOR = ',';
 
     /**
      * Scope separator
      */
-    const SCOPE_SEPARATOR   = '::';
+    const SCOPE_SEPARATOR = '::';
 
     /**
      * Configuration area key
      */
-    const CONFIG_KEY_AREA   = 'area';
+    const CONFIG_KEY_AREA = 'area';
 
     /**
      * Configuration locale key
@@ -54,12 +54,12 @@ class Translate implements \Magento\TranslateInterface
     /**
      * Configuration scope key
      */
-    const CONFIG_KEY_SCOPE  = 'scope';
+    const CONFIG_KEY_SCOPE = 'scope';
 
     /**
      * Configuration theme key
      */
-    const CONFIG_KEY_DESIGN_THEME   = 'theme';
+    const CONFIG_KEY_DESIGN_THEME = 'theme';
 
     /**
      * Locale code
@@ -374,9 +374,9 @@ class Translate implements \Magento\TranslateInterface
             if ($key === $value) {
                 continue;
             }
-            $key    = $this->_prepareDataString($key);
-            $value  = $this->_prepareDataString($value);
-            if ($scope && isset($this->_dataScope[$key]) && !$forceReload ) {
+            $key = $this->_prepareDataString($key);
+            $value = $this->_prepareDataString($value);
+            if ($scope && isset($this->_dataScope[$key]) && !$forceReload) {
                 /**
                  * Checking previous value
                  */
@@ -391,7 +391,7 @@ class Translate implements \Magento\TranslateInterface
                 $this->_data[$scopeKey] = $value;
             } else {
                 $this->_data[$key] = $value;
-                $this->_dataScope[$key]= $scope;
+                $this->_dataScope[$key] = $scope;
             }
         }
         return $this;
@@ -473,8 +473,10 @@ class Translate implements \Magento\TranslateInterface
     protected function _getThemeTranslationFile($locale, $area = null)
     {
         $area = isset($area) ? $area : $this->_appState->getAreaCode();
-        return $this->_viewFileSystem
-            ->getFilename(\Magento\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv', array('area' => $area));
+        return $this->_viewFileSystem->getFilename(
+            \Magento\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv',
+            array('area' => $area)
+        );
     }
 
     /**
@@ -558,9 +560,16 @@ class Translate implements \Magento\TranslateInterface
         $result = $this->_placeholderRender->render($translated, $args);
 
         if ($this->_translateInline && $this->getTranslateInline()) {
-            if (strpos($result, '{{{') === false
-                || strpos($result, '}}}') === false
-                || strpos($result, '}}{{') === false
+            if (strpos(
+                $result,
+                '{{{'
+            ) === false || strpos(
+                $result,
+                '}}}'
+            ) === false || strpos(
+                $result,
+                '}}{{'
+            ) === false
             ) {
                 $result = '{{{' . $result . '}}{{' . $translated . '}}{{' . $text . '}}{{' . $module . '}}}';
             }
@@ -686,8 +695,10 @@ class Translate implements \Magento\TranslateInterface
             if ($initParams === null) {
                 $this->_inlineInterface = $this->_translateFactory->create();
             } else {
-                $this->_inlineInterface = $this->_translateFactory
-                    ->create($initParams->getParams(), $initParams->getInlineType());
+                $this->_inlineInterface = $this->_translateFactory->create(
+                    $initParams->getParams(),
+                    $initParams->getInlineType()
+                );
             }
         }
         return $this->_inlineInterface;
@@ -704,13 +715,11 @@ class Translate implements \Magento\TranslateInterface
     {
         $this->setLocale($localeCode);
 
-        $dispatchResult = new \Magento\Object(array(
-            'inline_type' => null
-        ));
-        $this->_eventManager->dispatch('translate_initialization_before', array(
-            'translate_object' => $this,
-            'result' => $dispatchResult
-        ));
+        $dispatchResult = new \Magento\Object(array('inline_type' => null));
+        $this->_eventManager->dispatch(
+            'translate_initialization_before',
+            array('translate_object' => $this, 'result' => $dispatchResult)
+        );
         $this->init($area, $dispatchResult, true);
         return $this;
     }

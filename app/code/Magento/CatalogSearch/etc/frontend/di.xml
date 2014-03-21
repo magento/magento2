@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <virtualType name="Magento\CatalogSearch\Model\Session\Storage" type="Magento\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">catalogsearch</argument>
@@ -35,4 +35,12 @@
             <argument name="sessionName" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\CatalogSearch\Block\SearchResult\ListProduct" type="Magento\Catalog\Block\Product\ListProduct">
+        <arguments>
+            <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Search</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Layer\Search\AvailabilityFlag">
+        <plugin name="catalogSearch" type="Magento\CatalogSearch\Model\Layer\Search\AvailabilityFlag\Plugin" sortOrder="50"/>
+    </type>
 </config>

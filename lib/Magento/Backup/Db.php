@@ -86,7 +86,7 @@ class Db extends AbstractBackup
 
         $returnResult = false;
         if ($lineLength > 0) {
-            $lastSymbolIndex = $lineLength-1;
+            $lastSymbolIndex = $lineLength - 1;
             if ($cleanLine[$lastSymbolIndex] == ';') {
                 $returnResult = true;
             }
@@ -107,11 +107,15 @@ class Db extends AbstractBackup
 
         $this->_lastOperationSucceed = false;
 
-        $backup = $this->_backupFactory->createBackupModel()
-            ->setTime($this->getTime())
-            ->setType($this->getType())
-            ->setPath($this->getBackupsDir())
-            ->setName($this->getName());
+        $backup = $this->_backupFactory->createBackupModel()->setTime(
+            $this->getTime()
+        )->setType(
+            $this->getType()
+        )->setPath(
+            $this->getBackupsDir()
+        )->setName(
+            $this->getName()
+        );
 
         $backupDb = $this->_backupFactory->createBackupDbModel();
         $backupDb->createBackup($backup);

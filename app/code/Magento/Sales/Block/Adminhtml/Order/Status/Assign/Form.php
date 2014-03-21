@@ -84,16 +84,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'method'    => 'post',
-            ))
-        );
+        $form = $this->_formFactory->create(array('data' => array('id' => 'edit_form', 'method' => 'post')));
 
-        $fieldset   = $form->addFieldset('base_fieldset', array(
-            'legend'    => __('Assignment Information')
-        ));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Assignment Information')));
 
         $statuses = $this->_collectionFactory->create()->toOptionArray();
         array_unshift($statuses, array('value' => '', 'label' => ''));
@@ -101,32 +94,34 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $states = $this->_orderConfig->getStates();
         $states = array_merge(array('' => ''), $states);
 
-        $fieldset->addField('status', 'select',
+        $fieldset->addField(
+            'status',
+            'select',
             array(
-                'name'      => 'status',
-                'label'     => __('Order Status'),
-                'class'     => 'required-entry',
-                'values'    => $statuses,
-                'required'  => true,
+                'name' => 'status',
+                'label' => __('Order Status'),
+                'class' => 'required-entry',
+                'values' => $statuses,
+                'required' => true
             )
         );
 
-        $fieldset->addField('state', 'select',
+        $fieldset->addField(
+            'state',
+            'select',
             array(
-                'name'      => 'state',
-                'label'     => __('Order State'),
-                'class'     => 'required-entry',
-                'values'    => $states,
-                'required'  => true,
+                'name' => 'state',
+                'label' => __('Order State'),
+                'class' => 'required-entry',
+                'values' => $states,
+                'required' => true
             )
         );
 
-        $fieldset->addField('is_default', 'checkbox',
-            array(
-                'name'      => 'is_default',
-                'label'     => __('Use Order Status As Default'),
-                'value'     => 1,
-            )
+        $fieldset->addField(
+            'is_default',
+            'checkbox',
+            array('name' => 'is_default', 'label' => __('Use Order Status As Default'), 'value' => 1)
         );
 
 

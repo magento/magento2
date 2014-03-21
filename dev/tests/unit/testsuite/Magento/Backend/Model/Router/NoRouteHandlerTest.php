@@ -53,28 +53,43 @@ class NoRouteHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessWithBackendAreaFrontName()
     {
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('getPathInfo')
-            ->will($this->returnValue('backend/admin/custom'));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getPathInfo'
+        )->will(
+            $this->returnValue('backend/admin/custom')
+        );
 
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('setModuleName')
-            ->with('admin')
-            ->will($this->returnValue($this->_requestMock));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'setModuleName'
+        )->with(
+            'admin'
+        )->will(
+            $this->returnValue($this->_requestMock)
+        );
 
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('setControllerName')
-            ->with('noroute')
-            ->will($this->returnValue($this->_requestMock));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'setControllerName'
+        )->with(
+            'noroute'
+        )->will(
+            $this->returnValue($this->_requestMock)
+        );
 
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('setActionName')
-            ->with('index')
-            ->will($this->returnValue($this->_requestMock));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'setActionName'
+        )->with(
+            'index'
+        )->will(
+            $this->returnValue($this->_requestMock)
+        );
 
         $this->assertEquals(true, $this->_model->process($this->_requestMock));
     }
@@ -84,22 +99,19 @@ class NoRouteHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessWithoutAreaFrontName()
     {
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('getPathInfo')
-            ->will($this->returnValue('module/controller/action'));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getPathInfo'
+        )->will(
+            $this->returnValue('module/controller/action')
+        );
 
-        $this->_requestMock
-            ->expects($this->never())
-            ->method('setModuleName');
+        $this->_requestMock->expects($this->never())->method('setModuleName');
 
-        $this->_requestMock
-            ->expects($this->never())
-            ->method('setControllerName');
+        $this->_requestMock->expects($this->never())->method('setControllerName');
 
-        $this->_requestMock
-            ->expects($this->never())
-            ->method('setActionName');
+        $this->_requestMock->expects($this->never())->method('setActionName');
 
         $this->assertEquals(false, $this->_model->process($this->_requestMock));
     }

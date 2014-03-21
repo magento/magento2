@@ -71,15 +71,19 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getSelect($productId, $columns = array())
     {
-        return $this->_getReadAdapter()->select()
-            ->from(array("bundle_option" => $this->getTable('catalog_product_bundle_option')), array('type', 'option_id'))
-            ->where("bundle_option.parent_id = ?", $productId)
-            ->where("bundle_option.required = 1")
-            ->joinLeft(array(
-                "bundle_selection" => $this->getTable('catalog_product_bundle_selection')),
-                "bundle_selection.option_id = bundle_option.option_id",
-                $columns
-            );
+        return $this->_getReadAdapter()->select()->from(
+            array("bundle_option" => $this->getTable('catalog_product_bundle_option')),
+            array('type', 'option_id')
+        )->where(
+            "bundle_option.parent_id = ?",
+            $productId
+        )->where(
+            "bundle_option.required = 1"
+        )->joinLeft(
+            array("bundle_selection" => $this->getTable('catalog_product_bundle_selection')),
+            "bundle_selection.option_id = bundle_option.option_id",
+            $columns
+        );
     }
 
     /**
@@ -90,10 +94,7 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getSelectionsData($productId)
     {
-        return $this->_getReadAdapter()->fetchAll($this->_getSelect(
-            $productId,
-            array("*")
-        ));
+        return $this->_getReadAdapter()->fetchAll($this->_getSelect($productId, array("*")));
     }
 
     /**
@@ -105,9 +106,12 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function dropAllQuoteChildItems($productId)
     {
         $quoteItemIds = $this->_getReadAdapter()->fetchCol(
-            $this->_getReadAdapter()->select()
-            ->from($this->getTable('sales_flat_quote_item'), array('item_id'))
-            ->where('product_id = :product_id'),
+            $this->_getReadAdapter()->select()->from(
+                $this->getTable('sales_flat_quote_item'),
+                array('item_id')
+            )->where(
+                'product_id = :product_id'
+            ),
             array('product_id' => $productId)
         );
 
@@ -128,14 +132,11 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function dropAllUnneededSelections($productId, $ids)
     {
-        $where = array(
-            'parent_product_id = ?' => $productId
-        );
+        $where = array('parent_product_id = ?' => $productId);
         if (!empty($ids)) {
             $where['selection_id NOT IN (?) '] = $ids;
         }
-        $this->_getWriteAdapter()
-            ->delete($this->getTable('catalog_product_bundle_selection'), $where);
+        $this->_getWriteAdapter()->delete($this->getTable('catalog_product_bundle_selection'), $where);
     }
 
     /**
@@ -151,5 +152,4 @@ class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         return $this;
     }
-
 }

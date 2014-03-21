@@ -184,9 +184,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsUnique()) {
             if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
                 $label = $this->getAttribute()->getFrontend()->getLabel();
-                throw new Exception(
-                    __('The value of attribute "%1" must be unique.', $label)
-                );
+                throw new Exception(__('The value of attribute "%1" must be unique.', $label));
             }
         }
 
@@ -214,18 +212,18 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $clearImages = array();
-        $newImages   = array();
+        $newImages = array();
         $existImages = array();
-        if ($object->getIsDuplicate()!=true) {
+        if ($object->getIsDuplicate() != true) {
             foreach ($value['images'] as &$image) {
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
-                } else if (empty($image['value_id'])) {
-                    $newFile                   = $this->_moveImageFromTmp($image['file']);
+                } elseif (empty($image['value_id'])) {
+                    $newFile = $this->_moveImageFromTmp($image['file']);
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;
                     $this->_renamedImages[$image['file']] = $newFile;
-                    $image['file']             = $newFile;
+                    $image['file'] = $newFile;
                 } else {
                     $existImages[$image['file']] = $image;
                 }
@@ -255,11 +253,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
             if (in_array($attrData, array_keys($newImages))) {
                 $object->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-                $object->setData($mediaAttrCode.'_label', $newImages[$attrData]['label']);
+                $object->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
             }
 
             if (in_array($attrData, array_keys($existImages))) {
-                $object->setData($mediaAttrCode.'_label', $existImages[$attrData]['label']);
+                $object->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
             }
         }
 
@@ -310,8 +308,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         unset($storeIds[$storeId]);
         $storeIds = array_keys($storeIds);
 
-        $images = $this->_productFactory->create()
-            ->getAssignedImages($object, $storeIds);
+        $images = $this->_productFactory->create()->getAssignedImages($object, $storeIds);
 
         $picturesInOtherStores = array();
         foreach ($images as $image) {
@@ -330,10 +327,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
             if (empty($image['value_id'])) {
                 $data = array();
-                $data['entity_id']      = $object->getId();
-                $data['attribute_id']   = $this->getAttribute()->getId();
-                $data['value']          = $image['file'];
-                $image['value_id']      = $this->_getResource()->insertGallery($data);
+                $data['entity_id'] = $object->getId();
+                $data['attribute_id'] = $this->getAttribute()->getId();
+                $data['value'] = $image['file'];
+                $image['value_id'] = $this->_getResource()->insertGallery($data);
             }
 
             $this->_getResource()->deleteGalleryValueInStore($image['value_id'], $object->getStoreId());
@@ -345,7 +342,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $data['label'] = isset($image['label']) ? $image['label'] : '';
             $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
             $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
-            $data['store_id'] = (int) $object->getStoreId();
+            $data['store_id'] = (int)$object->getStoreId();
 
             $this->_getResource()->insertGalleryValueInStore($data);
         }
@@ -365,8 +362,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @return string
      * @throws Exception
      */
-    public function addImage(\Magento\Catalog\Model\Product $product, $file,
-        $mediaAttribute = null, $move = false, $exclude = true
+    public function addImage(
+        \Magento\Catalog\Model\Product $product,
+        $file,
+        $mediaAttribute = null,
+        $move = false,
+        $exclude = true
     ) {
         $file = $this->_mediaDirectory->getRelativePath($file);
         if (!$this->_mediaDirectory->isFile($file)) {
@@ -374,14 +375,14 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $pathinfo = pathinfo($file);
-        $imgExtensions = array('jpg','jpeg','gif','png');
+        $imgExtensions = array('jpg', 'jpeg', 'gif', 'png');
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
             throw new Exception(__('Please correct the image file type.'));
         }
 
-        $fileName       = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
+        $fileName = \Magento\Core\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
         $dispretionPath = \Magento\Core\Model\File\Uploader::getDispretionPath($fileName);
-        $fileName       = $dispretionPath . '/' . $fileName;
+        $fileName = $dispretionPath . '/' . $fileName;
 
         $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
 
@@ -402,9 +403,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaDirectory->changePermissions($destinationFile, 0777);
             }
         } catch (\Exception $e) {
-            throw new Exception(
-                __('We couldn\'t move this file: %1.', $e->getMessage())
-            );
+            throw new Exception(__('We couldn\'t move this file: %1.', $e->getMessage()));
         }
 
         $fileName = str_replace('\\', '/', $fileName);
@@ -413,9 +412,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
         if (!is_array($mediaGalleryData)) {
-            $mediaGalleryData = array(
-                'images' => array()
-            );
+            $mediaGalleryData = array('images' => array());
         }
 
         foreach ($mediaGalleryData['images'] as &$image) {
@@ -426,10 +423,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $position++;
         $mediaGalleryData['images'][] = array(
-            'file'     => $fileName,
+            'file' => $fileName,
             'position' => $position,
-            'label'    => '',
-            'disabled' => (int) $exclude
+            'label' => '',
+            'disabled' => (int)$exclude
         );
 
         $product->setData($attrCode, $mediaGalleryData);
@@ -452,8 +449,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param boolean $exclude mark image as disabled in product page view
      * @return array array of parallel arrays with original and renamed files
      */
-    public function addImagesWithDifferentMediaAttributes(\Magento\Catalog\Model\Product $product,
-        $fileAndAttributesArray, $filePath = '', $move = false, $exclude = true
+    public function addImagesWithDifferentMediaAttributes(
+        \Magento\Catalog\Model\Product $product,
+        $fileAndAttributesArray,
+        $filePath = '',
+        $move = false,
+        $exclude = true
     ) {
         $alreadyAddedFiles = array();
         $alreadyAddedFilesNames = array();
@@ -471,7 +472,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             if (!is_null($value['mediaAttribute'])) {
                 $this->setMediaAttribute($product, $value['mediaAttribute'], $savedFileName);
             }
-
         }
 
         return array('alreadyAddedFiles' => $alreadyAddedFiles, 'alreadyAddedFilesNames' => $alreadyAddedFilesNames);
@@ -488,10 +488,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function updateImage(\Magento\Catalog\Model\Product $product, $file, $data)
     {
         $fieldsMap = array(
-            'label'    => 'label',
+            'label' => 'label',
             'position' => 'position',
             'disabled' => 'disabled',
-            'exclude'  => 'disabled'
+            'exclude' => 'disabled'
         );
 
         $attrCode = $this->getAttribute()->getAttributeCode();
@@ -504,7 +504,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         foreach ($mediaGalleryData['images'] as &$image) {
             if ($image['file'] == $file) {
-                foreach ($fieldsMap as $mappedField=>$realField) {
+                foreach ($fieldsMap as $mappedField => $realField) {
                     if (isset($data[$mappedField])) {
                         $image[$realField] = $data[$mappedField];
                     }
@@ -635,8 +635,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _moveImageFromTmp($file)
     {
-        if (strrpos($file, '.tmp') == strlen($file)-4) {
-            $file = substr($file, 0, strlen($file)-4);
+        if (strrpos($file, '.tmp') == strlen($file) - 4) {
+            $file = substr($file, 0, strlen($file) - 4);
         }
         $destinationFile = $this->_getUniqueFileName($file);
 
@@ -670,12 +670,16 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected function _getUniqueFileName($file)
     {
         if ($this->_fileStorageDb->checkDbUsage()) {
-            $destFile = $this->_fileStorageDb->getUniqueFilename($this->_mediaConfig->getBaseMediaUrlAddition(), $file);
+            $destFile = $this->_fileStorageDb->getUniqueFilename(
+                $this->_mediaConfig->getBaseMediaUrlAddition(),
+                $file
+            );
         } else {
-            $destFile = dirname($file) . '/'
-                . \Magento\Core\Model\File\Uploader::getNewFileName(
-                    $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file))
-                );
+            $destFile = dirname(
+                $file
+            ) . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+                $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file))
+            );
         }
 
         return $destFile;
@@ -734,7 +738,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $this->_getResource()->duplicate(
             $this,
-            (isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : array()),
+            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : array(),
             $object->getOriginalId(),
             $object->getId()
         );
@@ -751,10 +755,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
     {
-        $fileMediaName = $dispretionPath . '/'
-                  . \Magento\Core\Model\File\Uploader::getNewFileName($this->_mediaConfig->getMediaPath($fileName));
-        $fileTmpMediaName = $dispretionPath . '/'
-                  . \Magento\Core\Model\File\Uploader::getNewFileName($this->_mediaConfig->getTmpMediaPath($fileName));
+        $fileMediaName = $dispretionPath . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+            $this->_mediaConfig->getMediaPath($fileName)
+        );
+        $fileTmpMediaName = $dispretionPath . '/' . \Magento\Core\Model\File\Uploader::getNewFileName(
+            $this->_mediaConfig->getTmpMediaPath($fileName)
+        );
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
@@ -782,7 +788,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $data[$tableName][] = array(
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'value_id' => $value['value_id'],
-                'entity_id' => $object->getId(),
+                'entity_id' => $object->getId()
             );
         }
         return $data;

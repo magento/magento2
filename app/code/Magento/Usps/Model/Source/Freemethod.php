@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Usps\Model\Source;
 
 /**
@@ -36,7 +35,7 @@ class Freemethod extends Method
     {
         $options = parent::toOptionArray();
 
-        array_unshift($options, ['value' => '', 'label' => __('None')]);
+        array_unshift($options, array('value' => '', 'label' => __('None')));
         return $options;
     }
 }

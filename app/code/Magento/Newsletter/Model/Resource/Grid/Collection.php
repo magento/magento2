@@ -44,8 +44,7 @@ class Collection extends \Magento\Newsletter\Model\Resource\Problem\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addSubscriberInfo()
-            ->addQueueInfo();
+        $this->addSubscriberInfo()->addQueueInfo();
         return $this;
     }
 }

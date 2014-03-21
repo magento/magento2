@@ -62,11 +62,18 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         /* @var $store \Magento\Core\Model\Store */
         foreach ($stores as $store) {
             if (!isset($categories[$store->getRootCategoryId()])) {
-                $select = $this->getWriteAdapter()->select()
-                    ->from($this->getWriteAdapter()->getTableName($this->getTableName('catalog_category_entity')))
-                    ->where('path = ?', (string)$rootId)
-                    ->orWhere('path = ?', "{$rootId}/{$store->getRootCategoryId()}")
-                    ->orWhere('path LIKE ?', "{$rootId}/{$store->getRootCategoryId()}/%");
+                $select = $this->getWriteAdapter()->select()->from(
+                    $this->getWriteAdapter()->getTableName($this->getTableName('catalog_category_entity'))
+                )->where(
+                    'path = ?',
+                    (string)$rootId
+                )->orWhere(
+                    'path = ?',
+                    "{$rootId}/{$store->getRootCategoryId()}"
+                )->orWhere(
+                    'path LIKE ?',
+                    "{$rootId}/{$store->getRootCategoryId()}/%"
+                );
                 $categories[$store->getRootCategoryId()] = $this->getWriteAdapter()->fetchAll($select);
                 $categoriesIds[$store->getRootCategoryId()] = array();
                 foreach ($categories[$store->getRootCategoryId()] as $category) {
@@ -107,7 +114,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
     protected function createTable($store)
     {
         $temporaryTable = $this->addTemporaryTableSuffix($this->getMainStoreTable($store));
-        $table  = $this->getFlatTableStructure($temporaryTable);
+        $table = $this->getFlatTableStructure($temporaryTable);
         $this->getWriteAdapter()->dropTable($temporaryTable);
         $this->getWriteAdapter()->createTable($table);
 
@@ -154,16 +161,10 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             //switch tables
             $tablesToRename = array();
             if ($this->getWriteAdapter()->isTableExists($activeTableName)) {
-                $tablesToRename[] = array(
-                    'oldName' => $activeTableName,
-                    'newName' => $oldTableName
-                );
+                $tablesToRename[] = array('oldName' => $activeTableName, 'newName' => $oldTableName);
             }
 
-            $tablesToRename[] = array(
-                'oldName' => $temporaryTableName,
-                'newName' => $activeTableName
-            );
+            $tablesToRename[] = array('oldName' => $temporaryTableName, 'newName' => $activeTableName);
 
             foreach ($tablesToRename as $tableToRename) {
                 $this->getWriteAdapter()->renameTable($tableToRename['oldName'], $tableToRename['newName']);

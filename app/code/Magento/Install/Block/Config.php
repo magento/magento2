@@ -116,10 +116,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
      */
     public function getSessionSaveOptions()
     {
-        return array(
-            'files' => __('File System'),
-            'db'    => __('Database'),
-        );
+        return array('files' => __('File System'), 'db' => __('Database'));
     }
 
     /**
@@ -127,13 +124,19 @@ class Config extends \Magento\Install\Block\AbstractBlock
      */
     public function getSessionSaveSelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('config[session_save]')
-            ->setId('session_save')
-            ->setTitle(__('Save Session Files In'))
-            ->setClass('required-entry')
-            ->setOptions($this->getSessionSaveOptions())
-            ->getHtml();
+        $html = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setName(
+            'config[session_save]'
+        )->setId(
+            'session_save'
+        )->setTitle(
+            __('Save Session Files In')
+        )->setClass(
+            'required-entry'
+        )->setOptions(
+            $this->getSessionSaveOptions()
+        )->getHtml();
         return $html;
     }
 }

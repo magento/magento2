@@ -58,16 +58,17 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         $actions = array();
 
         $actions[] = array(
-            '@'	=> array(
-                'href' => $this->getUrl('newsletter/template/preview',
+            '@' => array(
+                'href' => $this->getUrl(
+                    'newsletter/template/preview',
                     array(
-                        'id'         => $row->getTemplateId(),
+                        'id' => $row->getTemplateId(),
                         'subscriber' => $this->_coreRegistry->registry('subscriber')->getId()
                     )
                 ),
                 'target' => '_blank'
             ),
-            '#'	=> __('View')
+            '#' => __('View')
         );
 
         return $this->_actionsToHtml($actions);

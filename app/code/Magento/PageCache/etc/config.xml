@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <system>
             <full_page_cache>
@@ -33,6 +33,7 @@
                     <path>Magento/PageCache/etc/varnish.vcl</path>
                 </varnish>
                 <ttl>120</ttl>
+                <caching_application>1</caching_application>
                 <default>
                     <access_list>localhost</access_list>
                     <backend_host>localhost</backend_host>

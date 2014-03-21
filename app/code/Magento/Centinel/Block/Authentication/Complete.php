@@ -68,4 +68,3 @@ class Complete extends \Magento\View\Element\Template
         return parent::_toHtml();
     }
 }
-

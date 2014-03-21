@@ -38,10 +38,13 @@ use Magento\App\RequestInterface;
 
 class Index extends \Magento\App\Action\Action
 {
-    const XML_PATH_EMAIL_RECIPIENT  = 'contacts/email/recipient_email';
-    const XML_PATH_EMAIL_SENDER     = 'contacts/email/sender_email_identity';
-    const XML_PATH_EMAIL_TEMPLATE   = 'contacts/email/email_template';
-    const XML_PATH_ENABLED          = 'contacts/contacts/enabled';
+    const XML_PATH_EMAIL_RECIPIENT = 'contacts/email/recipient_email';
+
+    const XML_PATH_EMAIL_SENDER = 'contacts/email/sender_email_identity';
+
+    const XML_PATH_EMAIL_TEMPLATE = 'contacts/email/email_template';
+
+    const XML_PATH_ENABLED = 'contacts/contacts/enabled';
 
     /**
      * @var \Magento\Mail\Template\TransportBuilder
@@ -59,7 +62,6 @@ class Index extends \Magento\App\Action\Action
         parent::__construct($context);
         $this->_transportBuilder = $transportBuilder;
     }
-
 
     /**
      * Dispatch request
@@ -84,8 +86,11 @@ class Index extends \Magento\App\Action\Action
     public function indexAction()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock('contactForm')
-            ->setFormAction($this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*/post'));
+        $this->_view->getLayout()->getBlock(
+            'contactForm'
+        )->setFormAction(
+            $this->_objectManager->create('Magento\UrlInterface')->getUrl('*/*/post')
+        );
 
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
@@ -114,11 +119,11 @@ class Index extends \Magento\App\Action\Action
 
                 $error = false;
 
-                if (!\Zend_Validate::is(trim($post['name']) , 'NotEmpty')) {
+                if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
                     $error = true;
                 }
 
-                if (!\Zend_Validate::is(trim($post['comment']) , 'NotEmpty')) {
+                if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
                     $error = true;
                 }
 
@@ -136,17 +141,22 @@ class Index extends \Magento\App\Action\Action
 
                 $storeConfig = $this->_objectManager->get('Magento\Core\Model\Store\Config');
                 $storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface');
-                $transport = $this->_transportBuilder
-                    ->setTemplateIdentifier($storeConfig->getConfig(self::XML_PATH_EMAIL_TEMPLATE))
-                    ->setTemplateOptions(array(
+                $transport = $this->_transportBuilder->setTemplateIdentifier(
+                    $storeConfig->getConfig(self::XML_PATH_EMAIL_TEMPLATE)
+                )->setTemplateOptions(
+                    array(
                         'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
                         'store' => $storeManager->getStore()->getId()
-                    ))
-                    ->setTemplateVars(array('data' => $postObject))
-                    ->setFrom($storeConfig->getConfig(self::XML_PATH_EMAIL_SENDER))
-                    ->addTo($storeConfig->getConfig(self::XML_PATH_EMAIL_RECIPIENT))
-                    ->setReplyTo($post['email'])
-                    ->getTransport();
+                    )
+                )->setTemplateVars(
+                    array('data' => $postObject)
+                )->setFrom(
+                    $storeConfig->getConfig(self::XML_PATH_EMAIL_SENDER)
+                )->addTo(
+                    $storeConfig->getConfig(self::XML_PATH_EMAIL_RECIPIENT)
+                )->setReplyTo(
+                    $post['email']
+                )->getTransport();
 
                 $transport->sendMessage();
 
@@ -160,11 +170,12 @@ class Index extends \Magento\App\Action\Action
                 return;
             } catch (\Exception $e) {
                 $translate->setTranslateInline(true);
-                $this->messageManager->addError(__('We can\'t process your request right now. Sorry, that\'s all we know.'));
+                $this->messageManager->addError(
+                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
+                );
                 $this->_redirect('*/*/');
                 return;
             }
-
         } else {
             $this->_redirect('*/*/');
         }

@@ -37,7 +37,7 @@ class Catalog extends \Magento\App\Helper\AbstractHelper
     /**
      * Config path to valid file paths
      */
-    const XML_PATH_PUBLIC_FILES_VALID_PATHS     = 'general/file/public_files_valid_paths';
+    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
 
     /**
      * Config path to sitemap valid paths

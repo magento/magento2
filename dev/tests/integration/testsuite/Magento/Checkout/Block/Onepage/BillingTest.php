@@ -21,11 +21,9 @@
  * @category    Magento
  * @package     Magento_Checkout
  */
-
 namespace Magento\Checkout\Block\Onepage;
 
 use Magento\TestFramework\Helper\Bootstrap;
-
 
 class BillingTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,8 +43,11 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     protected $_customerService;
 
     const FIXTURE_CUSTOMER_ID = 1;
+
     const FIXTURE_ADDRESS_ID = 1;
+
     const SAMPLE_FIRST_NAME = 'UpdatedFirstName';
+
     const SAMPLE_LAST_NAME = 'UpdatedLastName';
 
     protected function setUp()
@@ -80,6 +81,8 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $checkoutSession->setQuoteId($quote->getId());
         $checkoutSession->setLoadInactive(true);
 
+        $objectManager->get('Magento\App\Http\Context')
+            ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
         $this->_block = $objectManager->get('Magento\View\LayoutInterface')
             ->createBlock(
                 'Magento\Checkout\Block\Onepage\Billing',
@@ -140,8 +143,13 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $emptyAddress->setLastname(null);
         $this->_block->getQuote()->setBillingAddress($emptyAddress);
         $customerData = $this->_customerService->getCustomer(self::FIXTURE_CUSTOMER_ID);
-        $customerData = $this->_customerBuilder->populate($customerData)
-            ->setFirstname(self::SAMPLE_FIRST_NAME)->setLastname(self::SAMPLE_LAST_NAME)->create();
+        $customerData = $this->_customerBuilder->populate(
+            $customerData
+        )->setFirstname(
+            self::SAMPLE_FIRST_NAME
+        )->setLastname(
+            self::SAMPLE_LAST_NAME
+        )->create();
         $this->_block->getQuote()->setCustomerData($customerData);
         $this->_block->getQuote()->save();
 

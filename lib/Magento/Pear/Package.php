@@ -48,10 +48,9 @@ namespace Magento\Pear;
 // add missing but required constant...
 define ('PEAR_PACKAGEFILEMANAGER_NOSVNENTRIES', 1001);
 $GLOBALS['_PEAR_PACKAGEFILEMANAGER2_ERRORS']['en']['PEAR_PACKAGEFILEMANAGER_NOSVNENTRIES'] =
-    'Directory "%s" is not a SVN directory (it must have the .svn/entries file)';
+   'Directory "%s" is not a SVN directory (it must have the .svn/entries file)';
 
 require_once "PEAR/PackageFile/Generator/v2.php";*/
-
 namespace Magento\Pear;
 
 use Magento\Pear;
@@ -63,13 +62,13 @@ class Package
      */
     protected $_data = array(
         'options' => array(
-            'baseinstalldir'=>'',
-            'filelistgenerator'=>'file',
-            'packagedirectory'=>'.',
-            'outputdirectory'=>'.',
+            'baseinstalldir' => '',
+            'filelistgenerator' => 'file',
+            'packagedirectory' => '.',
+            'outputdirectory' => '.'
         ),
         'package' => array(),
-        'release' => array(),
+        'release' => array()
     );
 
     /**
@@ -114,7 +113,7 @@ class Package
      */
     public function set($key, $data)
     {
-        if (''===$key) {
+        if ('' === $key) {
             $this->_data = $data;
             return $this;
         }
@@ -122,13 +121,13 @@ class Package
         // accept a/b/c as ['a']['b']['c']
         $keyArr = explode('/', $key);
 
-        $ref = &$this->_data;
-        for ($i=0, $l=sizeof($keyArr); $i<$l; $i++) {
+        $ref =& $this->_data;
+        for ($i = 0,$l = sizeof($keyArr); $i < $l; $i++) {
             $k = $keyArr[$i];
             if (!isset($ref[$k])) {
                 $ref[$k] = array();
             }
-            $ref = &$ref[$k];
+            $ref =& $ref[$k];
         }
         $ref = $data;
 
@@ -141,15 +140,15 @@ class Package
      */
     public function get($key)
     {
-        if (''===$key) {
+        if ('' === $key) {
             return $this->_data;
         }
 
         // accept a/b/c as ['a']['b']['c']
         $keyArr = explode('/', $key);
         $data = $this->_data;
-        foreach ($keyArr as $i=>$k) {
-            if ($k==='') {
+        foreach ($keyArr as $i => $k) {
+            if ($k === '') {
                 return null;
             }
             if (is_array($data)) {
@@ -181,11 +180,11 @@ class Package
      * @return PEAR_PackageFileManager2
      * @throws PEAR_Exception
      */
-    public function getPfm($package=null)
+    public function getPfm($package = null)
     {
         if (!$this->_pfm) {
             if (is_null($package)) {
-                $this->_pfm = new PEAR_PackageFileManager2;
+                $this->_pfm = new PEAR_PackageFileManager2();
                 $this->_pfm->setOptions($this->get('options'));
             } else {
                 $this->defineData();
@@ -218,7 +217,7 @@ class Package
      * @param bool $make
      * @return $this
      */
-    public function generatePackage($make=false)
+    public function generatePackage($make = false)
     {
         PEAR::setErrorHandling(PEAR_ERROR_DIE);
 
@@ -237,8 +236,10 @@ class Package
             $pfm->writePackageFile();
 
             $outputDir = $this->get('options/outputdirectory');
-            MagePearWrapper::getInstance()->run('package', array(),
-                array($outputDir.'package.xml', $outputDir.'package2.xml')
+            MagePearWrapper::getInstance()->run(
+                'package',
+                array(),
+                array($outputDir . 'package.xml', $outputDir . 'package2.xml')
             );
         } else {
             $pfm1->debugPackageFile();

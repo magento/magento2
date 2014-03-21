@@ -70,7 +70,6 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_customerResFactory = $customerResFactory;
     }
 
-
     /**
      * Resource initialization
      *
@@ -81,6 +80,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\Resource\Wishlist');
         $this->setWishlistTable($this->getTable('wishlist'));
     }
+
     /**
      * Set wishlist table name
      *
@@ -112,22 +112,25 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
         $collection = $this->_customerResFactory->create();
-        
+
         $customersSelect = $collection->getSelectCountSql();
 
         $countSelect = clone $customersSelect;
         $countSelect->joinLeft(
-                array('wt' => $this->getWishlistTable()),
-                'wt.customer_id = e.entity_id',
-                array()
-            )
-            ->group('wt.wishlist_id');
+            array('wt' => $this->getWishlistTable()),
+            'wt.customer_id = e.entity_id',
+            array()
+        )->group(
+            'wt.wishlist_id'
+        );
         $count = $collection->count();
-        $resultSelect = $this->getConnection()->select()
-            ->union(array($customersSelect, $count), \Zend_Db_Select::SQL_UNION_ALL);
+        $resultSelect = $this->getConnection()->select()->union(
+            array($customersSelect, $count),
+            \Zend_Db_Select::SQL_UNION_ALL
+        );
         list($customers, $count) = $this->getConnection()->fetchCol($resultSelect);
 
-        return array(($count*100)/$customers, $count);
+        return array($count * 100 / $customers, $count);
     }
 
     /**
@@ -141,12 +144,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $collection = $this->_customerResFactory->create();
         $countSelect = $collection->getSelectCountSql();
         $countSelect->joinLeft(
-                array('wt' => $this->getWishlistTable()),
-                'wt.customer_id = e.entity_id',
-                array()
-            )
-            ->where('wt.shared > 0')
-            ->group('wt.wishlist_id');
+            array('wt' => $this->getWishlistTable()),
+            'wt.customer_id = e.entity_id',
+            array()
+        )->where(
+            'wt.shared > 0'
+        )->group(
+            'wt.wishlist_id'
+        );
         return $countSelect->getAdapter()->fetchOne($countSelect);
     }
 }

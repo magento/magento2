@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator;
 
 class QuoteItemQtyList
@@ -47,8 +46,13 @@ class QuoteItemQtyList
     public function getQty($productId, $quoteItemId, $itemQty)
     {
         $qty = $itemQty;
-        if (isset($this->_checkedQuoteItems[$productId]['qty']) &&
-            !in_array($quoteItemId, $this->_checkedQuoteItems[$productId]['items'])) {
+        if (isset(
+            $this->_checkedQuoteItems[$productId]['qty']
+        ) && !in_array(
+            $quoteItemId,
+            $this->_checkedQuoteItems[$productId]['items']
+        )
+        ) {
             $qty += $this->_checkedQuoteItems[$productId]['qty'];
         }
 
@@ -57,4 +61,4 @@ class QuoteItemQtyList
 
         return $qty;
     }
-} 
+}

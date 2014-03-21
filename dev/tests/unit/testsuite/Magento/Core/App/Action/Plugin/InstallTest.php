@@ -91,7 +91,9 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
 
-        $this->assertEquals('ExpectedValue',
-            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock));
+        $this->assertEquals(
+            'ExpectedValue',
+            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
     }
 }

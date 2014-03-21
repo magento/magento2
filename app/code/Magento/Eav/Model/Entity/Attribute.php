@@ -36,18 +36,17 @@ use Magento\Eav\Exception;
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Attribute
-    extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
-    implements \Magento\Object\IdentityInterface
+class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
+    \Magento\Object\IdentityInterface
 {
     /**
      * Prefix of model events names
      *
      * @var string
      */
-    protected $_eventPrefix                         = 'eav_entity_attribute';
+    protected $_eventPrefix = 'eav_entity_attribute';
 
-    CONST ATTRIBUTE_CODE_MAX_LENGTH                 = 30;
+    const ATTRIBUTE_CODE_MAX_LENGTH = 30;
 
     /**
      * Parameter name in event
@@ -58,12 +57,12 @@ class Attribute
      */
     protected $_eventObject = 'attribute';
 
-    const CACHE_TAG         = 'EAV_ATTRIBUTE';
+    const CACHE_TAG = 'EAV_ATTRIBUTE';
 
     /**
      * @var string
      */
-    protected $_cacheTag    = 'EAV_ATTRIBUTE';
+    protected $_cacheTag = 'EAV_ATTRIBUTE';
 
     /**
      * @var \Magento\Stdlib\DateTime\TimezoneInterface
@@ -195,10 +194,12 @@ class Attribute
     public function loadEntityAttributeIdBySet()
     {
         // load attributes collection filtered by attribute_id and attribute_set_id
-        $filteredAttributes = $this->getResourceCollection()
-            ->setAttributeSetFilter($this->getAttributeSetId())
-            ->addFieldToFilter('entity_attribute.attribute_id', $this->getId())
-            ->load();
+        $filteredAttributes = $this->getResourceCollection()->setAttributeSetFilter(
+            $this->getAttributeSetId()
+        )->addFieldToFilter(
+            'entity_attribute.attribute_id',
+            $this->getId()
+        )->load();
         if (count($filteredAttributes) > 0) {
             // getFirstItem() can be used as we can have one or zero records in the collection
             $this->setEntityAttributeId($filteredAttributes->getFirstItem()->getEntityAttributeId());
@@ -215,29 +216,44 @@ class Attribute
     protected function _beforeSave()
     {
         // prevent overriding product data
-        if (isset($this->_data['attribute_code'])
-            && $this->_catalogProductFactory->create()->isReservedAttribute($this)
+        if (isset(
+            $this->_data['attribute_code']
+        ) && $this->_catalogProductFactory->create()->isReservedAttribute(
+            $this
+        )
         ) {
-            throw new Exception(__('The attribute code \'%1\' is reserved by system. Please try another attribute code', $this->_data['attribute_code']));
+            throw new Exception(
+                __(
+                    'The attribute code \'%1\' is reserved by system. Please try another attribute code',
+                    $this->_data['attribute_code']
+                )
+            );
         }
 
         /**
          * Check for maximum attribute_code length
          */
-        if(isset($this->_data['attribute_code']) &&
-           !\Zend_Validate::is($this->_data['attribute_code'],
-                              'StringLength',
-                              array('max' => self::ATTRIBUTE_CODE_MAX_LENGTH))
+        if (isset(
+            $this->_data['attribute_code']
+        ) && !\Zend_Validate::is(
+            $this->_data['attribute_code'],
+            'StringLength',
+            array('max' => self::ATTRIBUTE_CODE_MAX_LENGTH)
+        )
         ) {
-            throw new Exception(__('Maximum length of attribute code must be less than %1 symbols', self::ATTRIBUTE_CODE_MAX_LENGTH));
+            throw new Exception(
+                __('Maximum length of attribute code must be less than %1 symbols', self::ATTRIBUTE_CODE_MAX_LENGTH)
+            );
         }
 
-        $defaultValue   = $this->getDefaultValue();
-        $hasDefaultValue = ((string)$defaultValue != '');
+        $defaultValue = $this->getDefaultValue();
+        $hasDefaultValue = (string)$defaultValue != '';
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
-            if (!\Zend_Locale_Format::isNumber($defaultValue,
-                                              array('locale' => $this->_localeResolver->getLocaleCode()))
+            if (!\Zend_Locale_Format::isNumber(
+                $defaultValue,
+                array('locale' => $this->_localeResolver->getLocaleCode())
+            )
             ) {
                 throw new Exception(__('Invalid default decimal value'));
             }
@@ -263,7 +279,9 @@ class Attribute
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                $format = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+                $format = $this->_localeDate->getDateFormat(
+                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                );
                 try {
                     $defaultValue = $this->_localeDate->date($defaultValue, $format, null, false)->toValue();
                     $this->setDefaultValue($defaultValue);
@@ -427,12 +445,12 @@ class Attribute
      */
     public function getSortWeight($setId)
     {
-        $groupSortWeight = isset($this->_data['attribute_set_info'][$setId]['group_sort'])
-            ? (float) $this->_data['attribute_set_info'][$setId]['group_sort'] * 1000
-            : 0.0;
-        $sortWeight = isset($this->_data['attribute_set_info'][$setId]['sort'])
-            ? (float)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001
-            : 0.0;
+        $groupSortWeight = isset(
+            $this->_data['attribute_set_info'][$setId]['group_sort']
+        ) ? (double)$this->_data['attribute_set_info'][$setId]['group_sort'] * 1000 : 0.0;
+        $sortWeight = isset(
+            $this->_data['attribute_set_info'][$setId]['sort']
+        ) ? (double)$this->_data['attribute_set_info'][$setId]['sort'] * 0.0001 : 0.0;
         return $groupSortWeight + $sortWeight;
     }
 

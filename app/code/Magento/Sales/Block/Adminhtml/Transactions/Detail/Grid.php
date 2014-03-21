@@ -103,24 +103,30 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('key', array(
-            'header'    => __('Key'),
-            'index'     => 'key',
-            'sortable'  => false,
-            'type'      => 'text',
-            'header_css_class'  => 'col-key',
-            'column_css_class'  => 'col-key'
-        ));
+        $this->addColumn(
+            'key',
+            array(
+                'header' => __('Key'),
+                'index' => 'key',
+                'sortable' => false,
+                'type' => 'text',
+                'header_css_class' => 'col-key',
+                'column_css_class' => 'col-key'
+            )
+        );
 
-        $this->addColumn('value', array(
-            'header'    => __('Value'),
-            'index'     => 'value',
-            'sortable'  => false,
-            'type'      => 'text',
-            'escape'    => true,
-            'header_css_class'  => 'col-value',
-            'column_css_class'  => 'col-value'
-        ));
+        $this->addColumn(
+            'value',
+            array(
+                'header' => __('Value'),
+                'index' => 'value',
+                'sortable' => false,
+                'type' => 'text',
+                'escape' => true,
+                'header_css_class' => 'col-value',
+                'column_css_class' => 'col-value'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -132,9 +138,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getTransactionAdditionalInfo()
     {
-        $info = $this->_coreRegistry->registry('current_transaction')->getAdditionalInformation(
+        $info = $this->_coreRegistry->registry(
+            'current_transaction'
+        )->getAdditionalInformation(
             \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS
         );
-        return (is_array($info)) ? $info : array();
+        return is_array($info) ? $info : array();
     }
 }

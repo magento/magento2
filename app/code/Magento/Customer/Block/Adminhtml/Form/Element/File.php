@@ -81,7 +81,8 @@ class File extends \Magento\Data\Form\Element\AbstractElement
             $this->addClass('required-file');
         }
 
-        $element = sprintf('<input id="%s" name="%s" %s />%s%s',
+        $element = sprintf(
+            '<input id="%s" name="%s" %s />%s%s',
             $this->getHtmlId(),
             $this->getName(),
             $this->serialize($this->getHtmlAttributes()),
@@ -102,16 +103,14 @@ class File extends \Magento\Data\Form\Element\AbstractElement
         $html = '';
         if ($this->getValue() && !$this->getRequired() && !is_array($this->getValue())) {
             $checkboxId = sprintf('%s_delete', $this->getHtmlId());
-            $checkbox   = array(
-                'type'  => 'checkbox',
-                'name'  => sprintf('%s[delete]', $this->getName()),
+            $checkbox = array(
+                'type' => 'checkbox',
+                'name' => sprintf('%s[delete]', $this->getName()),
                 'value' => '1',
                 'class' => 'checkbox',
-                'id'    => $checkboxId
+                'id' => $checkboxId
             );
-            $label      = array(
-                'for'   => $checkboxId
-            );
+            $label = array('for' => $checkboxId);
             if ($this->getDisabled()) {
                 $checkbox['disabled'] = 'disabled';
                 $label['class'] = 'disabled';
@@ -155,9 +154,9 @@ class File extends \Magento\Data\Form\Element\AbstractElement
         $html = '';
         if ($this->getValue() && !is_array($this->getValue())) {
             $image = array(
-                'alt'   => __('Download'),
+                'alt' => __('Download'),
                 'title' => __('Download'),
-                'src'   => $this->_viewUrl->getViewFileUrl('images/fam_bullet_disk.gif'),
+                'src' => $this->_viewUrl->getViewFileUrl('images/fam_bullet_disk.gif'),
                 'class' => 'v-middle'
             );
             $url = $this->_getPreviewUrl();
@@ -176,12 +175,15 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getHiddenInput()
     {
-        return $this->_drawElementHtml('input', array(
-            'type'  => 'hidden',
-            'name'  => sprintf('%s[value]', $this->getName()),
-            'id'    => sprintf('%s_value', $this->getHtmlId()),
-            'value' => $this->getEscapedValue()
-        ));
+        return $this->_drawElementHtml(
+            'input',
+            array(
+                'type' => 'hidden',
+                'name' => sprintf('%s[value]', $this->getName()),
+                'id' => sprintf('%s_value', $this->getHtmlId()),
+                'value' => $this->getEscapedValue()
+            )
+        );
     }
 
     /**
@@ -191,9 +193,10 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getPreviewUrl()
     {
-        return $this->_adminhtmlData->getUrl('customer/index/viewfile', array(
-            'file' => $this->_adminhtmlData->urlEncode($this->getValue()),
-        ));
+        return $this->_adminhtmlData->getUrl(
+            'customer/index/viewfile',
+            array('file' => $this->_adminhtmlData->urlEncode($this->getValue()))
+        );
     }
 
     /**

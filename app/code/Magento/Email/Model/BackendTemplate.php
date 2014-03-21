@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Email\Model;
 
 /**
@@ -124,10 +123,7 @@ class BackendTemplate extends Template
         foreach ($data as $key => $value) {
             $configPath = $path ? $path . '/' . $key : $key;
             if (is_array($value)) {
-                $output = array_merge(
-                    $output,
-                    $this->_findEmailTemplateUsages($code, $value, $configPath)
-                );
+                $output = array_merge($output, $this->_findEmailTemplateUsages($code, $value, $configPath));
             } else {
                 if ($value == $code) {
                     $output[] = array('path' => $configPath);
@@ -149,8 +145,10 @@ class BackendTemplate extends Template
             return array();
         }
 
-        $templatePaths = $this->_structure
-            ->getFieldPathsByAttribute('source_model', 'Magento\Backend\Model\Config\Source\Email\Template');
+        $templatePaths = $this->_structure->getFieldPathsByAttribute(
+            'source_model',
+            'Magento\Backend\Model\Config\Source\Email\Template'
+        );
 
         if (!count($templatePaths)) {
             return array();

@@ -67,8 +67,9 @@ class Grid extends \Magento\Backend\Block\Template
     public function getCollection()
     {
         if ($this->getShipment()->getId()) {
-            $collection = $this->_shipmentItemFactory->create()->getCollection()
-                    ->setShipmentFilter($this->getShipment()->getId());
+            $collection = $this->_shipmentItemFactory->create()->getCollection()->setShipmentFilter(
+                $this->getShipment()->getId()
+            );
         } else {
             $collection = $this->getShipment()->getAllItems();
         }

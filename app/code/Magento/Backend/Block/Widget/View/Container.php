@@ -57,18 +57,23 @@ class Container extends \Magento\Backend\Block\Widget\Container
     {
         parent::_construct();
 
-        $this->_addButton('back', array(
-            'label'     => __('Back'),
-            'onclick'   => 'window.location.href=\'' . $this->getUrl('*/*/') . '\'',
-            'class'     => 'back',
-        ));
+        $this->_addButton(
+            'back',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'window.location.href=\'' . $this->getUrl('*/*/') . '\'',
+                'class' => 'back'
+            )
+        );
 
-        $this->_addButton('edit', array(
-            'label'     => __('Edit'),
-            'class'     => 'edit',
-            'onclick'   => 'window.location.href=\'' . $this->getEditUrl() . '\'',
-        ));
-
+        $this->_addButton(
+            'edit',
+            array(
+                'label' => __('Edit'),
+                'class' => 'edit',
+                'onclick' => 'window.location.href=\'' . $this->getEditUrl() . '\''
+            )
+        );
     }
 
     /**
@@ -76,10 +81,11 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $blockName = $this->_blockGroup
-            . '\\Block\\'
-            . str_replace(' ', '\\', ucwords(str_replace('\\', ' ', $this->_controller)))
-            . '\\View\\Plane';
+        $blockName = $this->_blockGroup . '\\Block\\' . str_replace(
+            ' ',
+            '\\',
+            ucwords(str_replace('\\', ' ', $this->_controller))
+        ) . '\\View\\Plane';
 
         $this->setChild('plane', $this->getLayout()->createBlock($blockName));
 
@@ -101,5 +107,4 @@ class Container extends \Magento\Backend\Block\Widget\Container
     {
         return $this->getChildHtml('plane');
     }
-
 }

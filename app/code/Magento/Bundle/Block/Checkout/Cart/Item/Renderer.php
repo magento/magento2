@@ -70,7 +70,13 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     ) {
         $this->_bundleProdConfigur = $bundleProdConfigur;
         parent::__construct(
-            $context, $productConfig, $checkoutSession, $imageHelper, $urlHelper, $messageManager, $data
+            $context,
+            $productConfig,
+            $checkoutSession,
+            $imageHelper,
+            $urlHelper,
+            $messageManager,
+            $data
         );
         $this->_isScopePrivate = true;
     }
@@ -147,10 +153,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         $baseMessages = $quoteItem->getMessage(false);
         if ($baseMessages) {
             foreach ($baseMessages as $message) {
-                $messages[] = array(
-                    'text' => $message,
-                    'type' => $quoteItem->getHasError() ? 'error' : 'notice'
-                );
+                $messages[] = array('text' => $message, 'type' => $quoteItem->getHasError() ? 'error' : 'notice');
             }
         }
 

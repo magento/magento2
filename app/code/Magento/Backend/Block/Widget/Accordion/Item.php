@@ -56,7 +56,7 @@ class Item extends \Magento\Backend\Block\Widget
      */
     public function getTarget()
     {
-        return ($this->getAjax()) ? 'ajax' : '';
+        return $this->getAjax() ? 'ajax' : '';
     }
 
     /**
@@ -66,8 +66,9 @@ class Item extends \Magento\Backend\Block\Widget
     {
         $title = $this->getData('title');
         $url = $this->getContentUrl() ? $this->getContentUrl() : '#';
-        $title = '<a href="' . $url . '" class="' . $this->getTarget() . '"' . $this->getUiId('title-link') . '>'
-            . $title . '</a>';
+        $title = '<a href="' . $url . '" class="' . $this->getTarget() . '"' . $this->getUiId(
+            'title-link'
+        ) . '>' . $title . '</a>';
 
         return $title;
     }
@@ -94,7 +95,7 @@ class Item extends \Magento\Backend\Block\Widget
     {
         $class = $this->getData('class');
         if ($this->getOpen()) {
-            $class.= ' open';
+            $class .= ' open';
         }
         return $class;
     }

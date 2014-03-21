@@ -63,9 +63,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         $write->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
 
         $data = new \Magento\Object();
-        $data->setOptionId($object->getId())
-            ->setStoreId($object->getStoreId())
-            ->setTitle($object->getTitle());
+        $data->setOptionId($object->getId())->setStoreId($object->getStoreId())->setTitle($object->getTitle());
 
         $write->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
 
@@ -111,28 +109,27 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
 
-        $title = $adapter->getCheckSql('option_title_store.title IS NOT NULL',
+        $title = $adapter->getCheckSql(
+            'option_title_store.title IS NOT NULL',
             'option_title_store.title',
             'option_title_default.title'
         );
-        $bind = array(
-            'store_id'   => $storeId,
-            'product_id' => $productId
+        $bind = array('store_id' => $storeId, 'product_id' => $productId);
+        $select = $adapter->select()->from(
+            array('opt' => $this->getMainTable()),
+            array()
+        )->join(
+            array('option_title_default' => $this->getTable('catalog_product_bundle_option_value')),
+            'option_title_default.option_id = opt.option_id AND option_title_default.store_id = 0',
+            array()
+        )->joinLeft(
+            array('option_title_store' => $this->getTable('catalog_product_bundle_option_value')),
+            'option_title_store.option_id = opt.option_id AND option_title_store.store_id = :store_id',
+            array('title' => $title)
+        )->where(
+            'opt.parent_id=:product_id'
         );
-        $select = $adapter->select()
-            ->from(array('opt' => $this->getMainTable()), array())
-            ->join(
-                array('option_title_default' => $this->getTable('catalog_product_bundle_option_value')),
-                'option_title_default.option_id = opt.option_id AND option_title_default.store_id = 0',
-                array()
-            )
-            ->joinLeft(
-                array('option_title_store' => $this->getTable('catalog_product_bundle_option_value')),
-                'option_title_store.option_id = opt.option_id AND option_title_store.store_id = :store_id',
-                array('title' => $title)
-            )
-            ->where('opt.parent_id=:product_id');
-        if (!$searchData = $adapter->fetchCol($select, $bind)) {
+        if (!($searchData = $adapter->fetchCol($select, $bind))) {
             $searchData = array();
         }
         return $searchData;

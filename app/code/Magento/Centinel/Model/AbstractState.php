@@ -73,7 +73,7 @@ abstract class AbstractState extends \Magento\Object
      * @return mixed
      * @see \Magento\Session\SessionManager::getData()
      */
-    public function getData($key='', $index=null)
+    public function getData($key = '', $index = null)
     {
         return $this->getDataStorage()->getData($key);
     }
@@ -90,7 +90,7 @@ abstract class AbstractState extends \Magento\Object
      * @param mixed $value
      * @return $this
      */
-    public function setData($key, $value=null)
+    public function setData($key, $value = null)
     {
         $this->getDataStorage()->setData($key, $value);
         return $this;

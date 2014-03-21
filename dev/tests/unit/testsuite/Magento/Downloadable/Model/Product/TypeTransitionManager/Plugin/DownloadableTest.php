@@ -52,13 +52,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(
-            'Magento\App\Request\Http',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->model = new Downloadable($this->requestMock);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -67,8 +61,13 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->subjectMock =
-            $this->getMock('Magento\Catalog\Model\Product\TypeTransitionManager', array(), array(), '', false);
+        $this->subjectMock = $this->getMock(
+            'Magento\Catalog\Model\Product\TypeTransitionManager',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->closureMock = function () {
         };
     }
@@ -79,12 +78,24 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundProcessProductWithProductThatCanBeTransformedToDownloadable($currentTypeId)
     {
-        $this->requestMock->expects($this->any())->method('getPost')->with('downloadable')
-            ->will($this->returnValue('valid_downloadable_data'));
+        $this->requestMock->expects(
+            $this->any()
+        )->method(
+            'getPost'
+        )->with(
+            'downloadable'
+        )->will(
+            $this->returnValue('valid_downloadable_data')
+        );
         $this->productMock->expects($this->any())->method('hasIsVirtual')->will($this->returnValue(true));
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
-        $this->productMock->expects($this->once())->method('setTypeId')
-            ->with(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setTypeId'
+        )->with(
+            \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+        );
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
     }
 
@@ -96,7 +107,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         return array(
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE),
+            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
         );
     }
 
@@ -111,8 +122,15 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $currentTypeId,
         $downloadableData
     ) {
-        $this->requestMock->expects($this->any())->method('getPost')->with('downloadable')
-            ->will($this->returnValue($downloadableData));
+        $this->requestMock->expects(
+            $this->any()
+        )->method(
+            'getPost'
+        )->with(
+            'downloadable'
+        )->will(
+            $this->returnValue($downloadableData)
+        );
         $this->productMock->expects($this->any())->method('hasIsVirtual')->will($this->returnValue($isVirtual));
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
         $this->productMock->expects($this->never())->method('setTypeId');
@@ -125,26 +143,10 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     public function productThatCannotBeTransformedToDownloadableDataProvider()
     {
         return array(
-            array(
-                true,
-                'custom_product_type',
-                'valid_downloadable_data',
-            ),
-            array(
-                false,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                null,
-            ),
-            array(
-                true,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                null,
-            ),
-            array(
-                false,
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-                'valid_downloadable_data',
-            ),
+            array(true, 'custom_product_type', 'valid_downloadable_data'),
+            array(false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null),
+            array(true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null),
+            array(false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'valid_downloadable_data')
         );
     }
 }

@@ -67,7 +67,8 @@ class Exception extends \Exception
      * @param string $part
      * @return $this
      */
-    public function setPart($part) {
+    public function setPart($part)
+    {
         $this->_part = $part;
         return $this;
     }

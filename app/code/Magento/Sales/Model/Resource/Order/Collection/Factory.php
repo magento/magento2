@@ -48,7 +48,7 @@ class Factory
     {
         $instance = $this->_objectManager->create($className, $data);
 
-        if (!($instance instanceof AbstractCollection)) {
+        if (!$instance instanceof AbstractCollection) {
             throw new \InvalidArgumentException(
                 $className . ' does not implement \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection'
             );

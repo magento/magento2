@@ -29,25 +29,13 @@ return array(
             'action' => 'begin',
             'code' => 'License Agreement'
         ),
-        'locale' => array(
-            'name' => 'locale',
-            'controller' => 'wizard',
-            'action' => 'locale',
-            'code' => 'Localization',
-        ),
+        'locale' => array('name' => 'locale', 'controller' => 'wizard', 'action' => 'locale', 'code' => 'Localization')
     ),
     'filesystem_prerequisites' => array(
         'writables' => array(
-            'etc' => array(
-                'existence' => '1',
-                'recursive' => '0'
-            ),
-            'var' => array(
-                'existence' => '1',
-                'recursive' => '1'
-            )
+            'etc' => array('existence' => '1', 'recursive' => '0'),
+            'var' => array('existence' => '1', 'recursive' => '1')
         ),
         'notWritables' => array()
     )
 );
-

@@ -39,17 +39,18 @@ return array(
         'groups' => array(
             'group.2.1' => array(
                 'fields' => array(
-                    'f2.1.1' => array('value' => 'f2.1.1.val'), 'f2.1.2' => array('value' => 'f2.1.2.val'),
+                    'f2.1.1' => array('value' => 'f2.1.1.val'),
+                    'f2.1.2' => array('value' => 'f2.1.2.val')
                 ),
                 'groups' => array(
                     'group.2.1.1' => array(
                         'fields' => array(
                             'f2.1.1.1' => array('value' => 'f2.1.1.1.val'),
-                            'f2.1.1.2' => array('value' => 'f2.1.1.2.val'),
+                            'f2.1.1.2' => array('value' => 'f2.1.1.2.val')
                         )
-                    ),
-                ),
-            ),
+                    )
+                )
+            )
         )
-    ),
+    )
 );

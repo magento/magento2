@@ -72,9 +72,15 @@ class Store extends Action
     {
         // load layout, set active menu and breadcrumbs
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Backend::system_store')
-            ->_addBreadcrumb(__('System'), __('System'))
-            ->_addBreadcrumb(__('Manage Stores'), __('Manage Stores'));
+        $this->_setActiveMenu(
+            'Magento_Backend::system_store'
+        )->_addBreadcrumb(
+            __('System'),
+            __('System')
+        )->_addBreadcrumb(
+            __('Manage Stores'),
+            __('Manage Stores')
+        );
         return $this;
     }
 
@@ -155,25 +161,27 @@ class Store extends Action
         }
         switch ($this->_coreRegistry->registry('store_type')) {
             case 'website':
-                $itemId     = $this->getRequest()->getParam('website_id', null);
-                $model      = $this->_objectManager->create('Magento\Core\Model\Website');
-                $title      = __("Web Site");
-                $notExists  = __("The website does not exist.");
-                $codeBase   = __('Before modifying the website code please make sure that it is not used in index.php.');
+                $itemId = $this->getRequest()->getParam('website_id', null);
+                $model = $this->_objectManager->create('Magento\Core\Model\Website');
+                $title = __("Web Site");
+                $notExists = __("The website does not exist.");
+                $codeBase = __('Before modifying the website code please make sure that it is not used in index.php.');
                 break;
             case 'group':
-                $itemId     = $this->getRequest()->getParam('group_id', null);
-                $model      = $this->_objectManager->create('Magento\Core\Model\Store\Group');
-                $title      = __("Store");
-                $notExists  = __("The store does not exist");
-                $codeBase   = false;
+                $itemId = $this->getRequest()->getParam('group_id', null);
+                $model = $this->_objectManager->create('Magento\Core\Model\Store\Group');
+                $title = __("Store");
+                $notExists = __("The store does not exist");
+                $codeBase = false;
                 break;
             case 'store':
-                $itemId     = $this->getRequest()->getParam('store_id', null);
-                $model      = $this->_objectManager->create('Magento\Core\Model\Store');
-                $title      = __("Store View");
-                $notExists  = __("Store view doesn't exist");
-                $codeBase   = __('Before modifying the store view code please make sure that it is not used in index.php.');
+                $itemId = $this->getRequest()->getParam('store_id', null);
+                $model = $this->_objectManager->create('Magento\Core\Model\Store');
+                $title = __("Store View");
+                $notExists = __("Store view doesn't exist");
+                $codeBase = __(
+                    'Before modifying the store view code please make sure that it is not used in index.php.'
+                );
                 break;
             default:
                 break;
@@ -195,8 +203,9 @@ class Store extends Action
                 $this->messageManager->addNotice($codeBase);
             }
 
-            $this->_initAction()
-                ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'));
+            $this->_initAction()->_addContent(
+                $this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit')
+            );
             $this->_view->renderLayout();
         } else {
             $this->messageManager->addError($notExists);
@@ -209,7 +218,7 @@ class Store extends Action
      */
     public function saveAction()
     {
-        if ($this->getRequest()->isPost() && $postData = $this->getRequest()->getPost()) {
+        if ($this->getRequest()->isPost() && ($postData = $this->getRequest()->getPost())) {
             if (empty($postData['store_type']) || empty($postData['store_action'])) {
                 $this->_redirect('adminhtml/*/');
                 return;
@@ -262,14 +271,17 @@ class Store extends Action
                             $storeModel->setId(null);
                             $eventName = 'store_add';
                         }
-                        $groupModel = $this->_objectManager->create('Magento\Core\Model\Store\Group')
-                            ->load($storeModel->getGroupId());
+                        $groupModel = $this->_objectManager->create(
+                            'Magento\Core\Model\Store\Group'
+                        )->load(
+                            $storeModel->getGroupId()
+                        );
                         $storeModel->setWebsiteId($groupModel->getWebsiteId());
                         $storeModel->save();
 
                         $this->_objectManager->get('Magento\Core\Model\StoreManager')->reinitStores();
 
-                        $this->_eventManager->dispatch($eventName, array('store'=>$storeModel));
+                        $this->_eventManager->dispatch($eventName, array('store' => $storeModel));
 
                         $this->messageManager->addSuccess(__('The store view has been saved'));
                         break;
@@ -283,7 +295,10 @@ class Store extends Action
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setPostData($postData);
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('An error occurred while saving. Please review the error log.'));
+                $this->messageManager->addException(
+                    $e,
+                    __('An error occurred while saving. Please review the error log.')
+                );
                 $this->_getSession()->setPostData($postData);
             }
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
@@ -300,27 +315,35 @@ class Store extends Action
         $this->_title->add(__('Delete Web Site'));
 
         $itemId = $this->getRequest()->getParam('item_id', null);
-        if (!$model = $this->_objectManager->create('Magento\Core\Model\Website')->load($itemId)) {
+        if (!($model = $this->_objectManager->create('Magento\Core\Model\Website')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This website cannot be deleted.'));
             $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $itemId));
-            return ;
+            return;
         }
 
         $this->_addDeletionNotice('website');
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Delete Web Site'), __('Delete Web Site'))
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
-                ->setFormActionUrl($this->getUrl('adminhtml/*/deleteWebsitePost'))
-                ->setBackUrl($this->getUrl('adminhtml/*/editWebsite', array('website_id' => $itemId)))
-                ->setStoreTypeTitle(__('Web Site'))
-                ->setDataObject($model)
-            );
+        $this->_initAction()->_addBreadcrumb(
+            __('Delete Web Site'),
+            __('Delete Web Site')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Backend\Block\System\Store\Delete'
+            )->setFormActionUrl(
+                $this->getUrl('adminhtml/*/deleteWebsitePost')
+            )->setBackUrl(
+                $this->getUrl('adminhtml/*/editWebsite', array('website_id' => $itemId))
+            )->setStoreTypeTitle(
+                __('Web Site')
+            )->setDataObject(
+                $model
+            )
+        );
         $this->_view->renderLayout();
     }
 
@@ -332,27 +355,35 @@ class Store extends Action
         $this->_title->add(__('Delete Store'));
 
         $itemId = $this->getRequest()->getParam('item_id', null);
-        if (!$model = $this->_objectManager->create('Magento\Core\Model\Store\Group')->load($itemId)) {
+        if (!($model = $this->_objectManager->create('Magento\Core\Model\Store\Group')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store cannot be deleted.'));
             $this->_redirect('adminhtml/*/editGroup', array('group_id' => $itemId));
-            return ;
+            return;
         }
 
         $this->_addDeletionNotice('store');
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Delete Store'), __('Delete Store'))
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
-                ->setFormActionUrl($this->getUrl('adminhtml/*/deleteGroupPost'))
-                ->setBackUrl($this->getUrl('adminhtml/*/editGroup', array('group_id' => $itemId)))
-                ->setStoreTypeTitle(__('Store'))
-                ->setDataObject($model)
-            );
+        $this->_initAction()->_addBreadcrumb(
+            __('Delete Store'),
+            __('Delete Store')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Backend\Block\System\Store\Delete'
+            )->setFormActionUrl(
+                $this->getUrl('adminhtml/*/deleteGroupPost')
+            )->setBackUrl(
+                $this->getUrl('adminhtml/*/editGroup', array('group_id' => $itemId))
+            )->setStoreTypeTitle(
+                __('Store')
+            )->setDataObject(
+                $model
+            )
+        );
         $this->_view->renderLayout();
     }
 
@@ -364,27 +395,35 @@ class Store extends Action
         $this->_title->add(__('Delete Store View'));
 
         $itemId = $this->getRequest()->getParam('item_id', null);
-        if (!$model = $this->_objectManager->create('Magento\Core\Model\Store')->load($itemId)) {
+        if (!($model = $this->_objectManager->create('Magento\Core\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store view cannot be deleted.'));
             $this->_redirect('adminhtml/*/editStore', array('store_id' => $itemId));
-            return ;
+            return;
         }
 
-        $this->_addDeletionNotice('store view');;
+        $this->_addDeletionNotice('store view');
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Delete Store View'), __('Delete Store View'))
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
-                ->setFormActionUrl($this->getUrl('adminhtml/*/deleteStorePost'))
-                ->setBackUrl($this->getUrl('adminhtml/*/editStore', array('store_id' => $itemId)))
-                ->setStoreTypeTitle(__('Store View'))
-                ->setDataObject($model)
-            );
+        $this->_initAction()->_addBreadcrumb(
+            __('Delete Store View'),
+            __('Delete Store View')
+        )->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Backend\Block\System\Store\Delete'
+            )->setFormActionUrl(
+                $this->getUrl('adminhtml/*/deleteStorePost')
+            )->setBackUrl(
+                $this->getUrl('adminhtml/*/editStore', array('store_id' => $itemId))
+            )->setStoreTypeTitle(
+                __('Store View')
+            )->setDataObject(
+                $model
+            )
+        );
         $this->_view->renderLayout();
     }
 
@@ -400,12 +439,12 @@ class Store extends Action
         if (!$model) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This website cannot be deleted.'));
             $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $model->getId()));
-            return ;
+            return;
         }
 
         $this->_backupDatabase('*/*/editWebsite', array('website_id' => $itemId));
@@ -414,7 +453,7 @@ class Store extends Action
             $model->delete();
             $this->messageManager->addSuccess(__('The website has been deleted.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -430,15 +469,15 @@ class Store extends Action
     {
         $itemId = $this->getRequest()->getParam('item_id');
 
-        if (!$model = $this->_objectManager->create('Magento\Core\Model\Store\Group')->load($itemId)) {
+        if (!($model = $this->_objectManager->create('Magento\Core\Model\Store\Group')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store cannot be deleted.'));
             $this->_redirect('adminhtml/*/editGroup', array('group_id' => $model->getId()));
-            return ;
+            return;
         }
 
         $this->_backupDatabase('*/*/editGroup', array('group_id' => $itemId));
@@ -447,7 +486,7 @@ class Store extends Action
             $model->delete();
             $this->messageManager->addSuccess(__('The store has been deleted.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -465,15 +504,15 @@ class Store extends Action
     {
         $itemId = $this->getRequest()->getParam('item_id');
 
-        if (!$model = $this->_objectManager->create('Magento\Core\Model\Store')->load($itemId)) {
+        if (!($model = $this->_objectManager->create('Magento\Core\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store view cannot be deleted.'));
             $this->_redirect('adminhtml/*/editStore', array('store_id' => $model->getId()));
-            return ;
+            return;
         }
 
         $this->_backupDatabase('*/*/editStore', array('store_id' => $itemId));
@@ -485,7 +524,7 @@ class Store extends Action
 
             $this->messageManager->addSuccess(__('The store view has been deleted.'));
             $this->_redirect('adminhtml/*/');
-            return ;
+            return;
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -509,31 +548,40 @@ class Store extends Action
      * @param array $arguments
      * @return $this|void
      */
-    protected function _backupDatabase($failPath, $arguments=array())
+    protected function _backupDatabase($failPath, $arguments = array())
     {
-        if (! $this->getRequest()->getParam('create_backup')) {
+        if (!$this->getRequest()->getParam('create_backup')) {
             return $this;
         }
         try {
             $backupDb = $this->_objectManager->create('Magento\Backup\Model\Db');
-            $backup   = $this->_objectManager->create('Magento\Backup\Model\Backup')
-                ->setTime(time())
-                ->setType('db')
-                ->setPath(
-                    $this->_objectManager->get('Magento\App\Filesystem')
-                        ->getPath(\Magento\App\Filesystem::VAR_DIR) . '/backups'
-                );
+            $backup = $this->_objectManager->create(
+                'Magento\Backup\Model\Backup'
+            )->setTime(
+                time()
+            )->setType(
+                'db'
+            )->setPath(
+                $this->_objectManager->get(
+                    'Magento\App\Filesystem'
+                )->getPath(
+                    \Magento\App\Filesystem::VAR_DIR
+                ) . '/backups'
+            );
 
             $backupDb->createBackup($backup);
             $this->messageManager->addSuccess(__('The database was backed up.'));
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect($failPath, $arguments);
-            return ;
+            return;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We couldn\'t create a backup right now. Please try again later.'));
+            $this->messageManager->addException(
+                $e,
+                __('We couldn\'t create a backup right now. Please try again later.')
+            );
             $this->_redirect($failPath, $arguments);
-            return ;
+            return;
         }
         return $this;
     }
@@ -547,9 +595,11 @@ class Store extends Action
     protected function _addDeletionNotice($typeTitle)
     {
         $this->messageManager->addNotice(
-            __('Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.', $typeTitle)
+            __(
+                'Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.',
+                $typeTitle
+            )
         );
         return $this;
     }
-
 }

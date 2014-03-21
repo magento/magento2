@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updater" />
     <type name="Magento\App\Arguments\Loader">
         <arguments>
@@ -59,8 +59,8 @@
                 <item name="const" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</item>
                 <item name="boolFalse" xsi:type="boolean">false</item>
                 <item name="boolTrue" xsi:type="boolean">true</item>
-                <item name="boolOne" xsi:type="boolean">1</item>
-                <item name="boolZero" xsi:type="boolean">0</item>
+                <item name="boolOne" xsi:type="boolean">true</item>
+                <item name="boolZero" xsi:type="boolean">false</item>
                 <item name="intValue" xsi:type="number">100500</item>
                 <item name="nullValue" xsi:type="null"/>
                 <item name="stringPattern" xsi:type="string">az-value</item>
@@ -68,8 +68,8 @@
             <argument name="constParam" xsi:type="const">Magento\Core\Model\Website::CACHE_TAG</argument>
             <argument name="boolFalseParam" xsi:type="boolean">false</argument>
             <argument name="boolTrueParam" xsi:type="boolean">true</argument>
-            <argument name="boolOneParam" xsi:type="boolean">1</argument>
-            <argument name="boolZeroParam" xsi:type="boolean">0</argument>
+            <argument name="boolOneParam" xsi:type="boolean">true</argument>
+            <argument name="boolZeroParam" xsi:type="boolean">false</argument>
             <argument name="intValueParam" xsi:type="number">100500</argument>
             <argument name="nullValueParam" xsi:type="null"/>
             <argument name="stringPatternParam" xsi:type="string">az-value</argument>

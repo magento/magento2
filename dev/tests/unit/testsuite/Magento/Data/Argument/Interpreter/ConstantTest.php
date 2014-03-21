@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
-class ConstantTest  extends \PHPUnit_Framework_TestCase
+class ConstantTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Constant
@@ -33,7 +32,7 @@ class ConstantTest  extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->object = new Constant;
+        $this->object = new Constant();
     }
 
     public function testEvaluate()
@@ -60,7 +59,7 @@ class ConstantTest  extends \PHPUnit_Framework_TestCase
         return array(
             array(array('value' => 'KNOWINGLY_UNDEFINED_CONSTANT')),
             array(array('value' => '')),
-            array(array()),
+            array(array())
         );
     }
-} 
+}

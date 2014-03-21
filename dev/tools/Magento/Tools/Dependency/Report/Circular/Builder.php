@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Circular;
 
 use Magento\Tools\Dependency\Circular;
@@ -66,9 +65,9 @@ class Builder extends AbstractBuilder
      */
     protected function buildData($modulesData)
     {
-        $modules = [];
+        $modules = array();
         foreach ($this->buildCircularDependencies($modulesData) as $moduleName => $modulesChains) {
-            $chains = [];
+            $chains = array();
             foreach ($modulesChains as $modulesChain) {
                 $chains[] = new Data\Chain($modulesChain);
             }
@@ -85,7 +84,7 @@ class Builder extends AbstractBuilder
      */
     protected function buildCircularDependencies($modulesData)
     {
-        $dependencies = [];
+        $dependencies = array();
         foreach ($modulesData as $moduleData) {
             foreach ($moduleData['dependencies'] as $dependencyData) {
                 $dependencies[$moduleData['name']][] = $dependencyData['module'];

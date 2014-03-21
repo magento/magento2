@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 /**
@@ -52,17 +51,20 @@ class CustomerDetailsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_customerMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_addressMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_customerMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Customer'
+        )->disableOriginalConstructor()->getMock();
+        $this->_addressMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Address'
+        )->disableOriginalConstructor()->getMock();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder */
         $customerDetailsBuilder = $objectManager->getObject('Magento\Customer\Service\V1\Data\CustomerDetailsBuilder');
-        $customerDetailsBuilder->setCustomer($this->_customerMock)
-            ->setAddresses([$this->_addressMock, $this->_addressMock]);
+        $customerDetailsBuilder->setCustomer(
+            $this->_customerMock
+        )->setAddresses(
+            array($this->_addressMock, $this->_addressMock)
+        );
         $this->_customerDetails = new CustomerDetails($customerDetailsBuilder);
     }
 
@@ -73,9 +75,6 @@ class CustomerDetailsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddresses()
     {
-        $this->assertEquals(
-            [$this->_addressMock, $this->_addressMock],
-            $this->_customerDetails->getAddresses()
-        );
+        $this->assertEquals(array($this->_addressMock, $this->_addressMock), $this->_customerDetails->getAddresses());
     }
 }

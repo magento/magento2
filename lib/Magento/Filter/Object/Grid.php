@@ -23,8 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Filter\Object;
 
 use Magento\Object;
@@ -39,7 +37,7 @@ class Grid extends \Magento\Filter\Object
     {
         $out = array();
         if (is_array($grid)) {
-            foreach ($grid as $i=>$array) {
+            foreach ($grid as $i => $array) {
                 $out[$i] = parent::filter($array);
             }
         }

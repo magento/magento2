@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Db\Collection;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -33,28 +32,36 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\Resource');
-        $resource = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
-            array($resourceModel), '', true, true, true, array('getMainTable', 'getIdFieldName')
+        $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
+        $resource = $this->getMockForAbstractClass(
+            'Magento\Core\Model\Resource\Db\AbstractDb',
+            array($resourceModel),
+            '',
+            true,
+            true,
+            true,
+            array('getMainTable', 'getIdFieldName')
         );
 
-        $resource->expects($this->any())
-            ->method('getMainTable')
-            ->will($this->returnValue($resource->getTable('core_website')));
-        $resource->expects($this->any())
-            ->method('getIdFieldName')
-            ->will($this->returnValue('website_id'));
+        $resource->expects(
+            $this->any()
+        )->method(
+            'getMainTable'
+        )->will(
+            $this->returnValue($resource->getTable('core_website'))
+        );
+        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('website_id'));
 
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Data\Collection\Db\FetchStrategyInterface');
 
-        $eventManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Event\ManagerInterface');
+        $eventManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Event\ManagerInterface'
+        );
 
-        $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\EntityFactory');
-        $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Logger');
+        $entityFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\EntityFactory'
+        );
+        $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Logger');
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',

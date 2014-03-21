@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Url;
 
 class QueryParamsResolverTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class QueryParamsResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Url\QueryParamsResolver');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Url\QueryParamsResolver'
+        );
     }
 
     public function testSetGetPurgeQueryParams()

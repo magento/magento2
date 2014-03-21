@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset\MergeStrategy;
 
 class FileExistsTest extends \PHPUnit_Framework_TestCase
@@ -71,53 +70,65 @@ class FileExistsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_directory = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->_directory));
+        $this->_filesystem->expects(
+            $this->any()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($this->_directory)
+        );
         $this->_strategy = $this->getMock('Magento\View\Asset\MergeStrategyInterface');
 
-        $this->_directory->expects($this->any())
-            ->method('getRelativePath')
-            ->will(
-                $this->returnCallback(
-                    function ($path) {
-                        $parts = explode('/', $path);
-                        return end($parts);
-                    }
-                )
-            );
-
-        $this->_object = new \Magento\View\Asset\MergeStrategy\FileExists(
-            $this->_strategy,
-            $this->_filesystem
+        $this->_directory->expects($this->any())->method('getRelativePath')->will(
+            $this->returnCallback(
+                function ($path) {
+                    $parts = explode('/', $path);
+                    return end($parts);
+                }
+            )
         );
+
+        $this->_object = new \Magento\View\Asset\MergeStrategy\FileExists($this->_strategy, $this->_filesystem);
     }
 
     public function testMergeFilesFileExists()
     {
-        $this->_strategy
-            ->expects($this->never())
-            ->method('mergeFiles');
+        $this->_strategy->expects($this->never())->method('mergeFiles');
 
-        $this->_directory->expects($this->once())
-            ->method('isExist')
-            ->with($this->equalTo($this->_mergedFile))
-            ->will($this->returnValue(true));
+        $this->_directory->expects(
+            $this->once()
+        )->method(
+            'isExist'
+        )->with(
+            $this->equalTo($this->_mergedFile)
+        )->will(
+            $this->returnValue(true)
+        );
 
         $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
     }
 
     public function testMergeFilesFileDoesNotExist()
     {
-        $this->_strategy
-            ->expects($this->once())
-            ->method('mergeFiles')
-            ->with($this->_filesArray, $this->_mergedFileAbs, 'contentType');
+        $this->_strategy->expects(
+            $this->once()
+        )->method(
+            'mergeFiles'
+        )->with(
+            $this->_filesArray,
+            $this->_mergedFileAbs,
+            'contentType'
+        );
 
-        $this->_directory->expects($this->once())
-            ->method('isExist')
-            ->with($this->equalTo($this->_mergedFile))
-            ->will($this->returnValue(false));
+        $this->_directory->expects(
+            $this->once()
+        )->method(
+            'isExist'
+        )->with(
+            $this->equalTo($this->_mergedFile)
+        )->will(
+            $this->returnValue(false)
+        );
 
         $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
     }

@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
-class Formset
-    extends \Magento\Backend\Block\Widget\Form\Generic
+class Formset extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
@@ -65,35 +63,38 @@ class Formset
 
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset('set_name', array('legend'=> __('Edit Set Name')));
-        $fieldset->addField('attribute_set_name', 'text', array(
-            'label' => __('Name'),
-            'note' => __('For internal use'),
-            'name' => 'attribute_set_name',
-            'required' => true,
-            'class' => 'required-entry validate-no-html-tags',
-            'value' => $data->getAttributeSetName()
-        ));
-
-        if( !$this->getRequest()->getParam('id', false) ) {
-            $fieldset->addField('gotoEdit', 'hidden', array(
-                'name' => 'gotoEdit',
-                'value' => '1'
-            ));
-
-            $sets = $this->_setFactory->create()
-                ->getResourceCollection()
-                ->setEntityTypeFilter($this->_coreRegistry->registry('entityType'))
-                ->load()
-                ->toOptionArray();
-
-            $fieldset->addField('skeleton_set', 'select', array(
-                'label' => __('Based On'),
-                'name' => 'skeleton_set',
+        $fieldset = $form->addFieldset('set_name', array('legend' => __('Edit Set Name')));
+        $fieldset->addField(
+            'attribute_set_name',
+            'text',
+            array(
+                'label' => __('Name'),
+                'note' => __('For internal use'),
+                'name' => 'attribute_set_name',
                 'required' => true,
-                'class' => 'required-entry',
-                'values' => $sets,
-            ));
+                'class' => 'required-entry validate-no-html-tags',
+                'value' => $data->getAttributeSetName()
+            )
+        );
+
+        if (!$this->getRequest()->getParam('id', false)) {
+            $fieldset->addField('gotoEdit', 'hidden', array('name' => 'gotoEdit', 'value' => '1'));
+
+            $sets = $this->_setFactory->create()->getResourceCollection()->setEntityTypeFilter(
+                $this->_coreRegistry->registry('entityType')
+            )->load()->toOptionArray();
+
+            $fieldset->addField(
+                'skeleton_set',
+                'select',
+                array(
+                    'label' => __('Based On'),
+                    'name' => 'skeleton_set',
+                    'required' => true,
+                    'class' => 'required-entry',
+                    'values' => $sets
+                )
+            );
         }
 
         $form->setMethod('post');

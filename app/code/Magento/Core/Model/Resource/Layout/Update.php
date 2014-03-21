@@ -39,10 +39,8 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\Cache\FrontendInterface $cache
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Cache\FrontendInterface $cache
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Cache\FrontendInterface $cache)
+    {
         parent::__construct($resource);
         $this->_cache = $cache;
     }
@@ -65,13 +63,12 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Core\Model\Store $store
      * @return string
      */
-    public function fetchUpdatesByHandle($handle, \Magento\View\Design\ThemeInterface $theme, \Magento\Core\Model\Store $store)
-    {
-        $bind = array(
-            'layout_update_handle' => $handle,
-            'theme_id' => $theme->getId(),
-            'store_id' => $store->getId(),
-        );
+    public function fetchUpdatesByHandle(
+        $handle,
+        \Magento\View\Design\ThemeInterface $theme,
+        \Magento\Core\Model\Store $store
+    ) {
+        $bind = array('layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId());
         $result = '';
         $readAdapter = $this->_getReadAdapter();
         if ($readAdapter) {
@@ -93,14 +90,22 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
         //If 0 means 'all stores' why it then refers by foreign key to Admin in `core_store` and not to something named
         // 'All Stores'?
 
-        $select = $this->_getReadAdapter()->select()
-            ->from(array('layout_update' => $this->getMainTable()), array('xml'))
-            ->join(array('link' => $this->getTable('core_layout_link')),
-                'link.layout_update_id=layout_update.layout_update_id', '')
-            ->where('link.store_id IN (0, :store_id)')
-            ->where('link.theme_id = :theme_id')
-            ->where('layout_update.handle = :layout_update_handle')
-            ->order('layout_update.sort_order ' . \Magento\DB\Select::SQL_ASC);
+        $select = $this->_getReadAdapter()->select()->from(
+            array('layout_update' => $this->getMainTable()),
+            array('xml')
+        )->join(
+            array('link' => $this->getTable('core_layout_link')),
+            'link.layout_update_id=layout_update.layout_update_id',
+            ''
+        )->where(
+            'link.store_id IN (0, :store_id)'
+        )->where(
+            'link.theme_id = :theme_id'
+        )->where(
+            'layout_update.handle = :layout_update_handle'
+        )->order(
+            'layout_update.sort_order ' . \Magento\DB\Select::SQL_ASC
+        );
 
         if (!$loadAllUpdates) {
             $select->where('link.is_temporary = 0');
@@ -119,12 +124,15 @@ class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $data = $object->getData();
         if (isset($data['store_id']) && isset($data['theme_id'])) {
-            $this->_getWriteAdapter()->insertOnDuplicate($this->getTable('core_layout_link'), array(
-                'store_id'         => $data['store_id'],
-                'theme_id'         => $data['theme_id'],
-                'layout_update_id' => $object->getId(),
-                'is_temporary'     => (int)$object->getIsTemporary(),
-            ));
+            $this->_getWriteAdapter()->insertOnDuplicate(
+                $this->getTable('core_layout_link'),
+                array(
+                    'store_id' => $data['store_id'],
+                    'theme_id' => $data['theme_id'],
+                    'layout_update_id' => $object->getId(),
+                    'is_temporary' => (int)$object->getIsTemporary()
+                )
+            );
         }
         $this->_cache->clean();
         return parent::_afterSave($object);

@@ -73,34 +73,38 @@ class Order extends \Magento\Object
 
         $query = $this->getQuery();
         //TODO: add full name logic
-        $collection = $this->_collectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->addAttributeToSearchFilter(array(
-                array('attribute' => 'increment_id',       'like'=>$query.'%'),
-                array('attribute' => 'billing_firstname',  'like'=>$query.'%'),
-                array('attribute' => 'billing_lastname',   'like'=>$query.'%'),
-                array('attribute' => 'billing_telephone',  'like'=>$query.'%'),
-                array('attribute' => 'billing_postcode',   'like'=>$query.'%'),
-
-                array('attribute' => 'shipping_firstname', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_lastname',  'like'=>$query.'%'),
-                array('attribute' => 'shipping_telephone', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_postcode',  'like'=>$query.'%'),
-            ))
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
-            ->load();
+        $collection = $this->_collectionFactory->create()->addAttributeToSelect(
+            '*'
+        )->addAttributeToSearchFilter(
+            array(
+                array('attribute' => 'increment_id', 'like' => $query . '%'),
+                array('attribute' => 'billing_firstname', 'like' => $query . '%'),
+                array('attribute' => 'billing_lastname', 'like' => $query . '%'),
+                array('attribute' => 'billing_telephone', 'like' => $query . '%'),
+                array('attribute' => 'billing_postcode', 'like' => $query . '%'),
+                array('attribute' => 'shipping_firstname', 'like' => $query . '%'),
+                array('attribute' => 'shipping_lastname', 'like' => $query . '%'),
+                array('attribute' => 'shipping_telephone', 'like' => $query . '%'),
+                array('attribute' => 'shipping_postcode', 'like' => $query . '%')
+            )
+        )->setCurPage(
+            $this->getStart()
+        )->setPageSize(
+            $this->getLimit()
+        )->load();
 
         foreach ($collection as $order) {
             $result[] = array(
-                'id'                => 'order/1/'.$order->getId(),
-                'type'              => __('Order'),
-                'name'              => __('Order #%1', $order->getIncrementId()),
-                'description'       => $order->getBillingFirstname().' '.$order->getBillingLastname(),
-                'form_panel_title'  => __('Order #%1 (%2)',
+                'id' => 'order/1/' . $order->getId(),
+                'type' => __('Order'),
+                'name' => __('Order #%1', $order->getIncrementId()),
+                'description' => $order->getBillingFirstname() . ' ' . $order->getBillingLastname(),
+                'form_panel_title' => __(
+                    'Order #%1 (%2)',
                     $order->getIncrementId(),
-                    $order->getBillingFirstname() . ' ' . $order->getBillingLastname()),
-                'url' => $this->_adminhtmlData->getUrl('sales/order/view', array('order_id' => $order->getId())),
+                    $order->getBillingFirstname() . ' ' . $order->getBillingLastname()
+                ),
+                'url' => $this->_adminhtmlData->getUrl('sales/order/view', array('order_id' => $order->getId()))
             );
         }
 

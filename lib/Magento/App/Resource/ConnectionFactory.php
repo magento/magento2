@@ -67,7 +67,7 @@ class ConnectionFactory
 
         $adapterInstance = $this->_objectManager->create($connectionConfig['adapter'], $connectionConfig);
 
-        if (!($adapterInstance instanceof ConnectionAdapterInterface)) {
+        if (!$adapterInstance instanceof ConnectionAdapterInterface) {
             throw new \InvalidArgumentException('Trying to create wrong connection adapter');
         }
 

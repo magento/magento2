@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\OfflineShipping\Block\Adminhtml\Form\Field;
 
 class ExportTest extends \PHPUnit_Framework_TestCase
@@ -38,8 +37,9 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", array('website' => 1));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_object = $objectManager->getObject('Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export', array(
-            'backendUrl' => $backendUrl)
+        $this->_object = $objectManager->getObject(
+            'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Export',
+            array('backendUrl' => $backendUrl)
         );
     }
 
@@ -48,8 +48,13 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $expected = 'some test data';
 
         $form = $this->getMock('Magento\Data\Form', array('getParent'), array(), '', false, false);
-        $parentObjectMock = $this->getMock('Magento\Backend\Block\Template',
-            array('getLayout'), array(), '', false, false
+        $parentObjectMock = $this->getMock(
+            'Magento\Backend\Block\Template',
+            array('getLayout'),
+            array(),
+            '',
+            false,
+            false
         );
         $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 

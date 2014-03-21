@@ -76,7 +76,7 @@ INSTALLSCHEME;
         'admin_password' => '1234qasd',
         'use_secure' => 'no',
         'secure_base_url' => '"https://magento.local"',
-        'cleanup_database' => '',
+        'cleanup_database' => ''
     );
     echo 'Example of installation:' . PHP_EOL;
     echo '  php -f ' . $_SERVER['argv'][0] . ' --';

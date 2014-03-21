@@ -64,25 +64,36 @@ class SuggestedAttributeList
         $escapedLabelPart = $this->_resourceHelper->addLikeEscape($labelPart, array('position' => 'any'));
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
         $collection = $this->_attributeColFactory->create();
-        $collection->addFieldToFilter('frontend_input', 'select')
-            ->addFieldToFilter('frontend_label', array('like' => $escapedLabelPart))
-            ->addFieldToFilter('is_configurable', array(array("eq" => 1), array('null' => true)))
-            ->addFieldToFilter('is_user_defined', 1)
-            ->addFieldToFilter('is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL);
+        $collection->addFieldToFilter(
+            'frontend_input',
+            'select'
+        )->addFieldToFilter(
+            'frontend_label',
+            array('like' => $escapedLabelPart)
+        )->addFieldToFilter(
+            'is_configurable',
+            array(array("eq" => 1), array('null' => true))
+        )->addFieldToFilter(
+            'is_user_defined',
+            1
+        )->addFieldToFilter(
+            'is_global',
+            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
+        );
 
         $result = array();
         $types = array(
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
             \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
         foreach ($collection->getItems() as $id => $attribute) {
             /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
             if (!$attribute->getApplyTo() || count(array_diff($types, $attribute->getApplyTo())) === 0) {
                 $result[$id] = array(
-                    'id'      => $attribute->getId(),
-                    'label'   => $attribute->getFrontendLabel(),
-                    'code'    => $attribute->getAttributeCode(),
+                    'id' => $attribute->getId(),
+                    'label' => $attribute->getFrontendLabel(),
+                    'code' => $attribute->getAttributeCode(),
                     'options' => $attribute->getSource()->getAllOptions(false)
                 );
             }

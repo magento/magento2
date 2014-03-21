@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Block\Payment;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
@@ -46,14 +45,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\RecurringPayment\Model\Payment');
+        $this->_payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\RecurringPayment\Model\Payment'
+        );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Registry')->register('current_recurring_payment', $this->_payment);
 
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\LayoutInterface');
+        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        );
         $this->_block = $this->_layout->createBlock('Magento\RecurringPayment\Block\Payment\View', 'block');
     }
 
@@ -69,8 +70,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testToHtmlPropagatesUrl()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
         $this->_block->setShouldPrepareInfoTabs(true);
         $childOne = $this->_layout->addBlock('Magento\View\Element\Text', 'child1', 'block');
         $this->_layout->addToParentGroup('child1', 'info_tabs');

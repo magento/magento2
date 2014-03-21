@@ -82,11 +82,15 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $customerId = $this->getCustomerId();
 
         if ($customerId && $this->_authorization->isAllowed('Magento_Sales::create')) {
-            $this->_addButton('order', [
-                'label' => __('Create Order'),
-                'onclick' => 'setLocation(\'' . $this->getCreateOrderUrl() . '\')',
-                'class' => 'add',
-            ], 0);
+            $this->_addButton(
+                'order',
+                array(
+                    'label' => __('Create Order'),
+                    'onclick' => 'setLocation(\'' . $this->getCreateOrderUrl() . '\')',
+                    'class' => 'add'
+                ),
+                0
+            );
         }
 
         parent::_construct();
@@ -104,12 +108,16 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($customerId) {
-            $url = $this->getUrl('customer/index/resetPassword', ['customer_id' => $customerId]);
-            $this->_addButton('reset_password', [
-                'label' => __('Reset Password'),
-                'onclick' => 'setLocation(\'' . $url . '\')',
-                'class' => 'save',
-            ], 0);
+            $url = $this->getUrl('customer/index/resetPassword', array('customer_id' => $customerId));
+            $this->_addButton(
+                'reset_password',
+                array(
+                    'label' => __('Reset Password'),
+                    'onclick' => 'setLocation(\'' . $url . '\')',
+                    'class' => 'save'
+                ),
+                0
+            );
         }
     }
 
@@ -120,7 +128,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCreateOrderUrl()
     {
-        return $this->getUrl('sales/order_create/start', ['customer_id' => $this->getCustomerId()]);
+        return $this->getUrl('sales/order_create/start', array('customer_id' => $this->getCustomerId()));
     }
 
     /**
@@ -158,9 +166,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getFormHtml()
     {
         $html = parent::getFormHtml();
-        $html .= $this->getLayout()
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Composite\Configure')
-            ->toHtml();
+        $html .= $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Composite\Configure'
+        )->toHtml();
         return $html;
     }
 
@@ -171,7 +179,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('customer/*/validate', ['_current' => true]);
+        return $this->getUrl('customer/*/validate', array('_current' => true));
     }
 
     /**
@@ -183,15 +191,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $customerId = $this->getCustomerId();
         if (!$customerId || $this->_customerAccountService->canModify($customerId)) {
-            $this->_addButton('save_and_continue', [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form'],
-                    ],
-                ],
-            ], 10);
+            $this->_addButton(
+                'save_and_continue',
+                array(
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
+                        )
+                    )
+                ),
+                10
+            );
         }
 
         return parent::_prepareLayout();
@@ -204,10 +216,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('customer/index/save', [
-            '_current'  => true,
-            'back'      => 'edit',
-            'tab'       => '{{tab_id}}'
-        ]);
+        return $this->getUrl(
+            'customer/index/save',
+            array('_current' => true, 'back' => 'edit', 'tab' => '{{tab_id}}')
+        );
     }
 }

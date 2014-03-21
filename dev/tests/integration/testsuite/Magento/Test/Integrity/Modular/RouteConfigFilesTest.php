@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
 
 class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
@@ -32,9 +31,9 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/routers'               => 'id',
-        '/config/routers/route'         => 'id',
-        '/config/routers/route/module'  => 'name'
+        '/config/routers' => 'id',
+        '/config/routers/route' => 'id',
+        '/config/routers/route/module' => 'name'
     );
 
     /**
@@ -66,10 +65,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $mask = $magentoBaseDir . '/app/code/*/*/etc/*/routes.xml';
         $files = glob($mask);
-        $mergedConfig = new \Magento\Config\Dom(
-            '<config></config>',
-            $this->_idAttributes
-        );
+        $mergedConfig = new \Magento\Config\Dom('<config></config>', $this->_idAttributes);
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
@@ -78,7 +74,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);
-            } catch(\Magento\Config\Dom\ValidationException $e) {
+            } catch (\Magento\Config\Dom\ValidationException $e) {
                 $invalidFiles[] = $file;
             }
         }
@@ -93,6 +89,5 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->fail('Merged routes config is invalid: ' . "\n" . implode("\n", $errors));
         }
-
     }
 }

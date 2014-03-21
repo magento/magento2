@@ -72,8 +72,14 @@ class DefaultItems extends \Magento\View\Element\Template
     public function getValueHtml($value)
     {
         if (is_array($value)) {
-            return sprintf('%d', $value['qty']) . ' x ' . $this->escapeHtml($value['title']) . " "
-                . $this->getItem()->getOrder()->formatPrice($value['price']);
+            return sprintf(
+                '%d',
+                $value['qty']
+            ) . ' x ' . $this->escapeHtml(
+                $value['title']
+            ) . " " . $this->getItem()->getOrder()->formatPrice(
+                $value['price']
+            );
         } else {
             return $this->escapeHtml($value);
         }

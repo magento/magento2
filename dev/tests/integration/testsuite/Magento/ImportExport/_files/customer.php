@@ -25,38 +25,51 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 //Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Customer');
-$customer->setWebsiteId(1)
-    ->setEntityId(1)
-    ->setEntityTypeId(1)
-    ->setAttributeSetId(0)
-    ->setEmail('CharlesTAlston@teleworm.us')
-    ->setPassword('password')
-    ->setGroupId(1)
-    ->setStoreId(1)
-    ->setIsActive(1)
-    ->setFirstname('Charles')
-    ->setLastname('Alston')
-    ->setGender(2);
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+$customer->setWebsiteId(
+    1
+)->setEntityId(
+    1
+)->setEntityTypeId(
+    1
+)->setAttributeSetId(
+    0
+)->setEmail(
+    'CharlesTAlston@teleworm.us'
+)->setPassword(
+    'password'
+)->setGroupId(
+    1
+)->setStoreId(
+    1
+)->setIsActive(
+    1
+)->setFirstname(
+    'Charles'
+)->setLastname(
+    'Alston'
+)->setGender(
+    2
+);
 $customer->isObjectNew(true);
 
 // Create address
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
 //  default_billing and default_shipping information would not be saved, it is needed only for simple check
-$address->addData(array(
-    'firstname'         => 'Charles',
-    'lastname'          => 'Alston',
-    'street'            => '3781 Neuport Lane',
-    'city'              => 'Panola',
-    'country_id'        => 'US',
-    'region_id'         => '51',
-    'postcode'          => '30058',
-    'telephone'         => '770-322-3514',
-    'default_billing'   => 1,
-    'default_shipping'  => 1,
-));
+$address->addData(
+    array(
+        'firstname' => 'Charles',
+        'lastname' => 'Alston',
+        'street' => '3781 Neuport Lane',
+        'city' => 'Panola',
+        'country_id' => 'US',
+        'region_id' => '51',
+        'postcode' => '30058',
+        'telephone' => '770-322-3514',
+        'default_billing' => 1,
+        'default_shipping' => 1
+    )
+);
 
 // Assign customer and address
 $customer->addAddress($address);

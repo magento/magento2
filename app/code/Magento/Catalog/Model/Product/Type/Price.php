@@ -43,7 +43,7 @@ class Price
     /**
      * @var array
      */
-    static $attributeCache = array();
+    protected static $attributeCache = array();
 
     /**
      * Core event manager proxy
@@ -122,12 +122,13 @@ class Price
      */
     public function getBasePrice($product, $qty = null)
     {
-        $price = (float)$product->getPrice();
-        return min($this->_applyGroupPrice($product, $price), $this->_applyTierPrice($product, $qty, $price),
+        $price = (double)$product->getPrice();
+        return min(
+            $this->_applyGroupPrice($product, $price),
+            $this->_applyTierPrice($product, $qty, $price),
             $this->_applySpecialPrice($product, $price)
         );
     }
-
 
     /**
      * Retrieve product final price
@@ -233,7 +234,7 @@ class Price
             return $finalPrice;
         }
 
-        $tierPrice  = $product->getTierPrice($qty);
+        $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
             $finalPrice = min($finalPrice, $tierPrice);
         }
@@ -264,12 +265,14 @@ class Price
             if (!is_null($qty)) {
                 return $product->getPrice();
             }
-            return array(array(
-                'price'         => $product->getPrice(),
-                'website_price' => $product->getPrice(),
-                'price_qty'     => 1,
-                'cust_group'    => $allGroups,
-            ));
+            return array(
+                array(
+                    'price' => $product->getPrice(),
+                    'website_price' => $product->getPrice(),
+                    'price_qty' => 1,
+                    'cust_group' => $allGroups
+                )
+            );
         }
 
         $custGroup = $this->_getCustomerGroupId($product);
@@ -279,7 +282,7 @@ class Price
             $prevGroup = $allGroups;
 
             foreach ($prices as $price) {
-                if ($price['cust_group']!=$custGroup && $price['cust_group']!=$allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
                     // tier not for current customer group nor is for all groups
                     continue;
                 }
@@ -291,14 +294,15 @@ class Price
                     // higher tier qty already found
                     continue;
                 }
-                if ($price['price_qty'] == $prevQty && $prevGroup != $allGroups && $price['cust_group'] == $allGroups) {
+                if ($price['price_qty'] == $prevQty && $prevGroup != $allGroups && $price['cust_group'] == $allGroups
+                ) {
                     // found tier qty is same as current tier qty but current tier group is ALL_GROUPS
                     continue;
                 }
                 if ($price['website_price'] < $prevPrice) {
-                    $prevPrice  = $price['website_price'];
-                    $prevQty    = $price['price_qty'];
-                    $prevGroup  = $price['cust_group'];
+                    $prevPrice = $price['website_price'];
+                    $prevQty = $price['price_qty'];
+                    $prevGroup = $price['cust_group'];
                 }
             }
             return $prevPrice;
@@ -321,7 +325,7 @@ class Price
             }
         }
 
-        return ($prices) ? $prices : array();
+        return $prices ? $prices : array();
     }
 
     /**
@@ -345,8 +349,12 @@ class Price
      */
     protected function _applySpecialPrice($product, $finalPrice)
     {
-        return $this->calculateSpecialPrice($finalPrice, $product->getSpecialPrice(), $product->getSpecialFromDate(),
-                        $product->getSpecialToDate(), $product->getStore()
+        return $this->calculateSpecialPrice(
+            $finalPrice,
+            $product->getSpecialPrice(),
+            $product->getSpecialFromDate(),
+            $product->getSpecialToDate(),
+            $product->getStore()
         );
     }
 
@@ -375,11 +383,11 @@ class Price
         if (is_array($price)) {
             foreach ($price as $index => $value) {
                 $price[$index]['formated_price'] = $this->_storeManager->getStore()->convertPrice(
-                        $price[$index]['website_price'], true
+                    $price[$index]['website_price'],
+                    true
                 );
             }
-        }
-        else {
+        } else {
             $price = $this->_storeManager->getStore()->formatPrice($price);
         }
 
@@ -411,11 +419,15 @@ class Price
             $basePrice = $finalPrice;
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 if ($option = $product->getOptionById($optionId)) {
-                    $confItemOption = $product->getCustomOption('option_'.$option->getId());
+                    $confItemOption = $product->getCustomOption('option_' . $option->getId());
 
-                    $group = $option->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setConfigurationItemOption($confItemOption);
+                    $group = $option->groupFactory(
+                        $option->getType()
+                    )->setOption(
+                        $option
+                    )->setConfigurationItemOption(
+                        $confItemOption
+                    );
                     $finalPrice += $group->getOptionPrice($confItemOption->getValue(), $basePrice);
                 }
             }
@@ -437,9 +449,16 @@ class Price
      * @param   int|null $productId
      * @return  float
      */
-    public function calculatePrice($basePrice, $specialPrice, $specialPriceFrom, $specialPriceTo,
-            $rulePrice = false, $wId = null, $gId = null, $productId = null)
-    {
+    public function calculatePrice(
+        $basePrice,
+        $specialPrice,
+        $specialPriceFrom,
+        $specialPriceTo,
+        $rulePrice = false,
+        $wId = null,
+        $gId = null,
+        $productId = null
+    ) {
         \Magento\Profiler::start('__PRODUCT_CALCULATE_PRICE__');
         if ($wId instanceof Store) {
             $sId = $wId->getId();
@@ -453,12 +472,17 @@ class Price
             $gId = $gId->getId();
         }
 
-        $finalPrice = $this->calculateSpecialPrice($finalPrice, $specialPrice, $specialPriceFrom, $specialPriceTo, $sId);
+        $finalPrice = $this->calculateSpecialPrice(
+            $finalPrice,
+            $specialPrice,
+            $specialPriceFrom,
+            $specialPriceTo,
+            $sId
+        );
 
         if ($rulePrice === false) {
             $storeTimestamp = $this->_localeDate->scopeTimeStamp($sId);
-            $rulePrice = $this->_ruleFactory->create()
-                ->getRulePrice($storeTimestamp, $wId, $gId, $productId);
+            $rulePrice = $this->_ruleFactory->create()->getRulePrice($storeTimestamp, $wId, $gId, $productId);
         }
 
         if ($rulePrice !== null && $rulePrice !== false) {
@@ -480,12 +504,16 @@ class Price
      * @param int|string|Store $store
      * @return float
      */
-    public function calculateSpecialPrice($finalPrice, $specialPrice, $specialPriceFrom, $specialPriceTo,
-            $store = null)
-    {
+    public function calculateSpecialPrice(
+        $finalPrice,
+        $specialPrice,
+        $specialPriceFrom,
+        $specialPriceTo,
+        $store = null
+    ) {
         if (!is_null($specialPrice) && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice     = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, $specialPrice);
             }
         }
         return $finalPrice;

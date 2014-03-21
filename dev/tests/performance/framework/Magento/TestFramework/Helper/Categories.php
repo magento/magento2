@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Helper;
 
 /**
@@ -58,8 +57,9 @@ class Categories
     public function __construct()
     {
 
-        $rootCategoryId = $this->getObjectManager()->create('Magento\Core\Model\StoreManager')->getDefaultStoreView()
-            ->getRootCategoryId();
+        $rootCategoryId = $this->getObjectManager()->create(
+            'Magento\Core\Model\StoreManager'
+        )->getDefaultStoreView()->getRootCategoryId();
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $this->getObjectManager()->get('Magento\Catalog\Model\Category');
@@ -78,7 +78,7 @@ class Categories
         foreach ($categories as $key => $categoryId) {
             $category->load($categoryId);
             $structure = explode('/', $category->getPath());
-            $pathSize  = count($structure);
+            $pathSize = count($structure);
             if ($pathSize > 1) {
                 $path = array();
                 for ($i = 1; $i < $pathSize; $i++) {

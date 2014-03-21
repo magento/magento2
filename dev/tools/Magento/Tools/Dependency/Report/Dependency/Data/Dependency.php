@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Dependency\Data;
 
 /**
@@ -33,7 +32,9 @@ class Dependency
      * Dependencies types
      */
     const TYPE_HARD = 'hard';
+
     const TYPE_SOFT = 'soft';
+
     /**#@-*/
 
     /**
@@ -60,7 +61,7 @@ class Dependency
     {
         $this->module = $module;
 
-        $this->type = (self::TYPE_SOFT == $type) ? self::TYPE_SOFT : self::TYPE_HARD;
+        $this->type = self::TYPE_SOFT == $type ? self::TYPE_SOFT : self::TYPE_HARD;
     }
 
     /**

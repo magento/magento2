@@ -90,9 +90,9 @@ class Eav extends AbstractIndexer
     public function getIndexers()
     {
         if (is_null($this->_types)) {
-            $this->_types   = array(
-                'source'    => $this->_eavSourceFactory->create(),
-                'decimal'   => $this->_eavDecimalFactory->create(),
+            $this->_types = array(
+                'source' => $this->_eavSourceFactory->create(),
+                'decimal' => $this->_eavDecimalFactory->create()
             );
         }
 

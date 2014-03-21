@@ -49,11 +49,17 @@ class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _prepareLayout()
     {
-        $this->setChild('store_switcher',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher')
-                ->setUseConfirm(false)
-                ->setSwitchUrl($this->getUrl('*/*/*', array('store'=>null)))
-                ->setTemplate('Magento_Reports::store/switcher.phtml')
+        $this->setChild(
+            'store_switcher',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher'
+            )->setUseConfirm(
+                false
+            )->setSwitchUrl(
+                $this->getUrl('*/*/*', array('store' => null))
+            )->setTemplate(
+                'Magento_Reports::store/switcher.phtml'
+            )
         );
         return parent::_prepareLayout();
     }

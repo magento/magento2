@@ -26,8 +26,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Address;
 /**
  * Adminhtml sales order address block
  */
-class Form
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
     /**
      * Address form template

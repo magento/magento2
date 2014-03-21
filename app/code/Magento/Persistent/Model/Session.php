@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Persistent\Model;
 
 /**
@@ -46,7 +45,14 @@ class Session extends \Magento\Core\Model\AbstractModel
      *
      * @var string[]
      */
-    protected $_unserializableFields = array('persistent_id', 'key', 'customer_id', 'website_id', 'info', 'updated_at');
+    protected $_unserializableFields = array(
+        'persistent_id',
+        'key',
+        'customer_id',
+        'website_id',
+        'info',
+        'updated_at'
+    );
 
     /**
      * If model loads expired sessions

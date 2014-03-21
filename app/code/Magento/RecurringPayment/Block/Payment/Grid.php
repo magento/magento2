@@ -79,10 +79,15 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
      */
     protected function _preparePayments($fields = '*')
     {
-        $this->_payments = $this->_recurringPayment->getCollection()
-            ->addFieldToFilter('customer_id', $this->_registry->registry('current_customer')->getId())
-            ->addFieldToSelect($fields)
-            ->setOrder('payment_id', 'desc');
+        $this->_payments = $this->_recurringPayment->getCollection()->addFieldToFilter(
+            'customer_id',
+            $this->_registry->registry('current_customer')->getId()
+        )->addFieldToSelect(
+            $fields
+        )->setOrder(
+            'payment_id',
+            'desc'
+        );
     }
 
     /**
@@ -95,59 +100,77 @@ class Grid extends \Magento\RecurringPayment\Block\Payments
         parent::_prepareLayout();
         $this->_preparePayments(array('reference_id', 'state', 'created_at', 'updated_at', 'method_code'));
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
-            ->setCollection($this->_payments)->setIsOutputRequired(false);
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager'
+        )->setCollection(
+            $this->_payments
+        )->setIsOutputRequired(
+            false
+        );
         $this->setChild('pager', $pager);
 
-        $this->setGridColumns(array(
-            new \Magento\Object(array(
-                'index' => 'reference_id',
-                'title' => $this->_fields->getFieldLabel('reference_id'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-            new \Magento\Object(array(
-                'index' => 'state',
-                'title' => $this->_fields->getFieldLabel('state'),
-            )),
-            new \Magento\Object(array(
-                'index' => 'created_at',
-                'title' => $this->_fields->getFieldLabel('created_at'),
-                'is_nobr' => true,
-                'width' => 1,
-                'is_amount' => true,
-            )),
-            new \Magento\Object(array(
-                'index' => 'updated_at',
-                'title' => $this->_fields->getFieldLabel('updated_at'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-            new \Magento\Object(array(
-                'index' => 'method_code',
-                'title' => $this->_fields->getFieldLabel('method_code'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-        ));
+        $this->setGridColumns(
+            array(
+                new \Magento\Object(
+                    array(
+                        'index' => 'reference_id',
+                        'title' => $this->_fields->getFieldLabel('reference_id'),
+                        'is_nobr' => true,
+                        'width' => 1
+                    )
+                ),
+                new \Magento\Object(array('index' => 'state', 'title' => $this->_fields->getFieldLabel('state'))),
+                new \Magento\Object(
+                    array(
+                        'index' => 'created_at',
+                        'title' => $this->_fields->getFieldLabel('created_at'),
+                        'is_nobr' => true,
+                        'width' => 1,
+                        'is_amount' => true
+                    )
+                ),
+                new \Magento\Object(
+                    array(
+                        'index' => 'updated_at',
+                        'title' => $this->_fields->getFieldLabel('updated_at'),
+                        'is_nobr' => true,
+                        'width' => 1
+                    )
+                ),
+                new \Magento\Object(
+                    array(
+                        'index' => 'method_code',
+                        'title' => $this->_fields->getFieldLabel('method_code'),
+                        'is_nobr' => true,
+                        'width' => 1
+                    )
+                )
+            )
+        );
 
         $payments = array();
         $store = $this->_storeManager->getStore();
         foreach ($this->_payments as $payment) {
             $payment->setStore($store);
-            $payments[] = new \Magento\Object(array(
-                'reference_id' => $payment->getReferenceId(),
-                'reference_id_link_url' => $this->getUrl(
-                    'sales/recurringPayment/view/',
-                    array('payment' => $payment->getId())
-                ),
-                'state'       => $payment->renderData('state'),
-                'created_at'  => $this->formatDate($payment->getData('created_at'), 'medium', true),
-                'updated_at'  => $payment->getData('updated_at')
-                    ? $this->formatDate($payment->getData('updated_at'), 'short', true)
-                    : '',
-                'method_code' => $payment->renderData('method_code'),
-            ));
+            $payments[] = new \Magento\Object(
+                array(
+                    'reference_id' => $payment->getReferenceId(),
+                    'reference_id_link_url' => $this->getUrl(
+                        'sales/recurringPayment/view/',
+                        array('payment' => $payment->getId())
+                    ),
+                    'state' => $payment->renderData('state'),
+                    'created_at' => $this->formatDate($payment->getData('created_at'), 'medium', true),
+                    'updated_at' => $payment->getData(
+                        'updated_at'
+                    ) ? $this->formatDate(
+                        $payment->getData('updated_at'),
+                        'short',
+                        true
+                    ) : '',
+                    'method_code' => $payment->renderData('method_code')
+                )
+            );
         }
         if ($payments) {
             $this->setGridElements($payments);

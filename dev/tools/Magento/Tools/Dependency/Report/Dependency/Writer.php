@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Dependency;
 
 use Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter;
@@ -39,34 +38,34 @@ class Writer extends AbstractWriter
      */
     protected function prepareData($config)
     {
-        $data[] = ['', 'All', 'Hard', 'Soft'];
-        $data[] = [
+        $data[] = array('', 'All', 'Hard', 'Soft');
+        $data[] = array(
             'Total number of dependencies',
             $config->getDependenciesCount(),
             $config->getHardDependenciesCount(),
-            $config->getSoftDependenciesCount(),
-        ];
-        $data[] = [];
+            $config->getSoftDependenciesCount()
+        );
+        $data[] = array();
 
         if ($config->getDependenciesCount()) {
-            $data[] = ['Dependencies for each module:', 'All', 'Hard', 'Soft'];
+            $data[] = array('Dependencies for each module:', 'All', 'Hard', 'Soft');
             foreach ($config->getModules() as $module) {
                 if ($module->getDependenciesCount()) {
-                    $data[] = [
+                    $data[] = array(
                         $module->getName(),
                         $module->getDependenciesCount(),
                         $module->getHardDependenciesCount(),
-                        $module->getSoftDependenciesCount(),
-                    ];
+                        $module->getSoftDependenciesCount()
+                    );
                     foreach ($module->getDependencies() as $dependency) {
-                        $data[] = [
+                        $data[] = array(
                             ' -- ' . $dependency->getModule(),
                             '',
                             (int)$dependency->isHard(),
-                            (int)!$dependency->isHard(),
-                        ];
+                            (int)(!$dependency->isHard())
+                        );
                     }
-                    $data[] = [];
+                    $data[] = array();
                 }
             }
         }

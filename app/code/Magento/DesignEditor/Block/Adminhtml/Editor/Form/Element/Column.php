@@ -30,9 +30,8 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
  *
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Column setClass($class)
  */
-class Column
-    extends \Magento\Data\Form\Element\Fieldset
-    implements \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
+class Column extends \Magento\Data\Form\Element\Fieldset implements
+    \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
 {
     /**
      * Control type
@@ -81,7 +80,8 @@ class Column
         $this->addType('color-picker', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker');
         $this->addType('font-picker', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\FontPicker');
         $this->addType('logo-uploader', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\LogoUploader');
-        $this->addType('background-uploader',
+        $this->addType(
+            'background-uploader',
             'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader'
         );
 

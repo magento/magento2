@@ -45,10 +45,8 @@ class Template extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -114,9 +112,13 @@ class Template extends \Magento\Backend\App\Action
 
         $this->_title->add($template->getId() ? $template->getTemplateCode() : __('New Template'));
 
-        $this->_addContent($this->_view->getLayout()
-            ->createBlock('Magento\Email\Block\Adminhtml\Template\Edit', 'template_edit')
-            ->setEditMode((bool)$this->getRequest()->getParam('id'))
+        $this->_addContent(
+            $this->_view->getLayout()->createBlock(
+                'Magento\Email\Block\Adminhtml\Template\Edit',
+                'template_edit'
+            )->setEditMode(
+                (bool)$this->getRequest()->getParam('id')
+            )
         );
         $this->_view->renderLayout();
     }
@@ -139,13 +141,21 @@ class Template extends \Magento\Backend\App\Action
         }
 
         try {
-            $template->setTemplateSubject($request->getParam('template_subject'))
-                ->setTemplateCode($request->getParam('template_code'))
-                ->setTemplateText($request->getParam('template_text'))
-                ->setTemplateStyles($request->getParam('template_styles'))
-                ->setModifiedAt($this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate())
-                ->setOrigTemplateCode($request->getParam('orig_template_code'))
-                ->setOrigTemplateVariables($request->getParam('orig_template_variables'));
+            $template->setTemplateSubject(
+                $request->getParam('template_subject')
+            )->setTemplateCode(
+                $request->getParam('template_code')
+            )->setTemplateText(
+                $request->getParam('template_text')
+            )->setTemplateStyles(
+                $request->getParam('template_styles')
+            )->setModifiedAt(
+                $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->gmtDate()
+            )->setOrigTemplateCode(
+                $request->getParam('orig_template_code')
+            )->setOrigTemplateVariables(
+                $request->getParam('orig_template_variables')
+            );
 
             if (!$template->getId()) {
                 $template->setTemplateType(\Magento\Email\Model\Template::TYPE_HTML);
@@ -161,12 +171,15 @@ class Template extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(__('The email template has been saved.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Backend\Model\Session')
-                ->setData('email_template_form_data', $request->getParams());
+            $this->_objectManager->get(
+                'Magento\Backend\Model\Session'
+            )->setData(
+                'email_template_form_data',
+                $request->getParams()
+            );
             $this->messageManager->addError($e->getMessage());
             $this->_forward('new');
         }
-
     }
 
     /**
@@ -180,7 +193,7 @@ class Template extends \Magento\Backend\App\Action
         if ($template->getId()) {
             try {
                 $template->delete();
-                 // display success message
+                // display success message
                 $this->messageManager->addSuccess(__('The email template has been deleted.'));
                 // go to grid
                 $this->_redirect('adminhtml/*/');
@@ -193,8 +206,11 @@ class Template extends \Magento\Backend\App\Action
                 );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
                 // save data in session
-                $this->_objectManager->get('Magento\Backend\Model\Session')
-                    ->setFormData($this->getRequest()->getParams());
+                $this->_objectManager->get(
+                    'Magento\Backend\Model\Session'
+                )->setFormData(
+                    $this->getRequest()->getParams()
+                );
                 // redirect to edit form
                 $this->_redirect('adminhtml/*/edit', array('id' => $template->getId()));
                 return;

@@ -25,8 +25,7 @@
  */
 namespace Magento\Connect\Command;
 
-final class Registry
-extends \Magento\Connect\Command
+final class Registry extends \Magento\Connect\Command
 {
     const PACKAGE_PEAR_DIR = 'pearlib/php/.registry';
 
@@ -43,28 +42,29 @@ extends \Magento\Connect\Command
         try {
             $packager = $this->getPackager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $ftpObj) = $packager->getRemoteCache($ftp);
             } else {
                 $cache = $this->getSconfig();
             }
-            if(!empty($params[0])) {
+            if (!empty($params[0])) {
                 $chanName = $conf->chanName($params[0]);
                 $data = $cache->getInstalledPackages($chanName);
             } else {
                 $data = $cache->getInstalledPackages();
             }
-            if($ftp) {
+            if ($ftp) {
                 @unlink($cache->getFilename());
             }
-            $this->ui()->output(array($command=>array('data'=>$data, 'channel-title'=>"Installed package for channel '%s' :")));
+            $this->ui()->output(
+                array($command => array('data' => $data, 'channel-title' => "Installed package for channel '%s' :"))
+            );
         } catch (\Exception $e) {
-            if($ftp) {
+            if ($ftp) {
                 @unlink($cache->getFilename());
             }
             $this->doError($command, $e->getMessage());
         }
-
     }
 
     /**
@@ -80,7 +80,7 @@ extends \Magento\Connect\Command
         //$this->splitPackageArgs($params);
         try {
             $channel = false;
-            if(count($params) < 2) {
+            if (count($params) < 2) {
                 throw new \Exception("Argument count should be = 2");
             }
             $channel = $params[0];
@@ -88,40 +88,38 @@ extends \Magento\Connect\Command
 
             $packager = $this->getPackager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
                 $confif = $this->config();
             }
-            if(!$cache->hasPackage($channel, $package)) {
+            if (!$cache->hasPackage($channel, $package)) {
                 return $this->ui()->output("No package found: {$channel}/{$package}");
             }
 
             $p = $cache->getPackageObject($channel, $package);
             $contents = $p->getContents();
-            if($ftp) {
+            if ($ftp) {
                 $ftpObj->close();
             }
-            if(!count($contents)) {
+            if (!count($contents)) {
                 return $this->ui()->output("No contents for package {$package}");
             }
-            $title = ("Contents of '{$package}': ");
-            if($ftp) {
+            $title = "Contents of '{$package}': ";
+            if ($ftp) {
                 @unlink($config->getFilename());
                 @unlink($cache->getFilename());
             }
 
-            $this->ui()->output(array($command=>array('data'=>$contents, 'title'=>$title)));
-
+            $this->ui()->output(array($command => array('data' => $contents, 'title' => $title)));
         } catch (\Exception $e) {
-            if($ftp) {
+            if ($ftp) {
                 @unlink($config->getFilename());
                 @unlink($cache->getFilename());
             }
             $this->doError($command, $e->getMessage());
         }
-
     }
 
     /**
@@ -141,30 +139,30 @@ extends \Magento\Connect\Command
         $ftp = empty($options['ftp']) ? false : $options['ftp'];
         try {
             $channel = false;
-            if(count($params) < 2) {
+            if (count($params) < 2) {
                 throw new \Exception("Argument count should be = 2");
             }
             $channel = $params[0];
             $package = $params[1];
             $packager = $this->getPackager();
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $ftpObj) = $packager->getRemoteCache($ftp);
             } else {
                 $cache = $this->getSconfig();
             }
 
-            if(!$cache->isChannel($channel)) {
+            if (!$cache->isChannel($channel)) {
                 throw new \Exception("'{$channel}' is not a valid installed channel name/uri");
             }
             $channelUri = $cache->chanUrl($channel);
             $rest = $this->rest();
             $rest->setChannel($channelUri);
             $releases = $rest->getReleases($package);
-            if(false === $releases) {
+            if (false === $releases) {
                 throw new \Exception("No information found about {$channel}/{$package}");
             }
-            $data = array($command => array('releases'=>$releases));
-            if($ftp) {
+            $data = array($command => array('releases' => $releases));
+            if ($ftp) {
                 @unlink($cache->getFilename());
             }
             $this->ui()->output($data);
@@ -193,7 +191,7 @@ extends \Magento\Connect\Command
             $config = null;
             $ftpObj = null;
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $config = $this->config();
@@ -207,7 +205,7 @@ extends \Magento\Connect\Command
             if (is_dir($packageDir)) {
                 $entries = scandir($packageDir);
                 foreach ((array)$entries as $entry) {
-                    $path =  $packageDir . '/' . $entry;
+                    $path = $packageDir . '/' . $entry;
                     $info = pathinfo($path);
                     if ($entry == '.' || $entry == '..' || is_dir($path) || $info['extension'] != 'xml') {
                         continue;
@@ -258,7 +256,7 @@ extends \Magento\Connect\Command
             $config = null;
             $ftpObj = null;
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $config = $this->config();
@@ -287,10 +285,10 @@ extends \Magento\Connect\Command
                 }
 
                 while ($ent = readdir($dp)) {
-                    if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
+                    if ($ent[0] == '.' || substr($ent, -4) != '.reg') {
                         continue;
                     }
-                    $pkglist[] = array('file'=>$ent, 'channel'=>$channel);
+                    $pkglist[] = array('file' => $ent, 'channel' => $channel);
                 }
                 closedir($dp);
             }
@@ -314,10 +312,10 @@ extends \Magento\Connect\Command
                 if (!$cache->hasPackage($channel, $name, $version, $version)) {
                     $cache->addPackage($package);
 
-                    if($ftp) {
-                        $localXml = tempnam(sys_get_temp_dir(),'package');
+                    if ($ftp) {
+                        $localXml = tempnam(sys_get_temp_dir(), 'package');
                         @file_put_contents($localXml, $package->getPackageXml());
-                        
+
                         if (is_file($localXml)) {
                             $ftpDir = $ftpObj->getcwd();
                             $remoteXmlPath = $ftpDir . '/' . \Magento\Connect\Package::PACKAGE_XML_DIR;
@@ -327,7 +325,10 @@ extends \Magento\Connect\Command
                             $ftpObj->chdir($ftpDir);
                         }
                     } else {
-                        $destDir = rtrim($config->magento_root, "\\/") . '/' . \Magento\Connect\Package::PACKAGE_XML_DIR;
+                        $destDir = rtrim(
+                            $config->magento_root,
+                            "\\/"
+                        ) . '/' . \Magento\Connect\Package::PACKAGE_XML_DIR;
                         $destFile = $package->getReleaseFilename() . '.xml';
                         $dest = $destDir . '/' . $destFile;
 
@@ -338,18 +339,17 @@ extends \Magento\Connect\Command
 
                     $this->ui()->output("Successfully added: {$channel}/{$name}-{$version}");
                 }
-
             }
 
             $config->sync_pear = true;
-            if($ftp) {
+            if ($ftp) {
                 $packager->writeToRemoteCache($cache, $ftpObj);
                 @unlink($config->getFilename());
             }
         } catch (\Exception $e) {
             $this->doError($command, $e->getMessage());
         }
-        
+
         return true;
     }
 
@@ -359,9 +359,9 @@ extends \Magento\Connect\Command
      * @param \Magento\Connect\Config $config
      * @return bool
      */
-    protected function _checkPearData($config) {
-        $pearStorage = $config->magento_root . '/' . $config->downloader_path  . '/' . self::PACKAGE_PEAR_DIR;
-        return (!$config->sync_pear) && file_exists($pearStorage) && is_dir($pearStorage);
+    protected function _checkPearData($config)
+    {
+        $pearStorage = $config->magento_root . '/' . $config->downloader_path . '/' . self::PACKAGE_PEAR_DIR;
+        return !$config->sync_pear && file_exists($pearStorage) && is_dir($pearStorage);
     }
-
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument\Interpreter;
 
 class UrlTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +44,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->_urlResolver = $this->getMock('Magento\UrlInterface');
         $this->_interpreter = $this->getMock(
-            'Magento\View\Layout\Argument\Interpreter\NamedParams', array(), array(), '', false
+            'Magento\View\Layout\Argument\Interpreter\NamedParams',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_model = new Url($this->_urlResolver, $this->_interpreter);
     }
@@ -56,15 +59,26 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $expected = 'http://some.domain.com/some/path/';
 
         $urlParams = array('param');
-        $this->_interpreter->expects($this->once())
-            ->method('evaluate')
-            ->with($input)
-            ->will($this->returnValue($urlParams));
+        $this->_interpreter->expects(
+            $this->once()
+        )->method(
+            'evaluate'
+        )->with(
+            $input
+        )->will(
+            $this->returnValue($urlParams)
+        );
 
-        $this->_urlResolver->expects($this->once())
-            ->method('getUrl')
-            ->with('some/path', $urlParams)
-            ->will($this->returnValue($expected));
+        $this->_urlResolver->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            'some/path',
+            $urlParams
+        )->will(
+            $this->returnValue($expected)
+        );
 
         $actual = $this->_model->evaluate($input);
         $this->assertSame($expected, $actual);

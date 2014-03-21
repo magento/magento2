@@ -27,9 +27,11 @@ namespace Magento\App\Response;
 
 interface RedirectInterface
 {
-    const PARAM_NAME_REFERER_URL        = 'referer_url';
-    const PARAM_NAME_ERROR_URL          = 'error_url';
-    const PARAM_NAME_SUCCESS_URL        = 'success_url';
+    const PARAM_NAME_REFERER_URL = 'referer_url';
+
+    const PARAM_NAME_ERROR_URL = 'error_url';
+
+    const PARAM_NAME_SUCCESS_URL = 'success_url';
 
     /**
      * Identify referer url via all accepted methods (HTTP_REFERER, regular or base64-encoded request param)

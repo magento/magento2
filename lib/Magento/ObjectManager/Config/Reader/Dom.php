@@ -34,11 +34,11 @@ class Dom extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/preference'                                    => 'for',
-        '/config/(type|virtualType)'                            => 'name',
-        '/config/(type|virtualType)/plugin'                     => 'name',
-        '/config/(type|virtualType)/arguments/argument'         => 'name',
-        '/config/(type|virtualType)/arguments/argument(/item)+' => 'name',
+        '/config/preference' => 'for',
+        '/config/(type|virtualType)' => 'name',
+        '/config/(type|virtualType)/plugin' => 'name',
+        '/config/(type|virtualType)/arguments/argument' => 'name',
+        '/config/(type|virtualType)/arguments/argument(/item)+' => 'name'
     );
 
     /**

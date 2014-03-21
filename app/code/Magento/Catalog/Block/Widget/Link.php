@@ -31,12 +31,9 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Widget;
 
-class Link
-    extends \Magento\View\Element\Html\Link
-    implements \Magento\Widget\Block\BlockInterface
+class Link extends \Magento\View\Element\Html\Link implements \Magento\Widget\Block\BlockInterface
 {
     /**
      * Entity model name which must be used to retrieve entity specific data.
@@ -89,7 +86,7 @@ class Link
     {
         if (!$this->_href) {
 
-            if($this->hasStoreId()) {
+            if ($this->hasStoreId()) {
                 $store = $this->_storeManager->getStore($this->getStoreId());
             } else {
                 $store = $this->_storeManager->getStore();
@@ -107,8 +104,8 @@ class Link
             $this->_href = $store->getUrl('', array('_direct' => $href));
         }
 
-        if(strpos($this->_href, "___store") === false){
-            $symbol = (strpos($this->_href, "?") === false) ? "?" : "&";
+        if (strpos($this->_href, "___store") === false) {
+            $symbol = strpos($this->_href, "?") === false ? "?" : "&";
             $this->_href = $this->_href . $symbol . "___store=" . $store->getCode();
         }
 
@@ -129,8 +126,11 @@ class Link
                 if (isset($idPath[1])) {
                     $id = $idPath[1];
                     if ($id) {
-                        $this->_anchorText = $this->_entityResource->getAttributeRawValue($id, 'name',
-                            $this->_storeManager->getStore());
+                        $this->_anchorText = $this->_entityResource->getAttributeRawValue(
+                            $id,
+                            'name',
+                            $this->_storeManager->getStore()
+                        );
                     }
                 }
             } else {

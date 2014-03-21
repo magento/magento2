@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Model\AddressFactory;
@@ -142,7 +141,7 @@ class Converter
         $addressId = $addressModel->getId();
 
         $attributes = $this->_metadataService->getAllAddressAttributeMetadata();
-        $addressData = [];
+        $addressData = array();
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             if (!is_null($addressModel->getData($code))) {
@@ -150,25 +149,30 @@ class Converter
             }
         }
 
-        $this->_addressBuilder->populateWithArray(array_merge($addressData, [
-            Address::KEY_STREET => $addressModel->getStreet(),
-            Address::KEY_DEFAULT_BILLING => $addressId === $defaultBillingId,
-            Address::KEY_DEFAULT_SHIPPING => $addressId === $defaultShippingId,
-            Address::KEY_REGION => [
-                Region::KEY_REGION => $addressModel->getRegion(),
-                Region::KEY_REGION_ID => $addressModel->getRegionId(),
-                Region::KEY_REGION_CODE => $addressModel->getRegionCode()
-            ]
-        ]));
+        $this->_addressBuilder->populateWithArray(
+            array_merge(
+                $addressData,
+                array(
+                    Address::KEY_STREET => $addressModel->getStreet(),
+                    Address::KEY_DEFAULT_BILLING => $addressId === $defaultBillingId,
+                    Address::KEY_DEFAULT_SHIPPING => $addressId === $defaultShippingId,
+                    Address::KEY_REGION => array(
+                        Region::KEY_REGION => $addressModel->getRegion(),
+                        Region::KEY_REGION_ID => $addressModel->getRegionId(),
+                        Region::KEY_REGION_CODE => $addressModel->getRegionCode()
+                    )
+                )
+            )
+        );
 
         if ($addressId) {
             $this->_addressBuilder->setId($addressId);
         }
 
         if ($addressModel->getCustomerId() || $addressModel->getParentId()) {
-            $customerId = $addressModel->getCustomerId()
-                ? $addressModel->getCustomerId()
-                : $addressModel->getParentId();
+            $customerId = $addressModel->getCustomerId() ? $addressModel
+                ->getCustomerId() : $addressModel
+                ->getParentId();
             $this->_addressBuilder->setCustomerId($customerId);
         }
 

@@ -24,13 +24,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
- /**
-  * Backend model for uploading transactional emails custom logo image
-  *
-  * @category   Magento
-  * @package    Magento_Backend
-  * @author     Magento Core Team <core@magentocommerce.com>
-  */
+/**
+ * Backend model for uploading transactional emails custom logo image
+ *
+ * @category   Magento
+ * @package    Magento_Backend
+ * @author     Magento Core Team <core@magentocommerce.com>
+ */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
 class Logo extends \Magento\Backend\Model\Config\Backend\Image
@@ -38,14 +38,14 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
     /**
      * The tail part of directory path for uploading
      */
-    const UPLOAD_DIR                = 'email/logo';
+    const UPLOAD_DIR = 'email/logo';
 
     /**
      * Upload max file size in kilobytes
      *
      * @var int
      */
-    protected $_maxFileSize         = 2048;
+    protected $_maxFileSize = 2048;
 
     /**
      * Return path to directory for upload file
@@ -76,8 +76,8 @@ class Logo extends \Magento\Backend\Model\Config\Backend\Image
      */
     protected function _beforeSave()
     {
-        $value       = $this->getValue();
-        $deleteFlag  = (is_array($value) && !empty($value['delete']));
+        $value = $this->getValue();
+        $deleteFlag = is_array($value) && !empty($value['delete']);
         $fileTmpName = $_FILES['groups']['tmp_name'][$this->getGroupId()]['fields'][$this->getField()]['value'];
 
         if ($this->getOldValue() && ($fileTmpName || $deleteFlag)) {

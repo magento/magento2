@@ -55,8 +55,10 @@ class MethodCollector extends PhraseCollector
      */
     protected function _isTranslateFunction($token)
     {
-        return ($token->isEqualFunction('__') || ($token->isWhitespace()
-                && $this->_tokenizer->getNextToken()->isEqualFunction('__')))
-            && $this->_tokenizer->getNextToken()->isOpenBrace();
+        return ($token->isEqualFunction(
+            '__'
+        ) || $token->isWhitespace() && $this->_tokenizer->getNextToken()->isEqualFunction(
+            '__'
+        )) && $this->_tokenizer->getNextToken()->isOpenBrace();
     }
 }

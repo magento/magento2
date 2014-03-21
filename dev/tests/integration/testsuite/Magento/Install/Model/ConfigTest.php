@@ -41,13 +41,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cacheTypeList \Magento\App\Cache\TypeListInterface */
-        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\TypeListInterface');
+        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\TypeListInterface'
+        );
         $types = array_keys($cacheTypeList->getTypes());
 
         /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\Cache\StateInterface');
+        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\Cache\StateInterface'
+        );
         foreach ($types as $type) {
             $cacheState->setEnabled($type, false);
         }
@@ -58,73 +60,64 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\App\Filesystem',
             array(
                 'directoryList' => $this->_objectManager->create(
-                        'Magento\App\Filesystem\DirectoryList',
-                        array(
-                            'root' => BP,
-                            'directories' => array(
-                                \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
-                                \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files'),
-                            )
+                    'Magento\App\Filesystem\DirectoryList',
+                    array(
+                        'root' => BP,
+                        'directories' => array(
+                            \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
+                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files')
                         )
+                    )
                 )
             )
         );
 
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $this->_objectManager->create(
-            'Magento\Module\Declaration\FileResolver', array(
-                'filesystem' => $filesystem,
-            )
+            'Magento\Module\Declaration\FileResolver',
+            array('filesystem' => $filesystem)
         );
 
 
         /** @var \Magento\Module\Declaration\Reader\Filesystem $filesystemReader */
         $filesystemReader = $this->_objectManager->create(
-            'Magento\Module\Declaration\Reader\Filesystem', array(
-                'fileResolver' => $modulesDeclarations,
-            )
+            'Magento\Module\Declaration\Reader\Filesystem',
+            array('fileResolver' => $modulesDeclarations)
         );
 
         /** @var \Magento\Module\ModuleList $modulesList */
         $modulesList = $this->_objectManager->create(
-            'Magento\Module\ModuleList', array(
-                'reader' => $filesystemReader,
-            )
+            'Magento\Module\ModuleList',
+            array('reader' => $filesystemReader)
         );
 
         /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = $this->_objectManager->create(
-            'Magento\Module\Dir\Reader', array(
-                'moduleList' => $modulesList,
-                'filesystem' => $filesystem
-            )
+            'Magento\Module\Dir\Reader',
+            array('moduleList' => $modulesList, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/Magento/Test/etc');
 
         /** @var \Magento\Core\Model\Config\FileResolver $fileResolver */
         $fileResolver = $this->_objectManager->create(
-            'Magento\Core\Model\Config\FileResolver', array(
-                'moduleReader' => $moduleReader,
-            )
+            'Magento\Core\Model\Config\FileResolver',
+            array('moduleReader' => $moduleReader)
         );
 
         /** @var \Magento\Install\Model\Config\Reader $configReader */
         $configReader = $this->_objectManager->create(
-            'Magento\Install\Model\Config\Reader', array(
-                'fileResolver' => $fileResolver,
-            )
+            'Magento\Install\Model\Config\Reader',
+            array('fileResolver' => $fileResolver)
         );
 
-        $configData =  $this->_objectManager->create(
-            'Magento\Install\Model\Config\Data', array(
-                'reader' => $configReader,
-            )
+        $configData = $this->_objectManager->create(
+            'Magento\Install\Model\Config\Data',
+            array('reader' => $configReader)
         );
 
-        $this->_object =  $this->_objectManager->create(
-            'Magento\Install\Model\Config', array(
-                'dataStorage' => $configData,
-            )
+        $this->_object = $this->_objectManager->create(
+            'Magento\Install\Model\Config',
+            array('dataStorage' => $configData)
         );
     }
 
@@ -155,17 +148,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($directories['writeable']));
         $this->assertCount(2, $directories['writeable']);
         $expected = array(
-            array(
-                'existence' => '1',
-                'recursive' => '0'
-            ),
-            array(
-                'existence' => '1',
-                'recursive' => '1'
-            ),
+            array('existence' => '1', 'recursive' => '0'),
+            array('existence' => '1', 'recursive' => '1')
         );
         $this->assertEquals($expected, $directories['writeable']);
-
     }
 
     public function testMergeCompleteAndPartial()
@@ -174,33 +160,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             file_get_contents(__DIR__ . '/_files/install_wizard_complete.xml'),
             file_get_contents(__DIR__ . '/_files/install_wizard_partial.xml')
         );
-        $fileResolverMock = $this->getMockBuilder('Magento\Config\FileResolverInterface')
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileResolverMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('install_wizard.xml'))
-            ->will($this->returnValue($fileList));
-
-        $configReader = $this->_objectManager->create(
-            'Magento\Install\Model\Config\Reader', array(
-                'fileResolver' => $fileResolverMock,
-            )
+        $fileResolverMock = $this->getMockBuilder(
+            'Magento\Config\FileResolverInterface'
+        )->setMethods(
+            array('get')
+        )->disableOriginalConstructor()->getMock();
+        $fileResolverMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $this->equalTo('install_wizard.xml')
+        )->will(
+            $this->returnValue($fileList)
         );
 
-        $configData =  $this->_objectManager->create(
-            'Magento\Install\Model\Config\Data', array(
-                'reader' => $configReader,
-            )
+        $configReader = $this->_objectManager->create(
+            'Magento\Install\Model\Config\Reader',
+            array('fileResolver' => $fileResolverMock)
+        );
+
+        $configData = $this->_objectManager->create(
+            'Magento\Install\Model\Config\Data',
+            array('reader' => $configReader)
         );
 
         /** @var \Magento\Install\Model\Config $model */
-        $model = $this->_objectManager->create(
-            'Magento\Install\Model\Config', array(
-                'dataStorage' => $configData,
-            )
-        );
+        $model = $this->_objectManager->create('Magento\Install\Model\Config', array('dataStorage' => $configData));
 
         $expectedSteps = array(
             array(
@@ -228,7 +214,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 $this->fail('It is more Install steps than expected');
             }
         }
-        if (count($expectedSteps) > $counter+1) {
+        if (count($expectedSteps) > $counter + 1) {
             $this->fail('Some expected steps are missing');
         }
         $pathsForCheck = $model->getWritableFullPathsForCheck();

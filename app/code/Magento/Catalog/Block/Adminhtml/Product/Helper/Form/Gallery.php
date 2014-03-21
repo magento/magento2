@@ -131,8 +131,9 @@ class Gallery extends AbstractElement
 
         if (!$this->getDataObject()->getExistsStoreValueFlag($attributeCode)) {
             return true;
-        } else if ($this->getValue() == $defaultValue &&
-                   $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()) {
+        } elseif ($this->getValue() == $defaultValue &&
+            $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()
+        ) {
             return false;
         }
         if ($defaultValue === false && !$attribute->getIsRequired() && $this->getValue()) {

@@ -62,36 +62,34 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('title', array(
-            'header' => __('Title'),
-            'align'  => 'left',
-            'index'  => 'title',
-        ));
+        $this->addColumn('title', array('header' => __('Title'), 'align' => 'left', 'index' => 'title'));
 
-        $this->addColumn('identifier', array(
-            'header' => __('URL Key'),
-            'align'  => 'left',
-            'index'  => 'identifier'
-        ));
+        $this->addColumn('identifier', array('header' => __('URL Key'), 'align' => 'left', 'index' => 'identifier'));
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'                    => __('Store View'),
-                'index'                     => 'store_id',
-                'type'                      => 'store',
-                'store_all'                 => true,
-                'store_view'                => true,
-                'sortable'                  => false,
-                'filter_condition_callback' => array($this, '_filterStoreCondition'),
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Store View'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_all' => true,
+                    'store_view' => true,
+                    'sortable' => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition')
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
-            'header'  => __('Status'),
-            'index'   => 'is_active',
-            'type'    => 'options',
-            'options' => $this->_cmsPage->getAvailableStatuses()
-        ));
+        $this->addColumn(
+            'is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => $this->_cmsPage->getAvailableStatuses()
+            )
+        );
 
         return $this;
     }

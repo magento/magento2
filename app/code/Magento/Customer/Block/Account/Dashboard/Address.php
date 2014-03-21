@@ -54,15 +54,15 @@ class Address extends \Magento\View\Element\Template
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context                              $context,
-        \Magento\Customer\Service\V1\CustomerCurrentServiceInterface        $customerCurrentService,
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Customer\Service\V1\CustomerCurrentServiceInterface $customerCurrentService,
         \Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface $customerAddressCurrentService,
-        \Magento\Customer\Model\Address\Config                              $addressConfig,
+        \Magento\Customer\Model\Address\Config $addressConfig,
         array $data = array()
     ) {
-        $this->customerCurrentService           = $customerCurrentService;
-        $this->customerAddressCurrentService    = $customerAddressCurrentService;
-        $this->_addressConfig                   = $addressConfig;
+        $this->customerCurrentService = $customerCurrentService;
+        $this->customerAddressCurrentService = $customerAddressCurrentService;
+        $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -129,8 +129,10 @@ class Address extends \Magento\View\Element\Template
         if (is_null($this->getCustomer())) {
             return '';
         } else {
-            return $this->_urlBuilder
-                ->getUrl('customer/address/edit', ['id'=>$this->getCustomer()->getDefaultShipping()]);
+            return $this->_urlBuilder->getUrl(
+                'customer/address/edit',
+                array('id' => $this->getCustomer()->getDefaultShipping())
+            );
         }
     }
 
@@ -142,8 +144,10 @@ class Address extends \Magento\View\Element\Template
         if (is_null($this->getCustomer())) {
             return '';
         } else {
-            return $this->_urlBuilder
-                ->getUrl('customer/address/edit', ['id'=>$this->getCustomer()->getDefaultBilling()]);
+            return $this->_urlBuilder->getUrl(
+                'customer/address/edit',
+                array('id' => $this->getCustomer()->getDefaultBilling())
+            );
         }
     }
 
@@ -168,4 +172,3 @@ class Address extends \Magento\View\Element\Template
         return $renderer->renderArray(AddressConverter::toFlatArray($address));
     }
 }
-

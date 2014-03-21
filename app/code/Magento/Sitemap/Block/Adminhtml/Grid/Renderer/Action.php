@@ -36,10 +36,14 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
      */
     public function render(\Magento\Object $row)
     {
-        $this->getColumn()->setActions(array(array(
-            'url'     => $this->getUrl('adminhtml/sitemap/generate', array('sitemap_id' => $row->getSitemapId())),
-            'caption' => __('Generate'),
-        )));
+        $this->getColumn()->setActions(
+            array(
+                array(
+                    'url' => $this->getUrl('adminhtml/sitemap/generate', array('sitemap_id' => $row->getSitemapId())),
+                    'caption' => __('Generate')
+                )
+            )
+        );
         return parent::render($row);
     }
 }

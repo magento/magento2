@@ -42,7 +42,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_expected;
 
     /** @var array */
-    protected $_requestData = [];
+    protected $_requestData = array();
 
     public function setUp()
     {
@@ -52,7 +52,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $formFactory = $objectManager->create('Magento\Customer\Model\Metadata\FormFactory');
         $this->_form = $formFactory->create('customer_address', 'customer_address_edit');
 
-        $this->_attributes = [
+        $this->_attributes = array(
             'id' => 14,
             'default_shipping' => 1,
             'default_billing' => 0,
@@ -64,16 +64,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'vat_id' => '',
             'firstname' => 'Jane',
             'lastname' => 'Doe',
-            'street' => ['2211 North First Street'],
+            'street' => array('2211 North First Street'),
             'city' => 'San Jose',
             'country_id' => 'US',
             'postcode' => '95131',
             'telephone' => '5125125125',
             'region_id' => 12,
             'region' => 'California'
-        ];
+        );
 
-        $requestData = [
+        $requestData = array(
             'company' => 'Company Name',
             'fax' => '(555) 555-5555',
             'middlename' => 'Mid',
@@ -82,14 +82,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'vat_id' => '',
             'firstname' => 'New Name',
             'lastname' => 'Doe',
-            'street' => ['2211 New Street'],
+            'street' => array('2211 New Street'),
             'city' => 'San Jose',
             'country_id' => 'US',
             'postcode' => '95131',
             'telephone' => '5125125125',
             'region_id' => 12,
             'region' => 'California'
-        ];
+        );
         $this->_request = $objectManager->get('Magento\App\RequestInterface');
         $this->_request->setParams($requestData);
 
@@ -101,8 +101,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         unset($this->_expected['middlename']);
         unset($this->_expected['prefix']);
         unset($this->_expected['suffix']);
-
-
     }
 
     public function testCompactData()
@@ -113,10 +111,23 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributes()
     {
-        $expectedAttributes = [
-            'prefix', 'firstname', 'middlename', 'lastname', 'suffix', 'company', 'street', 'city', 'country_id',
-            'region', 'region_id', 'postcode', 'telephone', 'fax', 'vat_id'
-        ];
+        $expectedAttributes = array(
+            'prefix',
+            'firstname',
+            'middlename',
+            'lastname',
+            'suffix',
+            'company',
+            'street',
+            'city',
+            'country_id',
+            'region',
+            'region_id',
+            'postcode',
+            'telephone',
+            'fax',
+            'vat_id'
+        );
         $this->assertEquals($expectedAttributes, array_keys($this->_form->getAttributes()));
     }
 
@@ -130,7 +141,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserAttributes()
     {
-        $expectedAttributes = ['address_user_attribute'];
+        $expectedAttributes = array('address_user_attribute');
         $this->assertEquals($expectedAttributes, array_keys($this->_form->getUserAttributes()));
     }
 

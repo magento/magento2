@@ -26,48 +26,55 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Outbound\Transport;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockVrnHttpAdptrCrl;
-    
+
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockMessage;
-        
+
     protected function setUp()
     {
-        $this->_mockVrnHttpAdptrCrl = $this->getMockBuilder('Magento\HTTP\Adapter\Curl')
-            ->disableOriginalConstructor()->getMock();
-        $this->_mockMessage = $this->getMockBuilder('Magento\Outbound\Message')
-            ->disableOriginalConstructor()->getMock();
-        $this->_mockMessage->expects($this->any())
-            ->method('getHeaders')
-            ->will($this->returnValue(array('header'=>'value')));        
+        $this->_mockVrnHttpAdptrCrl = $this->getMockBuilder(
+            'Magento\HTTP\Adapter\Curl'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockMessage = $this->getMockBuilder(
+            'Magento\Outbound\Message'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockMessage->expects(
+            $this->any()
+        )->method(
+            'getHeaders'
+        )->will(
+            $this->returnValue(array('header' => 'value'))
+        );
     }
 
     /**
      * Test case for when http adapter returns null
      * 
      * @expectedException \Zend_Http_Exception
-     */   
-    public function testNullResponse() 
+     */
+    public function testNullResponse()
     {
         $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
-        $this->_mockVrnHttpAdptrCrl->expects($this->any())
-            ->method('read')
-            ->will($this->returnValue(null));
+        $this->_mockVrnHttpAdptrCrl->expects($this->any())->method('read')->will($this->returnValue(null));
         $uut->dispatch($this->_mockMessage);
     }
-    
+
     public function testPositive()
     {
         $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
-        $this->_mockVrnHttpAdptrCrl->expects($this->any())
-            ->method('read')
-            ->will($this->returnValue("HTTP/2.0 200 OK\nHdrkey: Hdrval\n\nMessage Body"));
+        $this->_mockVrnHttpAdptrCrl->expects(
+            $this->any()
+        )->method(
+            'read'
+        )->will(
+            $this->returnValue("HTTP/2.0 200 OK\nHdrkey: Hdrval\n\nMessage Body")
+        );
         $response = $uut->dispatch($this->_mockMessage);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame("OK", $response->getMessage());
@@ -83,20 +90,16 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testMessageTimeout($timeout, $expectedTimeout)
     {
         $uut = new \Magento\Outbound\Transport\Http($this->_mockVrnHttpAdptrCrl);
-        $this->_mockMessage->expects($this->any())
-            ->method('getTimeout')
-            ->will($this->returnValue($timeout));
-        $config = array(
-            'verifypeer' => true,
-            'verifyhost' => 2,
-            'timeout' => $expectedTimeout
+        $this->_mockMessage->expects($this->any())->method('getTimeout')->will($this->returnValue($timeout));
+        $config = array('verifypeer' => true, 'verifyhost' => 2, 'timeout' => $expectedTimeout);
+        $this->_mockVrnHttpAdptrCrl->expects($this->once())->method('setConfig')->with($config);
+        $this->_mockVrnHttpAdptrCrl->expects(
+            $this->any()
+        )->method(
+            'read'
+        )->will(
+            $this->returnValue("HTTP/2.0 200 OK\nHdrkey: Hdrval\n\nMessage Body")
         );
-        $this->_mockVrnHttpAdptrCrl->expects($this->once())
-            ->method('setConfig')
-            ->with($config);
-        $this->_mockVrnHttpAdptrCrl->expects($this->any())
-            ->method('read')
-            ->will($this->returnValue("HTTP/2.0 200 OK\nHdrkey: Hdrval\n\nMessage Body"));
         $response = $uut->dispatch($this->_mockMessage);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame("OK", $response->getMessage());

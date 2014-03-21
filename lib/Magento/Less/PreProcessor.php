@@ -68,11 +68,12 @@ class PreProcessor
      */
     protected function initLessPreProcessors(PreProcessor\File\FileList $fileList)
     {
-        $preProcessorsInstances = [];
+        $preProcessorsInstances = array();
         foreach ($this->preProcessors as $preProcessorClass) {
-            $preProcessorsInstances[] = $this->instructionFactory->create($preProcessorClass['class'], [
-                'fileList' => $fileList
-            ]);
+            $preProcessorsInstances[] = $this->instructionFactory->create(
+                $preProcessorClass['class'],
+                array('fileList' => $fileList)
+            );
         }
         return $preProcessorsInstances;
     }
@@ -87,7 +88,9 @@ class PreProcessor
     public function processLessInstructions($lessFilePath, $viewParams)
     {
         /** @var $fileList PreProcessor\File\FileList */
-        $fileList = $this->fileListFactory->create(['lessFilePath' => $lessFilePath, 'viewParams' => $viewParams]);
+        $fileList = $this->fileListFactory->create(
+            array('lessFilePath' => $lessFilePath, 'viewParams' => $viewParams)
+        );
         $preProcessors = $this->initLessPreProcessors($fileList);
         /** @var $lessFile PreProcessor\File\Less */
         foreach ($fileList as $lessFile) {

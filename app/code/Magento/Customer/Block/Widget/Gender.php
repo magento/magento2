@@ -111,6 +111,6 @@ class Gender extends AbstractWidget
      */
     public function getGenderOptions()
     {
-         return $this->_getAttribute('gender')->getOptions();
+        return $this->_getAttribute('gender')->getOptions();
     }
 }

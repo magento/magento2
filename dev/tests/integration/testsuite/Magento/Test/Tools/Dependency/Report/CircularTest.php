@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report;
 
 use Magento\Tools\Dependency\ServiceLocator;
@@ -53,36 +52,26 @@ class CircularTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $this->builder->build([
-            'parse' => [
-                'files_for_parse' => [
-                    $this->fixtureDir . 'config4.xml',
-                    $this->fixtureDir . 'config5.xml',
-                ],
-            ],
-            'write' => [
-                'report_filename' => $this->sourceFilename,
-            ],
-        ]);
-
-        $this->assertFileEquals(
-            $this->fixtureDir . 'expected/circular-dependencies.csv',
-            $this->sourceFilename
+        $this->builder->build(
+            array(
+                'parse' => array(
+                    'files_for_parse' => array($this->fixtureDir . 'config4.xml', $this->fixtureDir . 'config5.xml')
+                ),
+                'write' => array('report_filename' => $this->sourceFilename)
+            )
         );
+
+        $this->assertFileEquals($this->fixtureDir . 'expected/circular-dependencies.csv', $this->sourceFilename);
     }
 
     public function testBuildWithoutDependencies()
     {
-        $this->builder->build([
-            'parse' => [
-                'files_for_parse' => [
-                    $this->fixtureDir . 'config3.xml',
-                ],
-            ],
-            'write' => [
-                'report_filename' => $this->sourceFilename,
-            ],
-        ]);
+        $this->builder->build(
+            array(
+                'parse' => array('files_for_parse' => array($this->fixtureDir . 'config3.xml')),
+                'write' => array('report_filename' => $this->sourceFilename)
+            )
+        );
 
         $this->assertFileEquals(
             $this->fixtureDir . 'expected/without-circular-dependencies.csv',

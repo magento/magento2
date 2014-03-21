@@ -39,14 +39,14 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_invoice_item_collection';
+    protected $_eventPrefix = 'sales_order_invoice_item_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_invoice_item_collection';
+    protected $_eventObject = 'order_invoice_item_collection';
 
     /**
      * Model initialization

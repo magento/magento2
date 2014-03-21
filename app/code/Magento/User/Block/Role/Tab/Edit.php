@@ -28,8 +28,7 @@ namespace Magento\User\Block\Role\Tab;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Edit extends \Magento\Backend\Block\Widget\Form
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var string

@@ -32,8 +32,7 @@ namespace Magento\ProductAlert\Model\Resource\Stock\Customer;
  * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\Customer\Model\Resource\Customer\Collection
+class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
 {
     /**
      * join productalert stock data to customer collection

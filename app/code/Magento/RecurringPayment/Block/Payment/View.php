@@ -78,7 +78,6 @@ class View extends \Magento\View\Element\Template
     ) {
         $this->_registry = $registry;
         parent::__construct($context, $data);
-
     }
 
     /**
@@ -133,8 +132,11 @@ class View extends \Magento\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->_recurringPayment = $this->_registry->registry('current_recurring_payment')
-            ->setStore($this->_storeManager->getStore());
+        $this->_recurringPayment = $this->_registry->registry(
+            'current_recurring_payment'
+        )->setStore(
+            $this->_storeManager->getStore()
+        );
         return parent::_prepareLayout();
     }
 

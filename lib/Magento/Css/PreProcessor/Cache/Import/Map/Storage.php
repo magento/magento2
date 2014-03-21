@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Cache\Import\Map;
 
 use Magento\App\Filesystem;
@@ -44,9 +43,8 @@ class Storage
     /**
      * @param Filesystem $filesystem
      */
-    public function __construct(
-        Filesystem $filesystem
-    ) {
+    public function __construct(Filesystem $filesystem)
+    {
         $this->mapsDirectory = $filesystem->getDirectoryWrite(Filesystem::VAR_DIR);
         if (!$this->mapsDirectory->isDirectory(self::MAPS_DIR)) {
             $this->mapsDirectory->create(self::MAPS_DIR);

@@ -50,7 +50,12 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         array $data = array()
     ) {
         parent::__construct(
-            $context, $customerSession, $subscriberFactory, $customerAccountService, $addressService, $data
+            $context,
+            $customerSession,
+            $subscriberFactory,
+            $customerAccountService,
+            $addressService,
+            $data
         );
         $this->_isScopePrivate = true;
     }
@@ -65,7 +70,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         $data = $this->getData('form_data');
         if (is_null($data)) {
             $formData = $this->_customerSession->getCustomerFormData(true);
-            $data = [];
+            $data = array();
             if ($formData) {
                 $data['data'] = $formData;
                 $data['customer_data'] = 1;
@@ -87,7 +92,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
         $formData = $this->getFormData();
         if (isset($formData['customer_data']) && $formData['customer_data']) {
             $request = $form->prepareRequest($formData['data']);
-            $data    = $form->extractData($request, $scope, false);
+            $data = $form->extractData($request, $scope, false);
             $form->restoreData($data);
         }
 

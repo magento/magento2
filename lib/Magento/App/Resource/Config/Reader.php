@@ -32,9 +32,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/resource' => 'name'
-    );
+    protected $_idAttributes = array('/config/resource' => 'name');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
@@ -76,6 +74,6 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     public function read($scope = null)
     {
-        return ($scope !== 'primary') ? parent::read($scope) : array();
+        return $scope !== 'primary' ? parent::read($scope) : array();
     }
 }

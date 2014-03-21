@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Store\Edit\Form;
 
 /**
@@ -44,8 +43,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $registryData = array(
             'store_type' => 'group',
-            'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Core\Model\Store\Group'),
+            'store_data' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Core\Model\Store\Group'
+            ),
             'store_action' => 'add'
         );
         /** @var $objectManager \Magento\TestFramework\ObjectManager */

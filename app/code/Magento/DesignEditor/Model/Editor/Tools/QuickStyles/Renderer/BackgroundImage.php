@@ -28,8 +28,7 @@ namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer;
 /**
  * Background image renderer
  */
-class BackgroundImage
-    extends \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\AbstractRenderer
+class BackgroundImage extends \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\AbstractRenderer
 {
     /**
      * Render color picker attribute

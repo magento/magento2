@@ -157,10 +157,14 @@ class Ftp extends AbstractRollback
         $rootDir = $this->_snapshot->getRootDir();
 
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($rootDir), \RecursiveIteratorIterator::CHILD_FIRST
+            new \RecursiveDirectoryIterator($rootDir),
+            \RecursiveIteratorIterator::CHILD_FIRST
         );
 
-        $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_snapshot->getIgnorePaths());
+        $iterator = new \Magento\Backup\Filesystem\Iterator\Filter(
+            $filesystemIterator,
+            $this->_snapshot->getIgnorePaths()
+        );
 
         foreach ($iterator as $item) {
             $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($rootDir, '', $item->__toString());
@@ -180,10 +184,14 @@ class Ftp extends AbstractRollback
     protected function _uploadBackupToFtp($tmpDir)
     {
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($tmpDir), \RecursiveIteratorIterator::SELF_FIRST
+            new \RecursiveDirectoryIterator($tmpDir),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_snapshot->getIgnorePaths());
+        $iterator = new \Magento\Backup\Filesystem\Iterator\Filter(
+            $filesystemIterator,
+            $this->_snapshot->getIgnorePaths()
+        );
 
         foreach ($filesystemIterator as $item) {
             $ftpPath = $this->_snapshot->getFtpPath() . '/' . str_replace($tmpDir, '', $item->__toString());
@@ -198,8 +206,9 @@ class Ftp extends AbstractRollback
             } else {
                 $result = $this->_ftpClient->put($ftpPath, $item->__toString());
                 if (false === $result) {
-                    throw new \Magento\Backup\Exception\NotEnoughPermissions('Failed to upload file '
-                        . $item->__toString() . ' to ftp');
+                    throw new \Magento\Backup\Exception\NotEnoughPermissions(
+                        'Failed to upload file ' . $item->__toString() . ' to ftp'
+                    );
                 }
             }
         }

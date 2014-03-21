@@ -100,7 +100,7 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        $group      = $this->getGroup();
+        $group = $this->getGroup();
         $attributes = $this->getAttributes();
 
         /** @var \Magento\Data\Form $form */
@@ -108,34 +108,30 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setHtmlIdPrefix('group_' . $group->getId());
         $form->setDataObject($this->getCategory());
 
-        $fieldset = $form->addFieldset('fieldset_group_' . $group->getId(), array(
-            'legend'    => __($group->getAttributeGroupName()),
-            'class'     => 'fieldset-wide',
-        ));
+        $fieldset = $form->addFieldset(
+            'fieldset_group_' . $group->getId(),
+            array('legend' => __($group->getAttributeGroupName()), 'class' => 'fieldset-wide')
+        );
 
         if ($this->getAddHiddenFields()) {
             if (!$this->getCategory()->getId()) {
                 // path
                 if ($this->getRequest()->getParam('parent')) {
-                    $fieldset->addField('path', 'hidden', array(
-                        'name'  => 'path',
-                        'value' => $this->getRequest()->getParam('parent')
-                    ));
+                    $fieldset->addField(
+                        'path',
+                        'hidden',
+                        array('name' => 'path', 'value' => $this->getRequest()->getParam('parent'))
+                    );
                 } else {
-                    $fieldset->addField('path', 'hidden', array(
-                        'name'  => 'path',
-                        'value' => 1
-                    ));
+                    $fieldset->addField('path', 'hidden', array('name' => 'path', 'value' => 1));
                 }
             } else {
-                $fieldset->addField('id', 'hidden', array(
-                    'name'  => 'id',
-                    'value' => $this->getCategory()->getId()
-                ));
-                $fieldset->addField('path', 'hidden', array(
-                    'name'  => 'path',
-                    'value' => $this->getCategory()->getPath()
-                ));
+                $fieldset->addField('id', 'hidden', array('name' => 'id', 'value' => $this->getCategory()->getId()));
+                $fieldset->addField(
+                    'path',
+                    'hidden',
+                    array('name' => 'path', 'value' => $this->getCategory()->getPath())
+                );
             }
         }
 
@@ -146,14 +142,18 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
             if ($attribute->getAttributeCode() == 'url_key') {
                 if ($this->getCategory()->getLevel() == 1) {
                     $fieldset->removeField('url_key');
-                    $fieldset->addField('url_key', 'hidden', array(
-                        'name'  => 'url_key',
-                        'value' => $this->getCategory()->getUrlKey()
-                    ));
+                    $fieldset->addField(
+                        'url_key',
+                        'hidden',
+                        array('name' => 'url_key', 'value' => $this->getCategory()->getUrlKey())
+                    );
                 } else {
-                    $form->getElement('url_key')->setRenderer(
-                        $this->getLayout()
-                            ->createBlock('Magento\Catalog\Block\Adminhtml\Form\Renderer\Attribute\Urlkey')
+                    $form->getElement(
+                        'url_key'
+                    )->setRenderer(
+                        $this->getLayout()->createBlock(
+                            'Magento\Catalog\Block\Adminhtml\Form\Renderer\Attribute\Urlkey'
+                        )
                     );
                 }
             }
@@ -188,7 +188,7 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
 
         $form->addValues($this->getCategory()->getData());
 
-        $this->_eventManager->dispatch('adminhtml_catalog_category_edit_prepare_form', array('form'=>$form));
+        $this->_eventManager->dispatch('adminhtml_catalog_category_edit_prepare_form', array('form' => $form));
 
         $form->setFieldNameSuffix('general');
         $this->setForm($form);

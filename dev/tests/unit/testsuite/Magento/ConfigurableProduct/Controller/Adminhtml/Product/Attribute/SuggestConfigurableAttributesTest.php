@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute;
 
 class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
@@ -57,10 +56,16 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMock('Magento\App\Response\Http', array(), array(), '', false);
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->helperMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->attributeListMock =
-            $this->getMock('Magento\ConfigurableProduct\Model\SuggestedAttributeList', array(), array(), '', false);
+        $this->attributeListMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\SuggestedAttributeList',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->suggestAttributes = $helper->getObject(
-            'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes', array(
+            'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Attribute\SuggestConfigurableAttributes',
+            array(
                 'response' => $this->responseMock,
                 'request' => $this->requestMock,
                 'coreHelper' => $this->helperMock,
@@ -72,24 +77,34 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
 
-        $this->requestMock
-            ->expects($this->once())
-            ->method('getParam')
-            ->with('label_part')
-            ->will($this->returnValue('attribute'));
-        $this->attributeListMock
-            ->expects($this->once())
-            ->method('getSuggestedAttributes')
-            ->with('attribute')
-            ->will($this->returnValue('some_value_for_json'));
-        $this->helperMock
-            ->expects($this->once())
-            ->method('jsonEncode')
-            ->with('some_value_for_json')
-            ->will($this->returnValue('body'));
+        $this->requestMock->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            'label_part'
+        )->will(
+            $this->returnValue('attribute')
+        );
+        $this->attributeListMock->expects(
+            $this->once()
+        )->method(
+            'getSuggestedAttributes'
+        )->with(
+            'attribute'
+        )->will(
+            $this->returnValue('some_value_for_json')
+        );
+        $this->helperMock->expects(
+            $this->once()
+        )->method(
+            'jsonEncode'
+        )->with(
+            'some_value_for_json'
+        )->will(
+            $this->returnValue('body')
+        );
         $this->responseMock->expects($this->once())->method('setBody')->with('body');
         $this->suggestAttributes->indexAction();
-
     }
 }
-

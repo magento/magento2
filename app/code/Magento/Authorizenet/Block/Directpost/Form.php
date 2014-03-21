@@ -96,8 +96,6 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function isAjaxRequest()
     {
-        return $this
-            ->getRequest()
-            ->getParam('isAjax');
+        return $this->getRequest()->getParam('isAjax');
     }
 }

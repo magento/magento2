@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument\Interpreter;
 
 class OptionsTest extends \PHPUnit_Framework_TestCase
@@ -51,22 +50,29 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $modelClass = 'Magento\Data\OptionSourceInterface';
         $model = $this->getMockForAbstractClass($modelClass);
-        $model->expects($this->once())
-            ->method('toOptionArray')
-            ->will($this->returnValue(array(
-                'value1' => 'label 1',
-                'value2' => 'label 2',
-                array('value' => 'value3', 'label' => 'label 3'),
-            )));
-        $this->_objectManager->expects($this->once())
-            ->method('get')
-            ->with($modelClass)
-            ->will($this->returnValue($model));
+        $model->expects(
+            $this->once()
+        )->method(
+            'toOptionArray'
+        )->will(
+            $this->returnValue(
+                array('value1' => 'label 1', 'value2' => 'label 2', array('value' => 'value3', 'label' => 'label 3'))
+            )
+        );
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $modelClass
+        )->will(
+            $this->returnValue($model)
+        );
         $input = array('model' => $modelClass);
         $expected = array(
             array('value' => 'value1', 'label' => 'label 1'),
             array('value' => 'value2', 'label' => 'label 2'),
-            array('value' => 'value3', 'label' => 'label 3'),
+            array('value' => 'value3', 'label' => 'label 3')
         );
         $actual = $this->_model->evaluate($input);
         $this->assertSame($expected, $actual);
@@ -84,16 +90,12 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function evaluateWrongModelDataProvider()
     {
         return array(
-            'no model' => array(
-                array(),
-                '\InvalidArgumentException',
-                'Options source model class is missing',
-            ),
+            'no model' => array(array(), '\InvalidArgumentException', 'Options source model class is missing'),
             'wrong model class' => array(
                 array('model' => 'Magento\View\Layout\Argument\Interpreter\OptionsTest'),
                 '\UnexpectedValueException',
-                'Instance of the options source model is expected',
-            ),
+                'Instance of the options source model is expected'
+            )
         );
     }
 }

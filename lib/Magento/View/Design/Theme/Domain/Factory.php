@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Theme\Domain;
 
-use \Magento\View\Design\ThemeInterface;
+use Magento\View\Design\ThemeInterface;
 
 /**
  * Theme domain model class factory
@@ -45,8 +44,8 @@ class Factory
      */
     protected $_types = array(
         ThemeInterface::TYPE_PHYSICAL => 'Magento\View\Design\Theme\Domain\PhysicalInterface',
-        ThemeInterface::TYPE_VIRTUAL  => 'Magento\View\Design\Theme\Domain\VirtualInterface',
-        ThemeInterface::TYPE_STAGING  => 'Magento\View\Design\Theme\Domain\StagingInterface',
+        ThemeInterface::TYPE_VIRTUAL => 'Magento\View\Design\Theme\Domain\VirtualInterface',
+        ThemeInterface::TYPE_STAGING => 'Magento\View\Design\Theme\Domain\StagingInterface'
     );
 
     /**

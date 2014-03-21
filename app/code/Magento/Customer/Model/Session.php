@@ -191,8 +191,16 @@ class Session extends \Magento\Session\SessionManager
     public function setCustomerData(CustomerData $customer)
     {
         $this->_customer = $customer;
-        $this->_httpContext->setValue('customer_group', $customer->getGroupId());
-        $this->setCustomerId($customer->getId());
+        if ($customer === null) {
+            $this->setCustomerId(null);
+        } else {
+            $this->_httpContext->setValue(
+                \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+                $customer->getGroupId(),
+                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+            );
+            $this->setCustomerId($customer->getId());
+        }
         return $this;
     }
 
@@ -204,7 +212,7 @@ class Session extends \Magento\Session\SessionManager
      */
     public function getCustomerData()
     {
-        if (!($this->_customer instanceof CustomerData) && $this->getCustomerId()) {
+        if (!$this->_customer instanceof CustomerData && $this->getCustomerId()) {
             $this->_customer = $this->_customerAccountService->getCustomer($this->getCustomerId());
         }
 
@@ -235,7 +243,6 @@ class Session extends \Magento\Session\SessionManager
         return $this;
     }
 
-
     /**
      * Set customer model and the customer id in session
      *
@@ -246,9 +253,13 @@ class Session extends \Magento\Session\SessionManager
     public function setCustomer(Customer $customerModel)
     {
         $this->_customerModel = $customerModel;
-        $this->_httpContext->setValue('customer_group', $customerModel->getGroupId());
+        $this->_httpContext->setValue(
+            \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+            $customerModel->getGroupId(),
+            \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+        );
         $this->setCustomerId($customerModel->getId());
-        if ((!$customerModel->isConfirmationRequired()) && $customerModel->getConfirmation()) {
+        if (!$customerModel->isConfirmationRequired() && $customerModel->getConfirmation()) {
             $customerModel->setConfirmation(null)->save();
         }
 
@@ -415,11 +426,12 @@ class Session extends \Magento\Session\SessionManager
      */
     public function setCustomerDataAsLoggedIn($customer)
     {
+        $this->_httpContext->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
         $this->setCustomerData($customer);
-        
+
         $customerModel = $this->_converter->createCustomerModel($customer);
         $this->setCustomer($customerModel);
-        
+
         $this->_eventManager->dispatch('customer_login', array('customer' => $customerModel));
         return $this;
     }
@@ -452,6 +464,7 @@ class Session extends \Magento\Session\SessionManager
             $this->_eventManager->dispatch('customer_logout', array('customer' => $this->getCustomer()));
             $this->_logout();
         }
+        $this->_httpContext->unsValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
         return $this;
     }
 
@@ -473,9 +486,11 @@ class Session extends \Magento\Session\SessionManager
         } else {
             $arguments = $this->_customerData->getLoginUrlParams();
             if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
-                $arguments += array('_query' => array(
-                    $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
-                ));
+                $arguments += array(
+                    '_query' => array(
+                        $this->sidResolver->getSessionIdQueryParam($this->_session) => $this->_session->getSessionId()
+                    )
+                );
             }
             $action->getResponse()->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Helper\Data::ROUTE_ACCOUNT_LOGIN, $arguments)

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 class PublicFileTest extends \PHPUnit_Framework_TestCase
@@ -48,12 +47,15 @@ class PublicFileTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $url = 'http://127.0.0.1/magento/test/style.css';
-        $this->_viewUrl
-            ->expects($this->once())
-            ->method('getPublicFileUrl')
-            ->with('test/style.css')
-            ->will($this->returnValue($url))
-        ;
+        $this->_viewUrl->expects(
+            $this->once()
+        )->method(
+            'getPublicFileUrl'
+        )->with(
+            'test/style.css'
+        )->will(
+            $this->returnValue($url)
+        );
         $this->assertEquals($url, $this->_object->getUrl());
     }
 

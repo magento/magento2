@@ -32,22 +32,39 @@ class AttributeMetadata extends \Magento\Service\Data\AbstractObject
      * Constants used as keys into $_data
      */
     const ATTRIBUTE_CODE = 'attribute_code';
+
     const FRONTEND_INPUT = 'frontend_input';
+
     const INPUT_FILTER = 'input_filter';
+
     const STORE_LABEL = 'store_label';
+
     const VALIDATION_RULES = 'validation_rules';
+
     const OPTIONS = 'options';
+
     const VISIBLE = 'visible';
+
     const REQUIRED = 'required';
+
     const MULTILINE_COUNT = 'multiline_count';
+
     const DATA_MODEL = 'data_model';
+
     const IS_USER_DEFINED = 'is_user_defined';
+
     const FRONTEND_CLASS = 'frontend_class';
+
     const SORT_ORDER = 'sort_order';
+
     const FRONTEND_LABEL = 'frontend_label';
+
     const IS_SYSTEM = 'is_system';
+
     const NOTE = 'note';
+
     const BACKEND_TYPE = 'backend_type';
+
     /**#@-*/
 
     /**

@@ -240,7 +240,6 @@ class DefaultStorage implements \Magento\Core\Model\Store\StorageInterface
      */
     public function setCurrentStore($store)
     {
-
     }
 
     /**

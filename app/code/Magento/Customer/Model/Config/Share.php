@@ -32,8 +32,7 @@ namespace Magento\Customer\Model\Config;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Share extends \Magento\Core\Model\Config\Value
-    implements \Magento\Option\ArrayInterface
+class Share extends \Magento\Core\Model\Config\Value implements \Magento\Option\ArrayInterface
 {
     /**
      * Xml config path to customers sharing scope value
@@ -45,7 +44,8 @@ class Share extends \Magento\Core\Model\Config\Value
      * Possible customer sharing scopes
      *
      */
-    const SHARE_GLOBAL  = 0;
+    const SHARE_GLOBAL = 0;
+
     const SHARE_WEBSITE = 1;
 
     /**
@@ -116,10 +116,7 @@ class Share extends \Magento\Core\Model\Config\Value
      */
     public function toOptionArray()
     {
-        return array(
-            self::SHARE_GLOBAL  => __('Global'),
-            self::SHARE_WEBSITE => __('Per Website'),
-        );
+        return array(self::SHARE_GLOBAL => __('Global'), self::SHARE_WEBSITE => __('Per Website'));
     }
 
     /**
@@ -133,11 +130,13 @@ class Share extends \Magento\Core\Model\Config\Value
         $value = $this->getValue();
         if ($value == self::SHARE_GLOBAL) {
             if ($this->_customerResource->findEmailDuplicates()) {
+                //@codingStandardsIgnoreStart
                 throw new \Magento\Core\Exception(
-                    //@codingStandardsIgnoreStart
-                    __('Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.')
-                    //@codingStandardsIgnoreEnd
+                    __(
+                        'Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.'
+                    )
                 );
+                //@codingStandardsIgnoreEnd
             }
         }
         return $this;
@@ -151,7 +150,7 @@ class Share extends \Magento\Core\Model\Config\Value
      */
     public function getSharedWebsiteIds($websiteId)
     {
-        $ids = [];
+        $ids = array();
         if ($this->isWebsiteScope()) {
             $ids[] = $websiteId;
         } else {

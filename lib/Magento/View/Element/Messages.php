@@ -95,7 +95,7 @@ class Messages extends Template
      * @var \Magento\Message\ManagerInterface
      */
     protected $messageManager;
-    
+
     /**
      * Constructor
      *
@@ -115,6 +115,7 @@ class Messages extends Template
         $this->messageFactory = $messageFactory;
         $this->collectionFactory = $collectionFactory;
         $this->messageManager = $messageManager;
+        $this->_isScopePrivate = true;
         parent::__construct($context, $data);
     }
 
@@ -164,7 +165,7 @@ class Messages extends Template
      */
     public function getMessageCollection()
     {
-        if (!($this->messages instanceof \Magento\Message\Collection)) {
+        if (!$this->messages instanceof \Magento\Message\Collection) {
             $this->messages = $this->collectionFactory->create();
         }
         return $this->messages;
@@ -274,8 +275,8 @@ class Messages extends Template
         $transport = new \Magento\Object(array('output' => $html));
         $params = array(
             'element_name' => $this->getNameInLayout(),
-            'layout'       => $this->getLayout(),
-            'transport'    => $transport,
+            'layout' => $this->getLayout(),
+            'transport' => $transport
         );
         $this->_eventManager->dispatch('view_message_block_render_grouped_html_after', $params);
         $html = $transport->getData('output');
@@ -296,11 +297,11 @@ class Messages extends Template
                 }
 
                 foreach ($messages as $message) {
-                    $html.= '<' . $this->secondLevelTagName . ' class="message ' . $type . '">';
-                    $html.= '<' . $this->contentWrapTagName .  $this->getUiId('message', $type) .  '>';
-                    $html.= $message->getText();
-                    $html.= '</' . $this->contentWrapTagName . '>';
-                    $html.= '</' . $this->secondLevelTagName . '>';
+                    $html .= '<' . $this->secondLevelTagName . ' class="message ' . $type . '">';
+                    $html .= '<' . $this->contentWrapTagName . $this->getUiId('message', $type) . '>';
+                    $html .= $message->getText();
+                    $html .= '</' . $this->contentWrapTagName . '>';
+                    $html .= '</' . $this->secondLevelTagName . '>';
                 }
             }
         }
@@ -354,9 +355,7 @@ class Messages extends Template
      */
     public function getCacheKeyInfo()
     {
-        return array(
-            'storage_types' => serialize($this->usedStorageTypes)
-        );
+        return array('storage_types' => serialize($this->usedStorageTypes));
     }
 
     /**

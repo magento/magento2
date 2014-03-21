@@ -49,7 +49,7 @@ $pattern = array(
     'use_config_manage_stock' => '1',
     'use_config_qty_increments' => '1',
     'use_config_enable_qty_inc' => '1',
-    'stock_id' => \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID,
+    'stock_id' => \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID
 );
 $generator = new \Magento\TestFramework\ImportExport\Fixture\Generator($pattern, 100000);
 /** @var \Magento\ImportExport\Model\Import $import */

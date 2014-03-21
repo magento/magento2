@@ -59,7 +59,7 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
         //Test cases 1-4, 10
         if ($this->_isLookupStrictSuccessful()) {
 
-           if ($paResStatus == 'Y' && $eciFlag == '02' && $xid != '' && $cavv != '' && $errorNo == '0') {
+            if ($paResStatus == 'Y' && $eciFlag == '02' && $xid != '' && $cavv != '' && $errorNo == '0') {
                 //Test case 1
                 if ($signatureVerification == 'Y') {
                     return true;
@@ -71,14 +71,24 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
             }
 
             //Test case 3
-            if ($paResStatus == 'N' && $signatureVerification == 'Y' &&  $eciFlag == '01' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == 'N' &&
+                $signatureVerification == 'Y' &&
+                $eciFlag == '01' &&
+                $xid != '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 return false;
             }
 
             //Test case 4
-            if ($paResStatus == 'U' && $signatureVerification == 'Y' && $eciFlag == '01' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == 'U' &&
+                $signatureVerification == 'Y' &&
+                $eciFlag == '01' &&
+                $xid != '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 if ($this->getIsModeStrict()) {
                     return false;
                 } else {
@@ -87,21 +97,34 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
             }
 
             //Test case 10
-            if ($paResStatus == '' && $signatureVerification == '' && $eciFlag == '01' &&
-                $xid == '' && $cavv == '' && $errorNo == '1050'
+            if ($paResStatus == '' &&
+                $signatureVerification == '' &&
+                $eciFlag == '01' &&
+                $xid == '' &&
+                $cavv == '' &&
+                $errorNo == '1050'
             ) {
                 return false;
             }
-
         }
 
         //Test cases 5-9
         if (!$this->getIsModeStrict() && $this->_isLookupSoftSuccessful()) {
-            if ($paResStatus == '' && $signatureVerification == '' && $eciFlag == '' &&
-                $xid == '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == '' &&
+                $signatureVerification == '' &&
+                $eciFlag == '' &&
+                $xid == '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 return true;
-            } elseif ($paResStatus == false && $signatureVerification == false && $eciFlag == false &&
-                $xid == false && $cavv == false && $errorNo == false) {
+            } elseif ($paResStatus == false &&
+                $signatureVerification == false &&
+                $eciFlag == false &&
+                $xid == false &&
+                $cavv == false &&
+                $errorNo == false
+            ) {
                 return true;
             }
         }
@@ -120,7 +143,8 @@ class Mastercard extends \Magento\Centinel\Model\AbstractState
         if ($this->getLookupEnrolled() == 'Y' &&
             $this->getLookupAcsUrl() != '' &&
             $this->getLookupPayload() != '' &&
-            $this->getLookupErrorNo() == '0') {
+            $this->getLookupErrorNo() == '0'
+        ) {
             return true;
         }
         return false;

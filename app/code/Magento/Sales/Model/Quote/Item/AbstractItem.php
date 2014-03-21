@@ -54,23 +54,23 @@ use Magento\Sales\Model\Quote\Item;
  * @method int[] getAppliedRuleIds()
  * @method \Magento\Sales\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
  */
-abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
-    implements \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
+abstract class AbstractItem extends \Magento\Core\Model\AbstractModel implements
+    \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
 {
     /**
      * @var Item|null
      */
-    protected $_parentItem  = null;
+    protected $_parentItem = null;
 
     /**
      * @var array
      */
-    protected $_children    = array();
+    protected $_children = array();
 
     /**
      * @var array
      */
-    protected $_messages    = array();
+    protected $_messages = array();
 
     /**
      * List of custom options
@@ -100,13 +100,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_productFactory = $productFactory;
     }
 
@@ -115,14 +109,14 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
      *
      * @return \Magento\Sales\Model\Quote
      */
-    abstract function getQuote();
+    abstract public function getQuote();
 
     /**
      * Retrieve address model
      *
      * @return \Magento\Sales\Model\Quote\Address
      */
-    abstract function getAddress();
+    abstract public function getAddress();
 
     /**
      * Retrieve product model object associated with item
@@ -132,10 +126,12 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     public function getProduct()
     {
         $product = $this->_getData('product');
-        if (($product === null) && $this->getProductId()) {
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->getQuote()->getStoreId())
-                ->load($this->getProductId());
+        if ($product === null && $this->getProductId()) {
+            $product = $this->_productFactory->create()->setStoreId(
+                $this->getQuote()->getStoreId()
+            )->load(
+                $this->getProductId()
+            );
             $this->setProduct($product);
         }
 
@@ -292,7 +288,8 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
      */
     public function clearMessage()
     {
-        $this->unsMessage(); // For older compatibility, when we kept message inside data array
+        $this->unsMessage();
+        // For older compatibility, when we kept message inside data array
         $this->_messages = array();
         return $this;
     }
@@ -321,10 +318,10 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
 
         try {
             $this->setQty($qty);
-        } catch (\Magento\Core\Exception $e){
+        } catch (\Magento\Core\Exception $e) {
             $this->setHasError(true);
             $this->setMessage($e->getMessage());
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->setHasError(true);
             $this->setMessage(__('Item qty declaration error'));
         }
@@ -332,29 +329,34 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
         try {
             $this->getProduct()->getTypeInstance()->checkProductBuyState($this->getProduct());
         } catch (\Magento\Core\Exception $e) {
-            $this->setHasError(true)
-                ->setMessage($e->getMessage());
-            $this->getQuote()->setHasError(true)
-                ->addMessage(__('Some of the products below do not have all the required options.'));
+            $this->setHasError(true)->setMessage($e->getMessage());
+            $this->getQuote()->setHasError(
+                true
+            )->addMessage(
+                __('Some of the products below do not have all the required options.')
+            );
         } catch (\Exception $e) {
-            $this->setHasError(true)
-                ->setMessage(__('Something went wrong during the item options declaration.'));
-            $this->getQuote()->setHasError(true)
-                ->addMessage(__('We found an item options declaration error.'));
+            $this->setHasError(true)->setMessage(__('Something went wrong during the item options declaration.'));
+            $this->getQuote()->setHasError(true)->addMessage(__('We found an item options declaration error.'));
         }
 
         if ($this->getProduct()->getHasError()) {
-            $this->setHasError(true)
-                ->setMessage(__('Some of the selected options are not currently available.'));
-            $this->getQuote()->setHasError(true)
-                ->addMessage($this->getProduct()->getMessage(), 'options');
+            $this->setHasError(true)->setMessage(__('Some of the selected options are not currently available.'));
+            $this->getQuote()->setHasError(true)->addMessage($this->getProduct()->getMessage(), 'options');
         }
 
         if ($this->getHasConfigurationUnavailableError()) {
-            $this->setHasError(true)
-                ->setMessage(__('Selected option(s) or their combination is not currently available.'));
-            $this->getQuote()->setHasError(true)
-                ->addMessage(__('Some item options or their combination are not currently available.'), 'unavailable-configuration');
+            $this->setHasError(
+                true
+            )->setMessage(
+                __('Selected option(s) or their combination is not currently available.')
+            );
+            $this->getQuote()->setHasError(
+                true
+            )->addMessage(
+                __('Some item options or their combination are not currently available.'),
+                'unavailable-configuration'
+            );
             $this->unsHasConfigurationUnavailableError();
         }
 
@@ -379,7 +381,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     public function getTotalQty()
     {
         if ($this->getParentItem()) {
-            return $this->getQty()*$this->getParentItem()->getQty();
+            return $this->getQty() * $this->getParentItem()->getQty();
         }
         return $this->getQty();
     }
@@ -391,10 +393,10 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
      */
     public function calcRowTotal()
     {
-        $qty        = $this->getTotalQty();
+        $qty = $this->getTotalQty();
         // Round unit price before multiplying to prevent losing 1 cent on subtotal
-        $total      = $this->getStore()->roundPrice($this->getCalculationPriceOriginal()) * $qty;
-        $baseTotal  = $this->getBaseCalculationPriceOriginal() * $qty;
+        $total = $this->getStore()->roundPrice($this->getCalculationPriceOriginal()) * $qty;
+        $baseTotal = $this->getBaseCalculationPriceOriginal() * $qty;
 
         $this->setRowTotal($this->getStore()->roundPrice($total));
         $this->setBaseRowTotal($this->getStore()->roundPrice($baseTotal));
@@ -450,7 +452,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasCustomPrice()) {
-                $price = (float) $this->getCustomPrice();
+                $price = (double)$this->getCustomPrice();
                 if ($price) {
                     $rate = $this->getStore()->convertPrice($price) / $price;
                     $price = $price / $rate;
@@ -472,7 +474,7 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     {
         if (!$this->hasBaseCalculationPrice()) {
             if ($this->hasOriginalCustomPrice()) {
-                $price = (float) $this->getOriginalCustomPrice();
+                $price = (double)$this->getOriginalCustomPrice();
                 if ($price) {
                     $rate = $this->getStore()->convertPrice($price) / $price;
                     $price = $price / $rate;
@@ -617,9 +619,9 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
     public function __clone()
     {
         $this->setId(null);
-        $this->_parentItem  = null;
-        $this->_children    = array();
-        $this->_messages    = array();
+        $this->_parentItem = null;
+        $this->_children = array();
+        $this->_messages = array();
         return $this;
     }
 
@@ -637,7 +639,9 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
             $calculate = $this->getProduct()->getPriceType();
         }
 
-        if ((null !== $calculate) && (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD) {
+        if (null !== $calculate &&
+            (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
+        ) {
             return true;
         }
         return false;
@@ -657,8 +661,8 @@ abstract class AbstractItem extends \Magento\Core\Model\AbstractModel
             $shipmentType = $this->getProduct()->getShipmentType();
         }
 
-        if (null !== $shipmentType
-            && (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
+        if (null !== $shipmentType &&
+            (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
         ) {
             return true;
         }

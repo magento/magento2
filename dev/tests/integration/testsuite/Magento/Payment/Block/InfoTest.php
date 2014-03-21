@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Block;
 
 class InfoTest extends \PHPUnit_Framework_TestCase
@@ -41,10 +40,14 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $block = $layout->createBlock('Magento\Payment\Block\Info', 'block');
 
         /** @var $paymentInfoBank \Magento\Payment\Model\Info  */
-        $paymentInfoBank = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Payment\Model\Info');
-        $paymentInfoBank->setMethodInstance(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\OfflinePayments\Model\Banktransfer'));
+        $paymentInfoBank = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Payment\Model\Info'
+        );
+        $paymentInfoBank->setMethodInstance(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\OfflinePayments\Model\Banktransfer'
+            )
+        );
         /** @var $childBank \Magento\Payment\Block\Info\Instructions */
         $childBank = $layout->addBlock('Magento\Payment\Block\Info\Instructions', 'child.one', 'block');
         $childBank->setInfo($paymentInfoBank);
@@ -54,13 +57,16 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $childHtml->setText($nonExpectedHtml);
 
         /** @var $paymentInfoCheckmo \Magento\Payment\Model\Info */
-        $paymentInfoCheckmo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Payment\Model\Info');
-        $paymentInfoCheckmo->setMethodInstance(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\OfflinePayments\Model\Checkmo'));
+        $paymentInfoCheckmo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Payment\Model\Info'
+        );
+        $paymentInfoCheckmo->setMethodInstance(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\OfflinePayments\Model\Checkmo'
+            )
+        );
         /** @var $childCheckmo \Magento\OfflinePayments\Block\Info\Checkmo */
-        $childCheckmo = $layout->addBlock('Magento\OfflinePayments\Block\Info\Checkmo',
-            'child.just.another', 'block');
+        $childCheckmo = $layout->addBlock('Magento\OfflinePayments\Block\Info\Checkmo', 'child.just.another', 'block');
         $childCheckmo->setInfo($paymentInfoCheckmo);
 
         $pdfArray = $block->getChildPdfAsArray();

@@ -45,23 +45,27 @@ use Magento\Core\Model\Store\Config as StoreConfig;
  */
 class Config
 {
-    /**#@+
+    /**
      * Cache types
      */
-    const BUILT_IN = 0;
-    const VARNISH = 1;
-    /**#@-*/
+    const BUILT_IN = 1;
 
-    /**#@+
+    const VARNISH = 2;
+
+    /**
      * XML path to Varnish settings
      */
     const XML_PAGECACHE_TTL = 'system/full_page_cache/ttl';
+
     const XML_PAGECACHE_TYPE = 'system/full_page_cache/caching_application';
+
     const XML_VARNISH_PAGECACHE_ACCESS_LIST = 'system/full_page_cache/varnish/access_list';
+
     const XML_VARNISH_PAGECACHE_BACKEND_PORT = 'system/full_page_cache/varnish/backend_port';
+
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
+
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
-    /**#@-*/
 
     /**
      * @var StoreConfig
@@ -79,6 +83,11 @@ class Config
     const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
 
     /**
+     * @var \Magento\App\Cache\StateInterface $_cacheState
+     */
+    protected $_cacheState;
+
+    /**
      * @var \Magento\Filesystem\Directory\WriteInterface
      */
     protected $_modulesDirectory;
@@ -87,25 +96,38 @@ class Config
      * @param Filesystem $filesystem
      * @param StoreConfig $coreStoreConfig
      * @param ConfigInterface $config
+     * @param \Magento\App\Cache\StateInterface $cacheState
      */
     public function __construct(
         \Magento\App\Filesystem $filesystem,
         StoreConfig $coreStoreConfig,
-        ConfigInterface $config
+        ConfigInterface $config,
+        \Magento\App\Cache\StateInterface $cacheState
     ) {
         $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_config = $config;
+        $this->_cacheState = $cacheState;
     }
 
     /**
      * Return currently selected cache type: built in or varnish
-     *
+     * 
      * @return int
      */
     public function getType()
     {
         return $this->_config->getValue(self::XML_PAGECACHE_TYPE);
+    }
+
+    /**
+     * Return page lifetime
+     *
+     * @return int
+     */
+    public function getTtl()
+    {
+        return $this->_config->getValue(self::XML_PAGECACHE_TTL);
     }
 
     /**
@@ -115,9 +137,7 @@ class Config
      */
     public function getVclFile()
     {
-        $data = $this->_modulesDirectory->readFile(
-            $this->_config->getValue(self::VARNISH_CONFIGURATION_PATH)
-        );
+        $data = $this->_modulesDirectory->readFile($this->_config->getValue(self::VARNISH_CONFIGURATION_PATH));
         return strtr($data, $this->_getReplacements());
     }
 
@@ -172,10 +192,7 @@ class Config
     protected function _getDesignExceptions()
     {
         $result = '';
-        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n"
-             . "        hash_data(\"%s\");\n"
-             . "    }";
-
+        $tpl = "%s (req.http.user-agent ~ \"%s\") {\n" . "        hash_data(\"%s\");\n" . "    }";
         $expressions = $this->_coreStoreConfig->getConfig(self::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX);
         if ($expressions) {
             $rules = array_values(unserialize($expressions));
@@ -186,11 +203,21 @@ class Config
                     } else {
                         $pattern = $matches[1];
                     }
-                    $if = ($i == 0) ? 'if' : ' elsif';
+                    $if = $i == 0 ? 'if' : ' elsif';
                     $result .= sprintf($tpl, $if, $pattern, $rule['value']);
                 }
             }
         }
         return $result;
+    }
+
+    /**
+     * Whether a cache type is enabled in Cache Management Grid
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->_cacheState->isEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 }

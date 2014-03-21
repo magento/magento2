@@ -34,8 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View\Options\Type;
 
-class Select
-    extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
+class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
      * @var \Magento\Core\Helper\Data
@@ -69,39 +68,37 @@ class Select
         $configValue = $this->getProduct()->getPreconfiguredValues()->getData('options/' . $_option->getId());
         $store = $this->getProduct()->getStore();
 
-        $this->setSkipJsReloadPrice(1); // Remove inline prototype onclick and onchange events
+        $this->setSkipJsReloadPrice(1);
+        // Remove inline prototype onclick and onchange events
 
-        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN
-            || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE) {
-            $require = ($_option->getIsRequire()) ? ' required' : '';
+        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN ||
+            $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE
+        ) {
+            $require = $_option->getIsRequire() ? ' required' : '';
             $extraParams = '';
-            $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-                ->setData(array(
-                    'id' => 'select_'.$_option->getId(),
-                    'class' => $require.' product-custom-option'
-                ));
+            $select = $this->getLayout()->createBlock(
+                'Magento\View\Element\Html\Select'
+            )->setData(
+                array('id' => 'select_' . $_option->getId(), 'class' => $require . ' product-custom-option')
+            );
             if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN) {
-                $select->setName('options['.$_option->getid().']')
-                    ->addOption('', __('-- Please Select --'));
+                $select->setName('options[' . $_option->getid() . ']')->addOption('', __('-- Please Select --'));
             } else {
-                $select->setName('options['.$_option->getid().'][]');
-                $select->setClass('multiselect'.$require.' product-custom-option');
+                $select->setName('options[' . $_option->getid() . '][]');
+                $select->setClass('multiselect' . $require . ' product-custom-option');
             }
             foreach ($_option->getValues() as $_value) {
-                $priceStr = $this->_formatPrice(array(
-                    'is_percent'    => ($_value->getPriceType() == 'percent'),
-                    'pricing_value' => $_value->getPrice(($_value->getPriceType() == 'percent'))
-                ), false);
+                $priceStr = $this->_formatPrice(
+                    array(
+                        'is_percent' => $_value->getPriceType() == 'percent',
+                        'pricing_value' => $_value->getPrice($_value->getPriceType() == 'percent')
+                    ),
+                    false
+                );
                 $select->addOption(
                     $_value->getOptionTypeId(),
                     $_value->getTitle() . ' ' . $priceStr . '',
-                    array(
-                        'price' => $this->_coreHelper->currencyByStore(
-                            $_value->getPrice(true),
-                            $store,
-                            false
-                        )
-                    )
+                    array('price' => $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false))
                 );
             }
             if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_MULTIPLE) {
@@ -119,22 +116,29 @@ class Select
             return $select->getHtml();
         }
 
-        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO
-            || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX
-            ) {
-            $selectHtml = '<div class="options-list nested" id="options-'.$_option->getId().'-list">';
-            $require = ($_option->getIsRequire()) ? ' required' : '';
+        if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO ||
+            $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX
+        ) {
+            $selectHtml = '<div class="options-list nested" id="options-' . $_option->getId() . '-list">';
+            $require = $_option->getIsRequire() ? ' required' : '';
             $arraySign = '';
             switch ($_option->getType()) {
                 case \Magento\Catalog\Model\Product\Option::OPTION_TYPE_RADIO:
                     $type = 'radio';
                     $class = 'radio';
                     if (!$_option->getIsRequire()) {
-                        $selectHtml .= '<div class="field choice"><input type="radio" id="options_' . $_option->getId() . '" class="'
-                            . $class . ' product-custom-option" name="options[' . $_option->getId() . ']"'
-                            . ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"')
-                            . ' value="" checked="checked" /><label class="label" for="options_'
-                            . $_option->getId() . '"><span>' . __('None') . '</span></label></div>';
+                        $selectHtml .= '<div class="field choice"><input type="radio" id="options_' .
+                            $_option->getId() .
+                            '" class="' .
+                            $class .
+                            ' product-custom-option" name="options[' .
+                            $_option->getId() .
+                            ']"' .
+                            ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
+                            ' value="" checked="checked" /><label class="label" for="options_' .
+                            $_option->getId() .
+                            '"><span>' .
+                            __('None') . '</span></label></div>';
                     }
                     break;
                 case \Magento\Catalog\Model\Product\Option::OPTION_TYPE_CHECKBOX:
@@ -147,26 +151,55 @@ class Select
             foreach ($_option->getValues() as $_value) {
                 $count++;
 
-                $priceStr = $this->_formatPrice(array(
-                    'is_percent'    => ($_value->getPriceType() == 'percent'),
-                    'pricing_value' => $_value->getPrice($_value->getPriceType() == 'percent')
-                ));
+                $priceStr = $this->_formatPrice(
+                    array(
+                        'is_percent' => $_value->getPriceType() == 'percent',
+                        'pricing_value' => $_value->getPrice($_value->getPriceType() == 'percent')
+                    )
+                );
 
                 $htmlValue = $_value->getOptionTypeId();
                 if ($arraySign) {
-                    $checked = (is_array($configValue) && in_array($htmlValue, $configValue)) ? 'checked' : '';
+                    $checked = is_array($configValue) && in_array($htmlValue, $configValue) ? 'checked' : '';
                 } else {
                     $checked = $configValue == $htmlValue ? 'checked' : '';
                 }
 
-                $selectHtml .= '<div class="field choice '. $require .'">' . '<input type="' . $type . '" class="' . $class . ' '
-                    . $require . ' product-custom-option"'
-                    . ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"')
-                    . ' name="options[' . $_option->getId() . ']' . $arraySign . '" id="options_' . $_option->getId()
-                    . '_' . $count . '" value="' . $htmlValue . '" ' . $checked . ' price="'
-                    . $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false) . '" />'
-                    . '<label class="label" for="options_' . $_option->getId() . '_' . $count . '"><span>'
-                    . $_value->getTitle() . '</span>' . $priceStr . '</label>';
+                $selectHtml .= '<div class="field choice ' .
+                    $require .
+                    '">' .
+                    '<input type="' .
+                    $type .
+                    '" class="' .
+                    $class .
+                    ' ' .
+                    $require .
+                    ' product-custom-option"' .
+                    ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
+                    ' name="options[' .
+                    $_option->getId() .
+                    ']' .
+                    $arraySign .
+                    '" id="options_' .
+                    $_option->getId() .
+                    '_' .
+                    $count .
+                    '" value="' .
+                    $htmlValue .
+                    '" ' .
+                    $checked .
+                    ' price="' .
+                    $this->_coreHelper->currencyByStore($_value->getPrice(true), $store, false) .
+                    '" />' .
+                    '<label class="label" for="options_' .
+                    $_option->getId() .
+                    '_' .
+                    $count .
+                    '"><span>' .
+                    $_value->getTitle() .
+                    '</span>' .
+                    $priceStr .
+                    '</label>';
                 $selectHtml .= '</div>';
             }
             $selectHtml .= '</div>';
@@ -174,5 +207,4 @@ class Select
             return $selectHtml;
         }
     }
-
 }

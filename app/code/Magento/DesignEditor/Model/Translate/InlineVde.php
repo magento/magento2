@@ -179,10 +179,13 @@ class InlineVde implements \Magento\Translate\InlineInterface
         }
 
         $scope = $this->_scopeResolver->getScope();
-        $ajaxUrl = $this->_url->getUrl('core/ajax/translate', array(
-            '_secure' => $scope->isCurrentlySecure(),
-            \Magento\DesignEditor\Helper\Data::TRANSLATION_MODE => $this->_helper->getTranslationMode()
-        ));
+        $ajaxUrl = $this->_url->getUrl(
+            'core/ajax/translate',
+            array(
+                '_secure' => $scope->isCurrentlySecure(),
+                \Magento\DesignEditor\Helper\Data::TRANSLATION_MODE => $this->_helper->getTranslationMode()
+            )
+        );
 
         /** @var $block \Magento\View\Element\Template */
         $block = $this->_objectManager->create('Magento\View\Element\Template');

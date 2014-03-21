@@ -78,15 +78,32 @@ class Unitofmeasure extends \Magento\Backend\Block\System\Config\Form\Field
         $kgWeight = 70;
 
         $this->setDivideOrderWeightNoteKg(
-            $this->escapeJsQuote(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $kgWeight, 'kg'))
+            $this->escapeJsQuote(
+                __(
+                    'This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.',
+                    $kgWeight,
+                    'kg'
+                )
+            )
         );
 
         $weight = round(
             $this->_carrierHelper->convertMeasureWeight(
-                $kgWeight, \Zend_Measure_Weight::KILOGRAM, \Zend_Measure_Weight::POUND), 3);
+                $kgWeight,
+                \Zend_Measure_Weight::KILOGRAM,
+                \Zend_Measure_Weight::POUND
+            ),
+            3
+        );
 
         $this->setDivideOrderWeightNoteLbp(
-            $this->escapeJsQuote(__('This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.', $weight, 'pounds'))
+            $this->escapeJsQuote(
+                __(
+                    'This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.',
+                    $weight,
+                    'pounds'
+                )
+            )
         );
 
         $this->setTemplate('unitofmeasure.phtml');

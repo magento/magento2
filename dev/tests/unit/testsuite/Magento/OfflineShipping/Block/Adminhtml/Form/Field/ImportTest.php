@@ -46,52 +46,64 @@ class ImportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formMock = $this->getMock('Magento\Data\Form',
+        $this->_formMock = $this->getMock(
+            'Magento\Data\Form',
             array('getFieldNameSuffix', 'addSuffixToName'),
-            array(), '', false, false
+            array(),
+            '',
+            false,
+            false
         );
-        $testData = array ('name' => 'test_name', 'html_id' => 'test_html_id');
+        $testData = array('name' => 'test_name', 'html_id' => 'test_html_id');
         $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_object = $testHelper->getObject('Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import', array(
-            'data' => $testData
-        ));
+        $this->_object = $testHelper->getObject(
+            'Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import',
+            array('data' => $testData)
+        );
         $this->_object->setForm($this->_formMock);
     }
 
     public function testGetNameWhenFormFiledNameSuffixIsEmpty()
     {
-        $this->_formMock->expects($this->once())
-            ->method('getFieldNameSuffix')
-            ->will($this->returnValue(false));
-        $this->_formMock->expects($this->never())
-            ->method('addSuffixToName');
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(false));
+        $this->_formMock->expects($this->never())->method('addSuffixToName');
         $actual = $this->_object->getName();
         $this->assertEquals('test_name', $actual);
     }
 
     public function testGetNameWhenFormFiledNameSuffixIsNotEmpty()
     {
-        $this->_formMock->expects($this->once())
-            ->method('getFieldNameSuffix')
-            ->will($this->returnValue(true));
-        $this->_formMock->expects($this->once())
-            ->method('addSuffixToName')
-            ->will($this->returnValue('test_suffix'));
+        $this->_formMock->expects($this->once())->method('getFieldNameSuffix')->will($this->returnValue(true));
+        $this->_formMock->expects($this->once())->method('addSuffixToName')->will($this->returnValue('test_suffix'));
         $actual = $this->_object->getName();
         $this->assertEquals('test_suffix', $actual);
     }
 
     public function testGetElementHtml()
     {
-        $this->_formMock->expects($this->any())
-            ->method('getHtmlIdPrefix')
-            ->will($this->returnValue('test_name_prefix'));
-        $this->_formMock->expects($this->any())
-            ->method('getHtmlIdSuffix')
-            ->will($this->returnValue('test_name_suffix'));
+        $this->_formMock->expects(
+            $this->any()
+        )->method(
+            'getHtmlIdPrefix'
+        )->will(
+            $this->returnValue('test_name_prefix')
+        );
+        $this->_formMock->expects(
+            $this->any()
+        )->method(
+            'getHtmlIdSuffix'
+        )->will(
+            $this->returnValue('test_name_suffix')
+        );
         $testString = $this->_object->getElementHtml();
-        $this->assertStringStartsWith('<input id="time_condition" type="hidden" name="test_name" value="', $testString);
-        $this->assertStringEndsWith('<input id="test_html_id" name="test_name"  data-ui-id="form-element-test_name"' .
-                                    ' value="" type="file"/>', $testString);
+        $this->assertStringStartsWith(
+            '<input id="time_condition" type="hidden" name="test_name" value="',
+            $testString
+        );
+        $this->assertStringEndsWith(
+            '<input id="test_html_id" name="test_name"  data-ui-id="form-element-test_name"' .
+            ' value="" type="file"/>',
+            $testString
+        );
     }
 }

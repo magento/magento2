@@ -49,10 +49,8 @@ class Observer
      * @param Session $checkoutSession
      * @param \Magento\Message\ManagerInterface $messageManager
      */
-    public function __construct(
-        Session $checkoutSession,
-        \Magento\Message\ManagerInterface $messageManager
-    ) {
+    public function __construct(Session $checkoutSession, \Magento\Message\ManagerInterface $messageManager)
+    {
         $this->_checkoutSession = $checkoutSession;
         $this->messageManager = $messageManager;
     }

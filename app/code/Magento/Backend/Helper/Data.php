@@ -125,10 +125,10 @@ class Data extends AbstractHelper
                 }
             }
             $url = 'http://www.magentocommerce.com/gethelp/';
-            $url.= $this->_locale->getLocaleCode().'/';
-            $url.= $frontModule.'/';
-            $url.= $request->getControllerName().'/';
-            $url.= $request->getActionName().'/';
+            $url .= $this->_locale->getLocaleCode() . '/';
+            $url .= $frontModule . '/';
+            $url .= $request->getControllerName() . '/';
+            $url .= $request->getActionName() . '/';
 
             $this->_pageHelpUrl = $url;
         }
@@ -143,7 +143,7 @@ class Data extends AbstractHelper
      */
     public function addPageHelpUrl($suffix)
     {
-        $this->_pageHelpUrl = $this->getPageHelpUrl().$suffix;
+        $this->_pageHelpUrl = $this->getPageHelpUrl() . $suffix;
         return $this;
     }
 

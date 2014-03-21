@@ -54,37 +54,37 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _beforeToHtml()
     {
-//        $this->addTab('package', array(
-//            'label'     => __('Package Info'),
-//            'content'   => $this->_getTabHtml('package'),
-//            'active'    => true,
-//        ));
-//
-//        $this->addTab('release', array(
-//            'label'     => __('Release Info'),
-//            'content'   => $this->_getTabHtml('release'),
-//        ));
-//
-//        $this->addTab('maintainers', array(
-//            'label'     => __('Authors'),
-//            'content'   => $this->_getTabHtml('authors'),
-//        ));
-//
-//        $this->addTab('depends', array(
-//            'label'     => __('Dependencies'),
-//            'content'   => $this->_getTabHtml('depends'),
-//        ));
-//
-//        $this->addTab('contents', array(
-//            'label'     => __('Contents'),
-//            'content'   => $this->_getTabHtml('contents'),
-//        ));
-//
-//        $this->addTab('load', array(
-//            'label'     => __('Load local Package'),
-//            'class'     => 'ajax',
-//            'url'       => $this->getUrl('adminhtml/*/loadtab', array('_current' => true)),
-//        ));
+        //        $this->addTab('package', array(
+        //            'label'     => __('Package Info'),
+        //            'content'   => $this->_getTabHtml('package'),
+        //            'active'    => true,
+        //        ));
+        //
+        //        $this->addTab('release', array(
+        //            'label'     => __('Release Info'),
+        //            'content'   => $this->_getTabHtml('release'),
+        //        ));
+        //
+        //        $this->addTab('maintainers', array(
+        //            'label'     => __('Authors'),
+        //            'content'   => $this->_getTabHtml('authors'),
+        //        ));
+        //
+        //        $this->addTab('depends', array(
+        //            'label'     => __('Dependencies'),
+        //            'content'   => $this->_getTabHtml('depends'),
+        //        ));
+        //
+        //        $this->addTab('contents', array(
+        //            'label'     => __('Contents'),
+        //            'content'   => $this->_getTabHtml('contents'),
+        //        ));
+        //
+        //        $this->addTab('load', array(
+        //            'label'     => __('Load local Package'),
+        //            'class'     => 'ajax',
+        //            'url'       => $this->getUrl('adminhtml/*/loadtab', array('_current' => true)),
+        //        ));
 
         return parent::_beforeToHtml();
     }
@@ -97,14 +97,13 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _getTabHtml($tab)
     {
-//        $classNameParts = explode('_', $tab);
-//        foreach ($classNameParts as $key => $part) {
-//            $classNameParts[$key] = ucfirst($part);
-//        }
-//        return $this->getLayout()
-//            ->createBlock('Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\\' . implode('_', $classNameParts))
-//            ->initForm()
-//            ->toHtml();
+        //        $classNameParts = explode('_', $tab);
+        //        foreach ($classNameParts as $key => $part) {
+        //            $classNameParts[$key] = ucfirst($part);
+        //        }
+        //        return $this->getLayout()
+        //            ->createBlock('Magento\Connect\Block\Adminhtml\Extension\Custom\Edit\Tab\\' . implode('_', $classNameParts))
+        //            ->initForm()
+        //            ->toHtml();
     }
-
 }

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Parser\Config;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -55,10 +54,10 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongOptionFilesForParse()
     {
-        return [
-            [['files_for_parse' => []]],
-            [['files_for_parse' => 'sting']],
-            [['there_are_no_files_for_parse' => [1, 3]]],
-        ];
+        return array(
+            array(array('files_for_parse' => array())),
+            array(array('files_for_parse' => 'sting')),
+            array(array('there_are_no_files_for_parse' => array(1, 3)))
+        );
     }
 }

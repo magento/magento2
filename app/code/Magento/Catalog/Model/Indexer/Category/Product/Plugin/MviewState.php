@@ -68,15 +68,14 @@ class MviewState
     public function afterSetStatus(\Magento\Mview\View\StateInterface $state)
     {
         if (in_array($state->getViewId(), $this->viewIds)) {
-            $viewId = $state->getViewId() == \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
-                ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID
-                : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+            $viewId = $state->getViewId() ==
+                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
             $relatedViewState = $this->state->loadByView($viewId);
 
             // if equals nothing to change
-            if ($relatedViewState->getMode() == \Magento\Mview\View\StateInterface::MODE_DISABLED
-                || $state->getStatus() == $relatedViewState->getStatus()
+            if ($relatedViewState->getMode() == \Magento\Mview\View\StateInterface::MODE_DISABLED ||
+                $state->getStatus() == $relatedViewState->getStatus()
             ) {
                 return $state;
             }

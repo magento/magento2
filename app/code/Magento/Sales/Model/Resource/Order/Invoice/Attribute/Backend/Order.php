@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Order\Invoice\Attribute\Backend;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Order extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Method is invoked before save

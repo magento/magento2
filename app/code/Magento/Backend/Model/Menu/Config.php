@@ -28,6 +28,7 @@ namespace Magento\Backend\Model\Menu;
 class Config
 {
     const CACHE_ID = 'backend_menu_config';
+
     const CACHE_MENU_OBJECT = 'backend_menu_object';
 
     /**
@@ -44,6 +45,7 @@ class Config
      * @var \Magento\Backend\Model\MenuFactory
      */
     protected $_menuFactory;
+
     /**
      * Menu model
      *

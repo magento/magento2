@@ -21,11 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor;
 
 use Magento\View\Asset\PreProcessor\PreProcessorInterface;
-use \Magento\View\Asset\PreProcessorFactory;
+use Magento\View\Asset\PreProcessorFactory;
 
 /**
  * Css pre-processor composite
@@ -35,7 +34,7 @@ class Composite implements PreProcessorInterface
     /**
      * Temporary directory prefix
      */
-    const TMP_VIEW_DIR   = 'view';
+    const TMP_VIEW_DIR = 'view';
 
     /**
      * @var PreProcessorInterface[]
@@ -51,10 +50,8 @@ class Composite implements PreProcessorInterface
      * @param PreProcessorFactory $preProcessorFactory
      * @param array $preProcessors
      */
-    public function __construct(
-        PreProcessorFactory $preProcessorFactory,
-        array $preProcessors = array()
-    ) {
+    public function __construct(PreProcessorFactory $preProcessorFactory, array $preProcessors = array())
+    {
         $this->preProcessorFactory = $preProcessorFactory;
         $this->preparePreProcessors($preProcessors);
     }

@@ -151,7 +151,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     public function setAddress(\Magento\Sales\Model\Quote\Address $address)
     {
         $this->_address = $address;
-        $this->_quote   = $address->getQuote();
+        $this->_quote = $address->getQuote();
         return $this;
     }
 
@@ -182,16 +182,27 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     public function importQuoteItem(\Magento\Sales\Model\Quote\Item $quoteItem)
     {
         $this->_quote = $quoteItem->getQuote();
-        $this->setQuoteItem($quoteItem)
-            ->setQuoteItemId($quoteItem->getId())
-            ->setProductId($quoteItem->getProductId())
-            ->setProduct($quoteItem->getProduct())
-            ->setSku($quoteItem->getSku())
-            ->setName($quoteItem->getName())
-            ->setDescription($quoteItem->getDescription())
-            ->setWeight($quoteItem->getWeight())
-            ->setPrice($quoteItem->getPrice())
-            ->setCost($quoteItem->getCost());
+        $this->setQuoteItem(
+            $quoteItem
+        )->setQuoteItemId(
+            $quoteItem->getId()
+        )->setProductId(
+            $quoteItem->getProductId()
+        )->setProduct(
+            $quoteItem->getProduct()
+        )->setSku(
+            $quoteItem->getSku()
+        )->setName(
+            $quoteItem->getName()
+        )->setDescription(
+            $quoteItem->getDescription()
+        )->setWeight(
+            $quoteItem->getWeight()
+        )->setPrice(
+            $quoteItem->getPrice()
+        )->setCost(
+            $quoteItem->getCost()
+        );
 
         if (!$this->hasQty()) {
             $this->setQty($quoteItem->getQty());

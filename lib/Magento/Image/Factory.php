@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Image;
 
 use Magento\ObjectManager;
@@ -42,10 +41,8 @@ class Factory
      * @param ObjectManager $objectManager
      * @param AdapterFactory $adapterFactory
      */
-    public function __construct(
-        ObjectManager $objectManager,
-        AdapterFactory $adapterFactory
-    ) {
+    public function __construct(ObjectManager $objectManager, AdapterFactory $adapterFactory)
+    {
         $this->objectManager = $objectManager;
         $this->adapterFactory = $adapterFactory;
     }

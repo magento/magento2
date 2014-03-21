@@ -41,10 +41,10 @@ class Composite implements RendererInterface
     public function __construct(array $renderers)
     {
         foreach ($renderers as $renderer) {
-            if (!($renderer instanceof RendererInterface)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Instance of the phrase renderer is expected, got %s instead.', get_class($renderer)
-                ));
+            if (!$renderer instanceof RendererInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf('Instance of the phrase renderer is expected, got %s instead.', get_class($renderer))
+                );
             }
         }
         $this->_renderers = $renderers;

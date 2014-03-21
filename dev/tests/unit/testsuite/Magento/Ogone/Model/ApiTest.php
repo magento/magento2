@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Ogone\Model;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
@@ -52,8 +51,15 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $loggerFactory = $this->getMock('\Magento\Logger\AdapterFactory', array(), array(), '', false);
         $object = new \Magento\Ogone\Model\Api(
-            $eventManager, $paymentDataMock, $coreStoreConfig, $loggerFactory,
-            $storeManager, $localeResolver, $urlBuilder, $string, $config
+            $eventManager,
+            $paymentDataMock,
+            $coreStoreConfig,
+            $loggerFactory,
+            $storeManager,
+            $localeResolver,
+            $urlBuilder,
+            $string,
+            $config
         );
 
         $method = new \ReflectionMethod('Magento\Ogone\Model\Api', '_translate');

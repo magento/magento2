@@ -23,8 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Di;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -79,17 +79,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = str_replace('\\', '/', $basePath);
 
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
-        $this->_generationDir =  $this->_tmpDir . '/generation';
+        $this->_generationDir = $this->_tmpDir . '/generation';
         $this->_compilationDir = $this->_tmpDir . '/di';
 
-        \Magento\Autoload\IncludePath::addIncludePath(array(
-            $basePath . '/app/code',
-            $basePath . '/lib',
-            $this->_generationDir,
-        ));
+        \Magento\Autoload\IncludePath::addIncludePath(
+            array($basePath . '/app/code', $basePath . '/lib', $this->_generationDir)
+        );
 
-        $this->_command = 'php ' . $basePath
-            . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
+        $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
         $this->_mapper = new \Magento\ObjectManager\Config\Mapper\Dom(
             new \Magento\Stdlib\BooleanUtils(),
             new \Magento\ObjectManager\Config\Mapper\ArgumentParser()
@@ -149,8 +146,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     unset($parameters[$parameterName]);
                 }
             }
-            $message = 'Configuration of ' . $instanceName
-                . ' contains data for non-existed parameters: ' . implode(', ', array_keys($parameters));
+            $message = 'Configuration of ' . $instanceName . ' contains data for non-existed parameters: ' . implode(
+                ', ',
+                array_keys($parameters)
+            );
             $this->assertEmpty($parameters, $message);
         }
     }
@@ -188,15 +187,21 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $generationPathPath = str_replace('/', '\\', $this->_generationDir);
 
         $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(
-            true, false, false, false, false, true, false
+            true,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false
         );
 
-        $patterns  = array(
+        $patterns = array(
             '/' . preg_quote($libPath) . '/',
             '/' . preg_quote($appPath) . '/',
             '/' . preg_quote($generationPathPath) . '/'
         );
-        $replacements  = array('', '', '');
+        $replacements = array('', '', '');
 
         /** Convert file names into class name format */
         $classes = array();
@@ -310,10 +315,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $autoloader,
             $this->_generationDir
         );
-        $generator = new \Magento\Code\Generator($autoloader, $generatorIo, array(
-            \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
-                => 'Magento\ObjectManager\Code\Generator\Factory',
-        ));
+        $generator = new \Magento\Code\Generator(
+            $autoloader,
+            $generatorIo,
+            array(
+                \Magento\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
+                => 'Magento\ObjectManager\Code\Generator\Factory'
+            )
+        );
         $autoloader = new \Magento\Code\Generator\Autoloader($generator);
         spl_autoload_register(array($autoloader, 'load'));
 
@@ -384,14 +393,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     public function testCompiler()
     {
         try {
-            $this->_shell->execute(
-                $this->_command,
-                array($this->_generationDir, $this->_compilationDir)
-            );
+            $this->_shell->execute($this->_command, array($this->_generationDir, $this->_compilationDir));
         } catch (\Magento\Exception $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
     }
-
-
 }

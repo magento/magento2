@@ -99,8 +99,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
         $entry = $service->insertItem($entry);
         $published = $this->convertContentDateToTimestamp($entry->getPublished()->getText());
 
-        $item->setGcontentItemId($entry->getId())
-            ->setPublished($published);
+        $item->setGcontentItemId($entry->getId())->setPublished($published);
 
         $expires = $this->_getAttributeValue($entry, 'expiration_date');
         if ($expires) {
@@ -169,9 +168,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
     protected function _getAttributeValue($entry, $name)
     {
         $attribute = $entry->getContentAttributeByName($name);
-        return ($attribute instanceof \Magento\Gdata\Gshopping\Extension\Attribute)
-            ? $attribute->text
-            : null;
+        return $attribute instanceof \Magento\Gdata\Gshopping\Extension\Attribute ? $attribute->text : null;
     }
 
     /**
@@ -188,10 +185,13 @@ class Item extends \Magento\GoogleShopping\Model\Service
         $countryInfo = $this->getConfig()->getTargetCountryInfo($storeId);
         $itemId = $this->_gsData->buildContentProductId($item->getProductId(), $item->getStoreId());
 
-        $query = $service->newItemQuery()
-            ->setId($itemId)
-            ->setTargetCountry($this->getConfig()->getTargetCountry($storeId))
-            ->setLanguage($countryInfo['language']);
+        $query = $service->newItemQuery()->setId(
+            $itemId
+        )->setTargetCountry(
+            $this->getConfig()->getTargetCountry($storeId)
+        )->setLanguage(
+            $countryInfo['language']
+        );
 
         return $query;
     }

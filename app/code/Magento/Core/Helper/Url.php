@@ -106,10 +106,10 @@ class Url extends \Magento\App\Helper\AbstractHelper
      */
     public function addRequestParam($url, $param)
     {
-        $startDelimiter = (false === strpos($url, '?'))? '?' : '&';
+        $startDelimiter = false === strpos($url, '?') ? '?' : '&';
 
         $arrQueryParams = array();
-        foreach ($param as $key=>$value) {
+        foreach ($param as $key => $value) {
             if (is_numeric($key) || is_object($value)) {
                 continue;
             }

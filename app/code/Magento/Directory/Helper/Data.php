@@ -150,8 +150,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         if (!$this->_regionCollection) {
             $this->_regionCollection = $this->_regCollectionFactory->create();
-            $this->_regionCollection->addCountryFilter($this->getAddress()->getCountryId())
-                ->load();
+            $this->_regionCollection->addCountryFilter($this->getAddress()->getCountryId())->load();
         }
         return $this->_regionCollection;
     }
@@ -186,8 +185,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
                     $countryIds[] = $country->getCountryId();
                 }
                 $collection = $this->_regCollectionFactory->create();
-                $collection->addCountryFilter($countryIds)
-                    ->load();
+                $collection->addCountryFilter($countryIds)->load();
                 $regions = array(
                     'config' => array(
                         'show_all_regions' => $this->isShowNonRequiredState(),
@@ -275,7 +273,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim($this->_storeManager->getStore()->getConfig(self::XML_PATH_STATES_REQUIRED));
-        $countryList =  preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
+        $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {
             return $this->_coreHelper->jsonEncode($countryList);
         }
@@ -289,7 +287,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isShowNonRequiredState()
     {
-        return (boolean)$this->_storeManager->getStore()->getConfig(self::XML_PATH_DISPLAY_ALL_STATES);
+        return (bool)$this->_storeManager->getStore()->getConfig(self::XML_PATH_DISPLAY_ALL_STATES);
     }
 
     /**

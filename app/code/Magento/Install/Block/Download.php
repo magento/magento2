@@ -78,9 +78,7 @@ class Download extends \Magento\Install\Block\AbstractBlock
      */
     public function getNextUrl()
     {
-        return $this->_installWizard
-            ->getStepByName('download')
-            ->getNextUrl();
+        return $this->_installWizard->getStepByName('download')->getNextUrl();
     }
 
     /**

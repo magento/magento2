@@ -39,9 +39,6 @@ class Type implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return array(
-            array('value' => '0', 'label' => __('Fixed')),
-            array('value' => '1', 'label' => __('Percent')),
-        );
+        return array(array('value' => '0', 'label' => __('Fixed')), array('value' => '1', 'label' => __('Percent')));
     }
 }

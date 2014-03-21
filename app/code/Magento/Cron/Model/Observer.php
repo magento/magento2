@@ -34,19 +34,27 @@ class Observer
     /**#@+
      * Cache key values
      */
-    const CACHE_KEY_LAST_SCHEDULE_GENERATE_AT   = 'cron_last_schedule_generate_at';
-    const CACHE_KEY_LAST_HISTORY_CLEANUP_AT     = 'cron_last_history_cleanup_at';
+    const CACHE_KEY_LAST_SCHEDULE_GENERATE_AT = 'cron_last_schedule_generate_at';
+
+    const CACHE_KEY_LAST_HISTORY_CLEANUP_AT = 'cron_last_history_cleanup_at';
+
     /**#@-*/
 
     /**#@+
      * List of configurable constants used to calculate and validate during handling cron jobs
      */
-    const XML_PATH_SCHEDULE_GENERATE_EVERY  = 'schedule_generate_every';
-    const XML_PATH_SCHEDULE_AHEAD_FOR       = 'schedule_ahead_for';
-    const XML_PATH_SCHEDULE_LIFETIME        = 'schedule_lifetime';
-    const XML_PATH_HISTORY_CLEANUP_EVERY    = 'history_cleanup_every';
-    const XML_PATH_HISTORY_SUCCESS          = 'history_success_lifetime';
-    const XML_PATH_HISTORY_FAILURE          = 'history_failure_lifetime';
+    const XML_PATH_SCHEDULE_GENERATE_EVERY = 'schedule_generate_every';
+
+    const XML_PATH_SCHEDULE_AHEAD_FOR = 'schedule_ahead_for';
+
+    const XML_PATH_SCHEDULE_LIFETIME = 'schedule_lifetime';
+
+    const XML_PATH_HISTORY_CLEANUP_EVERY = 'history_cleanup_every';
+
+    const XML_PATH_HISTORY_SUCCESS = 'history_success_lifetime';
+
+    const XML_PATH_HISTORY_FAILURE = 'history_failure_lifetime';
+
     /**#@-*/
 
     /**
@@ -136,14 +144,22 @@ class Observer
         $jobGroupsRoot = $this->_config->getJobs();
 
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
-            if (
-                $this->_request->getParam('group') === null
-                && $this->_coreStoreConfig->getConfig('system/cron/' . $groupId . '/use_separate_process') == 1
+            if ($this->_request->getParam(
+                'group'
+            ) === null && $this->_coreStoreConfig->getConfig(
+                'system/cron/' . $groupId . '/use_separate_process'
+            ) == 1
             ) {
                 $this->_shell->executeInBackground(
-                    '"' . PHP_BINARY . '" -f ' . BP . DIRECTORY_SEPARATOR
-                    . \Magento\App\Filesystem::PUB_DIR . DIRECTORY_SEPARATOR
-                    . 'cron.php -- --group=' . $groupId
+                    '"' .
+                    PHP_BINARY .
+                    '" -f ' .
+                    BP .
+                    DIRECTORY_SEPARATOR .
+                    \Magento\App\Filesystem::PUB_DIR .
+                    DIRECTORY_SEPARATOR .
+                    'cron.php -- --group=' .
+                    $groupId
                 );
                 continue;
             }
@@ -214,16 +230,11 @@ class Observer
          * though running status is set in tryLockJob we must set it here because the object
          * was loaded with a pending status and will set it back to pending if we don't set it here
          */
-        $schedule
-            ->setStatus(Schedule::STATUS_RUNNING)
-            ->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', time()))
-            ->save();
+        $schedule->setStatus(Schedule::STATUS_RUNNING)->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', time()))->save();
 
         call_user_func_array($callback, array($schedule));
 
-        $schedule
-            ->setStatus(Schedule::STATUS_SUCCESS)
-            ->setFinishedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
+        $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
     }
 
     /**
@@ -234,9 +245,10 @@ class Observer
     protected function _getPendingSchedules()
     {
         if (!$this->_pendingSchedules) {
-            $this->_pendingSchedules = $this->_scheduleFactory->create()->getCollection()
-                ->addFieldToFilter('status', Schedule::STATUS_PENDING)
-                ->load();
+            $this->_pendingSchedules = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
+                'status',
+                Schedule::STATUS_PENDING
+            )->load();
         }
         return $this->_pendingSchedules;
     }
@@ -315,9 +327,7 @@ class Observer
 
             $currentTime = time();
             $timeAhead = $currentTime + $scheduleAheadFor;
-            $schedule->setJobCode($jobCode)
-                ->setCronExpr($cronExpr)
-                ->setStatus(Schedule::STATUS_PENDING);
+            $schedule->setJobCode($jobCode)->setCronExpr($cronExpr)->setStatus(Schedule::STATUS_PENDING);
 
             for ($time = $currentTime; $time < $timeAhead; $time += self::SECONDS_IN_MINUTE) {
                 $ts = strftime('%Y-%m-%d %H:%M:00', $time);
@@ -355,12 +365,10 @@ class Observer
         /**
          * @var \Magento\Cron\Model\Resource\Schedule\Collection $history
          */
-        $history = $this->_scheduleFactory->create()->getCollection()
-            ->addFieldToFilter('status', array('in' => array(
-                Schedule::STATUS_SUCCESS,
-                Schedule::STATUS_MISSED,
-                Schedule::STATUS_ERROR,
-            )))->load();
+        $history = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
+            'status',
+            array('in' => array(Schedule::STATUS_SUCCESS, Schedule::STATUS_MISSED, Schedule::STATUS_ERROR))
+        )->load();
 
         $historySuccess = (int)$this->_coreStoreConfig->getConfig(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_SUCCESS
@@ -371,7 +379,7 @@ class Observer
         $historyLifetimes = array(
             Schedule::STATUS_SUCCESS => $historySuccess * self::SECONDS_IN_MINUTE,
             Schedule::STATUS_MISSED => $historyFailure * self::SECONDS_IN_MINUTE,
-            Schedule::STATUS_ERROR => $historyFailure * self::SECONDS_IN_MINUTE,
+            Schedule::STATUS_ERROR => $historyFailure * self::SECONDS_IN_MINUTE
         );
 
         $now = time();

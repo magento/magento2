@@ -35,8 +35,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Popup;
 
 use Magento\Catalog\Model\Product;
 
-class Grid
-    extends \Magento\Catalog\Block\Adminhtml\Product\Grid
+class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
     /**
      * Return empty row url for disabling JS click events
@@ -72,9 +71,7 @@ class Grid
     public function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');
-        $this->getMassactionBlock()
-            ->setFormFieldName('product')
-            ->addItem('import', array('label' => __('Import')));
+        $this->getMassactionBlock()->setFormFieldName('product')->addItem('import', array('label' => __('Import')));
 
         return $this;
     }

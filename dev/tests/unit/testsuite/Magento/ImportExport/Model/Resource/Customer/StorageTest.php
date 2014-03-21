@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model\Resource\Customer;
 
 class StorageTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +48,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\ImportExport\Model\Resource\Customer\Storage(
             $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', array(), array(), '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
+                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             $this->_getModelDependencies()
         );
@@ -69,32 +72,34 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected function _getModelDependencies()
     {
         $select = $this->getMock('Magento\DB\Select', array('from'), array(), '', false);
-        $select->expects($this->any())
-            ->method('from')
-            ->will($this->returnCallback(array($this, 'validateFrom')));
-        $customerCollection = $this->getMock('Magento\Customer\Model\Resource\Customer\Collection',
-            array('load', 'removeAttributeToSelect', 'getResource', 'getSelect'), array(), '', false
+        $select->expects($this->any())->method('from')->will($this->returnCallback(array($this, 'validateFrom')));
+        $customerCollection = $this->getMock(
+            'Magento\Customer\Model\Resource\Customer\Collection',
+            array('load', 'removeAttributeToSelect', 'getResource', 'getSelect'),
+            array(),
+            '',
+            false
         );
 
         $resourceStub = new \Magento\Object();
         $resourceStub->setEntityTable($this->_entityTable);
-        $customerCollection->expects($this->once())
-            ->method('getResource')
-            ->will($this->returnValue($resourceStub));
+        $customerCollection->expects($this->once())->method('getResource')->will($this->returnValue($resourceStub));
 
-        $customerCollection->expects($this->once())
-            ->method('getSelect')
-            ->will($this->returnValue($select));
+        $customerCollection->expects($this->once())->method('getSelect')->will($this->returnValue($select));
 
         $byPagesIterator = $this->getMock('stdClass', array('iterate'));
-        $byPagesIterator->expects($this->once())
-            ->method('iterate')
-            ->will($this->returnCallback(array($this, 'iterate')));
+        $byPagesIterator->expects(
+            $this->once()
+        )->method(
+            'iterate'
+        )->will(
+            $this->returnCallback(array($this, 'iterate'))
+        );
 
         return array(
-            'customer_collection'          => $customerCollection,
+            'customer_collection' => $customerCollection,
             'collection_by_pages_iterator' => $byPagesIterator,
-            'page_size'                    => 10
+            'page_size' => 10
         );
     }
 
@@ -144,9 +149,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeCount(1, $propertyName, $this->_model);
 
-        $expectedCustomerData = array(
-            $customer->getWebsiteId() => $customer->getId()
-        );
+        $expectedCustomerData = array($customer->getWebsiteId() => $customer->getId());
         $this->assertAttributeContains($expectedCustomerData, $propertyName, $this->_model);
     }
 
@@ -169,11 +172,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected function _addCustomerToStorage()
     {
-        $customer = new \Magento\Object(array(
-            'id'         => 1,
-            'website_id' => 1,
-            'email'      => 'test@test.com'
-        ));
+        $customer = new \Magento\Object(array('id' => 1, 'website_id' => 1, 'email' => 'test@test.com'));
         $this->_model->addCustomer($customer);
 
         return $customer;

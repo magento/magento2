@@ -35,5 +35,4 @@ class QueueWriterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($result);
     }
-
 }

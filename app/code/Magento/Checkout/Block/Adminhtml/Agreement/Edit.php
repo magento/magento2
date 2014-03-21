@@ -74,8 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($this->_coreRegistry->registry('checkout_agreement')->getId()) {
             return __('Edit Terms and Conditions');
-        }
-        else {
+        } else {
             return __('New Terms and Conditions');
         }
     }

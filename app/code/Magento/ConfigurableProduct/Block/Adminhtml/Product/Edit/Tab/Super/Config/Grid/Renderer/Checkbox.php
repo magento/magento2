@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer;
 
 class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
@@ -58,8 +57,9 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkb
     public function render(\Magento\Object $row)
     {
         $result = parent::render($row);
-        return $result . '<input type="hidden" class="value-json" value="'
-            . htmlspecialchars($this->getAttributesJson($row)) . '" />';
+        return $result . '<input type="hidden" class="value-json" value="' . htmlspecialchars(
+            $this->getAttributesJson($row)
+        ) . '" />';
     }
 
     /**
@@ -78,15 +78,16 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkb
         foreach ($this->getColumn()->getAttributes() as $attribute) {
             $productAttribute = $attribute->getProductAttribute();
             if ($productAttribute->getSourceModel()) {
-                $label = $productAttribute->getSource()
-                    ->getOptionText($row->getData($productAttribute->getAttributeCode()));
+                $label = $productAttribute->getSource()->getOptionText(
+                    $row->getData($productAttribute->getAttributeCode())
+                );
             } else {
                 $label = $row->getData($productAttribute->getAttributeCode());
             }
             $item = array();
-            $item['label']        = $label;
+            $item['label'] = $label;
             $item['attribute_id'] = $productAttribute->getId();
-            $item['value_index']  = $row->getData($productAttribute->getAttributeCode());
+            $item['value_index'] = $row->getData($productAttribute->getAttributeCode());
             $result[] = $item;
         }
 

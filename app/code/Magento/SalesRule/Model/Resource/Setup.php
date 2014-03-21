@@ -35,9 +35,6 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
      */
     public function getMigrationModel()
     {
-        return $this->_migrationFactory->create(array(
-            'resourceName' => 'core_setup'
-        ));
+        return $this->_migrationFactory->create(array('resourceName' => 'core_setup'));
     }
 }
-

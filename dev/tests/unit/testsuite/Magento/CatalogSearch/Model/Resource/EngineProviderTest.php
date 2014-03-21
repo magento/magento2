@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogSearch\Model\Resource;
 
 class EngineProviderTest extends \PHPUnit_Framework_TestCase
@@ -46,13 +45,25 @@ class EngineProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_engineFactoryMock = $this->getMock('Magento\CatalogSearch\Model\Resource\EngineFactory',
-            array('create'), array(), '', false);
-        $this->_storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config',
-            array('getConfig'), array(), '', false);
+        $this->_engineFactoryMock = $this->getMock(
+            'Magento\CatalogSearch\Model\Resource\EngineFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
+        $this->_storeConfigMock = $this->getMock(
+            'Magento\Core\Model\Store\Config',
+            array('getConfig'),
+            array(),
+            '',
+            false
+        );
 
-        $this->_model = new \Magento\CatalogSearch\Model\Resource\EngineProvider($this->_engineFactoryMock,
-            $this->_storeConfigMock);
+        $this->_model = new \Magento\CatalogSearch\Model\Resource\EngineProvider(
+            $this->_engineFactoryMock,
+            $this->_storeConfigMock
+        );
     }
 
     public function testGetPositive()
@@ -64,19 +75,27 @@ class EngineProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $engineMock->expects($this->once())
-            ->method('test')
-            ->will($this->returnValue(true));
+        $engineMock->expects($this->once())->method('test')->will($this->returnValue(true));
 
-        $this->_storeConfigMock->expects($this->once())
-            ->method('getConfig')
-            ->with('catalog/search/engine')
-            ->will($this->returnValue('Magento\CatalogSearch\Model\Resource\Fulltext\Engine'));
+        $this->_storeConfigMock->expects(
+            $this->once()
+        )->method(
+            'getConfig'
+        )->with(
+            'catalog/search/engine'
+        )->will(
+            $this->returnValue('Magento\CatalogSearch\Model\Resource\Fulltext\Engine')
+        );
 
-        $this->_engineFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\CatalogSearch\Model\Resource\Fulltext\Engine')
-            ->will($this->returnValue($engineMock));
+        $this->_engineFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\CatalogSearch\Model\Resource\Fulltext\Engine'
+        )->will(
+            $this->returnValue($engineMock)
+        );
 
         $this->assertEquals($engineMock, $this->_model->get());
     }
@@ -84,19 +103,33 @@ class EngineProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetNegative()
     {
         $engineMock = $this->getMock(
-            'Magento\CatalogSearch\Model\Resource\Fulltext\Engine', array('test', '__wakeup'), array(), '', false);
-        $engineMock->expects($this->never())
-            ->method('test');
+            'Magento\CatalogSearch\Model\Resource\Fulltext\Engine',
+            array('test', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+        $engineMock->expects($this->never())->method('test');
 
-        $this->_storeConfigMock->expects($this->once())
-            ->method('getConfig')
-            ->with('catalog/search/engine')
-            ->will($this->returnValue(''));
+        $this->_storeConfigMock->expects(
+            $this->once()
+        )->method(
+            'getConfig'
+        )->with(
+            'catalog/search/engine'
+        )->will(
+            $this->returnValue('')
+        );
 
-        $this->_engineFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\CatalogSearch\Model\Resource\Fulltext\Engine')
-            ->will($this->returnValue($engineMock));
+        $this->_engineFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\CatalogSearch\Model\Resource\Fulltext\Engine'
+        )->will(
+            $this->returnValue($engineMock)
+        );
 
         $this->assertEquals($engineMock, $this->_model->get());
     }

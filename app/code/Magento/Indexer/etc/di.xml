@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
     <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
     <type name="Magento\Indexer\Model\Indexer">
@@ -40,5 +40,9 @@
         <arguments>
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\Resource\Indexer\State\Collection</argument>
         </arguments>
+    </type>
+    <type name="Magento\Indexer\Model\Processor">
+        <plugin name="page-cache-indexer-reindex-invalidate"
+                type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
     </type>
 </config>

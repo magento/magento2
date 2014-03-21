@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper;
 
 class CategoryTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Helper\Category');
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Helper\Category'
+        );
     }
 
     protected function tearDown()
@@ -60,8 +60,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Data\Tree\Node\Collection', $categories);
         $index = 0;
         $expectedPaths = array(
-            array(3, '1/2/3'), array(6, '1/2/6'), array(7, '1/2/7'),
-            array(9, '1/2/9'), array(10, '1/2/10'), array(11, '1/2/11'), array(12, '1/2/12'),
+            array(3, '1/2/3'),
+            array(6, '1/2/6'),
+            array(7, '1/2/7'),
+            array(9, '1/2/9'),
+            array(10, '1/2/10'),
+            array(11, '1/2/11'),
+            array(12, '1/2/12')
         );
         foreach ($categories as $category) {
             $this->assertInstanceOf('Magento\Data\Tree\Node', $category);
@@ -73,9 +78,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCategoryUrl()
     {
-         $url = 'http://example.com/';
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category', array('data' => array('url' => $url)));
+        $url = 'http://example.com/';
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category',
+            array('data' => array('url' => $url))
+        );
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
 
         $category = new \Magento\Object(array('url' => $url));
@@ -94,8 +101,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testCanShowFalse()
     {
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
         $this->assertFalse($this->_helper->canShow($category));
         $category->setId(1);
         $this->assertFalse($this->_helper->canShow($category));
@@ -125,11 +133,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCategoryUrlPathDefault()
     {
-        $this->assertEquals('http://example.com/category',
+        $this->assertEquals(
+            'http://example.com/category',
             $this->_helper->getCategoryUrlPath('http://example.com/category.html')
         );
 
-        $this->assertEquals('http://example.com/category/',
+        $this->assertEquals(
+            'http://example.com/category/',
             $this->_helper->getCategoryUrlPath('http://example.com/category.html/', true)
         );
     }
@@ -140,7 +150,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCategoryUrlPath()
     {
-        $this->assertEquals('http://example.com/category.html',
+        $this->assertEquals(
+            'http://example.com/category.html',
             $this->_helper->getCategoryUrlPath('http://example.com/category.html')
         );
     }

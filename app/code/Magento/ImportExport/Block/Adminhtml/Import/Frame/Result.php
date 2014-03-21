@@ -38,17 +38,24 @@ class Result extends \Magento\Backend\Block\Template
 {
     /**
      * JavaScript actions for response.
+     *     'clear'           remove element from DOM
+     *     'innerHTML'       set innerHTML property (use: elementID => new content)
+     *     'value'           set value for form element (use: elementID => new value)
+     *     'show'            show specified element
+     *     'hide'            hide specified element
+     *     'removeClassName' remove specified class name from element
+     *     'addClassName'    add specified class name to element
      *
      * @var array
      */
     protected $_actions = array(
-        'clear'           => array(), // remove element from DOM
-        'innerHTML'       => array(), // set innerHTML property (use: elementID => new content)
-        'value'           => array(), // set value for form element (use: elementID => new value)
-        'show'            => array(), // show specified element
-        'hide'            => array(), // hide specified element
-        'removeClassName' => array(), // remove specified class name from element
-        'addClassName'    => array()  // add specified class name to element
+        'clear' => array(),
+        'innerHTML' => array(),
+        'value' => array(),
+        'show' => array(),
+        'hide' => array(),
+        'removeClassName' => array(),
+        'addClassName' => array()
     );
 
     /**
@@ -56,11 +63,7 @@ class Result extends \Magento\Backend\Block\Template
      *
      * @var array
      */
-    protected $_messages = array(
-        'error'   => array(),
-        'success' => array(),
-        'notice'  => array()
-    );
+    protected $_messages = array('error' => array(), 'success' => array(), 'notice' => array());
 
     /**
      * @var \Magento\Json\EncoderInterface
@@ -170,9 +173,15 @@ class Result extends \Magento\Backend\Block\Template
      */
     public function getImportButtonHtml()
     {
-        return '&nbsp;&nbsp;<button onclick="varienImport.startImport(\'' . $this->getImportStartUrl()
-            . '\', \'' . \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE . '\');" class="scalable save"'
-            . ' type="button"><span><span><span>' . __('Import') . '</span></span></span></button>';
+        return '&nbsp;&nbsp;<button onclick="varienImport.startImport(\'' .
+            $this->getImportStartUrl() .
+            '\', \'' .
+            \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE .
+            '\');" class="scalable save"' .
+            ' type="button"><span><span><span>' .
+            __(
+                'Import'
+            ) . '</span></span></span></button>';
     }
 
     /**
@@ -209,7 +218,7 @@ class Result extends \Magento\Backend\Block\Template
             $method = "add{$priority}";
 
             foreach ($messages as $message) {
-                $messagesBlock->$method($message);
+                $messagesBlock->{$method}($message);
             }
         }
         return $messagesBlock->toHtml();

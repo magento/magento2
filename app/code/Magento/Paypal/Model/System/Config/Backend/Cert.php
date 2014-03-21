@@ -101,9 +101,7 @@ class Cert extends \Magento\Core\Model\Config\Value
             }
             $this->setValue($_FILES['groups']['name'][$this->getGroupId()]['fields'][$this->getField()]['value']);
             $content = $this->_encryptor->encrypt($this->_tmpDirectory->readFile($tmpPath));
-            $this->_certFactory->create()->loadByWebsite($this->getScopeId())
-                ->setContent($content)
-                ->save();
+            $this->_certFactory->create()->loadByWebsite($this->getScopeId())->setContent($content)->save();
         }
         return $this;
     }

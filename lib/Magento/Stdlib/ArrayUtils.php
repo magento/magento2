@@ -86,24 +86,30 @@ class ArrayUtils
         }
 
         $keyIsFirst = "{$prefix}is_first";
-        $keyIsOdd   = "{$prefix}is_odd";
-        $keyIsEven  = "{$prefix}is_even";
-        $keyIsLast  = "{$prefix}is_last";
+        $keyIsOdd = "{$prefix}is_odd";
+        $keyIsEven = "{$prefix}is_even";
+        $keyIsLast = "{$prefix}is_last";
 
-        $count  = count($array); // this will force Iterator to load
-        $index  = 0;
+        $count = count($array);
+        // this will force Iterator to load
+        $index = 0;
         $isEven = false;
         foreach ($array as $key => $element) {
             if (is_object($element)) {
-                $this->_decorateArrayObject($element, $keyIsFirst, (0 === $index), $forceSetAll || (0 === $index));
+                $this->_decorateArrayObject($element, $keyIsFirst, 0 === $index, $forceSetAll || 0 === $index);
                 $this->_decorateArrayObject($element, $keyIsOdd, !$isEven, $forceSetAll || !$isEven);
                 $this->_decorateArrayObject($element, $keyIsEven, $isEven, $forceSetAll || $isEven);
                 $isEven = !$isEven;
                 $index++;
-                $this->_decorateArrayObject($element, $keyIsLast, ($index === $count), $forceSetAll || ($index === $count));
+                $this->_decorateArrayObject(
+                    $element,
+                    $keyIsLast,
+                    $index === $count,
+                    $forceSetAll || $index === $count
+                );
             } elseif (is_array($element)) {
-                if ($forceSetAll || (0 === $index)) {
-                    $array[$key][$keyIsFirst] = (0 === $index);
+                if ($forceSetAll || 0 === $index) {
+                    $array[$key][$keyIsFirst] = 0 === $index;
                 }
                 if ($forceSetAll || !$isEven) {
                     $array[$key][$keyIsOdd] = !$isEven;
@@ -113,8 +119,8 @@ class ArrayUtils
                 }
                 $isEven = !$isEven;
                 $index++;
-                if ($forceSetAll || ($index === $count)) {
-                    $array[$key][$keyIsLast] = ($index === $count);
+                if ($forceSetAll || $index === $count) {
+                    $array[$key][$keyIsLast] = $index === $count;
                 }
             }
         }

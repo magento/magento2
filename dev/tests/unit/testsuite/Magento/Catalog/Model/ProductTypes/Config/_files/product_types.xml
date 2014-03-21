@@ -23,11 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Catalog/etc/product_types.xsd">
     <type name="type_one" label="Label One" modelInstance="Instance_Type" composite="true" indexPriority="40" canUseQtyDecimals="true" isQty="true">
         <priceModel instance="Instance_Type_One" />
         <indexerModel instance="Instance_Type_Two" />
-        <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
     </type>
     <type name="type_two" modelInstance="Instance_Type">
@@ -41,7 +40,6 @@
     <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false">
         <priceModel instance="Instance_Type_Three" />
         <indexerModel instance="Instance_Type_Three" />
-        <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
     </type>
     <composableTypes>

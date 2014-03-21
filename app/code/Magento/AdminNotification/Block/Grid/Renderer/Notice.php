@@ -27,8 +27,7 @@
  */
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-class Notice
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Notice extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column
@@ -38,7 +37,10 @@ class Notice
      */
     public function render(\Magento\Object $row)
     {
-        return '<span class="grid-row-title">' . $row->getTitle() . '</span>'
-            . ($row->getDescription() ? '<br />' . $row->getDescription() : '');
+        return '<span class="grid-row-title">' .
+            $row->getTitle() .
+            '</span>' .
+            ($row->getDescription() ? '<br />' .
+            $row->getDescription() : '');
     }
 }

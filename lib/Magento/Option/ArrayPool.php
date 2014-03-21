@@ -51,10 +51,8 @@ class ArrayPool
     public function get($model)
     {
         $modelInstance = $this->_objectManager->get($model);
-        if (false == ($modelInstance instanceof \Magento\Option\ArrayInterface)) {
-            throw new \InvalidArgumentException(
-                $model . 'doesn\'t implement \Magento\Option\ArrayInterface'
-            );
+        if (false == $modelInstance instanceof \Magento\Option\ArrayInterface) {
+            throw new \InvalidArgumentException($model . 'doesn\'t implement \Magento\Option\ArrayInterface');
         }
         return $modelInstance;
     }

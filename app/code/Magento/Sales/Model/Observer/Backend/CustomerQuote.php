@@ -75,9 +75,9 @@ class CustomerQuote
              * if customer accounts are shared between all of them
              */
             /** @var $websites \Magento\Core\Model\Website[] */
-            $websites = $this->_config->isWebsiteScope()
-                ? array($this->_storeManager->getWebsite($customerDataObject->getWebsiteId()))
-                : $this->_storeManager->getWebsites();
+            $websites = $this->_config->isWebsiteScope() ? array(
+                $this->_storeManager->getWebsite($customerDataObject->getWebsiteId())
+            ) : $this->_storeManager->getWebsites();
 
             foreach ($websites as $website) {
                 $quote = $this->_quoteFactory->create();

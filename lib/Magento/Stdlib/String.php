@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib;
 
 /**
@@ -65,8 +64,14 @@ class String
         foreach ($str as $part) {
             if ($this->strlen($part) >= $length) {
                 $lastDelimiter = $this->strpos($this->strrev($part), $needle);
-                $tmpNewStr = $this->substr($this->strrev($part), 0, $lastDelimiter)
-                    . $insert . $this->substr($this->strrev($part), $lastDelimiter);
+                $tmpNewStr = $this->substr(
+                    $this->strrev($part),
+                    0,
+                    $lastDelimiter
+                ) . $insert . $this->substr(
+                    $this->strrev($part),
+                    $lastDelimiter
+                );
                 $newStr .= $this->strrev($tmpNewStr);
             } else {
                 $newStr .= $part;
@@ -128,7 +133,7 @@ class String
                 }
                 $partLength = $this->strlen($part);
                 // add part to current last element
-                if (($currentLength + $spaceLen + $partLength) <= $length) {
+                if ($currentLength + $spaceLen + $partLength <= $length) {
                     $result[$index] .= $space . $part;
                 } elseif ($partLength <= $length) {
                     // add part to new element

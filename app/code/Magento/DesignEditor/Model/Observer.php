@@ -46,12 +46,10 @@ class Observer
      * @param \Magento\ObjectManager $objectManager
      * @param \Magento\DesignEditor\Helper\Data $helper
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        \Magento\DesignEditor\Helper\Data $helper
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager, \Magento\DesignEditor\Helper\Data $helper)
+    {
         $this->_objectManager = $objectManager;
-        $this->_helper        = $helper;
+        $this->_helper = $helper;
     }
 
     /**
@@ -111,8 +109,10 @@ class Observer
                 'Magento\DesignEditor\Model\Theme\Customization\File\QuickStyleCss'
             );
             /** @var $singleFile \Magento\Theme\Model\Theme\SingleFile */
-            $singleFile = $this->_objectManager->create('Magento\Theme\Model\Theme\SingleFile',
-                array('fileService' => $cssService));
+            $singleFile = $this->_objectManager->create(
+                'Magento\Theme\Model\Theme\SingleFile',
+                array('fileService' => $cssService)
+            );
             $singleFile->update($theme, $content);
         }
     }

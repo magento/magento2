@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
@@ -43,9 +42,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product',
+        $this->productMock = $this->getMock(
+            '\Magento\Catalog\Model\Product',
             array(
-                'getConfigurableAttributesData', 'getTypeInstance', 'setConfigurableAttributesData', '__wakeup',
+                'getConfigurableAttributesData',
+                'getTypeInstance',
+                'setConfigurableAttributesData',
+                '__wakeup',
                 'getTypeId'
             ),
             array(),
@@ -53,10 +56,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->productTypeMock = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable', array(), array(), '', false
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->productMock->expects($this->any())
-            ->method('getTypeInstance')->will($this->returnValue($this->productTypeMock));
+        $this->productMock->expects(
+            $this->any()
+        )->method(
+            'getTypeInstance'
+        )->will(
+            $this->returnValue($this->productTypeMock)
+        );
         $this->model = new Configurable();
     }
 
@@ -69,30 +81,41 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithoutOriginalProductAttributes()
     {
-        $this->productMock->expects($this->once())->method('getTypeId')
-            ->will($this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE));
-        $this->productTypeMock->expects($this->once())
-            ->method('getConfigurableAttributesAsArray')
-            ->with($this->productMock)
-            ->will($this->returnValue(array()));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeId'
+        )->will(
+            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        );
+        $this->productTypeMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurableAttributesAsArray'
+        )->with(
+            $this->productMock
+        )->will(
+            $this->returnValue(array())
+        );
 
         $attributeData = array(
             array(
                 'attribute_id' => 1,
-                'values' => array(
-                    array(
-                        'value_index' => 0, 'pricing_value' => 10, 'is_percent' => 1,
-                    )
-                ),
+                'values' => array(array('value_index' => 0, 'pricing_value' => 10, 'is_percent' => 1))
             )
         );
-        $this->productMock->expects($this->once())
-            ->method('getConfigurableAttributesData')->will($this->returnValue($attributeData));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurableAttributesData'
+        )->will(
+            $this->returnValue($attributeData)
+        );
 
         $expected = array(
             array(
                 'attribute_id' => 1,
-                'values' => array(array('value_index' => 0, 'pricing_value' => 0, 'is_percent' => 0)),
+                'values' => array(array('value_index' => 0, 'pricing_value' => 0, 'is_percent' => 0))
             )
         );
 
@@ -103,32 +126,42 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithOriginalProductAttributes()
     {
         $originalAttributes = array(
-            array(
-                'id' => 1,
-                'values' => array(
-                    array('value_index' => 0, 'is_percent' => 10, 'pricing_value' => 50)
-                ),
-            ),
+            array('id' => 1, 'values' => array(array('value_index' => 0, 'is_percent' => 10, 'pricing_value' => 50)))
         );
 
-        $this->productMock->expects($this->once())->method('getTypeId')
-            ->will($this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE));
-        $this->productTypeMock->expects($this->once())
-            ->method('getConfigurableAttributesAsArray')
-            ->with($this->productMock)
-            ->will($this->returnValue($originalAttributes));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeId'
+        )->will(
+            $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+        );
+        $this->productTypeMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurableAttributesAsArray'
+        )->with(
+            $this->productMock
+        )->will(
+            $this->returnValue($originalAttributes)
+        );
 
         $attributeData = array(
             array(
                 'attribute_id' => 1,
                 'values' => array(
                     array('value_index' => 0, 'pricing_value' => 10, 'is_percent' => 1),
-                    array('value_index' => 1, 'pricing_value' => 100, 'is_percent' => 200),
-                ),
+                    array('value_index' => 1, 'pricing_value' => 100, 'is_percent' => 200)
+                )
             )
         );
-        $this->productMock->expects($this->once())
-            ->method('getConfigurableAttributesData')->will($this->returnValue($attributeData));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurableAttributesData'
+        )->will(
+            $this->returnValue($attributeData)
+        );
 
         $expected = array(
             array(
@@ -136,7 +169,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'values' => array(
                     array('value_index' => 0, 'pricing_value' => 50, 'is_percent' => 10),
                     array('value_index' => 1, 'pricing_value' => 0, 'is_percent' => 0)
-                ),
+                )
             )
         );
 

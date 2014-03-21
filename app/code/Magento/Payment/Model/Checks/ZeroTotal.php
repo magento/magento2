@@ -25,12 +25,11 @@
  */
 namespace Magento\Payment\Model\Checks;
 
-use \Magento\Sales\Model\Quote;
-use \Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Sales\Model\Quote;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 class ZeroTotal implements SpecificationInterface
 {
-
     /**
      * Check whether payment method is applicable to quote
      * Purposed to allow use in controllers some logic that was implemented in blocks only before
@@ -42,6 +41,6 @@ class ZeroTotal implements SpecificationInterface
     public function isApplicable(AbstractMethod $paymentMethod, Quote $quote)
     {
         $total = $quote->getBaseSubtotal() + $quote->getShippingAddress()->getBaseShippingAmount();
-        return  !($total < 0.0001 && $paymentMethod->getCode() != 'free');
+        return !($total < 0.0001 && $paymentMethod->getCode() != 'free');
     }
 }

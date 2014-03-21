@@ -30,10 +30,7 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      *
      * @var array
      */
-    protected $_messagePatterns = array(
-        'update' => 'Item %s was updated',
-        'remove' => 'Item %s was removed'
-    );
+    protected $_messagePatterns = array('update' => 'Item %s was updated', 'remove' => 'Item %s was removed');
 
     /**
      * Get command object
@@ -46,7 +43,8 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
     {
         $command = $this->_commandFactory->create($data['type'], array('data' => $data));
         if (isset($this->_messagePatterns[$data['type']])) {
-            $logger->logDebug(sprintf($this->_messagePatterns[$data['type']], $command->getId()),
+            $logger->logDebug(
+                sprintf($this->_messagePatterns[$data['type']], $command->getId()),
                 \Magento\Backend\Model\Menu::LOGGER_KEY
             );
         }
@@ -61,11 +59,8 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * @param \Magento\Logger $logger
      * @return void
      */
-    public function direct(
-        array $config,
-        \Magento\Backend\Model\Menu\Builder $builder,
-        \Magento\Logger $logger
-    ) {
+    public function direct(array $config, \Magento\Backend\Model\Menu\Builder $builder, \Magento\Logger $logger)
+    {
         foreach ($config as $data) {
             $builder->processCommand($this->_getCommand($data, $logger));
         }

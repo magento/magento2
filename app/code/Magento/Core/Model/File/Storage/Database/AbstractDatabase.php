@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File\Storage\Database;
 
 /**
@@ -96,8 +95,10 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
      */
     public function getConfigConnectionName()
     {
-        $connectionName = $this->_app->getConfig()
-            ->getValue(\Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE, 'default');
+        $connectionName = $this->_app->getConfig()->getValue(
+            \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
+            'default'
+        );
         if (empty($connectionName)) {
             $connectionName = 'default_setup';
         }

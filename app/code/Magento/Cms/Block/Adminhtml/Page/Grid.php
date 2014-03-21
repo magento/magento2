@@ -106,67 +106,68 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $baseUrl = $this->getUrl();
 
-        $this->addColumn('title', array(
-            'header'    => __('Title'),
-            'align'     => 'left',
-            'index'     => 'title',
-        ));
+        $this->addColumn('title', array('header' => __('Title'), 'align' => 'left', 'index' => 'title'));
 
-        $this->addColumn('identifier', array(
-            'header'    => __('URL Key'),
-            'align'     => 'left',
-            'index'     => 'identifier'
-        ));
+        $this->addColumn('identifier', array('header' => __('URL Key'), 'align' => 'left', 'index' => 'identifier'));
 
-        $this->addColumn('root_template', array(
-            'header'    => __('Layout'),
-            'index'     => 'root_template',
-            'type'      => 'options',
-            'options'   => $this->_pageLayout->getOptions(),
-        ));
+        $this->addColumn(
+            'root_template',
+            array(
+                'header' => __('Layout'),
+                'index' => 'root_template',
+                'type' => 'options',
+                'options' => $this->_pageLayout->getOptions()
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'        => __('Store View'),
-                'index'         => 'store_id',
-                'type'          => 'store',
-                'store_all'     => true,
-                'store_view'    => true,
-                'sortable'      => false,
-                'filter_condition_callback'
-                                => array($this, '_filterStoreCondition'),
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Store View'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_all' => true,
+                    'store_view' => true,
+                    'sortable' => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition')
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'type'      => 'options',
-            'options'   => $this->_cmsPage->getAvailableStatuses()
-        ));
+        $this->addColumn(
+            'is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => $this->_cmsPage->getAvailableStatuses()
+            )
+        );
 
-        $this->addColumn('creation_time', array(
-            'header'    => __('Created'),
-            'index'     => 'creation_time',
-            'type'      => 'datetime',
-        ));
+        $this->addColumn(
+            'creation_time',
+            array('header' => __('Created'), 'index' => 'creation_time', 'type' => 'datetime')
+        );
 
-        $this->addColumn('update_time', array(
-            'header'    => __('Modified'),
-            'index'     => 'update_time',
-            'type'      => 'datetime',
-        ));
+        $this->addColumn(
+            'update_time',
+            array('header' => __('Modified'), 'index' => 'update_time', 'type' => 'datetime')
+        );
 
-        $this->addColumn('page_actions', array(
-            'header'    => __('Action'),
-            'width'     => 10,
-            'sortable'  => false,
-            'filter'    => false,
-            'renderer'  => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
-        ));
+        $this->addColumn(
+            'page_actions',
+            array(
+                'header' => __('Action'),
+                'width' => 10,
+                'sortable' => false,
+                'filter' => false,
+                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -191,7 +192,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _filterStoreCondition($collection, \Magento\Object $column)
     {
-        if (!$value = $column->getFilter()->getValue()) {
+        if (!($value = $column->getFilter()->getValue())) {
             return;
         }
 

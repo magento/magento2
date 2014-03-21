@@ -28,9 +28,7 @@ namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
 /**
  * Cms page edit form main tab
  */
-class Main
-    extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\Core\Model\System\Store
@@ -76,66 +74,82 @@ class Main
 
 
         /** @var \Magento\Data\Form $form */
-        $form   = $this->_formFactory->create();
+        $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('page_');
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend'=>__('Page Information')));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Page Information')));
 
         if ($model->getPageId()) {
-            $fieldset->addField('page_id', 'hidden', array(
-                'name' => 'page_id',
-            ));
+            $fieldset->addField('page_id', 'hidden', array('name' => 'page_id'));
         }
 
-        $fieldset->addField('title', 'text', array(
-            'name'      => 'title',
-            'label'     => __('Page Title'),
-            'title'     => __('Page Title'),
-            'required'  => true,
-            'disabled'  => $isElementDisabled
-        ));
+        $fieldset->addField(
+            'title',
+            'text',
+            array(
+                'name' => 'title',
+                'label' => __('Page Title'),
+                'title' => __('Page Title'),
+                'required' => true,
+                'disabled' => $isElementDisabled
+            )
+        );
 
-        $fieldset->addField('identifier', 'text', array(
-            'name'      => 'identifier',
-            'label'     => __('URL Key'),
-            'title'     => __('URL Key'),
-            'class'     => 'validate-identifier',
-            'note'      => __('Relative to Web Site Base URL'),
-            'disabled'  => $isElementDisabled
-        ));
+        $fieldset->addField(
+            'identifier',
+            'text',
+            array(
+                'name' => 'identifier',
+                'label' => __('URL Key'),
+                'title' => __('URL Key'),
+                'class' => 'validate-identifier',
+                'note' => __('Relative to Web Site Base URL'),
+                'disabled' => $isElementDisabled
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $field = $fieldset->addField('store_id', 'multiselect', array(
-                'name'      => 'stores[]',
-                'label'     => __('Store View'),
-                'title'     => __('Store View'),
-                'required'  => true,
-                'values'    => $this->_systemStore->getStoreValuesForForm(false, true),
-                'disabled'  => $isElementDisabled,
-            ));
-            $renderer = $this->getLayout()
-                ->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $field = $fieldset->addField(
+                'store_id',
+                'multiselect',
+                array(
+                    'name' => 'stores[]',
+                    'label' => __('Store View'),
+                    'title' => __('Store View'),
+                    'required' => true,
+                    'values' => $this->_systemStore->getStoreValuesForForm(false, true),
+                    'disabled' => $isElementDisabled
+                )
+            );
+            $renderer = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+            );
             $field->setRenderer($renderer);
         } else {
-            $fieldset->addField('store_id', 'hidden', array(
-                'name'      => 'stores[]',
-                'value'     => $this->_storeManager->getStore(true)->getId()
-            ));
+            $fieldset->addField(
+                'store_id',
+                'hidden',
+                array('name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId())
+            );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
 
-        $fieldset->addField('is_active', 'select', array(
-            'label'     => __('Status'),
-            'title'     => __('Page Status'),
-            'name'      => 'is_active',
-            'required'  => true,
-            'options'   => $model->getAvailableStatuses(),
-            'disabled'  => $isElementDisabled,
-        ));
+        $fieldset->addField(
+            'is_active',
+            'select',
+            array(
+                'label' => __('Status'),
+                'title' => __('Page Status'),
+                'name' => 'is_active',
+                'required' => true,
+                'options' => $model->getAvailableStatuses(),
+                'disabled' => $isElementDisabled
+            )
+        );
         if (!$model->getId()) {
             $model->setData('is_active', $isElementDisabled ? '0' : '1');
         }

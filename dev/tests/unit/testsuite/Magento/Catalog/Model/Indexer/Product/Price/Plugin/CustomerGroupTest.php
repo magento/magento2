@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
 class CustomerGroupTest extends \PHPUnit_Framework_TestCase
@@ -48,12 +47,14 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_subjectMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Group', array(), array(), '', false
-        );
+        $this->_subjectMock = $this->getMock('Magento\Customer\Model\Resource\Group', array(), array(), '', false);
 
         $indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer', array('getId', 'invalidate'), array(), '', false
+            'Magento\Indexer\Model\Indexer',
+            array('getId', 'invalidate'),
+            array(),
+            '',
+            false
         );
         $indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
         $indexerMock->expects($this->once())->method('invalidate');

@@ -29,22 +29,23 @@ namespace Magento\Customer\Model\Layout;
 /**
  * Class DepersonalizePluginTest
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @package Magento\Customer\Model\Layout
  */
 class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Layout\DepersonalizePluginTest
+     * @var DepersonalizePlugin
      */
     protected $plugin;
 
     /**
-     * @var \Magento\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Core\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $sessionMock;
 
@@ -59,12 +60,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     protected $customerFactoryMock;
 
     /**
-     * @var \Magento\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eventManagerMock;
-
-    /**
-     * @var \Magento\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $requestMock;
 
@@ -78,6 +74,15 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $moduleManagerMock;
 
+    /**
+     * @var \Magento\Log\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $visitorMock;
+
+    /**
+     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheConfigMock;
     /**
      * SetUp
      */
@@ -105,7 +110,6 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->eventManagerMock = $this->getMock('Magento\Event\Manager', array(), array(), '', false);
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->customerMock = $this->getMock(
             'Magento\Customer\Model\Customer',
@@ -115,35 +119,36 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->moduleManagerMock = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
-
+        $this->visitorMock = $this->getMock('Magento\Log\Model\Visitor', array(), array(), '', false);
         $this->customerFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->customerMock));
+        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
 
-        $this->plugin = new \Magento\Customer\Model\Layout\DepersonalizePlugin(
-            $this->layoutMock,
+        $this->plugin = new DepersonalizePlugin(
             $this->sessionMock,
             $this->customerSessionMock,
             $this->customerFactoryMock,
-            $this->eventManagerMock,
             $this->requestMock,
-            $this->moduleManagerMock
+            $this->moduleManagerMock,
+            $this->visitorMock,
+            $this->cacheConfigMock
         );
     }
 
     /**
-     * testDepersonalize
+     * Test method beforeGenerateXml with enabled module PageCache
      */
-    public function testDepersonalize()
+    public function testBeforeGenerateXmlPageCacheEnabled()
     {
-        $formKey = md5('form_key');
-        $expectedCustomerGroupId = 3;
-        $result = 'test';
-
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_PageCache')
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
             ->will($this->returnValue(true));
         $this->requestMock
             ->expects($this->once())
@@ -153,19 +158,113 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('isCacheable')
             ->will($this->returnValue(true));
-        $this->sessionMock
-            ->expects($this->any())
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerGroupId');
+        $this->sessionMock->expects($this->once())
             ->method('getData')
-            ->with($this->equalTo(\Magento\Data\Form\FormKey::FORM_KEY))
-            ->will($this->returnValue($formKey));
-        $this->customerSessionMock
+            ->with($this->equalTo(\Magento\Data\Form\FormKey::FORM_KEY));
+        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
+        $this->assertEquals(array(), $output);
+    }
+
+    /**
+     * Test method beforeGenerateXml with disabled module PageCache
+     */
+    public function testBeforeGenerateXmlPageCacheDisabled()
+    {
+        $this->moduleManagerMock
             ->expects($this->once())
-            ->method('getCustomerGroupId')
-            ->will($this->returnValue($expectedCustomerGroupId));
-        $this->eventManagerMock
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->will($this->returnValue(false));
+        $this->requestMock
+            ->expects($this->never())
+            ->method('isAjax');
+        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
+        $this->assertEquals(array(), $output);
+    }
+
+    /**
+     * Test beforeGenerateXml method with enabled module PageCache and request is Ajax
+     */
+    public function testBeforeGenerateXmlRequestIsAjax()
+    {
+        $this->moduleManagerMock
             ->expects($this->once())
-            ->method('dispatch')
-            ->with($this->equalTo('before_session_write_close'));
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+        $this->requestMock
+            ->expects($this->once())
+            ->method('isAjax')
+            ->will($this->returnValue(true));
+        $this->layoutMock->expects($this->never())
+            ->method('isCacheable');
+        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
+        $this->assertEquals(array(), $output);
+    }
+
+    /**
+     * Test beforeGenerateXml method with enabled module PageCache and request is Ajax and Layout is not cacheable
+     */
+    public function testBeforeGenerateXmlLayoutIsNotCacheable()
+    {
+        $this->moduleManagerMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+        $this->requestMock
+            ->expects($this->once())
+            ->method('isAjax')
+            ->will($this->returnValue(false));
+        $this->layoutMock->expects($this->once())
+            ->method('isCacheable')
+            ->will($this->returnValue(false));
+        $this->customerSessionMock->expects($this->never())
+            ->method('getCustomerGroupId');
+        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
+        $this->assertEquals(array(), $output);
+    }
+
+    /**
+     * Test method afterGenerateXml with enabled module PageCache
+     */
+    public function testAfterGenerateXmlPageCacheEnabled()
+    {
+        $expectedResult = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->moduleManagerMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with('Magento_PageCache')
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+        $this->requestMock
+            ->expects($this->once())
+            ->method('isAjax')
+            ->will($this->returnValue(false));
+        $this->layoutMock
+            ->expects($this->once())
+            ->method('isCacheable')
+            ->will($this->returnValue(true));
+        $this->visitorMock
+            ->expects($this->once())
+            ->method('setSkipRequestLogging')
+            ->with($this->equalTo(true));
+        $this->visitorMock
+            ->expects($this->once())
+            ->method('unsetData');
         $this->sessionMock
             ->expects($this->once())
             ->method('clearStorage');
@@ -175,92 +274,95 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerGroupId')
-            ->with($this->equalTo($expectedCustomerGroupId));
+            ->with($this->equalTo(null));
         $this->customerMock
             ->expects($this->once())
             ->method('setGroupId')
-            ->with($this->equalTo($expectedCustomerGroupId));
+            ->with($this->equalTo(null));
         $this->sessionMock
             ->expects($this->once())
             ->method('setData')
             ->with(
                 $this->equalTo(\Magento\Data\Form\FormKey::FORM_KEY),
-                $this->equalTo($formKey)
+                $this->equalTo(null)
             );
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomer')
             ->with($this->equalTo($this->customerMock));
-        $output = $this->plugin->afterGenerateXml($this->layoutMock, $result);
-        $this->assertSame($result, $output);
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * testUsualBehaviorIsAjax
+     * Test afterGenerateXml method with disabled module PageCache
      */
-    public function testUsualBehaviorIsAjax()
+    public function testAfterGenerateXmlPageCacheDisabled()
     {
-        $result = 'test';
-
+        $expectedResult = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
             ->with('Magento_PageCache')
+            ->will($this->returnValue(false));
+        $this->requestMock
+            ->expects($this->never())
+            ->method('isAjax');
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
+        $this->assertSame($expectedResult, $actualResult);
+    }
+
+    /**
+     * Test afterGenerateXml method with enabled module PageCache and request is Ajax
+     */
+    public function testAfterGenerateXmlRequestIsAjax()
+    {
+        $expectedResult = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
+        $this->moduleManagerMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->equalTo('Magento_PageCache'))
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
             ->will($this->returnValue(true));
         $this->requestMock
             ->expects($this->once())
             ->method('isAjax')
             ->will($this->returnValue(true));
-        $this->layoutMock
-            ->expects($this->never())
+        $this->layoutMock->expects($this->never())
             ->method('isCacheable');
-        $output = $this->plugin->afterGenerateXml($this->layoutMock, $result);
-        $this->assertSame($result, $output);
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 
     /**
-     * testUsualBehaviorNonCacheable
+     * Test afterGenerateXml method with enabled module PageCache and request is Ajax and Layout is not cacheable
      */
-    public function testUsualBehaviorNonCacheable()
+    public function testAfterGenerateXmlLayoutIsNotCacheable()
     {
-        $result = 'test';
-
+        $expectedResult = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
-            ->with('Magento_PageCache')
+            ->with($this->equalTo('Magento_PageCache'))
+            ->will($this->returnValue(true));
+        $this->cacheConfigMock
+            ->expects($this->once())
+            ->method('isEnabled')
             ->will($this->returnValue(true));
         $this->requestMock
             ->expects($this->once())
             ->method('isAjax')
             ->will($this->returnValue(false));
-        $this->layoutMock
-            ->expects($this->once())
+        $this->layoutMock->expects($this->once())
             ->method('isCacheable')
             ->will($this->returnValue(false));
-        $this->eventManagerMock
+        $this->visitorMock
             ->expects($this->never())
-            ->method('dispatch');
-        $output = $this->plugin->afterGenerateXml($this->layoutMock, $result);
-        $this->assertSame($result, $output);
-    }
-
-    /**
-     * testUsualBehaviorPageCacheInNotEnabled
-     */
-    public function testUsualBehaviorPageCacheInNotEnabled()
-    {
-        $result = 'test';
-
-        $this->moduleManagerMock
-            ->expects($this->once())
-            ->method('isEnabled')
-            ->with('Magento_PageCache')
-            ->will($this->returnValue(false));
-        $this->eventManagerMock
-            ->expects($this->never())
-            ->method('dispatch');
-        $output = $this->plugin->afterGenerateXml($this->layoutMock, $result);
-        $this->assertSame($result, $output);
+            ->method('setSkipRequestLogging');
+        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
+        $this->assertSame($expectedResult, $actualResult);
     }
 }

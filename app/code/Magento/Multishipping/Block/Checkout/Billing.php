@@ -83,9 +83,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     {
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
-            $headBlock->setTitle(
-                __('Billing Information - %1', $headBlock->getDefaultTitle())
-            );
+            $headBlock->setTitle(__('Billing Information - %1', $headBlock->getDefaultTitle()));
         }
 
         return parent::_prepareLayout();
@@ -99,8 +97,11 @@ class Billing extends \Magento\Payment\Block\Form\Container
      */
     protected function _canUseMethod($method)
     {
-        return $method && $this->paymentSpecification->isSatisfiedBy($method->getCode())
-            && parent::_canUseMethod($method);
+        return $method && $this->paymentSpecification->isSatisfiedBy(
+            $method->getCode()
+        ) && parent::_canUseMethod(
+            $method
+        );
     }
 
     /**
@@ -149,7 +150,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
      */
     public function getQuoteBaseGrandTotal()
     {
-        return (float)$this->getQuote()->getBaseGrandTotal();
+        return (double)$this->getQuote()->getBaseGrandTotal();
     }
 
     /**

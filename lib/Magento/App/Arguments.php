@@ -117,9 +117,7 @@ class Arguments
      */
     public function getConnection($connectionName)
     {
-        return isset($this->_data['connection'][$connectionName])
-            ? $this->_data['connection'][$connectionName]
-            : null;
+        return isset($this->_data['connection'][$connectionName]) ? $this->_data['connection'][$connectionName] : null;
     }
 
     /**
@@ -160,9 +158,9 @@ class Arguments
      */
     public function getCacheTypeFrontendId($cacheType)
     {
-        return isset($this->_data['cache']['type'][$cacheType]['frontend'])
-            ? $this->_data['cache']['type'][$cacheType]['frontend']
-            : null;
+        return isset(
+            $this->_data['cache']['type'][$cacheType]['frontend']
+        ) ? $this->_data['cache']['type'][$cacheType]['frontend'] : null;
     }
 
     /**

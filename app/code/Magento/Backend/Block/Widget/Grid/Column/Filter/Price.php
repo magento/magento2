@@ -77,18 +77,37 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getHtml()
     {
-        $html  = '<div class="range">';
-        $html .= '<div class="range-line">'
-            . '<input type="text" name="'
-            . $this->_getHtmlName()
-            . '[from]" id="' . $this->_getHtmlId() . '_from" placeholder="' . __('From') . '" value="'
-            . $this->getEscapedValue('from') . '" class="input-text no-changes"  '
-            . $this->getUiId('filter', $this->_getHtmlName(), 'from') . '/></div>';
-        $html .= '<div class="range-line">'
-            . '<input type="text" name="'
-            . $this->_getHtmlName() . '[to]" id="' . $this->_getHtmlId() . '_to" placeholder="' . __('To')
-            . '" value="'.$this->getEscapedValue('to')
-            . '" class="input-text no-changes" ' . $this->getUiId('filter', $this->_getHtmlName(), 'to') . '/></div>';
+        $html = '<div class="range">';
+        $html .= '<div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[from]" id="' .
+            $this->_getHtmlId() .
+            '_from" placeholder="' .
+            __(
+                'From'
+            ) . '" value="' . $this->getEscapedValue(
+                'from'
+            ) . '" class="input-text no-changes"  ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'from'
+            ) . '/></div>';
+        $html .= '<div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[to]" id="' .
+            $this->_getHtmlId() .
+            '_to" placeholder="' .
+            __(
+                'To'
+            ) . '" value="' . $this->getEscapedValue(
+                'to'
+            ) . '" class="input-text no-changes" ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'to'
+            ) . '/></div>';
 
         if ($this->getDisplayCurrencySelect()) {
             $html .= '<div class="range-line">' . $this->_getCurrencySelectHtml() . '</div>';
@@ -139,11 +158,11 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
             $value = $this->_getColumnCurrencyCode();
         }
 
-        $html  = '';
-        $html .= '<select name="'.$this->_getHtmlName().'[currency]" id="'.$this->_getHtmlId().'_currency">';
+        $html = '';
+        $html .= '<select name="' . $this->_getHtmlName() . '[currency]" id="' . $this->_getHtmlId() . '_currency">';
         foreach ($this->_getCurrencyList() as $currency) {
-            $html .= '<option value="' . $currency . '" '
-                . ($currency == $value ? 'selected="selected"' : '').'>' . $currency . '</option>';
+            $html .= '<option value="' . $currency . '" ' . ($currency ==
+                $value ? 'selected="selected"' : '') . '>' . $currency . '</option>';
         }
         $html .= '</select>';
         return $html;
@@ -168,15 +187,13 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param null $index
      * @return array|null
      */
-    public function getValue($index=null)
+    public function getValue($index = null)
     {
         if ($index) {
             return $this->getData('value', $index);
         }
         $value = $this->getData('value');
-        if ((isset($value['from']) && strlen($value['from']) > 0)
-            || (isset($value['to']) && strlen($value['to']) > 0)
-        ) {
+        if (isset($value['from']) && strlen($value['from']) > 0 || isset($value['to']) && strlen($value['to']) > 0) {
             return $value;
         }
         return null;
@@ -217,8 +234,14 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     protected function _getColumnCurrencyCode()
     {
-        return $this->getColumn()->getCurrencyCode()?
-            $this->getColumn()->getCurrencyCode() : $this->_currencyLocator->getDefaultCurrency($this->_request);
+        return $this->getColumn()
+            ->getCurrencyCode() ? $this
+            ->getColumn()
+            ->getCurrencyCode() : $this
+            ->_currencyLocator
+            ->getDefaultCurrency(
+                $this->_request
+            );
     }
 
     /**

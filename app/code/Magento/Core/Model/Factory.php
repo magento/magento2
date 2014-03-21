@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 /**
@@ -55,10 +54,8 @@ class Factory
     public function create($model, array $data = array())
     {
         $modelInstance = $this->_objectManager->create($model, $data);
-        if (false == ($modelInstance instanceof \Magento\Core\Model\AbstractModel)) {
-            throw new \InvalidArgumentException(
-                $model . ' is not instance of \Magento\Core\Model\AbstractModel'
-            );
+        if (false == $modelInstance instanceof \Magento\Core\Model\AbstractModel) {
+            throw new \InvalidArgumentException($model . ' is not instance of \Magento\Core\Model\AbstractModel');
         }
         return $modelInstance;
     }

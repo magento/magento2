@@ -50,10 +50,8 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime $dateTime
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime $dateTime
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime $dateTime)
+    {
         $this->dateTime = $dateTime;
         parent::__construct($resource);
     }
@@ -82,9 +80,8 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      */
     protected function _shouldBeConverted()
     {
-        return (null !== $this->_converter);
+        return null !== $this->_converter;
     }
-
 
     /**
      * Perform actions before object save

@@ -36,6 +36,6 @@ return array(
             'instance' => 'Magento\App\Cache\Type\Layout',
             'label' => 'Layouts',
             'description' => 'Layout building instructions.'
-        ),
+        )
     )
 );

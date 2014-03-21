@@ -61,9 +61,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function getOrderTotalData()
     {
-        return array(
-            'grand_total_title' => __('Total Refund'),
-        );
+        return array('grand_total_title' => __('Total Refund'));
     }
 
     /**

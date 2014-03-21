@@ -28,13 +28,12 @@ namespace Magento\OfflinePayments\Model;
  */
 class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
 {
-
     /**
      * Payment method code
      *
      * @var string
      */
-    protected $_code  = 'cashondelivery';
+    protected $_code = 'cashondelivery';
 
     /**
      * Cash On Delivery payment block paths
@@ -59,5 +58,4 @@ class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
     {
         return trim($this->getConfigData('instructions'));
     }
-
 }

@@ -109,8 +109,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $collection */
-        $collection = $this->_agreementFactory->create()
-            ->addCustomerDetails();
+        $collection = $this->_agreementFactory->create()->addCustomerDetails();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -122,78 +121,102 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('agreement_id', array(
-            'header'            => __('ID'),
-            'index'             => 'agreement_id',
-            'type'              => 'text',
-            'header_css_class'  => 'col-id',
-            'column_css_class'  => 'col-id'
-        ));
+        $this->addColumn(
+            'agreement_id',
+            array(
+                'header' => __('ID'),
+                'index' => 'agreement_id',
+                'type' => 'text',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
-        $this->addColumn('customer_email', array(
-            'header'            => __('Email'),
-            'index'             => 'customer_email',
-            'type'              => 'text',
-            'header_css_class'  => 'col-mail',
-            'column_css_class'  => 'col-mail'
-        ));
+        $this->addColumn(
+            'customer_email',
+            array(
+                'header' => __('Email'),
+                'index' => 'customer_email',
+                'type' => 'text',
+                'header_css_class' => 'col-mail',
+                'column_css_class' => 'col-mail'
+            )
+        );
 
-        $this->addColumn('customer_firstname', array(
-            'header'            => __('First Name'),
-            'index'             => 'customer_firstname',
-            'type'              => 'text',
-            'escape'            => true,
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'customer_firstname',
+            array(
+                'header' => __('First Name'),
+                'index' => 'customer_firstname',
+                'type' => 'text',
+                'escape' => true,
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('customer_lastname', array(
-            'header'            => __('Last Name'),
-            'index'             => 'customer_lastname',
-            'type'              => 'text',
-            'escape'            => true,
-            'header_css_class'  => 'col-last-name',
-            'column_css_class'  => 'col-last-name'
-        ));
+        $this->addColumn(
+            'customer_lastname',
+            array(
+                'header' => __('Last Name'),
+                'index' => 'customer_lastname',
+                'type' => 'text',
+                'escape' => true,
+                'header_css_class' => 'col-last-name',
+                'column_css_class' => 'col-last-name'
+            )
+        );
 
-        $this->addColumn('reference_id', array(
-            'header'            => __('Reference ID'),
-            'index'             => 'reference_id',
-            'type'              => 'text',
-            'header_css_class'  => 'col-reference',
-            'column_css_class'  => 'col-reference'
-        ));
+        $this->addColumn(
+            'reference_id',
+            array(
+                'header' => __('Reference ID'),
+                'index' => 'reference_id',
+                'type' => 'text',
+                'header_css_class' => 'col-reference',
+                'column_css_class' => 'col-reference'
+            )
+        );
 
-        $this->addColumn('status', array(
-            'header'            => __('Status'),
-            'index'             => 'status',
-            'type'              => 'options',
-            'options'           => $this->_agreementModel->getStatusesArray(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'status',
+            array(
+                'header' => __('Status'),
+                'index' => 'status',
+                'type' => 'options',
+                'options' => $this->_agreementModel->getStatusesArray(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header'            => __('Created'),
-            'index'             => 'agreement_created_at',
-            'type'              => 'datetime',
-            'align'             => 'center',
-            'default'           => __('N/A'),
-            'html_decorators'   => array('nobr'),
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Created'),
+                'index' => 'agreement_created_at',
+                'type' => 'datetime',
+                'align' => 'center',
+                'default' => __('N/A'),
+                'html_decorators' => array('nobr'),
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('updated_at', array(
-            'header'            => __('Updated'),
-            'index'             => 'agreement_updated_at',
-            'type'              => 'datetime',
-            'align'             => 'center',
-            'default'           => __('N/A'),
-            'html_decorators'   => array('nobr'),
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'updated_at',
+            array(
+                'header' => __('Updated'),
+                'index' => 'agreement_updated_at',
+                'type' => 'datetime',
+                'align' => 'center',
+                'default' => __('N/A'),
+                'html_decorators' => array('nobr'),
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
         return parent::_prepareColumns();
     }

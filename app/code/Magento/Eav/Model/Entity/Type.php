@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Entity;
 
 /**
@@ -73,7 +72,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      *
      * @var array
      */
-    protected $_attributesBySet             = array();
+    protected $_attributesBySet = array();
 
     /**
      * Collection of sets
@@ -164,15 +163,16 @@ class Type extends \Magento\Core\Model\AbstractModel
     {
         if ($setId === null) {
             if ($this->_attributes === null) {
-                $this->_attributes = $this->_getAttributeCollection()
-                    ->setEntityTypeFilter($this);
+                $this->_attributes = $this->_getAttributeCollection()->setEntityTypeFilter($this);
             }
             $collection = $this->_attributes;
         } else {
             if (!isset($this->_attributesBySet[$setId])) {
-                $this->_attributesBySet[$setId] = $this->_getAttributeCollection()
-                    ->setEntityTypeFilter($this)
-                    ->setAttributeSetFilter($setId);
+                $this->_attributesBySet[$setId] = $this->_getAttributeCollection()->setEntityTypeFilter(
+                    $this
+                )->setAttributeSetFilter(
+                    $setId
+                );
             }
             $collection = $this->_attributesBySet[$setId];
         }
@@ -204,8 +204,9 @@ class Type extends \Magento\Core\Model\AbstractModel
     public function getAttributeSetCollection()
     {
         if (empty($this->_sets)) {
-            $this->_sets = $this->_attSetFactory->create()->getResourceCollection()
-                ->setEntityTypeFilter($this->getId());
+            $this->_sets = $this->_attSetFactory->create()->getResourceCollection()->setEntityTypeFilter(
+                $this->getId()
+            );
         }
         return $this->_sets;
     }
@@ -222,7 +223,7 @@ class Type extends \Magento\Core\Model\AbstractModel
             return false;
         }
 
-        if (!$this->getIncrementPerStore() || ($storeId === null)) {
+        if (!$this->getIncrementPerStore() || $storeId === null) {
             /**
              * store_id null we can have for entity from removed store
              */
@@ -233,24 +234,33 @@ class Type extends \Magento\Core\Model\AbstractModel
         $this->_getResource()->beginTransaction();
 
         try {
-            $entityStoreConfig = $this->_storeFactory->create()
-                ->loadByEntityStore($this->getId(), $storeId);
+            $entityStoreConfig = $this->_storeFactory->create()->loadByEntityStore($this->getId(), $storeId);
 
             if (!$entityStoreConfig->getId()) {
-                $entityStoreConfig
-                    ->setEntityTypeId($this->getId())
-                    ->setStoreId($storeId)
-                    ->setIncrementPrefix($storeId)
-                    ->save();
+                $entityStoreConfig->setEntityTypeId(
+                    $this->getId()
+                )->setStoreId(
+                    $storeId
+                )->setIncrementPrefix(
+                    $storeId
+                )->save();
             }
 
-            $incrementInstance = $this->_universalFactory->create($this->getIncrementModel())
-                ->setPrefix($entityStoreConfig->getIncrementPrefix())
-                ->setPadLength($this->getIncrementPadLength())
-                ->setPadChar($this->getIncrementPadChar())
-                ->setLastId($entityStoreConfig->getIncrementLastId())
-                ->setEntityTypeId($entityStoreConfig->getEntityTypeId())
-                ->setStoreId($entityStoreConfig->getStoreId());
+            $incrementInstance = $this->_universalFactory->create(
+                $this->getIncrementModel()
+            )->setPrefix(
+                $entityStoreConfig->getIncrementPrefix()
+            )->setPadLength(
+                $this->getIncrementPadLength()
+            )->setPadChar(
+                $this->getIncrementPadChar()
+            )->setLastId(
+                $entityStoreConfig->getIncrementLastId()
+            )->setEntityTypeId(
+                $entityStoreConfig->getEntityTypeId()
+            )->setStoreId(
+                $entityStoreConfig->getStoreId()
+            );
 
             /**
              * do read lock on eav/entity_store to solve potential timing issues

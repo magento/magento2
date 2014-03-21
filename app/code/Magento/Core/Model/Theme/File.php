@@ -27,7 +27,7 @@ namespace Magento\Core\Model\Theme;
 
 use Magento\Core\Model\AbstractModel;
 use Magento\View\Design\Theme\FileInterface;
-use \Magento\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
+use Magento\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
 
 /**
  * Theme files model class
@@ -192,8 +192,8 @@ class File extends AbstractModel implements FileInterface
     public function getFileInfo()
     {
         return array(
-            'id'        => $this->getId(),
-            'name'      => $this->getFileName(),
+            'id' => $this->getId(),
+            'name' => $this->getFileName(),
             'temporary' => $this->getData('is_temporary') ? $this->getId() : 0
         );
     }

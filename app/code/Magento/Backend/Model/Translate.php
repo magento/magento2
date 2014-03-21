@@ -40,5 +40,4 @@ class Translate extends \Magento\Translate implements \Magento\TranslateInterfac
         $this->_translateInline = $this->getInlineObject($initParams)->isAllowed($scope);
         return $this;
     }
-
 }

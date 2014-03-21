@@ -110,5 +110,4 @@ class Wishlist extends \Magento\Backend\Block\Template
 
         return $this;
     }
-
 }

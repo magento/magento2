@@ -75,10 +75,10 @@ class Path
         \Magento\App\Filesystem $filesystem,
         $filename = \Magento\View\ConfigInterface::CONFIG_FILE_NAME
     ) {
-        $this->filesystem           = $filesystem;
-        $this->filename             = $filename;
-        $this->mediaDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
-        $this->themeDirectoryRead   = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
+        $this->filesystem = $filesystem;
+        $this->filename = $filename;
+        $this->mediaDirectoryRead = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
+        $this->themeDirectoryRead = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
     }
 
     /**
@@ -121,9 +121,9 @@ class Path
     {
         $path = null;
         if ($theme->getId()) {
-            $path = $this->mediaDirectoryRead
-                ->getAbsolutePath(self::DIR_NAME . '/' . $theme->getId() . '/' . $this->filename);
-
+            $path = $this->mediaDirectoryRead->getAbsolutePath(
+                self::DIR_NAME . '/' . $theme->getId() . '/' . $this->filename
+            );
         }
         return $path;
     }

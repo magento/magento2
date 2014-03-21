@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Form;
 
 class LoginTest extends \PHPUnit_Framework_TestCase
@@ -53,26 +52,30 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->customerHelper = $this->getMockBuilder('Magento\Customer\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(['getRegisterUrl'])
-            ->getMock();
-        $this->checkoutData = $this->getMockBuilder('Magento\Checkout\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(['isContextCheckout'])
-            ->getMock();
-        $this->coreUrl = $this->getMockBuilder('Magento\Core\Helper\Url')
-            ->disableOriginalConstructor()
-            ->setMethods(['addRequestParam'])
-            ->getMock();
+        $this->customerHelper = $this->getMockBuilder(
+            'Magento\Customer\Helper\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('getRegisterUrl')
+        )->getMock();
+        $this->checkoutData = $this->getMockBuilder(
+            'Magento\Checkout\Helper\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('isContextCheckout')
+        )->getMock();
+        $this->coreUrl = $this->getMockBuilder(
+            'Magento\Core\Helper\Url'
+        )->disableOriginalConstructor()->setMethods(
+            array('addRequestParam')
+        )->getMock();
 
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->block = $this->objectManager->getObject('Magento\Customer\Block\Form\Login',
-            [
+        $this->block = $this->objectManager->getObject(
+            'Magento\Customer\Block\Form\Login',
+            array(
                 'customerHelper' => $this->customerHelper,
                 'checkoutData' => $this->checkoutData,
                 'coreUrl' => $this->coreUrl
-            ]
+            )
         );
     }
 
@@ -81,40 +84,39 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $expectedUrl = 'Custom Url';
 
         $this->block->setCreateAccountUrl($expectedUrl);
-        $this->checkoutData->expects($this->any())
-            ->method('isContextCheckout')
-            ->will($this->returnValue(false));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
 
-        $this->checkoutData->expects($this->any())
-            ->method('isContextCheckout')
-            ->will($this->returnValue(true));
-        $this->coreUrl->expects($this->any())
-            ->method('addRequestParam')
-            ->with($expectedUrl, array('context' => 'checkout'))
-            ->will($this->returnValue($expectedUrl));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(true));
+        $this->coreUrl->expects(
+            $this->any()
+        )->method(
+            'addRequestParam'
+        )->with(
+            $expectedUrl,
+            array('context' => 'checkout')
+        )->will(
+            $this->returnValue($expectedUrl)
+        );
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
 
         $this->block->unsCreateAccountUrl();
-        $this->customerHelper->expects($this->any())
-            ->method('getRegisterUrl')
-            ->will($this->returnValue($expectedUrl));
-        $this->checkoutData->expects($this->any())
-            ->method('isContextCheckout')
-            ->will($this->returnValue(false));
+        $this->customerHelper->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
 
-        $this->customerHelper->expects($this->any())
-            ->method('getRegisterUrl')
-            ->will($this->returnValue($expectedUrl));
-        $this->checkoutData->expects($this->any())
-            ->method('isContextCheckout')
-            ->will($this->returnValue(true));
-        $this->coreUrl->expects($this->any())
-            ->method('addRequestParam')
-            ->with($expectedUrl, array('context' => 'checkout'))
-            ->will($this->returnValue($expectedUrl));
+        $this->customerHelper->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(true));
+        $this->coreUrl->expects(
+            $this->any()
+        )->method(
+            'addRequestParam'
+        )->with(
+            $expectedUrl,
+            array('context' => 'checkout')
+        )->will(
+            $this->returnValue($expectedUrl)
+        );
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
     }
 }
- 

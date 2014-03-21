@@ -48,26 +48,47 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSystemMock = $this->getMock(
-            'Magento\App\Filesystem', array('getDirectoryWrite'), array(), '', false
+            'Magento\App\Filesystem',
+            array('getDirectoryWrite'),
+            array(),
+            '',
+            false
         );
-        $this->_dirMock = $this->getMockBuilder('\Magento\Filesystem\Directory\Write')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_dirMock = $this->getMockBuilder(
+            '\Magento\Filesystem\Directory\Write'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_fileSystemMock->expects($this->any())->method('getDirectoryWrite')
-            ->withAnyParameters()->will($this->returnValue($this->_dirMock));
-
-
-        $this->_fileSystemMock->expects($this->any())->method('isFile')
-            ->withAnyParameters()->will($this->returnValue(0));
-        $this->_responseMock =
-            $this->getMock('Magento\App\Response\Http', array('setHeader', 'sendHeaders'), array(), '', false);
-        $this->_responseMock->expects($this->any())->method('setHeader')
-            ->will($this->returnValue($this->_responseMock));
-        $this->_model = new \Magento\App\Response\Http\FileFactory(
-            $this->_responseMock,
-            $this->_fileSystemMock
+        $this->_fileSystemMock->expects(
+            $this->any()
+        )->method(
+            'getDirectoryWrite'
+        )->withAnyParameters()->will(
+            $this->returnValue($this->_dirMock)
         );
+
+
+        $this->_fileSystemMock->expects(
+            $this->any()
+        )->method(
+            'isFile'
+        )->withAnyParameters()->will(
+            $this->returnValue(0)
+        );
+        $this->_responseMock = $this->getMock(
+            'Magento\App\Response\Http',
+            array('setHeader', 'sendHeaders'),
+            array(),
+            '',
+            false
+        );
+        $this->_responseMock->expects(
+            $this->any()
+        )->method(
+            'setHeader'
+        )->will(
+            $this->returnValue($this->_responseMock)
+        );
+        $this->_model = new \Magento\App\Response\Http\FileFactory($this->_responseMock, $this->_fileSystemMock);
     }
 
     /**
@@ -85,10 +106,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateIfFileNotExist()
     {
         $file = 'some_file';
-        $content = array(
-            'type' => 'filename',
-            'value' => $file
-        );
+        $content = array('type' => 'filename', 'value' => $file);
 
         $this->_model->create('fileName', $content);
     }

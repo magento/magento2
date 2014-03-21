@@ -74,10 +74,16 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
         }
 
         $this->coreRegistry->unregister('rule_data');
-        $this->coreRegistry->register('rule_data', new \Magento\Object(array(
-            'store_id'          => $product->getStoreId(),
-            'website_id'        => $product->getWebsiteId(),
-            'customer_group_id' => $product->getCustomerGroupId())));
+        $this->coreRegistry->register(
+            'rule_data',
+            new \Magento\Object(
+                array(
+                    'store_id' => $product->getStoreId(),
+                    'website_id' => $product->getWebsiteId(),
+                    'customer_group_id' => $product->getCustomerGroupId()
+                )
+            )
+        );
 
         $minPrice = $product->getPriceModel()->getTotalPrices($product, 'min', $inclTax);
 

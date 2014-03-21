@@ -30,8 +30,7 @@
  */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
-class CustomTest
-    extends \Magento\ImportExport\Model\Source\Import\AbstractBehaviorTestCase
+class CustomTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehaviorTestCase
 {
     /**
      * Expected behavior group code
@@ -48,7 +47,7 @@ class CustomTest
     protected $_expectedBehaviors = array(
         \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
+        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM
     );
 
     protected function setUp()

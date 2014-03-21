@@ -239,7 +239,7 @@ class Parameter
      */
     public function __toString()
     {
-        return (string) $this->_value;
+        return (string)$this->_value;
     }
 
     /**

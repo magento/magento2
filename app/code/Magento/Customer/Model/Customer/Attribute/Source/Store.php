@@ -88,7 +88,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     public function getOptionText($value)
     {
         if (!$value) {
-            $value ='0';
+            $value = '0';
         }
         $isMultiple = false;
         if (strpos($value, ',')) {

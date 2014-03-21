@@ -75,10 +75,11 @@ class Files extends \Magento\Backend\Block\Template
      */
     public function getFiles()
     {
-        if (! $this->_filesCollection) {
+        if (!$this->_filesCollection) {
             $this->_filesCollection = $this->_imageStorage->getFilesCollection(
-                    $this->_imageHelper->getCurrentPath(), $this->_getMediaType()
-                );
+                $this->_imageHelper->getCurrentPath(),
+                $this->_getMediaType()
+            );
         }
 
         return $this->_filesCollection;

@@ -148,28 +148,12 @@ class Fulltext extends AbstractIndexer
      * @var array
      */
     protected $_matchedEntities = array(
-        Product::ENTITY => array(
-            Event::TYPE_SAVE,
-            Event::TYPE_MASS_ACTION,
-            Event::TYPE_DELETE
-        ),
-        Attribute::ENTITY => array(
-            Event::TYPE_SAVE,
-            Event::TYPE_DELETE,
-        ),
-        Store::ENTITY => array(
-            Event::TYPE_SAVE,
-            Event::TYPE_DELETE
-        ),
-        Group::ENTITY => array(
-            Event::TYPE_SAVE
-        ),
-        ValueInterface::ENTITY => array(
-            Event::TYPE_SAVE
-        ),
-        Category::ENTITY => array(
-            Event::TYPE_SAVE
-        )
+        Product::ENTITY => array(Event::TYPE_SAVE, Event::TYPE_MASS_ACTION, Event::TYPE_DELETE),
+        Attribute::ENTITY => array(Event::TYPE_SAVE, Event::TYPE_DELETE),
+        Store::ENTITY => array(Event::TYPE_SAVE, Event::TYPE_DELETE),
+        Group::ENTITY => array(Event::TYPE_SAVE),
+        ValueInterface::ENTITY => array(Event::TYPE_SAVE),
+        Category::ENTITY => array(Event::TYPE_SAVE)
     );
 
     /**
@@ -177,9 +161,7 @@ class Fulltext extends AbstractIndexer
      *
      * @var string[]
      */
-    protected $_relatedConfigSettings = array(
-        ModelFulltext::XML_PATH_CATALOG_SEARCH_TYPE
-    );
+    protected $_relatedConfigSettings = array(ModelFulltext::XML_PATH_CATALOG_SEARCH_TYPE);
 
     /**
      * Retrieve Fulltext Search instance
@@ -221,7 +203,7 @@ class Fulltext extends AbstractIndexer
      */
     public function matchEvent(Event $event)
     {
-        $data       = $event->getNewData();
+        $data = $event->getNewData();
         if (isset($data[self::EVENT_MATCH_RESULT_KEY])) {
             return $data[self::EVENT_MATCH_RESULT_KEY];
         }
@@ -229,7 +211,7 @@ class Fulltext extends AbstractIndexer
         $entity = $event->getEntity();
         if ($entity == Attribute::ENTITY) {
             /* @var $attribute Attribute */
-            $attribute      = $event->getDataObject();
+            $attribute = $event->getDataObject();
 
             if (!$attribute) {
                 $result = false;
@@ -317,7 +299,7 @@ class Fulltext extends AbstractIndexer
         switch ($event->getType()) {
             case Event::TYPE_SAVE:
                 /* @var $category Category */
-                $category   = $event->getDataObject();
+                $category = $event->getDataObject();
                 $productIds = $category->getAffectedProductIds();
                 if ($productIds) {
                     $event->addNewData('catalogsearch_category_update_product_ids', $productIds);
@@ -362,7 +344,7 @@ class Fulltext extends AbstractIndexer
                 /* @var $actionObject \Magento\Object */
                 $actionObject = $event->getDataObject();
 
-                $reindexData  = array();
+                $reindexData = array();
                 $rebuildIndex = false;
 
                 // check if status changed
@@ -458,9 +440,8 @@ class Fulltext extends AbstractIndexer
                 }
             }
 
-            $this->_getIndexer()->cleanIndex(null, $productId)
-                ->getResource()->resetSearchResults(null, $productId);
-        } else if (!empty($data['catalogsearch_update_product_id'])) {
+            $this->_getIndexer()->cleanIndex(null, $productId)->getResource()->resetSearchResults(null, $productId);
+        } elseif (!empty($data['catalogsearch_update_product_id'])) {
             $productId = $data['catalogsearch_update_product_id'];
             $productIds = array($productId);
 
@@ -486,7 +467,7 @@ class Fulltext extends AbstractIndexer
                             $this->_getIndexer()
                                 ->cleanIndex($storeId, $productIds)
                                 ->getResource()->resetSearchResults($storeId, $productIds);
-                        } else if ($actionType == 'add') {
+                        } elseif ($actionType == 'add') {
                             $this->_getIndexer()
                                 ->rebuildIndex($storeId, $productIds);
                         }
@@ -496,25 +477,25 @@ class Fulltext extends AbstractIndexer
             if (isset($data['catalogsearch_status'])) {
                 $status = $data['catalogsearch_status'];
                 if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
-                    $this->_getIndexer()
-                        ->rebuildIndex(null, $productIds);
+                    $this->_getIndexer()->rebuildIndex(null, $productIds);
                 } else {
-                    $this->_getIndexer()
-                        ->cleanIndex(null, $productIds)
-                        ->getResource()->resetSearchResults(null, $productIds);
+                    $this->_getIndexer()->cleanIndex(
+                        null,
+                        $productIds
+                    )->getResource()->resetSearchResults(
+                        null,
+                        $productIds
+                    );
                 }
             }
             if (isset($data['catalogsearch_force_reindex'])) {
-                $this->_getIndexer()
-                    ->rebuildIndex(null, $productIds)
-                    ->resetSearchResults();
+                $this->_getIndexer()->rebuildIndex(null, $productIds)->resetSearchResults();
             }
         } else if (isset($data['catalogsearch_category_update_product_ids'])) {
             $productIds = $data['catalogsearch_category_update_product_ids'];
             $categoryIds = $data['catalogsearch_category_update_category_ids'];
 
-            $this->_getIndexer()
-                ->updateCategoryIndex($productIds, $categoryIds);
+            $this->_getIndexer()->updateCategoryIndex($productIds, $categoryIds);
         }
     }
 

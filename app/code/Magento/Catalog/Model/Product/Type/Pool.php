@@ -59,8 +59,9 @@ class Pool
         $product = $this->_objectManager->get($className, $data);
 
         if (!$product instanceof \Magento\Catalog\Model\Product\Type\AbstractType) {
-            throw new \Magento\Core\Exception($className
-                . ' doesn\'t extends \Magento\Catalog\Model\Product\Type\AbstractType');
+            throw new \Magento\Core\Exception(
+                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Type\AbstractType'
+            );
         }
         return $product;
     }

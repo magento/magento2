@@ -43,6 +43,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param CustomerAccountService $customerAccountService
      * @param CustomerAddressService $customerAddressService
      * @param AddressConfig $addressConfig
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -56,6 +57,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         CustomerAccountService $customerAccountService,
         CustomerAddressService $customerAddressService,
         AddressConfig $addressConfig,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         parent::__construct(
@@ -69,6 +71,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $customerAccountService,
             $customerAddressService,
             $addressConfig,
+            $httpContext,
             $data
         );
         $this->_isScopePrivate = true;

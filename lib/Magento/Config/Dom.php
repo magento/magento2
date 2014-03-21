@@ -101,11 +101,11 @@ class Dom
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        $this->_schemaFile    = $schemaFile;
-        $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher, $idAttributes);
+        $this->_schemaFile = $schemaFile;
+        $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
         $this->_typeAttributeName = $typeAttributeName;
-        $this->_errorFormat   = $errorFormat;
-        $this->_dom           = $this->_initDom($xml);
+        $this->_errorFormat = $errorFormat;
+        $this->_dom = $this->_initDom($xml);
         $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
     }
 
@@ -143,11 +143,16 @@ class Dom
         if ($matchedNode) {
 
             //different node type
-            if ($this->_typeAttributeName
-                && $node->hasAttribute($this->_typeAttributeName)
-                && $matchedNode->hasAttribute($this->_typeAttributeName)
-                && ($node->getAttribute($this->_typeAttributeName)
-                    !== $matchedNode->getAttribute($this->_typeAttributeName))) {
+            if ($this->_typeAttributeName && $node->hasAttribute(
+                $this->_typeAttributeName
+            ) && $matchedNode->hasAttribute(
+                $this->_typeAttributeName
+            ) && $node->getAttribute(
+                $this->_typeAttributeName
+            ) !== $matchedNode->getAttribute(
+                $this->_typeAttributeName
+            )
+            ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
                 $newNode = $this->_dom->importNode($node, true);
                 $parentMatchedNode->replaceChild($newNode, $matchedNode);
@@ -164,7 +169,8 @@ class Dom
                 if (!$matchedNode->hasChildNodes() || $this->_isTextNode($matchedNode)) {
                     $matchedNode->nodeValue = $node->childNodes->item(0)->nodeValue;
                 }
-            } else { /* recursive merge for all child nodes */
+            } else {
+                /* recursive merge for all child nodes */
                 foreach ($node->childNodes as $childNode) {
                     if ($childNode instanceof \DOMElement) {
                         $this->_mergeNode($childNode, $path);
@@ -216,7 +222,7 @@ class Dom
         $prefix = is_null($this->_rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
         $idAttribute = $this->_nodeMergingConfig->getIdAttribute($path);
-        if ($idAttribute && $value = $node->getAttribute($idAttribute)) {
+        if ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
         return $path;
@@ -231,7 +237,7 @@ class Dom
      */
     protected function _getMatchedNode($nodePath)
     {
-        $xPath  = new \DOMXPath($this->_dom);
+        $xPath = new \DOMXPath($this->_dom);
         if ($this->_rootNamespace) {
             $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
         }
@@ -255,7 +261,9 @@ class Dom
      * @throws \Exception
      */
     public static function validateDomDocument(
-        \DOMDocument $dom, $schemaFileName, $errorFormat = self::ERROR_FORMAT_DEFAULT
+        \DOMDocument $dom,
+        $schemaFileName,
+        $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
         libxml_use_internal_errors(true);
         try {
@@ -296,7 +304,7 @@ class Dom
             $result = str_replace($placeholder, $value, $result);
         }
         if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException("Error format '$format' contains unsupported placeholders.");
+            throw new \InvalidArgumentException("Error format '{$format}' contains unsupported placeholders.");
         }
         return $result;
     }
@@ -365,9 +373,9 @@ class Dom
     private function _getAttributeName($attribute)
     {
         if (!is_null($attribute->prefix) && !empty($attribute->prefix)) {
-            $attributeName = $attribute->prefix . ':' .$attribute->name;
+            $attributeName = $attribute->prefix . ':' . $attribute->name;
         } else {
-            $attributeName =  $attribute->name;
+            $attributeName = $attribute->name;
         }
         return $attributeName;
     }

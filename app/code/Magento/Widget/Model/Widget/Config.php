@@ -84,9 +84,9 @@ class Config
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
         $settings = array(
-            'widget_plugin_src'   => $url,
+            'widget_plugin_src' => $url,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url'   => $this->getWidgetWindowUrl($config)
+            'widget_window_url' => $this->getWidgetWindowUrl($config)
         );
 
         return $settings;
@@ -143,5 +143,4 @@ class Config
         $param = $this->_coreHelper->urlDecode($queryParam);
         return preg_split('/\s*\,\s*/', $param, 0, PREG_SPLIT_NO_EMPTY);
     }
-
 }

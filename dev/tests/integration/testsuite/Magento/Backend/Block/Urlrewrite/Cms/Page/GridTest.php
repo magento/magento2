@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Urlrewrite\Cms\Page;
 
 /**
@@ -39,22 +38,29 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function testPrepareGrid()
     {
         /** @var \Magento\Backend\Block\Urlrewrite\Cms\Page\Grid $gridBlock */
-        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\Urlrewrite\Cms\Page\Grid');
+        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\Urlrewrite\Cms\Page\Grid'
+        );
         $gridBlock->toHtml();
 
         foreach (array('title', 'identifier', 'is_active') as $key) {
-            $this->assertInstanceOf('Magento\Backend\Block\Widget\Grid\Column', $gridBlock->getColumn($key),
-                'Column with key "' . $key . '" is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Widget\Grid\Column',
+                $gridBlock->getColumn($key),
+                'Column with key "' . $key . '" is invalid'
+            );
         }
 
-        $this->assertStringStartsWith('http://localhost/index.php', $gridBlock->getGridUrl(),
-            'Grid URL is invalid');
+        $this->assertStringStartsWith('http://localhost/index.php', $gridBlock->getGridUrl(), 'Grid URL is invalid');
 
         $row = new \Magento\Object(array('id' => 1));
         $this->assertStringStartsWith(
-            'http://localhost/index.php/backend/admin/index/edit/cms_page/1', $gridBlock->getRowUrl($row),
-            'Grid row URL is invalid');
+            'http://localhost/index.php/backend/admin/index/edit/cms_page/1',
+            $gridBlock->getRowUrl($row),
+            'Grid row URL is invalid'
+        );
 
         $this->assertEmpty(0, $gridBlock->getMassactionBlock()->getItems(), 'Grid should not have mass action items');
         $this->assertTrue($gridBlock->getUseAjax(), '"use_ajax" value of grid is incorrect');
@@ -68,10 +74,16 @@ class GridTest extends \PHPUnit_Framework_TestCase
     public function testPrepareGridForMultipleStores()
     {
         /** @var \Magento\Backend\Block\Urlrewrite\Cms\Page\Grid $gridBlock */
-        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\Urlrewrite\Cms\Page\Grid');
+        $gridBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\Urlrewrite\Cms\Page\Grid'
+        );
         $gridBlock->toHtml();
-        $this->assertInstanceOf('Magento\Backend\Block\Widget\Grid\Column', $gridBlock->getColumn('store_id'),
-            'When there is more than one store column with key "store_id" should be present');
+        $this->assertInstanceOf(
+            'Magento\Backend\Block\Widget\Grid\Column',
+            $gridBlock->getColumn('store_id'),
+            'When there is more than one store column with key "store_id" should be present'
+        );
     }
 }

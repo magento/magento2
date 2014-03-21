@@ -64,9 +64,9 @@ class Product extends \Magento\App\Helper\AbstractHelper
             }
         }
 
-        return isset($this->_productAttributes[$product->getId()][$attributeId])
-            ? $this->_productAttributes[$product->getId()][$attributeId]
-            : null;
+        return isset(
+            $this->_productAttributes[$product->getId()][$attributeId]
+        ) ? $this->_productAttributes[$product->getId()][$attributeId] : null;
     }
 
     /**

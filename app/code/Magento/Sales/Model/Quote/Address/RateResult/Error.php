@@ -31,7 +31,10 @@ class Error extends AbstractResult
     public function getErrorMessage()
     {
         if (!$this->getData('error_message')) {
-            $this->setData('error_message', __('This shipping method is not available. To use this shipping method, please contact us.'));
+            $this->setData(
+                'error_message',
+                __('This shipping method is not available. To use this shipping method, please contact us.')
+            );
         }
         return $this->getData('error_message');
     }

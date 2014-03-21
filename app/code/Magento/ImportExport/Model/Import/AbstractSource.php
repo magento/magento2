@@ -148,7 +148,6 @@ abstract class AbstractSource implements \SeekableIterator
         return -1 !== $this->_key;
     }
 
-
     /**
      * Rewind the \Iterator to the first element (\Iterator interface)
      *

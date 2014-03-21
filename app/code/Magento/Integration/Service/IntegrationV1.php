@@ -50,10 +50,8 @@ class IntegrationV1 implements \Magento\Integration\Service\IntegrationV1Interfa
      * @param IntegrationFactory $integrationFactory
      * @param IntegrationOauthService $oauthService
      */
-    public function __construct(
-        IntegrationFactory $integrationFactory,
-        IntegrationOauthService $oauthService
-    ) {
+    public function __construct(IntegrationFactory $integrationFactory, IntegrationOauthService $oauthService)
+    {
         $this->_integrationFactory = $integrationFactory;
         $this->_oauthService = $oauthService;
     }

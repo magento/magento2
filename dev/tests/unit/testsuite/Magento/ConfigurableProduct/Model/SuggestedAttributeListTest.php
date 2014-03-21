@@ -21,12 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Model;
 
 class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\ConfigurableProduct\Model\SuggestedAttributeList
      */
@@ -59,39 +57,70 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeFactoryMock =
-           $this->getMock(
-               'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory', array('create'));
-        $this->resourceHelperMock =
-            $this->getMock('Magento\Catalog\Model\Resource\Helper', array(), array(), '', false);
-        $this->collectionMock =
-            $this->getMock('Magento\Catalog\Model\Resource\Product\Attribute\Collection', array(), array(), '', false);
-        $this->resourceHelperMock
-            ->expects($this->once())
-            ->method('addLikeEscape')
-            ->with($this->labelPart, array('position' => 'any'))
-            ->will($this->returnValue($this->labelPart));
-        $this->attributeFactoryMock
-            ->expects($this->once())->method('create')->will($this->returnValue($this->collectionMock));
+        $this->attributeFactoryMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+            array('create')
+        );
+        $this->resourceHelperMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Helper',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->collectionMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->resourceHelperMock->expects(
+            $this->once()
+        )->method(
+            'addLikeEscape'
+        )->with(
+            $this->labelPart,
+            array('position' => 'any')
+        )->will(
+            $this->returnValue($this->labelPart)
+        );
+        $this->attributeFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->collectionMock)
+        );
         $valueMap = array(
             array('frontend_input', 'select', $this->collectionMock),
             array('frontend_label', array('like' => $this->labelPart), $this->collectionMock),
             array('is_configurable', array(array('eq' => 1), array('null' => true)), $this->collectionMock),
             array('is_user_defined', 1, $this->collectionMock),
-            array('is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock),
-
+            array('is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock)
         );
-        $this->collectionMock
-            ->expects($this->any())
-            ->method('addFieldToFilter')
-            ->will($this->returnValueMap($valueMap));
+        $this->collectionMock->expects(
+            $this->any()
+        )->method(
+            'addFieldToFilter'
+        )->will(
+            $this->returnValueMap($valueMap)
+        );
         $methods = array('getId', 'getFrontendLabel', 'getAttributeCode', 'getSource', '__wakeup', 'getApplyTo');
-        $this->attributeMock =
-            $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', $methods, array(), '', false);
-        $this->collectionMock
-            ->expects($this->once())
-            ->method('getItems')
-            ->will($this->returnValue(array('id' => $this->attributeMock)));
+        $this->attributeMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            $methods,
+            array(),
+            '',
+            false
+        );
+        $this->collectionMock->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->will(
+            $this->returnValue(array('id' => $this->attributeMock))
+        );
         $this->suggestedListModel = new \Magento\ConfigurableProduct\Model\SuggestedAttributeList(
             $this->attributeFactoryMock,
             $this->resourceHelperMock
@@ -100,14 +129,14 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuggestedAttributesIfTheyApplicable()
     {
-        $source = $this->getMock('Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
-            array(), array(), '', false);
-        $result['id'] = array(
-            'id'      => 'id',
-            'label'   => 'label',
-            'code'    => 'code',
-            'options' => 'options'
+        $source = $this->getMock(
+            'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            array(),
+            array(),
+            '',
+            false
         );
+        $result['id'] = array('id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options');
         $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(false));
         $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));

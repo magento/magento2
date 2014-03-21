@@ -73,7 +73,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
-        $xmlFile = $this->_getKnownValidPartialXml();;
+        $xmlFile = $this->_getKnownValidPartialXml();
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
@@ -87,7 +87,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
      * @param $schemaFile string schema that should find errors in the known bad xml file.
      * @param $fileSchemaFile string schema that should find errors in the known bad xml file
      */
-    protected function _validateFileExpectSuccess($xmlFile, $schemaFile, $fileSchemaFile=null)
+    protected function _validateFileExpectSuccess($xmlFile, $schemaFile, $fileSchemaFile = null)
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
@@ -101,8 +101,12 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
                     $errors = array_merge($errors, $moreErrors);
                 }
             }
-            $this->fail('There is a problem with the schema.  A known good XML file failed validation: '
-                . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));
+            $this->fail(
+                'There is a problem with the schema.  A known good XML file failed validation: ' . PHP_EOL . implode(
+                    PHP_EOL . PHP_EOL,
+                    $errors
+                )
+            );
         }
     }
 
@@ -125,7 +129,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
         if (isset($expectedErrors)) {
             $this->assertNotEmpty(
                 $actualErrors,
-                'No schema validation errors found, expected errors: '. PHP_EOL . implode(PHP_EOL, $expectedErrors)
+                'No schema validation errors found, expected errors: ' . PHP_EOL . implode(PHP_EOL, $expectedErrors)
             );
             foreach ($expectedErrors as $expectedError) {
                 $found = false;
@@ -141,7 +145,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
                 }
                 $this->assertTrue(
                     $found,
-                    'Failed asserting that '. $expectedError . " is in: \n" . implode(PHP_EOL, $actualErrors)
+                    'Failed asserting that ' . $expectedError . " is in: \n" . implode(PHP_EOL, $actualErrors)
                 );
             }
             // list of actual errors should now be empty

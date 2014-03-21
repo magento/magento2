@@ -54,16 +54,9 @@ class Tabs extends \Magento\View\Element\Template
             return;
         }
 
-        $this->_tabs[] = array(
-            'alias' => $alias,
-            'title' => $title,
-            'header' => $header,
-        );
+        $this->_tabs[] = array('alias' => $alias, 'title' => $title, 'header' => $header);
 
-        $this->setChild($alias,
-            $this->getLayout()->createBlock($block, $alias)
-                ->setTemplate($template)
-            );
+        $this->setChild($alias, $this->getLayout()->createBlock($block, $alias)->setTemplate($template));
     }
 
     /**

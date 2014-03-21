@@ -200,9 +200,15 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
             foreach ($section['children'] as $group) {
                 if (isset($group['children'])) {
                     $path = $section['id'] . '/' . $group['id'];
-                    $result = array_merge($result, $this->_getGroupFieldPathsByAttribute(
-                        $group['children'], $path, $attributeName, $attributeValue
-                    ));
+                    $result = array_merge(
+                        $result,
+                        $this->_getGroupFieldPathsByAttribute(
+                            $group['children'],
+                            $path,
+                            $attributeName,
+                            $attributeValue
+                        )
+                    );
                 }
             }
         }
@@ -224,7 +230,10 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
         foreach ($fields as $field) {
             if (isset($field['children'])) {
                 $result += $this->_getGroupFieldPathsByAttribute(
-                    $field['children'], $parentPath . '/' . $field['id'], $attributeName, $attributeValue
+                    $field['children'],
+                    $parentPath . '/' . $field['id'],
+                    $attributeName,
+                    $attributeValue
                 );
             } else if (isset($field[$attributeName]) && $field[$attributeName] == $attributeValue) {
                 $result[] = $parentPath . '/' . $field['id'];

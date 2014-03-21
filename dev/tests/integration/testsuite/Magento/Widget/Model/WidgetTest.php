@@ -35,8 +35,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget'
+        );
     }
 
     public function testGetWidgetsArray()
@@ -62,16 +63,24 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
+        $this->markTestIncomplete(
+            'Functionality is failed because widget' .
+            ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces' .
+            ' "new_products" widget in Catalog module'
+        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $objectManager->get(
+            'Magento\Core\Model\App'
+        )->loadArea(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
         $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
         $expectedFilePath = "/adminhtml/magento_backend/en_US/{$expectedFile}";
-        $expectedPubFile = $objectManager->get('Magento\App\Filesystem')
-                ->getPath(\Magento\App\Filesystem::STATIC_VIEW_DIR) . $expectedFilePath;
+        $expectedPubFile = $objectManager->get(
+            'Magento\App\Filesystem'
+        )->getPath(
+            \Magento\App\Filesystem::STATIC_VIEW_DIR
+        ) . $expectedFilePath;
 
         if (file_exists($expectedPubFile)) {
             unlink($expectedPubFile);
@@ -89,14 +98,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function getPlaceholderImageUrlDataProvider()
     {
         return array(
-            'custom image'  => array(
+            'custom image' => array(
                 'Magento\Catalog\Block\Product\Widget\NewWidget',
                 'Magento_Catalog/images/product_widget_new.gif'
             ),
-            'default image' => array(
-                'non_existing_widget_type',
-                'Magento_Widget/placeholder.gif'
-            ),
+            'default image' => array('non_existing_widget_type', 'Magento_Widget/placeholder.gif')
         );
     }
 
@@ -108,18 +114,21 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrlAtTheme()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/_files/design')
+                )
             )
-        ));
+        );
         $actualFile = $this->testGetPlaceholderImageUrl(
             'Magento\Catalog\Block\Product\Widget\NewWidget',
             'Magento_Catalog/images/product_widget_new.gif'
         );
 
-        $expectedFile = dirname(__DIR__)
-            . '/_files/design/adminhtml/magento_backend/Magento_Catalog/images/product_widget_new.gif';
+        $expectedFile = dirname(
+            __DIR__
+        ) . '/_files/design/adminhtml/magento_backend/Magento_Catalog/images/product_widget_new.gif';
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

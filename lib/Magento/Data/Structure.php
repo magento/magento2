@@ -16,9 +16,11 @@ class Structure
     /**
      * Reserved keys for storing structural relations
      */
-    const PARENT   = 'parent';
+    const PARENT = 'parent';
+
     const CHILDREN = 'children';
-    const GROUPS   = 'groups';
+
+    const GROUPS = 'groups';
 
     /**
      * @var array
@@ -58,9 +60,7 @@ class Structure
                 foreach ($groups as $groupName => $group) {
                     $this->_assertArray($group);
                     if ($group !== array_flip($group)) {
-                        throw new Exception(
-                            "Invalid format of group '{$groupName}': " . var_export($group, 1)
-                        );
+                        throw new Exception("Invalid format of group '{$groupName}': " . var_export($group, 1));
                     }
                     foreach ($group as $groupElementId) {
                         $this->_assertElementExists($groupElementId);
@@ -101,8 +101,9 @@ class Structure
             }
             foreach (array_keys($children) as $childId) {
                 $this->_assertElementExists($childId);
-                if (!isset($this->_elements[$childId][self::PARENT])
-                    || $elementId !== $this->_elements[$childId][self::PARENT]
+                if (!isset(
+                    $this->_elements[$childId][self::PARENT]
+                ) || $elementId !== $this->_elements[$childId][self::PARENT]
                 ) {
                     throw new Exception(
                         "Broken parent-child relation: the '{$childId}' is supposed to have '{$elementId}' as parent."
@@ -203,7 +204,8 @@ class Structure
     {
         $this->_assertElementExists($elementId);
         switch ($attribute) {
-            case self::PARENT: // break is intentionally omitted
+            case self::PARENT:
+                // break is intentionally omitted
             case self::CHILDREN:
             case self::GROUPS:
                 throw new \InvalidArgumentException("Attribute '{$attribute}' is reserved and cannot be set.");
@@ -256,7 +258,7 @@ class Structure
         }
 
         // rename key in its parent's children array
-        if (isset($this->_elements[$oldId][self::PARENT]) && $parentId = $this->_elements[$oldId][self::PARENT]) {
+        if (isset($this->_elements[$oldId][self::PARENT]) && ($parentId = $this->_elements[$oldId][self::PARENT])) {
             $alias = $this->_elements[$parentId][self::CHILDREN][$oldId];
             $offset = $this->_getChildOffset($parentId, $oldId);
             unset($this->_elements[$parentId][self::CHILDREN][$oldId]);
@@ -284,8 +286,9 @@ class Structure
             throw new Exception("The '{$elementId}' cannot be set as child to itself.");
         }
         if ($this->_isParentRecursively($elementId, $parentId)) {
-            throw new Exception("The '{$elementId}' is a parent of '{$parentId}' recursively, "
-                . "therefore '{$elementId}' cannot be set as child to it."
+            throw new Exception(
+                "The '{$elementId}' is a parent of '{$parentId}' recursively, " .
+                "therefore '{$elementId}' cannot be set as child to it."
             );
         }
         $this->unsetChild($elementId);
@@ -344,7 +347,7 @@ class Structure
                 $offset -= 1;
             }
         } elseif ($position < 0) {
-            if ($position < (($currentOffset + 1) - count($this->_elements[$parentId][self::CHILDREN]))) {
+            if ($position < $currentOffset + 1 - count($this->_elements[$parentId][self::CHILDREN])) {
                 if ($position === -1) {
                     $offset = null;
                 } else {
@@ -430,8 +433,9 @@ class Structure
      */
     public function getChildren($parentId)
     {
-        return isset($this->_elements[$parentId][self::CHILDREN])
-            ? $this->_elements[$parentId][self::CHILDREN] : array();
+        return isset(
+            $this->_elements[$parentId][self::CHILDREN]
+        ) ? $this->_elements[$parentId][self::CHILDREN] : array();
     }
 
     /**
@@ -442,8 +446,7 @@ class Structure
      */
     public function getParentId($childId)
     {
-        return isset($this->_elements[$childId][self::PARENT])
-            ? $this->_elements[$childId][self::PARENT] : false;
+        return isset($this->_elements[$childId][self::PARENT]) ? $this->_elements[$childId][self::PARENT] : false;
     }
 
     /**

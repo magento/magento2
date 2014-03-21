@@ -41,8 +41,7 @@ class Page extends \Magento\App\Action\Action
      */
     public function viewAction()
     {
-        $pageId = $this->getRequest()
-            ->getParam('page_id', $this->getRequest()->getParam('id', false));
+        $pageId = $this->getRequest()->getParam('page_id', $this->getRequest()->getParam('id', false));
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
             $this->_forward('noroute');
         }

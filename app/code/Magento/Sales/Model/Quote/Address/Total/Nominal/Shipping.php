@@ -39,7 +39,7 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
     /**
      * @var bool
      */
-    protected $_canSetAddressAmount   = false;
+    protected $_canSetAddressAmount = false;
 
     /**
      * Custom row total key

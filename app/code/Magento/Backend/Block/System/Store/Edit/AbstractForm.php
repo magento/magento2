@@ -55,27 +55,27 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getData('action'),
-                'method'    => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
 
         $this->_prepareStoreFieldSet($form);
 
-        $form->addField('store_type', 'hidden', array(
-            'name'      => 'store_type',
-            'no_span'   => true,
-            'value'     => $this->_coreRegistry->registry('store_type')
-        ));
+        $form->addField(
+            'store_type',
+            'hidden',
+            array('name' => 'store_type', 'no_span' => true, 'value' => $this->_coreRegistry->registry('store_type'))
+        );
 
-        $form->addField('store_action', 'hidden', array(
-            'name'      => 'store_action',
-            'no_span'   => true,
-            'value'     => $this->_coreRegistry->registry('store_action')
-        ));
+        $form->addField(
+            'store_action',
+            'hidden',
+            array(
+                'name' => 'store_action',
+                'no_span' => true,
+                'value' => $this->_coreRegistry->registry('store_action')
+            )
+        );
 
         $form->setAction($this->getUrl('adminhtml/*/save'));
         $form->setUseContainer(true);

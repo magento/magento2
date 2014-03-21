@@ -64,11 +64,14 @@ class Reader
     public function fetchAll()
     {
         $select = $this->_adapter->select();
-        $select->from($this->_tableName, array())
-            ->columns(array('resource_id' => 'resource_id', 'itemsCount' => new \Zend_Db_Expr('count(*)')))
-            ->group('resource_id');
+        $select->from(
+            $this->_tableName,
+            array()
+        )->columns(
+            array('resource_id' => 'resource_id', 'itemsCount' => new \Zend_Db_Expr('count(*)'))
+        )->group(
+            'resource_id'
+        );
         return $this->_adapter->fetchPairs($select);
     }
 }
-
-

@@ -49,10 +49,8 @@ class Shell
      * @param \Magento\Core\Model\Resource\HelperPool $helperPool
      * @param \Magento\App\Resource $resource
      */
-    public function __construct(
-        \Magento\Core\Model\Resource\HelperPool $helperPool,
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\Core\Model\Resource\HelperPool $helperPool, \Magento\App\Resource $resource)
+    {
         $this->_helperPool = $helperPool;
         $this->_resource = $resource;
     }

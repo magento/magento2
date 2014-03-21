@@ -36,7 +36,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/scope' => 'id',
         '/config/scope/fieldset' => 'id',
         '/config/scope/fieldset/field' => 'name',
-        '/config/scope/fieldset/field/aspect' => 'name',
+        '/config/scope/fieldset/field/aspect' => 'name'
     );
 
     /**

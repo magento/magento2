@@ -45,8 +45,12 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = $this->getMockForAbstractClass('Magento\ImportExport\Model\Import\Entity\AbstractEav', array(),
-            '', false);
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
+            array(),
+            '',
+            false
+        );
     }
 
     /**
@@ -57,17 +61,16 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
         $indexAttributeCode = 'gender';
 
         /** @var $attributeCollection \Magento\Customer\Model\Resource\Attribute\Collection */
-        $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Attribute\Collection');
+        $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Attribute\Collection'
+        );
         $attributeCollection->addFieldToFilter(
             'attribute_code',
-            array(
-                'in' => array($indexAttributeCode, 'group_id')
-            )
+            array('in' => array($indexAttributeCode, 'group_id'))
         );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($attributeCollection as $attribute) {
-            $index = ($attribute->getAttributeCode() == $indexAttributeCode) ? 'value' : 'label';
+            $index = $attribute->getAttributeCode() == $indexAttributeCode ? 'value' : 'label';
             $expectedOptions = array();
             foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                 $expectedOptions[strtolower($option[$index])] = $option['value'];

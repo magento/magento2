@@ -73,8 +73,13 @@ class Dictionary
      */
     public function getDuplicates()
     {
-        return array_values(array_filter($this->_phrasesByKey, function ($phrases) {
-            return count($phrases) > 1;
-        }));
+        return array_values(
+            array_filter(
+                $this->_phrasesByKey,
+                function ($phrases) {
+                    return count($phrases) > 1;
+                }
+            )
+        );
     }
 }

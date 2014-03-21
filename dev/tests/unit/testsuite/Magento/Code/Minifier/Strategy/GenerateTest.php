@@ -21,12 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Minifier\Strategy;
 
-use Magento\App\Filesystem,
-    Magento\Filesystem\Directory\Write,
-    Magento\Filesystem\Directory\Read;
+use Magento\App\Filesystem;
+use Magento\Filesystem\Directory\Write;
+use Magento\Filesystem\Directory\Read;
 
 class GenerateTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,27 +54,33 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->rootDirectory = $this->getMock(
-            'Magento\Filesystem\Directory\Read',
-            array(), array(), '', false
-        );
-        $this->pubViewCacheDir = $this->getMock(
-            'Magento\Filesystem\Directory\Write',
-            array(), array(), '', false
-        );
+        $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->pubViewCacheDir = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
         $this->filesystem = $this->getMock(
             'Magento\App\Filesystem',
             array('getDirectoryWrite', 'getDirectoryRead', '__wakeup'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue($this->rootDirectory));
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
-            ->will($this->returnValue($this->pubViewCacheDir));
+        $this->filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue($this->rootDirectory)
+        );
+        $this->filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+        )->will(
+            $this->returnValue($this->pubViewCacheDir)
+        );
         $this->adapter = $this->getMockForAbstractClass('Magento\Code\Minifier\AdapterInterface', array(), '', false);
     }
 
@@ -89,21 +94,27 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         $content = 'content';
         $minifiedContent = 'minified content';
 
-        $this->rootDirectory->expects($this->once())
-            ->method('readFile')
-            ->with($originalFile)
-            ->will($this->returnValue($content));
-        $this->pubViewCacheDir->expects($this->once())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $this->pubViewCacheDir->expects($this->once())
-            ->method('writeFile')
-            ->with($minifiedFile, $minifiedContent);
+        $this->rootDirectory->expects(
+            $this->once()
+        )->method(
+            'readFile'
+        )->with(
+            $originalFile
+        )->will(
+            $this->returnValue($content)
+        );
+        $this->pubViewCacheDir->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->pubViewCacheDir->expects($this->once())->method('writeFile')->with($minifiedFile, $minifiedContent);
 
-        $this->adapter->expects($this->once())
-            ->method('minify')
-            ->with($content)
-            ->will($this->returnValue($minifiedContent));
+        $this->adapter->expects(
+            $this->once()
+        )->method(
+            'minify'
+        )->with(
+            $content
+        )->will(
+            $this->returnValue($minifiedContent)
+        );
 
         $strategy = new Generate($this->adapter, $this->filesystem);
         $strategy->minifyFile($originalFile, $minifiedFile);
@@ -119,24 +130,23 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
 
         $mTimeMap = array(
             array($originalFile, null, array('mtime' => 1)),
-            array($minifiedFile, null, array('mtime' => 1)),
+            array($minifiedFile, null, array('mtime' => 1))
         );
 
-        $this->pubViewCacheDir->expects($this->once())
-            ->method('isExist')
-            ->with($minifiedFile)
-            ->will($this->returnValue(true));
-        $this->rootDirectory->expects($this->once())
-            ->method('stat')
-            ->will($this->returnValueMap($mTimeMap));
-        $this->pubViewCacheDir->expects($this->once())
-            ->method('stat')
-            ->will($this->returnValueMap($mTimeMap));
+        $this->pubViewCacheDir->expects(
+            $this->once()
+        )->method(
+            'isExist'
+        )->with(
+            $minifiedFile
+        )->will(
+            $this->returnValue(true)
+        );
+        $this->rootDirectory->expects($this->once())->method('stat')->will($this->returnValueMap($mTimeMap));
+        $this->pubViewCacheDir->expects($this->once())->method('stat')->will($this->returnValueMap($mTimeMap));
 
-        $this->rootDirectory->expects($this->never())
-            ->method('readFile');
-        $this->pubViewCacheDir->expects($this->never())
-            ->method('writeFile');
+        $this->rootDirectory->expects($this->never())->method('readFile');
+        $this->pubViewCacheDir->expects($this->never())->method('writeFile');
 
         $this->adapter->expects($this->never())->method('minify');
 

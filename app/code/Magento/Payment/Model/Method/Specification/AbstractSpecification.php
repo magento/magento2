@@ -22,6 +22,7 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Payment\Model\Method\Specification;
+
 use Magento\Payment\Model\Method\SpecificationInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
 

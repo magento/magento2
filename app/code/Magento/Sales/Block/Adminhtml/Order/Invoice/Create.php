@@ -85,9 +85,13 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        return ($this->getInvoice()->getOrder()->getForcedShipmentWithInvoice())
-            ? __('New Invoice and Shipment for Order #%1', $this->getInvoice()->getOrder()->getRealOrderId())
-            : __('New Invoice for Order #%1', $this->getInvoice()->getOrder()->getRealOrderId());
+        return $this->getInvoice()->getOrder()->getForcedShipmentWithInvoice() ? __(
+            'New Invoice and Shipment for Order #%1',
+            $this->getInvoice()->getOrder()->getRealOrderId()
+        ) : __(
+            'New Invoice for Order #%1',
+            $this->getInvoice()->getOrder()->getRealOrderId()
+        );
     }
 
     /**

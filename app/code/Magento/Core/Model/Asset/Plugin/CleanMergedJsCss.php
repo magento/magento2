@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Asset\Plugin;
 
 class CleanMergedJsCss
@@ -57,10 +56,8 @@ class CleanMergedJsCss
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCleanMergedJsCss(
-        \Magento\View\Asset\MergeService $subject,
-        \Closure $proceed
-    ) {
+    public function aroundCleanMergedJsCss(\Magento\View\Asset\MergeService $subject, \Closure $proceed)
+    {
         $proceed();
 
         /** @var \Magento\Filesystem\Directory\ReadInterface $pubCacheDirectory */

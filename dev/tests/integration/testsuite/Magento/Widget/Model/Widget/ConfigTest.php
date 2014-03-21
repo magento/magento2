@@ -38,8 +38,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Config');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Config'
+        );
     }
 
     /**
@@ -49,8 +50,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPluginSettings()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_backend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\DesignInterface'
+        )->setDesignTheme(
+            'magento_backend'
+        );
 
         $config = new \Magento\Object();
         $settings = $this->_model->getPluginSettings($config);
@@ -73,7 +77,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetWindowUrl()
     {
-        $config = new \Magento\Object(array('widget_filters' =>  array('is_email_compatible' => 1)));
+        $config = new \Magento\Object(array('widget_filters' => array('is_email_compatible' => 1)));
 
         $url = $this->_model->getWidgetWindowUrl($config);
 

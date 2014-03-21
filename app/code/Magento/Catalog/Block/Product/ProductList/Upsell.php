@@ -23,14 +23,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product\ProductList;
 
 use Magento\Catalog\Model\Resource\Product\Collection;
 use Magento\View\Element\AbstractBlock;
 
 /**
- * Catalog product related items block
+ * Catalog product upsell items block
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -140,7 +139,6 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
             $data,
             $priceBlockTypes
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -150,35 +148,21 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     {
         $product = $this->_coreRegistry->registry('product');
         /* @var $product \Magento\Catalog\Model\Product */
-        $this->_itemCollection = $product->getUpSellProductCollection()
-            ->setPositionOrder()
-            ->addStoreFilter();
+        $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->_catalogData->isModuleEnabled('Magento_Checkout')) {
-            $this->_checkoutCart->addExcludeProductFilter(
-                $this->_itemCollection,
-                $this->_checkoutSession->getQuoteId()
-            );
-
             $this->_addProductAttributesAndPrices($this->_itemCollection);
         }
-        $this->_itemCollection->setVisibility(
-            $this->_catalogProductVisibility->getVisibleInCatalogIds()
-        );
-
-        if ($this->getItemLimit('upsell') > 0) {
-            $this->_itemCollection->setPageSize($this->getItemLimit('upsell'));
-        }
+        $this->_itemCollection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
         $this->_itemCollection->load();
 
         /**
          * Updating collection with desired items
          */
-        $this->_eventManager->dispatch('catalog_product_upsell', array(
-            'product'       => $product,
-            'collection'    => $this->_itemCollection,
-            'limit'         => $this->getItemLimit()
-        ));
+        $this->_eventManager->dispatch(
+            'catalog_product_upsell',
+            array('product' => $product, 'collection' => $this->_itemCollection, 'limit' => null)
+        );
 
         foreach ($this->_itemCollection as $product) {
             $product->setDoNotUseCategoryId(true);
@@ -220,7 +204,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
      */
     public function getRowCount()
     {
-        return ceil(count($this->getItemCollection()->getItems())/$this->getColumnCount());
+        return ceil(count($this->getItemCollection()->getItems()) / $this->getColumnCount());
     }
 
     /**
@@ -303,7 +287,7 @@ class Upsell extends \Magento\Catalog\Block\Product\AbstractProduct implements \
     {
         $identities = array();
         foreach ($this->getItems() as $item) {
-            $identities[] = $item->getIdentities();
+            $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;
     }

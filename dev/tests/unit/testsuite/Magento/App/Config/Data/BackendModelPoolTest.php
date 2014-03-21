@@ -45,9 +45,7 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
         $this->_model = new \Magento\App\Config\Data\ProcessorFactory($this->_objectManager);
         $this->_processorMock = $this->getMockForAbstractClass('Magento\App\Config\Data\ProcessorInterface');
-        $this->_processorMock->expects($this->any())
-            ->method('processValue')
-            ->will($this->returnArgument(0));
+        $this->_processorMock->expects($this->any())->method('processValue')->will($this->returnArgument(0));
     }
 
     /**
@@ -55,13 +53,20 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModelWithCorrectInterface()
     {
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with('Magento\App\Config\Data\TestBackendModel')
-            ->will($this->returnValue($this->_processorMock));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\App\Config\Data\TestBackendModel'
+        )->will(
+            $this->returnValue($this->_processorMock)
+        );
 
-        $this->assertInstanceOf('Magento\App\Config\Data\ProcessorInterface',
-            $this->_model->get('Magento\App\Config\Data\TestBackendModel'));
+        $this->assertInstanceOf(
+            'Magento\App\Config\Data\ProcessorInterface',
+            $this->_model->get('Magento\App\Config\Data\TestBackendModel')
+        );
     }
 
     /**
@@ -70,12 +75,17 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModelWithWrongInterface()
     {
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with('Magento\App\Config\Data\WrongBackendModel')
-            ->will($this->returnValue($this->getMock(
-                'Magento\App\Config\Data\WrongBackendModel', array(), array(), '', false
-            )));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\App\Config\Data\WrongBackendModel'
+        )->will(
+            $this->returnValue(
+                $this->getMock('Magento\App\Config\Data\WrongBackendModel', array(), array(), '', false)
+            )
+        );
 
         $this->_model->get('Magento\App\Config\Data\WrongBackendModel');
     }
@@ -85,10 +95,15 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMemoryCache()
     {
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with('Magento\App\Config\Data\TestBackendModel')
-            ->will($this->returnValue($this->_processorMock));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\App\Config\Data\TestBackendModel'
+        )->will(
+            $this->returnValue($this->_processorMock)
+        );
 
         $this->_model->get('Magento\App\Config\Data\TestBackendModel');
         $this->_model->get('Magento\App\Config\Data\TestBackendModel');

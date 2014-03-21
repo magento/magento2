@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Locale\Hierarchy\Config;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
@@ -59,22 +58,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 'xml' => '<config><locale code="en_US" parent="en_UK" /><locale code="en_UK" parent="pt_BR"/></config>',
-                array(
-                    'en_US' => array('pt_BR', 'en_UK'),
-                    'en_UK' => array('pt_BR'),
-                )
+                array('en_US' => array('pt_BR', 'en_UK'), 'en_UK' => array('pt_BR'))
             ),
             array(
                 'xml' => '<config><locale code="en_US" parent="en_UK"/><locale code="en_UK" parent="en_US"/></config>',
-                array(
-                    'en_US' => array('en_UK'),
-                    'en_UK' => array('en_US'),
-                )
+                array('en_US' => array('en_UK'), 'en_UK' => array('en_US'))
             ),
-            array(
-                'xml' => '<config></config>',
-                array()
-            ),
+            array('xml' => '<config></config>', array())
         );
     }
 }

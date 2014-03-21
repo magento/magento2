@@ -99,7 +99,7 @@ abstract class AbstractType
             $data = $this->_attributeOverrides[$attribute->getAttributeCode()];
 
             if (isset($data['options_method']) && method_exists($this, $data['options_method'])) {
-                $data['filter_options'] = $this->$data['options_method']();
+                $data['filter_options'] = $this->{$data['options_method']}();
             }
             $attribute->addData($data);
 

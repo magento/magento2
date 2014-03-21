@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Model\File\Validator;
 
 class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
@@ -43,13 +42,28 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_coreStoreConfig = $this->getMock('\Magento\Core\Model\Store\Config', array('getConfig'),
-            array(), '', false);
-        $this->_coreStoreConfig->expects($this->atLeastOnce())->method('getConfig')->with($this->equalTo(
+        $this->_coreStoreConfig = $this->getMock(
+            '\Magento\Core\Model\Store\Config',
+            array('getConfig'),
+            array(),
+            '',
+            false
+        );
+        $this->_coreStoreConfig->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getConfig'
+        )->with(
+            $this->equalTo(
                 \Magento\Core\Model\File\Validator\NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS
-            ), $this->equalTo(null))->will($this->returnValue($this->_protectedList));
+            ),
+            $this->equalTo(null)
+        )->will(
+            $this->returnValue($this->_protectedList)
+        );
         $this->_model = new \Magento\Core\Model\File\Validator\NotProtectedExtension($this->_coreStoreConfig);
     }
+
     public function testGetProtectedFileExtensions()
     {
         $this->assertEquals($this->_protectedList, $this->_model->getProtectedFileExtensions());
@@ -62,8 +76,9 @@ class NotProtectedExtensionTest extends \PHPUnit_Framework_TestCase
             '_messageTemplates'
         );
         $property->setAccessible(true);
-        $defaultMess = array('protectedExtension'
-                             => __('File with an extension "%value%" is protected and cannot be uploaded'));
+        $defaultMess = array(
+            'protectedExtension' => __('File with an extension "%value%" is protected and cannot be uploaded')
+        );
         $this->assertEquals($defaultMess, $property->getValue($this->_model));
 
         $property = new \ReflectionProperty(

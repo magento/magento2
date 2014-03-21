@@ -50,32 +50,32 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'element2' => array('data', 'of', 'element', '2'),
                 'element3' => array('data', 'of', 'element', '3'),
                 'element4' => array('data', 'of', 'element', '4'),
-                'element5' => array('data', 'of', 'element', '5'),
+                'element5' => array('data', 'of', 'element', '5')
             ),
             'scheduledElements' => array(
                 'element1' => array('data', 'of', 'element', '1'),
                 'element2' => array('data', 'of', 'element', '2'),
                 'element3' => array('data', 'of', 'element', '3'),
                 'element4' => array('data', 'of', 'element', '4'),
-                'element5' => array('data', 'of', 'element', '5'),
+                'element5' => array('data', 'of', 'element', '5')
             ),
             'scheduledMoves' => array(
                 'element1' => array('data', 'of', 'element', 'to', 'move', '1'),
                 'element4' => array('data', 'of', 'element', 'to', 'move', '4'),
-                'element6' => array('data', 'of', 'element', 'to', 'move', '6'),
+                'element6' => array('data', 'of', 'element', 'to', 'move', '6')
             ),
             'scheduledRemoves' => array(
                 'element2' => array('data', 'of', 'element', 'to', 'remove', '2'),
                 'element3' => array('data', 'of', 'element', 'to', 'remove', '3'),
                 'element6' => array('data', 'of', 'element', 'to', 'remove', '6'),
-                'element7' => array('data', 'of', 'element', 'to', 'remove', '7'),
+                'element7' => array('data', 'of', 'element', 'to', 'remove', '7')
             ),
             'scheduledPaths' => array(
                 'path1' => 'path 1',
                 'path2' => 'path 2',
                 'path3' => 'path 3',
-                'path4' => 'path 4',
-            ),
+                'path4' => 'path 4'
+            )
         );
         $this->_model = new \Magento\Core\Model\Layout\ScheduledStructure($this->_scheduledData);
     }
@@ -220,7 +220,6 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('element1', $this->_model->getListToRemove());
         $this->_model->setElementToRemoveList('element1');
         $this->assertContains('element1', $this->_model->getListToRemove());
-
     }
 
     /**
@@ -303,10 +302,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPath()
     {
-        $this->assertEquals(
-            $this->_scheduledData['scheduledPaths']['path1'],
-            $this->_model->getPath('path1')
-        );
+        $this->assertEquals($this->_scheduledData['scheduledPaths']['path1'], $this->_model->getPath('path1'));
         $default = array('some', 'data');
         $this->assertEquals($default, $this->_model->getPath('not_existing_element', $default));
     }

@@ -60,8 +60,7 @@ class Request extends \Magento\Object
      *
      * @var string[]
      */
-    protected $_notButtonVars = array (
-        'METHOD', 'BUTTONCODE', 'BUTTONTYPE');
+    protected $_notButtonVars = array('METHOD', 'BUTTONCODE', 'BUTTONTYPE');
 
     /**
      * Customer address
@@ -78,9 +77,8 @@ class Request extends \Magento\Object
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
      */
-    public function __construct(
-        \Magento\Customer\Helper\Address $customerAddress
-    ) {
+    public function __construct(\Magento\Customer\Helper\Address $customerAddress)
+    {
         $this->_customerAddress = $customerAddress;
     }
 
@@ -150,19 +148,18 @@ class Request extends \Magento\Object
     {
         $request = array(
             'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
-            'notify_url'    => $paymentMethod->getNotifyUrl(),
+            'notify_url' => $paymentMethod->getNotifyUrl(),
             'cancel_return' => $paymentMethod->getCancelUrl(),
-            'return'        => $paymentMethod->getReturnUrl(),
-            'lc'            => $paymentMethod->getMerchantCountry(),
-
-            'template'              => 'templateD',
-            'showBillingAddress'    => 'false',
-            'showShippingAddress'   => 'true',
-            'showBillingEmail'      => 'false',
-            'showBillingPhone'      => 'false',
-            'showCustomerName'      => 'false',
-            'showCardInfo'          => 'true',
-            'showHostedThankyouPage'=> 'false'
+            'return' => $paymentMethod->getReturnUrl(),
+            'lc' => $paymentMethod->getMerchantCountry(),
+            'template' => 'templateD',
+            'showBillingAddress' => 'false',
+            'showShippingAddress' => 'true',
+            'showBillingEmail' => 'false',
+            'showBillingPhone' => 'false',
+            'showCustomerName' => 'false',
+            'showCardInfo' => 'true',
+            'showHostedThankyouPage' => 'false'
         );
 
         return $request;
@@ -177,17 +174,21 @@ class Request extends \Magento\Object
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
         $request = array(
-            'subtotal'      => $this->_formatPrice(
-                $this->_formatPrice($order->getPayment()->getBaseAmountAuthorized()) -
-                $this->_formatPrice($order->getBaseTaxAmount()) -
-                $this->_formatPrice($order->getBaseShippingAmount())
+            'subtotal' => $this->_formatPrice(
+                $this->_formatPrice(
+                    $order->getPayment()->getBaseAmountAuthorized()
+                ) - $this->_formatPrice(
+                    $order->getBaseTaxAmount()
+                ) - $this->_formatPrice(
+                    $order->getBaseShippingAmount()
+                )
             ),
-            'tax'           => $this->_formatPrice($order->getBaseTaxAmount()),
-            'shipping'      => $this->_formatPrice($order->getBaseShippingAmount()),
-            'invoice'       => $order->getIncrementId(),
+            'tax' => $this->_formatPrice($order->getBaseTaxAmount()),
+            'shipping' => $this->_formatPrice($order->getBaseShippingAmount()),
+            'invoice' => $order->getIncrementId(),
             'address_override' => 'true',
-            'currency_code'    => $order->getBaseCurrencyCode(),
-            'buyer_email'      => $order->getCustomerEmail()
+            'currency_code' => $order->getBaseCurrencyCode(),
+            'buyer_email' => $order->getCustomerEmail()
         );
 
         // append to request billing address data
@@ -212,20 +213,19 @@ class Request extends \Magento\Object
     protected function _getShippingAddress(\Magento\Object $address)
     {
         $request = array(
-            'first_name'=> $address->getFirstname(),
+            'first_name' => $address->getFirstname(),
             'last_name' => $address->getLastname(),
-            'city'      => $address->getCity(),
-            'state'     => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
-            'zip'       => $address->getPostcode(),
-            'country'   => $address->getCountry(),
+            'city' => $address->getCity(),
+            'state' => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
+            'zip' => $address->getPostcode(),
+            'country' => $address->getCountry()
         );
 
         // convert streets to tow lines format
-        $street = $this->_customerAddress
-            ->convertStreetLines($address->getStreet(), 2);
+        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);
 
-        $request['address1'] = isset($street[0]) ? $street[0]: '';
-        $request['address2'] = isset($street[1]) ? $street[1]: '';
+        $request['address1'] = isset($street[0]) ? $street[0] : '';
+        $request['address2'] = isset($street[1]) ? $street[1] : '';
 
         return $request;
     }
@@ -239,20 +239,19 @@ class Request extends \Magento\Object
     protected function _getBillingAddress(\Magento\Object $address)
     {
         $request = array(
-            'billing_first_name'=> $address->getFirstname(),
+            'billing_first_name' => $address->getFirstname(),
             'billing_last_name' => $address->getLastname(),
-            'billing_city'      => $address->getCity(),
-            'billing_state'     => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
-            'billing_zip'       => $address->getPostcode(),
-            'billing_country'   => $address->getCountry(),
+            'billing_city' => $address->getCity(),
+            'billing_state' => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
+            'billing_zip' => $address->getPostcode(),
+            'billing_country' => $address->getCountry()
         );
 
         // convert streets to tow lines format
-        $street = $this->_customerAddress
-            ->convertStreetLines($address->getStreet(), 2);
+        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);
 
-        $request['billing_address1'] = isset($street[0]) ? $street[0]: '';
-        $request['billing_address2'] = isset($street[1]) ? $street[1]: '';
+        $request['billing_address1'] = isset($street[0]) ? $street[0] : '';
+        $request['billing_address2'] = isset($street[1]) ? $street[1] : '';
 
         return $request;
     }

@@ -46,6 +46,5 @@ class Quote extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_headerText = __('Shopping Cart Price Rules');
         $this->_addButtonLabel = __('Add New Rule');
         parent::_construct();
-        
     }
 }

@@ -51,8 +51,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Resource');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Resource');
     }
 
     /**
@@ -69,9 +68,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         );
         $connectionConfig['dbname'] = $connectionConfig['dbName'];
 
-        return $objectManager->create(
-            'Magento\TestFramework\Db\Adapter\Mysql', array('config' => $connectionConfig)
-        );
+        return $objectManager->create('Magento\TestFramework\Db\Adapter\Mysql', array('config' => $connectionConfig));
     }
 
     /**
@@ -116,12 +113,18 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array("SELECT * FROM %s", \Magento\DB\Profiler::SELECT),
-            array("INSERT INTO %s (code, version, data_version) "
-                . "VALUES ('" . self::$_testResourceName . "', '1.1', '1.1')", \Magento\DB\Profiler::INSERT),
-            array("UPDATE %s SET version = '1.2' WHERE code = '" . self::$_testResourceName . "'",
-                \Magento\DB\Profiler::UPDATE),
-            array("DELETE FROM %s WHERE code = '" . self::$_testResourceName . "'",
-                \Magento\DB\Profiler::DELETE),
+            array(
+                "INSERT INTO %s (code, version, data_version) " .
+                "VALUES ('" .
+                self::$_testResourceName .
+                "', '1.1', '1.1')",
+                \Magento\DB\Profiler::INSERT
+            ),
+            array(
+                "UPDATE %s SET version = '1.2' WHERE code = '" . self::$_testResourceName . "'",
+                \Magento\DB\Profiler::UPDATE
+            ),
+            array("DELETE FROM %s WHERE code = '" . self::$_testResourceName . "'", \Magento\DB\Profiler::DELETE)
         );
     }
 

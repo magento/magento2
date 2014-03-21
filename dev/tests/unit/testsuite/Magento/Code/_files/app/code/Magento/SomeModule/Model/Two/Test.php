@@ -23,8 +23,9 @@
  */
 namespace Magento\SomeModule\Model\Two;
 
-require_once __DIR__ .  '/../One/Test.php';
-require_once __DIR__ .  '/../Proxy.php';
+
+require_once __DIR__ . '/../One/Test.php';
+require_once __DIR__ . '/../Proxy.php';
 class Test extends \Magento\SomeModule\Model\One\Test
 {
     /**
@@ -32,10 +33,8 @@ class Test extends \Magento\SomeModule\Model\One\Test
      */
     protected $_proxy;
 
-    public function __construct(
-        \Magento\SomeModule\Model\Proxy $proxy,
-        $data = array()
-    ) {
+    public function __construct(\Magento\SomeModule\Model\Proxy $proxy, $data = array())
+    {
         $this->_proxy = $proxy;
     }
 }

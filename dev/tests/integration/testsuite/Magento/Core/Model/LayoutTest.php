@@ -54,30 +54,34 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testConstructor(array $inputArguments, $expectedArea)
     {
         if (isset($inputArguments['area'])) {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-                ->setAreaCode($inputArguments['area']);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\App\State'
+            )->setAreaCode(
+                $inputArguments['area']
+            );
         }
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
         $this->assertEquals($expectedArea, $layout->getArea());
     }
 
     public function constructorDataProvider()
     {
         return array(
-            'default area'  => array(array(), null),
+            'default area' => array(array(), null),
             'frontend area' => array(array('area' => 'frontend'), 'frontend'),
-            'backend area'  => array(array('area' => 'adminhtml'), 'adminhtml'),
+            'backend area' => array(array('area' => 'adminhtml'), 'adminhtml')
         );
     }
 
     public function testConstructorStructure()
     {
-        $structure = new \Magento\Data\Structure;
+        $structure = new \Magento\Data\Structure();
         $structure->createElement('test.container', array());
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout', array('structure' => $structure));
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Layout',
+            array('structure' => $structure)
+        );
         $this->assertTrue($layout->hasElement('test.container'));
     }
 
@@ -102,13 +106,24 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $layoutUtility = new \Magento\Core\Utility\Layout($this);
         /** @var $layout \Magento\View\LayoutInterface */
-        $layout = $this->getMock('Magento\Core\Model\Layout', array('getUpdate'),
-            $layoutUtility->getLayoutDependencies());
+        $layout = $this->getMock(
+            'Magento\Core\Model\Layout',
+            array('getUpdate'),
+            $layoutUtility->getLayoutDependencies()
+        );
         $merge = $this->getMock('StdClass', array('asSimplexml'));
-        $merge->expects($this->once())->method('asSimplexml')->will($this->returnValue(simplexml_load_string(
-            '<layout><container name="container1"></container></layout>',
-            'Magento\View\Layout\Element'
-        )));
+        $merge->expects(
+            $this->once()
+        )->method(
+            'asSimplexml'
+        )->will(
+            $this->returnValue(
+                simplexml_load_string(
+                    '<layout><container name="container1"></container></layout>',
+                    'Magento\View\Layout\Element'
+                )
+            )
+        );
         $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($merge));
         $this->assertEmpty($layout->getXpath('/layout/container[@name="container1"]'));
         $layout->generateXml();
@@ -124,16 +139,18 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateGetAllBlocks()
     {
-        $this->_layout->setXml(simplexml_load_string(
-            '<layout>
+        $this->_layout->setXml(
+            simplexml_load_string(
+                '<layout>
                 <block class="Magento\View\Element\Text" name="block1">
                     <block class="Magento\View\Element\Text"/>
                 </block>
                 <block class="Magento\View\Element\Text" template="test" ttl="360"/>
                 <block class="Magento\View\Element\Text"/>
             </layout>',
-            'Magento\View\Layout\Element'
-        ));
+                'Magento\View\Layout\Element'
+            )
+        );
         $this->assertEquals(array(), $this->_layout->getAllBlocks());
         $this->_layout->generateElements();
         $expected = array('block1', 'block1_schedule_block', 'schedule_block', 'schedule_block_1');
@@ -149,11 +166,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     {
         $name = 'test';
         $this->_layout->addContainer($name, 'Test', array('option1' => 1, 'option2' => 2));
-        $this->assertEquals('Test', $this->_layout->getElementProperty(
-            $name, \Magento\View\Layout\Element::CONTAINER_OPT_LABEL
-        ));
-        $this->assertEquals(\Magento\View\Layout\Element::TYPE_CONTAINER,
-            $this->_layout->getElementProperty($name, 'type'));
+        $this->assertEquals(
+            'Test',
+            $this->_layout->getElementProperty($name, \Magento\View\Layout\Element::CONTAINER_OPT_LABEL)
+        );
+        $this->assertEquals(
+            \Magento\View\Layout\Element::TYPE_CONTAINER,
+            $this->_layout->getElementProperty($name, 'type')
+        );
         $this->assertSame(2, $this->_layout->getElementProperty($name, 'option2'));
 
         $this->_layout->addBlock('Magento\View\Element\Text', 'text', $name);
@@ -161,9 +181,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             \Magento\View\Layout\Element::TYPE_BLOCK,
             $this->_layout->getElementProperty('text', 'type')
         );
-        $this->assertSame(array('text' => 'text'), $this->_layout->getElementProperty(
-            $name, \Magento\Data\Structure::CHILDREN
-        ));
+        $this->assertSame(
+            array('text' => 'text'),
+            $this->_layout->getElementProperty($name, \Magento\Data\Structure::CHILDREN)
+        );
     }
 
     /**
@@ -217,12 +238,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'no name block' => array(
                 'Magento\View\Element\Text\ListText',
                 '',
-                array(
-                    'type' => 'Magento\View\Element\Text\ListText',
-                    'key1' => 'value1',
-                ),
+                array('type' => 'Magento\View\Element\Text\ListText', 'key1' => 'value1'),
                 '/text\\\\list/'
-            ),
+            )
         );
     }
 
@@ -237,16 +255,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function blockNotExistsDataProvider()
     {
-        return array(
-            array(''),
-            array('block_not_exists'),
-        );
+        return array(array(''), array('block_not_exists'));
     }
 
     public function testAddBlock()
     {
-        $this->assertInstanceOf('Magento\View\Element\Text', $this->_layout->addBlock('Magento\View\Element\Text',
-            'block1'));
+        $this->assertInstanceOf(
+            'Magento\View\Element\Text',
+            $this->_layout->addBlock('Magento\View\Element\Text', 'block1')
+        );
         $block2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Element\Text');
         $block2->setNameInLayout('block2');
         $this->_layout->addBlock($block2, '', 'block1');
@@ -296,8 +313,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testAddContainerInvalidHtmlTag()
     {
         $msg = 'Html tag "span" is forbidden for usage in containers. ' .
-               'Consider to use one of the allowed: dd, div, dl, fieldset, header, ' .
-               'footer, hgroup, ol, p, section, table, tfoot, ul.';
+            'Consider to use one of the allowed: dd, div, dl, fieldset, header, ' .
+            'footer, hgroup, ol, p, section, table, tfoot, ul.';
         $this->setExpectedException('Magento\Exception', $msg);
         $this->_layout->addContainer('container', 'Container', array('htmlTag' => 'span'));
     }
@@ -431,8 +448,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetBlock()
     {
         $this->assertFalse($this->_layout->getBlock('test'));
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Layout')
-            ->createBlock('Magento\View\Element\Text');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\Layout'
+        )->createBlock(
+            'Magento\View\Element\Text'
+        );
         $this->_layout->setBlock('test', $block);
         $this->assertSame($block, $this->_layout->getBlock('test'));
     }
@@ -464,7 +484,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetOutput()
     {
         $blockName = 'block_' . __METHOD__;
-        $expectedText = "some_text_for_$blockName";
+        $expectedText = "some_text_for_{$blockName}";
 
         $block = $this->_layout->addBlock('Magento\View\Element\Text', $blockName);
         $block->setText($expectedText);
@@ -492,8 +512,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContainerAttributes()
     {
-        $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/container_attributes.xml',
-            'Magento\View\Layout\Element'));
+        $this->_layout->setXml(
+            simplexml_load_file(__DIR__ . '/_files/layout/container_attributes.xml', 'Magento\View\Layout\Element')
+        );
         $this->_layout->generateElements();
         $result = $this->_layout->renderElement('container1', false);
         $this->assertEquals('<div id="container1-2" class="class12">Test11Test12</div>', $result);
@@ -503,16 +524,18 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testIsCacheable()
     {
-        $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/cacheable.xml',
-            'Magento\View\Layout\Element'));
+        $this->_layout->setXml(
+            simplexml_load_file(__DIR__ . '/_files/layout/cacheable.xml', 'Magento\View\Layout\Element')
+        );
         $this->_layout->generateElements();
         $this->assertTrue($this->_layout->isCacheable());
     }
 
     public function testIsNonCacheable()
     {
-        $this->_layout->setXml(simplexml_load_file(__DIR__ . '/_files/layout/non_cacheable.xml',
-            'Magento\View\Layout\Element'));
+        $this->_layout->setXml(
+            simplexml_load_file(__DIR__ . '/_files/layout/non_cacheable.xml', 'Magento\View\Layout\Element')
+        );
         $this->_layout->generateElements();
         $this->assertFalse($this->_layout->isCacheable());
     }

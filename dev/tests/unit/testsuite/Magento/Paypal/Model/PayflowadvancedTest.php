@@ -43,7 +43,7 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Object
      */
-    static public $request;
+    public static $request;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -55,43 +55,62 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
      * Test response parameters
      */
     const PARAMETER_FIRSTNAME = 'Firstname';
-    const PARAMETER_LASTNAME = 'Lastname';
-    const PARAMETER_ADDRESS = '111 Streetname Street';
-    const PARAMETER_CITY = 'City';
-    const PARAMETER_STATE = 'State';
-    const PARAMETER_ZIP = '11111';
-    const PARAMETER_COUNTRY = 'Country';
-    const PARAMETER_PHONE = '111-11-11';
-    const PARAMETER_EMAIL = 'email@example.com';
-    const PARAMETER_NAMETOSHIP = 'Name to ship';
-    const PARAMETER_ADDRESSTOSHIP = '112 Streetname Street';
-    const PARAMETER_CITYTOSHIP = 'City to ship';
-    const PARAMETER_STATETOSHIP = 'State to ship';
-    const PARAMETER_ZIPTOSHIP = '22222';
-    const PARAMETER_COUNTRYTOSHIP = 'Country to ship';
-    const PARAMETER_PHONETOSHIP = '222-22-22';
-    const PARAMETER_EMAILTOSHIP = 'emailtoship@example.com';
-    const PARAMETER_FAXTOSHIP = '333-33-33';
-    const PARAMETER_METHOD = 'CC';
-    const PARAMETER_CSCMATCH = 'Y';
-    const PARAMETER_AVSADDR = 'X';
-    const PARAMETER_AVSZIP = 'N';
-    const PARAMETER_TYPE = 'A';
-    /**#@-*/
 
+    const PARAMETER_LASTNAME = 'Lastname';
+
+    const PARAMETER_ADDRESS = '111 Streetname Street';
+
+    const PARAMETER_CITY = 'City';
+
+    const PARAMETER_STATE = 'State';
+
+    const PARAMETER_ZIP = '11111';
+
+    const PARAMETER_COUNTRY = 'Country';
+
+    const PARAMETER_PHONE = '111-11-11';
+
+    const PARAMETER_EMAIL = 'email@example.com';
+
+    const PARAMETER_NAMETOSHIP = 'Name to ship';
+
+    const PARAMETER_ADDRESSTOSHIP = '112 Streetname Street';
+
+    const PARAMETER_CITYTOSHIP = 'City to ship';
+
+    const PARAMETER_STATETOSHIP = 'State to ship';
+
+    const PARAMETER_ZIPTOSHIP = '22222';
+
+    const PARAMETER_COUNTRYTOSHIP = 'Country to ship';
+
+    const PARAMETER_PHONETOSHIP = '222-22-22';
+
+    const PARAMETER_EMAILTOSHIP = 'emailtoship@example.com';
+
+    const PARAMETER_FAXTOSHIP = '333-33-33';
+
+    const PARAMETER_METHOD = 'CC';
+
+    const PARAMETER_CSCMATCH = 'Y';
+
+    const PARAMETER_AVSADDR = 'X';
+
+    const PARAMETER_AVSZIP = 'N';
+
+    const PARAMETER_TYPE = 'A';
+
+    /**#@-*/
     protected function setUp()
     {
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $payment = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getOrder', '__wakeup'))
-            ->getMock();
-        $payment->expects($this->any())
-            ->method('getOrder')
-            ->will($this->returnValue($order));
-        $request = new \Magento\Paypal\Model\Payflow\Request;
+        $order = $this->getMockBuilder('Magento\Sales\Model\Order')->disableOriginalConstructor()->getMock();
+        $payment = $this->getMockBuilder(
+            'Magento\Sales\Model\Order\Payment'
+        )->disableOriginalConstructor()->setMethods(
+            array('getOrder', '__wakeup')
+        )->getMock();
+        $payment->expects($this->any())->method('getOrder')->will($this->returnValue($order));
+        $request = new \Magento\Paypal\Model\Payflow\Request();
         $this->_modelClass = $this->getMock(
             'Magento\Paypal\Model\Payflowadvanced',
             array(
@@ -103,23 +122,21 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
                 '_buildTokenRequest',
                 '_getCallbackUrl'
             ),
-            array(), '', false
+            array(),
+            '',
+            false
         );
-        $this->_modelClass->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($request));
-        $this->_modelClass->expects($this->any())
-            ->method('getInfoInstance')
-            ->will($this->returnValue($payment));
-        $this->_modelClass->expects($this->any())
-            ->method('_generateSecureSilentPostHash')
-            ->will($this->returnValue(md5('1234567890')));
-        $this->_modelClass->expects($this->any())
-            ->method('_postRequest')
-            ->will($this->returnValue(true));
-        $this->_modelClass->expects($this->any())
-            ->method('_processTokenErrors')
-            ->will($this->returnValue(true));
+        $this->_modelClass->expects($this->any())->method('getResponse')->will($this->returnValue($request));
+        $this->_modelClass->expects($this->any())->method('getInfoInstance')->will($this->returnValue($payment));
+        $this->_modelClass->expects(
+            $this->any()
+        )->method(
+            '_generateSecureSilentPostHash'
+        )->will(
+            $this->returnValue(md5('1234567890'))
+        );
+        $this->_modelClass->expects($this->any())->method('_postRequest')->will($this->returnValue(true));
+        $this->_modelClass->expects($this->any())->method('_processTokenErrors')->will($this->returnValue(true));
     }
 
     public function testSetResponseData()
@@ -127,62 +144,66 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
         // Setting legacy parameters
         /** @var $model \Magento\Paypal\Model\Payflowadvanced */
         $model = $this->_modelClass;
-        $model->setResponseData(array(
-            'NAME' => self::PARAMETER_FIRSTNAME . ' ' . self::PARAMETER_LASTNAME,
-            'FIRSTNAME' => self::PARAMETER_FIRSTNAME,
-            'LASTNAME' => self::PARAMETER_LASTNAME,
-            'ADDRESS' => self::PARAMETER_ADDRESS,
-            'CITY' => self::PARAMETER_CITY,
-            'STATE' => self::PARAMETER_STATE,
-            'ZIP' => self::PARAMETER_ZIP,
-            'COUNTRY' => self::PARAMETER_COUNTRY,
-            'PHONE' => self::PARAMETER_PHONE,
-            'EMAIL' => self::PARAMETER_EMAIL,
-            'NAMETOSHIP' => self::PARAMETER_NAMETOSHIP,
-            'ADDRESSTOSHIP' => self::PARAMETER_ADDRESSTOSHIP,
-            'CITYTOSHIP' => self::PARAMETER_CITYTOSHIP,
-            'STATETOSHIP' => self::PARAMETER_STATETOSHIP,
-            'ZIPTOSHIP' => self::PARAMETER_ZIPTOSHIP,
-            'COUNTRYTOSHIP' => self::PARAMETER_COUNTRYTOSHIP,
-            'PHONETOSHIP' => self::PARAMETER_PHONETOSHIP,
-            'EMAILTOSHIP' => self::PARAMETER_EMAILTOSHIP,
-            'FAXTOSHIP' => self::PARAMETER_FAXTOSHIP,
-            'METHOD' => self::PARAMETER_METHOD,
-            'CSCMATCH' => self::PARAMETER_CSCMATCH,
-            'AVSDATA' => self::PARAMETER_AVSADDR . self::PARAMETER_AVSZIP,
-            'TYPE' => self::PARAMETER_TYPE,
-        ));
+        $model->setResponseData(
+            array(
+                'NAME' => self::PARAMETER_FIRSTNAME . ' ' . self::PARAMETER_LASTNAME,
+                'FIRSTNAME' => self::PARAMETER_FIRSTNAME,
+                'LASTNAME' => self::PARAMETER_LASTNAME,
+                'ADDRESS' => self::PARAMETER_ADDRESS,
+                'CITY' => self::PARAMETER_CITY,
+                'STATE' => self::PARAMETER_STATE,
+                'ZIP' => self::PARAMETER_ZIP,
+                'COUNTRY' => self::PARAMETER_COUNTRY,
+                'PHONE' => self::PARAMETER_PHONE,
+                'EMAIL' => self::PARAMETER_EMAIL,
+                'NAMETOSHIP' => self::PARAMETER_NAMETOSHIP,
+                'ADDRESSTOSHIP' => self::PARAMETER_ADDRESSTOSHIP,
+                'CITYTOSHIP' => self::PARAMETER_CITYTOSHIP,
+                'STATETOSHIP' => self::PARAMETER_STATETOSHIP,
+                'ZIPTOSHIP' => self::PARAMETER_ZIPTOSHIP,
+                'COUNTRYTOSHIP' => self::PARAMETER_COUNTRYTOSHIP,
+                'PHONETOSHIP' => self::PARAMETER_PHONETOSHIP,
+                'EMAILTOSHIP' => self::PARAMETER_EMAILTOSHIP,
+                'FAXTOSHIP' => self::PARAMETER_FAXTOSHIP,
+                'METHOD' => self::PARAMETER_METHOD,
+                'CSCMATCH' => self::PARAMETER_CSCMATCH,
+                'AVSDATA' => self::PARAMETER_AVSADDR . self::PARAMETER_AVSZIP,
+                'TYPE' => self::PARAMETER_TYPE
+            )
+        );
 
         $this->_assertResponseData($model);
 
         // Setting new parameters
         /** @var $model \Magento\Paypal\Model\Payflowadvanced */
         $model = $this->_modelClass;
-        $model->setResponseData(array(
-            'BILLTOFIRSTNAME' => self::PARAMETER_FIRSTNAME,
-            'BILLTOLASTNAME' => self::PARAMETER_LASTNAME,
-            'BILLTOSTREET' => self::PARAMETER_ADDRESS,
-            'BILLTOCITY' => self::PARAMETER_CITY,
-            'BILLTOSTATE' => self::PARAMETER_STATE,
-            'BILLTOZIP' => self::PARAMETER_ZIP,
-            'BILLTOCOUNTRY' => self::PARAMETER_COUNTRY,
-            'BILLTOPHONE' => self::PARAMETER_PHONE,
-            'BILLTOEMAIL' => self::PARAMETER_EMAIL,
-            'SHIPTOFIRSTNAME' => self::PARAMETER_NAMETOSHIP,
-            'SHIPTOSTREET' => self::PARAMETER_ADDRESSTOSHIP,
-            'SHIPTOCITY' => self::PARAMETER_CITYTOSHIP,
-            'SHIPTOSTATE' => self::PARAMETER_STATETOSHIP,
-            'SHIPTOZIP' => self::PARAMETER_ZIPTOSHIP,
-            'SHIPTOCOUNTRY' => self::PARAMETER_COUNTRYTOSHIP,
-            'SHIPTOPHONE' => self::PARAMETER_PHONETOSHIP,
-            'SHIPTOEMAIL' => self::PARAMETER_EMAILTOSHIP,
-            'SHIPTOFAX' => self::PARAMETER_FAXTOSHIP,
-            'TENDER' => self::PARAMETER_METHOD,
-            'CVV2MATCH' => self::PARAMETER_CSCMATCH,
-            'AVSADDR' => self::PARAMETER_AVSADDR,
-            'AVSZIP' => self::PARAMETER_AVSZIP,
-            'TRXTYPE' => self::PARAMETER_TYPE,
-        ));
+        $model->setResponseData(
+            array(
+                'BILLTOFIRSTNAME' => self::PARAMETER_FIRSTNAME,
+                'BILLTOLASTNAME' => self::PARAMETER_LASTNAME,
+                'BILLTOSTREET' => self::PARAMETER_ADDRESS,
+                'BILLTOCITY' => self::PARAMETER_CITY,
+                'BILLTOSTATE' => self::PARAMETER_STATE,
+                'BILLTOZIP' => self::PARAMETER_ZIP,
+                'BILLTOCOUNTRY' => self::PARAMETER_COUNTRY,
+                'BILLTOPHONE' => self::PARAMETER_PHONE,
+                'BILLTOEMAIL' => self::PARAMETER_EMAIL,
+                'SHIPTOFIRSTNAME' => self::PARAMETER_NAMETOSHIP,
+                'SHIPTOSTREET' => self::PARAMETER_ADDRESSTOSHIP,
+                'SHIPTOCITY' => self::PARAMETER_CITYTOSHIP,
+                'SHIPTOSTATE' => self::PARAMETER_STATETOSHIP,
+                'SHIPTOZIP' => self::PARAMETER_ZIPTOSHIP,
+                'SHIPTOCOUNTRY' => self::PARAMETER_COUNTRYTOSHIP,
+                'SHIPTOPHONE' => self::PARAMETER_PHONETOSHIP,
+                'SHIPTOEMAIL' => self::PARAMETER_EMAILTOSHIP,
+                'SHIPTOFAX' => self::PARAMETER_FAXTOSHIP,
+                'TENDER' => self::PARAMETER_METHOD,
+                'CVV2MATCH' => self::PARAMETER_CSCMATCH,
+                'AVSADDR' => self::PARAMETER_AVSADDR,
+                'AVSZIP' => self::PARAMETER_AVSZIP,
+                'TRXTYPE' => self::PARAMETER_TYPE
+            )
+        );
         $this->_assertResponseData($model);
     }
 
@@ -213,21 +234,31 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareRequest(\Magento\Paypal\Model\Payflowadvanced $model, $params)
     {
-        $request = new \Magento\Paypal\Model\Payflow\Request;
-        $request->setCancelurl('/paypal/' . $model->getCallbackController() . '/' . 'cancelPayment')
-            ->setErrorurl('/paypal/' . $model->getCallbackController() . '/' . 'returnUrl')
-            ->setSilentpost('TRUE')
-            ->setSilentposturl('/paypal/' . $model->getCallbackController() . '/' . 'silentPost')
-            ->setReturnurl('/paypal/' . $model->getCallbackController() . '/' . 'returnUrl')
-            ->setTemplate('minLayout')
-            ->setDisablereceipt('TRUE')
-            ->setCscrequired($params[0])
-            ->setCscedit($params[1])
-            ->setEmailcustomer($params[2])
-            ->setUrlmethod($params[3]);
-        $model->expects($this->any())
-            ->method('_buildTokenRequest')
-            ->will($this->returnValue($request));
+        $request = new \Magento\Paypal\Model\Payflow\Request();
+        $request->setCancelurl(
+            '/paypal/' . $model->getCallbackController() . '/' . 'cancelPayment'
+        )->setErrorurl(
+            '/paypal/' . $model->getCallbackController() . '/' . 'returnUrl'
+        )->setSilentpost(
+            'TRUE'
+        )->setSilentposturl(
+            '/paypal/' . $model->getCallbackController() . '/' . 'silentPost'
+        )->setReturnurl(
+            '/paypal/' . $model->getCallbackController() . '/' . 'returnUrl'
+        )->setTemplate(
+            'minLayout'
+        )->setDisablereceipt(
+            'TRUE'
+        )->setCscrequired(
+            $params[0]
+        )->setCscedit(
+            $params[1]
+        )->setEmailcustomer(
+            $params[2]
+        )->setUrlmethod(
+            $params[3]
+        );
+        $model->expects($this->any())->method('_buildTokenRequest')->will($this->returnValue($request));
 
         $checkRequest = create_function('$request', 'Magento\Paypal\Model\PayflowadvancedTest::$request = $request;');
         $model->expects($this->any())->method('_postRequest')->will($this->returnCallback($checkRequest));
@@ -293,9 +324,6 @@ class PayflowadvancedTest extends \PHPUnit_Framework_TestCase
      */
     public function defaultRequestParameters()
     {
-        return array(
-            array('TRUE', 'TRUE', 'FALSE', 'GET'),
-            array('FALSE', 'FALSE', 'TRUE', 'POST'),
-        );
+        return array(array('TRUE', 'TRUE', 'FALSE', 'GET'), array('FALSE', 'FALSE', 'TRUE', 'POST'));
     }
 }

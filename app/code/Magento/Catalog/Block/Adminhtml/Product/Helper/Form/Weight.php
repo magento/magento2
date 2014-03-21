@@ -69,10 +69,14 @@ class Weight extends \Magento\Data\Form\Element\Text
     ) {
         $this->_helper = $helper;
         $this->_virtual = $factoryElement->create('checkbox');
-        $this->_virtual->setId(self::VIRTUAL_FIELD_HTML_ID)->setName('is_virtual')
-            ->setLabel($this->_helper->getTypeSwitcherControlLabel());
-        $data['class'] =
-            'validate-number validate-zero-or-greater validate-number-range number-range-0-99999999.9999';
+        $this->_virtual->setId(
+            self::VIRTUAL_FIELD_HTML_ID
+        )->setName(
+            'is_virtual'
+        )->setLabel(
+            $this->_helper->getTypeSwitcherControlLabel()
+        );
+        $data['class'] = 'validate-number validate-zero-or-greater validate-number-range number-range-0-99999999.9999';
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
@@ -89,14 +93,17 @@ class Weight extends \Magento\Data\Form\Element\Text
         if ($this->getDisabled()) {
             $this->_virtual->setDisabled($this->getDisabled());
         }
-        return '<div class="fields-group-2"><div class="field"><div class="addon"><div class="control">'
-            . parent::getElementHtml()
-            . '<label class="addafter" for="'
-            . $this->getHtmlId()
-            . '"><strong>' . __('lbs') . '</strong></label>'
-            . '</div></div></div><div class="field choice">'
-            . $this->_virtual->getElementHtml() . $this->_virtual->getLabelHtml()
-            . '</div></div>';
+        return '<div class="fields-group-2"><div class="field"><div class="addon"><div class="control">' .
+            parent::getElementHtml() .
+            '<label class="addafter" for="' .
+            $this->getHtmlId() .
+            '"><strong>' .
+            __('lbs') .
+            '</strong></label>' .
+            '</div></div></div><div class="field choice">' .
+            $this->_virtual->getElementHtml() .
+            $this->_virtual->getLabelHtml() .
+            '</div></div>';
     }
 
     /**

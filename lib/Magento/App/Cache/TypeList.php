@@ -125,13 +125,15 @@ class TypeList implements TypeListInterface
             } else {
                 $typeTags = '';
             }
-            $types[$type] = new \Magento\Object(array(
-                'id'            => $type,
-                'cache_type'    => $node['label'],
-                'description'   => $node['description'],
-                'tags'          => $typeTags,
-                'status'        => (int)$this->_cacheState->isEnabled($type),
-            ));
+            $types[$type] = new \Magento\Object(
+                array(
+                    'id' => $type,
+                    'cache_type' => $node['label'],
+                    'description' => $node['description'],
+                    'tags' => $typeTags,
+                    'status' => (int)$this->_cacheState->isEnabled($type)
+                )
+            );
         }
         return $types;
     }

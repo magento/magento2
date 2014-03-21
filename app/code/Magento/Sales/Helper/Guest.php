@@ -35,12 +35,12 @@ class Guest extends \Magento\Core\Helper\Data
      *
      * @var string
      */
-    protected $_cookieName  = 'guest-view';
+    protected $_cookieName = 'guest-view';
 
     /**
      * @var int
      */
-    protected $_lifeTime    = 600;
+    protected $_lifeTime = 600;
 
     /**
      * Core registry
@@ -101,13 +101,7 @@ class Guest extends \Magento\Core\Helper\Data
         $this->messageManager = $messageManager;
         $this->_orderFactory = $orderFactory;
         $this->_view = $view;
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**
@@ -134,14 +128,17 @@ class Guest extends \Magento\Core\Helper\Data
             $response->setRedirect($this->_urlBuilder->getUrl('sales/guest/form'));
             return false;
         } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
-            $type           = $post['oar_type'];
-            $incrementId    = $post['oar_order_id'];
-            $lastName       = $post['oar_billing_lastname'];
-            $email          = $post['oar_email'];
-            $zip            = $post['oar_zip'];
+            $type = $post['oar_type'];
+            $incrementId = $post['oar_order_id'];
+            $lastName = $post['oar_billing_lastname'];
+            $email = $post['oar_email'];
+            $zip = $post['oar_zip'];
 
-            if (empty($incrementId) || empty($lastName) || empty($type) || (!in_array($type, array('email', 'zip')))
-                || ($type == 'email' && empty($email)) || ($type == 'zip' && empty($zip))) {
+            if (empty($incrementId) || empty($lastName) || empty($type) || !in_array(
+                $type,
+                array('email', 'zip')
+            ) || $type == 'email' && empty($email) || $type == 'zip' && empty($zip)
+            ) {
                 $errors = true;
             }
 
@@ -151,11 +148,19 @@ class Guest extends \Magento\Core\Helper\Data
 
             if ($order->getId()) {
                 $billingAddress = $order->getBillingAddress();
-                if ((strtolower($lastName) != strtolower($billingAddress->getLastname()))
-                    || ($type == 'email'
-                        && strtolower($email) != strtolower($billingAddress->getEmail()))
-                    || ($type == 'zip'
-                        && (strtolower($zip) != strtolower($billingAddress->getPostcode())))
+                if (strtolower(
+                    $lastName
+                ) != strtolower(
+                    $billingAddress->getLastname()
+                ) || $type == 'email' && strtolower(
+                    $email
+                ) != strtolower(
+                    $billingAddress->getEmail()
+                ) || $type == 'zip' && strtolower(
+                    $zip
+                ) != strtolower(
+                    $billingAddress->getPostcode()
+                )
                 ) {
                     $errors = true;
                 }
@@ -168,8 +173,8 @@ class Guest extends \Magento\Core\Helper\Data
                 $this->_coreCookie->set($this->_cookieName, $toCookie, $this->_lifeTime, '/');
             }
         } elseif ($this->_coreCookie->get($this->_cookieName)) {
-            $fromCookie     = $this->_coreCookie->get($this->_cookieName);
-            $protectCode    = base64_decode($fromCookie);
+            $fromCookie = $this->_coreCookie->get($this->_cookieName);
+            $protectCode = base64_decode($fromCookie);
 
             if (!empty($protectCode)) {
                 $order->loadByAttribute('protect_code', $protectCode);
@@ -203,16 +208,12 @@ class Guest extends \Magento\Core\Helper\Data
             array(
                 'label' => __('Home'),
                 'title' => __('Go to Home Page'),
-                'link'  => $this->_storeManager->getStore()->getBaseUrl()
+                'link' => $this->_storeManager->getStore()->getBaseUrl()
             )
         );
         $breadcrumbs->addCrumb(
             'cms_page',
-            array(
-                'label' => __('Order Information'),
-                'title' => __('Order Information')
-            )
+            array('label' => __('Order Information'), 'title' => __('Order Information'))
         );
     }
-
 }

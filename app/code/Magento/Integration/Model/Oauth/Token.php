@@ -63,15 +63,20 @@ class Token extends \Magento\Core\Model\AbstractModel
      * Token types
      */
     const TYPE_REQUEST = 'request';
+
     const TYPE_ACCESS = 'access';
+
     const TYPE_VERIFIER = 'verifier';
+
     /**#@- */
 
     /**#@+
      * Customer types
      */
     const USER_TYPE_ADMIN = 'admin';
+
     const USER_TYPE_CUSTOMER = 'customer';
+
     /**#@- */
 
     /**
@@ -179,14 +184,16 @@ class Token extends \Magento\Core\Model\AbstractModel
         $tokenData = $this->getResource()->selectTokenByType($consumerId, self::TYPE_VERIFIER);
         $this->setData($tokenData ? $tokenData : array());
         if (!$this->getId()) {
-            $this->setData(array(
-                'consumer_id' => $consumerId,
-                'type' => self::TYPE_VERIFIER,
-                'token' => $this->_oauthHelper->generateToken(),
-                'secret' => $this->_oauthHelper->generateTokenSecret(),
-                'verifier' => $this->_oauthHelper->generateVerifier(),
-                'callback_url' => OauthHelper::CALLBACK_ESTABLISHED
-            ));
+            $this->setData(
+                array(
+                    'consumer_id' => $consumerId,
+                    'type' => self::TYPE_VERIFIER,
+                    'token' => $this->_oauthHelper->generateToken(),
+                    'secret' => $this->_oauthHelper->generateTokenSecret(),
+                    'verifier' => $this->_oauthHelper->generateVerifier(),
+                    'callback_url' => OauthHelper::CALLBACK_ESTABLISHED
+                )
+            );
             $this->save();
         }
         return $this;
@@ -255,13 +262,15 @@ class Token extends \Magento\Core\Model\AbstractModel
     public function createRequestToken($entityId, $callbackUrl)
     {
         $callbackUrl = !empty($callbackUrl) ? $callbackUrl : OauthHelper::CALLBACK_ESTABLISHED;
-        $this->setData(array(
-               'entity_id' => $entityId,
-               'type' => self::TYPE_REQUEST,
-               'token' => $this->_oauthHelper->generateToken(),
-               'secret' => $this->_oauthHelper->generateTokenSecret(),
-               'callback_url' => $callbackUrl
-           ));
+        $this->setData(
+            array(
+                'entity_id' => $entityId,
+                'type' => self::TYPE_REQUEST,
+                'token' => $this->_oauthHelper->generateToken(),
+                'secret' => $this->_oauthHelper->generateTokenSecret(),
+                'callback_url' => $callbackUrl
+            )
+        );
         $this->save();
 
         return $this;
@@ -320,8 +329,9 @@ class Token extends \Magento\Core\Model\AbstractModel
      */
     public function validate()
     {
-        if (OauthHelper::CALLBACK_ESTABLISHED != $this->getCallbackUrl()
-            && !$this->_urlValidator->isValid($this->getCallbackUrl())
+        if (OauthHelper::CALLBACK_ESTABLISHED != $this->getCallbackUrl() && !$this->_urlValidator->isValid(
+            $this->getCallbackUrl()
+        )
         ) {
             $messages = $this->_urlValidator->getMessages();
             throw new OauthException(array_shift($messages));

@@ -58,16 +58,15 @@ class DispatchExceptionHandlerTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->subjectMock = $this->getMock('Magento\App\FrontController', array(), array(), '', false);
-        $this->_model = new DispatchExceptionHandler(
-            $this->_storeManagerMock,
-            $this->_filesystemMock
-        );
+        $this->_model = new DispatchExceptionHandler($this->_storeManagerMock, $this->_filesystemMock);
     }
 
     public function testAroundDispatch()
     {
         $requestMock = $this->getMock('Magento\App\RequestInterface');
-        $this->assertEquals('Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $requestMock));
+        $this->assertEquals(
+            'Expected',
+            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $requestMock)
+        );
     }
 }

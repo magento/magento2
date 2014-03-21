@@ -48,20 +48,44 @@ class Observer
     protected $_helper;
 
     /**
+     * @var \Magento\App\Cache\TypeListInterface
+     */
+    protected $_typeList;
+
+    /**
+     * @var \Magento\Core\Model\Session
+     */
+    protected $_session;
+
+    /**
+     * @var \Magento\Core\Model\Session
+     */
+    protected $_formKey;
+
+    /**
      * Constructor
      *
-     * @param \Magento\PageCache\Model\Config $config
+     * @param Config $config
      * @param \Magento\App\PageCache\Cache $cache
      * @param \Magento\PageCache\Helper\Data $helper
+     * @param \Magento\App\Cache\TypeListInterface $typeList
+     * @param \Magento\Core\Model\Session $session
+     * @param \Magento\App\PageCache\FormKey $formKey
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
         \Magento\App\PageCache\Cache $cache,
-        \Magento\PageCache\Helper\Data $helper
-    ){
+        \Magento\PageCache\Helper\Data $helper,
+        \Magento\App\Cache\TypeListInterface $typeList,
+        \Magento\App\PageCache\FormKey $formKey,
+        \Magento\Core\Model\Session $session
+    ) {
         $this->_config = $config;
         $this->_cache = $cache;
         $this->_helper = $helper;
+        $this->_typeList = $typeList;
+        $this->_session = $session;
+        $this->_formKey = $formKey;
     }
 
     /**
@@ -76,13 +100,13 @@ class Observer
         $event = $observer->getEvent();
         /** @var \Magento\Core\Model\Layout $layout */
         $layout = $event->getLayout();
-        if ($layout->isCacheable()) {
+        if ($layout->isCacheable() && $this->_config->isEnabled()) {
             $name = $event->getElementName();
             $block = $layout->getBlock($name);
             $transport = $event->getTransport();
             if ($block instanceof \Magento\View\Element\AbstractBlock) {
                 $blockTtl = $block->getTtl();
-                $varnishIsEnabledFlag = $this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH;
+                $varnishIsEnabledFlag = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
                 $output = $transport->getData('output');
                 if ($varnishIsEnabledFlag && isset($blockTtl)) {
                     $output = $this->_wrapEsi($block);
@@ -104,15 +128,14 @@ class Observer
      * @param \Magento\View\Element\AbstractBlock $block
      * @return string
      */
-    protected function _wrapEsi(
-        \Magento\View\Element\AbstractBlock $block
-    ) {
+    protected function _wrapEsi(\Magento\View\Element\AbstractBlock $block)
+    {
         $url = $block->getUrl(
             'page_cache/block/esi',
-            [
-                'blocks' => json_encode([$block->getNameInLayout()]),
+            array(
+                'blocks' => json_encode(array($block->getNameInLayout())),
                 'handles' => json_encode($this->_helper->getActualHandles())
-            ]
+            )
         );
         return sprintf('<esi:include src="%s" />', $url);
     }
@@ -124,12 +147,16 @@ class Observer
      * @param \Magento\Event\Observer $observer
      * @return void
      */
-    public function invalidateCache(\Magento\Event\Observer $observer)
+    public function flushCacheByTags(\Magento\Event\Observer $observer)
     {
-        $object = $observer->getEvent()->getObject();
-        if ($object instanceof \Magento\Object\IdentityInterface) {
-            if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN) {
-                $this->_cache->clean($object->getIdentities());
+        if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->_config->isEnabled()) {
+            $object = $observer->getEvent()->getObject();
+            if ($object instanceof \Magento\Object\IdentityInterface) {
+                $tags = $object->getIdentities();
+                foreach ($tags as $tag) {
+                    $tags[] = preg_replace("~_\\d+$~", '', $tag);
+                }
+                $this->_cache->clean(array_unique($tags));
             }
         }
     }
@@ -144,6 +171,37 @@ class Observer
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN) {
             $this->_cache->clean();
+        }
+    }
+
+    /**
+     * Invalidate full page cache
+     *
+     * @return \Magento\PageCache\Model\Observer
+     */
+    public function invalidateCache()
+    {
+        if ($this->_config->isEnabled()) {
+            $this->_typeList->invalidate('full_page');
+        }
+        return $this;
+    }
+
+    /**
+     * Register form key in session from cookie value
+     *
+     * @param \Magento\Event\Observer $observer
+     * @return void
+     */
+    public function registerFormKeyFromCookie(\Magento\Event\Observer $observer)
+    {
+        if (!$this->_config->isEnabled()) {
+            return;
+        }
+
+        $formKeyFromCookie = $this->_formKey->get();
+        if ($formKeyFromCookie) {
+            $this->_session->setData(\Magento\Data\Form\FormKey::FORM_KEY, $formKeyFromCookie);
         }
     }
 }

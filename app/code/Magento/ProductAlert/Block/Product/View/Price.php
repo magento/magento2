@@ -38,8 +38,7 @@ class Price extends \Magento\ProductAlert\Block\Product\View
      */
     public function setTemplate($template)
     {
-        if (!$this->_helper->isPriceAlertAllowed()
-            || !$this->_product || false === $this->_product->getCanShowPrice()
+        if (!$this->_helper->isPriceAlertAllowed() || !$this->_product || false === $this->_product->getCanShowPrice()
         ) {
             $template = '';
         } else {

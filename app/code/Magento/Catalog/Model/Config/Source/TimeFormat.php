@@ -34,7 +34,7 @@ class TimeFormat implements \Magento\Option\ArrayInterface
     {
         return array(
             array('value' => '12h', 'label' => __('12h AM/PM')),
-            array('value' => '24h', 'label' => __('24h')),
+            array('value' => '24h', 'label' => __('24h'))
         );
     }
 }

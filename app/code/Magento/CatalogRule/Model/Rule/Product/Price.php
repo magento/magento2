@@ -77,12 +77,25 @@ class Price extends \Magento\Core\Model\AbstractModel
      * @param string $websiteDate
      * @return $this
      */
-    public function applyPriceRuleToIndexTable(Select $select, $indexTable, $entityId, $customerGroupId,
-        $websiteId, $updateFields, $websiteDate)
-    {
+    public function applyPriceRuleToIndexTable(
+        Select $select,
+        $indexTable,
+        $entityId,
+        $customerGroupId,
+        $websiteId,
+        $updateFields,
+        $websiteDate
+    ) {
 
-        $this->_getResource()->applyPriceRuleToIndexTable($select, $indexTable, $entityId, $customerGroupId, $websiteId,
-            $updateFields, $websiteDate);
+        $this->_getResource()->applyPriceRuleToIndexTable(
+            $select,
+            $indexTable,
+            $entityId,
+            $customerGroupId,
+            $websiteId,
+            $updateFields,
+            $websiteDate
+        );
 
         return $this;
     }

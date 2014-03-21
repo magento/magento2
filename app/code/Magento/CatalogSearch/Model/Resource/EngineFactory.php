@@ -56,7 +56,7 @@ class EngineFactory
     {
         $engine = $this->_objectManager->create($className, $arguments);
 
-        if (false === ($engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface)) {
+        if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
             throw new \LogicException(
                 $className . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
             );

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\AdminNotification\Model\System\Message;
 
 class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
@@ -59,10 +58,12 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
         $arguments = array(
             'authorization' => $this->_authorizationMock,
             'urlBuilder' => $this->_urlInterfaceMock,
-            'cacheTypeList' => $this->_cacheTypeListMock,
+            'cacheTypeList' => $this->_cacheTypeListMock
         );
-        $this->_messageModel = $objectManagerHelper
-            ->getObject('Magento\AdminNotification\Model\System\Message\CacheOutdated', $arguments);
+        $this->_messageModel = $objectManagerHelper->getObject(
+            'Magento\AdminNotification\Model\System\Message\CacheOutdated',
+            $arguments
+        );
     }
 
     /**
@@ -72,8 +73,13 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIdentity($expectedSum, $cacheTypes)
     {
-        $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')
-            ->will($this->returnValue($cacheTypes));
+        $this->_cacheTypeListMock->expects(
+            $this->any()
+        )->method(
+            'getInvalidated'
+        )->will(
+            $this->returnValue($cacheTypes)
+        );
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
     }
 
@@ -100,8 +106,13 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
     public function testIsDisplayed($expected, $allowed, $cacheTypes)
     {
         $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue($allowed));
-        $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')
-            ->will($this->returnValue($cacheTypes));
+        $this->_cacheTypeListMock->expects(
+            $this->any()
+        )->method(
+            'getInvalidated'
+        )->will(
+            $this->returnValue($cacheTypes)
+        );
         $this->assertEquals($expected, $this->_messageModel->isDisplayed());
     }
 

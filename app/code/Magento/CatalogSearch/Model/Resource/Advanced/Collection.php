@@ -132,19 +132,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                     $conditionData = array();
 
                     if (!is_numeric($attributeId)) {
-                        $field = 't1.'.$attributeId;
-                    }
-                    else {
+                        $field = 't1.' . $attributeId;
+                    } else {
                         $storeId = $this->getStoreId();
-                        $onCondition = 't1.entity_id = t2.entity_id'
-                                . ' AND t1.attribute_id = t2.attribute_id'
-                                . ' AND t2.store_id=?';
+                        $onCondition = 't1.entity_id = t2.entity_id' .
+                            ' AND t1.attribute_id = t2.attribute_id' .
+                            ' AND t2.store_id=?';
 
-                        $select->joinLeft(
-                            array('t2' => $table),
-                            $conn->quoteInto($onCondition, $storeId),
-                            array()
-                        );
+                        $select->joinLeft(array('t2' => $table), $conn->quoteInto($onCondition, $storeId), array());
                         $select->where('t1.store_id = ?', 0);
                         $select->where('t1.attribute_id = ?', $attributeId);
 
@@ -153,30 +148,26 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                         }
 
                         $field = $this->getConnection()->getCheckSql('t2.value_id>0', 't2.value', 't1.value');
-
                     }
 
                     if (is_array($conditionValue)) {
-                        if (isset($conditionValue['in'])){
+                        if (isset($conditionValue['in'])) {
                             $conditionData[] = array('in' => $conditionValue['in']);
-                        }
-                        elseif (isset($conditionValue['in_set'])) {
+                        } elseif (isset($conditionValue['in_set'])) {
                             $conditionParts = array();
                             foreach ($conditionValue['in_set'] as $value) {
                                 $conditionParts[] = array('finset' => $value);
                             }
                             $conditionData[] = $conditionParts;
-                        }
-                        elseif (isset($conditionValue['like'])) {
-                            $conditionData[] = array ('like' => $conditionValue['like']);
-                        }
-                        elseif (isset($conditionValue['from']) && isset($conditionValue['to'])) {
+                        } elseif (isset($conditionValue['like'])) {
+                            $conditionData[] = array('like' => $conditionValue['like']);
+                        } elseif (isset($conditionValue['from']) && isset($conditionValue['to'])) {
                             $invalidDateMessage = __('Please specify correct data.');
                             if ($conditionValue['from']) {
                                 if (!\Zend_Date::isDate($conditionValue['from'])) {
                                     throw new Exception($invalidDateMessage);
                                 }
-                                if (!is_numeric($conditionValue['from'])){
+                                if (!is_numeric($conditionValue['from'])) {
                                     $conditionValue['from'] = $this->_date->gmtDate(null, $conditionValue['from']);
                                     if (!$conditionValue['from']) {
                                         $conditionValue['from'] = $this->_date->gmtDate();
@@ -188,7 +179,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                                 if (!\Zend_Date::isDate($conditionValue['to'])) {
                                     throw new Exception($invalidDateMessage);
                                 }
-                                if (!is_numeric($conditionValue['to'])){
+                                if (!is_numeric($conditionValue['to'])) {
                                     $conditionValue['to'] = $this->_date->gmtDate(null, $conditionValue['to']);
                                     if (!$conditionValue['to']) {
                                         $conditionValue['to'] = $this->_date->gmtDate();

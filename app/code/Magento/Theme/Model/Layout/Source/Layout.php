@@ -33,9 +33,8 @@ class Layout implements \Magento\Option\ArrayInterface
     /**
      * @param \Magento\Theme\Model\Layout\Config $config
      */
-    public function __construct(
-        \Magento\Theme\Model\Layout\Config $config
-    ) {
+    public function __construct(\Magento\Theme\Model\Layout\Config $config)
+    {
         $this->_config = $config;
     }
 
@@ -83,14 +82,11 @@ class Layout implements \Magento\Option\ArrayInterface
         $options = array();
 
         foreach ($this->getOptions() as $value => $label) {
-            $options[] = array(
-                'label' => $label,
-                'value' => $value
-            );
+            $options[] = array('label' => $label, 'value' => $value);
         }
 
         if ($withEmpty) {
-            array_unshift($options, array('value'=>'', 'label'=>__('-- Please Select --')));
+            array_unshift($options, array('value' => '', 'label' => __('-- Please Select --')));
         }
 
         return $options;

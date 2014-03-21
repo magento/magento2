@@ -36,14 +36,8 @@ class Status implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Integration\Model\Integration::STATUS_INACTIVE,
-                'label' => __('Inactive')
-            ),
-            array(
-                'value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE,
-                'label' => __('Active')
-            ),
+            array('value' => \Magento\Integration\Model\Integration::STATUS_INACTIVE, 'label' => __('Inactive')),
+            array('value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE, 'label' => __('Active'))
         );
     }
 }

@@ -37,8 +37,8 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\View\Element\AbstractBlock;
 
-class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
-    implements \Magento\View\Block\IdentityInterface
+class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\View\Block\IdentityInterface
 {
     /**
      * Default toolbar block name
@@ -140,9 +140,12 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
             // if this is a product view page
             if ($this->_coreRegistry->registry('product')) {
                 // get collection of categories this product is associated with
-                $categories = $this->_coreRegistry->registry('product')->getCategoryCollection()
-                    ->setPage(1, 1)
-                    ->load();
+                $categories = $this->_coreRegistry->registry(
+                    'product'
+                )->getCategoryCollection()->setPage(
+                    1,
+                    1
+                )->load();
                 // if the product is associated with any category
                 if ($categories->count()) {
                     // show products from this category
@@ -178,10 +181,6 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getLayer()
     {
-        $layer = $this->_coreRegistry->registry('current_layer');
-        if ($layer) {
-            return $layer;
-        }
         return $this->_catalogLayer;
     }
 
@@ -239,9 +238,10 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         $toolbar->setCollection($collection);
 
         $this->setChild('toolbar', $toolbar);
-        $this->_eventManager->dispatch('catalog_block_product_list_collection', array(
-            'collection' => $this->_getProductCollection()
-        ));
+        $this->_eventManager->dispatch(
+            'catalog_block_product_list_collection',
+            array('collection' => $this->_getProductCollection())
+        );
 
         $this->_getProductCollection()->load();
 
@@ -330,7 +330,8 @@ class ListProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Block\Product\ListProduct
      */
-    public function prepareSortableFieldsByCategory($category) {
+    public function prepareSortableFieldsByCategory($category)
+    {
         if (!$this->getAvailableOrders()) {
             $this->setAvailableOrders($category->getAvailableSortByOptions());
         }

@@ -27,5 +27,4 @@ namespace Magento\Validator;
 
 class Int extends \Zend_Validate_Int implements \Magento\Validator\ValidatorInterface
 {
-
 }

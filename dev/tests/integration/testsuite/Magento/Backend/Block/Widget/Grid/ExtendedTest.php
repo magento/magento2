@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
@@ -46,20 +45,21 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_layoutMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\LayoutInterface');
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Block\Template\Context', array('layout' => $this->_layoutMock));
+        $this->_layoutMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        );
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Block\Template\Context',
+            array('layout' => $this->_layoutMock)
+        );
         $this->_block = $this->_layoutMock->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Extended', 'grid', array('context' => $context)
+            'Magento\Backend\Block\Widget\Grid\Extended',
+            'grid',
+            array('context' => $context)
         );
 
-        $this->_block->addColumn('column1',
-            array('id' => 'columnId1')
-        );
-        $this->_block->addColumn('column2',
-            array('id' => 'columnId2')
-        );
+        $this->_block->addColumn('column1', array('id' => 'columnId1'));
+        $this->_block->addColumn('column2', array('id' => 'columnId2'));
     }
 
     /**

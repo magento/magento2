@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\App\Router;
 
 /**
@@ -51,9 +50,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     public function testRouterCanProcessRequestsWithProperPathInfo()
     {
         $request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $request->expects($this->once())
-            ->method('getPathInfo')
-            ->will($this->returnValue('backend/admin/dashboard'));
+        $request->expects($this->once())->method('getPathInfo')->will($this->returnValue('backend/admin/dashboard'));
 
         $this->assertInstanceOf('Magento\Backend\Controller\Adminhtml\Dashboard', $this->model->match($request));
     }
@@ -74,7 +71,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('Magento_Index', 'process', 'Magento\Index\Controller\Adminhtml\Process'),
-            array('Magento_Index_Adminhtml', 'process', 'Magento\Index\Controller\Adminhtml\Process'),
+            array('Magento_Index_Adminhtml', 'process', 'Magento\Index\Controller\Adminhtml\Process')
         );
     }
 
@@ -91,29 +88,28 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
             'testmodule' => array(
                 'frontName' => 'testfixture',
                 'id' => 'testfixture',
-                'modules' => ['Magento_TestFixture_Adminhtml']
+                'modules' => array('Magento_TestFixture_Adminhtml')
             )
         );
 
         $routeConfig = $this->getMock(
             'Magento\App\Route\Config',
-            ['_getRoutes'],
+            array('_getRoutes'),
             array(
                 'reader' => $this->objectManager->get('Magento\App\Route\Config\Reader'),
                 'cache' => $this->objectManager->get('Magento\Config\CacheInterface'),
                 'configScope' => $this->objectManager->get('Magento\Config\ScopeInterface'),
                 'areaList' => $this->objectManager->get('Magento\App\AreaList'),
-                'cacheId' => 'RoutesConfig',
+                'cacheId' => 'RoutesConfig'
             )
         );
 
-        $routeConfig->expects($this->any())
-            ->method('_getRoutes')
-            ->will($this->returnValue($routers));
+        $routeConfig->expects($this->any())->method('_getRoutes')->will($this->returnValue($routers));
 
-        $defaultRouter = $this->objectManager->create('Magento\Backend\App\Router\DefaultRouter', array(
-            'routeConfig' => $routeConfig
-        ));
+        $defaultRouter = $this->objectManager->create(
+            'Magento\Backend\App\Router\DefaultRouter',
+            array('routeConfig' => $routeConfig)
+        );
 
         /** @var $request \Magento\TestFramework\Request */
         $request = $this->objectManager->get('Magento\TestFramework\Request');

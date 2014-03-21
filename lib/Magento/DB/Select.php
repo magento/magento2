@@ -58,12 +58,12 @@ class Select extends \Zend_Db_Select
     /**
      * Condition type
      */
-    const TYPE_CONDITION    = 'TYPE_CONDITION';
+    const TYPE_CONDITION = 'TYPE_CONDITION';
 
     /**
      * Straight join key
      */
-    const STRAIGHT_JOIN     = 'straightjoin';
+    const STRAIGHT_JOIN = 'straightjoin';
 
     /**
      * Sql straight join
@@ -144,8 +144,14 @@ class Select extends \Zend_Db_Select
                 foreach ($this->_parts[self::COLUMNS] as $columnEntry) {
                     list($correlationName, $column) = $columnEntry;
                     if ($column instanceof \Zend_Db_Expr) {
-                        if ($this->_findTableInCond($tableId, $column)
-                            || $this->_findTableInCond($tableProp['tableName'], $column)) {
+                        if ($this->_findTableInCond(
+                            $tableId,
+                            $column
+                        ) || $this->_findTableInCond(
+                            $tableProp['tableName'],
+                            $column
+                        )
+                        ) {
                             $useJoin = true;
                         }
                     } else {
@@ -155,22 +161,34 @@ class Select extends \Zend_Db_Select
                     }
                 }
                 foreach ($this->_parts[self::WHERE] as $where) {
-                    if ($this->_findTableInCond($tableId, $where)
-                        || $this->_findTableInCond($tableProp['tableName'], $where)) {
+                    if ($this->_findTableInCond(
+                        $tableId,
+                        $where
+                    ) || $this->_findTableInCond(
+                        $tableProp['tableName'],
+                        $where
+                    )
+                    ) {
                         $useJoin = true;
                     }
                 }
 
-                $joinUseInCond  = $useJoin;
-                $joinInTables   = array();
+                $joinUseInCond = $useJoin;
+                $joinInTables = array();
 
                 foreach ($this->_parts[self::FROM] as $tableCorrelationName => $table) {
                     if ($tableCorrelationName == $tableId) {
                         continue;
                     }
                     if (!empty($table['joinCondition'])) {
-                        if ($this->_findTableInCond($tableId, $table['joinCondition'])
-                        || $this->_findTableInCond($tableProp['tableName'], $table['joinCondition'])) {
+                        if ($this->_findTableInCond(
+                            $tableId,
+                            $table['joinCondition']
+                        ) || $this->_findTableInCond(
+                            $tableProp['tableName'],
+                            $table['joinCondition']
+                        )
+                        ) {
                             $useJoin = true;
                             $joinInTables[] = $tableCorrelationName;
                         }
@@ -238,14 +256,14 @@ class Select extends \Zend_Db_Select
         }
 
         $position = 0;
-        $result   = 0;
-        $needle   = array();
+        $result = 0;
+        $needle = array();
         while (is_integer($result)) {
             $result = strpos($cond, $table . '.', $position);
 
             if (is_integer($result)) {
                 $needle[] = $result;
-                $position = ($result + strlen($table) + 1);
+                $position = $result + strlen($table) + 1;
             }
         }
 
@@ -301,12 +319,12 @@ class Select extends \Zend_Db_Select
         if ($count === null) {
             $this->reset(self::LIMIT_COUNT);
         } else {
-            $this->_parts[self::LIMIT_COUNT]  = (int) $count;
+            $this->_parts[self::LIMIT_COUNT] = (int)$count;
         }
         if ($offset === null) {
             $this->reset(self::LIMIT_OFFSET);
         } else {
-            $this->_parts[self::LIMIT_OFFSET] = (int) $offset;
+            $this->_parts[self::LIMIT_OFFSET] = (int)$offset;
         }
         return $this;
     }
@@ -345,8 +363,7 @@ class Select extends \Zend_Db_Select
      */
     public function insertIgnoreFromSelect($tableName, $fields = array())
     {
-        return $this->getAdapter()
-            ->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
+        return $this->getAdapter()->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
     }
 
     /**
@@ -472,9 +489,7 @@ class Select extends \Zend_Db_Select
         } else {
             $exists = 'NOT EXISTS (%s)';
         }
-        $select->reset(self::COLUMNS)
-            ->columns(array(new \Zend_Db_Expr('1')))
-            ->where($joinCondition);
+        $select->reset(self::COLUMNS)->columns(array(new \Zend_Db_Expr('1')))->where($joinCondition);
 
         $exists = sprintf($exists, $select->assemble());
 

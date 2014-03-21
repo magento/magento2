@@ -37,7 +37,6 @@ class FileManager
      */
     protected $_writer;
 
-
     /**
      * @param \Magento\Tools\Migration\System\FileReader $reader
      * @param \Magento\Tools\Migration\System\WriterInterface $writer

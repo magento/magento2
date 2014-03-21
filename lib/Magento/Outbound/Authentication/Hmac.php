@@ -89,7 +89,6 @@ class Hmac implements AuthenticationInterface
      */
     protected function _getDomain()
     {
-        return parse_url($this->_storeManager->getSafeStore()
-            ->getBaseUrl(UrlInterface::URL_TYPE_WEB), PHP_URL_HOST);
+        return parse_url($this->_storeManager->getSafeStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB), PHP_URL_HOST);
     }
 }

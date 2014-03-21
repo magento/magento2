@@ -24,7 +24,7 @@
 namespace Magento\ConfigurableProduct\Block\Cart\Item\Renderer;
 
 use Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable as Renderer;
-use \Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
+use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,6 +39,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $productConfigMock;
+    
     /** @var Renderer */
     protected $_renderer;
 
@@ -55,15 +56,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
-        $this->productConfigMock =
-            $this->getMock('Magento\Catalog\Helper\Product\Configuration', array(), array(), '', false);
+        $this->productConfigMock = $this->getMock(
+            'Magento\Catalog\Helper\Product\Configuration',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_renderer = $objectManagerHelper->getObject(
             'Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable',
             array(
                 'viewConfig' => $this->_configManager,
                 'imageHelper' => $this->_imageHelper,
                 'storeConfig' => $this->_storeConfig,
-                'productConfig' =>$this->productConfigMock,
+                'productConfig' => $this->productConfigMock
             )
         );
     }
@@ -102,12 +108,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $arguments = array(
             'statusListFactory' => $this->getMock(
-                'Magento\Sales\Model\Status\ListFactory', array(), array(), '', false
+                'Magento\Sales\Model\Status\ListFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
             'itemOptionFactory' => $this->getMock(
-                'Magento\Sales\Model\Quote\Item\OptionFactory', array(), array(), '', false
-            ),
+                'Magento\Sales\Model\Quote\Item\OptionFactory',
+                array(),
+                array(),
+                '',
+                false
+            )
         );
         $childItem = $objectManagerHelper->getObject('Magento\Sales\Model\Quote\Item', $arguments);
         $childItem->setData('product', $childProduct);
@@ -169,8 +183,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $products['parentProduct'],
             $productForThumbnail,
-            'Parent product was expected to be returned '
-                . 'if "checkout/cart/configurable_product_image option" is set to "parent" in system config.'
+            'Parent product was expected to be returned ' .
+            'if "checkout/cart/configurable_product_image option" is set to "parent" in system config.'
         );
     }
 
@@ -184,13 +198,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function _initProducts($childHasThumbnail = true, $useParentThumbnail = false)
     {
         /** Set option which can force usage of parent product thumbnail when configurable product is displayed */
-        $thumbnailToBeUsed = $useParentThumbnail
-            ? ThumbnailSource::OPTION_USE_PARENT_IMAGE
-            : ThumbnailSource::OPTION_USE_OWN_IMAGE;
-        $this->_storeConfig->expects($this->any())
-            ->method('getConfig')
-            ->with(Renderer::CONFIG_THUMBNAIL_SOURCE)
-            ->will($this->returnValue($thumbnailToBeUsed));
+        $thumbnailToBeUsed = $useParentThumbnail ?
+            ThumbnailSource::OPTION_USE_PARENT_IMAGE :
+            ThumbnailSource::OPTION_USE_OWN_IMAGE;
+        $this->_storeConfig->expects(
+            $this->any()
+        )->method(
+            'getConfig'
+        )->with(
+            Renderer::CONFIG_THUMBNAIL_SOURCE
+        )->will(
+            $this->returnValue($thumbnailToBeUsed)
+        );
 
         /** Initialized parent product */
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $parentProduct */
@@ -215,13 +234,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($parentProduct));
-        $item->expects($this->any())
-            ->method('getOptionByCode')
-            ->with('simple_product')
-            ->will($this->returnValue($itemOption));
+        $item->expects(
+            $this->any()
+        )->method(
+            'getOptionByCode'
+        )->with(
+            'simple_product'
+        )->will(
+            $this->returnValue($itemOption)
+        );
         $this->_renderer->setItem($item);
 
-        return ['parentProduct' => $parentProduct, 'childProduct' => $childProduct];
+        return array('parentProduct' => $parentProduct, 'childProduct' => $childProduct);
     }
 
     public function testGetOptionList()
@@ -236,17 +260,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $productTags = array('catalog_product_1');
         $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $product->expects($this->exactly(2))
-            ->method('getIdentities')
-            ->will($this->returnValue($productTags));
+        $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
         $item = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
-        $item->expects($this->exactly(2))
-            ->method('getProduct')
-            ->will($this->returnValue($product));
+        $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->_renderer->setItem($item);
-        $this->assertEquals(
-            array_merge($productTags, $productTags),
-            $this->_renderer->getIdentities()
-        );
+        $this->assertEquals(array_merge($productTags, $productTags), $this->_renderer->getIdentities());
     }
 }

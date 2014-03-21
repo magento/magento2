@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
-class ExtendsMapper
-    extends \Magento\Backend\Model\Config\Structure\AbstractMapper
+class ExtendsMapper extends \Magento\Backend\Model\Config\Structure\AbstractMapper
 {
     /**
      * System configuration array
@@ -74,7 +73,7 @@ class ExtendsMapper
             return $data;
         }
 
-        $this->_systemConfiguration = &$data['config']['system']['sections'];
+        $this->_systemConfiguration =& $data['config']['system']['sections'];
 
         foreach (array_keys($this->_systemConfiguration) as $nodeName) {
             $this->_traverseAndExtend($nodeName);
@@ -150,7 +149,8 @@ class ExtendsMapper
 
         if (!$data) {
             throw new \InvalidArgumentException(
-                sprintf('Invalid path in extends attribute of config/system/sections/%s node', $path));
+                sprintf('Invalid path in extends attribute of config/system/sections/%s node', $path)
+            );
         }
 
         if (isset($data['extends'])) {
@@ -196,13 +196,13 @@ class ExtendsMapper
     protected function _replaceData($path, $newData)
     {
         $pathParts = $this->_transformPathToKeysList($path);
-        $result = &$this->_systemConfiguration;
+        $result =& $this->_systemConfiguration;
 
         foreach ($pathParts as $part) {
             if (!isset($result[$part])) {
                 return;
             }
-            $result = &$result[$part];
+            $result =& $result[$part];
         }
 
         $result = $newData;

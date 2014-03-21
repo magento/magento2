@@ -81,44 +81,59 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $head->addChild(
                 'magento-adminhtml-catalog-category-edit-js',
                 'Magento\Theme\Block\Html\Head\Script',
-                array(
-                    'file' => 'Magento_Catalog::catalog/category/edit.js'
-                )
+                array('file' => 'Magento_Catalog::catalog/category/edit.js')
             );
         }
 
         $category = $this->getCategory();
-        $categoryId = (int) $category->getId(); // 0 when we create category, otherwise some value for editing category
+        $categoryId = (int)$category->getId();
+        // 0 when we create category, otherwise some value for editing category
 
-        $this->setChild('tabs',
+        $this->setChild(
+            'tabs',
             $this->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tabs', 'tabs')
         );
 
         // Save button
         if (!$category->isReadonly()) {
-            $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'     => __('Save Category'),
-                'onclick'   => "categorySubmit('" . $this->getSaveUrl() . "', true)",
-                'class' => 'save'
-            ));
+            $this->addChild(
+                'save_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Save Category'),
+                    'onclick' => "categorySubmit('" . $this->getSaveUrl() . "', true)",
+                    'class' => 'save'
+                )
+            );
         }
 
         // Delete button
         if (!in_array($categoryId, $this->getRootIds()) && $category->isDeleteable()) {
-            $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'     => __('Delete Category'),
-                'onclick'   => "categoryDelete('" . $this->getUrl('catalog/*/delete', array('_current' => true)) . "', true, {$categoryId})",
-                'class' => 'delete'
-            ));
+            $this->addChild(
+                'delete_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Delete Category'),
+                    'onclick' => "categoryDelete('" . $this->getUrl(
+                        'catalog/*/delete',
+                        array('_current' => true)
+                    ) . "', true, {$categoryId})",
+                    'class' => 'delete'
+                )
+            );
         }
 
         // Reset button
         if (!$category->isReadonly()) {
             $resetPath = $categoryId ? 'catalog/*/edit' : 'catalog/*/add';
-            $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'     => __('Reset'),
-                'onclick'   => "categoryReset('".$this->getUrl($resetPath, array('_current'=>true))."',true)"
-            ));
+            $this->addChild(
+                'reset_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Reset'),
+                    'onclick' => "categoryReset('" . $this->getUrl($resetPath, array('_current' => true)) . "',true)"
+                )
+            );
         }
 
         return parent::_prepareLayout();
@@ -129,13 +144,13 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getStoreConfigurationUrl()
     {
-        $storeId = (int) $this->getRequest()->getParam('store');
+        $storeId = (int)$this->getRequest()->getParam('store');
         $params = array();
-//        $params = array('section'=>'catalog');
+        //        $params = array('section'=>'catalog');
         if ($storeId) {
             $store = $this->_storeManager->getStore($storeId);
             $params['website'] = $store->getWebsite()->getCode();
-            $params['store']   = $store->getCode();
+            $params['store'] = $store->getCode();
         }
         return $this->getUrl('catalog/system_store', $params);
     }
@@ -196,8 +211,10 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         if (isset($config['name'])) {
             $config['element_name'] = $config['name'];
         }
-        $this->setChild($alias . '_button',
-                        $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config));
+        $this->setChild(
+            $alias . '_button',
+            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->addData($config)
+        );
         $this->_additionalButtons[$alias] = $alias . '_button';
         return $this;
     }
@@ -235,8 +252,8 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             if ($this->getCategoryId()) {
                 return $this->getCategoryName();
             } else {
-                $parentId = (int) $this->getRequest()->getParam('parent');
-                if ($parentId && ($parentId != \Magento\Catalog\Model\Category::TREE_ROOT_ID)) {
+                $parentId = (int)$this->getRequest()->getParam('parent');
+                if ($parentId && $parentId != \Magento\Catalog\Model\Category::TREE_ROOT_ID) {
                     return __('New Subcategory');
                 } else {
                     return __('New Root Category');
@@ -252,7 +269,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getDeleteUrl(array $args = array())
     {
-        $params = array('_current'=>true);
+        $params = array('_current' => true);
         $params = array_merge($params, $args);
         return $this->getUrl('catalog/*/delete', $params);
     }
@@ -265,7 +282,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function getRefreshPathUrl(array $args = array())
     {
-        $params = array('_current'=>true);
+        $params = array('_current' => true);
         $params = array_merge($params, $args);
         return $this->getUrl('catalog/*/refreshPath', $params);
     }

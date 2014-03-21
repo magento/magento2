@@ -51,7 +51,6 @@ class Container extends \Magento\View\Element\Html\Select
      * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param array $data
      */
-
     public function __construct(
         \Magento\View\Element\Context $context,
         \Magento\View\Layout\ProcessorFactory $layoutProcessorFactory,
@@ -72,8 +71,10 @@ class Container extends \Magento\View\Element\Html\Select
     {
         $this->setName('block');
         $this->setClass('required-entry select');
-        $this->setExtraParams('onchange="WidgetInstance.loadSelectBoxByType(\'block_template\','
-            . ' this.up(\'div.group_container\'), this.value)"');
+        $this->setExtraParams(
+            'onchange="WidgetInstance.loadSelectBoxByType(\'block_template\',' .
+            ' this.up(\'div.group_container\'), this.value)"'
+        );
     }
 
     /**
@@ -84,9 +85,7 @@ class Container extends \Magento\View\Element\Html\Select
     protected function _beforeToHtml()
     {
         if (!$this->getOptions()) {
-            $layoutMergeParams = array(
-                'theme' => $this->_getThemeInstance($this->getTheme()),
-            );
+            $layoutMergeParams = array('theme' => $this->_getThemeInstance($this->getTheme()));
             /** @var $layoutProcessor \Magento\View\Layout\ProcessorInterface */
             $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
             $layoutProcessor->addPageHandles(array($this->getLayoutHandle()));

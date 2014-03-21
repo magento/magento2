@@ -30,8 +30,7 @@ use Magento\Data\Form\Element\AbstractElement;
 /**
  * Fieldset renderer which expanded by default
  */
-class Expanded
-    extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Expanded extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
      * @param \Magento\Backend\Block\Context $context

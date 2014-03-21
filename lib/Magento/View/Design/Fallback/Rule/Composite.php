@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Fallback\Rule;
 
 /**
@@ -47,7 +46,7 @@ class Composite implements RuleInterface
     public function __construct(array $rules)
     {
         foreach ($rules as $rule) {
-            if (!($rule instanceof RuleInterface)) {
+            if (!$rule instanceof RuleInterface) {
                 throw new \InvalidArgumentException('Each item should implement the fallback rule interface.');
             }
         }

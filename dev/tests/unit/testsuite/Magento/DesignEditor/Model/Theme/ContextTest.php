@@ -68,10 +68,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
         $this->_copyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false);
 
-        $this->_model = new \Magento\DesignEditor\Model\Theme\Context(
-            $this->_themeFactory,
-            $this->_copyService
-        );
+        $this->_model = new \Magento\DesignEditor\Model\Theme\Context($this->_themeFactory, $this->_copyService);
     }
 
     public function testConstruct()
@@ -91,18 +88,25 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     public function testSetEditableThemeById()
     {
-        $this->_theme->expects($this->any())
-            ->method('load')
-            ->with($this->equalTo(self::THEME_ID))
-            ->will($this->returnSelf());
+        $this->_theme->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->with(
+            $this->equalTo(self::THEME_ID)
+        )->will(
+            $this->returnSelf()
+        );
 
-        $this->_theme->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(self::THEME_ID));
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::THEME_ID));
 
-        $this->_theme->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL));
+        $this->_theme->expects(
+            $this->any()
+        )->method(
+            'getType'
+        )->will(
+            $this->returnValue(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL)
+        );
 
         $this->assertEquals($this->_model, $this->_model->setEditableThemeById(self::THEME_ID));
     }
@@ -113,18 +117,25 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetEditableThemeByIdWrongType()
     {
-        $this->_theme->expects($this->any())
-            ->method('load')
-            ->with($this->equalTo(self::THEME_ID))
-            ->will($this->returnSelf());
+        $this->_theme->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->with(
+            $this->equalTo(self::THEME_ID)
+        )->will(
+            $this->returnSelf()
+        );
 
-        $this->_theme->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(self::THEME_ID));
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(self::THEME_ID));
 
-        $this->_theme->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue(\Magento\View\Design\ThemeInterface::TYPE_STAGING));
+        $this->_theme->expects(
+            $this->any()
+        )->method(
+            'getType'
+        )->will(
+            $this->returnValue(\Magento\View\Design\ThemeInterface::TYPE_STAGING)
+        );
 
         $this->_model->setEditableThemeById(self::THEME_ID);
     }
@@ -135,14 +146,17 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetEditableThemeByIdWrongThemeId()
     {
-        $this->_theme->expects($this->any())
-            ->method('load')
-            ->with($this->equalTo(self::THEME_ID))
-            ->will($this->returnSelf());
+        $this->_theme->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->with(
+            $this->equalTo(self::THEME_ID)
+        )->will(
+            $this->returnSelf()
+        );
 
-        $this->_theme->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(false));
+        $this->_theme->expects($this->any())->method('getId')->will($this->returnValue(false));
 
         $this->_model->setEditableThemeById(self::THEME_ID);
     }
@@ -169,18 +183,26 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->_setEditableTheme();
 
-        $this->_theme->expects($this->atLeastOnce())
-            ->method('isVirtual')
-            ->will($this->returnValue(true));
+        $this->_theme->expects($this->atLeastOnce())->method('isVirtual')->will($this->returnValue(true));
 
-        $themeObj = $this->getMock('Magento\Core\Model\Theme\Domain\Virtual', array('getStagingTheme'),
-            array(), '', false);
+        $themeObj = $this->getMock(
+            'Magento\Core\Model\Theme\Domain\Virtual',
+            array('getStagingTheme'),
+            array(),
+            '',
+            false
+        );
         $themeObj->expects($this->atLeastOnce())->method('getStagingTheme')->will($this->returnSelf());
 
-        $this->_theme->expects($this->atLeastOnce())
-            ->method('getDomainModel')
-            ->with($this->equalTo(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL))
-            ->will($this->returnValue($themeObj));
+        $this->_theme->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getDomainModel'
+        )->with(
+            $this->equalTo(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
+        )->will(
+            $this->returnValue($themeObj)
+        );
 
         $this->assertEquals($themeObj, $this->_model->getStagingTheme());
     }
@@ -199,9 +221,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->_setEditableTheme();
 
-        $this->_theme->expects($this->atLeastOnce())
-            ->method('isVirtual')
-            ->will($this->returnValue(false));
+        $this->_theme->expects($this->atLeastOnce())->method('isVirtual')->will($this->returnValue(false));
 
         $this->_model->getStagingTheme();
     }
@@ -212,9 +232,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testGetVisibleTheme($isVirtual)
     {
         $this->_setEditableTheme();
-        $this->_theme->expects($this->atLeastOnce())
-            ->method('isVirtual')
-            ->will($this->returnValue($isVirtual));
+        $this->_theme->expects($this->atLeastOnce())->method('isVirtual')->will($this->returnValue($isVirtual));
 
         if ($isVirtual) {
             $themeObject = $this->_setStagingTheme();
@@ -230,10 +248,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public static function themeDataProvider()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return array(array(true), array(false));
     }
 
     protected function _setEditableTheme()
@@ -259,10 +274,16 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->_setEditableTheme();
         $themeObject = $this->_setStagingTheme();
-        $this->_copyService->expects($this->atLeastOnce())
-            ->method('copy')
-            ->with($this->equalTo($themeObject), $this->equalTo($this->_theme))
-            ->will($this->returnSelf());
+        $this->_copyService->expects(
+            $this->atLeastOnce()
+        )->method(
+            'copy'
+        )->with(
+            $this->equalTo($themeObject),
+            $this->equalTo($this->_theme)
+        )->will(
+            $this->returnSelf()
+        );
         $this->assertEquals($this->_model, $this->_model->copyChanges());
     }
 }

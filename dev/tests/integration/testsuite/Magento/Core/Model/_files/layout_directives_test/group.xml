@@ -23,22 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
     <block class="Magento\View\Element\Text" name="block1">
         <block class="Magento\View\Element\Text" name="block2" group="group1">
-            <argumrnts>
+            <arguments>
                 <argument xsi:type="string" name="text">blok2</argument>
-            </argumrnts>
+            </arguments>
         </block>
         <block class="Magento\View\Element\Text" name="block3" group="group1" >
-            <argumrnts>
+            <arguments>
                 <argument xsi:type="string" name="text">blok3</argument>
-            </argumrnts>
+            </arguments>
         </block>
         <block class="Magento\View\Element\Text" name="block4">
-            <argumrnts>
+            <arguments>
                 <argument xsi:type="string" name="text">blok4</argument>
-            </argumrnts>
+            </arguments>
         </block>
         </block>
 </layout>

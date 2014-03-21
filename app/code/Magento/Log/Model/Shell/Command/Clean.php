@@ -50,11 +50,8 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
      * @param LogFactory $logFactory
      * @param int $days
      */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        LogFactory $logFactory,
-        $days
-    ) {
+    public function __construct(StoreManagerInterface $storeManager, LogFactory $logFactory, $days)
+    {
         $this->_storeManager = $storeManager;
         $this->_logFactory = $logFactory;
         $this->_days = $days;

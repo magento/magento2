@@ -39,7 +39,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Aggregation key daily
      */
-    const AGGREGATION_DAILY   = 'report_viewed_product_aggregated_daily';
+    const AGGREGATION_DAILY = 'report_viewed_product_aggregated_daily';
 
     /**
      * Aggregation key monthly
@@ -49,7 +49,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     /**
      * Aggregation key yearly
      */
-    const AGGREGATION_YEARLY  = 'report_viewed_product_aggregated_yearly';
+    const AGGREGATION_YEARLY = 'report_viewed_product_aggregated_yearly';
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product
@@ -105,7 +105,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        $mainTable   = $this->getMainTable();
+        $mainTable = $this->getMainTable();
         $adapter = $this->_getWriteAdapter();
 
         // convert input dates to UTC to be comparable with DATETIME fields in DB
@@ -117,7 +117,10 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
                 $this->getTable('report_event'),
-                'logged_at', 'logged_at', $from, $to
+                'logged_at',
+                'logged_at',
+                $from,
+                $to
             );
         } else {
             $subSelect = null;
@@ -127,35 +130,43 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $periodExpr = $adapter->getDatePartSql(
             $this->getStoreTZOffsetQuery(
                 array('source_table' => $this->getTable('report_event')),
-                'source_table.logged_at', $from, $to
+                'source_table.logged_at',
+                $from,
+                $to
             )
         );
         $select = $adapter->select();
 
-        $select->group(array(
-            $periodExpr,
-            'source_table.store_id',
-            'source_table.object_id'
-        ));
+        $select->group(array($periodExpr, 'source_table.store_id', 'source_table.object_id'));
 
         $viewsNumExpr = new \Zend_Db_Expr('COUNT(source_table.event_id)');
 
         $columns = array(
-            'period'                 => $periodExpr,
-            'store_id'               => 'source_table.store_id',
-            'product_id'             => 'source_table.object_id',
-            'product_name'           => new \Zend_Db_Expr(sprintf('MIN(%s)', $adapter->getIfNullSql(
-                'product_name.value',
-                'product_default_name.value'
-            ))),
-            'product_price' => new \Zend_Db_Expr(sprintf('MIN(%s)', $adapter->getIfNullSql(
-                $adapter->getIfNullSql('product_price.value', 'product_default_price.value'), 0
-            ))),
+            'period' => $periodExpr,
+            'store_id' => 'source_table.store_id',
+            'product_id' => 'source_table.object_id',
+            'product_name' => new \Zend_Db_Expr(
+                sprintf('MIN(%s)', $adapter->getIfNullSql('product_name.value', 'product_default_name.value'))
+            ),
+            'product_price' => new \Zend_Db_Expr(
+                sprintf(
+                    'MIN(%s)',
+                    $adapter->getIfNullSql(
+                        $adapter->getIfNullSql('product_price.value', 'product_default_price.value'),
+                        0
+                    )
+                )
+            ),
             'views_num' => $viewsNumExpr
         );
 
-        $select->from(array('source_table' => $this->getTable('report_event')), $columns)
-            ->where('source_table.event_type_id = ?', \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW);
+        $select->from(
+            array('source_table' => $this->getTable('report_event')),
+            $columns
+        )->where(
+            'source_table.event_type_id = ?',
+            \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW
+        );
 
         $select->joinInner(
             array('product' => $this->getTable('catalog_product_entity')),
@@ -181,8 +192,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             array('product_name' => $nameAttribute->getBackend()->getTable()),
             $joinExprProductName,
             array()
-        )
-        ->joinLeft(
+        )->joinLeft(
             array('product_default_name' => $nameAttribute->getBackend()->getTable()),
             $joinProductName,
             array()
@@ -205,8 +215,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             array('product_price' => $priceAttribute->getBackend()->getTable()),
             $joinExprProductPrice,
             array()
-        )
-        ->joinLeft(
+        )->joinLeft(
             array('product_default_price' => $priceAttribute->getBackend()->getTable()),
             $joinProductPrice,
             array()

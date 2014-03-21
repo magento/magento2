@@ -44,7 +44,7 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @var array
      */
-    protected $_storeIds            = array();
+    protected $_storeIds = array();
 
     /**
      * StoreIds setter
@@ -67,9 +67,11 @@ class Shopcart extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         if (is_null($this->_currentCurrencyCode)) {
             reset($this->_storeIds);
-            $this->_currentCurrencyCode = (count($this->_storeIds) > 0)
-                ? $this->_storeManager->getStore(current($this->_storeIds))->getBaseCurrencyCode()
-                : $this->_storeManager->getStore()->getBaseCurrencyCode();
+            $this->_currentCurrencyCode = count(
+                $this->_storeIds
+            ) > 0 ? $this->_storeManager->getStore(
+                current($this->_storeIds)
+            )->getBaseCurrencyCode() : $this->_storeManager->getStore()->getBaseCurrencyCode();
         }
         return $this->_currentCurrencyCode;
     }

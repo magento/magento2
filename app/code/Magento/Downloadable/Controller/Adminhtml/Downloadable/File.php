@@ -32,7 +32,6 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 class File extends \Magento\Backend\App\Action
 {
     /**
@@ -51,7 +50,7 @@ class File extends \Magento\Backend\App\Action
      * @var \Magento\Downloadable\Helper\File
      */
     protected $_fileHelper;
-    
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Downloadable\Model\Link $link
@@ -108,11 +107,11 @@ class File extends \Magento\Backend\App\Action
             }
 
             $result['cookie'] = array(
-                'name'     => $this->_getSession()->getName(),
-                'value'    => $this->_getSession()->getSessionId(),
+                'name' => $this->_getSession()->getName(),
+                'value' => $this->_getSession()->getSessionId(),
                 'lifetime' => $this->_getSession()->getCookieLifetime(),
-                'path'     => $this->_getSession()->getCookiePath(),
-                'domain'   => $this->_getSession()->getCookieDomain()
+                'path' => $this->_getSession()->getCookiePath(),
+                'domain' => $this->_getSession()->getCookieDomain()
             );
         } catch (\Exception $e) {
             $result = array('error' => $e->getMessage(), 'errorcode' => $e->getCode());

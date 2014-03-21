@@ -39,26 +39,26 @@ class PropertyMapper extends PropertyMapperAbstract
     public function map(array $input, $entityTypeId)
     {
         return array(
-            'frontend_input_renderer'       => $this->_getValue($input, 'input_renderer'),
-            'is_global'                     => $this->_getValue(
-                    $input,
-                    'global',
-                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
-                ),
-            'is_visible'                    => $this->_getValue($input, 'visible', 1),
-            'is_searchable'                 => $this->_getValue($input, 'searchable', 0),
-            'is_filterable'                 => $this->_getValue($input, 'filterable', 0),
-            'is_comparable'                 => $this->_getValue($input, 'comparable', 0),
-            'is_visible_on_front'           => $this->_getValue($input, 'visible_on_front', 0),
-            'is_wysiwyg_enabled'            => $this->_getValue($input, 'wysiwyg_enabled', 0),
-            'is_html_allowed_on_front'      => $this->_getValue($input, 'is_html_allowed_on_front', 0),
+            'frontend_input_renderer' => $this->_getValue($input, 'input_renderer'),
+            'is_global' => $this->_getValue(
+                $input,
+                'global',
+                \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
+            ),
+            'is_visible' => $this->_getValue($input, 'visible', 1),
+            'is_searchable' => $this->_getValue($input, 'searchable', 0),
+            'is_filterable' => $this->_getValue($input, 'filterable', 0),
+            'is_comparable' => $this->_getValue($input, 'comparable', 0),
+            'is_visible_on_front' => $this->_getValue($input, 'visible_on_front', 0),
+            'is_wysiwyg_enabled' => $this->_getValue($input, 'wysiwyg_enabled', 0),
+            'is_html_allowed_on_front' => $this->_getValue($input, 'is_html_allowed_on_front', 0),
             'is_visible_in_advanced_search' => $this->_getValue($input, 'visible_in_advanced_search', 0),
-            'is_filterable_in_search'       => $this->_getValue($input, 'filterable_in_search', 0),
-            'used_in_product_listing'       => $this->_getValue($input, 'used_in_product_listing', 0),
-            'used_for_sort_by'              => $this->_getValue($input, 'used_for_sort_by', 0),
-            'apply_to'                      => $this->_getValue($input, 'apply_to'),
-            'position'                      => $this->_getValue($input, 'position', 0),
-            'is_used_for_promo_rules'       => $this->_getValue($input, 'used_for_promo_rules', 0)
+            'is_filterable_in_search' => $this->_getValue($input, 'filterable_in_search', 0),
+            'used_in_product_listing' => $this->_getValue($input, 'used_in_product_listing', 0),
+            'used_for_sort_by' => $this->_getValue($input, 'used_for_sort_by', 0),
+            'apply_to' => $this->_getValue($input, 'apply_to'),
+            'position' => $this->_getValue($input, 'position', 0),
+            'is_used_for_promo_rules' => $this->_getValue($input, 'used_for_promo_rules', 0)
         );
     }
-} 
+}

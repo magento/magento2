@@ -28,9 +28,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 /**
  * Order Shipments grid
  */
-class Shipments
-    extends \Magento\Backend\Block\Widget\Grid\Extended
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Shipments extends \Magento\Backend\Block\Widget\Grid\Extended implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
@@ -94,14 +93,21 @@ class Shipments
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create($this->_getCollectionClass())
-            ->addFieldToSelect('entity_id')
-            ->addFieldToSelect('created_at')
-            ->addFieldToSelect('increment_id')
-            ->addFieldToSelect('total_qty')
-            ->addFieldToSelect('shipping_name')
-            ->setOrderFilter($this->getOrder())
-        ;
+        $collection = $this->_collectionFactory->create(
+            $this->_getCollectionClass()
+        )->addFieldToSelect(
+            'entity_id'
+        )->addFieldToSelect(
+            'created_at'
+        )->addFieldToSelect(
+            'increment_id'
+        )->addFieldToSelect(
+            'total_qty'
+        )->addFieldToSelect(
+            'shipping_name'
+        )->setOrderFilter(
+            $this->getOrder()
+        );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -113,35 +119,47 @@ class Shipments
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', array(
-            'header' => __('Shipment'),
-            'index' => 'increment_id',
-            'header_css_class'  => 'col-memo',
-            'column_css_class'  => 'col-memo'
-        ));
+        $this->addColumn(
+            'increment_id',
+            array(
+                'header' => __('Shipment'),
+                'index' => 'increment_id',
+                'header_css_class' => 'col-memo',
+                'column_css_class' => 'col-memo'
+            )
+        );
 
-        $this->addColumn('shipping_name', array(
-            'header' => __('Ship-to Name'),
-            'index' => 'shipping_name',
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'shipping_name',
+            array(
+                'header' => __('Ship-to Name'),
+                'index' => 'shipping_name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header' => __('Ship Date'),
-            'index' => 'created_at',
-            'type' => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Ship Date'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('total_qty', array(
-            'header' => __('Total Quantity'),
-            'index' => 'total_qty',
-            'type'  => 'number',
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
-        ));
+        $this->addColumn(
+            'total_qty',
+            array(
+                'header' => __('Total Quantity'),
+                'index' => 'total_qty',
+                'type' => 'number',
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -166,10 +184,8 @@ class Shipments
     {
         return $this->getUrl(
             'adminhtml/order_shipment/view',
-            array(
-                'shipment_id'=> $row->getId(),
-                'order_id'  => $row->getOrderId()
-         ));
+            array('shipment_id' => $row->getId(), 'order_id' => $row->getOrderId())
+        );
     }
 
     /**

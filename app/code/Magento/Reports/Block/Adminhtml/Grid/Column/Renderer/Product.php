@@ -30,8 +30,7 @@ namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Product
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column
@@ -41,9 +40,10 @@ class Product
      */
     public function render(\Magento\Object $row)
     {
-        $id   = $row->getId();
+        $id = $row->getId();
 
-        return sprintf('<a href="%s">%s</a>',
+        return sprintf(
+            '<a href="%s">%s</a>',
             $this->getUrl('catalog/product_review/', array('productId' => $id)),
             __('Show Reviews')
         );

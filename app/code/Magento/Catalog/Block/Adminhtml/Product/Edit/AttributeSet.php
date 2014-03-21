@@ -69,7 +69,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
             'showRecent' => true,
             'storageKey' => 'product-template-key',
             'minLength' => 0,
-            'currentlySelected' => $this->_coreRegistry->registry('product')->getAttributeSetId(),
+            'currentlySelected' => $this->_coreRegistry->registry('product')->getAttributeSetId()
         );
     }
 }

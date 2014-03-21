@@ -33,8 +33,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type;
 
-class Enabled
-    extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Enabled extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * Enable MAP
@@ -88,18 +87,9 @@ class Enabled
     {
         if (!$this->_options) {
             $this->_options = array(
-                array(
-                    'label' => __('Yes'),
-                    'value' => self::MSRP_ENABLE_YES
-                ),
-                array(
-                    'label' => __('No'),
-                    'value' => self::MSRP_ENABLE_NO
-                ),
-                array(
-                    'label' => __('Use config'),
-                    'value' => self::MSRP_ENABLE_USE_CONFIG
-                )
+                array('label' => __('Yes'), 'value' => self::MSRP_ENABLE_YES),
+                array('label' => __('No'), 'value' => self::MSRP_ENABLE_NO),
+                array('label' => __('Use config'), 'value' => self::MSRP_ENABLE_USE_CONFIG)
             );
         }
         return $this->_options;
@@ -113,16 +103,12 @@ class Enabled
     public function getFlatColums()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array(
-            'unsigned'  => false,
-            'default'   => null,
-            'extra'     => null
-        );
+        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type']     = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
-        $column['length']   = 1;
+        $column['type'] = \Magento\DB\Ddl\Table::TYPE_SMALLINT;
+        $column['length'] = 1;
         $column['nullable'] = true;
-        $column['comment']  = $attributeCode . ' column';
+        $column['comment'] = $attributeCode . ' column';
 
         return array($attributeCode => $column);
     }
@@ -135,7 +121,6 @@ class Enabled
      */
     public function getFlatUpdateSelect($store)
     {
-        return $this->_entityAttributeFactory->create()
-            ->getFlatUpdateSelect($this->getAttribute(), $store);
+        return $this->_entityAttributeFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
     }
 }

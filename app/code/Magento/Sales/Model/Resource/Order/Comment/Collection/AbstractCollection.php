@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Order\Comment\Collection;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractCollection
-    extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
 {
     /**
      * Set filter on comments by their parent item

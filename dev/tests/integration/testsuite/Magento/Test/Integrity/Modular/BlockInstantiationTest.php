@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
 
 /**
@@ -50,13 +49,19 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get('Magento\Config\ScopeInterface')
                     ->setCurrentScope($area);
-
+                $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\App\Http\Context');
+                $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+                $context->setValue(
+                    \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+                    \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+                    \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+                );
                 /** @var \Magento\Core\Model\App $app */
                 $app = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App');
                 $app->loadArea($area);
 
-                $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->create($class);
+                $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
                 $this->assertNotNull($block);
             },
             $this->allBlocksDataProvider()
@@ -71,8 +76,11 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $blockClass = '';
         try {
             /** @var $website \Magento\Core\Model\Website */
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->setWebsiteId(0);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\StoreManagerInterface'
+            )->getStore()->setWebsiteId(
+                0
+            );
 
             $enabledModules = $this->_getEnabledModules();
             $skipBlocks = $this->_getBlocksToSkip();
@@ -90,8 +98,11 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             }
             return $templateBlocks;
         } catch (\Exception $e) {
-            trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
-                . " Exception: {$e}", E_USER_ERROR);
+            trigger_error(
+                "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
+                " Exception: {$e}",
+                E_USER_ERROR
+            );
         }
     }
 
@@ -122,18 +133,25 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $area = 'frontend';
         if ($module == 'Magento_Install') {
             $area = 'install';
-        } elseif ($module == 'Magento_Adminhtml' || strpos($blockClass, '\\Adminhtml\\')
-            || strpos($blockClass, '_Backend_')
-            || $class->isSubclassOf('Magento\Backend\Block\Template')
+        } elseif ($module == 'Magento_Adminhtml' || strpos(
+            $blockClass,
+            '\\Adminhtml\\'
+        ) || strpos(
+            $blockClass,
+            '_Backend_'
+        ) || $class->isSubclassOf(
+            'Magento\Backend\Block\Template'
+        )
         ) {
             $area = 'adminhtml';
         }
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\App'
+        )->loadAreaPart(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
             \Magento\Core\Model\App\Area::PART_CONFIG
         );
-        $templateBlocks[$module . ', ' . $blockClass . ', ' . $area]
-            = array($module, $blockClass, $area);
+        $templateBlocks[$module . ', ' . $blockClass . ', ' . $area] = array($module, $blockClass, $area);
         return $templateBlocks;
     }
 }

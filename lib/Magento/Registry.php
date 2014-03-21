@@ -78,7 +78,7 @@ class Registry
     public function unregister($key)
     {
         if (isset($this->_registry[$key])) {
-            if (is_object($this->_registry[$key]) && (method_exists($this->_registry[$key], '__destruct'))) {
+            if (is_object($this->_registry[$key]) && method_exists($this->_registry[$key], '__destruct')) {
                 $this->_registry[$key]->__destruct();
             }
             unset($this->_registry[$key]);

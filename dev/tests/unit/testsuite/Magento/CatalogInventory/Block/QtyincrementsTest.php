@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Block;
 
 class QtyincrementsTest extends \PHPUnit_Framework_TestCase
@@ -56,16 +55,16 @@ class QtyincrementsTest extends \PHPUnit_Framework_TestCase
     {
         $productTags = array('catalog_product_1');
         $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $product->expects($this->once())
-            ->method('getIdentities')
-            ->will($this->returnValue($productTags));
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue($product));
-        $this->assertEquals(
-            $productTags,
-            $this->block->getIdentities()
+        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $this->registryMock->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue($product)
         );
+        $this->assertEquals($productTags, $this->block->getIdentities());
     }
 }

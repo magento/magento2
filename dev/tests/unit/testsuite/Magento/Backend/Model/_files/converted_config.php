@@ -28,6 +28,7 @@
 
 return array(
     'config' => array(
+        'noNamespaceSchemaLocation' => '../../../../../../../../app/code/Magento/Backend/etc/system_file.xsd',
         'system' => array(
             'tabs' => array(
                 'tab_1' => array(
@@ -78,8 +79,8 @@ return array(
                                     'type' => 'text',
                                     'label' => 'Group Level 2',
                                     'children' => array(
-                                        'field_3.1' => array(
-                                            'id' => 'field_3.1',
+                                        'field_3_1' => array(
+                                            'id' => 'field_3_1',
                                             'translate' => 'label',
                                             'showInWebsite' => '1',
                                             'type' => 'text',
@@ -91,8 +92,8 @@ return array(
                                             'type' => 'text',
                                             'label' => 'Group Level 3',
                                             'children' => array(
-                                                'field_3.1.1' => array(
-                                                    'id' => 'field_3.1.1',
+                                                'field_3_1_1' => array(
+                                                    'id' => 'field_3_1_1',
                                                     'translate' => 'label',
                                                     'showInWebsite' => '1',
                                                     'backend_model' => 'Magento\Backend\Model\Config\Backend\Encrypted',

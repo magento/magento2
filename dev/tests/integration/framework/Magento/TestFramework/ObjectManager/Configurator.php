@@ -21,11 +21,9 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\ObjectManager;
 
-class Configurator
-    implements \Magento\ObjectManager\DynamicConfigInterface
+class Configurator implements \Magento\ObjectManager\DynamicConfigInterface
 {
     /**
      * Map application initialization params to Object Manager configuration format
@@ -34,10 +32,6 @@ class Configurator
      */
     public function getConfiguration()
     {
-        return array(
-            'preferences' => array(
-                'Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie'
-            )
-        );
+        return array('preferences' => array('Magento\Stdlib\Cookie' => 'Magento\TestFramework\Cookie'));
     }
 }

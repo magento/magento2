@@ -31,14 +31,18 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Google AdWords language codes
      */
     const XML_PATH_LANGUAGES = 'google/adwords/languages';
+
     const XML_PATH_LANGUAGE_CONVERT = 'google/adwords/language_convert';
+
     /**#@-*/
 
     /**#@+
      * Google AdWords conversion src
      */
     const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
+
     const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
+
     /**#@-*/
 
     /**
@@ -49,26 +53,36 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Default value for conversion value
      */
-    CONST CONVERSION_VALUE_DEFAULT = 0;
+    const CONVERSION_VALUE_DEFAULT = 0;
 
     /**#@+
      * Google AdWords config data
      */
-    const XML_PATH_ACTIVE  = 'google/adwords/active';
+    const XML_PATH_ACTIVE = 'google/adwords/active';
+
     const XML_PATH_CONVERSION_ID = 'google/adwords/conversion_id';
+
     const XML_PATH_CONVERSION_LANGUAGE = 'google/adwords/conversion_language';
+
     const XML_PATH_CONVERSION_FORMAT = 'google/adwords/conversion_format';
+
     const XML_PATH_CONVERSION_COLOR = 'google/adwords/conversion_color';
+
     const XML_PATH_CONVERSION_LABEL = 'google/adwords/conversion_label';
+
     const XML_PATH_CONVERSION_VALUE_TYPE = 'google/adwords/conversion_value_type';
+
     const XML_PATH_CONVERSION_VALUE = 'google/adwords/conversion_value';
+
     /**#@-*/
 
     /**#@+
      * Conversion value types
      */
-    CONST CONVERSION_VALUE_TYPE_DYNAMIC = 1;
-    CONST CONVERSION_VALUE_TYPE_CONSTANT = 0;
+    const CONVERSION_VALUE_TYPE_DYNAMIC = 1;
+
+    const CONVERSION_VALUE_TYPE_CONSTANT = 0;
+
     /**#@-*/
 
     /**
@@ -111,12 +125,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isGoogleAdwordsActive()
     {
-        return $this->_storeConfig->getConfigFlag(self::XML_PATH_ACTIVE)
-            && $this->getConversionId()
-            && $this->getConversionLanguage()
-            && $this->getConversionFormat()
-            && $this->getConversionColor()
-            && $this->getConversionLabel();
+        return $this->_storeConfig->getConfigFlag(
+            self::XML_PATH_ACTIVE
+        ) &&
+            $this->getConversionId() &&
+            $this->getConversionLanguage() &&
+            $this->getConversionFormat() &&
+            $this->getConversionColor() &&
+            $this->getConversionLabel();
     }
 
     /**
@@ -158,8 +174,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getConversionImgSrc()
     {
-        return sprintf($this->_config->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'), $this->getConversionId(),
-            $this->getConversionLabel());
+        return sprintf(
+            $this->_config->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
+            $this->getConversionId(),
+            $this->getConversionLabel()
+        );
     }
 
     /**
@@ -239,7 +258,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getConversionValueConstant()
     {
-        return (float)$this->_storeConfig->getConfig(self::XML_PATH_CONVERSION_VALUE);
+        return (double)$this->_storeConfig->getConfig(self::XML_PATH_CONVERSION_VALUE);
     }
 
     /**
@@ -250,7 +269,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getConversionValue()
     {
         if ($this->isDynamicConversionValue()) {
-            $conversionValue = (float)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
+            $conversionValue = (double)$this->_registry->registry(self::CONVERSION_VALUE_REGISTRY_NAME);
         } else {
             $conversionValue = $this->getConversionValueConstant();
         }

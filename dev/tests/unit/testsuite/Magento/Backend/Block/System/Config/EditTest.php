@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Config;
 
 class EditTest extends \PHPUnit_Framework_TestCase
@@ -61,36 +60,49 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_systemConfigMock = $this->getMock('Magento\Backend\Model\Config\Structure',
-            array(), array(), '', false, false
+        $this->_systemConfigMock = $this->getMock(
+            'Magento\Backend\Model\Config\Structure',
+            array(),
+            array(),
+            '',
+            false,
+            false
         );
 
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface',
-            array(), array(), '', false, false
+        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->with(
+            'section'
+        )->will(
+            $this->returnValue('test_section')
         );
-        $this->_requestMock->expects($this->any())
-            ->method('getParam')
-            ->with('section')
-            ->will($this->returnValue('test_section'));
 
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout',
-            array(), array(), '', false, false
-        );
+        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
 
         $this->_sectionMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Section', array(), array(), '', false
+            'Magento\Backend\Model\Config\Structure\Element\Section',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->_systemConfigMock->expects($this->any())
-            ->method('getElement')
-            ->with('test_section')
-            ->will($this->returnValue($this->_sectionMock));
+        $this->_systemConfigMock->expects(
+            $this->any()
+        )->method(
+            'getElement'
+        )->with(
+            'test_section'
+        )->will(
+            $this->returnValue($this->_sectionMock)
+        );
 
         $data = array(
-            'data' => array(
-                'systemConfig' => $this->_systemConfigMock,
-            ),
+            'data' => array('systemConfig' => $this->_systemConfigMock),
             'request' => $this->_requestMock,
             'layout' => $this->_layoutMock,
             'urlBuilder' => $this->_urlModelMock,
@@ -105,12 +117,26 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $expected = 'element_html_code';
 
-        $this->_layoutMock->expects($this->once())->method('getChildName')
-            ->with(null, 'save_button')
-            ->will($this->returnValue('test_child_name'));
+        $this->_layoutMock->expects(
+            $this->once()
+        )->method(
+            'getChildName'
+        )->with(
+            null,
+            'save_button'
+        )->will(
+            $this->returnValue('test_child_name')
+        );
 
-        $this->_layoutMock->expects($this->once())->method('renderElement')
-            ->with('test_child_name')->will($this->returnValue('element_html_code'));
+        $this->_layoutMock->expects(
+            $this->once()
+        )->method(
+            'renderElement'
+        )->with(
+            'test_child_name'
+        )->will(
+            $this->returnValue('element_html_code')
+        );
 
         $this->assertEquals($expected, $this->_object->getSaveButtonHtml());
     }
@@ -120,10 +146,15 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $expectedUrl = '*/system_config_save/index';
         $expectedParams = array('_current' => true);
 
-        $this->_urlModelMock->expects($this->once())
-            ->method('getUrl')
-            ->with($expectedUrl, $expectedParams)
-            ->will($this->returnArgument(0)
+        $this->_urlModelMock->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            $expectedUrl,
+            $expectedParams
+        )->will(
+            $this->returnArgument(0)
         );
 
         $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());

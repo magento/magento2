@@ -45,10 +45,8 @@ class Status extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -91,8 +89,7 @@ class Status extends \Magento\Backend\App\Action
     {
         $data = $this->_getSession()->getFormData(true);
         if ($data) {
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')
-                ->setData($data);
+            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->setData($data);
             $this->_coreRegistry->register('current_status', $status);
         }
         $this->_title->add(__('Order Status'));
@@ -118,9 +115,7 @@ class Status extends \Magento\Backend\App\Action
             $this->_setActiveMenu('Magento_Sales::system_order_statuses');
             $this->_view->renderLayout();
         } else {
-            $this->messageManager->addError(
-                __('We can\'t find this order status.')
-            );
+            $this->messageManager->addError(__('We can\'t find this order status.'));
             $this->_redirect('sales/');
         }
     }
@@ -149,19 +144,16 @@ class Status extends \Magento\Backend\App\Action
                 $label = $filterManager->stripTags($label);
             }
 
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')
-                    ->load($statusCode);
+            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
-                $this->messageManager->addError(
-                    __('We found another order status with the same order status code.')
-                );
+                $this->messageManager->addError(__('We found another order status with the same order status code.'));
                 $this->_getSession()->setFormData($data);
                 $this->_redirect('sales/*/new');
                 return;
             }
 
-            $status->setData($data) ->setStatus($statusCode);
+            $status->setData($data)->setStatus($statusCode);
 
             try {
                 $status->save();
@@ -210,7 +202,7 @@ class Status extends \Magento\Backend\App\Action
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
-            $state  = $this->getRequest()->getParam('state');
+            $state = $this->getRequest()->getParam('state');
             $isDefault = $this->getRequest()->getParam('is_default');
             $status = $this->_initStatus();
             if ($status && $status->getStatus()) {
@@ -241,7 +233,7 @@ class Status extends \Magento\Backend\App\Action
      */
     public function unassignAction()
     {
-        $state  = $this->getRequest()->getParam('state');
+        $state = $this->getRequest()->getParam('state');
         $status = $this->_initStatus();
         if ($status) {
             try {

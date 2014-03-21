@@ -24,37 +24,34 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Order;
 
 class TotalsTest extends \PHPUnit_Framework_TestCase
 {
     public function testToHtmlChildrenInitialized()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->setAreaCode('frontend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
 
         /** @var $layout \Magento\Core\Model\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Sales\Block\Order\Totals', 'block');
-        $block->setOrder(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order'))
-            ->setTemplate('order/totals.phtml');
+        $block->setOrder(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order')
+        )->setTemplate(
+            'order/totals.phtml'
+        );
 
         $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\Element\Context');
         $childOne = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
-        $childOne->expects($this->once())
-            ->method('initTotals');
+        $childOne->expects($this->once())->method('initTotals');
         $layout->addBlock($childOne, 'child1', 'block');
 
         $childTwo = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
-        $childTwo->expects($this->once())
-            ->method('initTotals');
+        $childTwo->expects($this->once())->method('initTotals');
         $layout->addBlock($childTwo, 'child2', 'block');
 
         $childThree = $this->getMock('Magento\View\Element\Text', array('initTotals'), array($context));
-        $childThree->expects($this->once())
-            ->method('initTotals');
+        $childThree->expects($this->once())->method('initTotals');
         $layout->addBlock($childThree, 'child3', 'block');
 
         $block->toHtml();

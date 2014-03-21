@@ -27,7 +27,6 @@ namespace Magento\Filesystem\Driver;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Filesystem\Driver\File
      */

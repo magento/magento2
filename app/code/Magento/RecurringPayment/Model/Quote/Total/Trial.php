@@ -26,8 +26,7 @@ namespace Magento\RecurringPayment\Model\Quote\Total;
 /**
  * Total model for recurring payment trial payment
  */
-class Trial
-    extends \Magento\RecurringPayment\Model\Quote\Total\AbstractRecurring
+class Trial extends \Magento\RecurringPayment\Model\Quote\Total\AbstractRecurring
 {
     /**
      * Custom row total/payment keys

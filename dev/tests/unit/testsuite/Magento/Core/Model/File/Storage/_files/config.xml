@@ -25,12 +25,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <global>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Core/etc/config.xsd">
+    <default>
         <resources>
             <fixture_module_setup>
                 <setup/>
             </fixture_module_setup>
         </resources>
-    </global>
+    </default>
 </config>

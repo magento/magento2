@@ -36,29 +36,43 @@ use Magento\DB\Ddl\Table;
  */
 interface AdapterInterface
 {
-    const INDEX_TYPE_PRIMARY    = 'primary';
-    const INDEX_TYPE_UNIQUE     = 'unique';
-    const INDEX_TYPE_INDEX      = 'index';
-    const INDEX_TYPE_FULLTEXT   = 'fulltext';
+    const INDEX_TYPE_PRIMARY = 'primary';
 
-    const FK_ACTION_CASCADE     = 'CASCADE';
-    const FK_ACTION_SET_NULL    = 'SET NULL';
-    const FK_ACTION_NO_ACTION   = 'NO ACTION';
-    const FK_ACTION_RESTRICT    = 'RESTRICT';
+    const INDEX_TYPE_UNIQUE = 'unique';
+
+    const INDEX_TYPE_INDEX = 'index';
+
+    const INDEX_TYPE_FULLTEXT = 'fulltext';
+
+    const FK_ACTION_CASCADE = 'CASCADE';
+
+    const FK_ACTION_SET_NULL = 'SET NULL';
+
+    const FK_ACTION_NO_ACTION = 'NO ACTION';
+
+    const FK_ACTION_RESTRICT = 'RESTRICT';
+
     const FK_ACTION_SET_DEFAULT = 'SET DEFAULT';
 
-    const INSERT_ON_DUPLICATE   = 1;
-    const INSERT_IGNORE         = 2;
+    const INSERT_ON_DUPLICATE = 1;
 
-    const ISO_DATE_FORMAT       = 'yyyy-MM-dd';
-    const ISO_DATETIME_FORMAT   = 'yyyy-MM-dd HH-mm-ss';
+    const INSERT_IGNORE = 2;
 
-    const INTERVAL_SECOND       = 'SECOND';
-    const INTERVAL_MINUTE       = 'MINUTES';
-    const INTERVAL_HOUR         = 'HOURS';
-    const INTERVAL_DAY          = 'DAYS';
-    const INTERVAL_MONTH        = 'MONTHS';
-    const INTERVAL_YEAR         = 'YEARS';
+    const ISO_DATE_FORMAT = 'yyyy-MM-dd';
+
+    const ISO_DATETIME_FORMAT = 'yyyy-MM-dd HH-mm-ss';
+
+    const INTERVAL_SECOND = 'SECOND';
+
+    const INTERVAL_MINUTE = 'MINUTES';
+
+    const INTERVAL_HOUR = 'HOURS';
+
+    const INTERVAL_DAY = 'DAYS';
+
+    const INTERVAL_MONTH = 'MONTHS';
+
+    const INTERVAL_YEAR = 'YEARS';
 
     /**
      * Error message for DDL query in transactions
@@ -271,7 +285,12 @@ interface AdapterInterface
      * @param string $schemaName
      * @return \Magento\DB\Adapter\AdapterInterface
      */
-    public function changeColumn($tableName, $oldColumnName, $newColumnName, $definition, $flushData = false,
+    public function changeColumn(
+        $tableName,
+        $oldColumnName,
+        $newColumnName,
+        $definition,
+        $flushData = false,
         $schemaName = null
     );
 
@@ -371,9 +390,17 @@ interface AdapterInterface
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function addForeignKey($fkName, $tableName, $columnName, $refTableName, $refColumnName,
-        $onDelete = self::FK_ACTION_CASCADE, $onUpdate = self::FK_ACTION_CASCADE,
-        $purge = false, $schemaName = null, $refSchemaName = null
+    public function addForeignKey(
+        $fkName,
+        $tableName,
+        $columnName,
+        $refTableName,
+        $refColumnName,
+        $onDelete = self::FK_ACTION_CASCADE,
+        $onUpdate = self::FK_ACTION_CASCADE,
+        $purge = false,
+        $schemaName = null,
+        $refSchemaName = null
     );
 
     /**
@@ -793,7 +820,6 @@ interface AdapterInterface
      * @param string|int $value OPTIONAL. Applies when $expression is NULL
      * @return \Zend_Db_Expr
      */
-
     public function getIfNullSql($expression, $value = 0);
 
     /**

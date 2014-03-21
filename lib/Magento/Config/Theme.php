@@ -51,7 +51,7 @@ class Theme
      */
     public function __construct($configContent)
     {
-        $config = new \DOMDocument;
+        $config = new \DOMDocument();
         $config->loadXML($configContent);
         // todo: validation of the document
         $this->_data = $this->_extractData($config);
@@ -86,12 +86,10 @@ class Theme
         $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
 
         return array(
-            'title'   => $themeTitleNode->nodeValue,
-            'parent'  => $themeParentNode ? $themeParentNode->nodeValue : null,
+            'title' => $themeTitleNode->nodeValue,
+            'parent' => $themeParentNode ? $themeParentNode->nodeValue : null,
             'version' => $themeVersionNode ? $themeVersionNode->nodeValue : null,
-            'media'   => array(
-                'preview_image' => $previewImage
-            )
+            'media' => array('preview_image' => $previewImage)
         );
     }
 

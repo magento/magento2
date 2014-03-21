@@ -29,7 +29,6 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Tree;
 
 class Attribute extends \Magento\Backend\Block\Template

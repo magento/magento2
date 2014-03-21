@@ -54,8 +54,10 @@ class RelatedProducts
         foreach ($quoteItems as $quoteItem) {
             $productTypeOpt = $quoteItem->getOptionByCode('product_type');
             if ($productTypeOpt instanceof \Magento\Sales\Model\Quote\Item\Option) {
-                if (in_array($productTypeOpt->getValue(), $this->_relatedProductTypes)
-                    && $productTypeOpt->getProductId()
+                if (in_array(
+                    $productTypeOpt->getValue(),
+                    $this->_relatedProductTypes
+                ) && $productTypeOpt->getProductId()
                 ) {
                     $productIds[] = $productTypeOpt->getProductId();
                 }
@@ -63,4 +65,4 @@ class RelatedProducts
         }
         return $productIds;
     }
-} 
+}

@@ -25,7 +25,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Model\Uploader;
 
 class Service
@@ -113,9 +112,9 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Core\Exception(__(
-                'The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb()
-            ));
+            throw new \Magento\Core\Exception(
+                __('The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb())
+            );
         }
 
         $file = $fileUploader->validateFile();
@@ -139,9 +138,9 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Core\Exception(__(
-                'The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb()
-            ));
+            throw new \Magento\Core\Exception(
+                __('The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb())
+            );
         }
 
         $file = $fileUploader->validateFile();

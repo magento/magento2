@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Validator;
 
 class ObjectTest extends \PHPUnit_Framework_TestCase
@@ -46,13 +45,21 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $entityValidity = new \Zend_Validate_Callback(array($this, 'isEntityValid'));
         $entityValidity->setMessage('Entity is not valid.');
 
-        $this->_model
-            ->addRule($fieldOneLength, 'field_one')
-            ->addRule($fieldOneExactValue, 'field_one')
-            ->addRule($fieldTwoLength, 'field_two')
-            ->addRule($fieldTwoExactValue, 'field_two')
-            ->addRule($entityValidity)
-        ;
+        $this->_model->addRule(
+            $fieldOneLength,
+            'field_one'
+        )->addRule(
+            $fieldOneExactValue,
+            'field_one'
+        )->addRule(
+            $fieldTwoLength,
+            'field_two'
+        )->addRule(
+            $fieldTwoExactValue,
+            'field_two'
+        )->addRule(
+            $entityValidity
+        );
     }
 
     protected function tearDown()
@@ -95,9 +102,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($isValid, 'Validation is expected to fail.');
 
         $actualMessages = $this->_model->getMessages();
-        $this->assertCount(
-            count($expectedErrors), $actualMessages, 'Number of messages does not meet expectations.'
-        );
+        $this->assertCount(count($expectedErrors), $actualMessages, 'Number of messages does not meet expectations.');
         foreach ($expectedErrors as $errorIndex => $expectedErrorMessage) {
             /** @var $actualMessage \Magento\Message\AbstractMessage */
             $actualMessage = $actualMessages[$errorIndex];
@@ -110,10 +115,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         return array(
             'only "field_one" is invalid' => array(
                 array('field_one' => 'one_value', 'field_two' => 'field_two_value', 'is_valid' => true),
-                array(
-                    "'one_value' is less than 10 characters long",
-                    "'field_one' does not match expected value",
-                )
+                array("'one_value' is less than 10 characters long", "'field_one' does not match expected value")
             ),
             'only "field_two" is invalid' => array(
                 array('field_one' => 'field_one_value', 'field_two' => 'two_value', 'is_valid' => true),
@@ -130,9 +132,9 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
                     "'field_one' does not match expected value",
                     "'two' is less than 5 characters long",
                     "'field_two' does not match expected value",
-                    'Entity is not valid.',
+                    'Entity is not valid.'
                 )
-            ),
+            )
         );
     }
 }

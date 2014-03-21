@@ -113,36 +113,50 @@ class Edit extends \Magento\Backend\Block\Widget
     protected function _prepareLayout()
     {
         if (!$this->getRequest()->getParam('popup')) {
-            $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label' => __('Back'),
-                'title' => __('Back'),
-                'onclick' => 'setLocation(\''
-                    . $this->getUrl('catalog/*/', array('store' => $this->getRequest()->getParam('store', 0))) . '\')',
-                'class' => 'action-back'
-            ));
+            $this->addChild(
+                'back_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Back'),
+                    'title' => __('Back'),
+                    'onclick' => 'setLocation(\'' . $this->getUrl(
+                        'catalog/*/',
+                        array('store' => $this->getRequest()->getParam('store', 0))
+                    ) . '\')',
+                    'class' => 'action-back'
+                )
+            );
         } else {
-            $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label' => __('Close Window'),
-                'onclick' => 'window.close()',
-                'class' => 'cancel'
-            ));
+            $this->addChild(
+                'back_button',
+                'Magento\Backend\Block\Widget\Button',
+                array('label' => __('Close Window'), 'onclick' => 'window.close()', 'class' => 'cancel')
+            );
         }
 
         if (!$this->getProduct()->isReadonly()) {
-            $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label' => __('Reset'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')'
-            ));
+            $this->addChild(
+                'reset_button',
+                'Magento\Backend\Block\Widget\Button',
+                array(
+                    'label' => __('Reset'),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')'
+                )
+            );
         }
 
         if (!$this->getProduct()->isReadonly()) {
-            $this->addChild('save-split-button', 'Magento\Backend\Block\Widget\Button\SplitButton', array(
-                'id' => 'save-split-button',
-                'label' => __('Save'),
-                'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
-                'button_class' => 'widget-button-save',
-                'options' => $this->_getSaveSplitButtonOptions()
-            ));
+            $this->addChild(
+                'save-split-button',
+                'Magento\Backend\Block\Widget\Button\SplitButton',
+                array(
+                    'id' => 'save-split-button',
+                    'label' => __('Save'),
+                    'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
+                    'button_class' => 'widget-button-save',
+                    'options' => $this->_getSaveSplitButtonOptions()
+                )
+            );
         }
 
         return parent::_prepareLayout();
@@ -203,7 +217,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('catalog/*/validate', array('_current'=>true));
+        return $this->getUrl('catalog/*/validate', array('_current' => true));
     }
 
     /**
@@ -211,7 +225,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('catalog/*/save', array('_current'=>true, 'back'=>null));
+        return $this->getUrl('catalog/*/save', array('_current' => true, 'back' => null));
     }
 
     /**
@@ -219,12 +233,10 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSaveAndContinueUrl()
     {
-        return $this->getUrl('catalog/*/save', array(
-            '_current'   => true,
-            'back'       => 'edit',
-            'tab'        => '{{tab_id}}',
-            'active_tab' => null
-        ));
+        return $this->getUrl(
+            'catalog/*/save',
+            array('_current' => true, 'back' => 'edit', 'tab' => '{{tab_id}}', 'active_tab' => null)
+        );
     }
 
     /**
@@ -252,7 +264,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getDuplicateUrl()
     {
-        return $this->getUrl('catalog/*/duplicate', array('_current'=>true));
+        return $this->getUrl('catalog/*/duplicate', array('_current' => true));
     }
 
     /**
@@ -315,13 +327,15 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getTypeSwitcherData()
     {
-        return $this->jsonEncoder->encode(array(
-            'tab_id' => 'product_info_tabs_downloadable_items',
-            'is_virtual_id' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::VIRTUAL_FIELD_HTML_ID,
-            'weight_id' => 'weight',
-            'current_type' => $this->getProduct()->getTypeId(),
-            'attributes' => $this->_getAttributes(),
-        ));
+        return $this->jsonEncoder->encode(
+            array(
+                'tab_id' => 'product_info_tabs_downloadable_items',
+                'is_virtual_id' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::VIRTUAL_FIELD_HTML_ID,
+                'weight_id' => 'weight',
+                'current_type' => $this->getProduct()->getTypeId(),
+                'attributes' => $this->_getAttributes()
+            )
+        );
     }
 
     /**
@@ -355,10 +369,10 @@ class Edit extends \Magento\Backend\Block\Widget
                 'label' => __('Save & Edit'),
                 'data_attribute' => array(
                     'mage-init' => array(
-                        'button' => array('event' => 'saveAndContinueEdit', 'target' => '[data-form=edit-product]'),
-                    ),
+                        'button' => array('event' => 'saveAndContinueEdit', 'target' => '[data-form=edit-product]')
+                    )
                 ),
-                'default' => true,
+                'default' => true
             );
         }
 
@@ -367,9 +381,9 @@ class Edit extends \Magento\Backend\Block\Widget
             'label' => __('Save & New'),
             'data_attribute' => array(
                 'mage-init' => array(
-                    'button' => array('event' => 'saveAndNew', 'target' => '[data-form=edit-product]'),
-                ),
-            ),
+                    'button' => array('event' => 'saveAndNew', 'target' => '[data-form=edit-product]')
+                )
+            )
         );
         if (!$this->getRequest()->getParam('popup') && $this->getProduct()->isDuplicable()) {
             $options[] = array(
@@ -377,19 +391,17 @@ class Edit extends \Magento\Backend\Block\Widget
                 'label' => __('Save & Duplicate'),
                 'data_attribute' => array(
                     'mage-init' => array(
-                        'button' => array('event' => 'saveAndDuplicate', 'target' => '[data-form=edit-product]'),
-                    ),
-                ),
+                        'button' => array('event' => 'saveAndDuplicate', 'target' => '[data-form=edit-product]')
+                    )
+                )
             );
         }
         $options[] = array(
             'id' => 'close-button',
             'label' => __('Save & Close'),
             'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '[data-form=edit-product]'),
-                ),
-            ),
+                'mage-init' => array('button' => array('event' => 'save', 'target' => '[data-form=edit-product]'))
+            )
         );
         return $options;
     }

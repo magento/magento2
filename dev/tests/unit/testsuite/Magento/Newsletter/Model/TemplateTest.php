@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Model;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -37,40 +36,40 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
 
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $storeManager->expects($this->once())
-            ->method('hasSingleStore')
-            ->will($this->returnValue($isSingleStore));
+        $storeManager->expects($this->once())->method('hasSingleStore')->will($this->returnValue($isSingleStore));
 
         $request = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
 
         if ($isSingleStore) {
             $store = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-            $store->expects($this->once())
-                ->method('getId')
-                ->will($this->returnValue('test_id'));
+            $store->expects($this->once())->method('getId')->will($this->returnValue('test_id'));
 
-            $storeManager->expects($this->once())
-                ->method('getStore')
-                ->will($this->returnValue($store));
+            $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         } else {
-            $request->expects($this->once())
-                ->method('getParam')
-                ->with('store_id')
-                ->will($this->returnValue('test_id'));
+            $request->expects(
+                $this->once()
+            )->method(
+                'getParam'
+            )->with(
+                'store_id'
+            )->will(
+                $this->returnValue('test_id')
+            );
         }
 
         $filter = $this->getMock('Magento\Newsletter\Model\Template\Filter', array(), array(), '', false);
         $appEmulation = $this->getMock('Magento\Core\Model\App\Emulation', array(), array(), '', false);
-        $filter->expects($this->once())
-            ->method('setStoreId')
-            ->with('test_id');
-        $filter->expects($this->once())
-            ->method('setIncludeProcessor')
-            ->will($this->returnSelf());
-        $filter->expects($this->once())
-            ->method('filter')
-            ->with('template text')
-            ->will($this->returnValue('processed text'));
+        $filter->expects($this->once())->method('setStoreId')->with('test_id');
+        $filter->expects($this->once())->method('setIncludeProcessor')->will($this->returnSelf());
+        $filter->expects(
+            $this->once()
+        )->method(
+            'filter'
+        )->with(
+            'template text'
+        )->will(
+            $this->returnValue('processed text')
+        );
 
         $storeConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
         $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory');
@@ -79,10 +78,23 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $filterManager = $this->getMock('\Magento\Filter\FilterManager', array(), array(), '', false);
 
         /** @var \Magento\Newsletter\Model\Template $model */
-        $model = $this->getMock('Magento\Newsletter\Model\Template', array('_init'), array(
-            $context, $design, $registry, $appEmulation, $storeManager, $request, $filter, $storeConfig,
-            $templateFactory, $filterManager, $data,
-        ));
+        $model = $this->getMock(
+            'Magento\Newsletter\Model\Template',
+            array('_init'),
+            array(
+                $context,
+                $design,
+                $registry,
+                $appEmulation,
+                $storeManager,
+                $request,
+                $filter,
+                $storeConfig,
+                $templateFactory,
+                $filterManager,
+                $data
+            )
+        );
 
         $result = $model->getProcessedTemplate();
         $this->assertEquals('processed text', $result);
@@ -93,9 +105,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public static function getProcessedTemplateDataProvider()
     {
-        return array(
-            'single store' => array(true),
-            'multi store' => array(false),
-        );
+        return array('single store' => array(true), 'multi store' => array(false));
     }
 }

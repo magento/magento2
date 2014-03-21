@@ -122,22 +122,21 @@ class Action extends \Magento\Core\Model\AbstractModel
      */
     public function updateAttributes($productIds, $attrData, $storeId)
     {
-        $this->_eventManager->dispatch('catalog_product_attribute_update_before', array(
-            'attributes_data' => &$attrData,
-            'product_ids'   => &$productIds,
-            'store_id'      => &$storeId
-        ));
+        $this->_eventManager->dispatch(
+            'catalog_product_attribute_update_before',
+            array('attributes_data' => &$attrData, 'product_ids' => &$productIds, 'store_id' => &$storeId)
+        );
 
         $this->_getResource()->updateAttributes($productIds, $attrData, $storeId);
-        $this->setData(array(
-            'product_ids'       => array_unique($productIds),
-            'attributes_data'   => $attrData,
-            'store_id'          => $storeId
-        ));
+        $this->setData(
+            array('product_ids' => array_unique($productIds), 'attributes_data' => $attrData, 'store_id' => $storeId)
+        );
 
         // register mass action indexer event
         $this->_indexIndexer->processEntityAction(
-            $this, \Magento\Catalog\Model\Product::ENTITY, \Magento\Index\Model\Event::TYPE_MASS_ACTION
+            $this,
+            \Magento\Catalog\Model\Product::ENTITY,
+            \Magento\Index\Model\Event::TYPE_MASS_ACTION
         );
         if (!$this->getCategoryIndexer()->isScheduled()) {
             $this->getCategoryIndexer()->reindexList(array_unique($productIds));
@@ -165,15 +164,15 @@ class Action extends \Magento\Core\Model\AbstractModel
             $this->_productWebsiteFactory->create()->removeProducts($websiteIds, $productIds);
         }
 
-        $this->setData(array(
-            'product_ids' => array_unique($productIds),
-            'website_ids' => $websiteIds,
-            'action_type' => $type
-        ));
+        $this->setData(
+            array('product_ids' => array_unique($productIds), 'website_ids' => $websiteIds, 'action_type' => $type)
+        );
 
         // register mass action indexer event
         $this->_indexIndexer->processEntityAction(
-            $this, \Magento\Catalog\Model\Product::ENTITY, \Magento\Index\Model\Event::TYPE_MASS_ACTION
+            $this,
+            \Magento\Catalog\Model\Product::ENTITY,
+            \Magento\Index\Model\Event::TYPE_MASS_ACTION
         );
         if (!$this->getCategoryIndexer()->isScheduled()) {
             $this->getCategoryIndexer()->reindexList(array_unique($productIds));

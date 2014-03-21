@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
 class CompositeTest extends \PHPUnit_Framework_TestCase
@@ -59,7 +58,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     {
         $interpreters = array(
             'correct' => $this->getMock('Magento\Data\Argument\InterpreterInterface'),
-            'wrong'   => $this->getMock('Magento\ObjectManager'),
+            'wrong' => $this->getMock('Magento\ObjectManager')
         );
         new Composite($interpreters, 'interpreter');
     }
@@ -83,7 +82,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             'nonexistent interpreter ' => array(
                 array('interpreter' => 'nonexistent'),
                 "Argument interpreter named 'nonexistent' has not been defined"
-            ),
+            )
         );
     }
 
@@ -92,10 +91,15 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $input = array('interpreter' => 'one', 'value' => 'test');
         $expected = array('value' => 'test (updated)');
 
-        $this->_interpreterOne->expects($this->once())
-            ->method('evaluate')
-            ->with(array('value' => 'test'))
-            ->will($this->returnValue($expected));
+        $this->_interpreterOne->expects(
+            $this->once()
+        )->method(
+            'evaluate'
+        )->with(
+            array('value' => 'test')
+        )->will(
+            $this->returnValue($expected)
+        );
         $this->assertSame($expected, $this->_model->evaluate($input));
     }
 
@@ -104,9 +108,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $input = array('interpreter' => 'new', 'value' => 'test');
         $newInterpreter = $this->getMock('Magento\Data\Argument\InterpreterInterface');
         $this->_model->addInterpreter('new', $newInterpreter);
-        $newInterpreter->expects($this->once())
-            ->method('evaluate')
-            ->with(array('value' => 'test'));
+        $newInterpreter->expects($this->once())->method('evaluate')->with(array('value' => 'test'));
         $this->_model->evaluate($input);
     }
 

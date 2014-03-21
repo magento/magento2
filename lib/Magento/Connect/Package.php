@@ -124,10 +124,10 @@ class Package
     protected $_validationErrors = array();
 
     /**
-    * Object with target
-    *
-    * @var Target
-    */
+     * Object with target
+     *
+     * @var Target
+     */
     protected $_target = null;
 
     /**
@@ -175,7 +175,7 @@ class Package
      * @param null|string $definition optional package definition xml
      * @return $this
      */
-    protected function _init($definition=null)
+    protected function _init($definition = null)
     {
 
         if (!is_null($definition)) {
@@ -212,7 +212,7 @@ END;
      * @param string $filename
      * @return $this
      */
-    protected function _loadFile($filename='')
+    protected function _loadFile($filename = '')
     {
         if (is_null($this->_reader)) {
             $this->_reader = new \Magento\Connect\Package\Reader($filename);
@@ -260,12 +260,9 @@ END;
     {
         $fileName = $this->getReleaseFilename();
         if (is_null($this->_writer)) {
-            $this->_writer = new \Magento\Connect\Package\Writer($this->getContents(), $path.$fileName);
+            $this->_writer = new \Magento\Connect\Package\Writer($this->getContents(), $path . $fileName);
         }
-        $this->_writer
-            ->composePackage()
-            ->addPackageXml($this->getPackageXml())
-            ->archivePackage();
+        $this->_writer->composePackage()->addPackageXml($this->getPackageXml())->archivePackage();
         return $this;
     }
 
@@ -279,10 +276,12 @@ END;
     protected function _savePackageV1x($path)
     {
         $fileName = $this->getReleaseFilename();
-        $writer = new \Magento\Connect\Package\Writer($this->getContents(), $path.$fileName);
-        $writer->composePackageV1x($this->getContentsV1x())
-            ->addPackageXml($this->_getPackageXmlV1x())
-            ->archivePackage();
+        $writer = new \Magento\Connect\Package\Writer($this->getContents(), $path . $fileName);
+        $writer->composePackageV1x(
+            $this->getContentsV1x()
+        )->addPackageXml(
+            $this->_getPackageXmlV1x()
+        )->archivePackage();
         return $this;
     }
 
@@ -347,7 +346,7 @@ END;
         $requiredDependenciesPhpNode = $requiredDependenciesNode->addChild('php');
         $requiredDependenciesPhpNode->addChild('min', (string)$newPackageXml->dependencies->required->php->min);
         $requiredDependenciesPhpNode->addChild('max', (string)$newPackageXml->dependencies->required->php->max);
-        $requiredDependenciesNode->addChild('pearinstaller')->addChild('min','1.6.2');
+        $requiredDependenciesNode->addChild('pearinstaller')->addChild('min', '1.6.2');
         // Handle packages
         foreach ($newPackageXml->dependencies->required->package as $package) {
             $packageNode = $requiredDependenciesNode->addChild('package');
@@ -415,10 +414,10 @@ END;
     }
 
     /**
-    * Retrieve Target object
-    *
-    * @return Target
-    */
+     * Retrieve Target object
+     *
+     * @return Target
+     */
     protected function getTarget()
     {
         if (!$this->_target instanceof Target) {
@@ -517,13 +516,9 @@ END;
      * @param string $email
      * @return $this
      */
-    public function addAuthor($name=null, $user=null, $email=null)
+    public function addAuthor($name = null, $user = null, $email = null)
     {
-        $this->_authors[] = array(
-            'name' =>$name,
-            'user' =>$user,
-            'email'=>$email
-        );
+        $this->_authors[] = array('name' => $name, 'user' => $user, 'email' => $email);
         $author = $this->_packageXml->authors->addChild('author');
         $author->addChild('name', $name);
         $author->addChild('user', $user);
@@ -586,7 +581,7 @@ END;
      * @param string $uri
      * @return $this
      */
-    public function setLicense($license, $uri=null)
+    public function setLicense($license, $uri = null)
     {
         $this->_packageXml->license = $license;
         if ($uri) {
@@ -617,7 +612,7 @@ END;
      * @param string $name
      * @return \SimpleXMLElement
      */
-    protected function _getNode($tag, $parent, $name='')
+    protected function _getNode($tag, $parent, $name = '')
     {
         $found = false;
         foreach ($parent->xpath($tag) as $_node) {
@@ -636,13 +631,13 @@ END;
         return $node;
     }
 
-     /**
-      * Add directory or file to <contents />.
-      *
-      * @param string $path Path to directory or file
-      * @param string $targetName Target name.
-      * @return $this
-      */
+    /**
+     * Add directory or file to <contents />.
+     *
+     * @param string $path Path to directory or file
+     * @param string $targetName Target name.
+     * @return $this
+     */
     public function addContent($path, $targetName)
     {
         $found = false;
@@ -653,7 +648,7 @@ END;
             $parent = $this->_getNode('dir', $parent, $directory);
         }
         $fileName = basename($source);
-        if ($fileName!='') {
+        if ($fileName != '') {
             $fileNode = $parent->addChild('file');
             $fileNode->addAttribute('name', $fileName);
             $targetDir = $this->getTarget()->getTargetUri($targetName);
@@ -673,7 +668,7 @@ END;
      * @param string $include Include
      * @return $this
      */
-    public function addContentDir($targetName, $path, $exclude=null, $include=null)
+    public function addContentDir($targetName, $path, $exclude = null, $include = null)
     {
         $targetDir = $this->getTarget()->getTargetUri($targetName);
         $targetDirLen = strlen($targetDir . '/');
@@ -743,7 +738,6 @@ END;
         return $this;
     }
 
-
     /**
      * Check PHP version restriction
      * @return true|string
@@ -753,19 +747,19 @@ END;
         $min = $this->getDependencyPhpVersionMin();
         $max = $this->getDependencyPhpVersionMax();
 
-        $minOk = $min? version_compare(PHP_VERSION, $min, ">=") : true;
-        $maxOk = $max? version_compare($this->_util->getTrimmedPhpVersion(), $max, "<=") : true;
+        $minOk = $min ? version_compare(PHP_VERSION, $min, ">=") : true;
+        $maxOk = $max ? version_compare($this->_util->getTrimmedPhpVersion(), $max, "<=") : true;
 
-        if(!$minOk || !$maxOk) {
+        if (!$minOk || !$maxOk) {
             $err = "requires PHP version ";
-            if($min && $max) {
-                $err .= " >= $min and <= $max ";
-            } elseif($min) {
-                $err .= " >= $min ";
-            } elseif($max) {
-                $err .=  " <= $max ";
+            if ($min && $max) {
+                $err .= " >= {$min} and <= {$max} ";
+            } elseif ($min) {
+                $err .= " >= {$min} ";
+            } elseif ($max) {
+                $err .= " <= {$max} ";
             }
-            $err .= " current is: ".PHP_VERSION;
+            $err .= " current is: " . PHP_VERSION;
             return $err;
         }
         return true;
@@ -779,13 +773,12 @@ END;
     public function checkPhpDependencies()
     {
         $errors = array();
-        foreach($this->getDependencyPhpExtensions() as $dep)
-        {
-            if(!extension_loaded($dep['name'])) {
+        foreach ($this->getDependencyPhpExtensions() as $dep) {
+            if (!extension_loaded($dep['name'])) {
                 $errors[] = $dep;
             }
         }
-        if(count($errors)) {
+        if (count($errors)) {
             return $errors;
         }
         return true;
@@ -802,12 +795,8 @@ END;
      */
     public function setDependencyPhpExtensions($extensions)
     {
-        foreach($extensions as $_extension) {
-            $this->addDependencyExtension(
-                $_extension['name'],
-                $_extension['min_version'],
-                $_extension['max_version']
-            );
+        foreach ($extensions as $_extension) {
+            $this->addDependencyExtension($_extension['name'], $_extension['min_version'], $_extension['max_version']);
         }
         return $this;
     }
@@ -827,11 +816,11 @@ END;
      */
     public function setDependencyPackages($packages, $clear = false)
     {
-        if($clear) {
+        if ($clear) {
             unset($this->_packageXml->dependencies->required->package);
         }
 
-        foreach($packages as $_package) {
+        foreach ($packages as $_package) {
 
             $filesArrayCondition = isset($_package['files']) && is_array($_package['files']);
             $filesArray = $filesArrayCondition ? $_package['files'] : array();
@@ -846,8 +835,6 @@ END;
         }
         return $this;
     }
-
-
 
     /**
      * Add package to dependency packages.
@@ -868,14 +855,13 @@ END;
         $parent->addChild('channel', $channel);
         $parent->addChild('min', $minVersion);
         $parent->addChild('max', $maxVersion);
-        if(count($files)) {
+        if (count($files)) {
             $parent = $parent->addChild('files');
-            foreach($files as $row) {
-                if(!empty($row['target']) && !empty($row['path'])) {
+            foreach ($files as $row) {
+                if (!empty($row['target']) && !empty($row['path'])) {
                     $node = $parent->addChild("file");
                     $node["target"] = $row['target'];
-                    $node["path"] =  $row['path'];
-
+                    $node["path"] = $row['path'];
                 }
             }
         }
@@ -950,16 +936,18 @@ END;
      */
     public function getAuthors()
     {
-        if (is_array($this->_authors)) return $this->_authors;
+        if (is_array($this->_authors)) {
+            return $this->_authors;
+        }
         $this->_authors = array();
-        if(!isset($this->_packageXml->authors->author)) {
+        if (!isset($this->_packageXml->authors->author)) {
             return array();
         }
         foreach ($this->_packageXml->authors->author as $_author) {
             $this->_authors[] = array(
                 'name' => (string)$_author->name,
                 'user' => (string)$_author->user,
-                'email'=> (string)$_author->email
+                'email' => (string)$_author->email
             );
         }
         return $this->_authors;
@@ -1042,12 +1030,14 @@ END;
      */
     public function getContents()
     {
-        if (is_array($this->_contents)) return $this->_contents;
-        $this->_contents = array();
-        if(!isset($this->_packageXml->contents->target)) {
+        if (is_array($this->_contents)) {
             return $this->_contents;
         }
-        foreach($this->_packageXml->contents->target as $target) {
+        $this->_contents = array();
+        if (!isset($this->_packageXml->contents->target)) {
+            return $this->_contents;
+        }
+        foreach ($this->_packageXml->contents->target as $target) {
             $targetUri = $this->getTarget()->getTargetUri($target['name']);
             $this->_getList($target, $targetUri);
         }
@@ -1064,10 +1054,10 @@ END;
         $currentContents = $this->_contents;
         $this->_contents = array();
 
-        if(!isset($this->_packageXml->contents->target)) {
+        if (!isset($this->_packageXml->contents->target)) {
             return $this->_contents;
         }
-        foreach($this->_packageXml->contents->target as $target) {
+        foreach ($this->_packageXml->contents->target as $target) {
             $this->_getList($target, '');
         }
         $contents = $this->_contents;
@@ -1088,8 +1078,8 @@ END;
         if (count($parent) == 0) {
             $this->_contents[] = $path;
         } else {
-            foreach($parent as $_content) {
-                $this->_getList($_content, ($path ? $path . '/' : '')  . $_content['name']);
+            foreach ($parent as $_content) {
+                $this->_getList($_content, ($path ? $path . '/' : '') . $_content['name']);
             }
         }
     }
@@ -1101,12 +1091,14 @@ END;
      */
     public function getHashContents()
     {
-        if (is_array($this->_hashContents)) return $this->_hashContents;
-        $this->_hashContents = array();
-        if(!isset($this->_packageXml->contents->target)) {
+        if (is_array($this->_hashContents)) {
             return $this->_hashContents;
         }
-        foreach($this->_packageXml->contents->target as $target) {
+        $this->_hashContents = array();
+        if (!isset($this->_packageXml->contents->target)) {
+            return $this->_hashContents;
+        }
+        foreach ($this->_packageXml->contents->target as $target) {
             $targetUri = $this->getTarget()->getTargetUri($target['name']);
             $this->_getHashList($target, $targetUri);
         }
@@ -1121,17 +1113,17 @@ END;
      * @param string $hash
      * @return void
      */
-    protected function _getHashList($parent, $path, $hash='')
+    protected function _getHashList($parent, $path, $hash = '')
     {
         if (count($parent) == 0) {
             $this->_hashContents[$path] = $hash;
         } else {
-            foreach($parent as $_content) {
+            foreach ($parent as $_content) {
                 $contentHash = '';
                 if (isset($_content['hash'])) {
                     $contentHash = (string)$_content['hash'];
                 }
-                $this->_getHashList($_content, ($path ? $path . '/' : '')  . $_content['name'], $contentHash);
+                $this->_getHashList($_content, ($path ? $path . '/' : '') . $_content['name'], $contentHash);
             }
         }
     }
@@ -1143,17 +1135,19 @@ END;
      */
     public function getCompatible()
     {
-        if (is_array($this->_compatible)) return $this->_compatible;
+        if (is_array($this->_compatible)) {
+            return $this->_compatible;
+        }
         $this->_compatible = array();
-        if(!isset($this->_packageXml->compatible->package)) {
+        if (!isset($this->_packageXml->compatible->package)) {
             return array();
         }
         foreach ($this->_packageXml->compatible->package as $_package) {
             $this->_compatible[] = array(
-                'name'    => (string)$_package->name,
+                'name' => (string)$_package->name,
                 'channel' => (string)$_package->channel,
-                'min'     => (string)$_package->min,
-                'max'     => (string)$_package->max
+                'min' => (string)$_package->min,
+                'max' => (string)$_package->max
             );
         }
         return $this->_compatible;
@@ -1166,7 +1160,7 @@ END;
      */
     public function getDependencyPhpVersionMin()
     {
-        if(!isset($this->_packageXml->dependencies->required->php->min)) {
+        if (!isset($this->_packageXml->dependencies->required->php->min)) {
             return false;
         }
         return (string)$this->_packageXml->dependencies->required->php->min;
@@ -1179,7 +1173,7 @@ END;
      */
     public function getDependencyPhpVersionMax()
     {
-        if(!isset($this->_packageXml->dependencies->required->php->max)) {
+        if (!isset($this->_packageXml->dependencies->required->php->max)) {
             return false;
         }
         return (string)$this->_packageXml->dependencies->required->php->max;
@@ -1192,13 +1186,15 @@ END;
      */
     public function getDependencyPhpExtensions()
     {
-        if (is_array($this->_dependencyPhpExtensions)) return $this->_dependencyPhpExtensions;
+        if (is_array($this->_dependencyPhpExtensions)) {
+            return $this->_dependencyPhpExtensions;
+        }
         $this->_dependencyPhpExtensions = array();
-        foreach($this->_packageXml->dependencies->required->extension as $_package) {
+        foreach ($this->_packageXml->dependencies->required->extension as $_package) {
             $this->_dependencyPhpExtensions[] = array(
-                'name'    => (string)$_package->name,
-                'min'     => (string)$_package->min,
-                'max'     => (string)$_package->max,
+                'name' => (string)$_package->name,
+                'min' => (string)$_package->min,
+                'max' => (string)$_package->max
             );
         }
         return $this->_dependencyPhpExtensions;
@@ -1212,19 +1208,22 @@ END;
     public function getDependencyPackages()
     {
         $this->_dependencyPackages = array();
-        foreach($this->_packageXml->dependencies->required->package as $_package) {
+        foreach ($this->_packageXml->dependencies->required->package as $_package) {
             $add = array(
-                'name'    => (string)$_package->name,
+                'name' => (string)$_package->name,
                 'channel' => (string)$_package->channel,
-                'min'     => (string)$_package->min,
-                'max'     => (string)$_package->max,
+                'min' => (string)$_package->min,
+                'max' => (string)$_package->max
             );
-            if(isset($_package->files)) {
+            if (isset($_package->files)) {
                 $add['files'] = array();
-                foreach($_package->files as $node) {
-                    if(isset($node->file)) {
+                foreach ($_package->files as $node) {
+                    if (isset($node->file)) {
 
-                        $add['files'][] = array('target' => (string) $node->file['target'], 'path'=> (string) $node->file['path']);
+                        $add['files'][] = array(
+                            'target' => (string)$node->file['target'],
+                            'path' => (string)$node->file['path']
+                        );
                     }
                 }
             }
@@ -1243,7 +1242,6 @@ END;
         return $this->_packageXml->asXml();
     }
 
-
     /**
      * Validator instance (single)
      *
@@ -1251,7 +1249,7 @@ END;
      */
     protected function validator()
     {
-        if(is_null($this->_validator)) {
+        if (is_null($this->_validator)) {
             $this->_validator = new \Magento\Connect\Validator();
         }
         return $this->_validator;
@@ -1286,7 +1284,7 @@ END;
      */
     public function hasErrors()
     {
-    	return count($this->_validationErrors) != 0;
+        return count($this->_validationErrors) != 0;
     }
 
     /**
@@ -1318,75 +1316,93 @@ END;
          *
          */
         $validateMap = array(
-           'name' => array('method' => 'getName',
-                           'v_method' => 'validatePackageName',
-                           'error'=>"Invalid package name, allowed: [a-zA-Z0-9_-] chars"),
-           'version' => array('method' => 'getVersion',
-                           'v_method' => 'validateVersion',
-                           'error'=>"Invalid version, should be like: x.x.x"),
-           'stability' => array('method' => 'getStability',
-                           'v_method' => 'validateStability',
-                           'error'=>"Invalid stability"),
-           'date' => array('method' => 'getDate',
-                           'v_method' => 'validateDate',
-                           'error'=>"Invalid date, should be YYYY-DD-MM"),
-           'license_uri' => array('method' => 'getLicenseUri',
-                           'v_method' => 'validateLicenseUrl',
-                           'error'=>"Invalid license URL"),
-           'channel' => array('method' => 'getChannel',
-                           'v_method' => 'validateChannelNameOrUri',
-                           'error'=>"Invalid channel URL"),
-           'authors' => array('method' => 'getAuthors',
-                           'v_method' => 'validateAuthors',
-                           'v_error_method' => 'getErrors'),
-           'php_min' => array('method' => 'getDependencyPhpVersionMin',
-                           'v_method' => 'validateVersion',
-                           'error' => 'PHP minimum version invalid',
-                           'optional' => true ),
-           'php_max' => array('method' => 'getDependencyPhpVersionMax',
-                           'v_method' => 'validateVersion',
-                           'error' => 'PHP maximum version invalid',
-                           'optional' => true ),
-           'compatible' => array('method' => 'getCompatible',
-                           'v_method' => 'validateCompatible',
-                           'v_error_method' => 'getErrors'),
-
-
+            'name' => array(
+                'method' => 'getName',
+                'v_method' => 'validatePackageName',
+                'error' => "Invalid package name, allowed: [a-zA-Z0-9_-] chars"
+            ),
+            'version' => array(
+                'method' => 'getVersion',
+                'v_method' => 'validateVersion',
+                'error' => "Invalid version, should be like: x.x.x"
+            ),
+            'stability' => array(
+                'method' => 'getStability',
+                'v_method' => 'validateStability',
+                'error' => "Invalid stability"
+            ),
+            'date' => array(
+                'method' => 'getDate',
+                'v_method' => 'validateDate',
+                'error' => "Invalid date, should be YYYY-DD-MM"
+            ),
+            'license_uri' => array(
+                'method' => 'getLicenseUri',
+                'v_method' => 'validateLicenseUrl',
+                'error' => "Invalid license URL"
+            ),
+            'channel' => array(
+                'method' => 'getChannel',
+                'v_method' => 'validateChannelNameOrUri',
+                'error' => "Invalid channel URL"
+            ),
+            'authors' => array(
+                'method' => 'getAuthors',
+                'v_method' => 'validateAuthors',
+                'v_error_method' => 'getErrors'
+            ),
+            'php_min' => array(
+                'method' => 'getDependencyPhpVersionMin',
+                'v_method' => 'validateVersion',
+                'error' => 'PHP minimum version invalid',
+                'optional' => true
+            ),
+            'php_max' => array(
+                'method' => 'getDependencyPhpVersionMax',
+                'v_method' => 'validateVersion',
+                'error' => 'PHP maximum version invalid',
+                'optional' => true
+            ),
+            'compatible' => array(
+                'method' => 'getCompatible',
+                'v_method' => 'validateCompatible',
+                'v_error_method' => 'getErrors'
+            )
         );
 
         $errors = array();
         /**
          * Iterate validation map
          */
-         foreach($validateMap as $name=>$data) {
+        foreach ($validateMap as $name => $data) {
 
             /**
              * Check mandatory rules fields
              */
-             if(!isset($data['method'], $data['v_method'])) {
-             throw new \Magento\Exception("Invalid rules specified!");
-         }
+            if (!isset($data['method'], $data['v_method'])) {
+                throw new \Magento\Exception("Invalid rules specified!");
+            }
 
             $method = $data['method'];
             $validatorMethod = $data['v_method'];
 
             /**
              * If $optional === false, value is mandatory
-              */
-            $optional = isset($data['optional']) ? (bool) $data['optional'] : false;
+             */
+            $optional = isset($data['optional']) ? (bool)$data['optional'] : false;
 
             /**
              * Check for method availability, package
              */
-            if(!method_exists($this, $method)) {
-                throw new \Magento\Exception("Invalid method specified for Package : $method");
+            if (!method_exists($this, $method)) {
+                throw new \Magento\Exception("Invalid method specified for Package : {$method}");
             }
 
             /**
              * Check for method availability, validator
              */
-            if(!method_exists($v, $validatorMethod)) {
-                throw new \Magento\Exception("Invalid method specified for Validator : $validatorMethod");
+            if (!method_exists($v, $validatorMethod)) {
+                throw new \Magento\Exception("Invalid method specified for Validator : {$validatorMethod}");
             }
 
             /**
@@ -1409,13 +1425,13 @@ END;
             /**
              * Skip if result is empty and value is optional
              */
-            if(empty($out) && $optional) {
-               continue;
+            if (empty($out) && $optional) {
+                continue;
             }
 
             /**
-            * Additional validator arguments, merged with array($out)
-            */
+             * Additional validator arguments, merged with array($out)
+             */
             $validatorArgs = isset($data['v_args']) ? array_merge(array($out), $data['v_args']) : array($out);
 
             /**
@@ -1426,7 +1442,7 @@ END;
             /**
              * Skip if validation success
              */
-            if($result) {
+            if ($result) {
                 continue;
             }
 
@@ -1444,7 +1460,7 @@ END;
              * If   errors is array => merge
              * Else append
              */
-            if(is_array($errorString)) {
+            if (is_array($errorString)) {
                 $errors = array_merge($errors, $errorString);
             } else {
                 $errors[] = $errorString;
@@ -1457,7 +1473,7 @@ END;
         /**
          * Return true if there's no errors :)
          */
-        return ! $this->hasErrors();
+        return !$this->hasErrors();
     }
 
     /**
@@ -1466,7 +1482,7 @@ END;
      */
     public function getReleaseFilename()
     {
-        return $this->getName()."-".$this->getVersion();
+        return $this->getName() . "-" . $this->getVersion();
     }
 
     /**
@@ -1479,10 +1495,10 @@ END;
     }
 
     /**
-    * Clear dependencies
-    *
-    * @return $this
-    */
+     * Clear dependencies
+     *
+     * @return $this
+     */
     public function clearDependencies()
     {
         $this->_packageXml->dependencies = null;
@@ -1490,10 +1506,10 @@ END;
     }
 
     /**
-    * Clear contents
-    *
-    * @return $this
-    */
+     * Clear contents
+     *
+     * @return $this
+     */
     public function clearContents()
     {
         $this->_packageXml->contents = null;
@@ -1508,9 +1524,7 @@ END;
      */
     protected function _convertChannelToV1x($channel)
     {
-        $channelMap = array(
-            'community' => 'connect.magentocommerce.com/community'
-        );
+        $channelMap = array('community' => 'connect.magentocommerce.com/community');
         if (isset($channelMap[$channel])) {
             $channel = $channelMap[$channel];
         }

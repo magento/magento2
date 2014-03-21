@@ -100,11 +100,15 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     protected function _beforeToHtml()
     {
-        $this->addChild('submit_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Submit Shipment'),
-            'class'     => 'save submit-button',
-            'onclick'   => 'submitShipment(this);',
-        ));
+        $this->addChild(
+            'submit_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Submit Shipment'),
+                'class' => 'save submit-button',
+                'onclick' => 'submitShipment(this);'
+            )
+        );
 
         return parent::_beforeToHtml();
     }
@@ -137,7 +141,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getUpdateUrl()
     {
-        return $this->getUrl('sales/*/updateQty', array('order_id'=>$this->getShipment()->getOrderId()));
+        return $this->getUrl('sales/*/updateQty', array('order_id' => $this->getShipment()->getOrderId()));
     }
 
     /**

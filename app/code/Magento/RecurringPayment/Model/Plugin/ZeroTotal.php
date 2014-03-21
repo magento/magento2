@@ -23,9 +23,9 @@
  */
 namespace Magento\RecurringPayment\Model\Plugin;
 
-use \Magento\Sales\Model\Quote;
-use \Magento\Payment\Model\Method\AbstractMethod;
-use \Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification;
+use Magento\Sales\Model\Quote;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification;
 
 /**
  * ZeroTotal checker plugin
@@ -66,7 +66,13 @@ class ZeroTotal
         AbstractMethod $paymentMethod,
         Quote $quote
     ) {
-        return $proceed($paymentMethod, $quote) || ($this->specification->isSatisfiedBy($paymentMethod->getCode())
-            && $this->filter->hasRecurringItems($quote));
+        return $proceed(
+            $paymentMethod,
+            $quote
+        ) || $this->specification->isSatisfiedBy(
+            $paymentMethod->getCode()
+        ) && $this->filter->hasRecurringItems(
+            $quote
+        );
     }
-} 
+}

@@ -31,25 +31,35 @@ $installer->startSetup();
 /**
  * Create table 'importexport_importdata'
  */
-$table = $installer->getConnection()
-    ->newTable($installer->getTable('importexport_importdata'))
-    ->addColumn('id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
-        'identity'  => true,
-        'unsigned'  => true,
-        'nullable'  => false,
-        'primary'   => true,
-        ), 'Id')
-    ->addColumn('entity', \Magento\DB\Ddl\Table::TYPE_TEXT, 50, array(
-        'nullable'  => false,
-        ), 'Entity')
-    ->addColumn('behavior', \Magento\DB\Ddl\Table::TYPE_TEXT, 10, array(
-        'nullable'  => false,
-        'default'   => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-        ), 'Behavior')
-    ->addColumn('data', \Magento\DB\Ddl\Table::TYPE_TEXT, '64k', array(
-        'default'   => '',
-        ), 'Data')
-    ->setComment('Import Data Table');
+$table = $installer->getConnection()->newTable(
+    $installer->getTable('importexport_importdata')
+)->addColumn(
+    'id',
+    \Magento\DB\Ddl\Table::TYPE_INTEGER,
+    null,
+    array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
+    'Id'
+)->addColumn(
+    'entity',
+    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    50,
+    array('nullable' => false),
+    'Entity'
+)->addColumn(
+    'behavior',
+    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    10,
+    array('nullable' => false, 'default' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND),
+    'Behavior'
+)->addColumn(
+    'data',
+    \Magento\DB\Ddl\Table::TYPE_TEXT,
+    '64k',
+    array('default' => ''),
+    'Data'
+)->setComment(
+    'Import Data Table'
+);
 $installer->getConnection()->createTable($table);
 
 /**
@@ -70,12 +80,7 @@ $installer->getConnection()->addIndex(
  * Add foreign keys for 'catalog_product_link_attribute_int' table
  */
 $installer->getConnection()->addForeignKey(
-    $installer->getFkName(
-        'catalog_product_link_attribute_int',
-        'link_id',
-        'catalog_product_link',
-        'link_id'
-    ),
+    $installer->getFkName('catalog_product_link_attribute_int', 'link_id', 'catalog_product_link', 'link_id'),
     $installer->getTable('catalog_product_link_attribute_int'),
     'link_id',
     $installer->getTable('catalog_product_link'),

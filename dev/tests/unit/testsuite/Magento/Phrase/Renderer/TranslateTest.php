@@ -40,18 +40,25 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_renderer = $objectManagerHelper->getObject('Magento\Phrase\Renderer\Translate', array(
-            'translator' => $this->_translator,
-        ));
+        $this->_renderer = $objectManagerHelper->getObject(
+            'Magento\Phrase\Renderer\Translate',
+            array('translator' => $this->_translator)
+        );
     }
 
     public function testTranslate()
     {
         $result = 'rendered text';
 
-        $this->_translator->expects($this->once())->method('translate')
-            ->with(array('text', 'param1', 'param2', 'param3'))
-            ->will($this->returnValue($result));
+        $this->_translator->expects(
+            $this->once()
+        )->method(
+            'translate'
+        )->with(
+            array('text', 'param1', 'param2', 'param3')
+        )->will(
+            $this->returnValue($result)
+        );
 
         $this->assertEquals($result, $this->_renderer->render('text', array('param1', 'param2', 'param3')));
     }

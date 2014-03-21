@@ -42,9 +42,8 @@ class HelperPool
     /**
      * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -66,7 +65,7 @@ class HelperPool
 
         if (!isset($this->_resourceHelpers[$connection])) {
             $helper = $this->_objectManager->create($helperClassName, array('modulePrefix' => $connection));
-            if (false === ($helper instanceof \Magento\Core\Model\Resource\Helper\AbstractHelper)) {
+            if (false === $helper instanceof \Magento\Core\Model\Resource\Helper\AbstractHelper) {
                 throw new \InvalidArgumentException(
                     $helperClassName . ' doesn\'t extend \Magento\Core\Model\Resource\Helper\AbstractHelper'
                 );

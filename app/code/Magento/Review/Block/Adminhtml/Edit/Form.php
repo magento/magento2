@@ -98,105 +98,134 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $customer = $this->_customerFactory->create()->load($review->getCustomerId());
 
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getUrl('catalog/*/save', array(
-                    'id' => $this->getRequest()->getParam('id'),
-                    'ret' => $this->_coreRegistry->registry('ret')
-                )),
-                'method'    => 'post'
-            ))
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'edit_form',
+                    'action' => $this->getUrl(
+                        'catalog/*/save',
+                        array(
+                            'id' => $this->getRequest()->getParam('id'),
+                            'ret' => $this->_coreRegistry->registry('ret')
+                        )
+                    ),
+                    'method' => 'post'
+                )
+            )
         );
 
-        $fieldset = $form->addFieldset('review_details', array(
-            'legend' => __('Review Details'),
-            'class' => 'fieldset-wide'
-        ));
+        $fieldset = $form->addFieldset(
+            'review_details',
+            array('legend' => __('Review Details'), 'class' => 'fieldset-wide')
+        );
 
-        $fieldset->addField('product_name', 'note', array(
-            'label'     => __('Product'),
-            'text'      => '<a href="' . $this->getUrl('catalog/product/edit', array('id' => $product->getId()))
-                . '" onclick="this.target=\'blank\'">' . $this->escapeHtml($product->getName()) . '</a>'
-        ));
+        $fieldset->addField(
+            'product_name',
+            'note',
+            array(
+                'label' => __('Product'),
+                'text' => '<a href="' . $this->getUrl(
+                    'catalog/product/edit',
+                    array('id' => $product->getId())
+                ) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml(
+                    $product->getName()
+                ) . '</a>'
+            )
+        );
 
         if ($customer->getId()) {
-            $customerText = __('<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-                $this->getUrl('customer/index/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
+            $customerText = __(
+                '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
+                $this->getUrl('customer/index/edit', array('id' => $customer->getId(), 'active_tab' => 'review')),
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
-                $this->escapeHtml($customer->getEmail()));
+                $this->escapeHtml($customer->getEmail())
+            );
         } elseif ($review->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
             $customerText = __('Administrator');
         } else {
             $customerText = __('Guest');
         }
 
-        $fieldset->addField('customer', 'note', array(
-            'label'     => __('Posted By'),
-            'text'      => $customerText,
-        ));
+        $fieldset->addField('customer', 'note', array('label' => __('Posted By'), 'text' => $customerText));
 
-        $fieldset->addField('summary_rating', 'note', array(
-            'label'     => __('Summary Rating'),
-            'text'      => $this->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Summary')->toHtml(),
-        ));
+        $fieldset->addField(
+            'summary_rating',
+            'note',
+            array(
+                'label' => __('Summary Rating'),
+                'text' => $this->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Summary')->toHtml()
+            )
+        );
 
-        $fieldset->addField('detailed_rating', 'note', array(
-            'label'     => __('Detailed Rating'),
-            'required'  => true,
-            'text'      => '<div id="rating_detail">'
-                           . $this->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Detailed')->toHtml()
-                           . '</div>',
-        ));
+        $fieldset->addField(
+            'detailed_rating',
+            'note',
+            array(
+                'label' => __('Detailed Rating'),
+                'required' => true,
+                'text' => '<div id="rating_detail">' . $this->getLayout()->createBlock(
+                    'Magento\Review\Block\Adminhtml\Rating\Detailed'
+                )->toHtml() . '</div>'
+            )
+        );
 
-        $fieldset->addField('status_id', 'select', array(
-            'label'     => __('Status'),
-            'required'  => true,
-            'name'      => 'status_id',
-            'values'    => $this->_reviewData->getReviewStatusesOptionArray(),
-        ));
+        $fieldset->addField(
+            'status_id',
+            'select',
+            array(
+                'label' => __('Status'),
+                'required' => true,
+                'name' => 'status_id',
+                'values' => $this->_reviewData->getReviewStatusesOptionArray()
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!$this->_storeManager->hasSingleStore()) {
-            $field = $fieldset->addField('select_stores', 'multiselect', array(
-                'label'     => __('Visible In'),
-                'required'  => true,
-                'name'      => 'stores[]',
-                'values'    => $this->_systemStore->getStoreValuesForForm(),
-            ));
-            $renderer = $this->getLayout()
-                ->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $field = $fieldset->addField(
+                'select_stores',
+                'multiselect',
+                array(
+                    'label' => __('Visible In'),
+                    'required' => true,
+                    'name' => 'stores[]',
+                    'values' => $this->_systemStore->getStoreValuesForForm()
+                )
+            );
+            $renderer = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+            );
             $field->setRenderer($renderer);
             $review->setSelectStores($review->getStores());
         } else {
-            $fieldset->addField('select_stores', 'hidden', array(
-                'name'      => 'stores[]',
-                'value'     => $this->_storeManager->getStore(true)->getId()
-            ));
+            $fieldset->addField(
+                'select_stores',
+                'hidden',
+                array('name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId())
+            );
             $review->setSelectStores($this->_storeManager->getStore(true)->getId());
         }
 
-        $fieldset->addField('nickname', 'text', array(
-            'label'     => __('Nickname'),
-            'required'  => true,
-            'name'      => 'nickname'
-        ));
+        $fieldset->addField(
+            'nickname',
+            'text',
+            array('label' => __('Nickname'), 'required' => true, 'name' => 'nickname')
+        );
 
-        $fieldset->addField('title', 'text', array(
-            'label'     => __('Summary of Review'),
-            'required'  => true,
-            'name'      => 'title',
-        ));
+        $fieldset->addField(
+            'title',
+            'text',
+            array('label' => __('Summary of Review'), 'required' => true, 'name' => 'title')
+        );
 
-        $fieldset->addField('detail', 'textarea', array(
-            'label'     => __('Review'),
-            'required'  => true,
-            'name'      => 'detail',
-            'style'     => 'height:24em;',
-        ));
+        $fieldset->addField(
+            'detail',
+            'textarea',
+            array('label' => __('Review'), 'required' => true, 'name' => 'detail', 'style' => 'height:24em;')
+        );
 
         $form->setUseContainer(true);
         $form->setValues($review->getData());

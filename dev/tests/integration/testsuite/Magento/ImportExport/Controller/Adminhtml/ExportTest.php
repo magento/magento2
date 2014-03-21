@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Controller\Adminhtml;
 
 /**
@@ -47,10 +46,10 @@ class ExportTest extends \Magento\Backend\Utility\Controller
     public function getEntityTypesDataProvider()
     {
         return array(
-            'products'                    => array('$entityType' => 'catalog_product'),
-            'customers'                   => array('$entityType' => 'customer'),
+            'products' => array('$entityType' => 'catalog_product'),
+            'customers' => array('$entityType' => 'customer'),
             // customer entities
-            'customers_customer_entities' => array('$entityType' => 'customer', '$customerEntityType' => 'customer'),
+            'customers_customer_entities' => array('$entityType' => 'customer', '$customerEntityType' => 'customer')
         );
     }
 

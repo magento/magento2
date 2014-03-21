@@ -80,18 +80,26 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals
     protected function _initTotals()
     {
         parent::_initTotals();
-        $this->addTotal(new \Magento\Object(array(
-            'code'      => 'adjustment_positive',
-            'value'     => $this->getSource()->getAdjustmentPositive(),
-            'base_value'=> $this->getSource()->getBaseAdjustmentPositive(),
-            'label'     => __('Adjustment Refund')
-        )));
-        $this->addTotal(new \Magento\Object(array(
-            'code'      => 'adjustment_negative',
-            'value'     => $this->getSource()->getAdjustmentNegative(),
-            'base_value'=> $this->getSource()->getBaseAdjustmentNegative(),
-            'label'     => __('Adjustment Fee')
-        )));
+        $this->addTotal(
+            new \Magento\Object(
+                array(
+                    'code' => 'adjustment_positive',
+                    'value' => $this->getSource()->getAdjustmentPositive(),
+                    'base_value' => $this->getSource()->getBaseAdjustmentPositive(),
+                    'label' => __('Adjustment Refund')
+                )
+            )
+        );
+        $this->addTotal(
+            new \Magento\Object(
+                array(
+                    'code' => 'adjustment_negative',
+                    'value' => $this->getSource()->getAdjustmentNegative(),
+                    'base_value' => $this->getSource()->getBaseAdjustmentNegative(),
+                    'label' => __('Adjustment Fee')
+                )
+            )
+        );
         return $this;
     }
 }

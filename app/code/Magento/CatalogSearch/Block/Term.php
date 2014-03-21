@@ -46,7 +46,6 @@ class Term extends Template
      */
     protected $_terms;
 
-
     /**
      * @var int
      */
@@ -97,13 +96,13 @@ class Term extends Template
     {
         if (empty($this->_terms)) {
             $this->_terms = array();
-            $terms = $this->_queryCollectionFactory->create()
-                ->setPopularQueryFilter($this->_storeManager->getStore()->getId())
-                ->setPageSize(100)
-                ->load()
-                ->getItems();
+            $terms = $this->_queryCollectionFactory->create()->setPopularQueryFilter(
+                $this->_storeManager->getStore()->getId()
+            )->setPageSize(
+                100
+            )->load()->getItems();
 
-            if( count($terms) == 0 ) {
+            if (count($terms) == 0) {
                 return $this;
             }
 
@@ -111,12 +110,12 @@ class Term extends Template
             $this->_maxPopularity = reset($terms)->getPopularity();
             $this->_minPopularity = end($terms)->getPopularity();
             $range = $this->_maxPopularity - $this->_minPopularity;
-            $range = ( $range == 0 ) ? 1 : $range;
+            $range = $range == 0 ? 1 : $range;
             foreach ($terms as $term) {
-                if( !$term->getPopularity() ) {
+                if (!$term->getPopularity()) {
                     continue;
                 }
-                $term->setRatio(($term->getPopularity()-$this->_minPopularity)/$range);
+                $term->setRatio(($term->getPopularity() - $this->_minPopularity) / $range);
                 $temp[$term->getName()] = $term;
                 $termKeys[] = $term->getName();
             }
@@ -147,9 +146,9 @@ class Term extends Template
         /** @var $url UrlInterface */
         $url = $this->_urlFactory->create();
         /*
-        * url encoding will be done in Url.php http_build_query
-        * so no need to explicitly called urlencode for the text
-        */
+         * url encoding will be done in Url.php http_build_query
+         * so no need to explicitly called urlencode for the text
+         */
         $url->setQueryParam('q', $obj->getName());
         return $url->getUrl('catalogsearch/result');
     }

@@ -22,14 +22,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\App\Action\Plugin;
 
-use Magento\App\Filesystem,
-    Magento\Filesystem\FilesystemException,
-    Magento\Filesystem\Directory\Write,
-    Magento\App\State,
-    Magento\Logger;
+use Magento\App\Filesystem;
+use Magento\Filesystem\FilesystemException;
+use Magento\Filesystem\Directory\Write;
+use Magento\App\State;
+use Magento\Logger;
 
 class Dir
 {
@@ -89,4 +88,4 @@ class Dir
             }
         }
     }
-} 
+}

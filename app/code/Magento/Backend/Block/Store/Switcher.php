@@ -341,15 +341,13 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="tooltip">'
-                . '<span class="help"><a'
-                . ' href="'. $this->escapeUrl($url) . '"'
-                . ' onclick="this.target=\'_blank\'"'
-                . ' title="' . __('What is this?') . '"'
-                . ' class="link-store-scope">'
-                . __('What is this?')
-                . '</a></span>'
-                .' </div>';
+            $html = '<div class="tooltip">' . '<span class="help"><a' . ' href="' . $this->escapeUrl(
+                $url
+            ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
+                'What is this?'
+            ) . '"' . ' class="link-store-scope">' . __(
+                'What is this?'
+            ) . '</a></span>' . ' </div>';
         }
         return $html;
     }

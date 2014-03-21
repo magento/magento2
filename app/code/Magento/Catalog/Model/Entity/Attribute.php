@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Entity;
 
-use \Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
  * Product attribute extension with event dispatching

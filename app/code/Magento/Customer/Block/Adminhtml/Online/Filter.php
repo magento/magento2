@@ -42,28 +42,19 @@ class Filter extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $form->addField('filter_value', 'select',
-                array(
-                    'name' => 'filter_value',
-                    'onchange' => 'this.form.submit()',
-                    'values' => array(
-                        array(
-                            'label' => __('All'),
-                            'value' => '',
-                        ),
-
-                        array(
-                            'label' => __('Customers Only'),
-                            'value' => 'filterCustomers',
-                        ),
-
-                        array(
-                            'label' => __('Visitors Only'),
-                            'value' => 'filterGuests',
-                        )
-                    ),
-                    'no_span' => true
-                )
+        $form->addField(
+            'filter_value',
+            'select',
+            array(
+                'name' => 'filter_value',
+                'onchange' => 'this.form.submit()',
+                'values' => array(
+                    array('label' => __('All'), 'value' => ''),
+                    array('label' => __('Customers Only'), 'value' => 'filterCustomers'),
+                    array('label' => __('Visitors Only'), 'value' => 'filterGuests')
+                ),
+                'no_span' => true
+            )
         );
 
         $form->setUseContainer(true);

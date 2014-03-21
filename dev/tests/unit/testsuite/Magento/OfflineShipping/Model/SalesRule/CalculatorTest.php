@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\OfflineShipping\Model\SalesRule;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
@@ -43,20 +42,17 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model->expects($this->any())
-            ->method('_getRules')
-            ->will($this->returnValue(array()));
+        $this->_model->expects($this->any())->method('_getRules')->will($this->returnValue(array()));
     }
 
     public function testProcessFreeShipping()
     {
         $item = $this->getMock('Magento\Sales\Model\Quote\Item', array('getAddress', '__wakeup'), array(), '', false);
-        $item->expects($this->once())
-            ->method('getAddress')
-            ->will($this->returnValue(true));
+        $item->expects($this->once())->method('getAddress')->will($this->returnValue(true));
 
         $this->assertInstanceOf(
-            'Magento\OfflineShipping\Model\SalesRule\Calculator', $this->_model->processFreeShipping($item)
+            'Magento\OfflineShipping\Model\SalesRule\Calculator',
+            $this->_model->processFreeShipping($item)
         );
 
         return true;

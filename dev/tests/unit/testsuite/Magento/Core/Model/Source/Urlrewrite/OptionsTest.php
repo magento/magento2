@@ -40,11 +40,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Core\Model\Source\Urlrewrite\Options();
         $options = $model->getAllOptions();
         $this->assertInternalType('array', $options);
-        $expectedOptions = array(
-            '' => 'No',
-            'R' => 'Temporary (302)',
-            'RP' => 'Permanent (301)'
-        );
+        $expectedOptions = array('' => 'No', 'R' => 'Temporary (302)', 'RP' => 'Permanent (301)');
         $this->assertEquals($expectedOptions, $options);
     }
 }

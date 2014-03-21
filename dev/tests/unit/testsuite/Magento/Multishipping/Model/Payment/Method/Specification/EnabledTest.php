@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Multishipping\Model\Payment\Method\Specification;
 
 /**
@@ -61,14 +60,17 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
         $method = 'method-name';
         $methodsInfo = array($method => $methodsInfo);
 
-        $this->paymentConfigMock->expects($this->once())->method('getMethodsInfo')
-            ->will($this->returnValue($methodsInfo));
+        $this->paymentConfigMock->expects(
+            $this->once()
+        )->method(
+            'getMethodsInfo'
+        )->will(
+            $this->returnValue($methodsInfo)
+        );
 
         $configSpecification = $this->objectManager->getObject(
             'Magento\Multishipping\Model\Payment\Method\Specification\Enabled',
-            array(
-                'paymentConfig' => $this->paymentConfigMock,
-            )
+            array('paymentConfig' => $this->paymentConfigMock)
         );
 
         $this->assertEquals(
@@ -86,15 +88,9 @@ class EnabledTest extends \PHPUnit_Framework_TestCase
     public function methodsDataProvider()
     {
         return array(
-            array(
-                array('allow_multiple_address' => 1), true,
-            ),
-            array(
-                array('allow_multiple_address' => 0), false,
-            ),
-            array(
-                array('no_flag' => 0), false,
-            ),
+            array(array('allow_multiple_address' => 1), true),
+            array(array('allow_multiple_address' => 0), false),
+            array(array('no_flag' => 0), false)
         );
     }
 }

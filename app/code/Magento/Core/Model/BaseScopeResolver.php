@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class BaseScopeResolver implements \Magento\BaseScopeResolverInterface
@@ -34,9 +33,8 @@ class BaseScopeResolver implements \Magento\BaseScopeResolverInterface
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
     }
 
@@ -46,7 +44,7 @@ class BaseScopeResolver implements \Magento\BaseScopeResolverInterface
     public function getScope($scopeId = null)
     {
         $scope = $this->_storeManager->getStore($scopeId);
-        if (!($scope instanceof \Magento\BaseScopeInterface)) {
+        if (!$scope instanceof \Magento\BaseScopeInterface) {
             throw new \Magento\Exception('Invalid scope object');
         }
 

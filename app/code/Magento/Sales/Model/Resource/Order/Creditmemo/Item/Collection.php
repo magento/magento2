@@ -39,14 +39,14 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_creditmemo_item_collection';
+    protected $_eventPrefix = 'sales_order_creditmemo_item_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_creditmemo_item_collection';
+    protected $_eventObject = 'order_creditmemo_item_collection';
 
     /**
      * Model initialization
@@ -55,7 +55,10 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Creditmemo\Item', 'Magento\Sales\Model\Resource\Order\Creditmemo\Item');
+        $this->_init(
+            'Magento\Sales\Model\Order\Creditmemo\Item',
+            'Magento\Sales\Model\Resource\Order\Creditmemo\Item'
+        );
     }
 
     /**

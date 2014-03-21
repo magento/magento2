@@ -89,7 +89,7 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
             'type' => $this->getType(),
             'attribute' => $this->getAttribute(),
             'operator' => $this->getOperator(),
-            'value' => $this->getValue(),
+            'value' => $this->getValue()
         );
         return $out;
     }
@@ -99,10 +99,18 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function asXml()
     {
-        $xml = "<type>" . $this->getType() . "</type>"
-            . "<attribute>" . $this->getAttribute() . "</attribute>"
-            . "<operator>" . $this->getOperator() . "</operator>"
-            . "<value>" . $this->getValue() . "</value>";
+        $xml = "<type>" .
+            $this->getType() .
+            "</type>" .
+            "<attribute>" .
+            $this->getAttribute() .
+            "</attribute>" .
+            "<operator>" .
+            $this->getOperator() .
+            "</operator>" .
+            "<value>" .
+            $this->getValue() .
+            "</value>";
         return $xml;
     }
 
@@ -112,12 +120,14 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function loadArray(array $arr)
     {
-        $this->addData(array(
-            'type' => $arr['type'],
-            'attribute' => $arr['attribute'],
-            'operator' => $arr['operator'],
-            'value' => $arr['value'],
-        ));
+        $this->addData(
+            array(
+                'type' => $arr['type'],
+                'attribute' => $arr['attribute'],
+                'operator' => $arr['operator'],
+                'value' => $arr['value']
+            )
+        );
         $this->loadAttributeOptions();
         $this->loadOperatorOptions();
         $this->loadValueOptions();
@@ -158,10 +168,7 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function loadOperatorOptions()
     {
-        $this->setOperatorOption(array(
-            '=' => __('to'),
-            '+=' => __('by'),
-        ));
+        $this->setOperatorOption(array('=' => __('to'), '+=' => __('by')));
         return $this;
     }
 
@@ -171,8 +178,8 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
     public function getOperatorSelectOptions()
     {
         $opt = array();
-        foreach ($this->getOperatorOption() as $k=>$v) {
-            $opt[] = array('value'=>$k, 'label'=>$v);
+        foreach ($this->getOperatorOption() as $k => $v) {
+            $opt[] = array('value' => $k, 'label' => $v);
         }
         return $opt;
     }
@@ -220,12 +227,7 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function getNewChildSelectOptions()
     {
-        return array(
-            array(
-                'value' => '',
-                'label' => __('Please choose an action to add.')
-            ),
-        );
+        return array(array('value' => '', 'label' => __('Please choose an action to add.')));
     }
 
     /**
@@ -258,11 +260,15 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function getTypeElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':type', 'hidden', array(
-            'name' => 'rule[actions][' . $this->getId() . '][type]',
-            'value' => $this->getType(),
-            'no_span' => true,
-        ));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':type',
+            'hidden',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][type]',
+                'value' => $this->getType(),
+                'no_span' => true
+            )
+        );
     }
 
     /**
@@ -270,12 +276,18 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function getAttributeElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':attribute', 'select', array(
-            'name' => 'rule[actions][' . $this->getId() . '][attribute]',
-            'values' => $this->getAttributeSelectOptions(),
-            'value' => $this->getAttribute(),
-            'value_name' => $this->getAttributeName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':attribute',
+            'select',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][attribute]',
+                'values' => $this->getAttributeSelectOptions(),
+                'value' => $this->getAttribute(),
+                'value_name' => $this->getAttributeName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
     /**
@@ -283,12 +295,18 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function getOperatorElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':operator', 'select', array(
-            'name' => 'rule[actions][' . $this->getId() . '][operator]',
-            'values' => $this->getOperatorSelectOptions(),
-            'value' => $this->getOperator(),
-            'value_name' => $this->getOperatorName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':operator',
+            'select',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][operator]',
+                'values' => $this->getOperatorSelectOptions(),
+                'value' => $this->getOperator(),
+                'value_name' => $this->getOperatorName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
     /**
@@ -296,11 +314,17 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
      */
     public function getValueElement()
     {
-        return $this->getForm()->addField('action:' . $this->getId() . ':value', 'text', array(
-            'name' => 'rule[actions][' . $this->getId() . '][value]',
-            'value' => $this->getValue(),
-            'value_name' => $this->getValueName(),
-        ))->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        return $this->getForm()->addField(
+            'action:' . $this->getId() . ':value',
+            'text',
+            array(
+                'name' => 'rule[actions][' . $this->getId() . '][value]',
+                'value' => $this->getValue(),
+                'value_name' => $this->getValueName()
+            )
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
     }
 
     /**
@@ -319,8 +343,9 @@ abstract class AbstractAction extends \Magento\Object implements ActionInterface
     public function getRemoveLinkHtml()
     {
         $src = $this->_viewUrl->getViewFileUrl('images/rule_component_remove.gif');
-        $html = '<span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove"><img src="'
-            . $src . '" alt="" class="v-middle" /></a></span>';
+        $html = '<span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove"><img src="' .
+            $src .
+            '" alt="" class="v-middle" /></a></span>';
         return $html;
     }
 

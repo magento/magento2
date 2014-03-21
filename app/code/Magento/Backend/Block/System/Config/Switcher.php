@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Config;
 
 class Switcher extends \Magento\Backend\Block\Template
@@ -65,19 +64,24 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         $section = $this->getRequest()->getParam('section');
         $curWebsite = $this->getRequest()->getParam('website');
-        $curStore   = $this->getRequest()->getParam('store');
+        $curStore = $this->getRequest()->getParam('store');
 
         $options = array();
         $options['default'] = array(
-            'label'    => __('Default Config'),
-            'url'      => $this->getUrl('*/*/*', array('section' => $section)),
+            'label' => __('Default Config'),
+            'url' => $this->getUrl('*/*/*', array('section' => $section)),
             'selected' => !$curWebsite && !$curStore,
-            'style'    => 'background:#ccc; font-weight:bold;',
+            'style' => 'background:#ccc; font-weight:bold;'
         );
 
         foreach ($this->_systemStore->getWebsiteCollection() as $website) {
             $options = $this->_processWebsite(
-                $this->_systemStore, $website, $section, $curStore, $curWebsite, $options
+                $this->_systemStore,
+                $website,
+                $section,
+                $curStore,
+                $curWebsite,
+                $options
             );
         }
 
@@ -117,11 +121,12 @@ class Switcher extends \Magento\Backend\Block\Template
                     $websiteShow = true;
                     $options['website_' . $website->getCode()] = array(
                         'label' => $website->getName(),
-                        'url' => $this->getUrl('*/*/*',
+                        'url' => $this->getUrl(
+                            '*/*/*',
                             array('section' => $section, 'website' => $website->getCode())
                         ),
                         'selected' => !$curStore && $curWebsite == $website->getCode(),
-                        'style' => 'padding-left:16px; background:#DDD; font-weight:bold;',
+                        'style' => 'padding-left:16px; background:#DDD; font-weight:bold;'
                     );
                 }
                 if (!$groupShow) {
@@ -135,18 +140,16 @@ class Switcher extends \Magento\Backend\Block\Template
                 }
                 $options['store_' . $store->getCode()] = array(
                     'label' => $store->getName(),
-                    'url' => $this->getUrl('*/*/*',
+                    'url' => $this->getUrl(
+                        '*/*/*',
                         array('section' => $section, 'website' => $website->getCode(), 'store' => $store->getCode())
                     ),
                     'selected' => $curStore == $store->getCode(),
-                    'style' => '',
+                    'style' => ''
                 );
             }
             if ($groupShow) {
-                $options['group_' . $group->getId() . '_close'] = array(
-                    'is_group' => true,
-                    'is_close' => true,
-                );
+                $options['group_' . $group->getId() . '_close'] = array('is_group' => true, 'is_close' => true);
             }
         }
         return $options;

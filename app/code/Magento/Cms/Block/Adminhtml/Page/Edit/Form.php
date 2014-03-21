@@ -34,7 +34,6 @@ namespace Magento\Cms\Block\Adminhtml\Page\Edit;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-
     /**
      * Prepare form
      *
@@ -43,12 +42,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form   = $this->_formFactory->create(array(
-            'data' => array(
-                'id' => 'edit_form',
-                'action' => $this->getData('action'),
-                'method' => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
         $form->setUseContainer(true);
         $this->setForm($form);

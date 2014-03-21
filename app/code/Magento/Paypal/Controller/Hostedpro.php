@@ -54,7 +54,7 @@ class Hostedpro extends \Magento\App\Action\Action
      */
     public function returnAction()
     {
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');;
+        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
         //TODO: some actions with order
         if ($session->getLastRealOrderId()) {
             $this->_redirect('checkout/onepage/success');

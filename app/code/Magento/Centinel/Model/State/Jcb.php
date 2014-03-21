@@ -75,12 +75,12 @@ class Jcb extends \Magento\Centinel\Model\AbstractState
      */
     protected function _isAuthenticationSuccessful()
     {
-        return $this->getAuthenticatePaResStatus() === 'Y'
-            && $this->getAuthenticateEciFlag() === '05'
-            && $this->getAuthenticateXid() != ''
-            && $this->getAuthenticateCavv() != ''
-            && $this->getAuthenticateErrorNo() === '0'
-            && $this->getAuthenticateSignatureVerification() === 'Y';
+        return $this->getAuthenticatePaResStatus() === 'Y' &&
+            $this->getAuthenticateEciFlag() === '05' &&
+            $this->getAuthenticateXid() != '' &&
+            $this->getAuthenticateCavv() != '' &&
+            $this->getAuthenticateErrorNo() === '0' &&
+            $this->getAuthenticateSignatureVerification() === 'Y';
     }
 
     /**
@@ -90,12 +90,12 @@ class Jcb extends \Magento\Centinel\Model\AbstractState
      */
     protected function _isAuthenticationUnavailable()
     {
-        return $this->getAuthenticatePaResStatus() === 'U'
-            && $this->getAuthenticateSignatureVerification() === 'Y'
-            && $this->getAuthenticateEciFlag() === '07'
-            && $this->getAuthenticateXid() != ''
-            && $this->getAuthenticateCavv() === ''
-            && $this->getAuthenticateErrorNo() === '0';
+        return $this->getAuthenticatePaResStatus() === 'U' &&
+            $this->getAuthenticateSignatureVerification() === 'Y' &&
+            $this->getAuthenticateEciFlag() === '07' &&
+            $this->getAuthenticateXid() != '' &&
+            $this->getAuthenticateCavv() === '' &&
+            $this->getAuthenticateErrorNo() === '0';
     }
 
     /**
@@ -105,12 +105,12 @@ class Jcb extends \Magento\Centinel\Model\AbstractState
      */
     protected function _isAuthenticationAttemptsPerformed()
     {
-        return $this->getAuthenticatePaResStatus() === 'A'
-            && $this->getAuthenticateSignatureVerification() === 'Y'
-            && $this->getAuthenticateEciFlag() === '06'
-            && $this->getAuthenticateXid() != ''
-            && $this->getAuthenticateCavv() != ''
-            && $this->getAuthenticateErrorNo() === '0';
+        return $this->getAuthenticatePaResStatus() === 'A' &&
+            $this->getAuthenticateSignatureVerification() === 'Y' &&
+            $this->getAuthenticateEciFlag() === '06' &&
+            $this->getAuthenticateXid() != '' &&
+            $this->getAuthenticateCavv() != '' &&
+            $this->getAuthenticateErrorNo() === '0';
     }
 
     /**
@@ -120,10 +120,10 @@ class Jcb extends \Magento\Centinel\Model\AbstractState
      */
     protected function _isLookupStrictSuccessful()
     {
-        return $this->getLookupEnrolled() === 'Y'
-            && $this->getLookupAcsUrl() != ''
-            && $this->getLookupPayload() != ''
-            && $this->getLookupErrorNo() === '0';
+        return $this->getLookupEnrolled() === 'Y' &&
+            $this->getLookupAcsUrl() != '' &&
+            $this->getLookupPayload() != '' &&
+            $this->getLookupErrorNo() === '0';
     }
 
     /**

@@ -54,17 +54,19 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject('Magento\Theme\Controller\Adminhtml\System\Design\Theme',
+        $this->_model = $helper->getObject(
+            'Magento\Theme\Controller\Adminhtml\System\Design\Theme',
             array(
                 'request' => $this->_request,
                 'objectManager' => $this->_objectManagerMock,
                 'response' => $this->getMock('Magento\App\Response\Http', array(), array(), '', false)
-                )
+            )
         );
     }
 
     /**
      * @covers \Magento\Theme\Controller\Adminhtml\System\Design\Theme::saveAction
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSaveAction()
     {
@@ -73,17 +75,53 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $jsRemovedFiles = array(3, 4);
         $jsOrder = array(1 => '1', 2 => 'test');
 
-        $this->_request->expects($this->at(0))->method('getParam')->with('back', false)
-            ->will($this->returnValue(true));
+        $this->_request->expects(
+            $this->at(0)
+        )->method(
+            'getParam'
+        )->with(
+            'back',
+            false
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $this->_request->expects($this->at(1))->method('getParam')->with('theme')
-            ->will($this->returnValue($themeData));
-        $this->_request->expects($this->at(2))->method('getParam')->with('custom_css_content')
-            ->will($this->returnValue($customCssContent));
-        $this->_request->expects($this->at(3))->method('getParam')->with('js_removed_files')
-            ->will($this->returnValue($jsRemovedFiles));
-        $this->_request->expects($this->at(4))->method('getParam')->with('js_order')
-            ->will($this->returnValue($jsOrder));
+        $this->_request->expects(
+            $this->at(1)
+        )->method(
+            'getParam'
+        )->with(
+            'theme'
+        )->will(
+            $this->returnValue($themeData)
+        );
+        $this->_request->expects(
+            $this->at(2)
+        )->method(
+            'getParam'
+        )->with(
+            'custom_css_content'
+        )->will(
+            $this->returnValue($customCssContent)
+        );
+        $this->_request->expects(
+            $this->at(3)
+        )->method(
+            'getParam'
+        )->with(
+            'js_removed_files'
+        )->will(
+            $this->returnValue($jsRemovedFiles)
+        );
+        $this->_request->expects(
+            $this->at(4)
+        )->method(
+            'getParam'
+        )->with(
+            'js_order'
+        )->will(
+            $this->returnValue($jsOrder)
+        );
         $this->_request->expects($this->once(5))->method('getPost')->will($this->returnValue(true));
 
         $themeMock = $this->getMock(
@@ -97,29 +135,45 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $themeImage = $this->getMock('Magento\Core\Model\Theme\Image', array(), array(), '', false);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
 
-        $themeFactory = $this->getMock('Magento\View\Design\Theme\FlyweightFactory', array('create'), array(), '',
-            false);
+        $themeFactory = $this->getMock(
+            'Magento\View\Design\Theme\FlyweightFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeMock));
 
-        $this->_objectManagerMock
-            ->expects($this->at(0))
-            ->method('get')
-            ->with('Magento\View\Design\Theme\FlyweightFactory')
-            ->will($this->returnValue($themeFactory));
+        $this->_objectManagerMock->expects(
+            $this->at(0)
+        )->method(
+            'get'
+        )->with(
+            'Magento\View\Design\Theme\FlyweightFactory'
+        )->will(
+            $this->returnValue($themeFactory)
+        );
 
-        $this->_objectManagerMock
-            ->expects($this->at(1))
-            ->method('get')
-            ->with('Magento\Theme\Model\Theme\Customization\File\CustomCss')
-            ->will($this->returnValue(null));
+        $this->_objectManagerMock->expects(
+            $this->at(1)
+        )->method(
+            'get'
+        )->with(
+            'Magento\Theme\Model\Theme\Customization\File\CustomCss'
+        )->will(
+            $this->returnValue(null)
+        );
 
-        $this->_objectManagerMock
-            ->expects($this->at(2))
-            ->method('create')
-            ->with('Magento\Theme\Model\Theme\SingleFile')
-            ->will($this->returnValue(null));
+        $this->_objectManagerMock->expects(
+            $this->at(2)
+        )->method(
+            'create'
+        )->with(
+            'Magento\Theme\Model\Theme\SingleFile'
+        )->will(
+            $this->returnValue(null)
+        );
 
         $this->_model->saveAction();
     }
-
 }

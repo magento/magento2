@@ -128,68 +128,71 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $actionUrl = $this->getUrl('*/*/sales');
 
         /** @var \Magento\Data\Form $form */
-        $form   = $this->_formFactory->create(array(
-            'data' => array(
-                'id' => 'filter_form',
-                'action' => $actionUrl,
-                'method' => 'get',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'filter_form', 'action' => $actionUrl, 'method' => 'get'))
         );
 
         $htmlIdPrefix = 'sales_report_';
         $form->setHtmlIdPrefix($htmlIdPrefix);
-        $fieldset = $form->addFieldset('base_fieldset', array('legend'=>__('Filter')));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Filter')));
 
         $dateFormat = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
 
-        $fieldset->addField('store_ids', 'hidden', array(
-            'name'  => 'store_ids'
-        ));
+        $fieldset->addField('store_ids', 'hidden', array('name' => 'store_ids'));
 
-        $fieldset->addField('report_type', 'select', array(
-            'name'      => 'report_type',
-            'options'   => $this->_reportTypeOptions,
-            'label'     => __('Match Period To'),
-        ));
+        $fieldset->addField(
+            'report_type',
+            'select',
+            array('name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Match Period To'))
+        );
 
-        $fieldset->addField('period_type', 'select', array(
-            'name' => 'period_type',
-            'options' => array(
-                'day'   => __('Day'),
-                'month' => __('Month'),
-                'year'  => __('Year')
-            ),
-            'label' => __('Period'),
-            'title' => __('Period')
-        ));
+        $fieldset->addField(
+            'period_type',
+            'select',
+            array(
+                'name' => 'period_type',
+                'options' => array('day' => __('Day'), 'month' => __('Month'), 'year' => __('Year')),
+                'label' => __('Period'),
+                'title' => __('Period')
+            )
+        );
 
-        $fieldset->addField('from', 'date', array(
-            'name'      => 'from',
-            'date_format' => $dateFormat,
-            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
-            'label'     => __('From'),
-            'title'     => __('From'),
-            'required'  => true
-        ));
+        $fieldset->addField(
+            'from',
+            'date',
+            array(
+                'name' => 'from',
+                'date_format' => $dateFormat,
+                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'label' => __('From'),
+                'title' => __('From'),
+                'required' => true
+            )
+        );
 
-        $fieldset->addField('to', 'date', array(
-            'name'      => 'to',
-            'date_format' => $dateFormat,
-            'image'     => $this->getViewFileUrl('images/grid-cal.gif'),
-            'label'     => __('To'),
-            'title'     => __('To'),
-            'required'  => true
-        ));
+        $fieldset->addField(
+            'to',
+            'date',
+            array(
+                'name' => 'to',
+                'date_format' => $dateFormat,
+                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'label' => __('To'),
+                'title' => __('To'),
+                'required' => true
+            )
+        );
 
-        $fieldset->addField('show_empty_rows', 'select', array(
-            'name'      => 'show_empty_rows',
-            'options'   => array(
-                '1' => __('Yes'),
-                '0' => __('No')
-            ),
-            'label'     => __('Empty Rows'),
-            'title'     => __('Empty Rows')
-        ));
+        $fieldset->addField(
+            'show_empty_rows',
+            'select',
+            array(
+                'name' => 'show_empty_rows',
+                'options' => array('1' => __('Yes'), '0' => __('No')),
+                'label' => __('Empty Rows'),
+                'title' => __('Empty Rows')
+            )
+        );
 
         $form->setUseContainer(true);
         $this->setForm($form);

@@ -33,7 +33,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_code  = \Magento\Paypal\Model\Config::METHOD_WPS;
+    protected $_code = \Magento\Paypal\Model\Config::METHOD_WPS;
 
     /**
      * @var string
@@ -48,12 +48,12 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var bool
      */
-    protected $_isInitializeNeeded      = true;
+    protected $_isInitializeNeeded = true;
 
     /**
      * @var bool
      */
-    protected $_canUseInternal          = false;
+    protected $_canUseInternal = false;
 
     /**
      * Config instance
@@ -194,10 +194,16 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function createFormBlock($name)
     {
-        $block = $this->getLayout()->createBlock('Magento\Paypal\Block\Standard\Form', $name)
-            ->setMethod('paypal_standard')
-            ->setPayment($this->getPayment())
-            ->setTemplate('standard/form.phtml');
+        $block = $this->getLayout()->createBlock(
+            'Magento\Paypal\Block\Standard\Form',
+            $name
+        )->setMethod(
+            'paypal_standard'
+        )->setPayment(
+            $this->getPayment()
+        )->setTemplate(
+            'standard/form.phtml'
+        );
 
         return $block;
     }
@@ -223,13 +229,19 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
         $order = $this->_orderFactory->create()->loadByIncrementId($orderIncrementId);
         /* @var $api \Magento\Paypal\Model\Api\Standard */
         $api = $this->_apiStandardFactory->create()->setConfigObject($this->getConfig());
-        $api->setOrderId($orderIncrementId)
-            ->setCurrencyCode($order->getBaseCurrencyCode())
-            //->setPaymentAction()
-            ->setOrder($order)
-            ->setNotifyUrl($this->_urlBuilder->getUrl('paypal/ipn/'))
-            ->setReturnUrl($this->_urlBuilder->getUrl('paypal/standard/success'))
-            ->setCancelUrl($this->_urlBuilder->getUrl('paypal/standard/cancel'));
+        $api->setOrderId(
+            $orderIncrementId
+        )->setCurrencyCode($order->getBaseCurrencyCode())
+        //->setPaymentAction()
+        ->setOrder(
+            $order
+        )->setNotifyUrl(
+            $this->_urlBuilder->getUrl('paypal/ipn/')
+        )->setReturnUrl(
+            $this->_urlBuilder->getUrl('paypal/standard/success')
+        )->setCancelUrl(
+            $this->_urlBuilder->getUrl('paypal/standard/cancel')
+        );
 
         // export address
         $isOrderVirtual = $order->getIsVirtual();
@@ -242,8 +254,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
 
         // add cart totals and line items
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
-        $api->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($this->_config->lineItemsEnabled);
+        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_config->lineItemsEnabled);
         $api->setCartSummary($this->_getAggregatedCartSummary());
         $api->setLocale($api->getLocaleCode());
         $result = $api->getStandardCheckoutRequest();
@@ -304,7 +315,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getConfigData($field, $storeId = null)
     {
-        return $this->getConfig()->$field;
+        return $this->getConfig()->{$field};
     }
 
     /**

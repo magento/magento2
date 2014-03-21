@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Custbalance
-    extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
+class Custbalance extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
 {
     /**
      * Fetch customer balance
@@ -45,11 +44,9 @@ class Custbalance
     {
         $custbalance = $address->getCustbalanceAmount();
         if ($custbalance != 0) {
-            $address->addTotal(array(
-                'code'  => 'custbalance',
-                'title' => __('Store Credit'),
-                'value' => -$custbalance
-            ));
+            $address->addTotal(
+                array('code' => 'custbalance', 'title' => __('Store Credit'), 'value' => -$custbalance)
+            );
         }
         return $this;
     }

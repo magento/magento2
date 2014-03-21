@@ -29,12 +29,19 @@ namespace Magento\Customer\Model\Metadata;
 
 class ElementFactory
 {
-    const OUTPUT_FORMAT_JSON    = 'json';
-    const OUTPUT_FORMAT_TEXT    = 'text';
-    const OUTPUT_FORMAT_HTML    = 'html';
-    const OUTPUT_FORMAT_PDF     = 'pdf';
+    const OUTPUT_FORMAT_JSON = 'json';
+
+    const OUTPUT_FORMAT_TEXT = 'text';
+
+    const OUTPUT_FORMAT_HTML = 'html';
+
+    const OUTPUT_FORMAT_PDF = 'pdf';
+
     const OUTPUT_FORMAT_ONELINE = 'oneline';
-    const OUTPUT_FORMAT_ARRAY   = 'array'; // available only for multiply attributes
+
+    const OUTPUT_FORMAT_ARRAY = 'array';
+
+    // available only for multiply attributes
 
     /**
      * @var \Magento\ObjectManager
@@ -72,12 +79,12 @@ class ElementFactory
         $isAjax = false
     ) {
         $dataModelClass = $attribute->getDataModel();
-        $params = [
+        $params = array(
             'entityTypeCode' => $entityTypeCode,
             'value' => is_null($value) ? false : $value,
             'isAjax' => $isAjax,
             'attribute' => $attribute
-        ];
+        );
         /** TODO fix when Validation is implemented MAGETWO-17341 */
         if ($dataModelClass == 'Magento\Customer\Model\Attribute\Data\Postcode') {
             $dataModelClass = 'Magento\Customer\Model\Metadata\Form\Text';

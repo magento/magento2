@@ -52,41 +52,33 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
                 'visibility' => 'protected',
                 'docblock' => array(
                     'shortDescription' => 'Object Manager instance',
-                    'tags' => array(
-                        array('name' => 'var', 'description' => '\Magento\ObjectManager')
-                    )
-                ),
+                    'tags' => array(array('name' => 'var', 'description' => '\Magento\ObjectManager'))
+                )
             ),
             array(
                 'name' => 'pluginList',
                 'visibility' => 'protected',
                 'docblock' => array(
                     'shortDescription' => 'List of plugins',
-                    'tags' => array(
-                        array('name' => 'var', 'description' => '\Magento\Interception\PluginList')
-                    )
-                ),
+                    'tags' => array(array('name' => 'var', 'description' => '\Magento\Interception\PluginList'))
+                )
             ),
             array(
                 'name' => 'chain',
                 'visibility' => 'protected',
                 'docblock' => array(
                     'shortDescription' => 'Invocation chain',
-                    'tags' => array(
-                        array('name' => 'var', 'description' => '\Magento\Interception\Chain')
-                    )
-                ),
+                    'tags' => array(array('name' => 'var', 'description' => '\Magento\Interception\Chain'))
+                )
             ),
             array(
                 'name' => 'subjectType',
                 'visibility' => 'protected',
                 'docblock' => array(
                     'shortDescription' => 'Subject type name',
-                    'tags' => array(
-                        array('name' => 'var', 'description' => 'string')
-                    )
-                ),
-            ),
+                    'tags' => array(array('name' => 'var', 'description' => 'string'))
+                )
+            )
         );
     }
 
@@ -107,17 +99,24 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
         }
 
         return array(
-            'name'       => '__construct',
-            'parameters' => array_merge(array(
-                array('name' => 'pluginLocator', 'type' => '\Magento\ObjectManager'),
-                array('name' => 'pluginList', 'type' => '\Magento\Interception\PluginList'),
-                array('name' => 'chain', 'type' => '\Magento\Interception\Chain'),
-            ), $parameters),
-            'body' => "\$this->pluginLocator = \$pluginLocator;\n"
-                . "\$this->pluginList = \$pluginList;\n"
-                . "\$this->chain = \$chain;\n"
-                . "\$this->subjectType = get_parent_class(\$this);\n"
-                . (count($parameters) ? "parent::__construct({$this->_getParameterList($parameters)});" : '')
+            'name' => '__construct',
+            'parameters' => array_merge(
+                array(
+                    array('name' => 'pluginLocator', 'type' => '\Magento\ObjectManager'),
+                    array('name' => 'pluginList', 'type' => '\Magento\Interception\PluginList'),
+                    array('name' => 'chain', 'type' => '\Magento\Interception\Chain')
+                ),
+                $parameters
+            ),
+            'body' => "\$this->pluginLocator = \$pluginLocator;\n" .
+            "\$this->pluginList = \$pluginList;\n" .
+            "\$this->chain = \$chain;\n" .
+            "\$this->subjectType = get_parent_class(\$this);\n" .
+            (count(
+                $parameters
+            ) ? "parent::__construct({$this->_getParameterList(
+                $parameters
+            )});" : '')
         );
     }
 
@@ -134,26 +133,26 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
             'name' => '___callParent',
             'parameters' => array(
                 array('name' => 'method', 'type' => 'string'),
-                array('name' => 'arguments', 'type' => 'array'),
+                array('name' => 'arguments', 'type' => 'array')
             ),
             'body' => 'return call_user_func_array(array(\'parent\', $method), $arguments);'
         );
 
         $methods[] = array(
             'name' => '__sleep',
-            'body' => "if (method_exists(get_parent_class(\$this), '__sleep')) {\n"
-                . "    return parent::__sleep();\n"
-                . "} else {\n"
-                . "    return array_keys(get_class_vars(get_parent_class(\$this)));\n"
-                . "}\n"
+            'body' => "if (method_exists(get_parent_class(\$this), '__sleep')) {\n" .
+            "    return parent::__sleep();\n" .
+            "} else {\n" .
+            "    return array_keys(get_class_vars(get_parent_class(\$this)));\n" .
+            "}\n"
         );
 
         $methods[] = array(
             'name' => '__wakeup',
-            'body' => "\$this->pluginLocator = \\Magento\\App\\ObjectManager::getInstance();\n"
-                . "\$this->pluginList = \$this->pluginLocator->get('Magento\\Interception\\PluginList');\n"
-                . "\$this->chain = \$this->pluginLocator->get('Magento\\Interception\\Chain');\n"
-                . "\$this->subjectType = get_parent_class(\$this);\n"
+            'body' => "\$this->pluginLocator = \\Magento\\App\\ObjectManager::getInstance();\n" .
+            "\$this->pluginList = \$this->pluginLocator->get('Magento\\Interception\\PluginList');\n" .
+            "\$this->chain = \$this->pluginLocator->get('Magento\\Interception\\Chain');\n" .
+            "\$this->subjectType = get_parent_class(\$this);\n"
         );
 
         $methods[] = array(
@@ -162,50 +161,55 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
             'parameters' => array(
                 array('name' => 'method', 'type' => 'string'),
                 array('name' => 'arguments', 'type' => 'array'),
-                array('name' => 'pluginInfo', 'type' => 'array'),
+                array('name' => 'pluginInfo', 'type' => 'array')
             ),
-            'body' => "\$capMethod = ucfirst(\$method);\n"
-                . "\$result = null;\n"
-                . "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_BEFORE])) {\n"
-                . "    foreach (\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_BEFORE] as \$code) {\n"
-                . "        \$beforeResult = call_user_func_array(\n"
-                . "            array(\$this->pluginList->getPlugin(\$this->subjectType, \$code), 'before'"
-                    . ". \$capMethod), array_merge(array(\$this), \$arguments)\n"
-                . "        );\n"
-                . "        if (\$beforeResult) {\n"
-                . "            \$arguments = \$beforeResult;\n"
-                . "        }\n"
-                . "    }\n"
-                . "}\n"
-                . "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AROUND])) {\n"
-                . "    \$chain = \$this->chain;\n"
-                . "    \$type = \$this->subjectType;\n"
-                . "    \$subject = \$this;\n"
-                . "    \$code = \$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AROUND];\n"
-                . "    \$next = function () use (\$chain, \$type, \$method, \$subject, \$code) {\n"
-                . "        return \$chain->invokeNext(\$type, \$method, \$subject, func_get_args(), \$code);\n"
-                . "    };\n"
-                . "    \$result = call_user_func_array(\n"
-                . "        array(\$this->pluginList->getPlugin(\$this->subjectType, \$code), 'around' . \$capMethod),\n"
-                . "        array_merge(array(\$this, \$next), \$arguments)\n"
-                . "    );\n"
-                . "} else {\n"
-                . "    \$result = call_user_func_array(array('parent', \$method), \$arguments);\n"
-                . "}\n"
-                . "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AFTER])) {\n"
-                . "    foreach (\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AFTER] as \$code) {\n"
-                . "        \$result = \$this->pluginList->getPlugin(\$this->subjectType, \$code)\n"
-                . "            ->{'after' . \$capMethod}(\$this, \$result);\n"
-                . "    }\n"
-                . "}\n"
-                . "return \$result;\n"
+            'body' => "\$capMethod = ucfirst(\$method);\n" .
+            "\$result = null;\n" .
+            "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_BEFORE])) {\n" .
+            "    foreach (\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_BEFORE] as \$code) {\n" .
+            "        \$beforeResult = call_user_func_array(\n" .
+            "            array(\$this->pluginList->getPlugin(\$this->subjectType, \$code), 'before'" .
+            ". \$capMethod), array_merge(array(\$this), \$arguments)\n" .
+            "        );\n" .
+            "        if (\$beforeResult) {\n" .
+            "            \$arguments = \$beforeResult;\n" .
+            "        }\n" .
+            "    }\n" .
+            "}\n" .
+            "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AROUND])) {\n" .
+            "    \$chain = \$this->chain;\n" .
+            "    \$type = \$this->subjectType;\n" .
+            "    \$subject = \$this;\n" .
+            "    \$code = \$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AROUND];\n" .
+            "    \$next = function () use (\$chain, \$type, \$method, \$subject, \$code) {\n" .
+            "        return \$chain->invokeNext(\$type, \$method, \$subject, func_get_args(), \$code);\n" .
+            "    };\n" .
+            "    \$result = call_user_func_array(\n" .
+            "        array(\$this->pluginList->getPlugin(\$this->subjectType, \$code), 'around' . \$capMethod),\n" .
+            "        array_merge(array(\$this, \$next), \$arguments)\n" .
+            "    );\n" .
+            "} else {\n" .
+            "    \$result = call_user_func_array(array('parent', \$method), \$arguments);\n" .
+            "}\n" .
+            "if (isset(\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AFTER])) {\n" .
+            "    foreach (\$pluginInfo[\\Magento\\Interception\\Definition::LISTENER_AFTER] as \$code) {\n" .
+            "        \$result = \$this->pluginList->getPlugin(\$this->subjectType, \$code)\n" .
+            "            ->{'after' . \$capMethod}(\$this, \$result);\n" .
+            "    }\n" .
+            "}\n" .
+            "return \$result;\n"
         );
 
         $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
-        $publicMethods   = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if (!($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor())
-                && !in_array($method->getName(), array('__sleep', '__wakeup', '__clone'))
+            if (!($method->isConstructor() ||
+                $method->isFinal() ||
+                $method->isStatic() ||
+                $method->isDestructor()) && !in_array(
+                    $method->getName(),
+                    array('__sleep', '__wakeup', '__clone')
+                )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
             }
@@ -230,15 +234,15 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
         $methodInfo = array(
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n"
-                . "if (!\$pluginInfo) {\n"
-                . "    return parent::{$method->getName()}({$this->_getParameterList($parameters)});\n"
-                . "} else {\n"
-                . "    return \$this->___call('{$method->getName()}', func_get_args(), \$pluginInfo);\n"
-                . "}",
-            'docblock' => array(
-                'shortDescription' => '{@inheritdoc}',
-            ),
+            'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
+            "if (!\$pluginInfo) {\n" .
+            "    return parent::{$method->getName()}({$this->_getParameterList(
+                $parameters
+            )});\n" .
+            "} else {\n" .
+            "    return \$this->___call('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
+            "}",
+            'docblock' => array('shortDescription' => '{@inheritdoc}')
         );
 
         return $methodInfo;
@@ -253,7 +257,7 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
         return implode(
             ', ',
             array_map(
-                function($item) {
+                function ($item) {
                     return "$" . $item['name'];
                 },
                 $parameters
@@ -291,8 +295,12 @@ class Interceptor extends \Magento\Code\Generator\EntityAbstract
             $resultClassName = $this->_getResultClassName();
 
             if ($resultClassName !== $sourceClassName . '\\Interceptor') {
-                $this->_addError('Invalid Interceptor class name ['
-                    . $resultClassName . ']. Use ' . $sourceClassName . '\\Interceptor'
+                $this->_addError(
+                    'Invalid Interceptor class name [' .
+                    $resultClassName .
+                    ']. Use ' .
+                    $sourceClassName .
+                    '\\Interceptor'
                 );
                 $result = false;
             }

@@ -76,26 +76,37 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_transportMock = $this->getMock('Magento\Mail\TransportInterface', array(), array(), '', false);
         $this->_encryptor = $this->getMock('Magento\Encryption\EncryptorInterface');
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject('Magento\Customer\Model\Customer', array(
-            'storeManager' => $this->_storeManager,
-            'config' =>  $this->_config,
-            'transportBuilder' => $this->_transportBuilderMock,
-            'coreStoreConfig' => $this->_coreStoreConfigMock,
-            'encryptor' => $this->_encryptor,
-        ));
+        $this->_model = $helper->getObject(
+            'Magento\Customer\Model\Customer',
+            array(
+                'storeManager' => $this->_storeManager,
+                'config' => $this->_config,
+                'transportBuilder' => $this->_transportBuilderMock,
+                'coreStoreConfig' => $this->_coreStoreConfigMock,
+                'encryptor' => $this->_encryptor
+            )
+        );
     }
 
     public function testHashPassword()
     {
-        $this->_encryptor
-            ->expects($this->once())
-            ->method('getHash')
-            ->with('password', 'salt')
-            ->will($this->returnValue('hash'))
-        ;
+        $this->_encryptor->expects(
+            $this->once()
+        )->method(
+            'getHash'
+        )->with(
+            'password',
+            'salt'
+        )->will(
+            $this->returnValue('hash')
+        );
         $this->assertEquals('hash', $this->_model->hashPassword('password', 'salt'));
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testSendPasswordResetConfirmationEmail()
     {
         $storeId = 1;
@@ -114,59 +125,93 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->_attribute->expects($this->any())->method('isVisible')->will($this->returnValue(false));
 
-        $this->_storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->with($this->equalTo(1))
-            ->will($this->returnValue($this->_website));
-        $this->_storeManager
-            ->expects($this->once())
-            ->method('getStore')
-            ->with(0)
-            ->will($this->returnValue($this->_storetMock));
+        $this->_storeManager->expects(
+            $this->once()
+        )->method(
+            'getWebsite'
+        )->with(
+            $this->equalTo(1)
+        )->will(
+            $this->returnValue($this->_website)
+        );
+        $this->_storeManager->expects(
+            $this->once()
+        )->method(
+            'getStore'
+        )->with(
+            0
+        )->will(
+            $this->returnValue($this->_storetMock)
+        );
 
         $this->_website->expects($this->once())->method('getStoreIds')->will($this->returnValue($storeIds));
 
-        $this->_coreStoreConfigMock
-            ->expects($this->at(0))
-            ->method('getConfig')
-            ->with(\Magento\Customer\Model\Customer::XML_PATH_RESET_PASSWORD_TEMPLATE, $storeId)
-            ->will($this->returnValue('templateId'));
-        $this->_coreStoreConfigMock
-            ->expects($this->at(1))
-            ->method('getConfig')
-            ->with(\Magento\Customer\Model\Customer::XML_PATH_FORGOT_EMAIL_IDENTITY, $storeId)
-            ->will($this->returnValue('sender'));
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('setTemplateOptions')
-            ->will($this->returnSelf());
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(array('customer' => $this->_model, 'store' => $this->_storetMock))
-            ->will($this->returnSelf());
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('addTo')
-            ->with($this->equalTo($email), $this->equalTo($firstName . ' ' . $lastName))
-            ->will($this->returnSelf());
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('setFrom')
-            ->with('sender')
-            ->will($this->returnSelf());
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->with('templateId')
-            ->will($this->returnSelf());
-        $this->_transportBuilderMock
-            ->expects($this->once())
-            ->method('getTransport')
-            ->will($this->returnValue($this->_transportMock));
-        $this->_transportMock
-            ->expects($this->once())
-            ->method('sendMessage');
+        $this->_coreStoreConfigMock->expects(
+            $this->at(0)
+        )->method(
+            'getConfig'
+        )->with(
+            \Magento\Customer\Model\Customer::XML_PATH_RESET_PASSWORD_TEMPLATE,
+            $storeId
+        )->will(
+            $this->returnValue('templateId')
+        );
+        $this->_coreStoreConfigMock->expects(
+            $this->at(1)
+        )->method(
+            'getConfig'
+        )->with(
+            \Magento\Customer\Model\Customer::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            $storeId
+        )->will(
+            $this->returnValue('sender')
+        );
+        $this->_transportBuilderMock->expects($this->once())->method('setTemplateOptions')->will($this->returnSelf());
+        $this->_transportBuilderMock->expects(
+            $this->once()
+        )->method(
+            'setTemplateVars'
+        )->with(
+            array('customer' => $this->_model, 'store' => $this->_storetMock)
+        )->will(
+            $this->returnSelf()
+        );
+        $this->_transportBuilderMock->expects(
+            $this->once()
+        )->method(
+            'addTo'
+        )->with(
+            $this->equalTo($email),
+            $this->equalTo($firstName . ' ' . $lastName)
+        )->will(
+            $this->returnSelf()
+        );
+        $this->_transportBuilderMock->expects(
+            $this->once()
+        )->method(
+            'setFrom'
+        )->with(
+            'sender'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->_transportBuilderMock->expects(
+            $this->once()
+        )->method(
+            'setTemplateIdentifier'
+        )->with(
+            'templateId'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->_transportBuilderMock->expects(
+            $this->once()
+        )->method(
+            'getTransport'
+        )->will(
+            $this->returnValue($this->_transportMock)
+        );
+        $this->_transportMock->expects($this->once())->method('sendMessage');
 
         $this->_model->sendPasswordResetNotificationEmail();
     }

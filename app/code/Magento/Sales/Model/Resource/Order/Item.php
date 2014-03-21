@@ -39,7 +39,7 @@ class Item extends AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_item_resource';
+    protected $_eventPrefix = 'sales_order_item_resource';
 
     /**
      * Model initialization

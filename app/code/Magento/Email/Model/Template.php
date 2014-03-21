@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Email\Model;
 
 use Magento\Core\Exception;
@@ -71,15 +70,18 @@ use Magento\Filter\Template as FilterTemplate;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\TemplateInterface
+class Template extends \Magento\Core\Model\Template implements \Magento\Mail\TemplateInterface
 {
     /**
      * Configuration path for default email templates
      */
-    const XML_PATH_SENDING_SET_RETURN_PATH      = 'system/smtp/set_return_path';
-    const XML_PATH_SENDING_RETURN_PATH_EMAIL    = 'system/smtp/return_path_email';
-    const XML_PATH_DESIGN_EMAIL_LOGO            = 'design/email/logo';
-    const XML_PATH_DESIGN_EMAIL_LOGO_ALT        = 'design/email/logo_alt';
+    const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
+
+    const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+
+    const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
+
+    const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
 
     /**
      * Config path to mail sending setting that shows if email communications are disabled
@@ -233,8 +235,9 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
             $uploadDir = \Magento\Backend\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
-                return $this->_storeManager->getStore()
-                    ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $uploadDir . '/' . $fileName;
+                return $this->_storeManager->getStore()->getBaseUrl(
+                    \Magento\UrlInterface::URL_TYPE_MEDIA
+                ) . $uploadDir . '/' . $fileName;
             }
         }
         return $this->getDefaultEmailLogo();
@@ -290,8 +293,11 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
     {
         if (empty($this->_templateFilter)) {
             $this->_templateFilter = $this->_emailFilterFactory->create();
-            $this->_templateFilter->setUseAbsoluteLinks($this->getUseAbsoluteLinks())
-                ->setStoreId($this->getDesignConfig()->getStore());
+            $this->_templateFilter->setUseAbsoluteLinks(
+                $this->getUseAbsoluteLinks()
+            )->setStoreId(
+                $this->getDesignConfig()->getStore()
+            );
         }
         return $this->_templateFilter;
     }
@@ -378,10 +384,9 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
      */
     public function isValidForSend()
     {
-        return !$this->_coreStoreConfig->getConfigFlag('system/smtp/disable')
-            && $this->getSenderName()
-            && $this->getSenderEmail()
-            && $this->getTemplateSubject();
+        return !$this->_coreStoreConfig->getConfigFlag(
+            'system/smtp/disable'
+        ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
     /**
@@ -409,8 +414,7 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
     public function getProcessedTemplate(array $variables = array())
     {
         $processor = $this->getTemplateFilter();
-        $processor->setUseSessionInUrl(false)
-            ->setPlainTemplateMode($this->isPlain());
+        $processor->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain());
 
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
@@ -427,14 +431,12 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
             $variables['logo_alt'] = $this->_getLogoAlt($processor->getStoreId());
         }
 
-        $processor->setIncludeProcessor(array($this, 'getInclude'))
-            ->setVariables($variables);
+        $processor->setIncludeProcessor(array($this, 'getInclude'))->setVariables($variables);
 
         $this->_applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)
-                ->filter($this->getPreparedTemplateText());
+            $processedResult = $processor->setStoreId($storeId)->filter($this->getPreparedTemplateText());
         } catch (\Exception $e) {
             $this->_cancelDesignConfig();
             throw new \Magento\Mail\Exception($e->getMessage(), $e->getCode(), $e);
@@ -504,8 +506,7 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
         $this->_applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)
-                ->filter($this->getTemplateSubject());
+            $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
         } catch (\Exception $e) {
             $this->_cancelDesignConfig();
             throw new \Magento\Mail\Exception($e->getMessage(), $e->getCode(), $e);
@@ -578,16 +579,10 @@ class Template extends \Magento\Core\Model\Template implements  \Magento\Mail\Te
         $variables = $this->_parseVariablesString($this->getData('orig_template_variables'));
         if ($variables) {
             foreach ($variables as $value => $label) {
-                $optionArray[] = array(
-                    'value' => '{{' . $value . '}}',
-                    'label' => __('%1', $label)
-                );
+                $optionArray[] = array('value' => '{{' . $value . '}}', 'label' => __('%1', $label));
             }
             if ($withGroup) {
-                $optionArray = array(
-                    'label' => __('Template Variables'),
-                    'value' => $optionArray
-                );
+                $optionArray = array('label' => __('Template Variables'), 'value' => $optionArray);
             }
         }
         return $optionArray;

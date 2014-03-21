@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Model\ProductType;
 
 class PluginTest extends \PHPUnit_Framework_TestCase
@@ -43,11 +42,17 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subject = $this->getMock('Magento\Catalog\Model\Product\Type\AbstractType', [], [], '', false);
+        $this->subject = $this->getMock(
+            'Magento\Catalog\Model\Product\Type\AbstractType',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getIsRecurring', '__wakeup', '__sleep'],
-            [],
+            array('getIsRecurring', '__wakeup', '__sleep'),
+            array(),
             '',
             false
         );

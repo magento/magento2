@@ -121,14 +121,18 @@ class View extends \Magento\View\Element\Template
         if (is_null($this->_relatedOrders)) {
             $billingAgreement = $this->_getBillingAgreementInstance();
             $billingAgreementId = $billingAgreement ? $billingAgreement->getAgreementId() : 0;
-            $this->_relatedOrders = $this->_orderCollectionFactory->create()
-                ->addFieldToSelect('*')
-                ->addFieldToFilter('customer_id', (int)$this->_customerSession->getCustomerId())
-                ->addFieldToFilter(
-                    'state',
-                    array('in' => $this->_orderConfig->getVisibleOnFrontStates())
-                )
-                ->setOrder('created_at', 'desc');
+            $this->_relatedOrders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+                '*'
+            )->addFieldToFilter(
+                'customer_id',
+                (int)$this->_customerSession->getCustomerId()
+            )->addFieldToFilter(
+                'state',
+                array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+            )->setOrder(
+                'created_at',
+                'desc'
+            );
             $this->_agreementResource->addOrdersFilter($this->_relatedOrders, $billingAgreementId);
         }
         return $this->_relatedOrders;
@@ -152,8 +156,11 @@ class View extends \Magento\View\Element\Template
                 $value = $this->formatDate($order->getCreatedAt(), 'short', true);
                 break;
             case 'shipping_address':
-                $value = $order->getShippingAddress()
-                    ? $this->escapeHtml($order->getShippingAddress()->getName()) : __('N/A');
+                $value = $order->getShippingAddress() ? $this->escapeHtml(
+                    $order->getShippingAddress()->getName()
+                ) : __(
+                    'N/A'
+                );
                 break;
             case 'order_total':
                 $value = $order->formatPrice($order->getGrandTotal());
@@ -166,10 +173,10 @@ class View extends \Magento\View\Element\Template
                 $value = $this->getUrl('sales/order/view', array('order_id' => $order->getId()));
                 break;
             default:
-                $value = ($order->getData($key)) ? $order->getData($key) : __('N/A');
+                $value = $order->getData($key) ? $order->getData($key) : __('N/A');
                 break;
         }
-        return ($escape) ? $this->escapeHtml($value) : $value;
+        return $escape ? $this->escapeHtml($value) : $value;
     }
 
     /**
@@ -181,8 +188,13 @@ class View extends \Magento\View\Element\Template
     {
         parent::_prepareLayout();
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
-            ->setCollection($this->getRelatedOrders())->setIsOutputRequired(false);
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager'
+        )->setCollection(
+            $this->getRelatedOrders()
+        )->setIsOutputRequired(
+            false
+        );
         $this->setChild('pager', $pager);
         $this->getRelatedOrders()->load();
 
@@ -232,9 +244,10 @@ class View extends \Magento\View\Element\Template
 
             $this->setCanCancel($billingAgreement->canCancel());
             $this->setCancelUrl(
-                $this->getUrl('*/billing_agreement/cancel', array(
-                    '_current' => true,
-                    'payment_method' => $billingAgreement->getMethodCode()))
+                $this->getUrl(
+                    '*/billing_agreement/cancel',
+                    array('_current' => true, 'payment_method' => $billingAgreement->getMethodCode())
+                )
             );
 
             $paymentMethodTitle = $billingAgreement->getAgreementLabel();
@@ -242,15 +255,9 @@ class View extends \Magento\View\Element\Template
 
             $createdAt = $billingAgreement->getCreatedAt();
             $updatedAt = $billingAgreement->getUpdatedAt();
-            $this->setAgreementCreatedAt(
-                $createdAt
-                    ? $this->formatDate($createdAt, 'short', true)
-                    : __('N/A')
-            );
+            $this->setAgreementCreatedAt($createdAt ? $this->formatDate($createdAt, 'short', true) : __('N/A'));
             if ($updatedAt) {
-                $this->setAgreementUpdatedAt(
-                    $this->formatDate($updatedAt, 'short', true)
-                );
+                $this->setAgreementUpdatedAt($this->formatDate($updatedAt, 'short', true));
             }
             $this->setAgreementStatus($billingAgreement->getStatusLabel());
         }

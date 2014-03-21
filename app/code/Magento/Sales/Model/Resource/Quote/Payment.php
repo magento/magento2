@@ -35,9 +35,7 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
      * @var \Magento\Sales\Model\Payment\Method\Converter

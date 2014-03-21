@@ -56,19 +56,21 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function saveConfig($path, $value, $scope, $scopeId)
     {
         $writeAdapter = $this->_getWriteAdapter();
-        $select = $writeAdapter->select()
-            ->from($this->getMainTable())
-            ->where('path = ?', $path)
-            ->where('scope = ?', $scope)
-            ->where('scope_id = ?', $scopeId);
+        $select = $writeAdapter->select()->from(
+            $this->getMainTable()
+        )->where(
+            'path = ?',
+            $path
+        )->where(
+            'scope = ?',
+            $scope
+        )->where(
+            'scope_id = ?',
+            $scopeId
+        );
         $row = $writeAdapter->fetchRow($select);
 
-        $newData = array(
-            'scope'     => $scope,
-            'scope_id'  => $scopeId,
-            'path'      => $path,
-            'value'     => $value
-        );
+        $newData = array('scope' => $scope, 'scope_id' => $scopeId, 'path' => $path, 'value' => $value);
 
         if ($row) {
             $whereCondition = array($this->getIdFieldName() . '=?' => $row[$this->getIdFieldName()]);
@@ -90,11 +92,14 @@ class Config extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function deleteConfig($path, $scope, $scopeId)
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->delete($this->getMainTable(), array(
-            $adapter->quoteInto('path = ?', $path),
-            $adapter->quoteInto('scope = ?', $scope),
-            $adapter->quoteInto('scope_id = ?', $scopeId)
-        ));
+        $adapter->delete(
+            $this->getMainTable(),
+            array(
+                $adapter->quoteInto('path = ?', $path),
+                $adapter->quoteInto('scope = ?', $scope),
+                $adapter->quoteInto('scope_id = ?', $scopeId)
+            )
+        );
         return $this;
     }
 }

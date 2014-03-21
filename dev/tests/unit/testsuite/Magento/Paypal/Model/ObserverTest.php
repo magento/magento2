@@ -21,9 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model;
-use Magento\TestFramework\Matcher\MethodInvokedAtIndex as MethodInvokedAtIndex;
+
+use Magento\TestFramework\Matcher\MethodInvokedAtIndex;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,63 +67,66 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_authorization = $this->getMockForAbstractClass('Magento\AuthorizationInterface');
         $this->_agreementFactory = $this->getMock(
             'Magento\Paypal\Model\Billing\AgreementFactory',
-            ['create'],
-            [],
+            array('create'),
+            array(),
             '',
             false
         );
-        $this->_checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->_checkoutSession = $this->getMock('Magento\Checkout\Model\Session', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Paypal\Model\Observer',
-            [
+            array(
                 'authorization' => $this->_authorization,
                 'agreementFactory' => $this->_agreementFactory,
                 'checkoutSession' => $this->_checkoutSession
-            ]
+            )
         );
     }
 
     public function testAddPaypalShortcuts()
     {
-        $layoutMock = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->setMethods(array('createBlock'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $blocks = array(
-            'Magento\Paypal\Block\Express\Shortcut',
-            'Magento\Paypal\Block\PayflowExpress\Shortcut'
-        );
+        $layoutMock = $this->getMockBuilder(
+            'Magento\Core\Model\Layout'
+        )->setMethods(
+            array('createBlock')
+        )->disableOriginalConstructor()->getMock();
+        $blocks = array('Magento\Paypal\Block\Express\Shortcut', 'Magento\Paypal\Block\PayflowExpress\Shortcut');
 
         $blockInstances = array();
         foreach ($blocks as $atPosition => $blockName) {
-            $block = $this->getMockBuilder($blockName)
-                ->setMethods(null)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $block = $this->getMockBuilder($blockName)->setMethods(null)->disableOriginalConstructor()->getMock();
 
             $blockInstances[$blockName] = $block;
 
-            $layoutMock->expects(new MethodInvokedAtIndex($atPosition))
-                ->method('createBlock')
-                ->with($blockName)
-                ->will($this->returnValue($block));
+            $layoutMock->expects(
+                new MethodInvokedAtIndex($atPosition)
+            )->method(
+                'createBlock'
+            )->with(
+                $blockName
+            )->will(
+                $this->returnValue($block)
+            );
         }
 
-        $shortcutButtonsMock = $this->getMockBuilder('Magento\Catalog\Block\ShortcutButtons')
-            ->setMethods(array('getLayout', 'addShortcut'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shortcutButtonsMock = $this->getMockBuilder(
+            'Magento\Catalog\Block\ShortcutButtons'
+        )->setMethods(
+            array('getLayout', 'addShortcut')
+        )->disableOriginalConstructor()->getMock();
 
-        $shortcutButtonsMock->expects($this->any())
-            ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+        $shortcutButtonsMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
 
         foreach ($blocks as $atPosition => $blockName) {
-            $shortcutButtonsMock->expects(new MethodInvokedAtIndex($atPosition))
-                ->method('addShortcut')
-                ->with($this->identicalTo($blockInstances[$blockName]));
+            $shortcutButtonsMock->expects(
+                new MethodInvokedAtIndex($atPosition)
+            )->method(
+                'addShortcut'
+            )->with(
+                $this->identicalTo($blockInstances[$blockName])
+            );
         }
 
         $this->_event->setContainer($shortcutButtonsMock);
@@ -139,10 +142,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testRestrictAdminBillingAgreementUsage($methodInstance, $isAllowed, $isAvailable)
     {
         $this->_event->setMethodInstance($methodInstance);
-        $this->_authorization->expects($this->any())
-            ->method('isAllowed')
-            ->with('Magento_Paypal::use')
-            ->will($this->returnValue($isAllowed));
+        $this->_authorization->expects(
+            $this->any()
+        )->method(
+            'isAllowed'
+        )->with(
+            'Magento_Paypal::use'
+        )->will(
+            $this->returnValue($isAllowed)
+        );
         $result = new \stdClass();
         $result->isAvailable = true;
         $this->_event->setResult($result);
@@ -152,43 +160,46 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function restrictAdminBillingAgreementUsageDataProvider()
     {
-        return [
-            [new \stdClass(), false, true],
-            [
+        return array(
+            array(new \stdClass(), false, true),
+            array(
                 $this->getMockForAbstractClass(
                     'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
-                    [],
+                    array(),
                     '',
                     false
                 ),
                 true,
                 true
-            ],
-            [
+            ),
+            array(
                 $this->getMockForAbstractClass(
                     'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
-                    [],
+                    array(),
                     '',
                     false
                 ),
                 false,
                 false
-            ],
-        ];
+            )
+        );
     }
 
     public function testAddBillingAgreementToSessionNoData()
     {
-        $payment = $this->getMock('Magento\Sales\Model\Order\Payment', [], [], '', false);
-        $payment->expects($this->once())
-            ->method('__call')
-            ->with('getBillingAgreementData')
-            ->will($this->returnValue(null));
+        $payment = $this->getMock('Magento\Sales\Model\Order\Payment', array(), array(), '', false);
+        $payment->expects(
+            $this->once()
+        )->method(
+            '__call'
+        )->with(
+            'getBillingAgreementData'
+        )->will(
+            $this->returnValue(null)
+        );
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->never())->method('create');
-        $this->_checkoutSession->expects($this->once())
-            ->method('__call')
-            ->with('unsLastBillingAgreementReferenceId');
+        $this->_checkoutSession->expects($this->once())->method('__call')->with('unsLastBillingAgreementReferenceId');
         $this->_model->addBillingAgreementToSession($this->_observer);
     }
 
@@ -198,58 +209,83 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddBillingAgreementToSession($isValid)
     {
-        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', [], [], '', false);
+        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', array(), array(), '', false);
         $agreement->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
         $comment = $this->getMockForAbstractClass(
             'Magento\Core\Model\AbstractModel',
-            [],
+            array(),
             '',
             false,
             true,
             true,
-            ['__wakeup']
+            array('__wakeup')
         );
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
-        $order->expects($this->once())
-            ->method('addStatusHistoryComment')
-            ->with(
-                $isValid
-                    ? __('Created billing agreement #%1.', 'agreement reference id')
-                    : __('We couldn\'t create a billing agreement for this order.')
+        $order = $this->getMock('Magento\Sales\Model\Order', array(), array(), '', false);
+        $order->expects(
+            $this->once()
+        )->method(
+            'addStatusHistoryComment'
+        )->with(
+            $isValid ? __(
+                'Created billing agreement #%1.',
+                'agreement reference id'
+            ) : __(
+                'We couldn\'t create a billing agreement for this order.'
             )
-            ->will($this->returnValue($comment));
+        )->will(
+            $this->returnValue($comment)
+        );
         if ($isValid) {
-            $agreement->expects($this->any())
-                ->method('__call')
-                ->with('getReferenceId')
-                ->will($this->returnValue('agreement reference id'));
-            $order->expects(new MethodInvokedAtIndex(0))
-                ->method('addRelatedObject')
-                ->with($agreement);
-            $this->_checkoutSession->expects($this->once())
-                ->method('__call')
-                ->with('setLastBillingAgreementReferenceId', ['agreement reference id']);
+            $agreement->expects(
+                $this->any()
+            )->method(
+                '__call'
+            )->with(
+                'getReferenceId'
+            )->will(
+                $this->returnValue('agreement reference id')
+            );
+            $order->expects(new MethodInvokedAtIndex(0))->method('addRelatedObject')->with($agreement);
+            $this->_checkoutSession->expects(
+                $this->once()
+            )->method(
+                '__call'
+            )->with(
+                'setLastBillingAgreementReferenceId',
+                array('agreement reference id')
+            );
         } else {
-            $this->_checkoutSession->expects($this->once())
-                ->method('__call')
-                ->with('unsLastBillingAgreementReferenceId');
-            $agreement->expects($this->never())
-                ->method('__call');
+            $this->_checkoutSession->expects(
+                $this->once()
+            )->method(
+                '__call'
+            )->with(
+                'unsLastBillingAgreementReferenceId'
+            );
+            $agreement->expects($this->never())->method('__call');
         }
-        $order->expects(new MethodInvokedAtIndex($isValid ? 1 : 0))
-            ->method('addRelatedObject')
-            ->with($comment);
+        $order->expects(new MethodInvokedAtIndex($isValid ? 1 : 0))->method('addRelatedObject')->with($comment);
 
-        $payment = $this->getMock('Magento\Sales\Model\Order\Payment', [], [], '', false);
-        $payment->expects($this->once())
-            ->method('__call')
-            ->with('getBillingAgreementData')
-            ->will($this->returnValue('not empty'));
+        $payment = $this->getMock('Magento\Sales\Model\Order\Payment', array(), array(), '', false);
+        $payment->expects(
+            $this->once()
+        )->method(
+            '__call'
+        )->with(
+            'getBillingAgreementData'
+        )->will(
+            $this->returnValue('not empty')
+        );
         $payment->expects($this->once())->method('getOrder')->will($this->returnValue($order));
-        $agreement->expects($this->once())
-            ->method('importOrderPayment')
-            ->with($payment)
-            ->will($this->returnValue($agreement));
+        $agreement->expects(
+            $this->once()
+        )->method(
+            'importOrderPayment'
+        )->with(
+            $payment
+        )->will(
+            $this->returnValue($agreement)
+        );
         $this->_event->setPayment($payment);
         $this->_agreementFactory->expects($this->once())->method('create')->will($this->returnValue($agreement));
         $this->_model->addBillingAgreementToSession($this->_observer);
@@ -257,6 +293,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function addBillingAgreementToSessionDataProvider()
     {
-        return [[true], [false]];
+        return array(array(true), array(false));
     }
 }

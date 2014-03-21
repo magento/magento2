@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Config;
 
 class Cache
@@ -103,7 +102,7 @@ class Cache
                 $this->_loadedConfig = $this->_containerFactory->create($config);
             }
         }
-        return $this->_loadedConfig ? : false;
+        return $this->_loadedConfig ?: false;
     }
 
     /**
@@ -115,7 +114,10 @@ class Cache
     public function save(\Magento\Core\Model\Config\Base $config)
     {
         $this->_configCacheType->save(
-            $config->getNode()->asNiceXml('', false), $this->_cacheId, array(), $this->_cacheLifetime
+            $config->getNode()->asNiceXml('', false),
+            $this->_cacheId,
+            array(),
+            $this->_cacheLifetime
         );
     }
 

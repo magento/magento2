@@ -34,7 +34,6 @@ namespace Magento\Connect;
  */
 class Singleconfig
 {
-
     /**
      * Cache data
      * @var array
@@ -63,17 +62,29 @@ class Singleconfig
      * Internal keys constants
      */
     const K_CHAN = 'channels_by_name';
+
     const K_CHAN_URI = 'channels_by_uri';
+
     const K_CHAN_ALIAS = 'channel_aliases';
+
     const K_PACK = 'packages';
+
     const K_URI = 'uri';
+
     const K_CHAN_DATA = 'channel_data';
+
     const K_NAME = 'name';
+
     const K_VER = 'version';
+
     const K_STATE = 'stability';
+
     const K_XML = 'xml';
+
     const K_DEPS = 'deps';
+
     const K_PACK_DEPS = 'pack_deps';
+
     const K_CONFIG = 'config';
 
     /**
@@ -130,7 +141,6 @@ class Singleconfig
             $this->load();
         }
     }
-
 
     /**
      * Load cache from file
@@ -220,11 +230,7 @@ class Singleconfig
      */
     public function setEmptyConfig()
     {
-        $this->_data = array(
-        self::K_CHAN => array (),
-        self::K_CHAN_URI => array (),
-        self::K_CHAN_ALIAS => array (),
-        );
+        $this->_data = array(self::K_CHAN => array(), self::K_CHAN_URI => array(), self::K_CHAN_ALIAS => array());
     }
 
     /**
@@ -327,7 +333,6 @@ class Singleconfig
         return $this->_data[self::K_CHAN_URI][$uri];
     }
 
-
     /**
      * Unset channel record
      * @param string $chanName
@@ -359,10 +364,10 @@ class Singleconfig
     protected function setChannelRecord($chanName, $uri, $data, $packages = array())
     {
         $this->_data[self::K_CHAN][$chanName] = array(
-        self::K_NAME=>$chanName,
-        self::K_URI=>$uri,
-        self::K_CHAN_DATA=>$data,
-        self::K_PACK=>$packages
+            self::K_NAME => $chanName,
+            self::K_URI => $uri,
+            self::K_CHAN_DATA => $data,
+            self::K_PACK => $packages
         );
     }
 
@@ -486,8 +491,6 @@ class Singleconfig
         $this->save();
     }
 
-
-
     /**
      * Add channel
      * @param string $chanName
@@ -511,8 +514,6 @@ class Singleconfig
         $this->setChannelUriRecord($chanName, $uri);
         $this->save();
     }
-
-
 
     /**
      * Delete channel
@@ -539,7 +540,6 @@ class Singleconfig
         }
         $this->save();
     }
-
 
     /**
      * Converts channel name, url or alias to channel name
@@ -569,7 +569,6 @@ class Singleconfig
         return $channelData[self::K_URI];
     }
 
-
     /**
      * Add package
      *
@@ -580,21 +579,18 @@ class Singleconfig
     {
         $channel = $this->chanName($package->getChannel());
         $name = $package->getName();
-        $record = array (
-        self::K_VER => $package->getVersion(),
-        self::K_STATE => $package->getStability(),
-        self::K_XML => $package->getPackageXml(),
-        self::K_NAME => $name,
-        self::K_DEPS => array(),
-        self::K_PACK_DEPS => array(),
+        $record = array(
+            self::K_VER => $package->getVersion(),
+            self::K_STATE => $package->getStability(),
+            self::K_XML => $package->getPackageXml(),
+            self::K_NAME => $name,
+            self::K_DEPS => array(),
+            self::K_PACK_DEPS => array()
         );
         $this->setPackageRecord($channel, $name, $record);
         $this->setPackageDependencies($channel, $name, $package->getDependencyPackages());
         $this->save();
     }
-
-
-
 
     /**
      * Delete package
@@ -695,7 +691,7 @@ class Singleconfig
         } elseif (version_compare($min1, $min2, ">=") && version_compare($max1, $max2, "<=")) {
             return true;
         } elseif (version_compare($min1, $min2, "<=") && version_compare($max1, $max2, ">=")) {
-           return true;
+            return true;
         }
         return false;
     }
@@ -741,8 +737,12 @@ class Singleconfig
      * @param string $preferredStability
      * @return bool|string
      */
-    public function detectVersionFromRestArray($restData, $argVersionMin = false, $argVersionMax = false, $preferredStability = 'devel')
-    {
+    public function detectVersionFromRestArray(
+        $restData,
+        $argVersionMin = false,
+        $argVersionMax = false,
+        $preferredStability = 'devel'
+    ) {
         if (!is_array($restData)) {
             return false;
         }
@@ -869,14 +869,18 @@ class Singleconfig
     public function requiredByOtherPackages($chanName, $packageName, $excludeList = array())
     {
         $out = array();
-        foreach ($this->_data[self::K_CHAN] as $channel=>$data) {
+        foreach ($this->_data[self::K_CHAN] as $channel => $data) {
             foreach ($data[self::K_PACK] as $package) {
                 if ($this->specifiedInDependencyList($excludeList, $channel, $package['name'])) {
                     continue;
                 }
                 $deps = $package[self::K_PACK_DEPS];
                 if ($this->specifiedInDependencyList($deps, $chanName, $packageName)) {
-                    $out[] = array('channel'=>$channel, 'name' =>$package['name'], 'version'=>$package['version']);
+                    $out[] = array(
+                        'channel' => $channel,
+                        'name' => $package['name'],
+                        'version' => $package['version']
+                    );
                 }
             }
         }
@@ -896,10 +900,10 @@ class Singleconfig
             $data = array($tmp[self::K_NAME]);
         }
         $out = array();
-        foreach ( $data as $chanName) {
+        foreach ($data as $chanName) {
             $channel = $this->getChannel($chanName);
             $out[$chanName] = array();
-            foreach ($channel[self::K_PACK] as $package=>$data) {
+            foreach ($channel[self::K_PACK] as $package => $data) {
                 $out[$chanName][$package] = array();
                 foreach (array(self::K_VER, self::K_STATE) as $k) {
                     $out[$chanName][$package][$k] = $data[$k];
@@ -923,7 +927,7 @@ class Singleconfig
     public function hasConflicts($chanName, $packageName, $version)
     {
         $conflicts = array();
-        foreach ($this->_data[self::K_CHAN] as $channel=>$data) {
+        foreach ($this->_data[self::K_CHAN] as $channel => $data) {
             foreach ($data[self::K_PACK] as $package) {
                 if ($channel != $chanName) {
                     continue;
@@ -936,7 +940,7 @@ class Singleconfig
 
                     if (!$this->versionInRange($version, $dep['min'], $dep['max'])) {
                         //var_dump($version, $dep['min'], $dep['max']);
-                        $conflicts[] = $channel . "/". $package['name'] ." ". $package['version'];
+                        $conflicts[] = $channel . "/" . $package['name'] . " " . $package['version'];
                     }
                 }
             }

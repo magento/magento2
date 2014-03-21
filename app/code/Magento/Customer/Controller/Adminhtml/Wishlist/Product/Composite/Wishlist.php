@@ -55,21 +55,23 @@ class Wishlist extends \Magento\Backend\App\Action
      */
     protected function _initData()
     {
-        $wishlistItemId = (int) $this->getRequest()->getParam('id');
+        $wishlistItemId = (int)$this->getRequest()->getParam('id');
         if (!$wishlistItemId) {
             throw new CoreException(__('No wishlist item ID is defined.'));
         }
 
         /* @var $wishlistItem \Magento\Wishlist\Model\Item */
-        $wishlistItem = $this->_objectManager->create('Magento\Wishlist\Model\Item')
-            ->loadWithOptions($wishlistItemId);
+        $wishlistItem = $this->_objectManager->create('Magento\Wishlist\Model\Item')->loadWithOptions($wishlistItemId);
 
         if (!$wishlistItem->getWishlistId()) {
             throw new CoreException(__('Please load the wish list item.'));
         }
 
-        $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
-            ->load($wishlistItem->getWishlistId());
+        $this->_wishlist = $this->_objectManager->create(
+            'Magento\Wishlist\Model\Wishlist'
+        )->load(
+            $wishlistItem->getWishlistId()
+        );
 
         $this->_wishlistItem = $wishlistItem;
 
@@ -98,8 +100,11 @@ class Wishlist extends \Magento\Backend\App\Action
             $configureResult->setMessage($e->getMessage());
         }
 
-        $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-            ->renderConfigureResult($configureResult);
+        $this->_objectManager->get(
+            'Magento\Catalog\Helper\Product\Composite'
+        )->renderConfigureResult(
+            $configureResult
+        );
     }
 
     /**
@@ -116,9 +121,7 @@ class Wishlist extends \Magento\Backend\App\Action
 
             $buyRequest = new \Magento\Object($this->getRequest()->getParams());
 
-            $this->_wishlist
-                ->updateItem($this->_wishlistItem->getId(), $buyRequest)
-                ->save();
+            $this->_wishlist->updateItem($this->_wishlistItem->getId(), $buyRequest)->save();
 
             $updateResult->setOk(true);
         } catch (Exception $e) {

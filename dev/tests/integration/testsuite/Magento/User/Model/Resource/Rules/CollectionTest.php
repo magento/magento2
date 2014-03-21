@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Model\Resource\Rules;
 
 /**
@@ -39,14 +38,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\Resource\Rules\Collection');
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\User\Model\Resource\Rules\Collection'
+        );
     }
 
     public function testGetByRoles()
     {
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User');
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
         $user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $this->_collection->getByRoles($user->getRole()->getId());
 
@@ -54,7 +53,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         /** @var \Zend_Db_Adapter_Abstract $adapter */
         $adapter = $this->_collection->getConnection();
         $quote = $adapter->getQuoteIdentifierSymbol();
-        $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId()."')", $where);
+        $this->assertContains("({$quote}role_id{$quote} = '" . $user->getRole()->getId() . "')", $where);
     }
 
     public function testAddSortByLength()

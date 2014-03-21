@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 use Magento\ObjectManager;
@@ -51,12 +50,10 @@ class TemplateEngineFactory
      * @param ObjectManager $objectManager
      * @param array $engines Format: array('<name>' => 'TemplateEngine\Class', ...)
      */
-    public function __construct(
-        ObjectManager $objectManager,
-        array $engines
-    ) {
+    public function __construct(ObjectManager $objectManager, array $engines)
+    {
         $this->objectManager = $objectManager;
-        $this->engines       = $engines;
+        $this->engines = $engines;
     }
 
     /**
@@ -70,12 +67,12 @@ class TemplateEngineFactory
     public function create($name)
     {
         if (!isset($this->engines[$name])) {
-            throw new \InvalidArgumentException("Unknown template engine type: '$name'.");
+            throw new \InvalidArgumentException("Unknown template engine type: '{$name}'.");
         }
         $engineClass = $this->engines[$name];
         $engineInstance = $this->objectManager->create($engineClass);
-        if (!($engineInstance instanceof \Magento\View\TemplateEngineInterface)) {
-            throw new \UnexpectedValueException("$engineClass has to implement the template engine interface.");
+        if (!$engineInstance instanceof \Magento\View\TemplateEngineInterface) {
+            throw new \UnexpectedValueException("{$engineClass} has to implement the template engine interface.");
         }
         return $engineInstance;
     }

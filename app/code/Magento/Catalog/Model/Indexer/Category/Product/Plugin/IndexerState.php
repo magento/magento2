@@ -59,9 +59,8 @@ class IndexerState
     public function afterSetStatus(\Magento\Indexer\Model\Indexer\State $state)
     {
         if (in_array($state->getIndexerId(), $this->indexerIds)) {
-            $indexerId = $state->getIndexerId() == \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
-                ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID
-                : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
+            $indexerId = $state->getIndexerId() ==
+                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID ? \Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID : \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID;
 
             $relatedIndexerState = $this->state->loadByIndexer($indexerId);
 

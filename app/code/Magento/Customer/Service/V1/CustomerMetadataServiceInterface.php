@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1;
 
 /**
@@ -30,8 +29,11 @@ namespace Magento\Customer\Service\V1;
 interface CustomerMetadataServiceInterface
 {
     const ATTRIBUTE_SET_ID_CUSTOMER = 1;
+
     const ATTRIBUTE_SET_ID_ADDRESS = 2;
+
     const ENTITY_TYPE_CUSTOMER = 'customer';
+
     const ENTITY_TYPE_ADDRESS = 'customer_address';
 
     /**

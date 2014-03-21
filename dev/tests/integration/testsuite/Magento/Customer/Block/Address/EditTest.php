@@ -57,12 +57,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $layout = $objectManager->get('Magento\View\LayoutInterface');
         $customerCurrentService = $objectManager->create(
             'Magento\Customer\Service\V1\CustomerCurrentServiceInterface',
-            ['customerSession' => $this->_customerSession]
+            array('customerSession' => $this->_customerSession)
         );
         $this->_block = $layout->createBlock(
             'Magento\Customer\Block\Address\Edit',
             '',
-            ['customerSession' => $this->_customerSession, 'customerCurrentService' => $customerCurrentService]
+            array('customerSession' => $this->_customerSession, 'customerCurrentService' => $customerCurrentService)
         );
     }
 
@@ -133,4 +133,3 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $this->_block->getStreetLine(2));
     }
 }
- 

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\Config\Argument\Interpreter;
 
 use Magento\Stdlib\BooleanUtils;
@@ -36,7 +35,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluate($data, $className, $isShared)
     {
-        $expected = new \StdClass;
+        $expected = new \StdClass();
         $factory = $this->getMock(
             '\Magento\ObjectManager\Config\Argument\ObjectFactory',
             array('create'),
@@ -44,12 +43,17 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $factory->expects($this->once())
-            ->method('create')
-            ->with($className, $isShared)
-            ->will($this->returnValue($expected))
-        ;
-        $interpreter = new Object(new BooleanUtils, $factory);
+        $factory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $className,
+            $isShared
+        )->will(
+            $this->returnValue($expected)
+        );
+        $interpreter = new Object(new BooleanUtils(), $factory);
         $this->assertSame($expected, $interpreter->evaluate($data));
     }
 
@@ -67,7 +71,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
             array(array('value' => 'Class', 'shared' => true), 'Class', true),
             array(array('value' => 'Class', 'shared' => 1), 'Class', true),
             array(array('value' => 'Class', 'shared' => '1'), 'Class', true),
-            array(array('value' => 'Class', 'shared' => 'true'), 'Class', true),
+            array(array('value' => 'Class', 'shared' => 'true'), 'Class', true)
         );
     }
 
@@ -80,7 +84,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function testEvaluateNoClass($data)
     {
         $factory = $this->getMock('\Magento\ObjectManager\Config\Argument\ObjectFactory', array(), array(), '', false);
-        $interpreter = new Object(new BooleanUtils, $factory);
+        $interpreter = new Object(new BooleanUtils(), $factory);
         $interpreter->evaluate($data);
     }
 
@@ -93,7 +97,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
             array(array()),
             array(array('value' => '')),
             array(array('value' => false)),
-            array(array('value' => 0)),
+            array(array('value' => 0))
         );
     }
-} 
+}

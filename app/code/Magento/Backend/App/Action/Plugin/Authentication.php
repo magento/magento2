@@ -22,9 +22,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\App\Action\Plugin;
-
 
 class Authentication
 {
@@ -127,23 +125,44 @@ class Authentication
         }
         if (!$isRedirectNeeded && !$request->getParam('forwarded')) {
             if ($request->getParam('isIframe')) {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedIframe')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'deniedIframe'
+                )->setDispatched(
+                    false
+                );
             } elseif ($request->getParam('isAjax')) {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('deniedJson')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'deniedJson'
+                )->setDispatched(
+                    false
+                );
             } else {
-                $request->setParam('forwarded', true)
-                    ->setRouteName('adminhtml')
-                    ->setControllerName('auth')
-                    ->setActionName('login')
-                    ->setDispatched(false);
+                $request->setParam(
+                    'forwarded',
+                    true
+                )->setRouteName(
+                    'adminhtml'
+                )->setControllerName(
+                    'auth'
+                )->setActionName(
+                    'login'
+                )->setDispatched(
+                    false
+                );
             }
         }
     }
@@ -157,9 +176,9 @@ class Authentication
     protected function _performLogin(\Magento\App\RequestInterface $request)
     {
         $outputValue = true;
-        $postLogin  = $request->getPost('login');
-        $username   = isset($postLogin['username']) ? $postLogin['username'] : '';
-        $password   = isset($postLogin['password']) ? $postLogin['password'] : '';
+        $postLogin = $request->getPost('login');
+        $username = isset($postLogin['username']) ? $postLogin['username'] : '';
+        $password = isset($postLogin['password']) ? $postLogin['password'] : '';
         $request->setPost('login', null);
 
         try {

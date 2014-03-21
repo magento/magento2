@@ -47,44 +47,46 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_payment = $this->getMockBuilder('Magento\RecurringPayment\Model\Payment')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setStore', 'getData', 'getInfoValue', '__wakeup'))
-            ->getMock();
+        $this->_payment = $this->getMockBuilder(
+            'Magento\RecurringPayment\Model\Payment'
+        )->disableOriginalConstructor()->setMethods(
+            array('setStore', 'getData', 'getInfoValue', '__wakeup')
+        )->getMock();
         $this->_payment->expects($this->once())->method('setStore')->will($this->returnValue($this->_payment));
 
-        $registry = $this->getMockBuilder('Magento\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(array('registry'))
-            ->getMock();
-        $registry->expects($this->once())
-            ->method('registry')
-            ->with('current_recurring_payment')
-            ->will($this->returnValue($this->_payment));
+        $registry = $this->getMockBuilder(
+            'Magento\Registry'
+        )->disableOriginalConstructor()->setMethods(
+            array('registry')
+        )->getMock();
+        $registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_recurring_payment'
+        )->will(
+            $this->returnValue($this->_payment)
+        );
 
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
 
-        $storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getStore'))
-            ->getMock();
-        $storeManager->expects($this->once())->method('getStore')
-            ->will($this->returnValue($store));
+        $storeManager = $this->getMockBuilder(
+            'Magento\Core\Model\StoreManager'
+        )->disableOriginalConstructor()->setMethods(
+            array('getStore')
+        )->getMock();
+        $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
 
-        $this->_addressFactory = $this->getMockBuilder('Magento\Sales\Model\Order\AddressFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create'))
-            ->getMock();
+        $this->_addressFactory = $this->getMockBuilder(
+            'Magento\Sales\Model\Order\AddressFactory'
+        )->disableOriginalConstructor()->setMethods(
+            array('create')
+        )->getMock();
 
         $this->_block = $objectManager->getObject(
             'Magento\RecurringPayment\Block\Payment\View\Address',
-            array(
-                'registry' => $registry,
-                'storeManager' => $storeManager,
-                'addressFactory' => $this->_addressFactory,
-            )
+            array('registry' => $registry, 'storeManager' => $storeManager, 'addressFactory' => $this->_addressFactory)
         );
     }
 
@@ -93,20 +95,20 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->_payment->expects($this->once())->method('getInfoValue')->will($this->returnValue('1'));
         $this->_block->setAddressType('shipping');
 
-        $parentBlock = $this->getMockBuilder('Magento\View\Element\Template')
-            ->disableOriginalConstructor()
-            ->setMethods(array('unsetChild'))
-            ->getMock();
+        $parentBlock = $this->getMockBuilder(
+            'Magento\View\Element\Template'
+        )->disableOriginalConstructor()->setMethods(
+            array('unsetChild')
+        )->getMock();
         $parentBlock->expects($this->once())->method('unsetChild');
 
-        $layout = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getParentName', 'getBlock'))
-            ->getMock();
-        $layout->expects($this->once())->method('getParentName')
-            ->will($this->returnValue('name'));
-        $layout->expects($this->once())->method('getBlock')
-            ->will($this->returnValue($parentBlock));
+        $layout = $this->getMockBuilder(
+            'Magento\Core\Model\Layout'
+        )->disableOriginalConstructor()->setMethods(
+            array('getParentName', 'getBlock')
+        )->getMock();
+        $layout->expects($this->once())->method('getParentName')->will($this->returnValue('name'));
+        $layout->expects($this->once())->method('getBlock')->will($this->returnValue($parentBlock));
 
         $this->_block->setLayout($layout);
 
@@ -115,15 +117,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareLayoutInfoAdded()
     {
-        $address = $this->getMockBuilder('Magento\Sales\Model\Order\Address')
-            ->disableOriginalConstructor()
-            ->setMethods(array('format', '__wakeup'))
-            ->getMock();
+        $address = $this->getMockBuilder(
+            'Magento\Sales\Model\Order\Address'
+        )->disableOriginalConstructor()->setMethods(
+            array('format', '__wakeup')
+        )->getMock();
         $this->_addressFactory->expects($this->once())->method('create')->will($this->returnValue($address));
 
-        $layout = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->getMockBuilder('Magento\Core\Model\Layout')->disableOriginalConstructor()->getMock();
 
         $this->_block->setLayout($layout);
 

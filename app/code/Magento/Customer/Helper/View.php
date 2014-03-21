@@ -68,7 +68,7 @@ class View extends \Magento\App\Helper\AbstractHelper
             $name .= ' ' . $customerData->getMiddlename();
         }
 
-        $name .=  ' ' . $customerData->getLastname();
+        $name .= ' ' . $customerData->getLastname();
 
         $suffixMetadata = $this->_customerMetadataService->getAttributeMetadata('customer', 'suffix');
         if ($suffixMetadata->isVisible() && $customerData->getSuffix()) {

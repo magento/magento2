@@ -32,8 +32,7 @@ namespace Magento\ConfigurableProduct\Model\Resource\Product\Collection;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AssociatedProduct
-    extends \Magento\Catalog\Model\Resource\Product\Collection
+class AssociatedProduct extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
      * Registry instance
@@ -82,7 +81,6 @@ class AssociatedProduct
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
@@ -164,25 +162,35 @@ class AssociatedProduct
 
         $allowedProductTypes = $this->_productTypeConfig->getComposableTypes();
 
-        $this->addAttributeToSelect('name')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('weight')
-            ->addAttributeToSelect('image')
-            ->addFieldToFilter('type_id', $allowedProductTypes)
-            ->addFieldToFilter('entity_id', array('neq' => $this->getProduct()->getId()))
-            ->addFilterByRequiredOptions()
-            ->joinAttribute('name', 'catalog_product/name', 'entity_id', null, 'inner')
-            ->joinTable(
-                array('cisi' => 'cataloginventory_stock_item'),
-                'product_id=entity_id',
-                array(
-                    'qty' => 'qty',
-                    'inventory_in_stock' => 'is_in_stock',
-                ),
-                null,
-                'left'
-            );
+        $this->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'sku'
+        )->addAttributeToSelect(
+            'weight'
+        )->addAttributeToSelect(
+            'image'
+        )->addFieldToFilter(
+            'type_id',
+            $allowedProductTypes
+        )->addFieldToFilter(
+            'entity_id',
+            array('neq' => $this->getProduct()->getId())
+        )->addFilterByRequiredOptions()->joinAttribute(
+            'name',
+            'catalog_product/name',
+            'entity_id',
+            null,
+            'inner'
+        )->joinTable(
+            array('cisi' => 'cataloginventory_stock_item'),
+            'product_id=entity_id',
+            array('qty' => 'qty', 'inventory_in_stock' => 'is_in_stock'),
+            null,
+            'left'
+        );
 
         return $this;
     }

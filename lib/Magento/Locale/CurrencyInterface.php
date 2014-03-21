@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Locale;
 
 interface CurrencyInterface
@@ -29,7 +28,7 @@ interface CurrencyInterface
     /**
      * Default currency
      */
-    const DEFAULT_CURRENCY  = 'USD';
+    const DEFAULT_CURRENCY = 'USD';
 
     /**
      * XML path to installed currencies

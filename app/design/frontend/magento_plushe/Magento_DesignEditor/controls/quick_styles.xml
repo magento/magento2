@@ -26,7 +26,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  -->
-<controls>
+<controls xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/DesignEditor/etc/quick_styles.xsd">
     <control name="store-name" title="Store Name" tab="header" column="left">
         <type>logo</type>
         <components>

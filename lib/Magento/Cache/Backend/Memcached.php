@@ -23,12 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cache\Backend;
 
-class Memcached
-    extends \Zend_Cache_Backend_Memcached
-    implements \Zend_Cache_Backend_ExtendedInterface
+class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
      * Maximum chunk of data that could be saved in one memcache cell (1 MiB)
@@ -52,7 +49,9 @@ class Memcached
 
         if (!isset($options['slab_size']) || !is_numeric($options['slab_size'])) {
             if (isset($options['slab_size'])) {
-                throw new \Magento\Exception("Invalid value for the node <slab_size>. Expected to be positive integer.");
+                throw new \Magento\Exception(
+                    "Invalid value for the node <slab_size>. Expected to be positive integer."
+                );
             }
 
             $this->_options['slab_size'] = self::DEFAULT_SLAB_SIZE;
@@ -100,10 +99,10 @@ class Memcached
      */
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
-        if (is_string($data) && (strlen($data) > $this->_options['slab_size'])) {
+        if (is_string($data) && strlen($data) > $this->_options['slab_size']) {
             $dataChunks = str_split($data, $this->_options['slab_size']);
 
-            for ($i = 0, $cnt = count($dataChunks); $i < $cnt; $i++) {
+            for ($i = 0,$cnt = count($dataChunks); $i < $cnt; $i++) {
                 $chunkId = $this->_getChunkId($id, $i);
 
                 if (!parent::save($dataChunks[$i], $chunkId, $tags, $specificLifetime)) {
@@ -129,7 +128,7 @@ class Memcached
     {
         $data = parent::load($id, $doNotTestCacheValidity);
 
-        if (is_string($data) && (substr($data, 0, strlen(self::CODE_WORD)) == self::CODE_WORD)) {
+        if (is_string($data) && substr($data, 0, strlen(self::CODE_WORD)) == self::CODE_WORD) {
             // Seems we've got chunked data
 
             $arr = explode('|', $data);

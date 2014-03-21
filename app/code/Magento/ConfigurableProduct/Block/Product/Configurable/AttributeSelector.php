@@ -51,7 +51,7 @@ class AttributeSelector extends \Magento\Backend\Block\Template
             'source' => $this->getUrl('*/product_attribute_suggestConfigurableAttributes'),
             'minLength' => 0,
             'className' => 'category-select',
-            'showAll' => true,
+            'showAll' => true
         );
     }
 }

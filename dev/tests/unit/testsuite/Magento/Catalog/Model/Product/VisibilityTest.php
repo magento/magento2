@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -46,12 +45,13 @@ class VisibilityTest extends \PHPUnit_Framework_TestCase
     {
         $abstractAttributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('getAttributeCode', '__wakeup'), array(), '', false
+            array('getAttributeCode', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
-        $abstractAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
 
         $this->_model->setAttribute($abstractAttributeMock);
 

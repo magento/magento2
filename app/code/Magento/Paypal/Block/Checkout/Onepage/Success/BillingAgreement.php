@@ -77,13 +77,15 @@ class BillingAgreement extends \Magento\View\Element\Template
         }
         $agreement = $this->_agreementFactory->create()->load($agreementReferenceId, 'reference_id');
         if ($agreement->getId() && $customerId == $agreement->getCustomerId()) {
-            $this->addData(array(
-                'agreement_ref_id' => $agreement->getReferenceId(),
-                'agreement_url'    => $this->getUrl(
-                    'paypal/billing_agreement/view',
-                    array('agreement' => $agreement->getId())
+            $this->addData(
+                array(
+                    'agreement_ref_id' => $agreement->getReferenceId(),
+                    'agreement_url' => $this->getUrl(
+                        'paypal/billing_agreement/view',
+                        array('agreement' => $agreement->getId())
+                    )
                 )
-            ));
+            );
             return parent::_toHtml();
         }
         return '';

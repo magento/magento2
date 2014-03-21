@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Translate;
 
 class AdapterAbstractTest extends \PHPUnit_Framework_TestCase
@@ -35,8 +34,7 @@ class AdapterAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMockBuilder('Magento\Translate\AbstractAdapter')
-            ->getMockForAbstractClass();
+        $this->_model = $this->getMockBuilder('Magento\Translate\AbstractAdapter')->getMockForAbstractClass();
     }
 
     /**

@@ -96,7 +96,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         if (!$this->getLoadDefault()) {
             $this->setWithoutDefaultFilter();
         }
-        $this->addOrder('main_table.name',  self::SORT_ORDER_ASC);
+        $this->addOrder('main_table.name', self::SORT_ORDER_ASC);
         return parent::_beforeLoad();
     }
 

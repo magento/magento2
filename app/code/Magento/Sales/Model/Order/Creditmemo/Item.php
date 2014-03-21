@@ -135,9 +135,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context, $registry, $resource, $resourceCollection, $data
-        );
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_orderItemFactory = $orderItemFactory;
     }
 
@@ -213,7 +211,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     public function setQty($qty)
     {
         if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (float)$qty;
+            $qty = (double)$qty;
         } else {
             $qty = (int)$qty;
         }
@@ -258,16 +256,14 @@ class Item extends \Magento\Core\Model\AbstractModel
      */
     public function cancel()
     {
-        $this->getOrderItem()->setQtyRefunded(
-            $this->getOrderItem()->getQtyRefunded()-$this->getQty()
-        );
+        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
         $this->getOrderItem()->setTaxRefunded(
-            $this->getOrderItem()->getTaxRefunded()
-                - $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getTaxRefunded() -
+            $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
         );
         $this->getOrderItem()->setHiddenTaxRefunded(
-            $this->getOrderItem()->getHiddenTaxRefunded()
-                - $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getHiddenTaxRefunded() -
+            $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
         );
         return $this;
     }
@@ -279,18 +275,18 @@ class Item extends \Magento\Core\Model\AbstractModel
      */
     public function calcRowTotal()
     {
-        $creditmemo           = $this->getCreditmemo();
-        $orderItem            = $this->getOrderItem();
+        $creditmemo = $this->getCreditmemo();
+        $orderItem = $this->getOrderItem();
         $orderItemQtyInvoiced = $orderItem->getQtyInvoiced();
 
-        $rowTotal            = $orderItem->getRowInvoiced() - $orderItem->getAmountRefunded();
-        $baseRowTotal        = $orderItem->getBaseRowInvoiced() - $orderItem->getBaseAmountRefunded();
-        $rowTotalInclTax     = $orderItem->getRowTotalInclTax();
+        $rowTotal = $orderItem->getRowInvoiced() - $orderItem->getAmountRefunded();
+        $baseRowTotal = $orderItem->getBaseRowInvoiced() - $orderItem->getBaseAmountRefunded();
+        $rowTotalInclTax = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
         if (!$this->isLast() && $orderItemQtyInvoiced > 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
-            $rowTotal     = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
+            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
             $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
         }
         $this->setRowTotal($rowTotal);
@@ -316,8 +312,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     public function isLast()
     {
         $orderItem = $this->getOrderItem();
-        if ((string)(float)$this->getQty() == (string)(float)$orderItem->getQtyToRefund()
-            && !$orderItem->getQtyToInvoice()
+        if ((string)(double)$this->getQty() == (string)(double)$orderItem->getQtyToRefund() &&
+            !$orderItem->getQtyToInvoice()
         ) {
             return true;
         }

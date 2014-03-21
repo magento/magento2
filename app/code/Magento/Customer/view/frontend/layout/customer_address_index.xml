@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="customer_account"/>
     <referenceBlock name="page.main.title">
-        <block class="Magento\Customer\Block\Address\Book" name="address.book.button" template="address/button.phtml" cacheable="false"/>
+        <block class="Magento\Customer\Block\Address\Book" name="address.book.button" template="address/button.phtml"/>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Address\Book" name="address_book" template="address/book.phtml" cacheable="false"/>
+        <block class="Magento\Customer\Block\Address\Book" name="address_book" template="address/book.phtml"/>
     </referenceContainer>
 </layout>

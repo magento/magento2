@@ -115,9 +115,13 @@ class Link extends AbstractRenderer
      */
     public function getCaption()
     {
-        return $this->isDisabled()
-            ? $this->getColumn()->getDisabledCaption() ?: $this->getColumn()->getCaption()
-            : $this->getColumn()->getCaption();
+        return $this->isDisabled() ? $this
+            ->getColumn()
+            ->getDisabledCaption() ?: $this
+            ->getColumn()
+            ->getCaption() : $this
+            ->getColumn()
+            ->getCaption();
     }
 
     /**
@@ -127,7 +131,7 @@ class Link extends AbstractRenderer
      */
     protected function _getAttributesHtml()
     {
-        $html = [];
+        $html = array();
 
         foreach ($this->_getAttributes() as $key => $value) {
             if ($value === null || $value == '') {
@@ -148,7 +152,7 @@ class Link extends AbstractRenderer
     {
         /** @var \Magento\Core\Helper\Data $helper */
         $helper = $this->_coreHelper;
-        $attributes = ['title' => $this->getCaption()];
+        $attributes = array('title' => $this->getCaption());
 
         foreach ($this->_getDataAttributes() as $key => $attr) {
             $attributes['data-' . $key] = is_scalar($attr) ? $attr : $helper->jsonEncode($attr);
@@ -166,7 +170,7 @@ class Link extends AbstractRenderer
      */
     protected function _getDataAttributes()
     {
-        return [];
+        return array();
     }
 
     /**
@@ -177,6 +181,6 @@ class Link extends AbstractRenderer
      */
     protected function _getUrl(Object $row)
     {
-        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
+        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), array('id' => $row->getId()));
     }
 }

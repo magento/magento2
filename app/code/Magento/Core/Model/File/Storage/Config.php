@@ -23,9 +23,9 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite,
-    Magento\Filesystem\File\Write,
-    Magento\Filesystem\FilesystemException;
+use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite;
+use Magento\Filesystem\File\Write;
+use Magento\Filesystem\FilesystemException;
 
 class Config
 {
@@ -94,7 +94,7 @@ class Config
     {
         /** @var Write $file */
         $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($this->cacheFilePath), 'w');
-        try{
+        try {
             $file->lock();
             $file->write(json_encode($this->config));
             $file->unlock();

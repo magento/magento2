@@ -80,10 +80,9 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
         if (!$this->_moduleManager->isEnabled('Magento_Reports')) {
             return $this;
         }
-        $collection = $this->_collectionFactory->create()
-            ->addItemCountExpr()
-            ->joinCustomerName('customer')
-            ->orderByCreatedAt();
+        $collection = $this->_collectionFactory->create()->addItemCountExpr()->joinCustomerName(
+            'customer'
+        )->orderByCreatedAt();
 
         if ($this->getParam('store') || $this->getParam('website') || $this->getParam('group')) {
             if ($this->getParam('store')) {
@@ -114,8 +113,8 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     protected function _preparePage()
     {
         $this->getCollection()->setPageSize($this->getParam($this->getVarNameLimit(), $this->_defaultLimit));
-//        Remove count of total orders
-//        $this->getCollection()->setCurPage($this->getParam($this->getVarNamePage(), $this->_defaultPage));
+        // Remove count of total orders
+        // $this->getCollection()->setCurPage($this->getParam($this->getVarNamePage(), $this->_defaultPage));
     }
 
     /**
@@ -123,31 +122,35 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('customer', array(
-            'header'    => __('Customer'),
-            'sortable'  => false,
-            'index'     => 'customer',
-            'default'   => __('Guest'),
-        ));
+        $this->addColumn(
+            'customer',
+            array('header' => __('Customer'), 'sortable' => false, 'index' => 'customer', 'default' => __('Guest'))
+        );
 
-        $this->addColumn('items', array(
-            'header'    => __('Items'),
-            'align'     => 'right',
-            'type'      => 'number',
-            'sortable'  => false,
-            'index'     => 'items_count'
-        ));
+        $this->addColumn(
+            'items',
+            array(
+                'header' => __('Items'),
+                'align' => 'right',
+                'type' => 'number',
+                'sortable' => false,
+                'index' => 'items_count'
+            )
+        );
 
         $baseCurrencyCode = $this->_storeManager->getStore((int)$this->getParam('store'))->getBaseCurrencyCode();
 
-        $this->addColumn('total', array(
-            'header'    => __('Grand Total'),
-            'align'     => 'right',
-            'sortable'  => false,
-            'type'      => 'currency',
-            'currency_code'  => $baseCurrencyCode,
-            'index'     => 'revenue'
-        ));
+        $this->addColumn(
+            'total',
+            array(
+                'header' => __('Grand Total'),
+                'align' => 'right',
+                'sortable' => false,
+                'type' => 'currency',
+                'currency_code' => $baseCurrencyCode,
+                'index' => 'revenue'
+            )
+        );
 
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
@@ -160,6 +163,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('sales/order/view', array('order_id'=>$row->getId()));
+        return $this->getUrl('sales/order/view', array('order_id' => $row->getId()));
     }
 }

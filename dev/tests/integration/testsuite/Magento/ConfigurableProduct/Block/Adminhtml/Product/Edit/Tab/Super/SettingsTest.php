@@ -35,18 +35,27 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContinueUrl($productId, $expectedUrl)
     {
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getId', '__wakeup'))
-            ->getMock();
+        $product = $this->getMockBuilder(
+            'Magento\Catalog\Model\Product'
+        )->disableOriginalConstructor()->setMethods(
+            array('getId', '__wakeup')
+        )->getMock();
         $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
 
-        $urlModel = $this->getMockBuilder('Magento\Backend\Model\Url')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getUrl'))
-            ->getMock();
-        $urlModel->expects($this->any())->method('getUrl')->with($this->equalTo($expectedUrl))
-            ->will($this->returnValue('url'));
+        $urlModel = $this->getMockBuilder(
+            'Magento\Backend\Model\Url'
+        )->disableOriginalConstructor()->setMethods(
+            array('getUrl')
+        )->getMock();
+        $urlModel->expects(
+            $this->any()
+        )->method(
+            'getUrl'
+        )->with(
+            $this->equalTo($expectedUrl)
+        )->will(
+            $this->returnValue('url')
+        );
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -59,9 +68,7 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
         $block = $layout->createBlock(
             'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Settings',
             'block',
-            array(
-               'context' => $context
-            )
+            array('context' => $context)
         );
         $this->assertEquals('url', $block->getContinueUrl());
     }
@@ -71,9 +78,6 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
      */
     public static function getContinueUrlDataProvider()
     {
-        return array(
-            array(null, '*/*/new'),
-            array(1, '*/*/edit'),
-        );
+        return array(array(null, '*/*/new'), array(1, '*/*/edit'));
     }
 }

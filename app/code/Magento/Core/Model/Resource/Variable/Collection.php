@@ -39,7 +39,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @var int
      */
-    protected $_storeId    = 0;
+    protected $_storeId = 0;
 
     /**
      *  Define resource model
@@ -81,11 +81,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addValuesToResult()
     {
-        $this->getSelect()
-            ->join(
-                array('value_table' => $this->getTable('core_variable_value')),
-                'value_table.variable_id = main_table.variable_id',
-                array('value_table.value'));
+        $this->getSelect()->join(
+            array('value_table' => $this->getTable('core_variable_value')),
+            'value_table.variable_id = main_table.variable_id',
+            array('value_table.value')
+        );
         $this->addFieldToFilter('value_table.store_id', array('eq' => $this->getStoreId()));
         return $this;
     }

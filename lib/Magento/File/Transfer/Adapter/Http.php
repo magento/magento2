@@ -154,5 +154,4 @@ class Http
 
         return $result;
     }
-
 }

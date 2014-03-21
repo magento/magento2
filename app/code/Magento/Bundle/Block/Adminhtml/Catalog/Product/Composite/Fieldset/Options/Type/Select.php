@@ -32,8 +32,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Select
-    extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select
+class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select
 {
     /**
      * @var string
@@ -48,7 +47,11 @@ class Select
     public function setValidationContainer($elementId, $containerId)
     {
         return '<script type="text/javascript">
-            $(\'' . $elementId . '\').advaiceContainer = \'' . $containerId . '\';
+            $(\'' .
+            $elementId .
+            '\').advaiceContainer = \'' .
+            $containerId .
+            '\';
             </script>';
     }
 }

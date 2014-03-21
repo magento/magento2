@@ -90,10 +90,11 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
             $storeId = (int)$this->getParam('store');
         }
 
-        $collection = $this->_collectionFactory->create()
-            ->setModel('Magento\Catalog\Model\Product')
-            ->addStoreFilter($storeId)
-        ;
+        $collection = $this->_collectionFactory->create()->setModel(
+            'Magento\Catalog\Model\Product'
+        )->addStoreFilter(
+            $storeId
+        );
 
         $this->setCollection($collection);
 
@@ -106,30 +107,33 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareColumns()
     {
 
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'sortable'  => false,
-            'index'     => 'product_name'
-        ));
+        $this->addColumn('name', array('header' => __('Product'), 'sortable' => false, 'index' => 'product_name'));
 
-        $this->addColumn('price', array(
-            'header'    => __('Price'),
-            'width'     => '120px',
-            'type'      => 'currency',
-            'currency_code' => (string) $this->_storeManager->getStore((int)$this->getParam('store'))
-                ->getBaseCurrencyCode(),
-            'sortable'  => false,
-            'index'     => 'product_price'
-        ));
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'width' => '120px',
+                'type' => 'currency',
+                'currency_code' => (string)$this->_storeManager->getStore(
+                    (int)$this->getParam('store')
+                )->getBaseCurrencyCode(),
+                'sortable' => false,
+                'index' => 'product_price'
+            )
+        );
 
-        $this->addColumn('ordered_qty', array(
-            'header'    => __('Order Quantity'),
-            'width'     => '120px',
-            'align'     => 'right',
-            'sortable'  => false,
-            'index'     => 'qty_ordered',
-            'type'      => 'number'
-        ));
+        $this->addColumn(
+            'ordered_qty',
+            array(
+                'header' => __('Order Quantity'),
+                'width' => '120px',
+                'align' => 'right',
+                'sortable' => false,
+                'index' => 'qty_ordered',
+                'type' => 'number'
+            )
+        );
 
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);

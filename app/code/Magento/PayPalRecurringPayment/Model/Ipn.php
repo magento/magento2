@@ -111,9 +111,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
         $referenceId = $this->getRequestData('rp_invoice_id');
         $this->_recurringPayment = $this->_recurringPaymentFactory->create()->loadByInternalReferenceId($referenceId);
         if (!$this->_recurringPayment->getId()) {
-            throw new Exception(
-                sprintf('Wrong recurring payment INTERNAL_REFERENCE_ID: "%s".', $referenceId)
-            );
+            throw new Exception(sprintf('Wrong recurring payment INTERNAL_REFERENCE_ID: "%s".', $referenceId));
         }
         return $this->_recurringPayment;
     }
@@ -135,9 +133,14 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
                 throw new Exception("Cannot handle payment status '{$paymentStatus}'.");
             }
             // Register recurring payment notification, create and process order
-            $price = $this->getRequestData('mc_gross') - $this->getRequestData('tax')
-                - $this->getRequestData('shipping');
-            $productItemInfo = new \Magento\Object;
+            $price = $this->getRequestData(
+                'mc_gross'
+            ) - $this->getRequestData(
+                'tax'
+            ) - $this->getRequestData(
+                'shipping'
+            );
+            $productItemInfo = new \Magento\Object();
             $type = trim($this->getRequestData('period_type'));
             if ($type == 'Trial') {
                 $productItemInfo->setPaymentType(\Magento\RecurringPayment\Model\PaymentTypeInterface::TRIAL);
@@ -150,11 +153,15 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
 
             $order = $this->_recurringPayment->createOrder($productItemInfo);
 
-            $payment = $order->getPayment()
-                ->setTransactionId($this->getRequestData('txn_id'))
-                ->setCurrencyCode($this->getRequestData('mc_currency'))
-                ->setPreparedMessage($this->_createIpnComment(''))
-                ->setIsTransactionClosed(0);
+            $payment = $order->getPayment()->setTransactionId(
+                $this->getRequestData('txn_id')
+            )->setCurrencyCode(
+                $this->getRequestData('mc_currency')
+            )->setPreparedMessage(
+                $this->_createIpnComment('')
+            )->setIsTransactionClosed(
+                0
+            );
             $order->save();
             $this->_recurringPayment->addOrderRelation($order->getId());
             $payment->registerCaptureNotification($this->getRequestData('mc_gross'));
@@ -164,9 +171,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
             $invoice = $payment->getCreatedInvoice();
             if ($invoice) {
                 $message = __('You notified customer about invoice #%1.', $invoice->getIncrementId());
-                $order->sendNewOrderEmail()->addStatusHistoryComment($message)
-                    ->setIsCustomerNotified(true)
-                    ->save();
+                $order->sendNewOrderEmail()->addStatusHistoryComment($message)->setIsCustomerNotified(true)->save();
             }
         } catch (\Magento\Core\Exception $e) {
             $comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);

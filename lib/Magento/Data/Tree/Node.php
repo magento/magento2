@@ -194,7 +194,6 @@ class Node extends \Magento\Object
      */
     public function isChildOf($node)
     {
-
     }
 
     /**
@@ -203,7 +202,7 @@ class Node extends \Magento\Object
      * @param   int  $recursionLevel
      * @return  \Magento\Data\Tree\Node
      */
-    public function loadChildren($recursionLevel=0)
+    public function loadChildren($recursionLevel = 0)
     {
         $this->_tree->load($this, $recursionLevel);
         return $this;
@@ -256,7 +255,7 @@ class Node extends \Magento\Object
      * @param Node $prevNode
      * @return $this
      */
-    public function appendChild($prevNode=null)
+    public function appendChild($prevNode = null)
     {
         $this->_tree->appendChild($this, $prevNode);
         return $this;
@@ -267,7 +266,7 @@ class Node extends \Magento\Object
      * @param Node $prevNode
      * @return $this
      */
-    public function moveTo($parentNode, $prevNode=null)
+    public function moveTo($parentNode, $prevNode = null)
     {
         $this->_tree->moveNodeTo($this, $parentNode, $prevNode);
         return $this;
@@ -278,7 +277,7 @@ class Node extends \Magento\Object
      * @param Node $prevNode
      * @return $this
      */
-    public function copyTo($parentNode, $prevNode=null)
+    public function copyTo($parentNode, $prevNode = null)
     {
         $this->_tree->copyNodeTo($this, $parentNode, $prevNode);
         return $this;
@@ -322,5 +321,4 @@ class Node extends \Magento\Object
     {
         return $this->_getData('name');
     }
-
 }

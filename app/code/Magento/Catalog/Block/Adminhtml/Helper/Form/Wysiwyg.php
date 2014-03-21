@@ -95,16 +95,22 @@ class Wysiwyg extends \Magento\Data\Form\Element\Textarea
     {
         $html = parent::getAfterElementHtml();
         if ($this->getIsWysiwygEnabled()) {
-            $disabled = ($this->getDisabled() || $this->getReadonly());
-            $html .= $this->_layout->createBlock('Magento\Backend\Block\Widget\Button', '', array('data' => array(
-                    'label'   => __('WYSIWYG Editor'),
-                    'type'    => 'button',
-                    'disabled' => $disabled,
-                    'class' => ($disabled) ? 'disabled action-wysiwyg' : 'action-wysiwyg',
-                    'onclick' => 'catalogWysiwygEditor.open(\''
-                        . $this->_backendData->getUrl('catalog/product/wysiwyg')
-                        . '\', \'' . $this->getHtmlId().'\')'
-                )))->toHtml();
+            $disabled = $this->getDisabled() || $this->getReadonly();
+            $html .= $this->_layout->createBlock(
+                'Magento\Backend\Block\Widget\Button',
+                '',
+                array(
+                    'data' => array(
+                        'label' => __('WYSIWYG Editor'),
+                        'type' => 'button',
+                        'disabled' => $disabled,
+                        'class' => $disabled ? 'disabled action-wysiwyg' : 'action-wysiwyg',
+                        'onclick' => 'catalogWysiwygEditor.open(\'' . $this->_backendData->getUrl(
+                            'catalog/product/wysiwyg'
+                        ) . '\', \'' . $this->getHtmlId() . '\')'
+                    )
+                )
+            )->toHtml();
             $html .= <<<HTML
 <script type="text/javascript">
 jQuery('#{$this->getHtmlId()}')
@@ -139,8 +145,7 @@ HTML;
     public function getIsWysiwygEnabled()
     {
         if ($this->_moduleManager->isEnabled('Magento_Cms')) {
-            return (bool)($this->_wysiwygConfig->isEnabled()
-                && $this->getEntityAttribute()->getIsWysiwygEnabled());
+            return (bool)($this->_wysiwygConfig->isEnabled() && $this->getEntityAttribute()->getIsWysiwygEnabled());
         }
 
         return false;

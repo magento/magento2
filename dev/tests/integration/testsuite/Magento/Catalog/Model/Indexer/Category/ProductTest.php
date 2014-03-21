@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Category;
 
 /**
@@ -31,6 +30,7 @@ namespace Magento\Catalog\Model\Indexer\Category;
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     const DEFAULT_ROOT_CATEGORY = 2;
+
     /**
      * @var \Magento\Indexer\Model\IndexerInterface
      */
@@ -44,13 +44,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\Indexer\Model\IndexerInterface indexer */
-        $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Indexer\Model\Indexer');
+        $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Indexer\Model\Indexer'
+        );
         $this->indexer->load('catalog_category_product');
 
         /** @var \Magento\Catalog\Model\Resource\Product $productResource */
-        $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Resource\Product');
+        $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Resource\Product'
+        );
     }
 
     public function testReindexAll()
@@ -121,9 +123,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 $this->assertTrue((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
             }
 
-            $this->assertFalse(
-                (bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getId())
-            );
+            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($product, $categoryThird->getId()));
         }
     }
 
@@ -148,9 +148,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         foreach ($products as $product) {
             /** @var \Magento\Catalog\Model\Product $product */
             foreach ($categories as $categoryId) {
-                $this->assertFalse(
-                    (bool)$this->productResource->canBeShowInCategory($product, $categoryId)
-                );
+                $this->assertFalse((bool)$this->productResource->canBeShowInCategory($product, $categoryId));
             }
             $this->assertTrue(
                 (bool)$this->productResource->canBeShowInCategory($product, self::DEFAULT_ROOT_CATEGORY)
@@ -175,14 +173,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categoryFifth = end($categories);
 
         /** @var \Magento\Catalog\Model\Category $categorySixth */
-        $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
-        $categorySixth->setName('Category 6')
-            ->setPath($categoryFifth->getPath())
-            ->setAvailableSortBy('name')
-            ->setDefaultSortBy('name')
-            ->setIsActive(true)
-            ->save();
+        $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
+        $categorySixth->setName(
+            'Category 6'
+        )->setPath(
+            $categoryFifth->getPath()
+        )->setAvailableSortBy(
+            'name'
+        )->setDefaultSortBy(
+            'name'
+        )->setIsActive(
+            true
+        )->save();
 
         /** @var \Magento\Catalog\Model\Product $productThird */
         $productThird = end($products);
@@ -191,16 +195,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $categories = array(self::DEFAULT_ROOT_CATEGORY, $categorySixth->getId());
         foreach ($categories as $categoryId) {
-            $this->assertTrue(
-                (bool)$this->productResource->canBeShowInCategory($productThird, $categoryId)
-            );
+            $this->assertTrue((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
 
         $categories = array($categoryFifth->getId(), $categorySecond->getId());
         foreach ($categories as $categoryId) {
-            $this->assertFalse(
-                (bool)$this->productResource->canBeShowInCategory($productThird, $categoryId)
-            );
+            $this->assertFalse((bool)$this->productResource->canBeShowInCategory($productThird, $categoryId));
         }
     }
 
@@ -211,8 +211,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function getCategories($count)
     {
         /** @var \Magento\Catalog\Model\Category $category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
 
         $result = $category->getCollection()->getItems();
         $result = array_slice($result, 2);
@@ -227,8 +228,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function getProducts($count)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
 
         $result = $product->getCollection()->getItems();
 
@@ -240,13 +242,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function clearIndex()
     {
-        $this->productResource->getWriteConnection()
-            ->delete($this->productResource->getTable('catalog_category_product_index'));
+        $this->productResource->getWriteConnection()->delete(
+            $this->productResource->getTable('catalog_category_product_index')
+        );
 
         $actualResult = $this->productResource->getReadConnection()->fetchOne(
-            $this->productResource->getReadConnection()->select()
-                ->from($this->productResource->getTable('catalog_category_product_index'), 'product_id')
-
+            $this->productResource->getReadConnection()->select()->from(
+                $this->productResource->getTable('catalog_category_product_index'),
+                'product_id'
+            )
         );
         $this->assertFalse($actualResult);
     }

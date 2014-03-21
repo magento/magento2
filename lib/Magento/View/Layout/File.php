@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout;
 
 use Magento\View\Design\ThemeInterface;
@@ -131,7 +130,7 @@ class File
     public function getFileIdentifier()
     {
         if (null === $this->identifier) {
-            $theme = ($this->getTheme() ? 'theme:' . $this->theme->getFullPath() : 'base');
+            $theme = $this->getTheme() ? 'theme:' . $this->theme->getFullPath() : 'base';
             $this->identifier = $theme . '|module:' . $this->getModule() . '|file:' . $this->getName();
         }
         return $this->identifier;

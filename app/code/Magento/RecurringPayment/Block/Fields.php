@@ -113,18 +113,18 @@ class Fields extends \Magento\Backend\Block\AbstractBlock
                 return __('This is the date when billing for the payment begins.');
             case 'schedule_description':
                 return __(
-                    'Enter a short description of the recurring payment. '
-                        . 'By default, this description will match the product name.'
+                    'Enter a short description of the recurring payment. ' .
+                    'By default, this description will match the product name.'
                 );
             case 'suspension_threshold':
                 return __(
-                    'This is the number of scheduled payments '
-                        . 'that can fail before the payment is automatically suspended.'
+                    'This is the number of scheduled payments ' .
+                    'that can fail before the payment is automatically suspended.'
                 );
             case 'bill_failed_later':
                 return __(
-                    'Use this to automatically bill the outstanding balance amount in the next billing cycle '
-                        . '(if there were failed payments).'
+                    'Use this to automatically bill the outstanding balance amount in the next billing cycle ' .
+                    '(if there were failed payments).'
                 );
             case 'period_unit':
                 return __('This is the unit for billing during the subscription period.');
@@ -136,8 +136,8 @@ class Fields extends \Magento\Backend\Block\AbstractBlock
                 return __('The initial, non-recurring payment amount is due immediately when the payment is created.');
             case 'init_may_fail':
                 return __(
-                    'This sets whether to suspend the payment if the initial fee fails or, '
-                        . 'instead, add it to the outstanding balance.'
+                    'This sets whether to suspend the payment if the initial fee fails or, ' .
+                    'instead, add it to the outstanding balance.'
                 );
         }
     }

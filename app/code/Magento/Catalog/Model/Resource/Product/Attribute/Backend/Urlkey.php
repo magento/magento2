@@ -32,8 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Urlkey
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Catalog url

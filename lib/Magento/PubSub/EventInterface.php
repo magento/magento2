@@ -37,12 +37,12 @@ interface EventInterface
     /**
      * Status is assigned to event when queue handler pick it up for processing
      */
-    const STATUS_IN_PROGRESS   = 1;
+    const STATUS_IN_PROGRESS = 1;
 
     /**
      * Status is assigned to event when queue handler successfully processed the event
      */
-    const STATUS_PROCESSED     = 2;
+    const STATUS_PROCESSED = 2;
 
     /**
      * Returns the status code of the event. Status indicates if the event has been processed

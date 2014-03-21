@@ -43,10 +43,7 @@ class System extends AbstractAction
     {
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Adminhtml::system');
-        $this->_addBreadcrumb(
-            __('System'),
-            __('System')
-        );
+        $this->_addBreadcrumb(__('System'), __('System'));
         $this->_view->renderLayout();
     }
 
@@ -55,7 +52,7 @@ class System extends AbstractAction
      */
     public function setStoreAction()
     {
-        $storeId = (int) $this->getRequest()->getParam('store');
+        $storeId = (int)$this->getRequest()->getParam('store');
         if ($storeId) {
             $this->_session->setStoreId($storeId);
         }

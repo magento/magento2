@@ -61,21 +61,17 @@ class Export extends \Magento\Data\Form\Element\AbstractElement
     public function getElementHtml()
     {
         /** @var \Magento\Backend\Block\Widget\Button $buttonBlock  */
-        $buttonBlock = $this->getForm()
-            ->getParent()
-            ->getLayout()
-            ->createBlock('Magento\Backend\Block\Widget\Button');
+        $buttonBlock = $this->getForm()->getParent()->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
 
-        $params = array(
-            'website' => $buttonBlock->getRequest()->getParam('website')
-        );
+        $params = array('website' => $buttonBlock->getRequest()->getParam('website'));
 
         $url = $this->_backendUrl->getUrl("*/*/exportTablerates", $params);
         $data = array(
-            'label'     =>  __('Export CSV'),
-            'onclick'   => "setLocation('" . $url
-                . "conditionName/' + $('carriers_tablerate_condition_name').value + '/tablerates.csv' )",
-            'class'     => '',
+            'label' => __('Export CSV'),
+            'onclick' => "setLocation('" .
+            $url .
+            "conditionName/' + $('carriers_tablerate_condition_name').value + '/tablerates.csv' )",
+            'class' => ''
         );
 
         $html = $buttonBlock->setData($data)->toHtml();

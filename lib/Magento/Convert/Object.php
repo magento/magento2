@@ -111,10 +111,12 @@ class Object
      */
     public function toOptionArray(array $items, $idField, $valueField)
     {
-        $options = [];
+        $options = array();
         foreach ($items as $item) {
-            $options[] = ['value' => $this->_invokeGetter($item, $idField),
-                          'label' => $this->_invokeGetter($item, $valueField)];
+            $options[] = array(
+                'value' => $this->_invokeGetter($item, $idField),
+                'label' => $this->_invokeGetter($item, $valueField)
+            );
         }
         return $options;
     }
@@ -133,7 +135,7 @@ class Object
      */
     public function toOptionHash(array $items, $idField, $valueField)
     {
-        $options = [];
+        $options = array();
         foreach ($items as $item) {
             $options[$this->_invokeGetter($item, $idField)] = $this->_invokeGetter($item, $valueField);
         }
@@ -159,9 +161,7 @@ class Object
         } else {
             // otherwise, turn it into a call to the item's getter method
             $methodName = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $field)));
-            return $item->$methodName();
+            return $item->{$methodName}();
         }
     }
-
-
 }

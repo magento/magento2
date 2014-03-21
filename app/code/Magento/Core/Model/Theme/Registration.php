@@ -27,7 +27,7 @@ namespace Magento\Core\Model\Theme;
 
 use Magento\App\Filesystem;
 use Magento\Core\Exception;
-use \Magento\View\Design\ThemeInterface;
+use Magento\View\Design\ThemeInterface;
 
 /**
  * Theme registration model class

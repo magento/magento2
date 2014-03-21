@@ -65,7 +65,8 @@ class Shell
     public function execute($command, array $arguments = array())
     {
         $arguments = array_map('escapeshellarg', $arguments);
-        $command = preg_replace('/\s?\||$/', ' 2>&1$0', $command); // Output errors to STDOUT instead of STDERR
+        $command = preg_replace('/\s?\||$/', ' 2>&1$0', $command);
+        // Output errors to STDOUT instead of STDERR
         $command = vsprintf($command, $arguments);
         $this->_log($command);
         exec($command, $output, $exitCode);
@@ -73,7 +74,7 @@ class Shell
         $this->_log($output);
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
-            throw new \Magento\Exception("Command `$command` returned non-zero exit code.", 0, $commandError);
+            throw new \Magento\Exception("Command `{$command}` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
     }
@@ -90,7 +91,7 @@ class Shell
         if ($this->_osInfo->isWindows()) {
             $command = 'start /B "magento background task" ' . $command;
         } else {
-            $command .=  ' > /dev/null 2>1 &';
+            $command .= ' > /dev/null 2>1 &';
         }
         pclose(popen($command, 'r'));
     }

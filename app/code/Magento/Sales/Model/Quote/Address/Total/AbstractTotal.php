@@ -54,7 +54,7 @@ abstract class AbstractTotal
      *
      * @var bool
      */
-    protected $_canSetAddressAmount   = true;
+    protected $_canSetAddressAmount = true;
 
     /**
      * Key for item row total getting
@@ -145,9 +145,7 @@ abstract class AbstractTotal
     protected function _getAddress()
     {
         if ($this->_address === null) {
-            throw new \Magento\Core\Exception(
-                __('The address model is not defined.')
-            );
+            throw new \Magento\Core\Exception(__('The address model is not defined.'));
         }
         return $this->_address;
     }
@@ -190,7 +188,7 @@ abstract class AbstractTotal
     protected function _addAmount($amount)
     {
         if ($this->_canAddAmountToAddress) {
-            $this->_getAddress()->addTotalAmount($this->getCode(),$amount);
+            $this->_getAddress()->addTotalAmount($this->getCode(), $amount);
         }
         return $this;
     }

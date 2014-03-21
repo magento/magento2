@@ -66,6 +66,6 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidProductTypesMergedXmlArray.php');
+        return include __DIR__ . '/_files/invalidProductTypesMergedXmlArray.php';
     }
 }

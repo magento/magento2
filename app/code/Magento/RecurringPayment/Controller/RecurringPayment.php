@@ -215,8 +215,11 @@ class RecurringPayment extends \Magento\App\Action\Action
      */
     protected function _initPayment()
     {
-        $payment = $this->_objectManager->create('Magento\RecurringPayment\Model\Payment')
-            ->load($this->getRequest()->getParam('payment'));
+        $payment = $this->_objectManager->create(
+            'Magento\RecurringPayment\Model\Payment'
+        )->load(
+            $this->getRequest()->getParam('payment')
+        );
         if (!$payment->getId()) {
             throw new \Magento\Core\Exception(__('We can\'t find the payment you specified.'));
         }

@@ -21,8 +21,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
+
 use Magento\Customer\Service\V1\Data\Eav\Option;
 use Magento\Customer\Service\V1\Data\Eav\OptionBuilder;
 
@@ -63,15 +63,15 @@ class SelectTest extends AbstractFormTestCase
 
     public function validateValueDataProvider()
     {
-        return [
-            'empty' => ['', true],
-            '0' => [0, true],
-            'zero' => ['0', true],
-            'string' => ['some text', true],
-            'number' => [123, true],
-            'true' => [true, true],
-            'false' => [false, true]
-        ];
+        return array(
+            'empty' => array('', true),
+            '0' => array(0, true),
+            'zero' => array('0', true),
+            'string' => array('some text', true),
+            'number' => array(123, true),
+            'true' => array(true, true),
+            'false' => array(false, true)
+        );
     }
 
     /**
@@ -81,10 +81,7 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testValidateValueRequired($value, $expected)
     {
-        $this->attributeMetadataMock
-            ->expects($this->any())
-            ->method('isRequired')
-            ->will($this->returnValue(true));
+        $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(true));
 
         $select = $this->getClass($value);
         $actual = $select->validateValue($value);
@@ -98,15 +95,15 @@ class SelectTest extends AbstractFormTestCase
 
     public function validateValueRequiredDataProvider()
     {
-        return [
-            'empty' => ['', '"" is a required value.'],
-            'null' => [null, '"" is a required value.'],
-            '0'  => [0, true],
-            'string' => ['some text', true],
-            'number' => [123, true],
-            'true' => [true, true],
-            'false' => [false, '"" is a required value.'],
-        ];
+        return array(
+            'empty' => array('', '"" is a required value.'),
+            'null' => array(null, '"" is a required value.'),
+            '0' => array(0, true),
+            'string' => array('some text', true),
+            'number' => array(123, true),
+            'true' => array(true, true),
+            'false' => array(false, '"" is a required value.')
+        );
     }
 
     /**
@@ -116,14 +113,19 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testOutputValue($value, $expected)
     {
-        $this->attributeMetadataMock
-            ->expects($this->any())
-            ->method('getOptions')
-            ->will($this->returnValue([
-                (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
-                (new OptionBuilder())->setValue('some key')->setLabel('some string')->create(),
-                (new OptionBuilder())->setValue('true')->setLabel('True')->create(),
-            ]));
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getOptions'
+        )->will(
+            $this->returnValue(
+                array(
+                    (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
+                    (new OptionBuilder())->setValue('some key')->setLabel('some string')->create(),
+                    (new OptionBuilder())->setValue('true')->setLabel('True')->create()
+                )
+            )
+        );
         $select = $this->getClass($value);
         $actual = $select->outputValue();
         $this->assertEquals($expected, $actual);
@@ -131,14 +133,14 @@ class SelectTest extends AbstractFormTestCase
 
     public function outputValueDataProvider()
     {
-        return [
-            'empty' => ['', ''],
-            'null' => [null, ''],
-            'number' => [14, 'fourteen'],
-            'string' => ['some key', 'some string'],
-            'boolean' => [true, ''],
-            'unknown' => ['unknownKey', ''],
-            'true' => ['true', 'True'],
-        ];
+        return array(
+            'empty' => array('', ''),
+            'null' => array(null, ''),
+            'number' => array(14, 'fourteen'),
+            'string' => array('some key', 'some string'),
+            'boolean' => array(true, ''),
+            'unknown' => array('unknownKey', ''),
+            'true' => array('true', 'True')
+        );
     }
 }

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 class MediaTest extends \PHPUnit_Framework_TestCase
@@ -53,24 +52,25 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $resource->expects($this->any())
-            ->method('getMainTable')
-            ->will($this->returnValue('table'));
+        $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
 
         $mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', array(), array(), '', false);
-        $directory = $this->getMockBuilder('Magento\Filesystem\Directory\Write')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $directory = $this->getMockBuilder(
+            'Magento\Filesystem\Directory\Write'
+        )->disableOriginalConstructor()->getMock();
         $filesystem = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directory));
-        $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Product\Attribute\Backend\Media', array(
-            'eventManager' => $eventManager,
-            'fileStorageDb' => $fileStorageDb,
-            'coreData' => $coreData,
-            'mediaConfig' => $mediaConfig,
-            'filesystem' => $filesystem,
-            'resourceProductAttribute' => $resource,
-        ));
+        $this->_model = $this->_objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Media',
+            array(
+                'eventManager' => $eventManager,
+                'fileStorageDb' => $fileStorageDb,
+                'coreData' => $coreData,
+                'mediaConfig' => $mediaConfig,
+                'filesystem' => $filesystem,
+                'resourceProductAttribute' => $resource
+            )
+        );
     }
 
     public function testGetAffectedFields()
@@ -85,40 +85,26 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $attribute->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('image'));
+        $attribute->expects($this->any())->method('getName')->will($this->returnValue('image'));
 
-        $attribute->expects($this->any())
-            ->method('getAttributeId')
-            ->will($this->returnValue($attributeId));
+        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
 
-        $attribute->expects($this->any())
-            ->method('isStatic')
-            ->will($this->returnValue(false));
+        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
 
-        $attribute->expects($this->any())
-            ->method('getBackendTable')
-            ->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
 
 
         $this->_model->setAttribute($attribute);
 
         $object = new \Magento\Object();
-        $object->setImage(array(
-            'images' => array(array(
-                'value_id' => $valueId
-            ))
-        ));
+        $object->setImage(array('images' => array(array('value_id' => $valueId))));
         $object->setId(555);
 
         $this->assertEquals(
             array(
-                'table' => array(array(
-                    'value_id' => $valueId,
-                    'attribute_id' => $attributeId,
-                    'entity_id' => $object->getId(),
-                ))
+                'table' => array(
+                    array('value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId())
+                )
             ),
             $this->_model->getAffectedFields($object)
         );

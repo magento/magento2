@@ -32,8 +32,7 @@ use Magento\App\ResponseInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class AbstractInvoice
-    extends \Magento\Backend\App\Action
+class AbstractInvoice extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\App\Response\Http\FileFactory
@@ -60,9 +59,15 @@ class AbstractInvoice
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Sales::sales_invoice')
-            ->_addBreadcrumb(__('Sales'), __('Sales'))
-            ->_addBreadcrumb(__('Invoices'), __('Invoices'));
+        $this->_setActiveMenu(
+            'Magento_Sales::sales_invoice'
+        )->_addBreadcrumb(
+            __('Sales'),
+            __('Sales')
+        )->_addBreadcrumb(
+            __('Invoices'),
+            __('Invoices')
+        );
         return $this;
     }
 
@@ -88,8 +93,9 @@ class AbstractInvoice
     {
         $this->_title->add(__('Invoices'));
 
-        $this->_initAction()
-            ->_addContent($this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Invoice'));
+        $this->_initAction()->_addContent(
+            $this->_view->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Invoice')
+        );
         $this->_view->renderLayout();
     }
 
@@ -101,7 +107,7 @@ class AbstractInvoice
     public function viewAction()
     {
         if ($invoiceId = $this->getRequest()->getParam('invoice_id')) {
-            $this->_forward('view', 'order_invoice', null, array('come_from'=>'invoice'));
+            $this->_forward('view', 'order_invoice', null, array('come_from' => 'invoice'));
         } else {
             $this->_forward('noroute');
         }
@@ -117,17 +123,21 @@ class AbstractInvoice
         if ($invoiceId = $this->getRequest()->getParam('invoice_id')) {
             if ($invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId)) {
                 $invoice->sendEmail();
-                $historyItem = $this->_objectManager->create('Magento\Sales\Model\Resource\Order\Status\History\Collection')
-                    ->getUnnotifiedForInstance($invoice, \Magento\Sales\Model\Order\Invoice::HISTORY_ENTITY_NAME);
+                $historyItem = $this->_objectManager->create(
+                    'Magento\Sales\Model\Resource\Order\Status\History\Collection'
+                )->getUnnotifiedForInstance(
+                    $invoice,
+                    \Magento\Sales\Model\Order\Invoice::HISTORY_ENTITY_NAME
+                );
                 if ($historyItem) {
                     $historyItem->setIsCustomerNotified(1);
                     $historyItem->save();
                 }
                 $this->messageManager->addSuccess(__('We sent the message.'));
-                $this->_redirect('sales/invoice/view', array(
-                    'order_id'  => $invoice->getOrder()->getId(),
-                    'invoice_id'=> $invoiceId,
-                ));
+                $this->_redirect(
+                    'sales/invoice/view',
+                    array('order_id' => $invoice->getOrder()->getId(), 'invoice_id' => $invoiceId)
+                );
             }
         }
     }
@@ -162,15 +172,19 @@ class AbstractInvoice
     {
         $invoicesIds = $this->getRequest()->getPost('invoice_ids');
         if (!empty($invoicesIds)) {
-            $invoices = $this->_objectManager->create('Magento\Sales\Model\Resource\Order\Invoice\Collection')
-                ->addAttributeToSelect('*')
-                ->addAttributeToFilter('entity_id', array('in' => $invoicesIds))
-                ->load();
+            $invoices = $this->_objectManager->create(
+                'Magento\Sales\Model\Resource\Order\Invoice\Collection'
+            )->addAttributeToSelect(
+                '*'
+            )->addAttributeToFilter(
+                'entity_id',
+                array('in' => $invoicesIds)
+            )->load();
             if (!isset($pdf)) {
                 $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf($invoices);
             } else {
                 $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')->getPdf($invoices);
-                $pdf->pages = array_merge ($pdf->pages, $pages->pages);
+                $pdf->pages = array_merge($pdf->pages, $pages->pages);
             }
             $date = $this->_objectManager->get('Magento\Stdlib\DateTime\DateTime')->date('Y-m-d_H-i-s');
 

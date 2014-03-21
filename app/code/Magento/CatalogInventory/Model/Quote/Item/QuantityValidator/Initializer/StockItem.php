@@ -21,11 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
+
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 
-class StockItem 
+class StockItem
 {
     /**
      * @var QuoteItemQtyList
@@ -72,11 +72,7 @@ class StockItem
             /**
              * we are using 0 because original qty was processed
              */
-            $qtyForCheck = $this->quoteItemQtyList->getQty(
-                $quoteItem->getProduct()->getId(),
-                $quoteItem->getId(),
-                0
-            );
+            $qtyForCheck = $this->quoteItemQtyList->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), 0);
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
@@ -114,11 +110,11 @@ class StockItem
          * qty of child products are declared just during add process
          * exception for updating also managed by product type
          */
-        if ($result->getHasQtyOptionUpdate()
-            && (!$quoteItem->getParentItem()
-                || $quoteItem->getParentItem()->getProduct()->getTypeInstance()
-                    ->getForceChildItemQtyChanges($quoteItem->getParentItem()->getProduct())
+        if ($result->getHasQtyOptionUpdate() && (!$quoteItem->getParentItem() ||
+            $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
+                $quoteItem->getParentItem()->getProduct()
             )
+        )
         ) {
             $quoteItem->setData('qty', $result->getOrigQty());
         }
@@ -137,4 +133,4 @@ class StockItem
 
         return $result;
     }
-} 
+}

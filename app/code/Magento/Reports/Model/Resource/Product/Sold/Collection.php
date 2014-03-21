@@ -45,10 +45,15 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      */
     public function setDateRange($from, $to)
     {
-        $this->_reset()
-            ->addAttributeToSelect('*')
-            ->addOrderedQty($from, $to)
-            ->setOrder('ordered_qty', self::SORT_ORDER_DESC);
+        $this->_reset()->addAttributeToSelect(
+            '*'
+        )->addOrderedQty(
+            $from,
+            $to
+        )->setOrder(
+            'ordered_qty',
+            self::SORT_ORDER_DESC
+        );
         return $this;
     }
 
@@ -73,18 +78,21 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      */
     protected function _productLimitationJoinWebsite()
     {
-        $filters     = $this->_productLimitationFilters;
-        $conditions  = array('product_website.product_id=e.entity_id');
+        $filters = $this->_productLimitationFilters;
+        $conditions = array('product_website.product_id=e.entity_id');
         if (isset($filters['website_ids'])) {
-            $conditions[] = $this->getConnection()
-                ->quoteInto('product_website.website_id IN(?)', $filters['website_ids']);
+            $conditions[] = $this->getConnection()->quoteInto(
+                'product_website.website_id IN(?)',
+                $filters['website_ids']
+            );
 
-            $subQuery = $this->getConnection()->select()
-                ->from(array('product_website' => $this->getTable('catalog_product_website')),
-                    array('product_website.product_id')
-                )
-                ->where(join(' AND ', $conditions));
-            $this->getSelect()->where('e.entity_id IN( '.$subQuery.' )');
+            $subQuery = $this->getConnection()->select()->from(
+                array('product_website' => $this->getTable('catalog_product_website')),
+                array('product_website.product_id')
+            )->where(
+                join(' AND ', $conditions)
+            );
+            $this->getSelect()->where('e.entity_id IN( ' . $subQuery . ' )');
         }
 
         return $this;

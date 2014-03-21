@@ -129,7 +129,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         foreach ($data as $itemId => $itemInfo) {
             if (!empty($itemInfo['wishlist'])) {
                 if ($item = $cart->getQuote()->getItemById($itemId)) {
-                    $productId  = $item->getProductId();
+                    $productId = $item->getProductId();
                     $buyRequest = $item->getBuyRequest();
 
                     if (isset($itemInfo['qty']) && is_numeric($itemInfo['qty'])) {
@@ -172,8 +172,8 @@ class Observer extends \Magento\Core\Model\AbstractModel
 
             if ($this->_customerSession->isLoggedIn()) {
                 $wishlist = $this->_wishlistFactory->create()
-                        ->loadByCustomer($this->_customerSession->getCustomer(), true);
-            } else if ($sharedWishlist) {
+                    ->loadByCustomer($this->_customerSession->getCustomer(), true);
+            } elseif ($sharedWishlist) {
                 $wishlist = $this->_wishlistFactory->create()->loadByCode($sharedWishlist);
             } else {
                 return;

@@ -54,16 +54,22 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _prepareLayout()
     {
-        $this->addTab('orders', array(
-            'label'     => __('Orders'),
-            'content'   => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Orders')->toHtml(),
-            'active'    => true
-        ));
+        $this->addTab(
+            'orders',
+            array(
+                'label' => __('Orders'),
+                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Orders')->toHtml(),
+                'active' => true
+            )
+        );
 
-        $this->addTab('amounts', array(
-            'label'     => __('Amounts'),
-            'content'   => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Amounts')->toHtml(),
-        ));
+        $this->addTab(
+            'amounts',
+            array(
+                'label' => __('Amounts'),
+                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Amounts')->toHtml()
+            )
+        );
         return parent::_prepareLayout();
     }
 }

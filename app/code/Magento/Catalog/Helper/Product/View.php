@@ -37,6 +37,7 @@ class View extends \Magento\App\Helper\AbstractHelper
 {
     // List of exceptions throwable during prepareAndRender() method
     public $ERR_NO_PRODUCT_LOADED = 1;
+
     public $ERR_BAD_CONTROLLER_INTERFACE = 2;
 
     /**
@@ -163,7 +164,6 @@ class View extends \Magento\App\Helper\AbstractHelper
                     array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()),
                     $handle
                 );
-
             }
         }
 
@@ -195,8 +195,11 @@ class View extends \Magento\App\Helper\AbstractHelper
             }
             $root->addBodyClass('product-' . $product->getUrlKey());
             if ($currentCategory instanceof \Magento\Catalog\Model\Category) {
-                $root->addBodyClass('categorypath-' . $currentCategory->getUrlPath())
-                    ->addBodyClass('category-' . $currentCategory->getUrlKey());
+                $root->addBodyClass(
+                    'categorypath-' . $currentCategory->getUrlPath()
+                )->addBodyClass(
+                    'category-' . $currentCategory->getUrlKey()
+                );
             }
         }
 

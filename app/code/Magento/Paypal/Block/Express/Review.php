@@ -160,16 +160,14 @@ class Review extends \Magento\View\Element\Template
         if ($rate->getErrorMessage()) {
             $price = $rate->getErrorMessage();
         } else {
-            $price = $this->_getShippingPrice($rate->getPrice(),
-                $this->_taxHelper->displayShippingPriceIncludingTax());
+            $price = $this->_getShippingPrice(
+                $rate->getPrice(),
+                $this->_taxHelper->displayShippingPriceIncludingTax()
+            );
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
-            if (($incl != $price) && $this->_taxHelper->displayShippingBothPrices()) {
-                $renderedInclTax = sprintf(
-                    $inclTaxFormat,
-                    __('Incl. Tax'),
-                    $incl
-                );
+            if ($incl != $price && $this->_taxHelper->displayShippingBothPrices()) {
+                $renderedInclTax = sprintf($inclTaxFormat, __('Incl. Tax'), $incl);
             }
         }
         return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
@@ -205,13 +203,7 @@ class Review extends \Magento\View\Element\Template
      */
     protected function _getShippingPrice($price, $isInclTax)
     {
-        return $this->_formatPrice(
-            $this->_taxHelper->getShippingPrice(
-                $price,
-                $isInclTax,
-                $this->_address
-            )
-        );
+        return $this->_formatPrice($this->_taxHelper->getShippingPrice($price, $isInclTax, $this->_address));
     }
 
     /**
@@ -251,21 +243,27 @@ class Review extends \Magento\View\Element\Template
                     foreach ($rates as $rate) {
                         if ($this->_address->getShippingMethod() == $rate->getCode()) {
                             $this->_currentShippingRate = $rate;
-                            break(2);
+                            break 2;
                         }
                     }
                 }
             }
 
             // misc shipping parameters
-            $this->setShippingMethodSubmitUrl($this->getUrl("{$this->_controllerPath}/saveShippingMethod"))
-                ->setCanEditShippingAddress($this->_quote->getMayEditShippingAddress())
-                ->setCanEditShippingMethod($this->_quote->getMayEditShippingMethod())
-            ;
+            $this->setShippingMethodSubmitUrl(
+                $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
+            )->setCanEditShippingAddress(
+                $this->_quote->getMayEditShippingAddress()
+            )->setCanEditShippingMethod(
+                $this->_quote->getMayEditShippingMethod()
+            );
         }
 
-        $this->setEditUrl($this->getUrl("{$this->_controllerPath}/edit"))
-            ->setPlaceOrderUrl($this->getUrl("{$this->_controllerPath}/placeOrder"));
+        $this->setEditUrl(
+            $this->getUrl("{$this->_controllerPath}/edit")
+        )->setPlaceOrderUrl(
+            $this->getUrl("{$this->_controllerPath}/placeOrder")
+        );
 
         return parent::_beforeToHtml();
     }

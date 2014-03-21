@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Model\Cart\SalesModel;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -45,20 +44,26 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($salesModelClass, $expectedType)
     {
-        $salesModel = $this->getMock($salesModelClass, ['__wakeup'], [], '', false);
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($expectedType, ['salesModel' => $salesModel])
-            ->will($this->returnValue('some value'));
+        $salesModel = $this->getMock($salesModelClass, array('__wakeup'), array(), '', false);
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $expectedType,
+            array('salesModel' => $salesModel)
+        )->will(
+            $this->returnValue('some value')
+        );
         $this->assertEquals('some value', $this->_model->create($salesModel));
     }
 
     public function createDataProvider()
     {
-        return [
-            ['Magento\Sales\Model\Quote', 'Magento\Payment\Model\Cart\SalesModel\Quote'],
-            ['Magento\Sales\Model\Order', 'Magento\Payment\Model\Cart\SalesModel\Order'],
-        ];
+        return array(
+            array('Magento\Sales\Model\Quote', 'Magento\Payment\Model\Cart\SalesModel\Quote'),
+            array('Magento\Sales\Model\Order', 'Magento\Payment\Model\Cart\SalesModel\Order')
+        );
     }
 
     /**

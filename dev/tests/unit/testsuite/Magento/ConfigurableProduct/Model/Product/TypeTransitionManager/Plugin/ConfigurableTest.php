@@ -52,13 +52,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock(
-            'Magento\App\Request\Http',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->model = new Configurable($this->requestMock);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -67,8 +61,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->subjectMock =
-            $this->getMock('Magento\Catalog\Model\Product\TypeTransitionManager', array(), array(), '', false);
+        $this->subjectMock = $this->getMock(
+            'Magento\Catalog\Model\Product\TypeTransitionManager',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->closureMock = function () {
             return 'Expected';
         };
@@ -76,17 +75,36 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundProcessProductWithProductThatCanBeTransformedToConfigurable()
     {
-        $this->requestMock->expects($this->any())->method('getParam')->with('attributes')
-            ->will($this->returnValue('not_empty_attribute_data'));
-        $this->productMock->expects($this->once())->method('setTypeId')
-            ->with(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        $this->requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->with(
+            'attributes'
+        )->will(
+            $this->returnValue('not_empty_attribute_data')
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setTypeId'
+        )->with(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+        );
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
     }
 
     public function testAroundProcessProductWithProductThatCannotBeTransformedToConfigurable()
     {
-        $this->requestMock->expects($this->any())->method('getParam')->with('attributes')
-            ->will($this->returnValue(null));
+        $this->requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->with(
+            'attributes'
+        )->will(
+            $this->returnValue(null)
+        );
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
 class MatrixTest extends \PHPUnit_Framework_TestCase
@@ -47,24 +46,30 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
             'applicationConfig' => $this->_appConfig,
             'localeCurrency' => $this->_locale,
             'formFactory' => $this->getMock('Magento\Data\FormFactory', array(), array(), '', false),
-            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
+            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false)
         );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_object = $helper->getObject('Magento\Backend\Block\System\Config\Form', $data);
         $this->_block = $helper->getObject(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix', $data
+            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
+            $data
         );
     }
 
     public function testRenderPrice()
     {
-        $this->_appConfig->expects($this->once())
-            ->method('getValue')->will($this->returnValue('USD'));
+        $this->_appConfig->expects($this->once())->method('getValue')->will($this->returnValue('USD'));
         $currency = $this->getMock('Zend_Currency', array(), array(), '', false);
-        $currency->expects($this->once())
-            ->method('toCurrency')->with('100.0000')->will($this->returnValue('$100.00'));
-        $this->_locale->expects($this->once())
-            ->method('getCurrency')->with('USD')->will($this->returnValue($currency));
+        $currency->expects($this->once())->method('toCurrency')->with('100.0000')->will($this->returnValue('$100.00'));
+        $this->_locale->expects(
+            $this->once()
+        )->method(
+            'getCurrency'
+        )->with(
+            'USD'
+        )->will(
+            $this->returnValue($currency)
+        );
         $this->assertEquals('$100.00', $this->_block->renderPrice(100));
     }
 }

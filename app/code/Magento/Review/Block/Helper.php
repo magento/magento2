@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block;
 
 use Magento\Catalog\Model\Product;
@@ -44,7 +43,7 @@ class Helper extends \Magento\View\Element\Template
      */
     protected $_availableTemplates = array(
         'default' => 'helper/summary.phtml',
-        'short'   => 'helper/summary_short.phtml'
+        'short' => 'helper/summary_short.phtml'
     );
 
     /**
@@ -121,10 +120,10 @@ class Helper extends \Magento\View\Element\Template
      */
     public function getReviewsUrl()
     {
-        return $this->getUrl('review/product/list', array(
-           'id'        => $this->getProduct()->getId(),
-           'category'  => $this->getProduct()->getCategoryId()
-        ));
+        return $this->getUrl(
+            'review/product/list',
+            array('id' => $this->getProduct()->getId(), 'category' => $this->getProduct()->getCategoryId())
+        );
     }
 
     /**

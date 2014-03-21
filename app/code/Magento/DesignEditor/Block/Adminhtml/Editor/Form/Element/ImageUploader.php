@@ -28,8 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 /**
  * Form element renderer to display logo uploader element for VDE
  */
-class ImageUploader
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Uploader
+class ImageUploader extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Uploader
 {
     /**
      * Control type

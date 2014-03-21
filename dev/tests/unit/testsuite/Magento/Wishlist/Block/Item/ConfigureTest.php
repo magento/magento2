@@ -52,15 +52,13 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_mockWishlistData = $this->getMockBuilder('Magento\Wishlist\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockContext = $this->getMockBuilder('Magento\View\Element\Template\Context')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockRegistry = $this->getMockBuilder('Magento\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockWishlistData = $this->getMockBuilder(
+            'Magento\Wishlist\Helper\Data'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockContext = $this->getMockBuilder(
+            'Magento\View\Element\Template\Context'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockRegistry = $this->getMockBuilder('Magento\Registry')->disableOriginalConstructor()->getMock();
 
         $this->_model = new \Magento\Wishlist\Block\Item\Configure(
             $this->_mockContext,
@@ -72,10 +70,15 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
     public function testGetProduct()
     {
         $product = 'some test product';
-        $this->_mockRegistry->expects($this->once())
-            ->method('registry')
-            ->with($this->equalTo('product'))
-            ->will($this->returnValue($product));
+        $this->_mockRegistry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            $this->equalTo('product')
+        )->will(
+            $this->returnValue($product)
+        );
 
         $this->assertEquals($product, $this->_model->getProduct());
     }

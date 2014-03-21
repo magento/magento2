@@ -98,35 +98,28 @@ class Theme extends \Magento\App\Helper\AbstractHelper
         /**
          * XPath selector to get CSS files from layout added for HEAD block directly
          */
-        $xpathSelectorBlocks = '//block[@class="Magento\Theme\Block\Html\Head"]'
-            . '/block[@class="Magento\Theme\Block\Html\Head\Css"]/arguments/argument[@name="file"]';
+        $xpathSelectorBlocks = '//block[@class="Magento\Theme\Block\Html\Head"]' .
+            '/block[@class="Magento\Theme\Block\Html\Head\Css"]/arguments/argument[@name="file"]';
 
         /**
          * XPath selector to get CSS files from layout added for HEAD block using reference
          */
-        $xpathSelectorRefs = '//referenceBlock[@name="head"]'
-            . '/block[@class="Magento\Theme\Block\Html\Head\Css"]/arguments/argument[@name="file"]';
+        $xpathSelectorRefs = '//referenceBlock[@name="head"]' .
+            '/block[@class="Magento\Theme\Block\Html\Head\Css"]/arguments/argument[@name="file"]';
 
         $elements = array_merge(
             $layoutElement->xpath($xpathSelectorBlocks) ?: array(),
             $layoutElement->xpath($xpathSelectorRefs) ?: array()
         );
 
-        $params = array(
-            'area'       => $theme->getArea(),
-            'themeModel' => $theme,
-            'skipProxy'  => true
-        );
+        $params = array('area' => $theme->getArea(), 'themeModel' => $theme, 'skipProxy' => true);
 
         $rootDirectory = $this->_filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $files = array();
         foreach ($elements as $fileId) {
             $fileId = (string)$fileId;
             $path = $this->_viewFileSystem->getViewFile($fileId, $params);
-            $file = array(
-                'id'       => $fileId,
-                'path'     => $path,
-            );
+            $file = array('id' => $fileId, 'path' => $path);
             $file['safePath'] = $rootDirectory->getRelativePath($file['path']);
 
             //keys are used also to remove duplicates
@@ -176,10 +169,16 @@ class Theme extends \Magento\App\Helper\AbstractHelper
             $themes = $this->_sortThemesByHierarchy($themes);
         }
 
-        $order = array_merge(array($codeDir, $jsDir), array_map(function ($fileTheme) {
-            /** @var $fileTheme \Magento\View\Design\ThemeInterface */
-            return $fileTheme->getThemeId();
-        }, $themes));
+        $order = array_merge(
+            array($codeDir, $jsDir),
+            array_map(
+                function ($fileTheme) {
+                    /** @var $fileTheme \Magento\View\Design\ThemeInterface */
+                    return $fileTheme->getThemeId();
+                },
+                $themes
+            )
+        );
         $groups = $this->_sortArrayByArray($groups, $order);
 
         $labels = $this->_getGroupLabels($themes, $jsDir, $codeDir);
@@ -221,9 +220,7 @@ class Theme extends \Magento\App\Helper\AbstractHelper
         );
 
         if (!$themeModel || !$themeModel->getThemeId()) {
-            throw new \LogicException(
-                __('Invalid theme loaded by theme path "%1/%2"', $area, $theme)
-            );
+            throw new \LogicException(__('Invalid theme loaded by theme path "%1/%2"', $area, $theme));
         }
 
         $file['theme'] = $themeModel;
@@ -314,10 +311,7 @@ class Theme extends \Magento\App\Helper\AbstractHelper
      */
     protected function _getGroupLabels(array $themes, $jsDir, $codeDir)
     {
-        $labels = array(
-            $jsDir => (string)__('Library files'),
-            $codeDir => (string)__('Framework files')
-        );
+        $labels = array($jsDir => (string)__('Library files'), $codeDir => (string)__('Framework files'));
         foreach ($themes as $theme) {
             /** @var $theme \Magento\View\Design\ThemeInterface */
             $labels[$theme->getThemeId()] = (string)__('"%1" Theme files', $theme->getThemeTitle());

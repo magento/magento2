@@ -154,10 +154,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
             $type = $item->getProductType();
         }
 
-        return $this->getItemRenderer($type)
-            ->setItem($item)
-            ->setCanEditQty($this->canEditQty())
-            ->toHtml();
+        return $this->getItemRenderer($type)->setItem($item)->setCanEditQty($this->canEditQty())->toHtml();
     }
 
     /**
@@ -170,9 +167,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     {
         $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
-            return $extraInfoBlock
-                ->setItem($item)
-                ->toHtml();
+            return $extraInfoBlock->setItem($item)->toHtml();
         }
         return '';
     }
@@ -337,13 +332,15 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function displayPriceInclTax(\Magento\Object $item)
     {
-        $qty = ($item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1));
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
+        $qty = $item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1);
+        $baseTax = $item->getTaxBeforeDiscount() ? $item
+            ->getTaxBeforeDiscount() : ($item
+            ->getTaxAmount() ? $item
+            ->getTaxAmount() : 0);
+        $tax = $item->getBaseTaxBeforeDiscount() ? $item
+            ->getBaseTaxBeforeDiscount() : ($item
+            ->getBaseTaxAmount() ? $item
+            ->getBaseTaxAmount() : 0);
 
         $basePriceTax = 0;
         $priceTax = 0;
@@ -367,17 +364,16 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function displaySubtotalInclTax($item)
     {
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
+        $baseTax = $item->getTaxBeforeDiscount() ? $item
+            ->getTaxBeforeDiscount() : ($item
+            ->getTaxAmount() ? $item
+            ->getTaxAmount() : 0);
+        $tax = $item->getBaseTaxBeforeDiscount() ? $item
+            ->getBaseTaxBeforeDiscount() : ($item
+            ->getBaseTaxAmount() ? $item
+            ->getBaseTaxAmount() : 0);
 
-        return $this->displayPrices(
-            $item->getBaseRowTotal() + $baseTax,
-            $item->getRowTotal() + $tax
-        );
+        return $this->displayPrices($item->getBaseRowTotal() + $baseTax, $item->getRowTotal() + $tax);
     }
 
     /**
@@ -468,8 +464,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
          * Disable editing of quantity of item if creating of shipment forced
          * and ship partially disabled for order
          */
-        if ($this->getOrder()->getForcedShipmentWithInvoice()
-            && ($this->canShipPartially($this->getOrder()) || $this->canShipPartiallyItem($this->getOrder()))
+        if ($this->getOrder()->getForcedShipmentWithInvoice() && ($this->canShipPartially(
+            $this->getOrder()
+        ) || $this->canShipPartiallyItem(
+            $this->getOrder()
+        ))
         ) {
             return false;
         }

@@ -53,7 +53,7 @@ class Service implements \Magento\Option\ArrayInterface
             foreach ($this->_importConfig->getAvailableServices() as $serviceName) {
                 $this->_options[] = array(
                     'label' => $this->_importConfig->getServiceLabel($serviceName),
-                    'value' => $serviceName,
+                    'value' => $serviceName
                 );
             }
         }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product\Compare;
 
 class SidebarTest extends \PHPUnit_Framework_TestCase
@@ -44,14 +43,12 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentities()
     {
-        $productTag = 'catalog_product_1';
-        $itemTag = 'compare_item_1';
+        $productTag = array('catalog_product_1');
+        $itemTag = array('compare_item_1');
         $itemId = 1;
 
         $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $product->expects($this->once())
-            ->method('getIdentities')
-            ->will($this->returnValue($productTag));
+        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTag));
         $item = $this->getMock(
             'Magento\Catalog\Model\Product\Compare\Item',
             array('getProduct', '__wakeup'),
@@ -59,13 +56,11 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $item->expects($this->once())
-            ->method('getProduct')
-            ->will($this->returnValue($product));
+        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
         $this->block->setItems(array($item));
         $this->block->setCatalogCompareItemId($itemId);
         $this->assertEquals(
-            array($productTag, $itemTag),
+            array_merge($productTag, $itemTag),
             $this->block->getIdentities()
         );
     }

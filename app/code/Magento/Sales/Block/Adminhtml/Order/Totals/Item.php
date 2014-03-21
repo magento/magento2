@@ -25,9 +25,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 
- /**
-  * Totals item block
-  */
+/**
+ * Totals item block
+ */
 class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
 {
     /**
@@ -53,12 +53,14 @@ class Item extends \Magento\Sales\Block\Adminhtml\Order\Totals
      */
     public function initTotals()
     {
-        $total = new \Magento\Object(array(
-            'code'      => $this->getNameInLayout(),
-            'block_name'=> $this->getNameInLayout(),
-            'area'      => $this->getDisplayArea(),
-            'strong'    => $this->getStrong()
-        ));
+        $total = new \Magento\Object(
+            array(
+                'code' => $this->getNameInLayout(),
+                'block_name' => $this->getNameInLayout(),
+                'area' => $this->getDisplayArea(),
+                'strong' => $this->getStrong()
+            )
+        );
         if ($this->getBeforeCondition()) {
             $this->getParentBlock()->addTotalBefore($total, $this->getBeforeCondition());
         } else {

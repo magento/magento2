@@ -181,10 +181,10 @@ class Options extends \Magento\View\Element\Template
     protected function _getPriceConfiguration($option)
     {
         $data = array();
-        $data['price']      = $this->_coreData->currency($option->getPrice(true), false, false);
-        $data['oldPrice']   = $this->_coreData->currency($option->getPrice(false), false, false);
+        $data['price'] = $this->_coreData->currency($option->getPrice(true), false, false);
+        $data['oldPrice'] = $this->_coreData->currency($option->getPrice(false), false, false);
         $data['priceValue'] = $option->getPrice(false);
-        $data['type']       = $option->getPriceType();
+        $data['type'] = $option->getPriceType();
         $data['excludeTax'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], false);
         $data['includeTax'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], true);
         return $data;
@@ -229,8 +229,7 @@ class Options extends \Magento\View\Element\Template
         $type = $this->getGroupOfOption($option->getType());
         $renderer = $this->getChildBlock($type);
 
-        $renderer->setProduct($this->getProduct())
-            ->setOption($option);
+        $renderer->setProduct($this->getProduct())->setOption($option);
 
         return $this->getChildHtml($type, false);
     }

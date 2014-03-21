@@ -29,13 +29,15 @@ if (!defined('TESTS_TEMP_DIR')) {
 
 require BP . '/app/functions.php';
 require BP . '/app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(array(
-    __DIR__,
-    realpath(__DIR__ . '/../testsuite'),
-    realpath(BP . '/app'),
-    realpath(BP . '/app/code'),
-    realpath(BP . '/lib'),
-));
+\Magento\Autoload\IncludePath::addIncludePath(
+    array(
+        __DIR__,
+        realpath(__DIR__ . '/../testsuite'),
+        realpath(BP . '/app'),
+        realpath(BP . '/app/code'),
+        realpath(BP . '/lib')
+    )
+);
 if (is_dir(TESTS_TEMP_DIR)) {
     $filesystemAdapter = new \Magento\Filesystem\Driver\File();
     $filesystemAdapter->deleteDirectory(TESTS_TEMP_DIR);
@@ -53,7 +55,7 @@ function tool_autoloader($className)
     $filePath = BP . '/dev/tools/' . $filePath . '.php';
 
     if (file_exists($filePath)) {
-        include_once($filePath);
+        include_once $filePath;
     } else {
         return false;
     }

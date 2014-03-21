@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -165,9 +164,12 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Ma
     protected function _prepareLayout()
     {
         $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
+        $product = $this->getProduct();
+        if (!$product) {
+            return parent::_prepareLayout();
+        }
         $headBlock = $this->getLayout()->getBlock('head');
         if ($headBlock) {
-            $product = $this->getProduct();
             $title = $product->getMetaTitle();
             if ($title) {
                 $headBlock->setTitle($title);
@@ -181,15 +183,16 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Ma
             }
             $description = $product->getMetaDescription();
             if ($description) {
-                $headBlock->setDescription( ($description) );
+                $headBlock->setDescription($description);
             } else {
                 $headBlock->setDescription($this->string->substr($product->getDescription(), 0, 255));
             }
             //@todo: move canonical link to separate block
-            if ($this->_productHelper->canUseCanonicalTag()
-                && !$headBlock->getChildBlock('magento-page-head-product-canonical-link')
+            if ($this->_productHelper->canUseCanonicalTag() && !$headBlock->getChildBlock(
+                'magento-page-head-product-canonical-link'
+            )
             ) {
-                $params = array('_ignore_category'=>true);
+                $params = array('_ignore_category' => true);
                 $headBlock->addChild(
                     'magento-page-head-product-canonical-link',
                     'Magento\Theme\Block\Html\Head\Link',
@@ -202,9 +205,8 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Ma
         }
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
-            $pageMainTitle->setPageTitle($this->getProduct()->getName());
+            $pageMainTitle->setPageTitle($product->getName());
         }
-
         return parent::_prepareLayout();
     }
 
@@ -246,7 +248,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Ma
             return $this->getCustomAddToCartUrl();
         }
 
-        if ($this->getRequest()->getParam('wishlist_next')){
+        if ($this->getRequest()->getParam('wishlist_next')) {
             $additional['wishlist_next'] = 1;
         }
 
@@ -290,34 +292,36 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct implements \Ma
             $_tierPrices[] = $this->_coreData->currency($tierPrice['website_price'], false, false);
             $_tierPricesInclTax[] = $this->_coreData->currency(
                 $this->_taxData->getPrice($product, (int)$tierPrice['website_price'], true),
-                false, false);
+                false,
+                false
+            );
         }
         $config = array(
-            'productId'           => $product->getId(),
-            'priceFormat'         => $this->_localeFormat->getPriceFormat(),
-            'includeTax'          => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
-            'showIncludeTax'      => $this->_taxData->displayPriceIncludingTax(),
-            'showBothPrices'      => $this->_taxData->displayBothPrices(),
-            'productPrice'        => $this->_coreData->currency($_finalPrice, false, false),
-            'productOldPrice'     => $this->_coreData->currency($_regularPrice, false, false),
-            'priceInclTax'        => $this->_coreData->currency($_priceInclTax, false, false),
-            'priceExclTax'        => $this->_coreData->currency($_priceExclTax, false, false),
-            'defaultTax'          => $defaultTax,
-            'currentTax'          => $currentTax,
-            'idSuffix'            => '_clone',
-            'oldPlusDisposition'  => 0,
-            'plusDisposition'     => 0,
-            'plusDispositionTax'  => 0,
+            'productId' => $product->getId(),
+            'priceFormat' => $this->_localeFormat->getPriceFormat(),
+            'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
+            'showIncludeTax' => $this->_taxData->displayPriceIncludingTax(),
+            'showBothPrices' => $this->_taxData->displayBothPrices(),
+            'productPrice' => $this->_coreData->currency($_finalPrice, false, false),
+            'productOldPrice' => $this->_coreData->currency($_regularPrice, false, false),
+            'priceInclTax' => $this->_coreData->currency($_priceInclTax, false, false),
+            'priceExclTax' => $this->_coreData->currency($_priceExclTax, false, false),
+            'defaultTax' => $defaultTax,
+            'currentTax' => $currentTax,
+            'idSuffix' => '_clone',
+            'oldPlusDisposition' => 0,
+            'plusDisposition' => 0,
+            'plusDispositionTax' => 0,
             'oldMinusDisposition' => 0,
-            'minusDisposition'    => 0,
-            'tierPrices'          => $_tierPrices,
-            'tierPricesInclTax'   => $_tierPricesInclTax,
+            'minusDisposition' => 0,
+            'tierPrices' => $_tierPrices,
+            'tierPricesInclTax' => $_tierPricesInclTax
         );
 
         $responseObject = new \Magento\Object();
-        $this->_eventManager->dispatch('catalog_product_view_config', array('response_object'=>$responseObject));
+        $this->_eventManager->dispatch('catalog_product_view_config', array('response_object' => $responseObject));
         if (is_array($responseObject->getAdditionalOptions())) {
-            foreach ($responseObject->getAdditionalOptions() as $option=>$value) {
+            foreach ($responseObject->getAdditionalOptions() as $option => $value) {
                 $config[$option] = $value;
             }
         }

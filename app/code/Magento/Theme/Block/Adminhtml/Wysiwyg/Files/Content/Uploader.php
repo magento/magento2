@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
 /**
@@ -68,9 +67,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      */
     protected function _prepareLayout()
     {
-        $this->getConfig()->setUrl(
-            $this->getUrl('adminhtml/*/upload', $this->_storageHelper->getRequestParams())
-        );
+        $this->getConfig()->setUrl($this->getUrl('adminhtml/*/upload', $this->_storageHelper->getRequestParams()));
         return parent::_prepareLayout();
     }
 

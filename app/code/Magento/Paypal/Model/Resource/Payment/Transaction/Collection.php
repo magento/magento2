@@ -33,15 +33,15 @@ namespace Magento\Paypal\Model\Resource\Payment\Transaction;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Created Before filter
      *
      * @var string
      */
-    protected $_createdBefore          = "";
+    protected $_createdBefore = "";
+
     /**
      * Initialize collection items factory class
      *

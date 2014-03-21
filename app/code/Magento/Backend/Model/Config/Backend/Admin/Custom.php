@@ -36,13 +36,17 @@ namespace Magento\Backend\Model\Config\Backend\Admin;
 
 class Custom extends \Magento\Core\Model\Config\Value
 {
-    const CONFIG_SCOPE                      = 'stores';
-    const CONFIG_SCOPE_ID                   = 0;
+    const CONFIG_SCOPE = 'stores';
 
-    const XML_PATH_UNSECURE_BASE_URL        = 'web/unsecure/base_url';
-    const XML_PATH_SECURE_BASE_URL          = 'web/secure/base_url';
-    const XML_PATH_UNSECURE_BASE_LINK_URL   = 'web/unsecure/base_link_url';
-    const XML_PATH_SECURE_BASE_LINK_URL     = 'web/secure/base_link_url';
+    const CONFIG_SCOPE_ID = 0;
+
+    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+
+    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+
+    const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
+
+    const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
     /**
      * Writer of configuration storage
@@ -72,15 +76,7 @@ class Custom extends \Magento\Core\Model\Config\Value
         array $data = array()
     ) {
         $this->_configWriter = $configWriter;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -93,7 +89,7 @@ class Custom extends \Magento\Core\Model\Config\Value
         $value = $this->getValue();
 
         if (!empty($value) && substr($value, -2) !== '}}') {
-            $value = rtrim($value, '/').'/';
+            $value = rtrim($value, '/') . '/';
         }
 
         $this->setValue($value);

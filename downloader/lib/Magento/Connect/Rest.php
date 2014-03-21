@@ -38,10 +38,15 @@ class Rest
      * Paths for xml config files
      */
     const CHANNELS_XML = "channels.xml";
+
     const CHANNEL_XML = "channel.xml";
+
     const PACKAGES_XML = "packages.xml";
+
     const RELEASES_XML = "releases.xml";
+
     const PACKAGE_XML = "package.xml";
+
     const EXT = "tgz";
 
     /**
@@ -76,14 +81,14 @@ class Rest
      *
      * @var array
      */
-    protected $states = array('b'=>'beta', 'd'=>'dev', 's'=>'stable', 'a'=>'alpha');
+    protected $states = array('b' => 'beta', 'd' => 'dev', 's' => 'stable', 'a' => 'alpha');
 
     /**
      * Constructor sets default protocol
      *
      * @param string $protocol
      */
-    public function __construct($protocol="http")
+    public function __construct($protocol = "http")
     {
         switch ($protocol) {
             case 'ftp':
@@ -229,7 +234,7 @@ class Rest
         $c = count($return);
         if ($c) {
             $output = array();
-            for ($i=0; $i<$c; $i++) {
+            for ($i = 0; $i < $c; $i++) {
                 $element = $return[$i];
                 $output[$element['n']] = $element['r'];
             }
@@ -237,7 +242,7 @@ class Rest
         }
 
         $out = array();
-        foreach ($return as $name=>$package) {
+        foreach ($return as $name => $package) {
             $stabilities = array_map(array($this, 'shortStateToLong'), array_keys($package));
             $versions = array_map('trim', array_values($package));
             $package = array_combine($versions, $stabilities);
@@ -304,7 +309,7 @@ class Rest
      */
     protected function sortReleasesCallback($a, $b)
     {
-        return version_compare($a['v'],$b['v']);
+        return version_compare($a['v'], $b['v']);
     }
 
     /**

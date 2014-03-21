@@ -48,20 +48,19 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockForAbstractClass('Magento\ImportExport\Model\Import\AbstractEntity', array(
-            $objectManager->get('Magento\Core\Helper\Data'),
-            $objectManager->get('Magento\Stdlib\String'),
-            $objectManager->get('Magento\Core\Model\Store\Config'),
-            $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
-            $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
-            $objectManager->get('Magento\App\Resource'),
-        ));
-        $model->expects($this->any())
-            ->method('validateRow')
-            ->will($this->returnValue(true));
-        $model->expects($this->any())
-            ->method('getEntityTypeCode')
-            ->will($this->returnValue('customer'));
+        $model = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\AbstractEntity',
+            array(
+                $objectManager->get('Magento\Core\Helper\Data'),
+                $objectManager->get('Magento\Stdlib\String'),
+                $objectManager->get('Magento\Core\Model\Store\Config'),
+                $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
+                $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
+                $objectManager->get('Magento\App\Resource')
+            )
+        );
+        $model->expects($this->any())->method('validateRow')->will($this->returnValue(true));
+        $model->expects($this->any())->method('getEntityTypeCode')->will($this->returnValue('customer'));
 
         $model->setSource($source);
 

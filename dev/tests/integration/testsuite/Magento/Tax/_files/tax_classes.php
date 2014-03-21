@@ -27,25 +27,37 @@
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$customerTaxClass1 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('CustomerTaxClass1')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-    ->save();
+$customerTaxClass1 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'CustomerTaxClass1'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+)->save();
 
-$customerTaxClass2 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('CustomerTaxClass2')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-    ->save();
+$customerTaxClass2 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'CustomerTaxClass2'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+)->save();
 
-$productTaxClass1 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('ProductTaxClass1')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
-    ->save();
+$productTaxClass1 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'ProductTaxClass1'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+)->save();
 
-$productTaxClass2 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('ProductTaxClass2')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
-    ->save();
+$productTaxClass2 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'ProductTaxClass2'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+)->save();
 
 $taxRate = array(
     'tax_country_id' => 'US',

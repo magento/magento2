@@ -33,14 +33,14 @@ abstract class AbstractShell
      *
      * @var string[]
      */
-    protected $_rawArgs     = array();
+    protected $_rawArgs = array();
 
     /**
      * Parsed input arguments
      *
      * @var array
      */
-    protected $_args        = array();
+    protected $_args = array();
 
     /**
      * Entry point - script filename that is executed
@@ -125,8 +125,16 @@ abstract class AbstractShell
         $current = null;
         foreach ($this->_rawArgs as $arg) {
             $match = array();
-            if (preg_match('#^--([\w\d_-]{1,})(=(.*))?$#', $arg, $match)
-                || preg_match('#^-([\w\d_]{1,})$#', $arg, $match) ) {
+            if (preg_match(
+                '#^--([\w\d_-]{1,})(=(.*))?$#',
+                $arg,
+                $match
+            ) || preg_match(
+                '#^-([\w\d_]{1,})$#',
+                $arg,
+                $match
+            )
+            ) {
                 if (isset($match[3])) {
                     $this->_args[$match[1]] = $match[3];
                     $current = null;

@@ -119,12 +119,7 @@ class Reader
             try {
                 if (is_null($domDocument)) {
                     $class = $this->_domDocumentClass;
-                    $domDocument = new $class(
-                        $file,
-                        array(),
-                        null,
-                        $this->_schemaFile
-                    );
+                    $domDocument = new $class($file, array(), null, $this->_schemaFile);
                 } else {
                     $domDocument->merge($file);
                 }

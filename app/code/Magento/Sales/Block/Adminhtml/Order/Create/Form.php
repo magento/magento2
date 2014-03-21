@@ -176,8 +176,9 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                     'adminhtml_customer_address',
                     AddressConverter::toFlatArray($addressData)
                 );
-                $data['addresses'][$addressData->getId()] = $addressForm
-                    ->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON);
+                $data['addresses'][$addressData->getId()] = $addressForm->outputData(
+                    \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON
+                );
             }
         }
         if (!is_null($this->getStoreId())) {

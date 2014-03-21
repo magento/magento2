@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Http;
 
 class HeaderTest extends \PHPUnit_Framework_TestCase
@@ -74,9 +73,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpMethods($method, $clean, $expectedValue)
     {
-        $this->_request->expects($this->once())
-            ->method('getServer')
-            ->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getServer')->will($this->returnValue('value'));
 
         $this->_prepareCleanString($clean);
 
@@ -146,7 +143,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
                 'method' => 'getHttpReferer',
                 'clean' => false,
                 'expectedValue' => 'value'
-            ),
+            )
         );
     }
 
@@ -158,9 +155,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequestUri($clean, $expectedValue)
     {
-        $this->_request->expects($this->once())
-            ->method('getRequestUri')
-            ->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getRequestUri')->will($this->returnValue('value'));
 
         $this->_prepareCleanString($clean);
 
@@ -180,14 +175,8 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     public function getRequestUriDataProvider()
     {
         return array(
-            'getRequestUri clean true' => array(
-                'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getRequestUri clean false' => array(
-                'clean' => false,
-                'expectedValue' => 'value'
-            ),
+            'getRequestUri clean true' => array('clean' => true, 'expectedValue' => 'converted value'),
+            'getRequestUri clean false' => array('clean' => false, 'expectedValue' => 'value')
         );
     }
 
@@ -199,9 +188,13 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     {
         $cleanStringExpects = $clean ? $this->once() : $this->never();
 
-        $this->_converter->expects($cleanStringExpects)
-            ->method('cleanString')
-            ->will($this->returnValue('converted value'));
+        $this->_converter->expects(
+            $cleanStringExpects
+        )->method(
+            'cleanString'
+        )->will(
+            $this->returnValue('converted value')
+        );
         return $this;
     }
 }

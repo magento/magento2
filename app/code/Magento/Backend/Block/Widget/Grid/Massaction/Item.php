@@ -74,7 +74,7 @@ class Item extends \Magento\Backend\Block\Widget
             $block = $this->getLayout()->createBlock($block);
         } elseif (is_array($block)) {
             $block = $this->_createFromConfig($block);
-        } elseif (!($block instanceof \Magento\View\Element\AbstractBlock)) {
+        } elseif (!$block instanceof \Magento\View\Element\AbstractBlock) {
             throw new \Magento\Core\Exception('Unknown block type');
         }
 
@@ -89,7 +89,7 @@ class Item extends \Magento\Backend\Block\Widget
     protected function _createFromConfig(array $config)
     {
         $type = isset($config['type']) ? $config['type'] : 'default';
-        switch($type) {
+        switch ($type) {
             default:
                 $blockClass = 'Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\DefaultAdditional';
                 break;
@@ -119,5 +119,4 @@ class Item extends \Magento\Backend\Block\Widget
     {
         return $this->getChildHtml('additional_action');
     }
-
 }

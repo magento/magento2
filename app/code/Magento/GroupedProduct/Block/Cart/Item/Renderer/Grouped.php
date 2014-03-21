@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Block\Cart\Item\Renderer;
 
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail as ThumbnailSource;
@@ -89,8 +88,10 @@ class Grouped extends \Magento\Checkout\Block\Cart\Item\Renderer implements \Mag
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
          * or if child product thumbnail is not available
          */
-        if ($this->_storeConfig->getConfig(self::CONFIG_THUMBNAIL_SOURCE) == ThumbnailSource::OPTION_USE_PARENT_IMAGE
-            || !($this->getProduct()->getThumbnail() && $this->getProduct()->getThumbnail() != 'no_selection')
+        if ($this->_storeConfig->getConfig(
+            self::CONFIG_THUMBNAIL_SOURCE
+        ) == ThumbnailSource::OPTION_USE_PARENT_IMAGE ||
+            !($this->getProduct()->getThumbnail() && $this->getProduct()->getThumbnail() != 'no_selection')
         ) {
             $product = $this->getGroupedProduct();
         } else {

@@ -45,17 +45,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $paramsResolverMock = $this->getMock(
-            'Magento\Url\RouteParamsResolverFactory', array(), array(), '', false
-        );
+        $paramsResolverMock = $this->getMock('Magento\Url\RouteParamsResolverFactory', array(), array(), '', false);
         $paramsResolver = $this->_objectManager->getObject('\Magento\Core\Model\Url\RouteParamsResolver');
-        $paramsResolverMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($paramsResolver));
+        $paramsResolverMock->expects($this->any())->method('create')->will($this->returnValue($paramsResolver));
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Url', array('routeParamsResolver' => $paramsResolverMock)
+            '\Magento\Url',
+            array('routeParamsResolver' => $paramsResolverMock)
         );
     }
+
     /**
      * @param $port mixed
      * @param $url string
@@ -63,13 +61,27 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentUrl($port, $url)
     {
-        $methods = array('getServer', 'getScheme', 'getHttpHost', 'getModuleName', 'setModuleName',
-            'getActionName', 'setActionName', 'getParam');
+        $methods = array(
+            'getServer',
+            'getScheme',
+            'getHttpHost',
+            'getModuleName',
+            'setModuleName',
+            'getActionName',
+            'setActionName',
+            'getParam'
+        );
         $requestMock = $this->getMock('\Magento\App\RequestInterface', $methods);
-        $requestMock->expects($this->at(0))->method('getServer')->with('SERVER_PORT')
-            ->will($this->returnValue($port));
-        $requestMock->expects($this->at(1))->method('getServer')->with('REQUEST_URI')
-            ->will($this->returnValue('/fancy_uri'));
+        $requestMock->expects($this->at(0))->method('getServer')->with('SERVER_PORT')->will($this->returnValue($port));
+        $requestMock->expects(
+            $this->at(1)
+        )->method(
+            'getServer'
+        )->with(
+            'REQUEST_URI'
+        )->will(
+            $this->returnValue('/fancy_uri')
+        );
         $requestMock->expects($this->once())->method('getScheme')->will($this->returnValue('http'));
         $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('example.com'));
 

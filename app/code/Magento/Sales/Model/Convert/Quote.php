@@ -57,6 +57,7 @@ class Quote extends \Magento\Object
      * @var \Magento\Sales\Model\Order\ItemFactory
      */
     protected $_orderItemFactory;
+
     /**
      * @var \Magento\Object\Copy
      */
@@ -98,16 +99,22 @@ class Quote extends \Magento\Object
      */
     public function toOrder(\Magento\Sales\Model\Quote $quote, $order = null)
     {
-        if (!($order instanceof \Magento\Sales\Model\Order)) {
+        if (!$order instanceof \Magento\Sales\Model\Order) {
             $order = $this->_orderFactory->create();
         }
         /* @var $order \Magento\Sales\Model\Order */
 
-        $order->setIncrementId($quote->getReservedOrderId())
-            ->setStoreId($quote->getStoreId())
-            ->setQuoteId($quote->getId())
-            ->setQuote($quote)
-            ->setCustomer($quote->getCustomer());
+        $order->setIncrementId(
+            $quote->getReservedOrderId()
+        )->setStoreId(
+            $quote->getStoreId()
+        )->setQuoteId(
+            $quote->getId()
+        )->setQuote(
+            $quote
+        )->setCustomer(
+            $quote->getCustomer()
+        );
 
         $this->_objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $quote, $order);
         $this->_eventManager->dispatch('sales_convert_quote_to_order', array('order' => $order, 'quote' => $quote));
@@ -123,21 +130,16 @@ class Quote extends \Magento\Object
      */
     public function addressToOrder(\Magento\Sales\Model\Quote\Address $address, $order = null)
     {
-        if (!($order instanceof \Magento\Sales\Model\Order)) {
+        if (!$order instanceof \Magento\Sales\Model\Order) {
             $order = $this->toOrder($address->getQuote());
         }
 
-        $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_quote_address',
-            'to_order',
-            $address,
-            $order
-        );
+        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_quote_address', 'to_order', $address, $order);
 
-        $this->_eventManager->dispatch('sales_convert_quote_address_to_order', array(
-            'address' => $address,
-            'order' => $order
-        ));
+        $this->_eventManager->dispatch(
+            'sales_convert_quote_address_to_order',
+            array('address' => $address, 'order' => $order)
+        );
         return $order;
     }
 
@@ -149,11 +151,15 @@ class Quote extends \Magento\Object
      */
     public function addressToOrderAddress(\Magento\Sales\Model\Quote\Address $address)
     {
-        $orderAddress = $this->_orderAddressFactory->create()
-            ->setStoreId($address->getStoreId())
-            ->setAddressType($address->getAddressType())
-            ->setCustomerId($address->getCustomerId())
-            ->setCustomerAddressId($address->getCustomerAddressId());
+        $orderAddress = $this->_orderAddressFactory->create()->setStoreId(
+            $address->getStoreId()
+        )->setAddressType(
+            $address->getAddressType()
+        )->setCustomerId(
+            $address->getCustomerId()
+        )->setCustomerAddressId(
+            $address->getCustomerAddressId()
+        );
 
         $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_quote_address',
@@ -162,8 +168,10 @@ class Quote extends \Magento\Object
             $orderAddress
         );
 
-        $this->_eventManager->dispatch('sales_convert_quote_address_to_order_address',
-            array('address' => $address, 'order_address' => $orderAddress));
+        $this->_eventManager->dispatch(
+            'sales_convert_quote_address_to_order_address',
+            array('address' => $address, 'order_address' => $orderAddress)
+        );
 
         return $orderAddress;
     }
@@ -176,9 +184,11 @@ class Quote extends \Magento\Object
      */
     public function paymentToOrderPayment(\Magento\Sales\Model\Quote\Payment $payment)
     {
-        $orderPayment = $this->_orderPaymentFactory->create()
-            ->setStoreId($payment->getStoreId())
-            ->setCustomerPaymentId($payment->getCustomerPaymentId());
+        $orderPayment = $this->_orderPaymentFactory->create()->setStoreId(
+            $payment->getStoreId()
+        )->setCustomerPaymentId(
+            $payment->getCustomerPaymentId()
+        );
 
         $this->_objectCopyService->copyFieldsetToTarget(
             'sales_convert_quote_payment',
@@ -198,16 +208,23 @@ class Quote extends \Magento\Object
      */
     public function itemToOrderItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
     {
-        $orderItem = $this->_orderItemFactory->create()
-            ->setStoreId($item->getStoreId())
-            ->setQuoteItemId($item->getId())
-            ->setQuoteParentItemId($item->getParentItemId())
-            ->setProductId($item->getProductId())
-            ->setProductType($item->getProductType())
-            ->setQtyBackordered($item->getBackorders())
-            ->setProduct($item->getProduct())
-            ->setBaseOriginalPrice($item->getBaseOriginalPrice())
-        ;
+        $orderItem = $this->_orderItemFactory->create()->setStoreId(
+            $item->getStoreId()
+        )->setQuoteItemId(
+            $item->getId()
+        )->setQuoteParentItemId(
+            $item->getParentItemId()
+        )->setProductId(
+            $item->getProductId()
+        )->setProductType(
+            $item->getProductType()
+        )->setQtyBackordered(
+            $item->getBackorders()
+        )->setProduct(
+            $item->getProduct()
+        )->setBaseOriginalPrice(
+            $item->getBaseOriginalPrice()
+        );
 
         $options = $item->getProductOrderOptions();
         if (!$options) {
@@ -222,7 +239,7 @@ class Quote extends \Magento\Object
         );
 
         if ($item->getParentItem()) {
-            $orderItem->setQtyOrdered($orderItem->getQtyOrdered()*$item->getParentItem()->getQty());
+            $orderItem->setQtyOrdered($orderItem->getQtyOrdered() * $item->getParentItem()->getQty());
         }
 
         if (!$item->getNoDiscount()) {

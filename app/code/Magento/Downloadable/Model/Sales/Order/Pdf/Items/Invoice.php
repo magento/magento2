@@ -86,31 +86,24 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
      */
     public function draw()
     {
-        $order  = $this->getOrder();
-        $item   = $this->getItem();
-        $pdf    = $this->getPdf();
-        $page   = $this->getPage();
-        $lines  = array();
+        $order = $this->getOrder();
+        $item = $this->getItem();
+        $pdf = $this->getPdf();
+        $page = $this->getPage();
+        $lines = array();
 
         // draw Product name
-        $lines[0] = array(array(
-            'text' => $this->string->split($item->getName(), 35, true, true),
-            'feed' => 35,
-        ));
+        $lines[0] = array(array('text' => $this->string->split($item->getName(), 35, true, true), 'feed' => 35));
 
         // draw SKU
         $lines[0][] = array(
-            'text'  => $this->string->split($this->getSku($item), 17),
-            'feed'  => 290,
+            'text' => $this->string->split($this->getSku($item), 17),
+            'feed' => 290,
             'align' => 'right'
         );
 
         // draw QTY
-        $lines[0][] = array(
-            'text'  => $item->getQty() * 1,
-            'feed'  => 435,
-            'align' => 'right'
-        );
+        $lines[0][] = array('text' => $item->getQty() * 1, 'feed' => 435, 'align' => 'right');
 
         // draw item Prices
         $i = 0;
@@ -120,31 +113,23 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
         foreach ($prices as $priceData) {
             if (isset($priceData['label'])) {
                 // draw Price label
-                $lines[$i][] = array(
-                    'text'  => $priceData['label'],
-                    'feed'  => $feedPrice,
-                    'align' => 'right'
-                );
+                $lines[$i][] = array('text' => $priceData['label'], 'feed' => $feedPrice, 'align' => 'right');
                 // draw Subtotal label
-                $lines[$i][] = array(
-                    'text'  => $priceData['label'],
-                    'feed'  => $feedSubtotal,
-                    'align' => 'right'
-                );
+                $lines[$i][] = array('text' => $priceData['label'], 'feed' => $feedSubtotal, 'align' => 'right');
                 $i++;
             }
             // draw Price
             $lines[$i][] = array(
-                'text'  => $priceData['price'],
-                'feed'  => $feedPrice,
-                'font'  => 'bold',
+                'text' => $priceData['price'],
+                'feed' => $feedPrice,
+                'font' => 'bold',
                 'align' => 'right'
             );
             // draw Subtotal
             $lines[$i][] = array(
-                'text'  => $priceData['subtotal'],
-                'feed'  => $feedSubtotal,
-                'font'  => 'bold',
+                'text' => $priceData['subtotal'],
+                'feed' => $feedSubtotal,
+                'font' => 'bold',
                 'align' => 'right'
             );
             $i++;
@@ -152,9 +137,9 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
 
         // draw Tax
         $lines[0][] = array(
-            'text'  => $order->formatPriceTxt($item->getTaxAmount()),
-            'feed'  => 495,
-            'font'  => 'bold',
+            'text' => $order->formatPriceTxt($item->getTaxAmount()),
+            'feed' => 495,
+            'font' => 'bold',
             'align' => 'right'
         );
 
@@ -177,10 +162,7 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
                     }
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
-                        $lines[][] = array(
-                            'text' => $this->string->split($value, 30, true, true),
-                            'feed' => 40
-                        );
+                        $lines[][] = array('text' => $this->string->split($value, 30, true, true), 'feed' => 40);
                     }
                 }
             }
@@ -198,16 +180,10 @@ class Invoice extends \Magento\Downloadable\Model\Sales\Order\Pdf\Items\Abstract
 
         // draw Links
         foreach ($purchasedItems as $link) {
-            $lines[][] = array(
-                'text' => $this->string->split($link->getLinkTitle(), 50, true, true),
-                'feed' => 40
-            );
+            $lines[][] = array('text' => $this->string->split($link->getLinkTitle(), 50, true, true), 'feed' => 40);
         }
 
-        $lineBlock = array(
-            'lines'  => $lines,
-            'height' => 20
-        );
+        $lineBlock = array('lines' => $lines, 'height' => 20);
 
         $page = $pdf->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
         $this->setPage($page);

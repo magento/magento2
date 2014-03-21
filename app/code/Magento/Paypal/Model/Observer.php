@@ -187,10 +187,7 @@ class Observer
                 if (empty($result['error'])) {
                     $this->_view->loadLayout('checkout_onepage_review');
                     $html = $this->_view->getLayout()->getBlock('paypal.iframe')->toHtml();
-                    $result['update_section'] = array(
-                        'name' => 'paypaliframe',
-                        'html' => $html
-                    );
+                    $result['update_section'] = array('name' => 'paypaliframe', 'html' => $html);
                     $result['redirect'] = false;
                     $result['success'] = false;
                     $controller->getResponse()->clearHeader('Location');
@@ -212,8 +209,10 @@ class Observer
     {
         $event = $observer->getEvent();
         $methodInstance = $event->getMethodInstance();
-        if ($methodInstance instanceof \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement
-            && false == $this->_authorization->isAllowed('Magento_Paypal::use')
+        if ($methodInstance instanceof \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement &&
+            false == $this->_authorization->isAllowed(
+                'Magento_Paypal::use'
+            )
         ) {
             $event->getResult()->isAvailable = false;
         }
@@ -264,9 +263,13 @@ class Observer
             '',
             array('checkoutSession' => $observer->getEvent()->getCheckoutSession())
         );
-        $shortcut->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
-            ->setShowOrPosition($observer->getEvent()->getOrPosition())
-            ->setTemplate('express/shortcut.phtml');
+        $shortcut->setIsInCatalogProduct(
+            $observer->getEvent()->getIsCatalogProduct()
+        )->setShowOrPosition(
+            $observer->getEvent()->getOrPosition()
+        )->setTemplate(
+            'express/shortcut.phtml'
+        );
         $shortcutButtons->addShortcut($shortcut);
         // PayPal Express Checkout Payflow Edition
         $shortcut = $shortcutButtons->getLayout()->createBlock(
@@ -274,9 +277,13 @@ class Observer
             '',
             array('checkoutSession' => $observer->getEvent()->getCheckoutSession())
         );
-        $shortcut->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
-            ->setShowOrPosition($observer->getEvent()->getOrPosition())
-            ->setTemplate('express/shortcut.phtml');
+        $shortcut->setIsInCatalogProduct(
+            $observer->getEvent()->getIsCatalogProduct()
+        )->setShowOrPosition(
+            $observer->getEvent()->getOrPosition()
+        )->setTemplate(
+            'express/shortcut.phtml'
+        );
         $shortcutButtons->addShortcut($shortcut);
     }
 }

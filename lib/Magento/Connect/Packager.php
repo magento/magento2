@@ -92,7 +92,7 @@ class Packager
         $wd = $ftpObj->getcwd();
 
         $remoteConfigExists = $ftpObj->fileExists($cfgFile);
-        $tempConfigFile = uniqid($cfgFile."_temp");
+        $tempConfigFile = uniqid($cfgFile . "_temp");
         if (!$remoteConfigExists) {
             $remoteCfg = new Config($tempConfigFile);
             $remoteCfg->store();
@@ -105,7 +105,7 @@ class Packager
         $ftpObj->chdir($wd);
 
         $remoteCacheExists = $ftpObj->fileExists($cacheFile);
-        $tempCacheFile = uniqid($cacheFile."_temp");
+        $tempCacheFile = uniqid($cacheFile . "_temp");
 
         if (!$remoteCacheExists) {
             $remoteCache = new Singleconfig($tempCacheFile);
@@ -130,7 +130,7 @@ class Packager
         $ftpObj->connect($ftpString);
         $remoteConfigExists = $ftpObj->fileExists("cache.cfg");
         if (!$remoteConfigExists) {
-            $configFile= uniqid("temp_cachecfg_");
+            $configFile = uniqid("temp_cachecfg_");
             $remoteCfg = new Singleconfig($configFile);
             $remoteCfg->clear();
             $ftpObj->upload("cache.cfg", $configFile);
@@ -154,7 +154,7 @@ class Packager
 
         $wd = $ftpObj->getcwd();
         $remoteConfigExists = $ftpObj->fileExists($cfgFile);
-        $tempConfigFile = uniqid($cfgFile."_temp");
+        $tempConfigFile = uniqid($cfgFile . "_temp");
         if (!$remoteConfigExists) {
             $remoteCfg = new Config($tempConfigFile);
             $remoteCfg->store();
@@ -274,11 +274,11 @@ class Packager
                 if ($modeDir) {
                     $args[] = $modeDir;
                 }
-                call_user_func_array(array($ftp,'upload'), $args);
+                call_user_func_array(array($ftp, 'upload'), $args);
             }
         }
         $ftp->chdir($ftpDir);
-        \Magento\System\Dirs::rm(array("-r",$target));
+        \Magento\System\Dirs::rm(array("-r", $target));
     }
 
     /**
@@ -315,9 +315,8 @@ class Packager
                 @mkdir($dest, $modeDir);
             }
         }
-        \Magento\System\Dirs::rm(array("-r",$target));
+        \Magento\System\Dirs::rm(array("-r", $target));
     }
-
 
     /**
      * Get local modified files
@@ -332,8 +331,8 @@ class Packager
         $p = $cachObj->getPackageObject($chanName, $package);
         $hashContents = $p->getHashContents();
         $listModified = array();
-        foreach ($hashContents as $file=>$hash) {
-            if (md5_file($configObj->magento_root . '/' . $file)!==$hash) {
+        foreach ($hashContents as $file => $hash) {
+            if (md5_file($configObj->magento_root . '/' . $file) !== $hash) {
                 $listModified[] = $file;
             }
         }
@@ -354,20 +353,19 @@ class Packager
         $p = $cacheObj->getPackageObject($chanName, $package);
         $hashContents = $p->getHashContents();
         $listModified = array();
-        foreach ($hashContents as $file=>$hash) {
+        foreach ($hashContents as $file => $hash) {
             $localFile = uniqid("temp_remote_");
             if (!$ftp->fileExists($file)) {
                 continue;
             }
             $ftp->get($localFile, $file);
-            if (file_exists($localFile) && md5_file($localFile)!==$hash) {
+            if (file_exists($localFile) && md5_file($localFile) !== $hash) {
                 $listModified[] = $file;
             }
             @unlink($localFile);
         }
         return $listModified;
     }
-
 
     /**
      * Get upgrades list
@@ -413,7 +411,7 @@ class Packager
              */
             $state = $configObj->preferred_state ? $configObj->preferred_state : "devel";
 
-            foreach ($localPackages as $localName=>$localData) {
+            foreach ($localPackages as $localName => $localData) {
                 if (!isset($remotePackages[$localName])) {
                     continue;
                 }
@@ -422,7 +420,7 @@ class Packager
                 $remoteVersion = $localVersion = trim($localData[Singleconfig::K_VER]);
                 foreach ($package as $version => $s) {
 
-                    if ( $cacheObject->compareStabilities($s, $state) < 0 ) {
+                    if ($cacheObject->compareStabilities($s, $state) < 0) {
                         continue;
                     }
 
@@ -444,7 +442,7 @@ class Packager
                 if (!isset($updates[$chanName])) {
                     $updates[$chanName] = array();
                 }
-                $updates[$chanName][$localName] = array("from"=>$localVersion, "to"=>$remoteVersion);
+                $updates[$chanName][$localName] = array("from" => $localVersion, "to" => $remoteVersion);
             }
         }
         return $updates;
@@ -475,7 +473,7 @@ class Packager
                 $level--;
                 if ($level == 0) {
                     $hash = array();
-                    return array('list'=>array());
+                    return array('list' => array());
                 }
                 return;
             }
@@ -485,30 +483,28 @@ class Packager
             $keyOuter = $chanName . "/" . $package;
 
             //print "Processing outer: {$keyOuter} \n";
-            $hash[$keyOuter] = array (
-                'name'     => $package,
-                'channel'  => $chanName,
-                'version'  => $version,
-                'packages' => $dependencies,
+            $hash[$keyOuter] = array(
+                'name' => $package,
+                'channel' => $chanName,
+                'version' => $version,
+                'packages' => $dependencies
             );
 
             if ($withDepsRecursive) {
-                $flds = array('name','channel','min','max');
+                $flds = array('name', 'channel', 'min', 'max');
                 $fldsCount = count($flds);
                 foreach ($dependencies as $row) {
                     foreach ($flds as $key) {
-                        $varName = "p".ucfirst($key);
-                        $$varName = $row[$key];
+                        $varName = "p" . ucfirst($key);
+                        ${$varName} = $row[$key];
                     }
                     $method = __FUNCTION__;
                     $keyInner = $pChannel . "/" . $pName;
                     if (!isset($hash[$keyInner])) {
-                        $this->$method($pChannel, $pName, $cache, $config,
-                        $withDepsRecursive, false);
+                        $this->{$method}($pChannel, $pName, $cache, $config, $withDepsRecursive, false);
                     }
                 }
             }
-
         } catch (\Exception $e) {
         }
 
@@ -516,7 +512,7 @@ class Packager
         if (0 === $level) {
             $out = $this->processDepsHash($hash);
             $hash = array();
-            return array('list'=>$out);
+            return array('list' => $out);
         }
     }
 
@@ -534,8 +530,15 @@ class Packager
      * @return array|void
      * @throws \Exception
      */
-    public function getDependenciesList($chanName, $package, $cache, $config, $versionMax = false, $versionMin = false,
-        $withDepsRecursive = true, $forceRemote = false
+    public function getDependenciesList(
+        $chanName,
+        $package,
+        $cache,
+        $config,
+        $versionMax = false,
+        $versionMin = false,
+        $withDepsRecursive = true,
+        $forceRemote = false
     ) {
         static $level = 0;
         static $_depsHash = array();
@@ -567,29 +570,38 @@ class Packager
             $keyOuter = $chanName . "/" . $package;
 
             //print "Processing outer: {$keyOuter} \n";
-            $_depsHash[$keyOuter] = array (
-                'name'               => $package,
-                'channel'            => $chanName,
+            $_depsHash[$keyOuter] = array(
+                'name' => $package,
+                'channel' => $chanName,
                 'downloaded_version' => $version,
-                'min'                => $versionMin,
-                'max'                => $versionMax,
-                'packages'           => $dependencies,
+                'min' => $versionMin,
+                'max' => $versionMax,
+                'packages' => $dependencies
             );
 
             if ($withDepsRecursive) {
-                $flds = array('name','channel','min','max');
+                $flds = array('name', 'channel', 'min', 'max');
                 $fldsCount = count($flds);
                 foreach ($dependencies as $row) {
                     foreach ($flds as $key) {
-                        $varName = "p".ucfirst($key);
-                        $$varName = $row[$key];
+                        $varName = "p" . ucfirst($key);
+                        ${$varName} = $row[$key];
                     }
                     $method = __FUNCTION__;
                     $keyInner = $pChannel . "/" . $pName;
                     if (!isset($_depsHash[$keyInner])) {
                         $_deps[] = $row;
-                        $this->$method($pChannel, $pName, $cache, $config,
-                        $pMax, $pMin, $withDepsRecursive, $forceRemote, false);
+                        $this->{$method}(
+                            $pChannel,
+                            $pName,
+                            $cache,
+                            $config,
+                            $pMax,
+                            $pMin,
+                            $withDepsRecursive,
+                            $forceRemote,
+                            false
+                        );
                     } else {
                         $downloaded = $_depsHash[$keyInner]['downloaded_version'];
                         $hasMin = $_depsHash[$keyInner]['min'];
@@ -604,26 +616,26 @@ class Packager
                             continue;
                         }
 
-                        $names = array("pMin","pMax","hasMin","hasMax");
-                        for ($i=0, $c=count($names); $i<$c; $i++) {
-                            if (!isset($$names[$i])) {
+                        $names = array("pMin", "pMax", "hasMin", "hasMax");
+                        for ($i = 0,$c = count($names); $i < $c; $i++) {
+                            if (!isset(${$names[$i]})) {
                                 continue;
                             }
-                            if (false !== $$names[$i]) {
+                            if (false !== ${$names[$i]}) {
                                 continue;
                             }
-                            $$names[$i] = $i % 2 == 0 ? "0" : "999999999";
+                            ${$names[$i]} = $i % 2 == 0 ? "0" : "999999999";
                         }
 
                         if (!$cache->hasVersionRangeIntersect($pMin, $pMax, $hasMin, $hasMax)) {
                             $reason = "Detected {$pName} conflict of versions: {$hasMin}-{$hasMax} and {$pMin}-{$pMax}";
                             unset($_depsHash[$keyInner]);
                             $_failed[] = array(
-                                'name'    => $pName,
+                                'name' => $pName,
                                 'channel' => $pChannel,
-                                'max'     => $pMax,
-                                'min'     => $pMin,
-                                'reason'  => $reason
+                                'max' => $pMax,
+                                'min' => $pMin,
+                                'reason' => $reason
                             );
                             continue;
                         }
@@ -632,18 +644,26 @@ class Packager
                         $forceMax = $newMaxIsLess ? $pMax : $hasMax;
                         $forceMin = $newMinIsGreater ? $pMin : $hasMin;
                         //var_dump("Trying to process {$pName} : max {$forceMax} - min {$forceMin}");
-                        $this->$method($pChannel, $pName, $cache, $config,
-                        $forceMax, $forceMin, $withDepsRecursive, $forceRemote);
+                        $this->{$method}(
+                            $pChannel,
+                            $pName,
+                            $cache,
+                            $config,
+                            $forceMax,
+                            $forceMin,
+                            $withDepsRecursive,
+                            $forceRemote
+                        );
                     }
                 }
             }
         } catch (\Exception $e) {
             $_failed[] = array(
-                'name'    => $package,
+                'name' => $package,
                 'channel' => $chanName,
-                'max'     => $versionMax,
-                'min'     => $versionMin,
-                'reason'  => $e->getMessage()
+                'max' => $versionMax,
+                'min' => $versionMin,
+                'reason' => $e->getMessage()
             );
         }
 
@@ -655,7 +675,7 @@ class Packager
             $_depsHash = array();
             $_deps = array();
             $_failed = array();
-            return array('deps' => $deps, 'result' => $out, 'failed'=> $failed);
+            return array('deps' => $deps, 'result' => $out, 'failed' => $failed);
         }
     }
 
@@ -672,7 +692,7 @@ class Packager
         $nodes = array();
         $graph = new \Magento\Connect\Structures\Graph();
 
-        foreach ($depsHash as $key=>$data) {
+        foreach ($depsHash as $key => $data) {
             $packages = $data['packages'];
             $node = new \Magento\Connect\Structures\Node();
             $nodes[$key] =& $node;
@@ -683,7 +703,7 @@ class Packager
         }
 
         if (count($nodes) > 1) {
-            foreach ($depsHash as $key=>$data) {
+            foreach ($depsHash as $key => $data) {
                 $packages = $data['packages'];
                 foreach ($packages as $pdata) {
                     $pName = $pdata['channel'] . "/" . $pdata['name'];
@@ -697,7 +717,7 @@ class Packager
         $sortReverse ? krsort($result) : ksort($result);
         $out = array();
         $total = 0;
-        foreach ($result as $order=>$nodes) {
+        foreach ($result as $order => $nodes) {
             foreach ($nodes as $n) {
                 $out[] = $n->getData();
             }

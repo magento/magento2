@@ -65,7 +65,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogInventory\Model\Stock\Item', 'Magento\CatalogInventory\Model\Resource\Stock\Item');
+        $this->_init(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            'Magento\CatalogInventory\Model\Resource\Stock\Item'
+        );
     }
 
     /**
@@ -119,9 +122,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
         $this->getSelect()->joinLeft(
             array('status_table' => $this->getTable('cataloginventory_stock_status')),
-                'main_table.product_id=status_table.product_id'
-                . ' AND main_table.stock_id=status_table.stock_id'
-                . $this->getConnection()->quoteInto(' AND status_table.website_id=?', $websiteId),
+            'main_table.product_id=status_table.product_id' .
+            ' AND main_table.stock_id=status_table.stock_id' .
+            $this->getConnection()->quoteInto(
+                ' AND status_table.website_id=?',
+                $websiteId
+            ),
             array('stock_status')
         );
 
@@ -155,14 +161,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addQtyFilter($comparisonMethod, $qty)
     {
-        $methods = array(
-            '<'  => 'lt',
-            '>'  => 'gt',
-            '='  => 'eq',
-            '<=' => 'lteq',
-            '>=' => 'gteq',
-            '<>' => 'neq'
-        );
+        $methods = array('<' => 'lt', '>' => 'gt', '=' => 'eq', '<=' => 'lteq', '>=' => 'gteq', '<>' => 'neq');
         if (!isset($methods[$comparisonMethod])) {
             throw new \Magento\Core\Exception(__('%1 is not a correct comparison method.', $comparisonMethod));
         }
@@ -177,11 +176,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected function _initSelect()
     {
-        return parent::_initSelect()->getSelect()
-            ->join(
-                array('cp_table' => $this->getTable('catalog_product_entity')),
-                'main_table.product_id = cp_table.entity_id',
-                array('type_id')
-            );
+        return parent::_initSelect()->getSelect()->join(
+            array('cp_table' => $this->getTable('catalog_product_entity')),
+            'main_table.product_id = cp_table.entity_id',
+            array('type_id')
+        );
     }
 }

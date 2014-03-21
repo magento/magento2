@@ -32,8 +32,7 @@ namespace Magento\Customer\Model\Customer\Attribute\Backend;
  * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Website
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Website extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -44,10 +43,8 @@ class Website
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Core\Model\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
         parent::__construct($logger);
     }

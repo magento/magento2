@@ -29,7 +29,9 @@ class Form
      * Values for ignoreInvisible parameter in constructor
      */
     const IGNORE_INVISIBLE = true;
+
     const DONT_IGNORE_INVISIBLE = false;
+
     /**#@-*/
 
     /**
@@ -60,7 +62,7 @@ class Form
     /**
      * @var array
      */
-    protected $_filterAttributes = [];
+    protected $_filterAttributes = array();
 
     /**
      * @var bool
@@ -72,7 +74,7 @@ class Form
      *
      * @var array
      */
-    protected $_attributeValues = [];
+    protected $_attributeValues = array();
 
     /**
      * @var \Magento\App\RequestInterface
@@ -122,9 +124,9 @@ class Form
         \Magento\Validator\ConfigFactory $validatorConfigFactory,
         $entityType,
         $formCode,
-        array $attributeValues = [],
+        array $attributeValues = array(),
         $ignoreInvisible = self::IGNORE_INVISIBLE,
-        $filterAttributes = [],
+        $filterAttributes = array(),
         $isAjax = false
     ) {
         $this->_eavMetadataService = $eavMetadataService;
@@ -148,8 +150,7 @@ class Form
     public function getAttributes()
     {
         if (!isset($this->_attributes)) {
-            $this->_attributes = $this->_eavMetadataService
-                ->getAttributes($this->_entityType, $this->_formCode);
+            $this->_attributes = $this->_eavMetadataService->getAttributes($this->_entityType, $this->_formCode);
         }
         return $this->_attributes;
     }
@@ -176,7 +177,7 @@ class Form
      */
     public function getUserAttributes()
     {
-        $result = [];
+        $result = array();
         foreach ($this->getAttributes() as $attribute) {
             if ($attribute->isUserDefined()) {
                 $result[$attribute->getAttributeCode()] = $attribute;
@@ -192,7 +193,7 @@ class Form
      */
     public function getSystemAttributes()
     {
-        $result = [];
+        $result = array();
         foreach ($this->getAttributes() as $attribute) {
             if (!$attribute->isUserDefined()) {
                 $result[$attribute->getAttributeCode()] = $attribute;
@@ -210,8 +211,10 @@ class Form
     {
         $attributes = $this->getAttributes();
         foreach ($attributes as $attributeCode => $attribute) {
-            if ($this->_ignoreInvisible && !$attribute->isVisible()
-                || in_array($attribute->getAttributeCode(), $this->_filterAttributes)
+            if ($this->_ignoreInvisible && !$attribute->isVisible() || in_array(
+                $attribute->getAttributeCode(),
+                $this->_filterAttributes
+            )
             ) {
                 unset($attributes[$attributeCode]);
             }
@@ -290,14 +293,14 @@ class Form
     {
         $dataModel = $this->_elementFactory->create(
             $attribute,
-            isset($this->_attributeValues[$attribute->getAttributeCode()])
-                ? $this->_attributeValues[$attribute->getAttributeCode()] : null,
+            isset(
+                $this->_attributeValues[$attribute->getAttributeCode()]
+            ) ? $this->_attributeValues[$attribute->getAttributeCode()] : null,
             $this->_entityType,
             $this->_isAjax
         );
         return $dataModel;
     }
-
 
     /**
      * Prepare request with data and returns it
@@ -331,18 +334,18 @@ class Form
         $validatorFactory = $this->_validatorConfigFactory->create(array('configFiles' => $configFiles));
         $builder = $validatorFactory->createValidatorBuilder('customer', 'form');
 
-        $builder->addConfiguration('metadata_data_validator', array(
-                'method' => 'setAttributes',
-                'arguments' => array($this->getAllowedAttributes())
-            ));
-        $builder->addConfiguration('metadata_data_validator', array(
-                'method' => 'setData',
-                'arguments' => array($data)
-            ));
-        $builder->addConfiguration('metadata_data_validator', array(
-                'method' => 'setEntityType',
-                'arguments' => array($this->_entityType)
-            ));
+        $builder->addConfiguration(
+            'metadata_data_validator',
+            array('method' => 'setAttributes', 'arguments' => array($this->getAllowedAttributes()))
+        );
+        $builder->addConfiguration(
+            'metadata_data_validator',
+            array('method' => 'setData', 'arguments' => array($data))
+        );
+        $builder->addConfiguration(
+            'metadata_data_validator',
+            array('method' => 'setEntityType', 'arguments' => array($this->_entityType))
+        );
         $this->_validator = $builder->createValidator();
 
         return $this->_validator;

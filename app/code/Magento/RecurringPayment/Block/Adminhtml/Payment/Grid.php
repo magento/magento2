@@ -105,59 +105,77 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('reference_id', array(
-            'header' => $this->_fields->getFieldLabel('reference_id'),
-            'index' => 'reference_id',
-            'html_decorators' => array('nobr'),
-            'width' => 1,
-        ));
+        $this->addColumn(
+            'reference_id',
+            array(
+                'header' => $this->_fields->getFieldLabel('reference_id'),
+                'index' => 'reference_id',
+                'html_decorators' => array('nobr'),
+                'width' => 1
+            )
+        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'     => __('Store'),
-                'index'      => 'store_id',
-                'type'       => 'store',
-                'store_view' => true,
-                'display_deleted' => true,
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Store'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_view' => true,
+                    'display_deleted' => true
+                )
+            );
         }
 
-        $this->addColumn('state', array(
-            'header' => $this->_fields->getFieldLabel('state'),
-            'index' => 'state',
-            'type'  => 'options',
-            'options' => $this->recurringStates->toOptionArray(),
-            'html_decorators' => array('nobr'),
-            'width' => 1,
-        ));
+        $this->addColumn(
+            'state',
+            array(
+                'header' => $this->_fields->getFieldLabel('state'),
+                'index' => 'state',
+                'type' => 'options',
+                'options' => $this->recurringStates->toOptionArray(),
+                'html_decorators' => array('nobr'),
+                'width' => 1
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header' => $this->_fields->getFieldLabel('created_at'),
-            'index' => 'created_at',
-            'type' => 'datetime',
-            'html_decorators' => array('nobr'),
-            'width' => 1,
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => $this->_fields->getFieldLabel('created_at'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'html_decorators' => array('nobr'),
+                'width' => 1
+            )
+        );
 
-        $this->addColumn('updated_at', array(
-            'header' => $this->_fields->getFieldLabel('updated_at'),
-            'index' => 'updated_at',
-            'type' => 'datetime',
-            'html_decorators' => array('nobr'),
-            'width' => 1,
-        ));
+        $this->addColumn(
+            'updated_at',
+            array(
+                'header' => $this->_fields->getFieldLabel('updated_at'),
+                'index' => 'updated_at',
+                'type' => 'datetime',
+                'html_decorators' => array('nobr'),
+                'width' => 1
+            )
+        );
 
-        $this->addColumn('method_code', array(
-            'header'  => $this->_fields->getFieldLabel('method_code'),
-            'index'   => 'method_code',
-            'type'    => 'options',
-            'options' => $this->payments->toOptionArray(),
-        ));
+        $this->addColumn(
+            'method_code',
+            array(
+                'header' => $this->_fields->getFieldLabel('method_code'),
+                'index' => 'method_code',
+                'type' => 'options',
+                'options' => $this->payments->toOptionArray()
+            )
+        );
 
-        $this->addColumn('schedule_description', array(
-            'header' => $this->_fields->getFieldLabel('schedule_description'),
-            'index' => 'schedule_description',
-        ));
+        $this->addColumn(
+            'schedule_description',
+            array('header' => $this->_fields->getFieldLabel('schedule_description'), 'index' => 'schedule_description')
+        );
 
         return parent::_prepareColumns();
     }
@@ -180,6 +198,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('sales/*/grid', array('_current'=>true));
+        return $this->getUrl('sales/*/grid', array('_current' => true));
     }
 }

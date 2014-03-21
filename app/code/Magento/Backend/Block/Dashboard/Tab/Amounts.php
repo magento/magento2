@@ -31,7 +31,6 @@
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Backend\Block\Dashboard\Tab;
 
 class Amounts extends \Magento\Backend\Block\Dashboard\Graph
@@ -79,12 +78,8 @@ class Amounts extends \Magento\Backend\Block\Dashboard\Graph
         $this->getDataHelper()->setParam('group', $this->getRequest()->getParam('group'));
 
         $this->setDataRows('revenue');
-        $this->_axisMaps = array(
-            'x' => 'range',
-            'y' => 'revenue'
-        );
+        $this->_axisMaps = array('x' => 'range', 'y' => 'revenue');
 
         parent::_prepareData();
     }
 }
-

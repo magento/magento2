@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Model\System\Config\Backend;
 
 /**
@@ -47,7 +46,7 @@ class Varnish extends \Magento\Core\Model\Config\Value
     {
         $data = $this->_getDefaultValues();
         $currentValue = $this->getValue();
-        if(!$currentValue) {
+        if (!$currentValue) {
             $replaceValue = isset($data[$this->getField()]) ? $data[$this->getField()] : false;
             $this->setValue($replaceValue);
         }
@@ -76,9 +75,9 @@ class Varnish extends \Magento\Core\Model\Config\Value
     {
         $data = $this->_getDefaultValues();
         $currentValue = $this->getValue();
-        if(!$currentValue) {
+        if (!$currentValue) {
             foreach ($data as $field => $value) {
-                if(strstr($this->getPath(), $field)) {
+                if (strstr($this->getPath(), $field)) {
                     $this->setValue($value);
                     $this->save();
                     break;

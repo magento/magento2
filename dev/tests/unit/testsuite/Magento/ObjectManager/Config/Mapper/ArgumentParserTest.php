@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\Config\Mapper;
 
 class ArgumentParserTest extends \PHPUnit_Framework_TestCase
@@ -30,29 +29,20 @@ class ArgumentParserTest extends \PHPUnit_Framework_TestCase
     {
         $document = new \DOMDocument();
         $document->load(__DIR__ . '/_files/argument_parser.xml');
-        $parser = new ArgumentParser;
+        $parser = new ArgumentParser();
         $actual = $parser->parse($document->getElementsByTagName('argument')->item(0));
         $expected = array(
             'item' => array(
-                'one' => array(
-                    'name' => 'one',
-                    'value' => 'value1',
-                ),
+                'one' => array('name' => 'one', 'value' => 'value1'),
                 'nested' => array(
                     'name' => 'nested',
                     'item' => array(
-                        'two' => array(
-                            'name' => 'two',
-                            'value' => 'value2',
-                        ),
-                        'three' => array(
-                            'name' => 'three',
-                            'value' => 'value3',
-                        ),
-                    ),
-                ),
-            ),
+                        'two' => array('name' => 'two', 'value' => 'value2'),
+                        'three' => array('name' => 'three', 'value' => 'value3')
+                    )
+                )
+            )
         );
         $this->assertSame($expected, $actual);
     }
-} 
+}

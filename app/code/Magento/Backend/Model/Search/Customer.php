@@ -71,24 +71,30 @@ class Customer extends \Magento\Object
             return $this;
         }
 
-        $collection = $this->_collectionFactory->create()
-            ->addNameToSelect()
-            ->joinAttribute('company', 'customer_address/company', 'default_billing', null, 'left')
-            ->addAttributeToFilter(array(
-                array('attribute'=>'firstname', 'like' => $this->getQuery().'%'),
-                array('attribute'=>'lastname', 'like'  => $this->getQuery().'%'),
-                array('attribute'=>'company', 'like'   => $this->getQuery().'%'),
-            ))
-            ->setPage(1, 10)
-            ->load();
+        $collection = $this->_collectionFactory->create()->addNameToSelect()->joinAttribute(
+            'company',
+            'customer_address/company',
+            'default_billing',
+            null,
+            'left'
+        )->addAttributeToFilter(
+            array(
+                array('attribute' => 'firstname', 'like' => $this->getQuery() . '%'),
+                array('attribute' => 'lastname', 'like' => $this->getQuery() . '%'),
+                array('attribute' => 'company', 'like' => $this->getQuery() . '%')
+            )
+        )->setPage(
+            1,
+            10
+        )->load();
 
         foreach ($collection->getItems() as $customer) {
             $result[] = array(
-                'id'            => 'customer/1/'.$customer->getId(),
-                'type'          => __('Customer'),
-                'name'          => $customer->getName(),
-                'description'   => $customer->getCompany(),
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customer->getId())),
+                'id' => 'customer/1/' . $customer->getId(),
+                'type' => __('Customer'),
+                'name' => $customer->getName(),
+                'description' => $customer->getCompany(),
+                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customer->getId()))
             );
         }
 

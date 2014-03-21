@@ -61,9 +61,9 @@ class RouteTest extends \PHPUnit_Framework_TestCase
     {
         $areaName = 'rest';
         $testApi = 'test_api';
-        $route = new \Magento\Webapi\Controller\Rest\Router\Route("$areaName/:$testApi");
+        $route = new \Magento\Webapi\Controller\Rest\Router\Route("{$areaName}/:{$testApi}");
 
-        $testUri = "$areaName/$testApi";
+        $testUri = "{$areaName}/{$testApi}";
         $request = new \Zend_Controller_Request_Http();
         $request->setRequestUri($testUri);
 

@@ -28,8 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 /**
  * Edit button block
  */
-class Edit
-    extends \Magento\Backend\Block\Widget\Button\SplitButton
+class Edit extends \Magento\Backend\Block\Widget\Button\SplitButton
 {
     /**
      * @var \Magento\DesignEditor\Model\Theme\Context
@@ -127,10 +126,10 @@ class Edit
      */
     public function getRevertUrl($revertType)
     {
-        return $this->getUrl('adminhtml/system_design_editor/revert', array(
-            'theme_id'  => $this->_themeContext->getEditableTheme()->getId(),
-            'revert_to' => $revertType
-        ));
+        return $this->getUrl(
+            'adminhtml/system_design_editor/revert',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId(), 'revert_to' => $revertType)
+        );
     }
 
     /**
@@ -141,21 +140,23 @@ class Edit
     protected function _initEditButton()
     {
         $isPhysicalTheme = $this->_themeContext->getEditableTheme()->isPhysical();
-        $this->setData(array(
-            'label'          => __('Edit'),
-            'options'        => array(
-                array(
-                    'label'          => __('Restore last saved version of theme'),
-                    'data_attribute' => array('mage-init' => $this->_getDataRevertToPrevious()),
-                    'disabled'       => $isPhysicalTheme || !$this->_isAbleRevertToPrevious()
-                ),
-                array(
-                    'label'          => __('Restore theme defaults'),
-                    'data_attribute' => array('mage-init' => $this->_getDataRevertToDefault()),
-                    'disabled'       => $isPhysicalTheme || !$this->_isAbleRevertToDefault()
+        $this->setData(
+            array(
+                'label' => __('Edit'),
+                'options' => array(
+                    array(
+                        'label' => __('Restore last saved version of theme'),
+                        'data_attribute' => array('mage-init' => $this->_getDataRevertToPrevious()),
+                        'disabled' => $isPhysicalTheme || !$this->_isAbleRevertToPrevious()
+                    ),
+                    array(
+                        'label' => __('Restore theme defaults'),
+                        'data_attribute' => array('mage-init' => $this->_getDataRevertToDefault()),
+                        'disabled' => $isPhysicalTheme || !$this->_isAbleRevertToDefault()
+                    )
                 )
             )
-        ));
+        );
 
         return $this;
     }
@@ -169,17 +170,19 @@ class Edit
     {
         $sourceChange = $this->_changeFactory->create();
         $sourceChange->loadByThemeId($this->_themeContext->getEditableTheme()->getId());
-        $dateMessage = $this->_localeDate
-            ->date($sourceChange->getChangeTime(), \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString();
+        $dateMessage = $this->_localeDate->date(
+            $sourceChange->getChangeTime(),
+            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        )->toString();
         $message = __('Do you want to restore the version saved at %1?', $dateMessage);
 
         $data = array(
             'vde-edit-button' => array(
-                'event'     => 'revert-to-last',
-                'target'    => 'body',
+                'event' => 'revert-to-last',
+                'target' => 'body',
                 'eventData' => array(
-                    'url'     => $this->getRevertUrl('last_saved'),
-                    'confirm' => array('title' => __('Restore Theme Version'), 'message' => $message),
+                    'url' => $this->getRevertUrl('last_saved'),
+                    'confirm' => array('title' => __('Restore Theme Version'), 'message' => $message)
                 )
             )
         );
@@ -196,10 +199,10 @@ class Edit
         $message = __('Do you want to restore the theme defaults?');
         $data = array(
             'vde-edit-button' => array(
-                'event'     => 'revert-to-default',
-                'target'    => 'body',
+                'event' => 'revert-to-default',
+                'target' => 'body',
                 'eventData' => array(
-                    'url'     => $this->getRevertUrl('physical'),
+                    'url' => $this->getRevertUrl('physical'),
                     'confirm' => array('title' => __('Restore Theme Defaults'), 'message' => $message)
                 )
             )
@@ -240,8 +243,10 @@ class Edit
      * @param \Magento\View\Design\ThemeInterface $targetTheme
      * @return bool
      */
-    protected function _hasThemeChanged(\Magento\View\Design\ThemeInterface $sourceTheme, \Magento\View\Design\ThemeInterface $targetTheme)
-    {
+    protected function _hasThemeChanged(
+        \Magento\View\Design\ThemeInterface $sourceTheme,
+        \Magento\View\Design\ThemeInterface $targetTheme
+    ) {
         $sourceChange = $this->_changeFactory->create();
         $sourceChange->loadByThemeId($sourceTheme->getId());
 

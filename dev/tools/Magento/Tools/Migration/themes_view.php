@@ -35,7 +35,7 @@ try {
     $config = array();
 
     foreach (glob(__DIR__ . '/AliasesMap/cms_content_tables_*.php', GLOB_BRACE) as $configFile) {
-        $config = array_merge($config, include($configFile));
+        $config = array_merge($config, include $configFile);
     }
 
     foreach ($config as $table => $field) {
@@ -77,8 +77,11 @@ function updateFieldForTable($objectManager, $table, $col)
         foreach ($result as $recordId => $string) {
             $content = str_replace('{{skin', '{{view', $string, $count);
             if ($count) {
-                $installer->getConnection()->update($table, array($col => $content),
-                    $installer->getConnection()->quoteInto($pkField . '=?', $recordId));
+                $installer->getConnection()->update(
+                    $table,
+                    array($col => $content),
+                    $installer->getConnection()->quoteInto($pkField . '=?', $recordId)
+                );
                 $logMessages['replaced'][] = 'Replaced -- Id: ' . $recordId . ' in table `' . $table . '`';
             } else {
                 $logMessages['skipped'][] = 'Skipped -- Id: ' . $recordId . ' in table `' . $table . '`';

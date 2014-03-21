@@ -40,7 +40,6 @@ class CollectionFactory
         $this->_objectManager = $objectManager;
     }
 
-
     /**
      * Create Collection
      *

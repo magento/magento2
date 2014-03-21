@@ -243,27 +243,18 @@ class Quote
          */
         $this->_eventManager->dispatch(
             'checkout_type_onepage_save_order',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         $this->_eventManager->dispatch(
             'sales_model_service_quote_submit_before',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         try {
             $transaction->save();
             $this->_inactivateQuote();
             $this->_eventManager->dispatch(
                 'sales_model_service_quote_submit_success',
-                array(
-                    'order' => $order,
-                    'quote' => $quote
-                )
+                array('order' => $order, 'quote' => $quote)
             );
         } catch (\Exception $e) {
             if (!$this->_customerSession->isLoggedIn()) {
@@ -281,19 +272,13 @@ class Quote
 
             $this->_eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
-                array(
-                    'order' => $order,
-                    'quote' => $quote
-                )
+                array('order' => $order, 'quote' => $quote)
             );
             throw $e;
         }
         $this->_eventManager->dispatch(
             'sales_model_service_quote_submit_after',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         $this->_order = $order;
         return $order;
@@ -321,14 +306,15 @@ class Quote
             if ($customerData->getId()) {
                 $this->_customerAccountService->saveCustomer($customerData);
                 $this->_customerAddressService->saveAddresses($customerData->getId(), $addresses);
-            } else { //for new customers
-                $customerDetails =
-                    $this->_customerDetailsBuilder->setCustomer($customerData)->setAddresses($addresses)->create();
-                $customerData = $this->_customerAccountService->createAccount(
-                    $customerDetails);
-                $addresses = $this->_customerAddressService->getAddresses(
-                    $customerData->getId()
-                );
+            } else {
+                //for new customers
+                $customerDetails = $this->_customerDetailsBuilder->setCustomer(
+                    $customerData
+                )->setAddresses(
+                    $addresses
+                )->create();
+                $customerData = $this->_customerAccountService->createAccount($customerDetails);
+                $addresses = $this->_customerAddressService->getAddresses($customerData->getId());
                 //Update quote address information
                 foreach ($addresses as $address) {
                     if ($address->isDefaultBilling()) {
@@ -396,27 +382,18 @@ class Quote
          */
         $this->_eventManager->dispatch(
             'checkout_type_onepage_save_order',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         $this->_eventManager->dispatch(
             'sales_model_service_quote_submit_before',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         try {
             $transaction->save();
             $this->_inactivateQuote();
             $this->_eventManager->dispatch(
                 'sales_model_service_quote_submit_success',
-                array(
-                    'order' => $order,
-                    'quote' => $quote
-                )
+                array('order' => $order, 'quote' => $quote)
             );
         } catch (\Exception $e) {
             //reset order ID's on exception, because order not saved
@@ -429,19 +406,13 @@ class Quote
 
             $this->_eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
-                array(
-                    'order' => $order,
-                    'quote' => $quote
-                )
+                array('order' => $order, 'quote' => $quote)
             );
             throw $e;
         }
         $this->_eventManager->dispatch(
             'sales_model_service_quote_submit_after',
-            array(
-                'order' => $order,
-                'quote' => $quote
-            )
+            array('order' => $order, 'quote' => $quote)
         );
         $this->_order = $order;
         return $order;
@@ -455,7 +426,10 @@ class Quote
     public function submitNominalItems()
     {
         $this->_validate();
-        $this->_eventManager->dispatch('sales_model_service_quote_submit_nominal_items', ['quote' => $this->_quote]);
+        $this->_eventManager->dispatch(
+            'sales_model_service_quote_submit_nominal_items',
+            array('quote' => $this->_quote)
+        );
         $this->_inactivateQuote();
         $this->_deleteNominalItems();
     }
@@ -568,7 +542,7 @@ class Quote
             );
         }
 
-        if (!($this->getQuote()->getPayment()->getMethod())) {
+        if (!$this->getQuote()->getPayment()->getMethod()) {
             throw new \Magento\Core\Exception(__('Please select a valid payment method.'));
         }
 

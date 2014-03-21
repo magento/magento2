@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
-use \Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -34,8 +34,7 @@ use \Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Source
-    extends AbstractEav
+class Source extends AbstractEav
 {
     /**
      * Catalog resource helper
@@ -80,20 +79,21 @@ class Source
      */
     protected function _getIndexableAttributes($multiSelect)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from(array('ca' => $this->getTable('catalog_eav_attribute')), 'attribute_id')
-            ->join(
-                array('ea' => $this->getTable('eav_attribute')),
-                'ca.attribute_id = ea.attribute_id',
-                array())
-            ->where($this->_getIndexableAttributesCondition());
+        $select = $this->_getReadAdapter()->select()->from(
+            array('ca' => $this->getTable('catalog_eav_attribute')),
+            'attribute_id'
+        )->join(
+            array('ea' => $this->getTable('eav_attribute')),
+            'ca.attribute_id = ea.attribute_id',
+            array()
+        )->where(
+            $this->_getIndexableAttributesCondition()
+        );
 
         if ($multiSelect == true) {
-            $select->where('ea.backend_type = ?', 'varchar')
-                ->where('ea.frontend_input = ?', 'multiselect');
+            $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
         } else {
-            $select->where('ea.backend_type = ?', 'int')
-                ->where('ea.frontend_input = ?', 'select');
+            $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input = ?', 'select');
         }
 
         return $this->_getReadAdapter()->fetchCol($select);
@@ -123,13 +123,13 @@ class Source
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter    = $this->_getWriteAdapter();
-        $idxTable   = $this->getIdxTable();
+        $adapter = $this->_getWriteAdapter();
+        $idxTable = $this->getIdxTable();
         // prepare select attributes
         if (is_null($attributeId)) {
-            $attrIds    = $this->_getIndexableAttributes(false);
+            $attrIds = $this->_getIndexableAttributes(false);
         } else {
-            $attrIds    = array($attributeId);
+            $attrIds = array($attributeId);
         }
 
         if (!$attrIds) {
@@ -137,54 +137,55 @@ class Source
         }
 
         /**@var $subSelect \Magento\DB\Select*/
-        $subSelect = $adapter->select()
-            ->from(
-                array('s' => $this->getTable('core_store')),
-                array('store_id', 'website_id')
-            )
-            ->joinLeft(
-                array('d' => $this->getTable('catalog_product_entity_int')),
-                '1 = 1 AND d.store_id = 0',
-                array('entity_id', 'attribute_id', 'value')
-            )
-            ->where('s.store_id != 0');
+        $subSelect = $adapter->select()->from(
+            array('s' => $this->getTable('core_store')),
+            array('store_id', 'website_id')
+        )->joinLeft(
+            array('d' => $this->getTable('catalog_product_entity_int')),
+            '1 = 1 AND d.store_id = 0',
+            array('entity_id', 'attribute_id', 'value')
+        )->where(
+            's.store_id != 0'
+        );
 
         if (!is_null($entityIds)) {
             $subSelect->where('d.entity_id IN(?)', $entityIds);
         }
 
         /**@var $select \Magento\DB\Select*/
-        $select = $adapter->select()
-            ->from(
-                array('pid' => new \Zend_Db_Expr(sprintf('(%s)',$subSelect->assemble()))),
-                array()
+        $select = $adapter->select()->from(
+            array('pid' => new \Zend_Db_Expr(sprintf('(%s)', $subSelect->assemble()))),
+            array()
+        )->joinLeft(
+            array('pis' => $this->getTable('catalog_product_entity_int')),
+            'pis.entity_id = pid.entity_id AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
+            array()
+        )->columns(
+            array(
+                'pid.entity_id',
+                'pid.attribute_id',
+                'pid.store_id',
+                'value' => $adapter->getIfNullSql('pis.value', 'pid.value')
             )
-            ->joinLeft(
-                array('pis' => $this->getTable('catalog_product_entity_int')),
-                'pis.entity_id = pid.entity_id AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
-                array()
-            )
-            ->columns(
-                array(
-                    'pid.entity_id',
-                    'pid.attribute_id',
-                    'pid.store_id',
-                    'value' => $adapter->getIfNullSql('pis.value', 'pid.value')
-                )
-            )
-            ->where('pid.attribute_id IN(?)', $attrIds);
+        )->where(
+            'pid.attribute_id IN(?)',
+            $attrIds
+        );
 
         $select->where($this->_resourceHelper->getIsNullNotNullCondition('pis.value', 'pid.value'));
 
         /**
          * Add additional external limitation
          */
-        $this->_eventManager->dispatch('prepare_catalog_product_index_select', array(
-            'select'        => $select,
-            'entity_field'  => new \Zend_Db_Expr('pid.entity_id'),
-            'website_field' => new \Zend_Db_Expr('pid.website_id'),
-            'store_field'   => new \Zend_Db_Expr('pid.store_id')
-        ));
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_index_select',
+            array(
+                'select' => $select,
+                'entity_field' => new \Zend_Db_Expr('pid.entity_id'),
+                'website_field' => new \Zend_Db_Expr('pid.website_id'),
+                'store_field' => new \Zend_Db_Expr('pid.store_id')
+            )
+        );
 
         $query = $select->insertFromSelect($idxTable);
         $adapter->query($query);
@@ -201,13 +202,13 @@ class Source
      */
     protected function _prepareMultiselectIndex($entityIds = null, $attributeId = null)
     {
-        $adapter    = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
 
         // prepare multiselect attributes
         if (is_null($attributeId)) {
-            $attrIds    = $this->_getIndexableAttributes(true);
+            $attrIds = $this->_getIndexableAttributes(true);
         } else {
-            $attrIds    = array($attributeId);
+            $attrIds = array($attributeId);
         }
 
         if (!$attrIds) {
@@ -216,9 +217,13 @@ class Source
 
         // load attribute options
         $options = array();
-        $select  = $adapter->select()
-            ->from($this->getTable('eav_attribute_option'), array('attribute_id', 'option_id'))
-            ->where('attribute_id IN(?)', $attrIds);
+        $select = $adapter->select()->from(
+            $this->getTable('eav_attribute_option'),
+            array('attribute_id', 'option_id')
+        )->where(
+            'attribute_id IN(?)',
+            $attrIds
+        );
         $query = $select->query();
         while ($row = $query->fetch()) {
             $options[$row['attribute_id']][$row['option_id']] = true;
@@ -226,22 +231,27 @@ class Source
 
         // prepare get multiselect values query
         $productValueExpression = $adapter->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
-        $select = $adapter->select()
-            ->from(
-                array('pvd' => $this->getTable('catalog_product_entity_varchar')),
-                array('entity_id', 'attribute_id'))
-            ->join(
-                array('cs' => $this->getTable('core_store')),
-                '',
-                array('store_id'))
-            ->joinLeft(
-                array('pvs' => $this->getTable('catalog_product_entity_varchar')),
-                'pvs.entity_id = pvd.entity_id AND pvs.attribute_id = pvd.attribute_id'
-                    . ' AND pvs.store_id=cs.store_id',
-                array('value' => $productValueExpression))
-            ->where('pvd.store_id=?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
-            ->where('cs.store_id!=?', \Magento\Core\Model\Store::DEFAULT_STORE_ID)
-            ->where('pvd.attribute_id IN(?)', $attrIds);
+        $select = $adapter->select()->from(
+            array('pvd' => $this->getTable('catalog_product_entity_varchar')),
+            array('entity_id', 'attribute_id')
+        )->join(
+            array('cs' => $this->getTable('core_store')),
+            '',
+            array('store_id')
+        )->joinLeft(
+            array('pvs' => $this->getTable('catalog_product_entity_varchar')),
+            'pvs.entity_id = pvd.entity_id AND pvs.attribute_id = pvd.attribute_id' . ' AND pvs.store_id=cs.store_id',
+            array('value' => $productValueExpression)
+        )->where(
+            'pvd.store_id=?',
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        )->where(
+            'cs.store_id!=?',
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        )->where(
+            'pvd.attribute_id IN(?)',
+            $attrIds
+        );
 
         $statusCond = $adapter->quoteInto('=?', ProductStatus::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'pvd.entity_id', 'cs.store_id', $statusCond);
@@ -253,27 +263,25 @@ class Source
         /**
          * Add additional external limitation
          */
-        $this->_eventManager->dispatch('prepare_catalog_product_index_select', array(
-            'select'        => $select,
-            'entity_field'  => new \Zend_Db_Expr('pvd.entity_id'),
-            'website_field' => new \Zend_Db_Expr('cs.website_id'),
-            'store_field'   => new \Zend_Db_Expr('cs.store_id')
-        ));
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_index_select',
+            array(
+                'select' => $select,
+                'entity_field' => new \Zend_Db_Expr('pvd.entity_id'),
+                'website_field' => new \Zend_Db_Expr('cs.website_id'),
+                'store_field' => new \Zend_Db_Expr('cs.store_id')
+            )
+        );
 
-        $i     = 0;
-        $data  = array();
+        $i = 0;
+        $data = array();
         $query = $select->query();
         while ($row = $query->fetch()) {
             $values = explode(',', $row['value']);
             foreach ($values as $valueId) {
                 if (isset($options[$row['attribute_id']][$valueId])) {
-                    $data[] = array(
-                        $row['entity_id'],
-                        $row['attribute_id'],
-                        $row['store_id'],
-                        $valueId
-                    );
-                    $i ++;
+                    $data[] = array($row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId);
+                    $i++;
                     if ($i % 10000 == 0) {
                         $this->_saveIndexData($data);
                         $data = array();

@@ -41,6 +41,6 @@ class PropertyMapper extends PropertyMapperAbstract
      */
     public function map(array $input, $entityTypeId)
     {
-        return array('is_configurable' => $this->_getValue($input, 'is_configurable', 1),);
+        return array('is_configurable' => $this->_getValue($input, 'is_configurable', 1));
     }
-} 
+}

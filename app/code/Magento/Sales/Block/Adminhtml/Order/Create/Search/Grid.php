@@ -141,10 +141,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 $productIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in'=>$productIds));
+                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
             } else {
-                if($productIds) {
-                    $this->getCollection()->addFieldToFilter('entity_id', array('nin'=>$productIds));
+                if ($productIds) {
+                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
                 }
             }
         } else {
@@ -163,13 +163,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $attributes = $this->_catalogConfig->getProductAttributes();
         /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
         $collection = $this->_productFactory->create()->getCollection();
-        $collection
-            ->setStore($this->getStore())
-            ->addAttributeToSelect($attributes)
-            ->addAttributeToSelect('sku')
-            ->addStoreFilter()
-            ->addAttributeToFilter('type_id', $this->_salesConfig->getAvailableProductTypes())
-            ->addAttributeToSelect('gift_message_available');
+        $collection->setStore(
+            $this->getStore()
+        )->addAttributeToSelect(
+            $attributes
+        )->addAttributeToSelect(
+            'sku'
+        )->addStoreFilter()->addAttributeToFilter(
+            'type_id',
+            $this->_salesConfig->getAvailableProductTypes()
+        )->addAttributeToSelect(
+            'gift_message_available'
+        );
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -182,57 +187,63 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'width'     => '60',
-            'index'     => 'entity_id'
-        ));
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'renderer'  => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product',
-            'index'     => 'name'
-        ));
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'width'     => '80',
-            'index'     => 'sku'
-        ));
-        $this->addColumn('price', array(
-            'header'    => __('Price'),
-            'column_css_class' => 'price',
-            'align'     => 'center',
-            'type'      => 'currency',
-            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
-            'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
-            'index'     => 'price',
-            'renderer'  => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price',
-        ));
+        $this->addColumn(
+            'entity_id',
+            array('header' => __('ID'), 'sortable' => true, 'width' => '60', 'index' => 'entity_id')
+        );
+        $this->addColumn(
+            'name',
+            array(
+                'header' => __('Product'),
+                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Product',
+                'index' => 'name'
+            )
+        );
+        $this->addColumn('sku', array('header' => __('SKU'), 'width' => '80', 'index' => 'sku'));
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'column_css_class' => 'price',
+                'align' => 'center',
+                'type' => 'currency',
+                'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
+                'rate' => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
+                'index' => 'price',
+                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Price'
+            )
+        );
 
-        $this->addColumn('in_products', array(
-            'header'    => __('Select'),
-            'header_css_class' => 'a-center',
-            'type'      => 'checkbox',
-            'name'      => 'in_products',
-            'values'    => $this->_getSelectedProducts(),
-            'align'     => 'center',
-            'index'     => 'entity_id',
-            'sortable'  => false,
-        ));
+        $this->addColumn(
+            'in_products',
+            array(
+                'header' => __('Select'),
+                'header_css_class' => 'a-center',
+                'type' => 'checkbox',
+                'name' => 'in_products',
+                'values' => $this->_getSelectedProducts(),
+                'align' => 'center',
+                'index' => 'entity_id',
+                'sortable' => false
+            )
+        );
 
-        $this->addColumn('qty', array(
-            'filter'    => false,
-            'sortable'  => false,
-            'header'    => __('Quantity'),
-            'renderer'  => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',
-            'name'      => 'qty',
-            'inline_css'=> 'qty',
-            'align'     => 'center',
-            'type'      => 'input',
-            'validate_class' => 'validate-number',
-            'index'     => 'qty',
-            'width'     => '1',
-        ));
+        $this->addColumn(
+            'qty',
+            array(
+                'filter' => false,
+                'sortable' => false,
+                'header' => __('Quantity'),
+                'renderer' => 'Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty',
+                'name' => 'qty',
+                'inline_css' => 'qty',
+                'align' => 'center',
+                'type' => 'input',
+                'validate_class' => 'validate-number',
+                'index' => 'qty',
+                'width' => '1'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -244,7 +255,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('sales/*/loadBlock', array('block'=>'search_grid', '_current' => true, 'collapse' => null));
+        return $this->getUrl(
+            'sales/*/loadBlock',
+            array('block' => 'search_grid', '_current' => true, 'collapse' => null)
+        );
     }
 
     /**

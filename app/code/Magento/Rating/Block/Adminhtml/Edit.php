@@ -80,8 +80,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('delete', 'label', __('Delete Rating'));
 
         if ($this->getRequest()->getParam($this->_objectId)) {
-            $ratingData = $this->_ratingFactory->create()
-                ->load($this->getRequest()->getParam($this->_objectId));
+            $ratingData = $this->_ratingFactory->create()->load($this->getRequest()->getParam($this->_objectId));
 
             $this->_coreRegistry->register('rating_data', $ratingData);
         }

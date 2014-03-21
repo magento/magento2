@@ -33,7 +33,7 @@ return array(
             'is_qty' => true,
             'price_model' => 'Instance_Type_One',
             'price_indexer' => 'Instance_Type_Two',
-            'stock_indexer' => 'Instance_Type_Three',
+            'stock_indexer' => 'Instance_Type_Three'
         ),
         'type_two' => array(
             'name' => 'type_two',
@@ -43,12 +43,8 @@ return array(
             'index_priority' => 0,
             'can_use_qty_decimals' => true,
             'is_qty' => false,
-            'allowed_selection_types' => array(
-                'type_two' => 'type_two'
-            ),
-            'custom_attributes' => array(
-                'some_name' => 'some_value'
-            ),
+            'allowed_selection_types' => array('type_two' => 'type_two'),
+            'custom_attributes' => array('some_name' => 'some_value')
         ),
         'type_three' => array(
             'name' => 'type_three',
@@ -60,8 +56,8 @@ return array(
             'is_qty' => false,
             'price_model' => 'Instance_Type_Three',
             'price_indexer' => 'Instance_Type_Three',
-            'stock_indexer' => 'Instance_Type_Three',
+            'stock_indexer' => 'Instance_Type_Three'
         )
     ),
-    'composableTypes' => array('type_one' => 'type_one', 'type_three' => 'type_three'),
+    'composableTypes' => array('type_one' => 'type_one', 'type_three' => 'type_three')
 );

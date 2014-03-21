@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Cache;
 
 use Magento\Css\PreProcessor\Cache\Import\Cache;
@@ -34,9 +33,7 @@ class CacheFactory
     /**
      * @var array
      */
-    protected $cacheTypes = [
-        Cache::IMPORT_CACHE => 'Magento\Css\PreProcessor\Cache\Import\Cache'
-    ];
+    protected $cacheTypes = array(Cache::IMPORT_CACHE => 'Magento\Css\PreProcessor\Cache\Import\Cache');
 
     /**
      * @var \Magento\ObjectManager
@@ -60,14 +57,13 @@ class CacheFactory
     public function create($cacheType, $publisherFile)
     {
         if (!isset($this->cacheTypes[$cacheType])) {
-            throw new \InvalidArgumentException(
-                sprintf('No cache type registered for "%s" type.', $cacheType)
-            );
+            throw new \InvalidArgumentException(sprintf('No cache type registered for "%s" type.', $cacheType));
         }
 
         /** @var CacheInterface $cacheManager */
         $cacheManager = $this->objectManager->create(
-            $this->cacheTypes[$cacheType], array('publisherFile' => $publisherFile)
+            $this->cacheTypes[$cacheType],
+            array('publisherFile' => $publisherFile)
         );
 
         if (!$cacheManager instanceof CacheInterface) {

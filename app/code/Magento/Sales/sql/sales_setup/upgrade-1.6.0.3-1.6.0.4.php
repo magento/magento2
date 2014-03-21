@@ -31,7 +31,9 @@
 /** @var $installer \Magento\Sales\Model\Resource\Setup */
 $installer = $this;
 $connection = $installer->getConnection();
-$connection->createTable($connection->createTableByDdl(
-    $installer->getTable('sales_order_aggregated_created'),
-    $installer->getTable('sales_order_aggregated_updated')
-));
+$connection->createTable(
+    $connection->createTableByDdl(
+        $installer->getTable('sales_order_aggregated_created'),
+        $installer->getTable('sales_order_aggregated_updated')
+    )
+);

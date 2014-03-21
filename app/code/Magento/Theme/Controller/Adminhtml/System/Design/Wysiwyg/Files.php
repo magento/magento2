@@ -49,7 +49,7 @@ class Files extends \Magento\Backend\App\Action
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
-    
+
     /**
      * Index action
      *
@@ -70,8 +70,11 @@ class Files extends \Magento\Backend\App\Action
     {
         try {
             $this->getResponse()->setBody(
-                $this->_view->getLayout()->createBlock('Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree')
-                    ->getTreeJson($this->_getStorage()->getTreeArray())
+                $this->_view->getLayout()->createBlock(
+                    'Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree'
+                )->getTreeJson(
+                    $this->_getStorage()->getTreeArray()
+                )
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
@@ -165,10 +168,7 @@ class Files extends \Magento\Backend\App\Action
         try {
             return $this->_fileFactory->create(
                 $file,
-                array(
-                    'type'  => 'filename',
-                    'value' => $helper->getThumbnailPath($file)
-                ),
+                array('type' => 'filename', 'value' => $helper->getThumbnailPath($file)),
                 \Magento\App\Filesystem::MEDIA_DIR
             );
         } catch (\Exception $e) {
@@ -189,7 +189,9 @@ class Files extends \Magento\Backend\App\Action
             if (!$this->getRequest()->isPost()) {
                 throw new \Exception('Wrong request');
             }
-            $files = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode(
+            $files = $this->_objectManager->get(
+                'Magento\Core\Helper\Data'
+            )->jsonDecode(
                 $this->getRequest()->getParam('files')
             );
             foreach ($files as $file) {

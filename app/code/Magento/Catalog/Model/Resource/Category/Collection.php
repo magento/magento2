@@ -39,14 +39,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var string
      */
-    protected $_eventPrefix              = 'catalog_category_collection';
+    protected $_eventPrefix = 'catalog_category_collection';
 
     /**
      * Event object name
      *
      * @var string
      */
-    protected $_eventObject              = 'category_collection';
+    protected $_eventObject = 'category_collection';
 
     /**
      * Name of product table
@@ -74,7 +74,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var boolean
      */
-    protected $_loadWithProductCount     = false;
+    protected $_loadWithProductCount = false;
 
     /**
      * Init collection and determine table names
@@ -86,7 +86,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\Resource\Category');
 
         $this->_productWebsiteTable = $this->getTable('catalog_product_website');
-        $this->_productTable        = $this->getTable('catalog_category_product');
+        $this->_productTable = $this->getTable('catalog_category_product');
     }
 
     /**
@@ -136,8 +136,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      */
     protected function _beforeLoad()
     {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', array($this->_eventObject => $this));
         return parent::_beforeLoad();
     }
 
@@ -148,8 +147,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      */
     protected function _afterLoad()
     {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', array($this->_eventObject => $this));
 
         return parent::_afterLoad();
     }
@@ -226,9 +224,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      */
     public function loadProductCount($items, $countRegular = true, $countAnchor = true)
     {
-        $anchor     = array();
-        $regular    = array();
-        $websiteId  = $this->_storeManager->getStore($this->getProductStoreId())->getWebsiteId();
+        $anchor = array();
+        $regular = array();
+        $websiteId = $this->_storeManager->getStore($this->getProductStoreId())->getWebsiteId();
 
         foreach ($items as $item) {
             if ($item->getIsAnchor()) {
@@ -244,17 +242,22 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             if (!empty($regularIds)) {
                 $select = $this->_conn->select();
                 $select->from(
-                        array('main_table' => $this->_productTable),
-                        array('category_id', new \Zend_Db_Expr('COUNT(main_table.product_id)'))
-                    )
-                    ->where($this->_conn->quoteInto('main_table.category_id IN(?)', $regularIds))
-                    ->group('main_table.category_id');
+                    array('main_table' => $this->_productTable),
+                    array('category_id', new \Zend_Db_Expr('COUNT(main_table.product_id)'))
+                )->where(
+                    $this->_conn->quoteInto('main_table.category_id IN(?)', $regularIds)
+                )->group(
+                    'main_table.category_id'
+                );
                 if ($websiteId) {
                     $select->join(
                         array('w' => $this->_productWebsiteTable),
-                        'main_table.product_id = w.product_id', array()
-                    )
-                    ->where('w.website_id = ?', $websiteId);
+                        'main_table.product_id = w.product_id',
+                        array()
+                    )->where(
+                        'w.website_id = ?',
+                        $websiteId
+                    );
                 }
                 $counts = $this->_conn->fetchPairs($select);
                 foreach ($regular as $item) {
@@ -271,30 +274,31 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             // Retrieve Anchor categories product counts
             foreach ($anchor as $item) {
                 if ($allChildren = $item->getAllChildren()) {
-                    $bind = array(
-                        'entity_id' => $item->getId(),
-                        'c_path'    => $item->getPath() . '/%'
-                    );
+                    $bind = array('entity_id' => $item->getId(), 'c_path' => $item->getPath() . '/%');
                     $select = $this->_conn->select();
                     $select->from(
-                            array('main_table' => $this->_productTable),
-                            new \Zend_Db_Expr('COUNT(DISTINCT main_table.product_id)')
-                        )
-                        ->joinInner(
-                            array('e' => $this->getTable('catalog_category_entity')),
-                            'main_table.category_id=e.entity_id',
-                            array()
-                        )
-                        ->where('e.entity_id = :entity_id')
-                        ->orWhere('e.path LIKE :c_path');
+                        array('main_table' => $this->_productTable),
+                        new \Zend_Db_Expr('COUNT(DISTINCT main_table.product_id)')
+                    )->joinInner(
+                        array('e' => $this->getTable('catalog_category_entity')),
+                        'main_table.category_id=e.entity_id',
+                        array()
+                    )->where(
+                        'e.entity_id = :entity_id'
+                    )->orWhere(
+                        'e.path LIKE :c_path'
+                    );
                     if ($websiteId) {
                         $select->join(
                             array('w' => $this->_productWebsiteTable),
-                            'main_table.product_id = w.product_id', array()
-                        )
-                        ->where('w.website_id = ?', $websiteId);
+                            'main_table.product_id = w.product_id',
+                            array()
+                        )->where(
+                            'w.website_id = ?',
+                            $websiteId
+                        );
                     }
-                    $item->setProductCount((int) $this->_conn->fetchOne($select, $bind));
+                    $item->setProductCount((int)$this->_conn->fetchOne($select, $bind));
                 } else {
                     $item->setProductCount(0);
                 }
@@ -327,10 +331,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             'core_url_rewrite',
             'category_id=entity_id',
             array('request_path'),
-            "{{table}}.is_system=1"
-                . " AND {{table}}.product_id IS NULL"
-                . " AND {{table}}.store_id='{$storeId}'"
-                . " AND id_path LIKE 'category/%'",
+            "{{table}}.is_system=1" .
+            " AND {{table}}.product_id IS NULL" .
+            " AND {{table}}.store_id='{$storeId}'" .
+            " AND id_path LIKE 'category/%'",
             'left'
         );
         return $this;
@@ -344,8 +348,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     public function addIsActiveFilter()
     {
         $this->addAttributeToFilter('is_active', 1);
-        $this->_eventManager->dispatch($this->_eventPrefix . '_add_is_active_filter',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch(
+            $this->_eventPrefix . '_add_is_active_filter',
+            array($this->_eventObject => $this)
+        );
         return $this;
     }
 
@@ -382,10 +388,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         if (!is_array($paths)) {
             $paths = array($paths);
         }
-        $write  = $this->getResource()->getWriteConnection();
-        $cond   = array();
+        $write = $this->getResource()->getWriteConnection();
+        $cond = array();
         foreach ($paths as $path) {
-            $cond[] = $write->quoteInto('e.path LIKE ?', "$path%");
+            $cond[] = $write->quoteInto('e.path LIKE ?', "{$path}%");
         }
         if ($cond) {
             $this->getSelect()->where(join(' OR ', $cond));

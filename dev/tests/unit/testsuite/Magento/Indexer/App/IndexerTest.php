@@ -44,18 +44,16 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystemMock = $this->getMock('Magento\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false);
-        $directoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryMock));
-        $this->processorMock = $this->getMock('Magento\Indexer\Model\Processor', array(), array(), '', false);
-        $this->entryPoint = new \Magento\Indexer\App\Indexer(
-            'reportDir',
-            $this->filesystemMock,
-            $this->processorMock
+        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->filesystemMock->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->will(
+            $this->returnValue($directoryMock)
         );
+        $this->processorMock = $this->getMock('Magento\Indexer\Model\Processor', array(), array(), '', false);
+        $this->entryPoint = new \Magento\Indexer\App\Indexer('reportDir', $this->filesystemMock, $this->processorMock);
     }
 
     public function testExecute()

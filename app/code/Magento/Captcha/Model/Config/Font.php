@@ -45,9 +45,8 @@ class Font implements \Magento\Option\ArrayInterface
     /**
      * @param \Magento\Captcha\Helper\Data $captchaData
      */
-    public function __construct(
-        \Magento\Captcha\Helper\Data $captchaData
-    ) {
+    public function __construct(\Magento\Captcha\Helper\Data $captchaData)
+    {
         $this->_captchaData = $captchaData;
     }
 

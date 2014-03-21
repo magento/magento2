@@ -1,8 +1,8 @@
 <?php
 namespace Magento\Sniffs\Annotations;
 
-use \PHP_CodeSniffer_File;
-use \PHP_CodeSniffer;
+use PHP_CodeSniffer_File;
+use PHP_CodeSniffer;
 
 /**
  * Base of the annotations sniffs
@@ -230,10 +230,7 @@ class Helper
             self::LEVEL => self::ERROR,
             self::MESSAGE => 'Only 1 @return tag is allowed in function comment'
         ),
-        self::MISSING_PARAM_TAG => array(
-            self::LEVEL => self::ERROR,
-            self::MESSAGE => 'Doc comment for "%s" missing'
-        ),
+        self::MISSING_PARAM_TAG => array(self::LEVEL => self::ERROR, self::MESSAGE => 'Doc comment for "%s" missing'),
         self::SPACING_AFTER_LONG_NAME => array(
             self::LEVEL => self::OFF,
             self::MESSAGE => 'Expected 1 space after the longest variable name'
@@ -242,10 +239,7 @@ class Helper
             self::LEVEL => self::OFF,
             self::MESSAGE => 'Expected 1 space after the longest type'
         ),
-        self::MISSING_PARAM_TYPE => array(
-            self::LEVEL => self::ERROR,
-            self::MESSAGE => 'Missing type at position %s'
-        ),
+        self::MISSING_PARAM_TYPE => array(self::LEVEL => self::ERROR, self::MESSAGE => 'Missing type at position %s'),
         self::MISSING_PARAM_NAME => array(
             self::LEVEL => self::ERROR,
             self::MESSAGE => 'Missing parameter name at position %s'

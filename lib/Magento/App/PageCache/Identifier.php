@@ -38,7 +38,10 @@ class Identifier
      */
     public function __construct(\Magento\App\Request\Http $request)
     {
-        $data = array($request->getRequestUri(), $request->get(\Magento\App\Response\Http::COOKIE_VARY_STRING));
+        $data = array(
+            $request->getRequestUri(),
+            $request->get(\Magento\App\Response\Http::COOKIE_VARY_STRING),
+        );
         $this->value = md5(serialize($data));
     }
 

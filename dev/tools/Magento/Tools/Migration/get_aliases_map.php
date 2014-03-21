@@ -26,7 +26,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('USAGE', <<<USAGE
+define(
+    'USAGE',
+<<<USAGE
 $>./get_aliases_map.php -- [-ph]
     Build Magento 1 Aliases To Magento 2 Classes Names.
     Additional parameters:
@@ -43,10 +45,12 @@ if (isset($options['h'])) {
     exit(0);
 }
 
-require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) .
-    '/dev/tests/static/framework/bootstrap.php';
-require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) .
-    '/dev/tests/static/framework/Magento/TestFramework/Utility/Classes.php';
+require_once realpath(
+    dirname(dirname(dirname(dirname(dirname(__DIR__)))))
+) . '/dev/tests/static/framework/bootstrap.php';
+require_once realpath(
+    dirname(dirname(dirname(dirname(dirname(__DIR__)))))
+) . '/dev/tests/static/framework/Magento/TestFramework/Utility/Classes.php';
 require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/lib/Zend/Json.php';
 
 $magentoBaseDir = dirname(__DIR__) . '/../../../../';
@@ -66,14 +70,14 @@ foreach ($utilityFiles->getPhpFiles(true, true, true, false) as $file) {
         foreach ($factoryNames as $factoryName) {
             list($module, $name) = getModuleName($factoryName, $compositeModules);
             $patterns = array(
-                '::getModel(\'%s\''             => 'Model',
-                '::getSingleton(\'%s\''         => 'Model',
-                '::getResourceModel(\'%s\''     => 'Model_Resource',
+                '::getModel(\'%s\'' => 'Model',
+                '::getSingleton(\'%s\'' => 'Model',
+                '::getResourceModel(\'%s\'' => 'Model_Resource',
                 '::getResourceSingleton(\'%s\'' => 'Model_Resource',
-                'addBlock(\'%s\''               => 'Block',
-                'createBlock(\'%s\''            => 'Block',
-                'getBlockClassName(\'%s\''      => 'Block',
-                'getBlockSingleton(\'%s\''      => 'Block'
+                'addBlock(\'%s\'' => 'Block',
+                'createBlock(\'%s\'' => 'Block',
+                'getBlockClassName(\'%s\'' => 'Block',
+                'getBlockSingleton(\'%s\'' => 'Block'
             );
 
             foreach ($patterns as $pattern => $classType) {
@@ -121,7 +125,7 @@ function getFilesCombinedArray($dirPath, $filePattern)
     $patternIterator = new RegexIterator($directoryIterator, $filePattern);
 
     foreach ($patternIterator as $fileInfo) {
-        $arrayFromFile = include_once($fileInfo->getPathname());
+        $arrayFromFile = include_once $fileInfo->getPathname();
         $result = array_merge($result, $arrayFromFile);
     }
     return $result;

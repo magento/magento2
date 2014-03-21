@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Attribute\Data;
 
 class TextTest extends \PHPUnit_Framework_TestCase
@@ -45,11 +44,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
             'store_label' => 'Test',
             'attribute_code' => 'test',
             'is_required' => 1,
-            'validate_rules' => array(
-                'min_text_length' => 0,
-                'max_text_length' => 0,
-                'input_validation' => 0
-            )
+            'validate_rules' => array('min_text_length' => 0, 'max_text_length' => 0, 'input_validation' => 0)
         );
 
         $attributeClass = 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute';

@@ -88,11 +88,11 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
         if (!$this->isTotals() && !$this->isSubTotals()) {
             $this->_selectedColumns = array(
-                'period'                => $this->_periodFormat,
-                'code'                  => 'code',
-                'percent'               => 'percent',
-                'orders_count'          => 'SUM(orders_count)',
-                'tax_base_amount_sum'   => 'SUM(tax_base_amount_sum)'
+                'period' => $this->_periodFormat,
+                'code' => 'code',
+                'percent' => 'percent',
+                'orders_count' => 'SUM(orders_count)',
+                'tax_base_amount_sum' => 'SUM(tax_base_amount_sum)'
             );
         }
 
@@ -120,9 +120,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         }
 
         if ($this->isSubTotals()) {
-            $this->getSelect()->group(array(
-                $this->_periodFormat
-            ));
+            $this->getSelect()->group(array($this->_periodFormat));
         }
         return parent::_initSelect();
     }

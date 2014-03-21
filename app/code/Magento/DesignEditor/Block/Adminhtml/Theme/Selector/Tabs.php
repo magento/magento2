@@ -50,7 +50,10 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _toHtml()
     {
-        return parent::_toHtml() . '<div id="' . $this->getDestElementId() . '" class="theme-selector"><div>' .
+        return parent::_toHtml() .
+            '<div id="' .
+            $this->getDestElementId() .
+            '" class="theme-selector"><div>' .
             $this->_getScript();
     }
 
@@ -61,7 +64,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _getScript()
     {
-        $script = sprintf("
+        $script = sprintf(
+            "
             (function ($) {
                 $('.themes-customizations .theme').themeControl({url: '%s'});
             })(jQuery);",

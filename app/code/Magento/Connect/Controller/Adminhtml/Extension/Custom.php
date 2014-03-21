@@ -54,7 +54,7 @@ class Custom extends \Magento\Backend\App\Action
      */
     public function editAction()
     {
-        $this ->_title->add(__('Extension'));
+        $this->_title->add(__('Extension'));
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Connect::system_extensions_custom');
@@ -89,9 +89,7 @@ class Custom extends \Magento\Backend\App\Action
                 }
                 $data = array_merge($data, array('file_name' => $packageName));
                 $session->setCustomExtensionPackageFormData($data);
-                $this->messageManager->addSuccess(
-                    __('The package %1 data has been loaded.', $packageName)
-                );
+                $this->messageManager->addSuccess(__('The package %1 data has been loaded.', $packageName));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }
@@ -134,10 +132,10 @@ class Custom extends \Magento\Backend\App\Action
             } else {
                 $this->_forward('create');
             }
-        } catch (\Magento\Core\Exception $e){
+        } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong saving the package.'));
             $this->_redirect('adminhtml/*');
         }
@@ -166,10 +164,10 @@ class Custom extends \Magento\Backend\App\Action
                 }
             }
             $this->_redirect('adminhtml/*');
-        } catch(\Magento\Core\Exception $e){
+        } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*');
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong creating the package.'));
             $this->_redirect('adminhtml/*');
         }

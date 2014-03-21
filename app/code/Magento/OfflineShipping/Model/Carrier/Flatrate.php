@@ -28,9 +28,8 @@ use Magento\Shipping\Model\Rate\Result;
 /**
  * Flat rate shipping model
  */
-class Flatrate
-    extends \Magento\Shipping\Model\Carrier\AbstractCarrier
-    implements \Magento\Shipping\Model\Carrier\CarrierInterface
+class Flatrate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
+    \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string
@@ -106,10 +105,16 @@ class Flatrate
 
         /** @var Result $result */
         $result = $this->_rateResultFactory->create();
-        if ($this->getConfigData('type') == 'O') { // per order
+        if ($this->getConfigData('type') == 'O') {
+            // per order
             $shippingPrice = $this->getConfigData('price');
-        } elseif ($this->getConfigData('type') == 'I') { // per item
-            $shippingPrice = ($request->getPackageQty() * $this->getConfigData('price')) - ($this->getFreeBoxes() * $this->getConfigData('price'));
+        } elseif ($this->getConfigData('type') == 'I') {
+            // per item
+            $shippingPrice = $request->getPackageQty() * $this->getConfigData(
+                'price'
+            ) - $this->getFreeBoxes() * $this->getConfigData(
+                'price'
+            );
         } else {
             $shippingPrice = false;
         }
@@ -144,7 +149,6 @@ class Flatrate
      */
     public function getAllowedMethods()
     {
-        return array('flatrate'=>$this->getConfigData('name'));
+        return array('flatrate' => $this->getConfigData('name'));
     }
-
 }

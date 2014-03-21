@@ -35,7 +35,6 @@ use Magento\Exception;
  */
 abstract class AbstractServiceCollection extends \Magento\Data\Collection
 {
-
     /**
      * Filters on specific fields
      *
@@ -50,7 +49,7 @@ abstract class AbstractServiceCollection extends \Magento\Data\Collection
      *
      * @var array
      */
-    protected $fieldFilters = [];
+    protected $fieldFilters = array();
 
     /**
      * @var FilterBuilder
@@ -123,10 +122,7 @@ abstract class AbstractServiceCollection extends \Magento\Data\Collection
         if (is_array($field) && count($field) != count($condition)) {
             throw new Exception('When passing in a field array there must be a matching condition array.');
         }
-        $this->fieldFilters[] = [
-            'field'     => $field,
-            'condition' => $condition,
-        ];
+        $this->fieldFilters[] = array('field' => $field, 'condition' => $condition);
         return $this;
     }
 
@@ -140,11 +136,13 @@ abstract class AbstractServiceCollection extends \Magento\Data\Collection
         foreach ($this->fieldFilters as $filter) {
             if (!is_array($filter['field'])) {
                 // just one field
-                $this->searchCriteriaBuilder->addFilter($this->createFilterData($filter['field'], $filter['condition']));
+                $this->searchCriteriaBuilder->addFilter(
+                    $this->createFilterData($filter['field'], $filter['condition'])
+                );
             } else {
                 // array of fields, put filters in array to use 'or' group
                 /** @var Filter[] $orGroupFilters */
-                $orGroupFilters = [];
+                $orGroupFilters = array();
                 foreach ($filter['field'] as $index => $field) {
                     $orGroupFilters[] = $this->createFilterData($field, $filter['condition'][$index]);
                 }

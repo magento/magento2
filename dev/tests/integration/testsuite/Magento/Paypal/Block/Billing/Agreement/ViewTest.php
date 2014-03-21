@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Block\Billing\Agreement;
 
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class ViewTest extends \Magento\Backend\Utility\Controller
 {
@@ -65,19 +64,24 @@ class ViewTest extends \Magento\Backend\Utility\Controller
 
         /** Assign second order to the active customer */
         $orderB = clone $orderA;
-        $orderB->setId(null)
-            ->setIncrementId('100000002')
-            ->setCustomerIsGuest(false)
-            ->setCustomerId($customerId)
-            ->save();
+        $orderB->setId(
+            null
+        )->setIncrementId(
+            '100000002'
+        )->setCustomerIsGuest(
+            false
+        )->setCustomerId(
+            $customerId
+        )->save();
 
         /** @var \Magento\Customer\Model\Session $customerSession */
         $customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
         $customerSession->setCustomerId($customerId);
 
         /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
-        $billingAgreementCollection = Bootstrap::getObjectManager()
-            ->create('Magento\Paypal\Model\Resource\Billing\Agreement\Collection');
+        $billingAgreementCollection = Bootstrap::getObjectManager()->create(
+            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+        );
         /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
         $billingAgreement = $billingAgreementCollection->getFirstItem();
         $billingAgreement->addOrderRelation($orderA->getId())->save();

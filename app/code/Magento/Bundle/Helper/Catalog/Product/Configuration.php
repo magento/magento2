@@ -34,8 +34,8 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
  * @package    Magento_Bundle
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Configuration extends \Magento\App\Helper\AbstractHelper
-    implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+class Configuration extends \Magento\App\Helper\AbstractHelper implements
+    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
      * Core data
@@ -99,8 +99,7 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      *
      * @return float
      */
-    public function getSelectionFinalPrice(ItemInterface $item,
-        $selectionProduct)
+    public function getSelectionFinalPrice(ItemInterface $item, $selectionProduct)
     {
         $selectionProduct->unsetData('final_price');
         return $item->getProduct()->getPriceModel()->getSelectionFinalTotalPrice(
@@ -137,8 +136,8 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
         $bundleOptionsIds = $optionsQuoteItemOption ? unserialize($optionsQuoteItemOption->getValue()) : array();
         if ($bundleOptionsIds) {
             /**
-            * @var \Magento\Bundle\Model\Resource\Option\Collection
-            */
+             * @var \Magento\Bundle\Model\Resource\Option\Collection
+             */
             $optionsCollection = $typeInstance->getOptionsByIds($bundleOptionsIds, $product);
 
             // get and add bundle selections collection
@@ -155,20 +154,18 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
                 $bundleOptions = $optionsCollection->appendSelections($selectionsCollection, true);
                 foreach ($bundleOptions as $bundleOption) {
                     if ($bundleOption->getSelections()) {
-                        $option = array(
-                            'label' => $bundleOption->getTitle(),
-                            'value' => array()
-                        );
+                        $option = array('label' => $bundleOption->getTitle(), 'value' => array());
 
                         $bundleSelections = $bundleOption->getSelections();
 
                         foreach ($bundleSelections as $bundleSelection) {
                             $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
                             if ($qty) {
-                                $option['value'][] = $qty . ' x ' . $this->_escaper->escapeHtml($bundleSelection->getName())
-                                    . ' ' . $this->_coreData->currency(
-                                        $this->getSelectionFinalPrice($item, $bundleSelection)
-                                    );
+                                $option['value'][] = $qty . ' x ' . $this->_escaper->escapeHtml(
+                                    $bundleSelection->getName()
+                                ) . ' ' . $this->_coreData->currency(
+                                    $this->getSelectionFinalPrice($item, $bundleSelection)
+                                );
                             }
                         }
 
@@ -191,9 +188,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      */
     public function getOptions(ItemInterface $item)
     {
-        return array_merge(
-            $this->getBundleOptions($item),
-            $this->_ctlgProdConfigur->getCustomOptions($item)
-        );
+        return array_merge($this->getBundleOptions($item), $this->_ctlgProdConfigur->getCustomOptions($item));
     }
 }

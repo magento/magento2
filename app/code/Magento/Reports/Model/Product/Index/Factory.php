@@ -28,6 +28,7 @@ namespace Magento\Reports\Model\Product\Index;
 class Factory
 {
     const TYPE_COMPARED = 'compared';
+
     const TYPE_VIEWED = 'viewed';
 
     /**

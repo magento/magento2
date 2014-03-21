@@ -35,7 +35,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $nodeMap = array(
             'default' => '/config/default',
             'stores' => '/config/stores',
-            'websites' => '/config/websites',
+            'websites' => '/config/websites'
         );
         $this->_model = new \Magento\App\Config\Initial\Converter($nodeMap);
     }

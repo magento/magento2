@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Publisher;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -44,9 +43,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileFactory = $this->objectManagerHelper->getObject(
             'Magento\View\Publisher\FileFactory',
-            [
-                'objectManager' => $this->objectManagerMock
-            ]
+            array('objectManager' => $this->objectManagerMock)
         );
     }
 
@@ -59,20 +56,17 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($filePath, $viewParams, $sourcePath, $expectedInstance)
     {
-        $fileInstance = $this->getMock($expectedInstance, [], [], '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(
-                $this->equalTo($expectedInstance),
-                $this->equalTo(
-                    [
-                        'filePath'   => $filePath,
-                        'viewParams' => $viewParams,
-                        'sourcePath' => $sourcePath
-                    ]
-                )
-            )
-            ->will($this->returnValue($fileInstance));
+        $fileInstance = $this->getMock($expectedInstance, array(), array(), '', false);
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo($expectedInstance),
+            $this->equalTo(array('filePath' => $filePath, 'viewParams' => $viewParams, 'sourcePath' => $sourcePath))
+        )->will(
+            $this->returnValue($fileInstance)
+        );
         $this->assertInstanceOf($expectedInstance, $this->fileFactory->create($filePath, $viewParams, $sourcePath));
     }
 
@@ -81,20 +75,20 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        return [
-            'css' => [
+        return array(
+            'css' => array(
                 'some\file\path.css',
-                ['some', 'view', 'params'],
+                array('some', 'view', 'params'),
                 'some\source\path',
                 'Magento\View\Publisher\CssFile'
-            ],
-            'other' => [
+            ),
+            'other' => array(
                 'some\file\path.gif',
-                ['some', 'other', 'view', 'params'],
+                array('some', 'other', 'view', 'params'),
                 'some\other\source\path',
                 'Magento\View\Publisher\File'
-            ],
-        ];
+            )
+        );
     }
 
     /**
@@ -104,21 +98,18 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWrongInstance()
     {
         $filePath = 'something';
-        $viewParams = ['some', 'array'];
+        $viewParams = array('some', 'array');
         $fileInstance = new \stdClass();
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(
-                $this->equalTo('stdClass'),
-                $this->equalTo(
-                    [
-                        'filePath'   => $filePath,
-                        'viewParams' => $viewParams,
-                        'sourcePath' => null
-                    ]
-                )
-            )
-            ->will($this->returnValue($fileInstance));
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('stdClass'),
+            $this->equalTo(array('filePath' => $filePath, 'viewParams' => $viewParams, 'sourcePath' => null))
+        )->will(
+            $this->returnValue($fileInstance)
+        );
         $fileFactory = new FileFactory($this->objectManagerMock, 'stdClass');
         $fileFactory->create($filePath, $viewParams);
     }

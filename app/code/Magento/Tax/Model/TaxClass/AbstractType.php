@@ -60,8 +60,6 @@ abstract class AbstractType extends \Magento\Object implements \Magento\Tax\Mode
      */
     public function getAssignedToRules()
     {
-        return $this->_calculationRule
-            ->getCollection()
-            ->setClassTypeFilter($this->_classType, $this->getId());
+        return $this->_calculationRule->getCollection()->setClassTypeFilter($this->_classType, $this->getId());
     }
 }

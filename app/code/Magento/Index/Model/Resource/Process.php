@@ -72,10 +72,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function updateEventStatus($processId, $eventId, $status)
     {
         $adapter = $this->_getWriteAdapter();
-        $condition = array(
-            'process_id = ?' => $processId,
-            'event_id = ?'   => $eventId
-        );
+        $condition = array('process_id = ?' => $processId, 'event_id = ?' => $eventId);
         $adapter->update($this->getTable('index_process_event'), array('status' => $status), $condition);
         return $this;
     }
@@ -88,10 +85,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function endProcess(ModelProcess $process)
     {
-        $data = array(
-            'status'    => ModelProcess::STATUS_PENDING,
-            'ended_at'  => $this->dateTime->formatDate(time()),
-        );
+        $data = array('status' => ModelProcess::STATUS_PENDING, 'ended_at' => $this->dateTime->formatDate(time()));
         $this->_updateProcessData($process->getId(), $data);
         return $this;
     }
@@ -104,10 +98,7 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function startProcess(ModelProcess $process)
     {
-        $data = array(
-            'status'        => ModelProcess::STATUS_RUNNING,
-            'started_at'    => $this->dateTime->formatDate(time()),
-        );
+        $data = array('status' => ModelProcess::STATUS_RUNNING, 'started_at' => $this->dateTime->formatDate(time()));
         $this->_updateProcessData($process->getId(), $data);
         return $this;
     }
@@ -121,8 +112,8 @@ class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function failProcess(ModelProcess $process)
     {
         $data = array(
-            'status'   => ModelProcess::STATUS_REQUIRE_REINDEX,
-            'ended_at' => $this->dateTime->formatDate(time()),
+            'status' => ModelProcess::STATUS_REQUIRE_REINDEX,
+            'ended_at' => $this->dateTime->formatDate(time())
         );
         $this->_updateProcessData($process->getId(), $data);
         return $this;

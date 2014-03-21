@@ -188,7 +188,7 @@ class Price extends \Magento\View\Element\Template implements \Magento\View\Bloc
                 }
 
                 if ($price['price'] < $productPrice) {
-                    $price['savePercent'] = ceil(100 - ((100 / $productPrice) * $price['price']));
+                    $price['savePercent'] = ceil(100 - 100 / $productPrice * $price['price']);
 
                     $tierPrice = $this->_storeManager->getStore()->convertPrice(
                         $this->_taxData->getPrice($product, $price['website_price'])

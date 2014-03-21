@@ -68,9 +68,11 @@ class Dom implements \Magento\Config\ConverterInterface
             }
             switch ($node->nodeName) {
                 case 'preference':
-                    $output['preferences'][$node->attributes->getNamedItem('for')->nodeValue] = $node->attributes
-                        ->getNamedItem('type')
-                        ->nodeValue;
+                    $output['preferences'][$node->attributes->getNamedItem(
+                        'for'
+                    )->nodeValue] = $node->attributes->getNamedItem(
+                        'type'
+                    )->nodeValue;
                     break;
                 case 'type':
                 case 'virtualType':
@@ -112,11 +114,12 @@ class Dom implements \Magento\Config\ConverterInterface
                                 $pluginSortOrderNode = $pluginAttributes->getNamedItem('sortOrder');
                                 $pluginTypeNode = $pluginAttributes->getNamedItem('type');
                                 $pluginData = array(
-                                    'sortOrder' => ($pluginSortOrderNode) ? (int)$pluginSortOrderNode->nodeValue : 0,
+                                    'sortOrder' => $pluginSortOrderNode ? (int)$pluginSortOrderNode->nodeValue : 0
                                 );
                                 if ($pluginDisabledNode) {
-                                    $pluginData['disabled']
-                                        = $this->booleanUtils->toBoolean($pluginDisabledNode->nodeValue);
+                                    $pluginData['disabled'] = $this->booleanUtils->toBoolean(
+                                        $pluginDisabledNode->nodeValue
+                                    );
                                 }
                                 if ($pluginTypeNode) {
                                     $pluginData['instance'] = $pluginTypeNode->nodeValue;

@@ -76,15 +76,7 @@ class Translate extends \Magento\Core\Model\Config\Value
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_cacheTypeList = $cacheTypeList;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**

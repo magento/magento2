@@ -115,9 +115,10 @@ class Placeholder
     {
         if (is_string($value) && preg_match('/{{(.*)}}.*/', $value, $matches)) {
             $placeholder = $matches[1];
-            if ($placeholder == 'unsecure_base_url'
-                || $placeholder == 'secure_base_url'
-                || strpos($value, \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER) !== false
+            if ($placeholder == 'unsecure_base_url' || $placeholder == 'secure_base_url' || strpos(
+                $value,
+                \Magento\Core\Model\Store::BASE_URL_PLACEHOLDER
+            ) !== false
             ) {
                 return $placeholder;
             }
@@ -156,12 +157,12 @@ class Placeholder
     protected function _setValue(array &$container, $path, $value)
     {
         $segments = explode('/', $path);
-        $currentPointer = &$container;
+        $currentPointer =& $container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {
                 $currentPointer[$segment] = array();
             }
-            $currentPointer = &$currentPointer[$segment];
+            $currentPointer =& $currentPointer[$segment];
         }
         $currentPointer = $value;
     }

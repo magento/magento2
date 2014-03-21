@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Framework\Data;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -36,23 +35,23 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     protected function createModule($name, $dependencies = array())
     {
         $objectManagerHelper = new ObjectManager($this);
-        return $objectManagerHelper->getObject('Magento\Tools\Dependency\Report\Framework\Data\Module', [
-            'name' => $name,
-            'dependencies' => $dependencies,
-        ]);
+        return $objectManagerHelper->getObject(
+            'Magento\Tools\Dependency\Report\Framework\Data\Module',
+            array('name' => $name, 'dependencies' => $dependencies)
+        );
     }
 
     public function testGetName()
     {
         $name = 'name';
-        $module = $this->createModule($name, []);
+        $module = $this->createModule($name, array());
 
         $this->assertEquals($name, $module->getName());
     }
 
     public function testGetDependencies()
     {
-        $dependencies = ['foo', 'baz', 'bar'];
+        $dependencies = array('foo', 'baz', 'bar');
         $module = $this->createModule('name', $dependencies);
 
         $this->assertEquals($dependencies, $module->getDependencies());
@@ -60,7 +59,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDependenciesCount()
     {
-        $module = $this->createModule('name', ['foo', 'baz', 'bar']);
+        $module = $this->createModule('name', array('foo', 'baz', 'bar'));
 
         $this->assertEquals(3, $module->getDependenciesCount());
     }

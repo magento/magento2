@@ -55,11 +55,14 @@ class QuoteImporter
             throw new \Exception('Quote totals must be collected before this operation.');
         }
 
-        $result = [];
+        $result = array();
         foreach ($quote->getAllVisibleItems() as $item) {
             $product = $item->getProduct();
-            if (is_object($product) && ($product->getIsRecurring())
-                && $payment = $this->_paymentFactory->create()->importProduct($product)
+            if (is_object(
+                $product
+            ) && $product->getIsRecurring() && ($payment = $this->_paymentFactory->create()->importProduct(
+                $product
+            ))
             ) {
                 $payment->importQuote($quote);
                 $payment->importQuoteItem($item);

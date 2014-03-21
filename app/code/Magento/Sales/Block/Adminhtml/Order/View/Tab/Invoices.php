@@ -32,9 +32,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Invoices
-    extends \Magento\Backend\Block\Widget\Grid\Extended
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Invoices extends \Magento\Backend\Block\Widget\Grid\Extended implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
@@ -108,20 +107,33 @@ class Invoices
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create($this->_getCollectionClass())
-            ->addFieldToSelect('entity_id')
-            ->addFieldToSelect('created_at')
-            ->addFieldToSelect('order_id')
-            ->addFieldToSelect('increment_id')
-            ->addFieldToSelect('state')
-            ->addFieldToSelect('grand_total')
-            ->addFieldToSelect('base_grand_total')
-            ->addFieldToSelect('store_currency_code')
-            ->addFieldToSelect('base_currency_code')
-            ->addFieldToSelect('order_currency_code')
-            ->addFieldToSelect('billing_name')
-            ->setOrderFilter($this->getOrder())
-        ;
+        $collection = $this->_collectionFactory->create(
+            $this->_getCollectionClass()
+        )->addFieldToSelect(
+            'entity_id'
+        )->addFieldToSelect(
+            'created_at'
+        )->addFieldToSelect(
+            'order_id'
+        )->addFieldToSelect(
+            'increment_id'
+        )->addFieldToSelect(
+            'state'
+        )->addFieldToSelect(
+            'grand_total'
+        )->addFieldToSelect(
+            'base_grand_total'
+        )->addFieldToSelect(
+            'store_currency_code'
+        )->addFieldToSelect(
+            'base_currency_code'
+        )->addFieldToSelect(
+            'order_currency_code'
+        )->addFieldToSelect(
+            'billing_name'
+        )->setOrderFilter(
+            $this->getOrder()
+        );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -133,45 +145,60 @@ class Invoices
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', array(
-            'header'    => __('Invoice'),
-            'index'     => 'increment_id',
-            'header_css_class'  => 'col-invoice-number',
-            'column_css_class'  => 'col-invoice-number'
-        ));
+        $this->addColumn(
+            'increment_id',
+            array(
+                'header' => __('Invoice'),
+                'index' => 'increment_id',
+                'header_css_class' => 'col-invoice-number',
+                'column_css_class' => 'col-invoice-number'
+            )
+        );
 
-        $this->addColumn('billing_name', array(
-            'header' => __('Bill-to Name'),
-            'index' => 'billing_name',
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'billing_name',
+            array(
+                'header' => __('Bill-to Name'),
+                'index' => 'billing_name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header'    => __('Invoice Date'),
-            'index'     => 'created_at',
-            'type'      => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Invoice Date'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('state', array(
-            'header'    => __('Status'),
-            'index'     => 'state',
-            'type'      => 'options',
-            'options'   => $this->_orderInvoice->getStates(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'state',
+            array(
+                'header' => __('Status'),
+                'index' => 'state',
+                'type' => 'options',
+                'options' => $this->_orderInvoice->getStates(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
-        $this->addColumn('base_grand_total', array(
-            'header'    => __('Amount'),
-            'index'     => 'base_grand_total',
-            'type'      => 'currency',
-            'currency'  => 'base_currency_code',
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
-        ));
+        $this->addColumn(
+            'base_grand_total',
+            array(
+                'header' => __('Amount'),
+                'index' => 'base_grand_total',
+                'type' => 'currency',
+                'currency' => 'base_currency_code',
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -194,11 +221,9 @@ class Invoices
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('sales/order_invoice/view',
-            array(
-                'invoice_id'=> $row->getId(),
-                'order_id'  => $row->getOrderId()
-            )
+        return $this->getUrl(
+            'sales/order_invoice/view',
+            array('invoice_id' => $row->getId(), 'order_id' => $row->getOrderId())
         );
     }
 
@@ -211,7 +236,6 @@ class Invoices
     {
         return $this->getUrl('sales/*/invoices', array('_current' => true));
     }
-
 
     /**
      * ######################## TAB settings #################################

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
 class Observer
@@ -94,9 +93,9 @@ class Observer
 
         $route = $this->_backendData->getAreaFrontName();
 
-        $this->_app->getResponse()
-            ->setRedirect($this->_storeManager->getStore()->getBaseUrl() . $route)
-            ->sendResponse();
+        $this->_app->getResponse()->setRedirect(
+            $this->_storeManager->getStore()->getBaseUrl() . $route
+        )->sendResponse();
         exit(0);
     }
 }

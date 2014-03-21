@@ -80,7 +80,7 @@ class Crypt
                 $abc = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 $initVector = '';
                 for ($i = 0; $i < $initVectorSize; $i++) {
-                    $initVector .= $abc{rand(0, strlen($abc) - 1)};
+                    $initVector .= $abc[rand(0, strlen($abc) - 1)];
                 }
             } else if (false === $initVector) {
                 /* Set vector to zero bytes to not use it */

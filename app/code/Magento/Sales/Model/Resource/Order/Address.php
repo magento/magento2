@@ -35,7 +35,7 @@ class Address extends AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_address_resource';
+    protected $_eventPrefix = 'sales_order_address_resource';
 
     /**
      * @var \Magento\Sales\Model\Resource\Factory
@@ -78,16 +78,16 @@ class Address extends AbstractOrder
     public function getAllAttributes()
     {
         $attributes = array(
-            'city'       => __('City'),
-            'company'    => __('Company'),
+            'city' => __('City'),
+            'company' => __('Company'),
             'country_id' => __('Country'),
-            'email'      => __('Email'),
-            'firstname'  => __('First Name'),
-            'lastname'   => __('Last Name'),
-            'region_id'  => __('State/Province'),
-            'street'     => __('Street Address'),
-            'telephone'  => __('Telephone'),
-            'postcode'   => __('Zip/Postal Code')
+            'email' => __('Email'),
+            'firstname' => __('First Name'),
+            'lastname' => __('Last Name'),
+            'region_id' => __('State/Province'),
+            'street' => __('Street Address'),
+            'telephone' => __('Telephone'),
+            'postcode' => __('Zip/Postal Code')
         );
         asort($attributes);
         return $attributes;
@@ -112,7 +112,9 @@ class Address extends AbstractOrder
 
             // update grid table after grid update
             foreach ($gridList as $gridResource => $field) {
-                $this->_salesResourceFactory->create($gridResource)->updateOnRelatedRecordChanged(
+                $this->_salesResourceFactory->create(
+                    $gridResource
+                )->updateOnRelatedRecordChanged(
                     $field,
                     $object->getParentId()
                 );

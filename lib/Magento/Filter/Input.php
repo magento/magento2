@@ -228,7 +228,7 @@ class Input implements \Zend_Filter_Interface
     protected function _filter(array $data, &$filters = null, $isFilterListSimple = false)
     {
         if (null === $filters) {
-            $filters = &$this->_filters;
+            $filters =& $this->_filters;
         }
         foreach ($data as $key => $value) {
             if (!$isFilterListSimple && !empty($filters[$key])) {
@@ -265,8 +265,11 @@ class Input implements \Zend_Filter_Interface
      * @return mixed
      * @throws \Exception
      */
-    protected function _applyFiltrationWithHelper($value, \Magento\App\Helper\AbstractHelper $helper, array $filterData)
-    {
+    protected function _applyFiltrationWithHelper(
+        $value,
+        \Magento\App\Helper\AbstractHelper $helper,
+        array $filterData
+    ) {
         if (!isset($filterData['method']) || empty($filterData['method'])) {
             throw new \Exception("Helper filtration method is not set");
         }
@@ -293,7 +296,7 @@ class Input implements \Zend_Filter_Interface
             $helper = $filterData['helper'];
             if (is_string($helper)) {
                 $helper = $this->_objectManager->get($helper);
-            } elseif (!($helper instanceof \Magento\App\Helper\AbstractHelper)) {
+            } elseif (!$helper instanceof \Magento\App\Helper\AbstractHelper) {
                 throw new \Exception("Filter '{$helper}' not found");
             }
         }
@@ -339,7 +342,7 @@ class Input implements \Zend_Filter_Interface
         if (is_string($filter)) {
             $filter = $this->_objectManager->create($filter, $filterData['args']);
         }
-        if (!($filter instanceof \Zend_Filter_Interface)) {
+        if (!$filter instanceof \Zend_Filter_Interface) {
             throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
         }
         return $filter;

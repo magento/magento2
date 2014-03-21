@@ -90,34 +90,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected function _getDefaultFrontendClasses()
     {
         return array(
-            array(
-                'value' => '',
-                'label' => __('None')
-            ),
-            array(
-                'value' => 'validate-number',
-                'label' => __('Decimal Number')
-            ),
-            array(
-                'value' => 'validate-digits',
-                'label' => __('Integer Number')
-            ),
-            array(
-                'value' => 'validate-email',
-                'label' => __('Email')
-            ),
-            array(
-                'value' => 'validate-url',
-                'label' => __('URL')
-            ),
-            array(
-                'value' => 'validate-alpha',
-                'label' => __('Letters')
-            ),
-            array(
-                'value' => 'validate-alphanum',
-                'label' => __('Letters (a-z, A-Z) or Numbers (0-9)')
-            )
+            array('value' => '', 'label' => __('None')),
+            array('value' => 'validate-number', 'label' => __('Decimal Number')),
+            array('value' => 'validate-digits', 'label' => __('Integer Number')),
+            array('value' => 'validate-email', 'label' => __('Email')),
+            array('value' => 'validate-url', 'label' => __('URL')),
+            array('value' => 'validate-alpha', 'label' => __('Letters')),
+            array('value' => 'validate-alphanum', 'label' => __('Letters (a-z, A-Z) or Numbers (0-9)'))
         );
     }
 
@@ -132,10 +111,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $_defaultClasses = $this->_getDefaultFrontendClasses();
 
         if (isset($this->_entityTypeFrontendClasses[$entityTypeCode])) {
-            return array_merge(
-                $_defaultClasses,
-                $this->_entityTypeFrontendClasses[$entityTypeCode]
-            );
+            return array_merge($_defaultClasses, $this->_entityTypeFrontendClasses[$entityTypeCode]);
         }
 
         return $_defaultClasses;
@@ -187,10 +163,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getAttributeMetadata($entityTypeCode, $attributeCode)
     {
         $attribute = $this->_eavConfig->getAttribute($entityTypeCode, $attributeCode);
-        return [
+        return array(
             'entity_type_id' => $attribute->getEntityTypeId(),
             'attribute_id' => $attribute->getAttributeId(),
-            'attribute_table' => $attribute->getBackend()->getTable(),
-        ];
+            'attribute_table' => $attribute->getBackend()->getTable()
+        );
     }
 }

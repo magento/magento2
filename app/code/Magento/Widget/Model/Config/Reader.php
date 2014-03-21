@@ -35,7 +35,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/widgets/widget/parameters/parameter' => 'name',
         '/widgets/widget/parameters/parameter/options/option' => 'name',
         '/widgets/widget/containers/container' => 'name',
-        '/widgets/widget/containers/container/template' => 'name',
+        '/widgets/widget/containers/container/template' => 'name'
     );
 
     /**

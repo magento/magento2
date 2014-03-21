@@ -34,11 +34,11 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * Test dependencies between handle attributes that is out of coverage by XSD
-         *
-         * @param string $layoutFile
-         */
+            /**
+             * Test dependencies between handle attributes that is out of coverage by XSD
+             *
+             * @param string $layoutFile
+             */
             function ($layoutFile) {
                 $issues = array();
                 $node = simplexml_load_file($layoutFile);
@@ -79,8 +79,12 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
                 }
                 if ($issues) {
                     $this->fail(
-                        'The following containers declare attribute "htmlId" and/or "htmlClass", but not "htmlTag":'
-                            . "\n" . implode("\n", $issues) . "\n"
+                        'The following containers declare attribute "htmlId" and/or "htmlClass", but not "htmlTag":' .
+                        "\n" .
+                        implode(
+                            "\n",
+                            $issues
+                        ) . "\n"
                     );
                 }
             },

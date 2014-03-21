@@ -25,7 +25,6 @@ namespace Magento\OfflinePayments\Block\Info;
 
 class Checkmo extends \Magento\Payment\Block\Info
 {
-
     /**
      * @var string
      */
@@ -76,8 +75,8 @@ class Checkmo extends \Magento\Payment\Block\Info
     {
         $details = @unserialize($this->getInfo()->getAdditionalData());
         if (is_array($details)) {
-            $this->_payableTo = isset($details['payable_to']) ? (string) $details['payable_to'] : '';
-            $this->_mailingAddress = isset($details['mailing_address']) ? (string) $details['mailing_address'] : '';
+            $this->_payableTo = isset($details['payable_to']) ? (string)$details['payable_to'] : '';
+            $this->_mailingAddress = isset($details['mailing_address']) ? (string)$details['mailing_address'] : '';
         } else {
             $this->_payableTo = '';
             $this->_mailingAddress = '';
@@ -93,5 +92,4 @@ class Checkmo extends \Magento\Payment\Block\Info
         $this->setTemplate('Magento_OfflinePayments::info/pdf/checkmo.phtml');
         return $this->toHtml();
     }
-
 }

@@ -53,7 +53,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Status\NewStatus\Form
         $form->getElement('base_fieldset')->removeField('is_new');
         $form->getElement('base_fieldset')->removeField('status');
         $form->setAction(
-            $this->getUrl('sales/order_status/save', array('status'=>$this->getRequest()->getParam('status')))
+            $this->getUrl('sales/order_status/save', array('status' => $this->getRequest()->getParam('status')))
         );
         return $this;
     }

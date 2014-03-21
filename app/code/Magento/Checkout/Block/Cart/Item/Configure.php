@@ -35,7 +35,6 @@ namespace Magento\Checkout\Block\Cart\Item;
  */
 class Configure extends \Magento\View\Element\Template
 {
-
     /**
      * Configure product view blocks
      *
@@ -46,10 +45,12 @@ class Configure extends \Magento\View\Element\Template
         // Set custom submit url route for form - to submit updated options to cart
         $block = $this->getLayout()->getBlock('product.info');
         if ($block) {
-             $block->setSubmitRouteData(array(
-                'route' => 'checkout/cart/updateItemOptions',
-                'params' => array('id' => $this->getRequest()->getParam('id'))
-             ));
+            $block->setSubmitRouteData(
+                array(
+                    'route' => 'checkout/cart/updateItemOptions',
+                    'params' => array('id' => $this->getRequest()->getParam('id'))
+                )
+            );
         }
 
         return parent::_prepareLayout();

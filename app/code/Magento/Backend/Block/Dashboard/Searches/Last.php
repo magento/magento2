@@ -108,26 +108,25 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('search_query', array(
-            'header'    => __('Search Term'),
-            'sortable'  => false,
-            'index'     => 'query_text',
-            'renderer'  => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery',
-        ));
+        $this->addColumn(
+            'search_query',
+            array(
+                'header' => __('Search Term'),
+                'sortable' => false,
+                'index' => 'query_text',
+                'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
+            )
+        );
 
-        $this->addColumn('num_results', array(
-            'header'    => __('Results'),
-            'sortable'  => false,
-            'index'     => 'num_results',
-            'type'      => 'number'
-        ));
+        $this->addColumn(
+            'num_results',
+            array('header' => __('Results'), 'sortable' => false, 'index' => 'num_results', 'type' => 'number')
+        );
 
-        $this->addColumn('popularity', array(
-            'header'    => __('Uses'),
-            'sortable'  => false,
-            'index'     => 'popularity',
-            'type'      => 'number'
-        ));
+        $this->addColumn(
+            'popularity',
+            array('header' => __('Uses'), 'sortable' => false, 'index' => 'popularity', 'type' => 'number')
+        );
 
         $this->setFilterVisibility(false);
         $this->setPagerVisibility(false);
@@ -140,6 +139,6 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/search/edit', array('id'=>$row->getId()));
+        return $this->getUrl('catalog/search/edit', array('id' => $row->getId()));
     }
 }

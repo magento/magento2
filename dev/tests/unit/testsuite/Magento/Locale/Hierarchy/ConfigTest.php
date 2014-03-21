@@ -52,18 +52,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_configReaderMock = $this->getMock(
-            '\Magento\Config\ReaderInterface', array(), array(), '', false
-        );
+        $this->_configReaderMock = $this->getMock('\Magento\Config\ReaderInterface', array(), array(), '', false);
         $this->_cacheMock = $this->getMock('Magento\Config\CacheInterface');
         $this->_cacheId = 'customCacheId';
 
         $this->_testData = array('key' => 'value');
 
-        $this->_cacheMock->expects($this->once())
-            ->method('load')
-            ->with($this->_cacheId)
-            ->will($this->returnValue(serialize($this->_testData)));
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            $this->_cacheId
+        )->will(
+            $this->returnValue(serialize($this->_testData))
+        );
 
         $this->_model = new \Magento\Locale\Hierarchy\Config(
             $this->_configReaderMock,

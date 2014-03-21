@@ -73,8 +73,8 @@ class Status extends \Magento\View\Element\Template
     protected function _construct()
     {
         /*
-        * setting cache to save the rss for 10 minutes
-        */
+         * setting cache to save the rss for 10 minutes
+         */
         $this->setCacheKey('rss_order_status_' . $this->getRequest()->getParam('data'));
         $this->setCacheLifetime(600);
     }
@@ -92,12 +92,9 @@ class Status extends \Magento\View\Element\Template
         }
         $title = __('Order # %1 Notification(s)', $order->getIncrementId());
         $newUrl = $this->_urlBuilder->getUrl('sales/order/view', array('order_id' => $order->getId()));
-        $rssObj->_addHeader(array(
-            'title'       => $title,
-            'description' => $title,
-            'link'        => $newUrl,
-            'charset'     => 'UTF-8',
-        ));
+        $rssObj->_addHeader(
+            array('title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8')
+        );
         /** @var $resourceModel \Magento\Rss\Model\Resource\Order */
         $resourceModel = $this->_orderFactory->create();
         $results = $resourceModel->getAllCommentCollection($order->getId());
@@ -108,31 +105,29 @@ class Status extends \Magento\View\Element\Template
                 if ($type && $type != 'order') {
                     $urlAppend = $type;
                 }
-                $type  = __(ucwords($type));
+                $type = __(ucwords($type));
                 $title = __('Details for %1 #%2', $type, $result['increment_id']);
-                $description = '<p>'
-                    . __('Notified Date: %1<br/>', $this->formatDate($result['created_at']))
-                    . __('Comment: %1<br/>', $result['comment'])
-                    . '</p>';
+                $description = '<p>' . __(
+                    'Notified Date: %1<br/>',
+                    $this->formatDate($result['created_at'])
+                ) . __(
+                    'Comment: %1<br/>',
+                    $result['comment']
+                ) . '</p>';
                 $url = $this->_urlBuilder->getUrl('sales/order/' . $urlAppend, array('order_id' => $order->getId()));
-                $rssObj->_addEntry(array(
-                    'title'         => $title,
-                    'link'          => $url,
-                    'description'   => $description,
-                ));
+                $rssObj->_addEntry(array('title' => $title, 'link' => $url, 'description' => $description));
             }
         }
         $title = __('Order #%1 created at %2', $order->getIncrementId(), $this->formatDate($order->getCreatedAt()));
         $url = $this->_urlBuilder->getUrl('sales/order/view', array('order_id' => $order->getId()));
-        $description = '<p>'
-            . __('Current Status: %1<br/>', $order->getStatusLabel())
-            . __('Total: %1<br/>', $order->formatPrice($order->getGrandTotal()))
-            . '</p>';
-        $rssObj->_addEntry(array(
-            'title'         => $title,
-            'link'          => $url,
-            'description'   => $description,
-        ));
+        $description = '<p>' . __(
+            'Current Status: %1<br/>',
+            $order->getStatusLabel()
+        ) . __(
+            'Total: %1<br/>',
+            $order->formatPrice($order->getGrandTotal())
+        ) . '</p>';
+        $rssObj->_addEntry(array('title' => $title, 'link' => $url, 'description' => $description));
         return $rssObj->createRssXml();
     }
 }

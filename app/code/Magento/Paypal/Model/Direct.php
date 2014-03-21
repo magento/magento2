@@ -35,7 +35,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * @var string
      */
-    protected $_code  = \Magento\Paypal\Model\Config::METHOD_WPP_DIRECT;
+    protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_DIRECT;
 
     /**
      * @var string
@@ -47,35 +47,35 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @var bool
      */
-    protected $_isGateway               = true;
+    protected $_isGateway = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canAuthorize            = true;
+    protected $_canAuthorize = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canCapture              = true;
+    protected $_canCapture = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canCapturePartial       = true;
+    protected $_canCapturePartial = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canRefund               = true;
+    protected $_canRefund = true;
 
     /**
      * Availability option
@@ -89,21 +89,21 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @var bool
      */
-    protected $_canVoid                 = true;
+    protected $_canVoid = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canUseInternal          = true;
+    protected $_canUseInternal = true;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canUseCheckout          = true;
+    protected $_canUseCheckout = true;
 
     /**
      * Availability option
@@ -122,7 +122,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      *
      * @var bool
      */
-    protected $_canReviewPayment        = true;
+    protected $_canReviewPayment = true;
 
     /**
      * Website Payments Pro instance
@@ -215,7 +215,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         $this->_cartFactory = $cartFactory;
 
         $proInstance = array_shift($data);
-        if ($proInstance && ($proInstance instanceof \Magento\Paypal\Model\Pro)) {
+        if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
             $this->_pro = $proInstance;
         } else {
             $this->_pro = $this->_proTypeFactory->create($this->_proType);
@@ -304,13 +304,12 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     public function getConfigData($field, $storeId = null)
     {
         $value = null;
-        switch ($field)
-        {
+        switch ($field) {
             case 'cctypes':
                 $value = $this->getAllowedCcTypes();
                 break;
             default:
-                $value = $this->_pro->getConfig()->$field;
+                $value = $this->_pro->getConfig()->{$field};
         }
         return $value;
     }
@@ -451,27 +450,35 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     protected function _placeOrder(Payment $payment, $amount)
     {
         $order = $payment->getOrder();
-        $api = $this->_pro->getApi()
-            ->setPaymentAction($this->_pro->getConfig()->paymentAction)
-            ->setIpAddress($this->_requestHttp->getClientIp(false))
-            ->setAmount($amount)
-            ->setCurrencyCode($order->getBaseCurrencyCode())
-            ->setInvNum($order->getIncrementId())
-            ->setEmail($order->getCustomerEmail())
-            ->setNotifyUrl($this->_urlBuilder->getUrl('paypal/ipn/'))
-            ->setCreditCardType($payment->getCcType())
-            ->setCreditCardNumber($payment->getCcNumber())
-            ->setCreditCardExpirationDate(
-                $this->_getFormattedCcExpirationDate($payment->getCcExpMonth(), $payment->getCcExpYear())
-            )
-            ->setCreditCardCvv2($payment->getCcCid())
-            ->setMaestroSoloIssueNumber($payment->getCcSsIssue());
+        $api = $this->_pro->getApi()->setPaymentAction(
+            $this->_pro->getConfig()->paymentAction
+        )->setIpAddress(
+            $this->_requestHttp->getClientIp(false)
+        )->setAmount(
+            $amount
+        )->setCurrencyCode(
+            $order->getBaseCurrencyCode()
+        )->setInvNum(
+            $order->getIncrementId()
+        )->setEmail(
+            $order->getCustomerEmail()
+        )->setNotifyUrl(
+            $this->_urlBuilder->getUrl('paypal/ipn/')
+        )->setCreditCardType(
+            $payment->getCcType()
+        )->setCreditCardNumber(
+            $payment->getCcNumber()
+        )->setCreditCardExpirationDate(
+            $this->_getFormattedCcExpirationDate($payment->getCcExpMonth(), $payment->getCcExpYear())
+        )->setCreditCardCvv2(
+            $payment->getCcCid()
+        )->setMaestroSoloIssueNumber(
+            $payment->getCcSsIssue()
+        );
 
         if ($payment->getCcSsStartMonth() && $payment->getCcSsStartYear()) {
             $year = sprintf('%02d', substr($payment->getCcSsStartYear(), -2, 2));
-            $api->setMaestroSoloIssueDate(
-                $this->_getFormattedCcExpirationDate($payment->getCcSsStartMonth(), $year)
-            );
+            $api->setMaestroSoloIssueDate($this->_getFormattedCcExpirationDate($payment->getCcSsStartMonth(), $year));
         }
         if ($this->getIsCentinelValidationEnabled()) {
             $this->getCentinelValidator()->exportCmpiData($api);
@@ -488,8 +495,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         // add line items
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
 
-        $api->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled);
+        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled);
 
         // call api and import transaction and other payment information
         $api->callDoDirectPayment();
@@ -539,8 +545,8 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      */
     public function canVoid(\Magento\Object $payment)
     {
-        if ($payment instanceof \Magento\Sales\Model\Order\Invoice
-            || $payment instanceof \Magento\Sales\Model\Order\Creditmemo
+        if ($payment instanceof \Magento\Sales\Model\Order\Invoice ||
+            $payment instanceof \Magento\Sales\Model\Order\Creditmemo
         ) {
             return false;
         }

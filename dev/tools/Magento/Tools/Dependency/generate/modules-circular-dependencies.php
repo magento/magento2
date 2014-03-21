@@ -23,32 +23,26 @@
  */
 
 require_once __DIR__ . '/bootstrap.php';
-
 use Magento\TestFramework\Utility\Files;
 use Magento\Tools\Dependency\ServiceLocator;
 
 try {
-    $console = new \Zend_Console_Getopt([
-        'directory|d=s' => 'Path to base directory for parsing',
-    ]);
+    $console = new \Zend_Console_Getopt(array('directory|d=s' => 'Path to base directory for parsing'));
     $console->parse();
 
     $directory = $console->getOption('directory') ?: BP;
 
     Files::setInstance(new \Magento\TestFramework\Utility\Files($directory));
-    $filesForParse = Files::init()->getConfigFiles('module.xml', [], false);
+    $filesForParse = Files::init()->getConfigFiles('module.xml', array(), false);
 
-    ServiceLocator::getCircularDependenciesReportBuilder()->build([
-        'parse' => [
-            'files_for_parse' => $filesForParse,
-        ],
-        'write' => [
-            'report_filename' => 'modules-circular-dependencies.csv',
-        ],
-    ]);
+    ServiceLocator::getCircularDependenciesReportBuilder()->build(
+        array(
+            'parse' => array('files_for_parse' => $filesForParse),
+            'write' => array('report_filename' => 'modules-circular-dependencies.csv')
+        )
+    );
 
     fwrite(STDOUT, PHP_EOL . 'Report successfully processed.' . PHP_EOL);
-
 } catch (\Zend_Console_Getopt_Exception $e) {
     fwrite(STDERR, $e->getUsageMessage() . PHP_EOL);
     exit(1);

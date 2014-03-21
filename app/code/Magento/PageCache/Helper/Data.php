@@ -38,23 +38,28 @@ namespace Magento\PageCache\Helper;
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
-     * Constructor
-     *
-     * @param \Magento\Theme\Model\Layout\Config $config
-     * @param \Magento\App\View                  $view
-     */
-    public function __construct(
-        \Magento\Theme\Model\Layout\Config $config,
-        \Magento\App\View $view
-    ) {
-        $this->view = $view;
-        $this->config = $config;
-    }
-
-    /**
      * Private caching time one year
      */
     const PRIVATE_MAX_AGE_CACHE = 31536000;
+
+    /**
+     * @var \Magento\App\View
+     */
+    protected $view;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\App\View $view
+     */
+    public function __construct(
+        \Magento\App\Helper\Context $context,
+        \Magento\App\View $view
+    ) {
+        parent::__construct($context);
+        $this->view = $view;
+    }
 
     /**
      * Retrieve url
@@ -75,11 +80,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getActualHandles()
     {
-        $handlesPage = $this->view->getLayout()->getUpdate()->getHandles();
-        $handlesConfig = $this->config->getPageLayoutHandles();
-        $appliedHandles = array_intersect($handlesPage, $handlesConfig);
-        $resultHandles = array_merge(['default'], array_values($appliedHandles));
-
-        return $resultHandles;
+        return $this->view->getLayout()->getUpdate()->getHandles();
     }
 }

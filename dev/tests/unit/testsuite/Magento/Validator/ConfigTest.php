@@ -67,8 +67,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
         $argInterpreter = $this->getMock('\Magento\Data\Argument\InterpreterInterface', array(), array(), '', false);
 
-        $argObjectFactory =
-            $this->getMock('\Magento\ObjectManager\Config\Argument\ObjectFactory', array(), array(), '', false);
+        $argObjectFactory = $this->getMock(
+            '\Magento\ObjectManager\Config\Argument\ObjectFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $config = new \Magento\ObjectManager\Config\Config(new \Magento\ObjectManager\Relations\Runtime());
         $factory = new \Magento\ObjectManager\Factory\Factory($config, $argInterpreter, $argObjectFactory, null);
@@ -77,19 +82,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $constraintFactory = new \Magento\Validator\ConstraintFactory($realObjectManager);
         $validatorFactory = new \Magento\ValidatorFactory($realObjectManager);
         $universalFactory = new \Magento\Validator\UniversalFactory($realObjectManager);
-        $argObjectFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValueMap(array(
-                array('Magento\Validator\ConstraintFactory', null, $constraintFactory),
-                array('Magento\ValidatorFactory', null, $validatorFactory),
-                array('Magento\Validator\UniversalFactory', null, $universalFactory),
-            )));
+        $argObjectFactory->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('Magento\Validator\ConstraintFactory', null, $constraintFactory),
+                    array('Magento\ValidatorFactory', null, $validatorFactory),
+                    array('Magento\Validator\UniversalFactory', null, $universalFactory)
+                )
+            )
+        );
         $this->_config = $this->_objectManager->getObject(
             'Magento\Validator\Config',
-            array(
-                'configFiles' => $configFiles,
-                'builderFactory' => $universalFactory,
-            )
+            array('configFiles' => $configFiles, 'builderFactory' => $universalFactory)
         );
     }
 
@@ -183,51 +191,35 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         // Case 1. Pass check alnum and int properties are not empty and have valid value
         $entityName = 'test_entity_a';
         $groupName = 'check_alnum_and_int_not_empty_and_have_valid_value';
-        $value = new \Magento\Object(array(
-            'int' => 1,
-            'alnum' => 'abc123'
-        ));
+        $value = new \Magento\Object(array('int' => 1, 'alnum' => 'abc123'));
         $expectedResult = true;
         $expectedMessages = array();
         $result[] = array($entityName, $groupName, $value, $expectedResult, $expectedMessages);
 
         // Case 2. Fail check alnum is not empty
-        $value = new \Magento\Object(array(
-            'int' => 'abc123',
-            'alnum' => null
-        ));
+        $value = new \Magento\Object(array('int' => 'abc123', 'alnum' => null));
         $expectedResult = false;
         $expectedMessages = array(
             'alnum' => array(
                 'isEmpty' => 'Value is required and can\'t be empty',
-                'alnumInvalid' => 'Invalid type given. String, integer or float expected',
+                'alnumInvalid' => 'Invalid type given. String, integer or float expected'
             ),
-            'int' => array(
-                'notInt' => '\'abc123\' does not appear to be an integer',
-            ),
+            'int' => array('notInt' => '\'abc123\' does not appear to be an integer')
         );
         $result[] = array($entityName, $groupName, $value, $expectedResult, $expectedMessages);
 
         // Case 3. Pass check alnum has valid value
         $groupName = 'check_alnum';
-        $value = new \Magento\Object(array(
-            'int' => 'abc123',
-            'alnum' => 'abc123'
-        ));
+        $value = new \Magento\Object(array('int' => 'abc123', 'alnum' => 'abc123'));
         $expectedResult = true;
         $expectedMessages = array();
         $result[] = array($entityName, $groupName, $value, $expectedResult, $expectedMessages);
 
         // Case 4. Fail check alnum has valid value
-        $value = new \Magento\Object(array(
-            'int' => 'abc123',
-            'alnum' => '[abc123]'
-        ));
+        $value = new \Magento\Object(array('int' => 'abc123', 'alnum' => '[abc123]'));
         $expectedResult = false;
         $expectedMessages = array(
-            'alnum' => array(
-                'notAlnum' => '\'[abc123]\' contains characters which are non alphabetic and no digits'
-            )
+            'alnum' => array('notAlnum' => '\'[abc123]\' contains characters which are non alphabetic and no digits')
         );
         $result[] = array($entityName, $groupName, $value, $expectedResult, $expectedMessages);
 
@@ -239,9 +231,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuilderConfiguration()
     {
-        $this->getMockBuilder('Magento\Validator\Builder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->getMockBuilder('Magento\Validator\Builder')->disableOriginalConstructor()->getMock();
 
         $this->_initConfig(array(__DIR__ . '/_files/validation/positive/builder/validation.xml'));
         $builder = $this->_config->createValidatorBuilder('test_entity_a', 'check_builder');
@@ -261,41 +251,39 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'options' => array(
                     'arguments' => array(
                         new \Magento\Validator\Constraint\Option('test_string_argument'),
-                        new \Magento\Validator\Constraint\Option(array(
-                            'option1' => 'value1',
-                            'option2' => 'value2'
-                        )),
-                        new \Magento\Validator\Constraint\Option\Callback(array(
-                            'Magento\Validator\Test\Callback',
-                            'getId'
-                        ), null, true)
+                        new \Magento\Validator\Constraint\Option(array('option1' => 'value1', 'option2' => 'value2')),
+                        new \Magento\Validator\Constraint\Option\Callback(
+                            array('Magento\Validator\Test\Callback', 'getId'),
+                            null,
+                            true
+                        )
                     ),
                     'callback' => array(
-                        new \Magento\Validator\Constraint\Option\Callback(array(
-                            'Magento\Validator\Test\Callback',
-                            'configureValidator'
-                        ), null, true)
+                        new \Magento\Validator\Constraint\Option\Callback(
+                            array('Magento\Validator\Test\Callback', 'configureValidator'),
+                            null,
+                            true
+                        )
                     ),
                     'methods' => array(
                         'setOptionThree' => array(
                             'method' => 'setOptionThree',
                             'arguments' => array(
                                 new \Magento\Validator\Constraint\Option(array('argOption' => 'argOptionValue')),
-                                new \Magento\Validator\Constraint\Option\Callback(array(
-                                    'Magento\Validator\Test\Callback',
-                                    'getId'
-                                ), null, true),
+                                new \Magento\Validator\Constraint\Option\Callback(
+                                    array('Magento\Validator\Test\Callback', 'getId'),
+                                    null,
+                                    true
+                                ),
                                 new \Magento\Validator\Constraint\Option('10')
                             )
                         ),
-                        'enableOptionFour' => array(
-                            'method' => 'enableOptionFour',
-                        )
+                        'enableOptionFour' => array('method' => 'enableOptionFour')
                     )
                 ),
                 'property' => 'int',
                 'type' => 'property'
-            ),
+            )
         );
         $this->assertAttributeEquals($expected, '_constraints', $builder);
     }
@@ -334,7 +322,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             array(__DIR__ . '/_files/validation/negative/invalid_entity_callback.xml'),
             array(__DIR__ . '/_files/validation/negative/invalid_child_for_option.xml'),
             array(__DIR__ . '/_files/validation/negative/invalid_content_for_callback.xml'),
-            array(__DIR__ . '/_files/validation/negative/multiple_callback_in_argument.xml'),
+            array(__DIR__ . '/_files/validation/negative/multiple_callback_in_argument.xml')
         );
     }
 

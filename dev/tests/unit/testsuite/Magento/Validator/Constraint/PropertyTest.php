@@ -75,19 +75,33 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
      * @param array $validatorMessages
      * @param array $expectedMessages
      */
-    public function testIsValid($value, $validateValue, $expectedResult, $validatorMessages = array(),
+    public function testIsValid(
+        $value,
+        $validateValue,
+        $expectedResult,
+        $validatorMessages = array(),
         $expectedMessages = array()
     ) {
-        $this->_validatorMock
-            ->expects($this->once())->method('isValid')
-            ->with($validateValue)->will($this->returnValue($expectedResult));
+        $this->_validatorMock->expects(
+            $this->once()
+        )->method(
+            'isValid'
+        )->with(
+            $validateValue
+        )->will(
+            $this->returnValue($expectedResult)
+        );
 
         if ($expectedResult) {
             $this->_validatorMock->expects($this->never())->method('getMessages');
         } else {
-            $this->_validatorMock
-                ->expects($this->once())->method('getMessages')
-                ->will($this->returnValue($validatorMessages));
+            $this->_validatorMock->expects(
+                $this->once()
+            )->method(
+                'getMessages'
+            )->will(
+                $this->returnValue($validatorMessages)
+            );
         }
 
         $this->assertEquals($expectedResult, $this->_constraint->isValid($value));
@@ -102,41 +116,29 @@ class PropertyTest extends \PHPUnit_Framework_TestCase
     public function isValidDataProvider()
     {
         return array(
-            array(
-                array(self::PROPERTY_NAME => 'Property value', 'foo' => 'Foo value'),
-                'Property value',
-                true
-            ),
-            array(
-                new \Magento\Object(array(self::PROPERTY_NAME => 'Property value')),
-                'Property value',
-                true
-            ),
-            array(
-                new \ArrayObject(array(self::PROPERTY_NAME => 'Property value')),
-                'Property value',
-                true
-            ),
+            array(array(self::PROPERTY_NAME => 'Property value', 'foo' => 'Foo value'), 'Property value', true),
+            array(new \Magento\Object(array(self::PROPERTY_NAME => 'Property value')), 'Property value', true),
+            array(new \ArrayObject(array(self::PROPERTY_NAME => 'Property value')), 'Property value', true),
             array(
                 array(self::PROPERTY_NAME => 'Property value', 'foo' => 'Foo value'),
                 'Property value',
                 false,
                 array('Error message 1', 'Error message 2'),
-                array(self::PROPERTY_NAME => array('Error message 1', 'Error message 2')),
+                array(self::PROPERTY_NAME => array('Error message 1', 'Error message 2'))
             ),
             array(
                 array('foo' => 'Foo value'),
                 null,
                 false,
                 array('Error message 1'),
-                array(self::PROPERTY_NAME => array('Error message 1')),
+                array(self::PROPERTY_NAME => array('Error message 1'))
             ),
             array(
                 'scalar',
                 null,
                 false,
                 array('Error message 1'),
-                array(self::PROPERTY_NAME => array('Error message 1')),
+                array(self::PROPERTY_NAME => array('Error message 1'))
             )
         );
     }

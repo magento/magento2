@@ -31,7 +31,6 @@
  * @package    Magento_Newsletter
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Newsletter\Model\Queue\Options;
 
 class Status implements \Magento\Option\ArrayInterface
@@ -44,11 +43,11 @@ class Status implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            \Magento\Newsletter\Model\Queue::STATUS_SENT 	=> __('Sent'),
-            \Magento\Newsletter\Model\Queue::STATUS_CANCEL	=> __('Cancelled'),
-            \Magento\Newsletter\Model\Queue::STATUS_NEVER 	=> __('Not Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_SENT => __('Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_CANCEL => __('Cancelled'),
+            \Magento\Newsletter\Model\Queue::STATUS_NEVER => __('Not Sent'),
             \Magento\Newsletter\Model\Queue::STATUS_SENDING => __('Sending'),
-            \Magento\Newsletter\Model\Queue::STATUS_PAUSE 	=> __('Paused'),
+            \Magento\Newsletter\Model\Queue::STATUS_PAUSE => __('Paused')
         );
     }
 }

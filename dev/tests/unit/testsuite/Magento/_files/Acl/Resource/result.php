@@ -22,12 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 return array(
-    0 => array(
-        'id' => 'One_Module::resource',
-        'title' => 'Resource One',
-        'sortOrder' => 10,
-        'children' => array(),
-    ),
+    0 => array('id' => 'One_Module::resource', 'title' => 'Resource One', 'sortOrder' => 10, 'children' => array()),
     1 => array(
         'id' => 'One_Module::resource_parent',
         'title' => 'Resource Parent',
@@ -42,10 +37,10 @@ return array(
                         'id' => 'One_Module::resource_child_two',
                         'title' => 'Child Resource Level 2 Title',
                         'sortOrder' => 40,
-                        'children' => array(),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                        'children' => array()
+                    )
+                )
+            )
+        )
+    )
 );

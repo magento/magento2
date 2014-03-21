@@ -40,6 +40,6 @@ class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
      */
     public function getErrorMessage()
     {
-        return  __('Tracking information is unavailable.');
+        return __('Tracking information is unavailable.');
     }
 }

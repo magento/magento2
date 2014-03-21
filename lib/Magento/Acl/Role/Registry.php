@@ -49,7 +49,7 @@ class Registry extends \Zend_Acl_Role_Registry
                 $role = $this->get($role);
             }
         } catch (\Zend_Acl_Role_Registry_Exception $e) {
-            throw new \Zend_Acl_Role_Registry_Exception("Child Role id '$roleId' does not exist");
+            throw new \Zend_Acl_Role_Registry_Exception("Child Role id '{$roleId}' does not exist");
         }
 
         if (!is_array($parents)) {
@@ -64,7 +64,7 @@ class Registry extends \Zend_Acl_Role_Registry
                 }
                 $roleParent = $this->get($roleParentId);
             } catch (\Zend_Acl_Role_Registry_Exception $e) {
-                throw new \Zend_Acl_Role_Registry_Exception("Parent Role id '$roleParentId' does not exist");
+                throw new \Zend_Acl_Role_Registry_Exception("Parent Role id '{$roleParentId}' does not exist");
             }
             $this->_roles[$roleId]['parents'][$roleParentId] = $roleParent;
             $this->_roles[$roleParentId]['children'][$roleId] = $role;

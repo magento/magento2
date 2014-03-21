@@ -90,12 +90,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         $flagName = 'joined_with_update_table';
         if (!$this->getFlag($flagName)) {
-            $this->getSelect()
-                ->join(
-                    array('update' => $this->getTable('core_layout_update')),
-                    'update.layout_update_id = main_table.layout_update_id',
-                    array($fields)
-                );
+            $this->getSelect()->join(
+                array('update' => $this->getTable('core_layout_update')),
+                'update.layout_update_id = main_table.layout_update_id',
+                array($fields)
+            );
             $this->setFlag($flagName, true);
         }
 
@@ -128,8 +127,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
 
         $this->_joinWithUpdate();
-        $this->addFieldToFilter('update.updated_at', array('notnull' => true))
-            ->addFieldToFilter('update.updated_at', array('lt' => $formattedDate));
+        $this->addFieldToFilter(
+            'update.updated_at',
+            array('notnull' => true)
+        )->addFieldToFilter(
+            'update.updated_at',
+            array('lt' => $formattedDate)
+        );
 
         return $this;
     }

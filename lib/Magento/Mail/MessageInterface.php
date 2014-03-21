@@ -31,6 +31,7 @@ interface MessageInterface
      * Types of message
      */
     const TYPE_TEXT = 'text/plain';
+
     const TYPE_HTML = 'text/html';
 
     /**

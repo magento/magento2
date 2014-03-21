@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 /**
@@ -105,11 +104,10 @@ class MinifyService
         foreach ($assets as $asset) {
             $contentType = $asset->getContentType();
             if ($this->isEnabled($contentType)) {
-                $asset = $this->objectManager
-                    ->create('Magento\View\Asset\Minified', array(
-                        'asset' => $asset,
-                        'minifier' => $this->getMinifier($contentType)
-                    ));
+                $asset = $this->objectManager->create(
+                    'Magento\View\Asset\Minified',
+                    array('asset' => $asset, 'minifier' => $this->getMinifier($contentType))
+                );
             }
             $resultAssets[] = $asset;
         }
@@ -126,26 +124,26 @@ class MinifyService
     {
         if (!isset($this->minifiers[$contentType])) {
             $adapter = $this->getAdapter($contentType);
-            $strategyParams = array(
-                'adapter' => $adapter,
-            );
+            $strategyParams = array('adapter' => $adapter);
             switch ($this->appState->getMode()) {
                 case \Magento\App\State::MODE_PRODUCTION:
                     $strategy = $this->objectManager->create('Magento\Code\Minifier\Strategy\Lite', $strategyParams);
                     break;
                 default:
-                    $strategy = $this->objectManager
-                        ->create('Magento\Code\Minifier\Strategy\Generate', $strategyParams);
+                    $strategy = $this->objectManager->create(
+                        'Magento\Code\Minifier\Strategy\Generate',
+                        $strategyParams
+                    );
             }
-            $baseDir = $this->_filesystem
-                ->getDirectoryRead(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
-                ->getAbsolutePath('minify');
+            $baseDir = $this->_filesystem->getDirectoryRead(
+                \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+            )->getAbsolutePath(
+                'minify'
+            );
 
-            $this->minifiers[$contentType] = $this->objectManager->create('Magento\Code\Minifier',
-                array(
-                    'strategy' => $strategy,
-                    'directoryName' => $baseDir
-                )
+            $this->minifiers[$contentType] = $this->objectManager->create(
+                'Magento\Code\Minifier',
+                array('strategy' => $strategy, 'directoryName' => $baseDir)
             );
         }
         return $this->minifiers[$contentType];
@@ -176,9 +174,7 @@ class MinifyService
     {
         $adapterClass = $this->config->getAssetMinificationAdapter($contentType);
         if (!$adapterClass) {
-            throw new \Magento\Exception(
-                "Minification adapter is not specified for '$contentType' content type"
-            );
+            throw new \Magento\Exception("Minification adapter is not specified for '{$contentType}' content type");
         }
 
         $adapter = $this->objectManager->create($adapterClass);

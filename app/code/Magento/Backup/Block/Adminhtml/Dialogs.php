@@ -49,12 +49,12 @@ class Dialogs extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->getLayout()->getBlock('head')->addChild(
+        $this->getLayout()->getBlock(
+            'head'
+        )->addChild(
             'magento-adminhtml-backup-js',
             'Magento\Theme\Block\Html\Head\Script',
-            array(
-                'file' => 'mage/adminhtml/backup.js'
-            )
+            array('file' => 'mage/adminhtml/backup.js')
         );
         parent::_prepareLayout();
     }

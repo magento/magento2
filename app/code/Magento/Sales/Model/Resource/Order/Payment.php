@@ -35,16 +35,14 @@ class Payment extends AbstractOrder
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix          = 'sales_order_payment_resource';
+    protected $_eventPrefix = 'sales_order_payment_resource';
 
     /**
      * @var \Magento\Sales\Model\Payment\Method\Converter

@@ -44,7 +44,7 @@ class AppArea
         'install',
         'webapi_rest',
         'webapi_soap',
-        'cron',
+        'cron'
     );
 
     /**
@@ -64,11 +64,15 @@ class AppArea
      */
     protected function _getTestAppArea($annotations)
     {
-        $area = isset($annotations['method'][self::ANNOTATION_NAME])
-                    ? current($annotations['method'][self::ANNOTATION_NAME])
-                    : (isset($annotations['class'][self::ANNOTATION_NAME])
-                        ? current($annotations['class'][self::ANNOTATION_NAME])
-                        : \Magento\TestFramework\Application::DEFAULT_APP_AREA);
+        $area = isset(
+            $annotations['method'][self::ANNOTATION_NAME]
+        ) ? current(
+            $annotations['method'][self::ANNOTATION_NAME]
+        ) : (isset(
+            $annotations['class'][self::ANNOTATION_NAME]
+        ) ? current(
+            $annotations['class'][self::ANNOTATION_NAME]
+        ) : \Magento\TestFramework\Application::DEFAULT_APP_AREA);
 
         if (false == in_array($area, $this->_allowedAreas)) {
             throw new \Magento\Exception(

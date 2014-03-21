@@ -56,11 +56,17 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @var string
      */
     const TYPE_PAYMENT = 'payment';
-    const TYPE_ORDER   = 'order';
-    const TYPE_AUTH    = 'authorization';
+
+    const TYPE_ORDER = 'order';
+
+    const TYPE_AUTH = 'authorization';
+
     const TYPE_CAPTURE = 'capture';
-    const TYPE_VOID    = 'void';
-    const TYPE_REFUND  = 'refund';
+
+    const TYPE_VOID = 'void';
+
+    const TYPE_REFUND = 'refund';
+
     /**#@-*/
 
     /**
@@ -274,16 +280,13 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             $parentId = $this->getParentId();
             if ($parentId) {
                 $class = get_class($this);
-                $this->_parentTransaction = new $class;
+                $this->_parentTransaction = new $class();
                 if ($shouldLoad) {
-                    $this->_parentTransaction
-                        ->setOrderPaymentObject($this->_paymentObject)
-                        ->load($parentId);
+                    $this->_parentTransaction->setOrderPaymentObject($this->_paymentObject)->load($parentId);
                     if (!$this->_parentTransaction->getId()) {
                         $this->_parentTransaction = false;
                     } else {
-                        $this->_parentTransaction
-                            ->hasChildTransaction(true);
+                        $this->_parentTransaction->hasChildTransaction(true);
                     }
                 }
             }
@@ -385,7 +388,6 @@ class Transaction extends \Magento\Core\Model\AbstractModel
                 // case self::TYPE_PAYMENT?
             default:
                 break;
-
         }
         if ($authTransaction) {
             if (!$dryRun) {
@@ -489,9 +491,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     public function loadByTxnId($txnId)
     {
         $this->_beforeLoadByTxnId($txnId);
-        $this->getResource()->loadObjectByTxnId(
-            $this, $this->getOrderId(), $this->_paymentObject->getId(), $txnId
-        );
+        $this->getResource()->loadObjectByTxnId($this, $this->getOrderId(), $this->_paymentObject->getId(), $txnId);
         $this->_afterLoadByTxnId();
         return $this;
     }
@@ -506,7 +506,6 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         $this->_eventManager->dispatch($this->_eventPrefix . '_load_by_txn_id_after', $this->_getEventData());
         return $this;
     }
-
 
     /**
      * Additional information setter
@@ -544,7 +543,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             $info = array();
         }
         if ($key) {
-            return (isset($info[$key]) ? $info[$key] : null);
+            return isset($info[$key]) ? $info[$key] : null;
         }
         return $info;
     }
@@ -637,9 +636,13 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             return $orderId;
         }
         if ($this->_paymentObject) {
-            return $this->_paymentObject->getOrder()
-                ? $this->_paymentObject->getOrder()->getId()
-                : $this->_paymentObject->getParentId();
+            return $this->_paymentObject
+                ->getOrder() ? $this
+                ->_paymentObject
+                ->getOrder()
+                ->getId() : $this
+                ->_paymentObject
+                ->getParentId();
         }
     }
 
@@ -675,7 +678,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             } else {
                 $this->_order = false;
             }
-        } elseif (!$this->getId() || ($this->getOrderId() == $order->getId())) {
+        } elseif (!$this->getId() || $this->getOrderId() == $order->getId()) {
             $this->_order = $order;
         } else {
             throw new \Magento\Core\Exception(__('Set order for existing transactions not allowed'));
@@ -745,16 +748,20 @@ class Transaction extends \Magento\Core\Model\AbstractModel
 
         $this->setOrder(true);
 
-        $orderFilter = $this->getOrder(); // Try to get order instance for filter
+        $orderFilter = $this->getOrder();
+        // Try to get order instance for filter
         if (!$orderFilter) {
             $orderFilter = $this->getOrderId();
         }
 
         // prepare children collection
-        $children = $this->getResourceCollection()
-            ->setOrderFilter($orderFilter)
-            ->addPaymentIdFilter($paymentId)
-            ->addParentIdFilter($this->getId());
+        $children = $this->getResourceCollection()->setOrderFilter(
+            $orderFilter
+        )->addPaymentIdFilter(
+            $paymentId
+        )->addParentIdFilter(
+            $this->getId()
+        );
 
         // set basic children array and attempt to map them per txn_id, if all of them have txn_id
         $this->_children = array();
@@ -787,8 +794,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     protected function _isVoided()
     {
         $this->_verifyThisTransactionExists();
-        return self::TYPE_AUTH === $this->getTxnType()
-            && (bool)count($this->getChildTransactions(self::TYPE_VOID));
+        return self::TYPE_AUTH === $this->getTxnType() && (bool)count($this->getChildTransactions(self::TYPE_VOID));
     }
 
     /**
@@ -809,11 +815,11 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     public function getTransactionTypes()
     {
         return array(
-            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER    => __('Order'),
-            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH    => __('Authorization'),
+            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER => __('Order'),
+            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH => __('Authorization'),
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE => __('Capture'),
-            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_VOID    => __('Void'),
-            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND  => __('Refund')
+            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_VOID => __('Void'),
+            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND => __('Refund')
         );
     }
 

@@ -116,14 +116,18 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 $regions = $this->_parseRegions($rate['state'], $rate['postcode']);
                 $ratesTotal += count($regions);
                 if ($ratesTotal > self::RATES_MAX) {
-                    throw new \Magento\Core\Exception(__("Google shopping only supports %1 tax rates per product", self::RATES_MAX));
+                    throw new \Magento\Core\Exception(
+                        __("Google shopping only supports %1 tax rates per product", self::RATES_MAX)
+                    );
                 }
                 foreach ($regions as $region) {
-                    $entry->addTax(array(
-                        'tax_rate' =>     $rate['value'] * 100,
-                        'tax_country' =>  empty($rate['country']) ? '*' : $rate['country'],
-                        'tax_region' =>   $region
-                    ));
+                    $entry->addTax(
+                        array(
+                            'tax_rate' => $rate['value'] * 100,
+                            'tax_country' => empty($rate['country']) ? '*' : $rate['country'],
+                            'tax_region' => $region
+                        )
+                    );
                 }
             }
         }
@@ -140,7 +144,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     protected function _parseRegions($state, $zip)
     {
-        return (!empty($zip) && $zip != '*') ? $this->_parseZip($zip) : (($state) ? array($state) : array('*'));
+        return !empty($zip) && $zip != '*' ? $this->_parseZip($zip) : ($state ? array($state) : array('*'));
     }
 
     /**

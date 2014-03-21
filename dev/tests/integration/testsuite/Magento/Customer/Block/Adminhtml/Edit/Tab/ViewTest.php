@@ -62,28 +62,29 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->_storeManager = $objectManager->get('Magento\Core\Model\StoreManager');
-        $this->_context = $objectManager
-            ->get(
-                'Magento\Backend\Block\Template\Context',
-                array('storeManager' => $this->_storeManager)
-            );
+        $this->_context = $objectManager->get(
+            'Magento\Backend\Block\Template\Context',
+            array('storeManager' => $this->_storeManager)
+        );
 
         $this->_customerBuilder = $objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
         $this->_coreRegistry = $objectManager->get('Magento\Registry');
-        $this->_customerAccountService = $objectManager
-            ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $this->_customerAccountService = $objectManager->get(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        );
         $this->_groupService = $objectManager->get('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
-        $this->_block = $objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\View',
-                '',
-                array(
-                    'context' => $this->_context,
-                    'groupService' => $this->_groupService,
-                    'registry' => $this->_coreRegistry
-                )
-            );
+        $this->_block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\View',
+            '',
+            array(
+                'context' => $this->_context,
+                'groupService' => $this->_groupService,
+                'registry' => $this->_coreRegistry
+            )
+        );
     }
 
     public function tearDown()
@@ -125,7 +126,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateDate()
     {
         $createdAt = $this->_block->formatDate(
-            $this->_loadCustomer()->getCreatedAt(), \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true
+            $this->_loadCustomer()->getCreatedAt(),
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            true
         );
         $this->assertEquals($createdAt, $this->_block->getCreateDate());
     }
@@ -136,10 +139,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCreateDate()
     {
         $customer = $this->_loadCustomer();
-        $date = $this->_context
-            ->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
+        $date = $this->_context->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
         $storeCreateDate = $this->_block->formatDate(
-            $date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true
+            $date,
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            true
         );
         $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());
     }
@@ -152,12 +156,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Magento\Stdlib\DateTime\TimezoneInterface $defaultTimeZonePath
          */
-        $defaultTimeZonePath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Stdlib\DateTime\TimezoneInterface')->getDefaultTimezonePath();
-        $timezone = $this->_context
-            ->getStoreConfig()
-            ->getConfig(
-                $defaultTimeZonePath, $this->_loadCustomer()->getStoreId());
+        $defaultTimeZonePath = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Stdlib\DateTime\TimezoneInterface'
+        )->getDefaultTimezonePath();
+        $timezone = $this->_context->getStoreConfig()->getConfig(
+            $defaultTimeZonePath,
+            $this->_loadCustomer()->getStoreId()
+        );
         $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());
     }
 
@@ -176,11 +181,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testIsConfirmedStatusConfirmationIsNotRequired()
     {
         /** @var Customer $customer */
-        $customer = $this->_customerBuilder->setConfirmation(true)
-            ->setFirstname('firstname')
-            ->setLastname('lastname')
-            ->setEmail('email@email.com')
-            ->create();
+        $customer = $this->_customerBuilder->setConfirmation(
+            true
+        )->setFirstname(
+            'firstname'
+        )->setLastname(
+            'lastname'
+        )->setEmail(
+            'email@email.com'
+        )->create();
         $id = $this->_customerAccountService->saveCustomer($customer);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $id);
         $this->assertEquals('Confirmation Not Required', $this->_block->getIsConfirmedStatus());
@@ -220,7 +229,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->_createCustomer();
         $this->assertEquals(
-            __('The customer does not have default billing address.'), $this->_block->getBillingAddressHtml()
+            __('The customer does not have default billing address.'),
+            $this->_block->getBillingAddressHtml()
         );
     }
 
@@ -270,11 +280,14 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     private function _createCustomer()
     {
         /** @var \Magento\Customer\Service\V1\Data\Customer $customer */
-        $customer = $this->_customerBuilder->setFirstname('firstname')
-            ->setLastname('lastname')
-            ->setEmail('email@email.com')
-            ->create();
-        $data = ['account' => $customer->__toArray()];
+        $customer = $this->_customerBuilder->setFirstname(
+            'firstname'
+        )->setLastname(
+            'lastname'
+        )->setEmail(
+            'email@email.com'
+        )->create();
+        $data = array('account' => $customer->__toArray());
         $this->_context->getBackendSession()->setCustomerData($data);
         return $customer;
     }
@@ -285,7 +298,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     private function _loadCustomer()
     {
         $customer = $this->_customerAccountService->getCustomer(1);
-        $data = ['account' => $customer->__toArray()];
+        $data = array('account' => $customer->__toArray());
         $this->_context->getBackendSession()->setCustomerData($data);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
         return $customer;

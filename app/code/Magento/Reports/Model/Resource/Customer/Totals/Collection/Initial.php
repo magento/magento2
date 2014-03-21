@@ -34,8 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource\Customer\Totals\Collection;
 
-class Initial
-    extends \Magento\Reports\Model\Resource\Report\Collection
+class Initial extends \Magento\Reports\Model\Resource\Report\Collection
 {
     /**
      * Report sub-collection class name

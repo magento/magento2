@@ -28,7 +28,7 @@ class PayflowDirect extends \Magento\Paypal\Model\Direct
     /**
      * @var string
      */
-    protected $_code  = \Magento\Paypal\Model\Config::METHOD_WPP_PE_DIRECT;
+    protected $_code = \Magento\Paypal\Model\Config::METHOD_WPP_PE_DIRECT;
 
     /**
      * Website Payments Pro instance type
@@ -73,11 +73,15 @@ class PayflowDirect extends \Magento\Paypal\Model\Direct
      */
     protected function _importResultToPayment($api, $payment)
     {
-        $payment->setTransactionId($api->getPaypalTransactionId())->setIsTransactionClosed(0)
-            ->setIsTransactionPending($api->getIsPaymentPending())
-            ->setTransactionAdditionalInfo(
-                \Magento\Paypal\Model\Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID,
-                $api->getTransactionId()
+        $payment->setTransactionId(
+            $api->getPaypalTransactionId()
+        )->setIsTransactionClosed(
+            0
+        )->setIsTransactionPending(
+            $api->getIsPaymentPending()
+        )->setTransactionAdditionalInfo(
+            \Magento\Paypal\Model\Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID,
+            $api->getTransactionId()
         );
         $payment->setPreparedMessage(__('Payflow PNREF: #%1.', $api->getTransactionId()));
         $this->_pro->importPaymentInfo($api, $payment);

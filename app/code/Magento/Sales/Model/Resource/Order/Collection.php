@@ -39,14 +39,14 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_collection';
+    protected $_eventPrefix = 'sales_order_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_collection';
+    protected $_eventObject = 'order_collection';
 
     /**
      * @var \Magento\Core\Model\Resource\Helper
@@ -83,9 +83,16 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     protected function _construct()
     {
         $this->_init('Magento\Sales\Model\Order', 'Magento\Sales\Model\Resource\Order');
-        $this->addFilterToMap('entity_id', 'main_table.entity_id')
-            ->addFilterToMap('customer_id', 'main_table.customer_id')
-            ->addFilterToMap('quote_address_id', 'main_table.quote_address_id');
+        $this->addFilterToMap(
+            'entity_id',
+            'main_table.entity_id'
+        )->addFilterToMap(
+            'customer_id',
+            'main_table.customer_id'
+        )->addFilterToMap(
+            'quote_address_id',
+            'main_table.quote_address_id'
+        );
     }
 
     /**
@@ -97,7 +104,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     {
         if (is_null($this->_fieldsToSelect)) {
             // If we select all fields from table, we need to add column alias
-            $this->getSelect()->columns(array('items_count'=>'total_item_count'));
+            $this->getSelect()->columns(array('items_count' => 'total_item_count'));
         } else {
             $this->addFieldToSelect('total_item_count', 'items_count');
         }
@@ -143,41 +150,53 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
         $shippingAliasName = 'shipping_o_a';
         $joinTable = $this->getTable('sales_flat_order_address');
 
-        $this
-            ->addFilterToMap('billing_firstname', $billingAliasName . '.firstname')
-            ->addFilterToMap('billing_lastname', $billingAliasName . '.lastname')
-            ->addFilterToMap('billing_telephone', $billingAliasName . '.telephone')
-            ->addFilterToMap('billing_postcode', $billingAliasName . '.postcode')
+        $this->addFilterToMap(
+            'billing_firstname',
+            $billingAliasName . '.firstname'
+        )->addFilterToMap(
+            'billing_lastname',
+            $billingAliasName . '.lastname'
+        )->addFilterToMap(
+            'billing_telephone',
+            $billingAliasName . '.telephone'
+        )->addFilterToMap(
+            'billing_postcode',
+            $billingAliasName . '.postcode'
+        )->addFilterToMap(
+            'shipping_firstname',
+            $shippingAliasName . '.firstname'
+        )->addFilterToMap(
+            'shipping_lastname',
+            $shippingAliasName . '.lastname'
+        )->addFilterToMap(
+            'shipping_telephone',
+            $shippingAliasName . '.telephone'
+        )->addFilterToMap(
+            'shipping_postcode',
+            $shippingAliasName . '.postcode'
+        );
 
-            ->addFilterToMap('shipping_firstname', $shippingAliasName . '.firstname')
-            ->addFilterToMap('shipping_lastname', $shippingAliasName . '.lastname')
-            ->addFilterToMap('shipping_telephone', $shippingAliasName . '.telephone')
-            ->addFilterToMap('shipping_postcode', $shippingAliasName . '.postcode');
-
-        $this
-            ->getSelect()
-            ->joinLeft(
-                array($billingAliasName => $joinTable),
-                "(main_table.entity_id = {$billingAliasName}.parent_id"
-                    . " AND {$billingAliasName}.address_type = 'billing')",
-                array(
-                    $billingAliasName . '.firstname',
-                    $billingAliasName . '.lastname',
-                    $billingAliasName . '.telephone',
-                    $billingAliasName . '.postcode'
-                )
+        $this->getSelect()->joinLeft(
+            array($billingAliasName => $joinTable),
+            "(main_table.entity_id = {$billingAliasName}.parent_id" .
+            " AND {$billingAliasName}.address_type = 'billing')",
+            array(
+                $billingAliasName . '.firstname',
+                $billingAliasName . '.lastname',
+                $billingAliasName . '.telephone',
+                $billingAliasName . '.postcode'
             )
-            ->joinLeft(
-                array($shippingAliasName => $joinTable),
-                "(main_table.entity_id = {$shippingAliasName}.parent_id"
-                    . " AND {$shippingAliasName}.address_type = 'shipping')",
-                array(
-                    $shippingAliasName . '.firstname',
-                    $shippingAliasName . '.lastname',
-                    $shippingAliasName . '.telephone',
-                    $shippingAliasName . '.postcode'
-                )
-            );
+        )->joinLeft(
+            array($shippingAliasName => $joinTable),
+            "(main_table.entity_id = {$shippingAliasName}.parent_id" .
+            " AND {$shippingAliasName}.address_type = 'shipping')",
+            array(
+                $shippingAliasName . '.firstname',
+                $shippingAliasName . '.lastname',
+                $shippingAliasName . '.telephone',
+                $shippingAliasName . '.postcode'
+            )
+        );
         $this->_coreResourceHelper->prepareColumnsList($this->getSelect());
         return $this;
     }
@@ -238,13 +257,15 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      */
     public function addBillingAgreementsFilter($agreements)
     {
-        $agreements = (is_array($agreements)) ? $agreements : array($agreements);
-        $this->getSelect()
-            ->joinInner(
-                array('sbao' => $this->getTable('sales_billing_agreement_order')),
-                'main_table.entity_id = sbao.order_id',
-                array())
-            ->where('sbao.agreement_id IN(?)', $agreements);
+        $agreements = is_array($agreements) ? $agreements : array($agreements);
+        $this->getSelect()->joinInner(
+            array('sbao' => $this->getTable('sales_billing_agreement_order')),
+            'main_table.entity_id = sbao.order_id',
+            array()
+        )->where(
+            'sbao.agreement_id IN(?)',
+            $agreements
+        );
         return $this;
     }
 }

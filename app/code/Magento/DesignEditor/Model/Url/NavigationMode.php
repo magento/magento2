@@ -108,9 +108,7 @@ class NavigationMode extends \Magento\Url
         $this->_hasThemeAndMode();
         $url = parent::getRouteUrl($routePath, $routeParams);
         $baseUrl = trim($this->getBaseUrl(), '/');
-        $vdeBaseUrl = implode('/', array(
-            $baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId
-        ));
+        $vdeBaseUrl = implode('/', array($baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId));
         if (strpos($url, $baseUrl) === 0 && strpos($url, $vdeBaseUrl) === false) {
             $url = str_replace($baseUrl, $vdeBaseUrl, $url);
         }

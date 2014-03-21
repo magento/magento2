@@ -23,31 +23,23 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration\Mapper;
 
-class Tab
-    extends \Magento\Tools\Migration\System\Configuration\Mapper\AbstractMapper
+class Tab extends \Magento\Tools\Migration\System\Configuration\Mapper\AbstractMapper
 {
     /**
      * Attribute maps
      * oldName => newName
      * @var array
      */
-    protected $_attributeMaps = array(
-        'sort_order' => 'sortOrder',
-        'frontend_type' => 'type',
-        'class' => 'class'
-    );
+    protected $_attributeMaps = array('sort_order' => 'sortOrder', 'frontend_type' => 'type', 'class' => 'class');
 
     /**
      * List of allowed filed names for tab
      *
      * @var array
      */
-    protected $_allowedFieldNames = array(
-        'label',
-    );
+    protected $_allowedFieldNames = array('label');
 
     /**
      * Transform tabs configuration

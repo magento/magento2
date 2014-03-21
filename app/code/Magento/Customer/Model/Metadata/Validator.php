@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata;
 
 class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
@@ -81,9 +80,9 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
             }
             $dataModel = $this->_attrDataFactory->create($attribute, $data[$attributeCode], $entityType);
             $dataModel->setExtractedData($data);
-            $value = empty($data[$attributeCode]) && isset($this->_entityData[$attributeCode])
-                ? $this->_entityData[$attributeCode]
-                : $data[$attributeCode];
+            $value = empty($data[$attributeCode]) && isset(
+                $this->_entityData[$attributeCode]
+            ) ? $this->_entityData[$attributeCode] : $data[$attributeCode];
             $result = $dataModel->validateValue($value);
             if (true !== $result) {
                 $this->_addErrorMessages($attributeCode, (array)$result);

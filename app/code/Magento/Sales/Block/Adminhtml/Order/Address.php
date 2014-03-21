@@ -59,7 +59,7 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         $this->_controller = 'adminhtml_order';
-        $this->_mode       = 'address';
+        $this->_mode = 'address';
         $this->_blockGroup = 'Magento_Sales';
         parent::_construct();
         $this->_updateButton('save', 'label', __('Save Order Address'));
@@ -91,9 +91,6 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
     public function getBackUrl()
     {
         $address = $this->_coreRegistry->registry('order_address');
-        return $this->getUrl(
-            'sales/*/view',
-            array('order_id' => $address ? $address->getOrder()->getId() : null)
-        );
+        return $this->getUrl('sales/*/view', array('order_id' => $address ? $address->getOrder()->getId() : null));
     }
 }

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Utility;
 
 /**
@@ -65,13 +64,13 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
     {
         return array(
             'user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+            'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
     }
 
     protected function tearDown()
     {
-        $this->_auth->logout();
+        $this->_auth->getAuthStorage()->destroy(['send_expire_cookie' => false]);
         $this->_auth = null;
         $this->_session = null;
         $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOnSecretKey();
@@ -86,7 +85,9 @@ class Controller extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $messageManager
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint, $messageType = null, $messageManager = 'Magento\Message\Manager'
+        \PHPUnit_Framework_Constraint $constraint,
+        $messageType = null,
+        $messageManager = 'Magento\Message\Manager'
     ) {
         parent::assertSessionMessages($constraint, $messageType, $messageManager);
     }

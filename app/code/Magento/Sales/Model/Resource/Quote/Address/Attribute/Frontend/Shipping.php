@@ -46,13 +46,11 @@ class Shipping extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Fro
         if ($amount != 0) {
             $title = __('Shipping & Handling');
             if ($address->getShippingDescription()) {
-                $title .= sprintf(' (%s)', $address->getShippingDescription());  
+                $title .= sprintf(' (%s)', $address->getShippingDescription());
             }
-            $address->addTotal(array(
-                'code'  => 'shipping',
-                'title' => $title,
-                'value' => $address->getShippingAmount()
-            ));
+            $address->addTotal(
+                array('code' => 'shipping', 'title' => $title, 'value' => $address->getShippingAmount())
+            );
         }
         return $this;
     }

@@ -93,12 +93,12 @@ class Data implements DataInterface
     {
         $keys = explode('/', $path);
         $lastKey = array_pop($keys);
-        $currentElement = &$this->_data;
+        $currentElement =& $this->_data;
         foreach ($keys as $key) {
             if (!isset($currentElement[$key])) {
                 $currentElement[$key] = array();
             }
-            $currentElement = &$currentElement[$key];
+            $currentElement =& $currentElement[$key];
         }
         $currentElement[$lastKey] = $value;
     }

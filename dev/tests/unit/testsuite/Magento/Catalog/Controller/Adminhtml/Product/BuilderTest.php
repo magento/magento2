@@ -21,13 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product;
-
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder
      */
@@ -66,11 +63,15 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->productFactoryMock
-            = $this->getMock('Magento\Catalog\Model\ProductFactory', array('create'));
+        $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array('create'));
         $this->registryMock = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $this->wysiwygConfigMock
-            = $this->getMock('Magento\Cms\Model\Wysiwyg\Config', array('setStoreId'), array(), '', false);
+        $this->wysiwygConfigMock = $this->getMock(
+            'Magento\Cms\Model\Wysiwyg\Config',
+            array('setStoreId'),
+            array(),
+            '',
+            false
+        );
         $this->requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $methods = array('setStoreId', 'setData', 'load', '__wakeup', 'setAttributeSetId', 'setTypeId');
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
@@ -93,11 +94,22 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             array('store', null, 'store')
         );
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($valueMap));
-        $this->productFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->once())->method('setStoreId')->with('some_store')->will($this->returnSelf());
+        $this->productFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->productMock)
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setStoreId'
+        )->with(
+            'some_store'
+        )->will(
+            $this->returnSelf()
+        );
         $this->productMock->expects($this->never())->method('setTypeId');
         $this->productMock->expects($this->once())->method('load')->with(2)->will($this->returnSelf());
         $this->productMock->expects($this->once())->method('setAttributeSetId')->with(3)->will($this->returnSelf());
@@ -120,20 +132,40 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             array('store', null, 'store')
         );
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($valueMap));
-        $this->productFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->once())->method('setStoreId')->with('some_store')->will($this->returnSelf());
-        $this->productMock->expects($this->once())
-            ->method('setTypeId')
-            ->with(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
-            ->will($this->returnSelf());
-        $this->productMock
-            ->expects($this->once())
-            ->method('load')
-            ->with(15)
-            ->will($this->throwException(new \Exception()));
+        $this->productFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->productMock)
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setStoreId'
+        )->with(
+            'some_store'
+        )->will(
+            $this->returnSelf()
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setTypeId'
+        )->with(
+            \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE
+        )->will(
+            $this->returnSelf()
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            15
+        )->will(
+            $this->throwException(new \Exception())
+        );
         $this->loggerMock->expects($this->once())->method('logException');
         $this->productMock->expects($this->once())->method('setAttributeSetId')->with(3)->will($this->returnSelf());
         $registryValueMap = array(
@@ -155,11 +187,22 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             array('store', null, 'store')
         );
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($valueMap));
-        $this->productFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->once())->method('setStoreId')->with('some_store')->will($this->returnSelf());
+        $this->productFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->productMock)
+        );
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'setStoreId'
+        )->with(
+            'some_store'
+        )->will(
+            $this->returnSelf()
+        );
         $productValueMap = array(
             array('type_id', $this->productMock),
             array(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE, $this->productMock)
@@ -175,5 +218,4 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->wysiwygConfigMock->expects($this->once())->method('setStoreId')->with('store');
         $this->assertEquals($this->productMock, $this->builder->build($this->requestMock));
     }
-
 }

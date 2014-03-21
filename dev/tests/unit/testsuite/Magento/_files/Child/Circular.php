@@ -31,6 +31,5 @@ class Circular extends \Magento\Test\Di\Child
      */
     public function __construct(\Magento\Test\Di\Aggregate\AggregateParent $aggregateParent)
     {
-
     }
 }

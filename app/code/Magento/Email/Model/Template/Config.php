@@ -117,10 +117,12 @@ class Config
     {
         $data = $this->_dataStorage->get();
         if (!isset($data[$templateId])) {
-            throw new \UnexpectedValueException("Email template '$templateId' is not defined.");
+            throw new \UnexpectedValueException("Email template '{$templateId}' is not defined.");
         }
         if (!isset($data[$templateId][$fieldName])) {
-            throw new \UnexpectedValueException("Field '$fieldName' is not defined for email template '$templateId'.");
+            throw new \UnexpectedValueException(
+                "Field '{$fieldName}' is not defined for email template '{$templateId}'."
+            );
         }
         return $data[$templateId][$fieldName];
     }

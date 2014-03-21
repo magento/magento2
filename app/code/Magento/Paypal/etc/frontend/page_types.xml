@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="paypal_billing_agreement_index" label="Billing Agreement"/>
     <type id="paypal_billing_agreement_view" label="Billing Agreement View"/>
     <type id="paypal_express_review" label="PayPal Express Order Review Form"/>

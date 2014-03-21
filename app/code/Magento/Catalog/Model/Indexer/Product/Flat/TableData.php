@@ -44,9 +44,8 @@ class TableData implements TableDataInterface
     /**
      * @param \Magento\App\Resource $resource
      */
-    public function __construct(
-        \Magento\App\Resource $resource
-    ) {
+    public function __construct(\Magento\App\Resource $resource)
+    {
         $this->_resource = $resource;
     }
 
@@ -64,15 +63,9 @@ class TableData implements TableDataInterface
         $renameTables = array();
 
         if ($connection->isTableExists($flatTable)) {
-            $renameTables[] = array(
-                'oldName' => $flatTable,
-                'newName' => $flatDropName,
-            );
+            $renameTables[] = array('oldName' => $flatTable, 'newName' => $flatDropName);
         }
-        $renameTables[] = array(
-            'oldName' => $temporaryFlatTableName,
-            'newName' => $flatTable,
-        );
+        $renameTables[] = array('oldName' => $temporaryFlatTableName, 'newName' => $flatTable);
 
         $connection->dropTable($flatDropName);
         $connection->renameTablesBatch($renameTables);

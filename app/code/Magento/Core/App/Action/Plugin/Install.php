@@ -22,9 +22,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\App\Action\Plugin;
-
 
 class Install
 {
@@ -81,9 +79,7 @@ class Install
     ) {
         if (!$this->_appState->isInstalled()) {
             $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
-            $this->_response->setRedirect(
-                $this->_url->getUrl('install')
-            );
+            $this->_response->setRedirect($this->_url->getUrl('install'));
             return $this->_response;
         }
         return $proceed($request);

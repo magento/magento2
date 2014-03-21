@@ -33,10 +33,8 @@
  */
 namespace Magento\AdminNotification\Model\Resource\Grid;
 
-class Collection
-    extends \Magento\AdminNotification\Model\Resource\Inbox\Collection
+class Collection extends \Magento\AdminNotification\Model\Resource\Inbox\Collection
 {
-
     /**
      * Add remove filter
      *

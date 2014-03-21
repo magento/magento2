@@ -72,20 +72,10 @@ class RecurringPayment extends PaymentGrid implements TabInterface
         if ($currentCustomer) {
             $this->_currentCustomerId = $currentCustomer->getId();
         } else {
-            $this->_currentCustomerId = $this->_coreRegistry->registry(
-                RegistryConstants::CURRENT_CUSTOMER_ID
-            );
+            $this->_currentCustomerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         }
 
-        parent::__construct(
-            $context,
-            $backendHelper,
-            $paymentCollection,
-            $recurringStates,
-            $fields,
-            $payments,
-            $data
-        );
+        parent::__construct($context, $backendHelper, $paymentCollection, $recurringStates, $fields, $payments, $data);
     }
 
     /**

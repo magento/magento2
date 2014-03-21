@@ -77,7 +77,7 @@ class Factory
             self::TYPE_FILESYSTEM,
             self::TYPE_SYSTEM_SNAPSHOT,
             self::TYPE_MEDIA,
-            self::TYPE_SNAPSHOT_WITHOUT_MEDIA,
+            self::TYPE_SNAPSHOT_WITHOUT_MEDIA
         );
     }
 

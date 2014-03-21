@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data\Search;
 
 use Magento\Service\Data\AbstractObject;
@@ -32,14 +31,15 @@ use Magento\Service\Data\AbstractObject;
 abstract class AbstractFilterGroup extends AbstractObject implements FilterGroupInterface
 {
     const FILTERS = 'filters';
+
     const GROUPS = 'groups';
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(AbstractFilterGroupBuilder $filterGroupBuilder)
+    public function __construct(AbstractFilterGroupBuilder $builder)
     {
-        parent::__construct($filterGroupBuilder);
+        parent::__construct($builder);
         $this->_data['group_type'] = $this->getGroupType();
     }
 
@@ -51,7 +51,7 @@ abstract class AbstractFilterGroup extends AbstractObject implements FilterGroup
     public function getFilters()
     {
         $filters = $this->_get(self::FILTERS);
-        return is_null($filters) ? [] : $filters;
+        return is_null($filters) ? array() : $filters;
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractFilterGroup extends AbstractObject implements FilterGroup
     public function getGroups()
     {
         $groups = $this->_get(self::GROUPS);
-        return is_null($groups) ? [] : $groups;
+        return is_null($groups) ? array() : $groups;
     }
 
     /**
@@ -70,5 +70,5 @@ abstract class AbstractFilterGroup extends AbstractObject implements FilterGroup
      *
      * @return string
      */
-    public abstract function getGroupType();
+    abstract public function getGroupType();
 }

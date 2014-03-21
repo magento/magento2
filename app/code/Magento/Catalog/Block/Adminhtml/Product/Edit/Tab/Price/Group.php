@@ -34,8 +34,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price;
 
-class Group
-    extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup
+class Group extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup
 {
     /**
      * @var string
@@ -81,16 +80,18 @@ class Group
      */
     protected function _prepareLayout()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
                 'label' => __('Add Group Price'),
                 'onclick' => 'return groupPriceControl.addItem()',
                 'class' => 'add'
-            ));
+            )
+        );
         $button->setName('add_group_price_item_button');
 
         $this->setChild('add_button', $button);
         return parent::_prepareLayout();
     }
-
 }

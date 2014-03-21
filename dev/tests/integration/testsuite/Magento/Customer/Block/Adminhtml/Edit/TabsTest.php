@@ -72,21 +72,20 @@ class TabsTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\App\State')->setAreaCode('adminhtml');
 
         $this->context = $objectManager->get('Magento\Backend\Block\Template\Context');
-        $this->customerAccountService = $objectManager
-            ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $this->customerAccountService = $objectManager->get(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        );
 
         $this->coreRegistry = $objectManager->get('Magento\Registry');
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
-        $this->block = $objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tabs',
-                '',
-                [
-                    'context' => $this->context,
-                    'registry' => $this->coreRegistry
-                ]
-            );
+        $this->block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tabs',
+            '',
+            array('context' => $this->context, 'registry' => $this->coreRegistry)
+        );
     }
 
     /**
@@ -95,7 +94,7 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $this->context->getBackendSession()->setCustomerData([]);
+        $this->context->getBackendSession()->setCustomerData(array());
     }
 
     /**
@@ -103,12 +102,13 @@ class TabsTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        $customer = $this->customerAccountService
-            ->getCustomer($this->coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID));
+        $customer = $this->customerAccountService->getCustomer(
+            $this->coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+        );
 
         $customerData['customer_id'] = $customer->getId();
         $customerData['account'] = $customer->__toArray();
-        $customerData['address'] = [];
+        $customerData['address'] = array();
         $this->context->getBackendSession()->setCustomerData($customerData);
 
         $html = $this->block->toHtml();
@@ -128,14 +128,14 @@ class TabsTest extends \PHPUnit_Framework_TestCase
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
 
-        $customerData['account'] = [
+        $customerData['account'] = array(
             Customer::FIRSTNAME => 'John',
             Customer::LASTNAME => 'Doe',
             Customer::EMAIL => 'john.doe@gmail.com',
             Customer::GROUP_ID => 1,
             Customer::WEBSITE_ID => 1
-        ];
-        $customerData['address'] = [];
+        );
+        $customerData['address'] = array();
 
         $this->context->getBackendSession()->setCustomerData($customerData);
 

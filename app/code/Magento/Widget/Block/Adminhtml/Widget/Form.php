@@ -31,7 +31,6 @@
  * @package    Magento_Widget
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -69,19 +68,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('base_fieldset', array(
-            'legend'    => __('Widget')
-        ));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Widget')));
 
-        $fieldset->addField('select_widget_type', 'select', array(
-            'label'                 => __('Widget Type'),
-            'title'                 => __('Widget Type'),
-            'name'                  => 'widget_type',
-            'required'              => true,
-            'onchange'              => "wWidget.validateField()",
-            'options'               => $this->_getWidgetSelectOptions(),
-            'after_element_html'    => $this->_getWidgetSelectAfterHtml(),
-        ));
+        $fieldset->addField(
+            'select_widget_type',
+            'select',
+            array(
+                'label' => __('Widget Type'),
+                'title' => __('Widget Type'),
+                'name' => 'widget_type',
+                'required' => true,
+                'onchange' => "wWidget.validateField()",
+                'options' => $this->_getWidgetSelectOptions(),
+                'after_element_html' => $this->_getWidgetSelectAfterHtml()
+            )
+        );
 
         $form->setUseContainer(true);
         $form->setId('widget_options_form');
@@ -138,11 +139,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $result[] = $widget;
             }
             if ($withEmptyElement) {
-                array_unshift($result, array(
-                    'type'        => '',
-                    'name'        => __('-- Please Select --'),
-                    'description' => '',
-                ));
+                array_unshift($result, array('type' => '', 'name' => __('-- Please Select --'), 'description' => ''));
             }
             $this->setData('available_widgets', $result);
         }

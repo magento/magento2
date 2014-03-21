@@ -33,10 +33,10 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes;
 
-class Extend
-    extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
+class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     const DYNAMIC = 0;
+
     const FIXED = 1;
 
     /**
@@ -81,51 +81,82 @@ class Extend
     {
         $elementHtml = parent::getElementHtml();
 
-        $switchAttributeCode = $this->getAttribute()->getAttributeCode().'_type';
+        $switchAttributeCode = $this->getAttribute()->getAttributeCode() . '_type';
         $switchAttributeValue = $this->getProduct()->getData($switchAttributeCode);
 
-        $html = '<select name="product[' . $switchAttributeCode . ']" id="' . $switchAttributeCode
-        . '" type="select" class="required-entry select next-toinput"'
-        . ($this->getProduct()->getId() && $this->getAttribute()->getAttributeCode() == 'price'
-            || $this->getElement()->getReadonly() ? ' disabled="disabled"' : '') . '>
+        $html = '<select name="product[' .
+            $switchAttributeCode .
+            ']" id="' .
+            $switchAttributeCode .
+            '" type="select" class="required-entry select next-toinput"' .
+            ($this->getProduct()->getId() &&
+            $this->getAttribute()->getAttributeCode() == 'price' ||
+            $this->getElement()->getReadonly() ? ' disabled="disabled"' : '') . '>
             <option value="">' . __('-- Select --') . '</option>
-            <option ' . ($switchAttributeValue == self::DYNAMIC ? 'selected' : '')
-            . ' value="' . self::DYNAMIC . '">' . __('Dynamic') . '</option>
-            <option ' . ($switchAttributeValue == self::FIXED ? 'selected' : '')
-            . ' value="' . self::FIXED . '">' . __('Fixed') . '</option>
+            <option ' . ($switchAttributeValue ==
+            self::DYNAMIC ? 'selected' : '') . ' value="' . self::DYNAMIC . '">' . __('Dynamic') . '</option>
+            <option ' . ($switchAttributeValue ==
+            self::FIXED ? 'selected' : '') . ' value="' . self::FIXED . '">' . __('Fixed') . '</option>
         </select>';
 
-        if (!($this->getAttribute()->getAttributeCode() == 'price'
-            && $this->getCanReadPrice() === false)
-        ) {
-            $html = '<div class="' . $this->getAttribute()->getAttributeCode() .' ">' . $elementHtml . '</div>' . $html;
+        if (!($this->getAttribute()->getAttributeCode() == 'price' && $this->getCanReadPrice() === false)) {
+            $html = '<div class="' .
+                $this->getAttribute()->getAttributeCode() .
+                ' ">' .
+                $elementHtml .
+                '</div>' .
+                $html;
         }
         if ($this->getDisableChild() && !$this->getElement()->getReadonly()) {
             $html .= "<script type=\"text/javascript\">
-                function " . $switchAttributeCode . "_change() {
-                    if ($('" . $switchAttributeCode . "').value == '" . self::DYNAMIC . "') {
-                        if ($('" . $this->getAttribute()->getAttributeCode() . "')) {
-                            $('" . $this->getAttribute()->getAttributeCode() . "').disabled = true;
-                            $('" . $this->getAttribute()->getAttributeCode() . "').value = '';
-                            $('" . $this->getAttribute()->getAttributeCode() . "').removeClassName('required-entry');
+                function " .
+                $switchAttributeCode .
+                "_change() {
+                    if ($('" .
+                $switchAttributeCode .
+                "').value == '" .
+                self::DYNAMIC .
+                "') {
+                        if ($('" .
+                $this->getAttribute()->getAttributeCode() .
+                "')) {
+                            $('" .
+                $this->getAttribute()->getAttributeCode() .
+                "').disabled = true;
+                            $('" .
+                $this->getAttribute()->getAttributeCode() .
+                "').value = '';
+                            $('" .
+                $this->getAttribute()->getAttributeCode() .
+                "').removeClassName('required-entry');
                         }
 
                         if ($('dynamic-price-warning')) {
                             $('dynamic-price-warning').show();
                         }
                     } else {
-                        if ($('" . $this->getAttribute()->getAttributeCode() . "')) {";
+                        if ($('" .
+                $this->getAttribute()->getAttributeCode() .
+                "')) {";
 
-            if ($this->getAttribute()->getAttributeCode() == 'price'
-                && $this->getCanEditPrice() === false
-                && $this->getCanReadPrice() === true
-                && $this->getProduct()->isObjectNew()
+            if ($this->getAttribute()->getAttributeCode() == 'price' &&
+                $this->getCanEditPrice() === false &&
+                $this->getCanReadPrice() === true &&
+                $this->getProduct()->isObjectNew()
             ) {
-                $defaultProductPrice = ($this->getDefaultProductPrice()) ? $this->getDefaultProductPrice() : "''";
-                $html .= "$('" . $this->getAttribute()->getAttributeCode() . "').value = " . $defaultProductPrice . ";";
+                $defaultProductPrice = $this->getDefaultProductPrice() ? $this->getDefaultProductPrice() : "''";
+                $html .= "$('" .
+                    $this->getAttribute()->getAttributeCode() .
+                    "').value = " .
+                    $defaultProductPrice .
+                    ";";
             } else {
-                $html .= "$('" . $this->getAttribute()->getAttributeCode() . "').disabled = false;
-                          $('" . $this->getAttribute()->getAttributeCode() . "').addClassName('required-entry');";
+                $html .= "$('" .
+                    $this->getAttribute()->getAttributeCode() .
+                    "').disabled = false;
+                          $('" .
+                    $this->getAttribute()->getAttributeCode() .
+                    "').addClassName('required-entry');";
             }
 
             $html .= "}
@@ -136,9 +167,9 @@ class Extend
                     }
                 }";
 
-            if (!($this->getAttribute()->getAttributeCode() == 'price'
-                && !$this->getCanEditPrice()
-                && !$this->getProduct()->isObjectNew())
+            if (!($this->getAttribute()->getAttributeCode() == 'price' &&
+                !$this->getCanEditPrice() &&
+                !$this->getProduct()->isObjectNew())
             ) {
                 $html .= "$('" . $switchAttributeCode . "').observe('change', " . $switchAttributeCode . "_change);";
             }
@@ -153,7 +184,7 @@ class Extend
      */
     public function getProduct()
     {
-        if (!$this->getData('product')){
+        if (!$this->getData('product')) {
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         return $this->getData('product');

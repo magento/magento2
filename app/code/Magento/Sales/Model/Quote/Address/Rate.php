@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Model\Quote\Address;
 
-use \Magento\Core\Model\AbstractModel;
+use Magento\Core\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Quote\Address\Rate _getResource()
@@ -109,18 +109,31 @@ class Rate extends AbstractModel
     public function importShippingRate(\Magento\Sales\Model\Quote\Address\RateResult\AbstractResult $rate)
     {
         if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
-            $this->setCode($rate->getCarrier() . '_error')
-                ->setCarrier($rate->getCarrier())
-                ->setCarrierTitle($rate->getCarrierTitle())
-                ->setErrorMessage($rate->getErrorMessage());
+            $this->setCode(
+                $rate->getCarrier() . '_error'
+            )->setCarrier(
+                $rate->getCarrier()
+            )->setCarrierTitle(
+                $rate->getCarrierTitle()
+            )->setErrorMessage(
+                $rate->getErrorMessage()
+            );
         } elseif ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method) {
-            $this->setCode($rate->getCarrier() . '_' . $rate->getMethod())
-                ->setCarrier($rate->getCarrier())
-                ->setCarrierTitle($rate->getCarrierTitle())
-                ->setMethod($rate->getMethod())
-                ->setMethodTitle($rate->getMethodTitle())
-                ->setMethodDescription($rate->getMethodDescription())
-                ->setPrice($rate->getPrice());
+            $this->setCode(
+                $rate->getCarrier() . '_' . $rate->getMethod()
+            )->setCarrier(
+                $rate->getCarrier()
+            )->setCarrierTitle(
+                $rate->getCarrierTitle()
+            )->setMethod(
+                $rate->getMethod()
+            )->setMethodTitle(
+                $rate->getMethodTitle()
+            )->setMethodDescription(
+                $rate->getMethodDescription()
+            )->setPrice(
+                $rate->getPrice()
+            );
         }
         return $this;
     }

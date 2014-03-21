@@ -214,9 +214,7 @@ class Option extends Widget
      */
     public function getAddButtonId()
     {
-        $buttonId = $this->getLayout()
-            ->getBlock('admin.product.options')
-            ->getChildBlock('add_button')->getId();
+        $buttonId = $this->getLayout()->getBlock('admin.product.options')->getChildBlock('add_button')->getId();
         return $buttonId;
     }
 
@@ -225,13 +223,18 @@ class Option extends Widget
      */
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setData(array(
-                'id'    => $this->getFieldId() . '_${id}_type',
-                'class' => 'select select-product-option-type required-option-select',
-            ))
-            ->setName($this->getFieldName() . '[${id}][type]')
-            ->setOptions($this->_optionType->toOptionArray());
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setData(
+            array(
+                'id' => $this->getFieldId() . '_${id}_type',
+                'class' => 'select select-product-option-type required-option-select'
+            )
+        )->setName(
+            $this->getFieldName() . '[${id}][type]'
+        )->setOptions(
+            $this->_optionType->toOptionArray()
+        );
 
         return $select->getHtml();
     }
@@ -241,13 +244,15 @@ class Option extends Widget
      */
     public function getRequireSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setData(array(
-                'id'    => $this->getFieldId() . '_${id}_is_require',
-                'class' => 'select'
-            ))
-            ->setName($this->getFieldName() . '[${id}][is_require]')
-            ->setOptions($this->_configYesNo->toOptionArray());
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setData(
+            array('id' => $this->getFieldId() . '_${id}_is_require', 'class' => 'select')
+        )->setName(
+            $this->getFieldName() . '[${id}][is_require]'
+        )->setOptions(
+            $this->_configYesNo->toOptionArray()
+        );
 
         return $select->getHtml();
     }
@@ -261,26 +266,23 @@ class Option extends Widget
     {
         $canEditPrice = $this->getCanEditPrice();
         $canReadPrice = $this->getCanReadPrice();
-        $this->getChildBlock('select_option_type')
-            ->setCanReadPrice($canReadPrice)
-            ->setCanEditPrice($canEditPrice);
+        $this->getChildBlock('select_option_type')->setCanReadPrice($canReadPrice)->setCanEditPrice($canEditPrice);
 
-        $this->getChildBlock('file_option_type')
-            ->setCanReadPrice($canReadPrice)
-            ->setCanEditPrice($canEditPrice);
+        $this->getChildBlock('file_option_type')->setCanReadPrice($canReadPrice)->setCanEditPrice($canEditPrice);
 
-        $this->getChildBlock('date_option_type')
-            ->setCanReadPrice($canReadPrice)
-            ->setCanEditPrice($canEditPrice);
+        $this->getChildBlock('date_option_type')->setCanReadPrice($canReadPrice)->setCanEditPrice($canEditPrice);
 
-        $this->getChildBlock('text_option_type')
-            ->setCanReadPrice($canReadPrice)
-            ->setCanEditPrice($canEditPrice);
+        $this->getChildBlock('text_option_type')->setCanReadPrice($canReadPrice)->setCanEditPrice($canEditPrice);
 
-        $templates = $this->getChildHtml('text_option_type') . "\n" .
-            $this->getChildHtml('file_option_type') . "\n" .
-            $this->getChildHtml('select_option_type') . "\n" .
-            $this->getChildHtml('date_option_type');
+        $templates = $this->getChildHtml(
+            'text_option_type'
+        ) . "\n" . $this->getChildHtml(
+            'file_option_type'
+        ) . "\n" . $this->getChildHtml(
+            'select_option_type'
+        ) . "\n" . $this->getChildHtml(
+            'date_option_type'
+        );
 
         return $templates;
     }
@@ -313,8 +315,11 @@ class Option extends Widget
                 $value['can_edit_price'] = $this->getCanEditPrice();
 
                 if ($this->getProduct()->getStoreId() != '0') {
-                    $value['checkboxScopeTitle'] = $this->getCheckboxScopeHtml($option->getOptionId(), 'title',
-                        is_null($option->getStoreTitle()));
+                    $value['checkboxScopeTitle'] = $this->getCheckboxScopeHtml(
+                        $option->getOptionId(),
+                        'title',
+                        is_null($option->getStoreTitle())
+                    );
                     $value['scopeTitleDisabled'] = is_null($option->getStoreTitle()) ? 'disabled' : null;
                 }
 
@@ -328,43 +333,58 @@ class Option extends Widget
                             'option_id' => $_value->getOptionId(),
                             'option_type_id' => $_value->getOptionTypeId(),
                             'title' => $this->escapeHtml($_value->getTitle()),
-                            'price' => ($showPrice)
-                                ? $this->getPriceValue($_value->getPrice(), $_value->getPriceType()) : '',
-                            'price_type' => ($showPrice) ? $_value->getPriceType() : 0,
+                            'price' => $showPrice ? $this->getPriceValue(
+                                $_value->getPrice(),
+                                $_value->getPriceType()
+                            ) : '',
+                            'price_type' => $showPrice ? $_value->getPriceType() : 0,
                             'sku' => $this->escapeHtml($_value->getSku()),
-                            'sort_order' => $_value->getSortOrder(),
+                            'sort_order' => $_value->getSortOrder()
                         );
 
                         if ($this->getProduct()->getStoreId() != '0') {
                             $value['optionValues'][$i]['checkboxScopeTitle'] = $this->getCheckboxScopeHtml(
-                                $_value->getOptionId(), 'title', is_null($_value->getStoreTitle()),
-                                $_value->getOptionTypeId());
-                            $value['optionValues'][$i]['scopeTitleDisabled'] = is_null($_value->getStoreTitle())
-                                ? 'disabled' : null;
+                                $_value->getOptionId(),
+                                'title',
+                                is_null($_value->getStoreTitle()),
+                                $_value->getOptionTypeId()
+                            );
+                            $value['optionValues'][$i]['scopeTitleDisabled'] = is_null(
+                                $_value->getStoreTitle()
+                            ) ? 'disabled' : null;
                             if ($scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE) {
                                 $value['optionValues'][$i]['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
-                                    $_value->getOptionId(), 'price', is_null($_value->getstorePrice()),
-                                    $_value->getOptionTypeId());
-                                $value['optionValues'][$i]['scopePriceDisabled'] = is_null($_value->getStorePrice())
-                                    ? 'disabled' : null;
+                                    $_value->getOptionId(),
+                                    'price',
+                                    is_null($_value->getstorePrice()),
+                                    $_value->getOptionTypeId()
+                                );
+                                $value['optionValues'][$i]['scopePriceDisabled'] = is_null(
+                                    $_value->getStorePrice()
+                                ) ? 'disabled' : null;
                             }
                         }
                         $i++;
                     }
                 } else {
-                    $value['price'] = ($showPrice)
-                        ? $this->getPriceValue($option->getPrice(), $option->getPriceType()) : '';
+                    $value['price'] = $showPrice ? $this->getPriceValue(
+                        $option->getPrice(),
+                        $option->getPriceType()
+                    ) : '';
                     $value['price_type'] = $option->getPriceType();
                     $value['sku'] = $this->escapeHtml($option->getSku());
                     $value['max_characters'] = $option->getMaxCharacters();
                     $value['file_extension'] = $option->getFileExtension();
                     $value['image_size_x'] = $option->getImageSizeX();
                     $value['image_size_y'] = $option->getImageSizeY();
-                    if ($this->getProduct()->getStoreId() != '0'
-                        && $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE
+                    if ($this->getProduct()->getStoreId() != '0' &&
+                        $scope == \Magento\Core\Model\Store::PRICE_SCOPE_WEBSITE
                     ) {
-                        $value['checkboxScopePrice'] = $this->getCheckboxScopeHtml($option->getOptionId(), 'price',
-                            is_null($option->getStorePrice()));
+                        $value['checkboxScopePrice'] = $this->getCheckboxScopeHtml(
+                            $option->getOptionId(),
+                            'price',
+                            is_null($option->getStorePrice())
+                        );
                         $value['scopePriceDisabled'] = is_null($option->getStorePrice()) ? 'disabled' : null;
                     }
                 }
@@ -397,13 +417,36 @@ class Option extends Widget
             $selectNameHtml = '[values][' . $select_id . ']';
             $selectIdHtml = 'select_' . $select_id . '_';
         }
-        $useDefault = '<div class="field-service">'
-            . '<label for="' . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '" class="use-default">'
-            . '<input value="1" type="checkbox" class="use-default-control"'
-            . 'name="' . $this->getFieldName() . '[' . $id . ']' . $selectNameHtml . '[scope][' . $name . ']"'
-            . 'id="' . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '_use_default"' . $checkedHtml
-            .' /><span class="use-default-label">' . __('Use Default')
-            . '</span></label></div>';
+        $useDefault = '<div class="field-service">' .
+            '<label for="' .
+            $this->getFieldId() .
+            '_' .
+            $id .
+            '_' .
+            $selectIdHtml .
+            $name .
+            '" class="use-default">' .
+            '<input value="1" type="checkbox" class="use-default-control"' .
+            'name="' .
+            $this->getFieldName() .
+            '[' .
+            $id .
+            ']' .
+            $selectNameHtml .
+            '[scope][' .
+            $name .
+            ']"' .
+            'id="' .
+            $this->getFieldId() .
+            '_' .
+            $id .
+            '_' .
+            $selectIdHtml .
+            $name .
+            '_use_default"' .
+            $checkedHtml .
+            ' /><span class="use-default-label">' .
+            __('Use Default') . '</span></label></div>';
 
         return $useDefault;
     }

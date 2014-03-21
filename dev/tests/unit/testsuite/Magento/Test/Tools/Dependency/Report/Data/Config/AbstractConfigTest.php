@@ -21,19 +21,19 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Data\Config;
 
 class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetModules()
     {
-        $modules = ['foo', 'baz', 'bar'];
+        $modules = array('foo', 'baz', 'bar');
 
         /** @var \Magento\Tools\Dependency\Report\Data\Config\AbstractConfig $config */
-        $config = $this->getMockForAbstractClass('Magento\Tools\Dependency\Report\Data\Config\AbstractConfig', [
-            'modules' => $modules,
-        ]);
+        $config = $this->getMockForAbstractClass(
+            'Magento\Tools\Dependency\Report\Data\Config\AbstractConfig',
+            array('modules' => $modules)
+        );
 
         $this->assertEquals($modules, $config->getModules());
     }

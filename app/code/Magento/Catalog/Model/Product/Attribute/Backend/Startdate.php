@@ -66,8 +66,8 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      */
     protected function _getValueForSave($object)
     {
-        $attributeName  = $this->getAttribute()->getName();
-        $startDate      = $object->getData($attributeName);
+        $attributeName = $this->getAttribute()->getName();
+        $startDate = $object->getData($attributeName);
         if ($startDate === false) {
             return false;
         }
@@ -107,21 +107,21 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      */
     public function validate($object)
     {
-        $attr      = $this->getAttribute();
-        $maxDate   = $attr->getMaxValue();
+        $attr = $this->getAttribute();
+        $maxDate = $attr->getMaxValue();
         $startDate = $this->_getValueForSave($object);
         if ($startDate === false) {
             return true;
         }
 
         if ($maxDate) {
-            $date     = $this->_date;
-            $value    = $date->timestamp($startDate);
+            $date = $this->_date;
+            $value = $date->timestamp($startDate);
             $maxValue = $date->timestamp($maxDate);
 
             if ($value > $maxValue) {
                 $message = __('The From Date value should be less than or equal to the To Date value.');
-                $eavExc  = new \Magento\Eav\Model\Entity\Attribute\Exception($message);
+                $eavExc = new \Magento\Eav\Model\Entity\Attribute\Exception($message);
                 $eavExc->setAttributeCode($attr->getName());
                 throw $eavExc;
             }

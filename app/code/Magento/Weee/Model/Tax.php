@@ -33,19 +33,22 @@ class Tax extends \Magento\Core\Model\AbstractModel
     /**
      * Including FPT only
      */
-    const DISPLAY_INCL              = 0;
+    const DISPLAY_INCL = 0;
+
     /**
      * Including FPT and FPT description
      */
-    const DISPLAY_INCL_DESCR        = 1;
+    const DISPLAY_INCL_DESCR = 1;
+
     /**
      * Excluding FPT, FPT description, final price
      */
-    const DISPLAY_EXCL_DESCR_INCL   = 2;
+    const DISPLAY_EXCL_DESCR_INCL = 2;
+
     /**
      * Excluding FPT
      */
-    const DISPLAY_EXCL              = 3;
+    const DISPLAY_EXCL = 3;
 
     /**
      * @var array|null
@@ -151,8 +154,8 @@ class Tax extends \Magento\Core\Model\AbstractModel
         $billing = null,
         $website = null,
         $calculateTax = false,
-        $ignoreDiscount = false)
-    {
+        $ignoreDiscount = false
+    ) {
         $amount = 0;
         $attributes = $this->getProductWeeeAttributes(
             $product,
@@ -210,8 +213,8 @@ class Tax extends \Magento\Core\Model\AbstractModel
         $billing = null,
         $website = null,
         $calculateTax = null,
-        $ignoreDiscount = false)
-    {
+        $ignoreDiscount = false
+    ) {
         $result = array();
         $allWeee = $this->getWeeeTaxAttributeCodes();
         if (!$allWeee) {
@@ -247,14 +250,27 @@ class Tax extends \Magento\Core\Model\AbstractModel
             if (in_array($code, $allWeee)) {
 
                 $attributeSelect = $this->getResource()->getReadConnection()->select();
-                $attributeSelect
-                    ->from($this->getResource()->getTable('weee_tax'), 'value')
-                    ->where('attribute_id = ?', (int)$attribute->getId())
-                    ->where('website_id IN(?)', array($websiteId, 0))
-                    ->where('country = ?', $rateRequest->getCountryId())
-                    ->where('state IN(?)', array($rateRequest->getRegionId(), '*'))
-                    ->where('entity_id = ?', (int)$product->getId())
-                    ->limit(1);
+                $attributeSelect->from(
+                    $this->getResource()->getTable('weee_tax'),
+                    'value'
+                )->where(
+                    'attribute_id = ?',
+                    (int)$attribute->getId()
+                )->where(
+                    'website_id IN(?)',
+                    array($websiteId, 0)
+                )->where(
+                    'country = ?',
+                    $rateRequest->getCountryId()
+                )->where(
+                    'state IN(?)',
+                    array($rateRequest->getRegionId(), '*')
+                )->where(
+                    'entity_id = ?',
+                    (int)$product->getId()
+                )->limit(
+                    1
+                );
 
                 $order = array('state ' . \Magento\DB\Select::SQL_DESC, 'website_id ' . \Magento\DB\Select::SQL_DESC);
                 $attributeSelect->order($order);
@@ -262,31 +278,38 @@ class Tax extends \Magento\Core\Model\AbstractModel
                 $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
                 if ($value) {
                     if ($discountPercent) {
-                        $value = $this->_storeManager->getStore()->roundPrice($value-($value*$discountPercent/100));
+                        $value = $this->_storeManager->getStore()->roundPrice(
+                            $value - $value * $discountPercent / 100
+                        );
                     }
 
                     $taxAmount = $amount = 0;
-                    $amount    = $value;
+                    $amount = $value;
                     if ($calculateTax && $this->_weeeData->isTaxable($store)) {
                         /** @var \Magento\Tax\Model\Calculation $calculator */
-                        $defaultPercent = $this->_calculationFactory->create()
-                            ->getRate(
-                                $defaultRateRequest->setProductClassId($product->getTaxClassId())
-                            );
+                        $defaultPercent = $this->_calculationFactory->create()->getRate(
+                            $defaultRateRequest->setProductClassId($product->getTaxClassId())
+                        );
                         $currentPercent = $product->getTaxPercent();
                         if ($this->_taxData->priceIncludesTax($store)) {
-                            $taxAmount = $this->_storeManager->getStore()
-                                ->roundPrice($value/(100+$defaultPercent)*$currentPercent);
+                            $taxAmount = $this->_storeManager->getStore()->roundPrice(
+                                $value / (100 + $defaultPercent) * $currentPercent
+                            );
                         } else {
-                            $taxAmount = $this->_storeManager->getStore()->roundPrice($value*$defaultPercent/100);
+                            $taxAmount = $this->_storeManager->getStore()->roundPrice($value * $defaultPercent / 100);
                         }
                     }
 
                     $one = new \Magento\Object();
-                    $one->setName(__($attribute->getFrontend()->getLabel()))
-                        ->setAmount($amount)
-                        ->setTaxAmount($taxAmount)
-                        ->setCode($attribute->getAttributeCode());
+                    $one->setName(
+                        __($attribute->getFrontend()->getLabel())
+                    )->setAmount(
+                        $amount
+                    )->setTaxAmount(
+                        $taxAmount
+                    )->setCode(
+                        $attribute->getAttributeCode()
+                    );
 
                     $result[] = $one;
                 }
@@ -305,11 +328,14 @@ class Tax extends \Magento\Core\Model\AbstractModel
         $group = $this->_customerSession->getCustomerGroupId();
         $key = implode('-', array($website, $group, $product->getId()));
         if (!isset($this->_productDiscounts[$key])) {
-            $this->_productDiscounts[$key] = (int) $this->getResource()
-                ->getProductDiscountPercent($product->getId(), $website, $group);
+            $this->_productDiscounts[$key] = (int)$this->getResource()->getProductDiscountPercent(
+                $product->getId(),
+                $website,
+                $group
+            );
         }
         if ($value = $this->_productDiscounts[$key]) {
-            return 100-min(100, max(0, $value));
+            return 100 - min(100, max(0, $value));
         } else {
             return 0;
         }

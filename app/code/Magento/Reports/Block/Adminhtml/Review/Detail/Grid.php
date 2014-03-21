@@ -69,8 +69,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_reviewsFactory->create()
-            ->addProductFilter((int)$this->getRequest()->getParam('id'));
+        $collection = $this->_reviewsFactory->create()->addProductFilter((int)$this->getRequest()->getParam('id'));
 
         $this->setCollection($collection);
 
@@ -86,29 +85,16 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('nickname', array(
-            'header'    =>__('Customer'),
-            'width'     =>'100px',
-            'index'     =>'nickname'
-        ));
+        $this->addColumn('nickname', array('header' => __('Customer'), 'width' => '100px', 'index' => 'nickname'));
 
-        $this->addColumn('title', array(
-            'header'    =>__('Title'),
-            'width'     =>'150px',
-            'index'     =>'title'
-        ));
+        $this->addColumn('title', array('header' => __('Title'), 'width' => '150px', 'index' => 'title'));
 
-        $this->addColumn('detail', array(
-            'header'    =>__('Detail'),
-            'index'     =>'detail'
-        ));
+        $this->addColumn('detail', array('header' => __('Detail'), 'index' => 'detail'));
 
-        $this->addColumn('created_at', array(
-            'header'    =>__('Created'),
-            'index'     =>'created_at',
-            'width'     =>'200px',
-            'type'      =>'datetime'
-        ));
+        $this->addColumn(
+            'created_at',
+            array('header' => __('Created'), 'index' => 'created_at', 'width' => '200px', 'type' => 'datetime')
+        );
 
         $this->setFilterVisibility(false);
 
@@ -117,6 +103,4 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         return parent::_prepareColumns();
     }
-
 }
-

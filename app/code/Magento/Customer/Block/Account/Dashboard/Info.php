@@ -67,8 +67,8 @@ class Info extends \Magento\View\Element\Template
         \Magento\Customer\Helper\View $helperView,
         array $data = array()
     ) {
-        $this->customerCurrentService   = $customerCurrentService;
-        $this->_subscriberFactory       = $subscriberFactory;
+        $this->customerCurrentService = $customerCurrentService;
+        $this->_subscriberFactory = $subscriberFactory;
         $this->_helperView = $helperView;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;

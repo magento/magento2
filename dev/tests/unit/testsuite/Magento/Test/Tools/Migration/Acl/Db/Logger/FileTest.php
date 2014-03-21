@@ -23,14 +23,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl\Db\Logger;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/AbstractLogger.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/Logger/File.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/AbstractLogger.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/Logger/File.php';
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructWithValidFile()
@@ -46,4 +47,3 @@ class FileTest extends \PHPUnit_Framework_TestCase
         new \Magento\Tools\Migration\Acl\Db\Logger\File(null);
     }
 }
-

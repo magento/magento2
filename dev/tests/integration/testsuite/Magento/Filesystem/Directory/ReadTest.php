@@ -49,27 +49,15 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testGetAbsolutePath()
     {
         $dir = $this->getDirectoryInstance('foo');
-        $this->assertContains(
-            '_files/foo',
-            $dir->getAbsolutePath()
-        );
-        $this->assertContains(
-            '_files/foo/bar',
-            $dir->getAbsolutePath('bar')
-        );
+        $this->assertContains('_files/foo', $dir->getAbsolutePath());
+        $this->assertContains('_files/foo/bar', $dir->getAbsolutePath('bar'));
     }
 
     public function testGetRelativePath()
     {
         $dir = $this->getDirectoryInstance('foo');
-        $this->assertEquals(
-            '',
-            $dir->getRelativePath()
-        );
-        $this->assertEquals(
-            'bar',
-            $dir->getRelativePath(__DIR__ . '/../_files/foo/bar')
-        );
+        $this->assertEquals('', $dir->getRelativePath());
+        $this->assertEquals('bar', $dir->getRelativePath(__DIR__ . '/../_files/foo/bar'));
     }
 
     /**
@@ -155,11 +143,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function existsProvider()
     {
-        return array(
-            array('foo', 'bar', true),
-            array('foo', 'bar/baz/', true),
-            array('foo', 'bar/notexists', false)
-        );
+        return array(array('foo', 'bar', true), array('foo', 'bar/baz/', true), array('foo', 'bar/notexists', false));
     }
 
     /**
@@ -172,10 +156,20 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat($dirPath, $path)
     {
         $dir = $this->getDirectoryInstance($dirPath);
-        $expectedInfo =  array(
-            'dev', 'ino', 'mode', 'nlink', 'uid',
-            'gid', 'rdev', 'size', 'atime',
-            'mtime', 'ctime', 'blksize', 'blocks'
+        $expectedInfo = array(
+            'dev',
+            'ino',
+            'mode',
+            'nlink',
+            'uid',
+            'gid',
+            'rdev',
+            'size',
+            'atime',
+            'mtime',
+            'ctime',
+            'blksize',
+            'blocks'
         );
         $result = $dir->stat($path);
         foreach ($expectedInfo as $key) {
@@ -190,10 +184,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function statProvider()
     {
-        return array(
-            array('foo', 'bar'),
-            array('foo', 'file_three.txt')
-        );
+        return array(array('foo', 'bar'), array('foo', 'file_three.txt'));
     }
 
     /**
@@ -241,10 +232,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isReadableProvider()
     {
-        return array(
-            array('foo', 'bar', true),
-            array('foo', 'file_three.txt', true)
-        );
+        return array(array('foo', 'bar', true), array('foo', 'file_three.txt', true));
     }
 
     /**
@@ -254,10 +242,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isFileProvider()
     {
-        return array(
-            array('bar', false),
-            array('file_three.txt', true)
-        );
+        return array(array('bar', false), array('file_three.txt', true));
     }
 
     /**
@@ -267,10 +252,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isDirectoryProvider()
     {
-        return array(
-            array('bar', true),
-            array('file_three.txt', false)
-        );
+        return array(array('bar', true), array('file_three.txt', false));
     }
 
     /**
@@ -319,13 +301,13 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $config = array(
-            'path' => $fullPath
-        );
+        $config = array('path' => $fullPath);
         $objectManager = Bootstrap::getObjectManager();
         $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\ReadFactory');
-        return $directoryFactory->create($config,
-            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList')));
+        return $directoryFactory->create(
+            $config,
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList'))
+        );
     }
 
     /**
@@ -333,13 +315,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadRecursively()
     {
-        $expected = array(
-            'bar/baz/file_one.txt',
-            'bar',
-            'bar/baz',
-            'bar/file_two.txt',
-            'file_three.txt'
-        );
+        $expected = array('bar/baz/file_one.txt', 'bar', 'bar/baz', 'bar/file_two.txt', 'file_three.txt');
 
         $dir = $this->getDirectoryInstance('foo');
         $actual = $dir->readRecursively('');

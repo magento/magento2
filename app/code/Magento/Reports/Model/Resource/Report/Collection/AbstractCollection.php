@@ -41,49 +41,49 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
      *
      * @var string
      */
-    protected $_from               = null;
+    protected $_from = null;
 
     /**
      * To date
      *
      * @var string
      */
-    protected $_to                 = null;
+    protected $_to = null;
 
     /**
      * Period
      *
      * @var string
      */
-    protected $_period             = null;
+    protected $_period = null;
 
     /**
      * Store ids
      *
      * @var int|array
      */
-    protected $_storesIds          = 0;
+    protected $_storesIds = 0;
 
     /**
      * Is totals
      *
      * @var bool
      */
-    protected $_isTotals           = false;
+    protected $_isTotals = false;
 
     /**
      * Is subtotals
      *
      * @var bool
      */
-    protected $_isSubTotals        = false;
+    protected $_isSubTotals = false;
 
     /**
      * Aggregated columns
      *
      * @var array
      */
-    protected $_aggregatedColumns  = array();
+    protected $_aggregatedColumns = array();
 
     /**
      * Set array of columns that should be aggregated
@@ -117,7 +117,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     public function setDateRange($from = null, $to = null)
     {
         $this->_from = $from;
-        $this->_to   = $to;
+        $this->_to = $to;
         return $this;
     }
 
@@ -172,7 +172,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     protected function _applyStoresFilterToSelect(\Zend_Db_Select $select)
     {
         $nullCheck = false;
-        $storeIds  = $this->_storesIds;
+        $storeIds = $this->_storesIds;
 
         if (!is_array($storeIds)) {
             $storeIds = array($storeIds);

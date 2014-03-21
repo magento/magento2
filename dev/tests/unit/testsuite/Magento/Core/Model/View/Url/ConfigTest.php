@@ -40,9 +40,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeConfig = $this->getMockBuilder('Magento\Core\Model\Store\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_storeConfig = $this->getMockBuilder(
+            'Magento\Core\Model\Store\Config'
+        )->disableOriginalConstructor()->getMock();
         $this->_model = new \Magento\Core\Model\View\Url\Config($this->_storeConfig);
     }
 
@@ -54,11 +54,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue($path, $expectedValue)
     {
-        $this->_storeConfig
-            ->expects($this->any())
-            ->method('getConfig')
-            ->with($path)
-            ->will($this->returnValue($expectedValue));
+        $this->_storeConfig->expects(
+            $this->any()
+        )->method(
+            'getConfig'
+        )->with(
+            $path
+        )->will(
+            $this->returnValue($expectedValue)
+        );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);
     }
@@ -72,7 +76,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             array('some/valid/path1', 'someValue'),
             array('some/valid/path2', 2),
             array('some/valid/path3', false),
-            array('some/invalid/path3', null),
+            array('some/invalid/path3', null)
         );
     }
 }

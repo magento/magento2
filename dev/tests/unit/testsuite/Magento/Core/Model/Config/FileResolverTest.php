@@ -93,18 +93,34 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $directory->expects($this->once())
-            ->method('search')
-            ->with(sprintf('{%1$s,*/%1$s}', $filename))
-            ->will($this->returnValue($fileList));
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::CONFIG_DIR)
-            ->will($this->returnValue($directory));
-        $this->iteratorFactory->expects($this->once())
-            ->method('create')
-            ->with($directory, $fileList)
-            ->will($this->returnValue(true));
+        $directory->expects(
+            $this->once()
+        )->method(
+            'search'
+        )->with(
+            sprintf('{%1$s,*/%1$s}', $filename)
+        )->will(
+            $this->returnValue($fileList)
+        );
+        $this->filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::CONFIG_DIR
+        )->will(
+            $this->returnValue($directory)
+        );
+        $this->iteratorFactory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $directory,
+            $fileList
+        )->will(
+            $this->returnValue(true)
+        );
         $this->assertTrue($this->model->get($filename, $scope));
     }
 
@@ -118,10 +134,15 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetGlobal($filename, $fileList)
     {
         $scope = 'global';
-        $this->moduleReader->expects($this->once())
-            ->method('getConfigurationFiles')
-            ->with($filename)
-            ->will($this->returnValue($fileList));
+        $this->moduleReader->expects(
+            $this->once()
+        )->method(
+            'getConfigurationFiles'
+        )->with(
+            $filename
+        )->will(
+            $this->returnValue($fileList)
+        );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
 
@@ -135,10 +156,15 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetDefault($filename, $fileList)
     {
         $scope = 'some_scope';
-        $this->moduleReader->expects($this->once())
-            ->method('getConfigurationFiles')
-            ->with($scope . '/' . $filename)
-            ->will($this->returnValue($fileList));
+        $this->moduleReader->expects(
+            $this->once()
+        )->method(
+            'getConfigurationFiles'
+        )->with(
+            $scope . '/' . $filename
+        )->will(
+            $this->returnValue($fileList)
+        );
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
 

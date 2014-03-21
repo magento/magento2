@@ -60,9 +60,8 @@ class CodeSniffer implements ToolInterface
      * @param string $reportFile Destination file to write inspection report to
      * @param Wrapper $wrapper
      */
-    public function __construct($rulesetDir, $reportFile,
-        Wrapper $wrapper
-    ) {
+    public function __construct($rulesetDir, $reportFile, Wrapper $wrapper)
+    {
         $this->reportFile = $reportFile;
         $this->rulesetDir = $rulesetDir;
         $this->wrapper = $wrapper;
@@ -98,15 +97,25 @@ class CodeSniffer implements ToolInterface
      *
      * @return int
      */
-    public function run(array $whiteList, array $blackList = array(), array $extensions = array(), $warningSeverity = 0)
-    {
-        $whiteList = array_map(function ($item) {
-            return $item;
-        }, $whiteList);
+    public function run(
+        array $whiteList,
+        array $blackList = array(),
+        array $extensions = array(),
+        $warningSeverity = 0
+    ) {
+        $whiteList = array_map(
+            function ($item) {
+                return $item;
+            },
+            $whiteList
+        );
 
-        $blackList = array_map(function ($item) {
-            return preg_quote($item);
-        }, $blackList);
+        $blackList = array_map(
+            function ($item) {
+                return preg_quote($item);
+            },
+            $blackList
+        );
 
         $this->wrapper->checkRequirements();
         $settings = $this->wrapper->getDefaults();

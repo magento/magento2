@@ -69,14 +69,8 @@ class Customer extends \Magento\Backend\App\Action
         }
 
         $this->_view->loadLayout();
-        $this->_addBreadcrumb(
-            __('Reports'),
-            __('Reports')
-        );
-        $this->_addBreadcrumb(
-            __('Customers'),
-            __('Customers')
-        );
+        $this->_addBreadcrumb(__('Reports'), __('Reports'));
+        $this->_addBreadcrumb(__('Customers'), __('Customers'));
         return $this;
     }
 
@@ -89,12 +83,12 @@ class Customer extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('New Accounts Report'));
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_customers_accounts')
-            ->_addBreadcrumb(
-                __('New Accounts'),
-                __('New Accounts')
-            );
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_customers_accounts'
+        )->_addBreadcrumb(
+            __('New Accounts'),
+            __('New Accounts')
+        );
         $this->_view->renderLayout();
     }
 
@@ -139,10 +133,12 @@ class Customer extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('Order Count Report'));
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_customers_orders')
-            ->_addBreadcrumb(__('Customers by Number of Orders'),
-                __('Customers by Number of Orders'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_customers_orders'
+        )->_addBreadcrumb(
+            __('Customers by Number of Orders'),
+            __('Customers by Number of Orders')
+        );
         $this->_view->renderLayout();
     }
 
@@ -168,7 +164,7 @@ class Customer extends \Magento\Backend\App\Action
     public function exportOrdersExcelAction()
     {
         $this->_view->loadLayout();
-        $fileName   = 'customers_orders.xml';
+        $fileName = 'customers_orders.xml';
         /** @var ExportInterface $exportBlock */
         $exportBlock = $this->_view->getLayout()->getChildBlock('adminhtml.report.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName));
@@ -183,10 +179,12 @@ class Customer extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('Order Total Report'));
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_customers_totals')
-            ->_addBreadcrumb(__('Customers by Orders Total'),
-                __('Customers by Orders Total'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_customers_totals'
+        )->_addBreadcrumb(
+            __('Customers by Orders Total'),
+            __('Customers by Orders Total')
+        );
         $this->_view->renderLayout();
     }
 

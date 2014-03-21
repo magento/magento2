@@ -55,10 +55,10 @@ class Profiler extends \Magento\Cache\Frontend\Decorator\Bare
     protected function _getProfilerTags($operation)
     {
         return array(
-            'group'         => 'cache',
-            'operation'     => 'cache:' . $operation,
+            'group' => 'cache',
+            'operation' => 'cache:' . $operation,
             'frontend_type' => get_class($this->getLowLevelFrontend()),
-            'backend_type'  => $this->_getBackendType(),
+            'backend_type' => $this->_getBackendType()
         );
     }
 

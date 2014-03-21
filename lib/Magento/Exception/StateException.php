@@ -1,5 +1,4 @@
 <?php
-
 namespace Magento\Exception;
 
 /**
@@ -23,10 +22,12 @@ namespace Magento\Exception;
  *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */ 
+ */
 class StateException extends Exception
 {
     const INVALID_STATE = 1;
+
     const EXPIRED = 3;
+
     const INPUT_MISMATCH = 5;
 }

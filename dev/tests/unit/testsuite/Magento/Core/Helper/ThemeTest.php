@@ -24,15 +24,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     const ROOT_DIR = '/zzz';
+
     const APP_DIR = '/zzz/qqq';
+
     const MODULES_DIR = '/zzz/qqq/code00';
+
     const THEMES_DIR = '/zzz/qqq/design00';
+
     const PUB_LIB_DIR = '/zzz/qqq/js00';
 
     /**
@@ -53,22 +56,26 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->_getFilesystem();
 
         $directory = $this->getMock('Magento\Filesystem\Directory\Read', array('getRelativePath'), array(), '', false);
-        $directory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnValueMap(array(
-                array('/zzz/qqq/test1.css', 'qqq/test1.css'),
-                array('/zzz/qqq/test2.css', 'qqq/test2.css'),
-                array('/zzz/qqq/test3.css', 'qqq/test3.css'),
-                array('/zzz/qqq/test4.css', 'qqq/test4.css'),
-                array('/zzz/qqq/test21.css', 'qqq/test21.css'),
-                array('/zzz/qqq/test22.css', 'qqq/test22.css'),
-                array('/zzz/qqq/test23.css', 'qqq/test23.css'),
-                array('/zzz/qqq/test24.css', 'qqq/test24.css'),
-            )));
+        $directory->expects(
+            $this->any()
+        )->method(
+            'getRelativePath'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('/zzz/qqq/test1.css', 'qqq/test1.css'),
+                    array('/zzz/qqq/test2.css', 'qqq/test2.css'),
+                    array('/zzz/qqq/test3.css', 'qqq/test3.css'),
+                    array('/zzz/qqq/test4.css', 'qqq/test4.css'),
+                    array('/zzz/qqq/test21.css', 'qqq/test21.css'),
+                    array('/zzz/qqq/test22.css', 'qqq/test22.css'),
+                    array('/zzz/qqq/test23.css', 'qqq/test23.css'),
+                    array('/zzz/qqq/test24.css', 'qqq/test24.css')
+                )
+            )
+        );
 
-        $filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($directory));
+        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directory));
 
 
         // 4. Get layout merge model and factory
@@ -83,11 +90,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
 
         // 7. Get view file system model mock
-        $params = array(
-            'area'       => $themeArea,
-            'themeModel' => $theme,
-            'skipProxy'  => true
-        );
+        $params = array('area' => $themeArea, 'themeModel' => $theme, 'skipProxy' => true);
         $map = array(
             array('test1.css', $params, '/zzz/qqq/test1.css'),
             array('test2.css', $params, '/zzz/qqq/test2.css'),
@@ -96,7 +99,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array('test21.css', $params, '/zzz/qqq/test21.css'),
             array('test22.css', $params, '/zzz/qqq/test22.css'),
             array('Magento_Core::test23.css', $params, '/zzz/qqq/test23.css'),
-            array('test24.css', $params, '/zzz/qqq/test24.css'),
+            array('test24.css', $params, '/zzz/qqq/test24.css')
         );
         $fileSystemView = $this->_getFileSystemView($map);
 
@@ -128,8 +131,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 </block>',
                 array(
                     'test1.css' => array(
-                        'id'       => 'test1.css',
-                        'path'     => '/zzz/qqq/test1.css',
+                        'id' => 'test1.css',
+                        'path' => '/zzz/qqq/test1.css',
                         'safePath' => 'qqq/test1.css'
                     )
                 )
@@ -144,10 +147,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 </block>',
                 array(
                     'Magento_Core::test3.css' => array(
-                        'id'       => 'Magento_Core::test3.css',
-                        'path'     => '/zzz/qqq/test3.css',
+                        'id' => 'Magento_Core::test3.css',
+                        'path' => '/zzz/qqq/test3.css',
                         'safePath' => 'qqq/test3.css'
-                    ),
+                    )
                 )
             ),
             array(
@@ -158,10 +161,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 </referenceBlock>',
                 array(
                     'test21.css' => array(
-                        'id'       => 'test21.css',
-                        'path'     => '/zzz/qqq/test21.css',
+                        'id' => 'test21.css',
+                        'path' => '/zzz/qqq/test21.css',
                         'safePath' => 'qqq/test21.css'
-                    ),
+                    )
                 )
             ),
             array(
@@ -174,10 +177,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 </referenceBlock>',
                 array(
                     'Magento_Core::test23.css' => array(
-                        'id'       => 'Magento_Core::test23.css',
-                        'path'     => '/zzz/qqq/test23.css',
+                        'id' => 'Magento_Core::test23.css',
+                        'path' => '/zzz/qqq/test23.css',
                         'safePath' => 'qqq/test23.css'
-                    ),
+                    )
                 )
             ),
             array(
@@ -188,8 +191,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         </arguments>
                     </block>
                 </block>',
-                array(),
-
+                array()
             ),
             array(
                 '<block type="Some_Block_Class">
@@ -199,7 +201,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         </arguments>
                     </block>
                 </block>',
-                array(),
+                array()
             ),
             array(
                 '<referenceBlock name="some_block_name">
@@ -207,7 +209,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         <arguments><argument name="file" xsi:type="string">test23.css</argument></arguments>
                     </block>
                 </referenceBlock>',
-                array(),
+                array()
             ),
             array(
                 '<referenceBlock name="some_block_name">
@@ -217,7 +219,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         </arguments>
                     </block>
                 </referenceBlock>',
-                array(),
+                array()
             ),
             array(
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
@@ -259,23 +261,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     </block>
                 </referenceBlock>',
                 array(
-                    'testh.css' => array(
-                        'id' => 'testh.css',
-                        'path' => '',
-                        'safePath' => '',
-                    ),
+                    'testh.css' => array('id' => 'testh.css', 'path' => '', 'safePath' => ''),
                     'Magento_Core::test.css' => array(
                         'id' => 'Magento_Core::test.css',
                         'path' => '',
-                        'safePath' => '',
+                        'safePath' => ''
                     ),
-                    'test.css' => array(
-                        'id' => 'test.css',
-                        'path' => '',
-                        'safePath' => '',
-                    ),
-                ),
-            ),
+                    'test.css' => array('id' => 'test.css', 'path' => '', 'safePath' => '')
+                )
+            )
         );
     }
 
@@ -301,84 +295,78 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function getGroupedCssFilesDataProvider()
     {
         $item11 = array(
-            'path'     => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
+            'path' => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
             'safePath' => 'design00/area11/vendor11_theme11/test11.test'
         );
         $item12 = array(
-            'path'     => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
+            'path' => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
             'safePath' => 'design00/area12/vendor12_theme12/test12.test'
         );
         $item13 = array(
-            'path'     => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
+            'path' => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
             'safePath' => 'design00/area13/vendor13_theme13/test13.test'
         );
 
         $item21 = array(
-            'path'     => '/zzz/qqq/code00/Magento_Core00/test21.test',
+            'path' => '/zzz/qqq/code00/Magento_Core00/test21.test',
             'safePath' => 'code00/Magento_Core00/test21.test'
         );
-        $item31 = array(
-            'path'     => '/zzz/qqq/js00/some_path/test31.test',
-            'safePath' => 'js00/some_path/test31.test'
-        );
+        $item31 = array('path' => '/zzz/qqq/js00/some_path/test31.test', 'safePath' => 'js00/some_path/test31.test');
         $groups11 = array(
             '"11" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
+                    'path' => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
                     'safePath' => 'design00/area11/vendor11_theme11/test11.test'
-                ),
+                )
             )
         );
         $groups12 = array(
             '"12" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
+                    'path' => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
                     'safePath' => 'design00/area12/vendor12_theme12/test12.test'
-                ),
+                )
             )
         );
         $groups13 = array(
             '"13" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
+                    'path' => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
                     'safePath' => 'design00/area13/vendor13_theme13/test13.test'
-                ),
+                )
             )
         );
         $groups1 = array(
             '"11" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
+                    'path' => '/zzz/qqq/design00/area11/vendor11_theme11/test11.test',
                     'safePath' => 'design00/area11/vendor11_theme11/test11.test'
-                ),
+                )
             ),
             '"12" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
+                    'path' => '/zzz/qqq/design00/area12/vendor12_theme12/test12.test',
                     'safePath' => 'design00/area12/vendor12_theme12/test12.test'
-                ),
+                )
             ),
             '"13" Theme files' => array(
                 array(
-                    'path'     => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
+                    'path' => '/zzz/qqq/design00/area13/vendor13_theme13/test13.test',
                     'safePath' => 'design00/area13/vendor13_theme13/test13.test'
-                ),
+                )
             )
         );
         $groups21 = array(
             'Framework files' => array(
                 array(
-                    'path'     => '/zzz/qqq/code00/Magento_Core00/test21.test',
+                    'path' => '/zzz/qqq/code00/Magento_Core00/test21.test',
                     'safePath' => 'code00/Magento_Core00/test21.test'
-                ),
+                )
             )
         );
         $groups31 = array(
             'Library files' => array(
-                array(
-                    'path'     => '/zzz/qqq/js00/some_path/test31.test',
-                    'safePath' => 'js00/some_path/test31.test'
-                ),
+                array('path' => '/zzz/qqq/js00/some_path/test31.test', 'safePath' => 'js00/some_path/test31.test')
             )
         );
         return array(
@@ -388,10 +376,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array(array($item11, $item12, $item13), $groups1),
             array(array($item21), $groups21),
             array(array($item31), $groups31),
-            array(
-                array($item11, $item12, $item13, $item21, $item31),
-                array_merge($groups1, $groups21, $groups31)
-            ),
+            array(array($item11, $item12, $item13, $item21, $item31), array_merge($groups1, $groups21, $groups31))
         );
     }
 
@@ -402,10 +387,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGroupedCssFilesException()
     {
-        $files = array(array(
-            'path'     => '/zzz/some_path/test.test',
-            'safePath' => 'some_path/test.test'
-        ));
+        $files = array(array('path' => '/zzz/some_path/test.test', 'safePath' => 'some_path/test.test'));
 
         $helper = $this->_getHelper($files);
 
@@ -428,15 +410,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $theme->expects($this->any())
-            ->method('getThemeId')
-            ->will($this->returnValue($themeId));
-        $theme->expects($this->any())
-            ->method('getArea')
-            ->will($this->returnValue($themeArea));
-        $theme->expects($this->any())
-            ->method('getThemeTitle')
-            ->will($this->returnValue($themeId));
+        $theme->expects($this->any())->method('getThemeId')->will($this->returnValue($themeId));
+        $theme->expects($this->any())->method('getArea')->will($this->returnValue($themeArea));
+        $theme->expects($this->any())->method('getThemeTitle')->will($this->returnValue($themeId));
 
         return $theme;
     }
@@ -448,11 +424,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected function _getFileSystemView($map)
     {
         /** @var $fileSystem \Magento\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
-        $fileSystem = $this->getMockBuilder('Magento\View\FileSystem', array())
-            ->disableOriginalConstructor()->getMock();
-        $fileSystem->expects($this->any())
-            ->method('getViewFile')
-            ->will($this->returnValueMap($map));
+        $fileSystem = $this->getMockBuilder(
+            'Magento\View\FileSystem',
+            array()
+        )->disableOriginalConstructor()->getMock();
+        $fileSystem->expects($this->any())->method('getViewFile')->will($this->returnValueMap($map));
 
         return $fileSystem;
     }
@@ -467,15 +443,23 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $layoutProcessor = $this->getMockBuilder('Magento\View\Layout\ProcessorInterface')->getMockForAbstractClass();
         $xml = '<layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . $layoutStr . '</layouts>';
         $layoutElement = simplexml_load_string($xml);
-        $layoutProcessor->expects($this->any())
-            ->method('getFileLayoutUpdatesXml')
-            ->will($this->returnValue($layoutElement));
+        $layoutProcessor->expects(
+            $this->any()
+        )->method(
+            'getFileLayoutUpdatesXml'
+        )->will(
+            $this->returnValue($layoutElement)
+        );
 
         /** @var $processorFactory \Magento\View\Layout\ProcessorFactory */
-        $processorFactory = $this->getMock('Magento\View\Layout\ProcessorFactory', array('create'), array(), '', false);
-        $processorFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($layoutProcessor));
+        $processorFactory = $this->getMock(
+            'Magento\View\Layout\ProcessorFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
+        $processorFactory->expects($this->any())->method('create')->will($this->returnValue($layoutProcessor));
 
         return $processorFactory;
     }
@@ -486,18 +470,28 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected function _getFilesystem()
     {
         /** @var $filesystem \Magento\App\Filesystem */
-        $filesystem = $this->getMock('Magento\App\Filesystem',
-            array('getPath', '__wakeup', 'getDirectoryRead'), array(), '', false
+        $filesystem = $this->getMock(
+            'Magento\App\Filesystem',
+            array('getPath', '__wakeup', 'getDirectoryRead'),
+            array(),
+            '',
+            false
         );
-        $filesystem->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap(array(
-                array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
-                array(\Magento\App\Filesystem::APP_DIR, self::APP_DIR),
-                array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
-                array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
-                array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR),
-            )));
+        $filesystem->expects(
+            $this->any()
+        )->method(
+            'getPath'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array(\Magento\App\Filesystem::ROOT_DIR, self::ROOT_DIR),
+                    array(\Magento\App\Filesystem::APP_DIR, self::APP_DIR),
+                    array(\Magento\App\Filesystem::MODULES_DIR, self::MODULES_DIR),
+                    array(\Magento\App\Filesystem::THEMES_DIR, self::THEMES_DIR),
+                    array(\Magento\App\Filesystem::PUB_LIB_DIR, self::PUB_LIB_DIR)
+                )
+            )
+        );
 
         return $filesystem;
     }
@@ -512,16 +506,26 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme13 = $this->_getTheme('13', 'area13');
 
         /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
-        $themeCollection = $this->getMock('Magento\Core\Model\Resource\Theme\Collection',
-            array('getThemeByFullPath'), array(), '', false
+        $themeCollection = $this->getMock(
+            'Magento\Core\Model\Resource\Theme\Collection',
+            array('getThemeByFullPath'),
+            array(),
+            '',
+            false
         );
-        $themeCollection->expects($this->any())
-            ->method('getThemeByFullPath')
-            ->will($this->returnValueMap(array(
-                array('area11/vendor11_theme11', $theme11),
-                array('area12/vendor12_theme12', $theme12),
-                array('area13/vendor13_theme13', $theme13),
-            )));
+        $themeCollection->expects(
+            $this->any()
+        )->method(
+            'getThemeByFullPath'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('area11/vendor11_theme11', $theme11),
+                    array('area12/vendor12_theme12', $theme12),
+                    array('area13/vendor13_theme13', $theme13)
+                )
+            )
+        );
 
         return $themeCollection;
     }
@@ -542,14 +546,22 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         // 5. Get layout merge model and factory
         /** @var $processorFactory \Magento\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject */
-        $processorFactory = $this->getMock('Magento\View\Layout\ProcessorFactory', array('create'), array(), '', false);
+        $processorFactory = $this->getMock(
+            'Magento\View\Layout\ProcessorFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
 
         /** @var $context \Magento\App\Helper\Context */
         $context = $this->getMock('Magento\App\Helper\Context', null, array(), '', false);
 
         /** @var $fileSystem \Magento\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
-        $fileSystem = $this->getMockBuilder('Magento\View\FileSystem', array())
-            ->disableOriginalConstructor()->getMock();
+        $fileSystem = $this->getMockBuilder(
+            'Magento\View\FileSystem',
+            array()
+        )->disableOriginalConstructor()->getMock();
 
         /** @var $helper \Magento\Core\Helper\Theme|\PHPUnit_Framework_MockObject_MockObject */
         $helper = $this->getMock(
@@ -557,9 +569,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array('getCssFiles'),
             array($context, $dirs, $processorFactory, $themeCollection, $fileSystem)
         );
-        $helper->expects($this->once())
-            ->method('getCssFiles')
-            ->will($this->returnValue($files));
+        $helper->expects($this->once())->method('getCssFiles')->will($this->returnValue($files));
 
         return $helper;
     }

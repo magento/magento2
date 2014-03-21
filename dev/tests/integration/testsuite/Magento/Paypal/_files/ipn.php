@@ -25,10 +25,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array (
-    'mc_gross'       => '100.00',
-    'invoice'        => '100000001',
+return array(
+    'mc_gross' => '100.00',
+    'invoice' => '100000001',
     'payment_status' => 'Completed',
-    'mc_currency'    => 'USD',
-    'receiver_email' => 'merchant_2012050718_biz@example.com',
+    'mc_currency' => 'USD',
+    'receiver_email' => 'merchant_2012050718_biz@example.com'
 );

@@ -73,16 +73,18 @@ class Factory
             $class = $this->_defaultOutputPrefix . ucfirst($type);
             if (!class_exists($class)) {
                 throw new \InvalidArgumentException(
-                    sprintf("Cannot create standard driver output, class \"%s\" doesn't exist.", $class
-                ));
+                    sprintf("Cannot create standard driver output, class \"%s\" doesn't exist.", $class)
+                );
             }
         }
         $output = new $class($config);
         if (!$output instanceof OutputInterface) {
-            throw new \InvalidArgumentException(sprintf(
-                "Output class \"%s\" must implement \Magento\Profiler\Driver\Standard\OutputInterface.",
-                get_class($output)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Output class \"%s\" must implement \Magento\Profiler\Driver\Standard\OutputInterface.",
+                    get_class($output)
+                )
+            );
         }
         return $output;
     }

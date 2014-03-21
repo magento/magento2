@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 
 /**
@@ -80,26 +79,23 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'action' => '#',
-                'method' => 'post',
-            ))
-        );
+        $form = $this->_formFactory->create(array('data' => array('action' => '#', 'method' => 'post')));
         $this->setForm($form);
         $form->setUseContainer(true);
 
         $form->addType('js_files', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Uploader');
 
         $jsConfig = array(
-            'name'     => 'js_files_uploader',
-            'title'    => __('Select JS Files to Upload'),
-            'accept'   => 'application/x-javascript',
-            'multiple' => '1',
+            'name' => 'js_files_uploader',
+            'title' => __('Select JS Files to Upload'),
+            'accept' => 'application/x-javascript',
+            'multiple' => '1'
         );
         if ($this->_customizationConfig->isThemeAssignedToStore($this->_themeContext->getEditableTheme())) {
-            $confirmMessage = __('These JavaScript files may change the appearance of your live store(s).'
-                . ' Are you sure you want to do this?');
+            $confirmMessage = __(
+                'These JavaScript files may change the appearance of your live store(s).' .
+                ' Are you sure you want to do this?'
+            );
             $jsConfig['onclick'] = "return confirm('{$confirmMessage}');";
         }
         $form->addField('js_files_uploader', 'js_files', $jsConfig);
@@ -115,8 +111,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getConfirmMessageDelete()
     {
-        return __('Are you sure you want to delete this JavaScript file?'
-            . ' The changes to your theme will not be reversible.');
+        return __(
+            'Are you sure you want to delete this JavaScript file?' .
+            ' The changes to your theme will not be reversible.'
+        );
     }
 
     /**
@@ -126,8 +124,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsUploadUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/uploadjs',
-            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/uploadjs',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**
@@ -137,8 +137,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsReorderUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/reorderjs',
-            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/reorderjs',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**
@@ -148,9 +150,10 @@ class Js extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getJsDeleteUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/deleteCustomFiles', array(
-            'theme_id' => $this->_themeContext->getEditableTheme()->getId()
-        ));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/deleteCustomFiles',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**

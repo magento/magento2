@@ -87,7 +87,7 @@ abstract class AbstractCommand
      */
     public function canRun()
     {
-        return ($this->_execShellCmd($this->_buildVersionShellCmd()) !== false);
+        return $this->_execShellCmd($this->_buildVersionShellCmd()) !== false;
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class AbstractCommand
         if (!$versionOutput) {
             return null;
         }
-        return (preg_match('/[^\d]*([^\s]+)/', $versionOutput, $matches) ? $matches[1] : $versionOutput);
+        return preg_match('/[^\d]*([^\s]+)/', $versionOutput, $matches) ? $matches[1] : $versionOutput;
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class AbstractCommand
         $output = array();
         exec($shellCmd . ' 2>&1', $output, $this->_lastExitCode);
         $this->_lastOutput = implode(PHP_EOL, $output);
-        return ($this->_lastExitCode === 0 ? $this->_lastOutput : false);
+        return $this->_lastExitCode === 0 ? $this->_lastOutput : false;
     }
 
     /**

@@ -32,9 +32,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Transactions
-    extends \Magento\Sales\Block\Adminhtml\Transactions\Grid
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Transactions extends \Magento\Sales\Block\Adminhtml\Transactions\Grid implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Retrieve grid url

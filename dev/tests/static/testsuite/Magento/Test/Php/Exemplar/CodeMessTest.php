@@ -56,8 +56,10 @@ class CodeMessTest extends \PHPUnit_Framework_TestCase
     {
         self::$_rulesetFile = realpath(__DIR__ . '/../_files/phpmd/ruleset.xml');
         self::$_reportFile = __DIR__ . '/../../../tmp/phpmd_report.xml';
-        self::$_messDetector =
-            new \Magento\TestFramework\CodingStandard\Tool\CodeMessDetector(self::$_rulesetFile, self::$_reportFile);
+        self::$_messDetector = new \Magento\TestFramework\CodingStandard\Tool\CodeMessDetector(
+            self::$_rulesetFile,
+            self::$_reportFile
+        );
     }
 
     protected function setUp()
@@ -112,8 +114,9 @@ class CodeMessTest extends \PHPUnit_Framework_TestCase
              * @param string|array $expectedXpaths
              */
             function ($inputFile, $expectedXpaths) {
-                $this->assertNotEquals(\PHP_PMD_TextUI_Command::EXIT_SUCCESS, self::$_messDetector->run(
-                    array($inputFile)),
+                $this->assertNotEquals(
+                    \PHP_PMD_TextUI_Command::EXIT_SUCCESS,
+                    self::$_messDetector->run(array($inputFile)),
                     "PHP Mess Detector has failed to identify problem at the erroneous file {$inputFile}"
                 );
 
@@ -122,11 +125,11 @@ class CodeMessTest extends \PHPUnit_Framework_TestCase
                 foreach ($expectedXpaths as $expectedXpath) {
                     $this->assertNotEmpty(
                         $actualReportXml->xpath($expectedXpath),
-                        "Expected xpath: '$expectedXpath' for file: '$inputFile'"
+                        "Expected xpath: '{$expectedXpath}' for file: '{$inputFile}'"
                     );
                 }
             },
-            include(__DIR__ . '/_files/phpmd/data.php')
+            include __DIR__ . '/_files/phpmd/data.php'
         );
     }
 }

@@ -39,7 +39,7 @@ class History extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_status_history_resource';
+    protected $_eventPrefix = 'sales_order_status_history_resource';
 
     /**
      * Model initialization

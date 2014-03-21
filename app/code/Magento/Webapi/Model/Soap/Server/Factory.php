@@ -60,13 +60,7 @@ class Factory
      */
     public function create($url, $options)
     {
-        $soapServer = $this->_objectManager->create(
-            'SoapServer',
-            array(
-                'wsdl' => $url,
-                'options' => $options
-            )
-        );
+        $soapServer = $this->_objectManager->create('SoapServer', array('wsdl' => $url, 'options' => $options));
         $soapServer->setObject($this->_soapHandler);
         return $soapServer;
     }

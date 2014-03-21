@@ -88,10 +88,15 @@ class Matrix extends \Magento\Backend\Block\Template
 
         sort($currencies);
 
-        $this->setAllowedCurrencies($currencies)
-            ->setDefaultCurrencies($defaultCurrencies)
-            ->setOldRates($oldCurrencies)
-            ->setNewRates($this->_prepareRates($newRates));
+        $this->setAllowedCurrencies(
+            $currencies
+        )->setDefaultCurrencies(
+            $defaultCurrencies
+        )->setOldRates(
+            $oldCurrencies
+        )->setNewRates(
+            $this->_prepareRates($newRates)
+        );
 
         return parent::_prepareLayout();
     }

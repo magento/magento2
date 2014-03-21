@@ -35,7 +35,6 @@ namespace Magento\Downloader\Model\Config;
 
 interface ConfigInterface
 {
-
     /**
      * Set data for Settings View
      *
@@ -88,4 +87,3 @@ interface ConfigInterface
      */
     public function setCommandOptions($session, &$options);
 }
-?>

@@ -36,7 +36,6 @@ namespace Magento\Widget\Model\Resource;
 
 class Widget extends \Magento\Core\Model\Resource\Db\AbstractDb
 {
-
     /**
      * Define main table
      *
@@ -56,9 +55,11 @@ class Widget extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function loadPreconfiguredWidget($widgetId)
     {
         $readAdapter = $this->_getReadAdapter();
-        $select = $readAdapter->select()
-            ->from($this->getMainTable())
-            ->where($this->getIdFieldName() . '=:' . $this->getIdFieldName());
+        $select = $readAdapter->select()->from(
+            $this->getMainTable()
+        )->where(
+            $this->getIdFieldName() . '=:' . $this->getIdFieldName()
+        );
         $bind = array($this->getIdFieldName() => $widgetId);
         $widget = $readAdapter->fetchRow($select, $bind);
         if (is_array($widget)) {

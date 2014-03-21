@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model\Export\RowCustomizer;
 
 use Magento\ImportExport\Model\Export\RowCustomizerInterface;
@@ -102,8 +101,12 @@ class Composite implements RowCustomizerInterface
     public function getAdditionalRowsCount($additionalRowsCount, $productId)
     {
         foreach ($this->customizers as $className) {
-            $additionalRowsCount =
-                $this->objectManager->get($className)->getAdditionalRowsCount($additionalRowsCount, $productId);
+            $additionalRowsCount = $this->objectManager->get(
+                $className
+            )->getAdditionalRowsCount(
+                $additionalRowsCount,
+                $productId
+            );
         }
         return $additionalRowsCount;
     }

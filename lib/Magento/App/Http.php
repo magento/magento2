@@ -116,9 +116,11 @@ class Http implements \Magento\LauncherInterface
             $areaCode = $this->_areaList->getCodeByFrontName($this->_request->getFrontName());
             $this->_state->setAreaCode($areaCode);
             $this->_objectManager->configure($this->_configLoader->load($areaCode));
-            $this->_response = $this->_objectManager
-                ->get('Magento\App\FrontControllerInterface')
-                ->dispatch($this->_request);
+            $this->_response = $this->_objectManager->get(
+                'Magento\App\FrontControllerInterface'
+            )->dispatch(
+                $this->_request
+            );
             // This event gives possibility to launch something before sending output (allow cookie setting)
             $eventParams = array('request' => $this->_request, 'response' => $this->_response);
             $this->_eventManager->dispatch('controller_front_send_response_before', $eventParams);
@@ -141,7 +143,7 @@ class Http implements \Magento\LauncherInterface
                             $reportData['script_name'] = $_SERVER['SCRIPT_NAME'];
                         }
                     }
-                    require_once($this->_filesystem->getPath(Filesystem::PUB_DIR) . '/errors/report.php');
+                    require_once $this->_filesystem->getPath(Filesystem::PUB_DIR) . '/errors/report.php';
                     $processor = new \Error_Processor($this->_response);
                     $processor->saveReport($reportData);
                     $this->_response = $processor->processReport();

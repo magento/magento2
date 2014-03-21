@@ -120,7 +120,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
             if (strip_tags($row) == $row) {
                 $row = preg_replace('/@ (.*)/', __("See '\\1'"), $row);
                 if (!is_null($product)) {
-                    $row .= ' ' . __("for product '%1' (in '%2' store)", $product->getName(), $this->_storeManager->getStore($product->getStoreId())->getName());
+                    $row .= ' ' . __(
+                        "for product '%1' (in '%2' store)",
+                        $product->getName(),
+                        $this->_storeManager->getStore($product->getStoreId())->getName()
+                    );
                 }
                 $result[] = $row;
                 continue;

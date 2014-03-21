@@ -33,8 +33,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
-class Countryofmanufacture
-    extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * @var \Magento\App\Cache\Type\Config
@@ -83,8 +82,7 @@ class Countryofmanufacture
         if ($cache = $this->_configCacheType->load($cacheKey)) {
             $options = unserialize($cache);
         } else {
-            $collection = $this->_countryFactory->create()->getResourceCollection()
-                ->loadByStore();
+            $collection = $this->_countryFactory->create()->getResourceCollection()->loadByStore();
             $options = $collection->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
@@ -43,7 +42,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        include(__DIR__. '/_files/session_backend_mock.php');
+        include __DIR__ . '/_files/session_backend_mock.php';
         $requestMock = $helper->getObject('Magento\App\Request\Http');
         $helper->getObject('Magento\Backend\Model\Session', array('request' => $requestMock));
         $this->assertTrue(self::$sessionStart);

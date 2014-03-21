@@ -48,11 +48,10 @@ class Tax extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
 
         $this->_removeButton('add');
-        $this->addButton('filter_form_submit', array(
-            'label'     => __('Show Report'),
-            'onclick'   => 'filterFormSubmit()',
-            'class'     => 'primary'
-        ));
+        $this->addButton(
+            'filter_form_submit',
+            array('label' => __('Show Report'), 'onclick' => 'filterFormSubmit()', 'class' => 'primary')
+        );
     }
 
     /**
@@ -63,5 +62,4 @@ class Tax extends \Magento\Backend\Block\Widget\Grid\Container
         $this->getRequest()->setParam('filter', null);
         return $this->getUrl('*/*/tax', array('_current' => true));
     }
-
 }

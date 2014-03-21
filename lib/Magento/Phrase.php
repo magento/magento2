@@ -25,7 +25,7 @@
  */
 namespace Magento;
 
-use \Magento\Phrase\RendererInterface;
+use Magento\Phrase\RendererInterface;
 
 class Phrase
 {

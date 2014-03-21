@@ -54,24 +54,21 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->_storeManager = $this->_objectManager->get('Magento\Core\Model\StoreManager');
-        $this->_context = $this->_objectManager
-            ->get(
-                'Magento\Backend\Block\Template\Context',
-                array('storeManager' => $this->_storeManager)
-            );
+        $this->_context = $this->_objectManager->get(
+            'Magento\Backend\Block\Template\Context',
+            array('storeManager' => $this->_storeManager)
+        );
 
         $this->_coreRegistry = $this->_objectManager->get('Magento\Registry');
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, self::CUSTOMER_ID_VALUE);
 
-        $this->_block = $this->_objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
-                '',
-                array(
-                    'context' => $this->_context,
-                    'registry' => $this->_coreRegistry
-                )
-            );
+        $this->_block = $this->_objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
+            '',
+            array('context' => $this->_context, 'registry' => $this->_coreRegistry)
+        );
     }
 
     public function tearDown()
@@ -91,15 +88,14 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testGetGridParentHtml()
     {
-        $this->_block = $this->_objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
-                '',
-                array()
-            );
-        $mockCollection = $this->getMockBuilder('\Magento\Data\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_block = $this->_objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
+            '',
+            array()
+        );
+        $mockCollection = $this->getMockBuilder('\Magento\Data\Collection')->disableOriginalConstructor()->getMock();
         $this->_block->setCollection($mockCollection);
         $this->assertContains("<div class=\"grid-actions\">", $this->_block->getGridParentHtml());
     }

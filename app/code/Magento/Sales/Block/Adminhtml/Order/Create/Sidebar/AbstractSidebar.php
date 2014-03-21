@@ -184,9 +184,9 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
                 } else {
                     $type = '';
                     // Maybe some item, that can give us product via getProduct()
-                    if (($item instanceof \Magento\Object) || method_exists($item, 'getProduct')) {
+                    if ($item instanceof \Magento\Object || method_exists($item, 'getProduct')) {
                         $product = $item->getProduct();
-                        if ($product && ($product instanceof \Magento\Catalog\Model\Product)) {
+                        if ($product && $product instanceof \Magento\Catalog\Model\Product) {
                             $type = $product->getTypeId();
                         }
                     }
@@ -228,7 +228,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      */
     public function getItemQty(\Magento\Object $item)
     {
-        return $item->getQty()*1 ? $item->getQty()*1 : 1;
+        return $item->getQty() * 1 ? $item->getQty() * 1 : 1;
     }
 
     /**

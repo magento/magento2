@@ -55,6 +55,7 @@
         <xs:attribute name="class" type="xs:string" />
         <xs:attribute name="is_email_compatible" type="xs:boolean" />
         <xs:attribute name="placeholder_image" type="xs:string" />
+        <xs:attribute name="ttl" type="xs:int" />
     </xs:complexType>
 
     <xs:complexType name="parametersType">

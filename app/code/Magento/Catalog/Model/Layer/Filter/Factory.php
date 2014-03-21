@@ -59,8 +59,9 @@ class Factory
         $filter = $this->_objectManager->create($className, $data);
 
         if (!$filter instanceof \Magento\Catalog\Model\Layer\Filter\AbstractFilter) {
-            throw new \Magento\Core\Exception($className
-                . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter');
+            throw new \Magento\Core\Exception(
+                $className . ' doesn\'t extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter'
+            );
         }
         return $filter;
     }

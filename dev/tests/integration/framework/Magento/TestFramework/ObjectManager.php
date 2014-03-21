@@ -32,10 +32,7 @@ class ObjectManager extends \Magento\App\ObjectManager
      *
      * @var array
      */
-    protected $_classesToDestruct = array(
-        'Magento\Core\Model\Layout',
-        'Magento\Registry'
-    );
+    protected $_classesToDestruct = array('Magento\Core\Model\Layout', 'Magento\Registry');
 
     /**
      * @var array
@@ -64,9 +61,7 @@ class ObjectManager extends \Magento\App\ObjectManager
         }
 
         \Magento\Core\Model\Config\Base::destroy();
-        $sharedInstances = array(
-            'Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this
-        );
+        $sharedInstances = array('Magento\ObjectManager' => $this, 'Magento\App\ObjectManager' => $this);
         foreach ($this->persistedInstances as $persistedClass) {
             if (isset($this->_sharedInstances[$persistedClass])) {
                 $sharedInstances[$persistedClass] = $this->_sharedInstances[$persistedClass];

@@ -30,8 +30,10 @@ class DebugHints
     /**#@+
      * XPath of configuration of the debugging hints
      */
-    const XML_PATH_DEBUG_TEMPLATE_HINTS         = 'dev/debug/template_hints';
-    const XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS  = 'dev/debug/template_hints_blocks';
+    const XML_PATH_DEBUG_TEMPLATE_HINTS = 'dev/debug/template_hints';
+
+    const XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS = 'dev/debug/template_hints_blocks';
+
     /**#@-*/
 
     /**
@@ -81,10 +83,7 @@ class DebugHints
             $showBlockHints = $this->_storeConfig->getConfig(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS);
             return $this->_objectManager->create(
                 'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
-                array(
-                    'subject' => $invocationResult,
-                    'showBlockHints' => $showBlockHints,
-                )
+                array('subject' => $invocationResult, 'showBlockHints' => $showBlockHints)
             );
         }
         return $invocationResult;

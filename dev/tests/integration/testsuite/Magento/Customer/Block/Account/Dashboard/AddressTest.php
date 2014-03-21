@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
@@ -52,6 +51,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '',
                 array('customerSession' => $this->_customerSession)
             );
+        $this->objectManager->get('Magento\App\ViewInterface')->setIsLayoutLoaded(true);
     }
 
     protected function tearDown()
@@ -64,29 +64,29 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        $layout->setIsCacheable(false);
         /** @var CustomerAccountServiceInterface $customerAccountService */
-        $customerAccountService = Bootstrap::getObjectManager()
+        $customerAccountService = $objectManager
             ->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
         $customer = $customerAccountService->getCustomer(1);
-
         $this->_customerSession->setCustomerId(1);
         $object = $this->_block->getCustomer();
         $this->assertEquals($customer, $object);
+        $layout->setIsCacheable(true);
     }
 
     public function testGetCustomerMissingCustomer()
     {
         $moduleManager = $this->objectManager->get('Magento\Module\Manager');
         if ($moduleManager->isEnabled('Magento_PageCache')) {
-            $customerDataBuilder = $this->objectManager
-                ->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
-            $customerData = $customerDataBuilder
-                ->setGroupId($this->_customerSession->getCustomerGroupId())->create();
+            $customerDataBuilder = $this->objectManager->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
+            $customerData = $customerDataBuilder->setGroupId($this->_customerSession->getCustomerGroupId())->create();
             $this->assertEquals($customerData, $this->_block->getCustomer());
         } else {
             $this->assertNull($this->_block->getCustomer());
         }
-
     }
 
     /**
@@ -109,13 +109,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function getPrimaryShippingAddressHtmlDataProvider()
     {
         $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-                  . "\nUnited States<br/>\nT: 3468676\n\n";
+            . "\nUnited States<br/>\nT: 3468676\n\n";
 
-        return [
-            '0' => [0, 'You have not set a default shipping address.'],
-            '1' => [1, $expected],
-            '5' => [5, 'You have not set a default shipping address.'],
-        ];
+        return array(
+            '0' => array(0, 'You have not set a default shipping address.'),
+            '1' => array(1, $expected),
+            '5' => array(5, 'You have not set a default shipping address.')
+        );
     }
 
     /**
@@ -136,7 +136,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function getPrimaryBillingAddressHtmlDataProvider()
     {
         $expected = "John Smith<br/>\n\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>"
-                  . "\nUnited States<br/>\nT: 3468676\n\n";
+            . "\nUnited States<br/>\nT: 3468676\n\n";
         return [
             '0' => [0, 'You have not set a default billing address.'],
             '1' => [1, $expected],
@@ -162,9 +162,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function getPrimaryShippingAddressEditUrlDataProvider()
     {
         return [
-            '0' => [0, ''],
-            '1' => [1, 'http://localhost/index.php/customer/address/edit/id/1/'],
-            '5' => [5, 'http://localhost/index.php/customer/address/edit/'],
+            '0' => [0, 'http://localhost/index.php/customer/address/edit/'],
+            '1' => [1, 'http://localhost/index.php/customer/address/edit/'],
         ];
     }
 
@@ -183,13 +182,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $url);
     }
 
-
     public function getPrimaryBillingAddressEditUrlDataProvider()
     {
         return [
-            '0' => [0, ''],
-            '1' => [1, 'http://localhost/index.php/customer/address/edit/id/1/'],
-            '5' => [5, 'http://localhost/index.php/customer/address/edit/'],
+            '0' => [0, 'http://localhost/index.php/customer/address/edit/'],
+            '1' => [1, 'http://localhost/index.php/customer/address/edit/'],
         ];
     }
 }

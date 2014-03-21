@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Service;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -119,14 +118,17 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $this->_prepareQuote(false);
 
-        $customerDetails = $this->_customerDetailsBuilder->setCustomer($this->getSampleCustomerEntity())
-            ->setAddresses($this->getSampleAddressEntity())->create();
+        $customerDetails = $this->_customerDetailsBuilder->setCustomer(
+            $this->getSampleCustomerEntity()
+        )->setAddresses(
+            $this->getSampleAddressEntity()
+        )->create();
         $customerData = $this->_customerAccountService->createAccount($customerDetails, 'password');
 
         $existingCustomerId = $customerData->getId();
         $customerData = $this->_customerBuilder->mergeDataObjectWithArray(
             $customerData,
-            [CustomerData::EMAIL => 'new@example.com']
+            array(CustomerData::EMAIL => 'new@example.com')
         );
         $addresses = $this->_customerAddressService->getAddresses($existingCustomerId);
         $this->_serviceQuote->getQuote()->setCustomerData($customerData);
@@ -205,11 +207,17 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $lastname = 'McTest';
         $groupId = 1;
 
-        $this->_customerBuilder->setStoreId($storeId)
-            ->setEmail($email)
-            ->setFirstname($firstname)
-            ->setLastname($lastname)
-            ->setGroupId($groupId);
+        $this->_customerBuilder->setStoreId(
+            $storeId
+        )->setEmail(
+            $email
+        )->setFirstname(
+            $firstname
+        )->setLastname(
+            $lastname
+        )->setGroupId(
+            $groupId
+        );
         return $this->_customerBuilder->create();
     }
 
@@ -220,32 +228,52 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     private function getSampleAddressEntity()
     {
-        $this->_customerAddressBuilder
-            ->setCountryId('US')
-            ->setDefaultBilling(true)
-            ->setDefaultShipping(true)
-            ->setPostcode('75477')
-            ->setRegion((new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create())
-            ->setStreet(['Green str, 67'])
-            ->setTelephone('3468676')
-            ->setCity('CityM')
-            ->setFirstname('John')
-            ->setLastname('Smith');
+        $this->_customerAddressBuilder->setCountryId(
+            'US'
+        )->setDefaultBilling(
+            true
+        )->setDefaultShipping(
+            true
+        )->setPostcode(
+            '75477'
+        )->setRegion(
+            (new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
+        )->setStreet(
+            array('Green str, 67')
+        )->setTelephone(
+            '3468676'
+        )->setCity(
+            'CityM'
+        )->setFirstname(
+            'John'
+        )->setLastname(
+            'Smith'
+        );
         $address1 = $this->_customerAddressBuilder->create();
 
-        $this->_customerAddressBuilder
-            ->setCountryId('US')
-            ->setDefaultBilling(false)
-            ->setDefaultShipping(false)
-            ->setPostcode('47676')
-            ->setRegion((new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create())
-            ->setStreet(['Black str, 48'])
-            ->setCity('CityX')
-            ->setTelephone('3234676')
-            ->setFirstname('John')
-            ->setLastname('Smith');
+        $this->_customerAddressBuilder->setCountryId(
+            'US'
+        )->setDefaultBilling(
+            false
+        )->setDefaultShipping(
+            false
+        )->setPostcode(
+            '47676'
+        )->setRegion(
+            (new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
+        )->setStreet(
+            array('Black str, 48')
+        )->setCity(
+            'CityX'
+        )->setTelephone(
+            '3234676'
+        )->setFirstname(
+            'John'
+        )->setLastname(
+            'Smith'
+        );
         $address2 = $this->_customerAddressBuilder->create();
 
-        return [$address1, $address2];
+        return array($address1, $address2);
     }
 }

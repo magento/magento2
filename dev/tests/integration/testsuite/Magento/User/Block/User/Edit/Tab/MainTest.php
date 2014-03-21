@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Block\User\Edit\Tab;
 
 /**
@@ -70,14 +69,16 @@ class MainTest extends \Magento\Backend\Utility\Controller
         $this->_user->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $actualHtml = $this->_block->toHtml();
         $this->assertSelectCount(
-            'input.required-entry[type="password"]', 0, $actualHtml,
+            'input.required-entry[type="password"]',
+            0,
+            $actualHtml,
             'All password fields have to be optional.'
         );
+        $this->assertSelectCount('input.validate-admin-password[type="password"][name="password"]', 1, $actualHtml);
         $this->assertSelectCount(
-            'input.validate-admin-password[type="password"][name="password"]', 1, $actualHtml
-        );
-        $this->assertSelectCount(
-            'input.validate-cpassword[type="password"][name="password_confirmation"]', 1, $actualHtml
+            'input.validate-cpassword[type="password"][name="password_confirmation"]',
+            1,
+            $actualHtml
         );
     }
 
@@ -85,10 +86,14 @@ class MainTest extends \Magento\Backend\Utility\Controller
     {
         $actualHtml = $this->_block->toHtml();
         $this->assertSelectCount(
-            'input.validate-admin-password.required-entry[type="password"][name="password"]', 1, $actualHtml
+            'input.validate-admin-password.required-entry[type="password"][name="password"]',
+            1,
+            $actualHtml
         );
         $this->assertSelectCount(
-            'input.validate-cpassword.required-entry[type="password"][name="password_confirmation"]', 1, $actualHtml
+            'input.validate-cpassword.required-entry[type="password"][name="password_confirmation"]',
+            1,
+            $actualHtml
         );
     }
 }

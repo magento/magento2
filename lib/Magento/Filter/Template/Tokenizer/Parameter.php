@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter\Template\Tokenizer;
 
 /**
@@ -31,7 +30,6 @@ namespace Magento\Filter\Template\Tokenizer;
  */
 class Parameter extends \Magento\Filter\Template\Tokenizer\AbstractTokenizer
 {
-
     /**
      * Tokenize string and return getted parameters
      *
@@ -44,7 +42,7 @@ class Parameter extends \Magento\Filter\Template\Tokenizer\AbstractTokenizer
         while ($this->next()) {
             if ($this->isWhiteSpace()) {
                 continue;
-            } elseif($this->char() != '=') {
+            } elseif ($this->char() != '=') {
                 $parameterName .= $this->char();
             } else {
                 $parameters[$parameterName] = $this->getValue();
@@ -70,10 +68,10 @@ class Parameter extends \Magento\Filter\Template\Tokenizer\AbstractTokenizer
 
 
         if ($quoteStart) {
-           $breakSymbol = $this->char();
+            $breakSymbol = $this->char();
         } else {
-           $breakSymbol = false;
-           $value .= $this->char();
+            $breakSymbol = false;
+            $value .= $this->char();
         }
 
         while ($this->next()) {

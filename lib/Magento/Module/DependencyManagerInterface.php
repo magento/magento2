@@ -37,7 +37,6 @@ interface DependencyManagerInterface
      */
     public function checkModuleDependencies(array $moduleConfig, array $activeModules = array());
 
-
     /**
      * Recursively identify all module dependencies and detect circular ones
      *
@@ -47,5 +46,5 @@ interface DependencyManagerInterface
      * @return array
      * @throws \Exception
      */
-    public function getExtendedModuleDependencies($moduleName,  array $modules, array $usedModules = array());
+    public function getExtendedModuleDependencies($moduleName, array $modules, array $usedModules = array());
 }

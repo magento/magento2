@@ -24,7 +24,7 @@
  */
 namespace Magento\Interception\Fixture\Intercepted;
 
-use Magento\Interception\Fixture\Intercepted as Intercepted;
+use Magento\Interception\Fixture\Intercepted;
 
 class Plugin
 {

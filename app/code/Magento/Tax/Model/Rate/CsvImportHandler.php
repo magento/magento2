@@ -96,9 +96,8 @@ class CsvImportHandler
             4 => __('Rate'),
             5 => __('Zip/Post is Range'),
             6 => __('Range From'),
-            7 => __('Range To'),
+            7 => __('Range To')
         );
-
     }
 
     /**
@@ -253,11 +252,9 @@ class CsvImportHandler
         // data with index 2 must represent region code
         $regionCode = $rateData[2];
         if (!empty($regionsCache[$countryCode][$regionCode])) {
-            $regionId = ($regionsCache[$countryCode][$regionCode] == '*')
-                ? 0
-                : $regionsCache[$countryCode][$regionCode];
+            $regionId = $regionsCache[$countryCode][$regionCode] == '*' ? 0 : $regionsCache[$countryCode][$regionCode];
             // data with index 3 must represent postcode
-            $postCode = (empty($rateData[3]) || $rateData[3] == '*') ? null : $rateData[3];
+            $postCode = empty($rateData[3]) || $rateData[3] == '*' ? null : $rateData[3];
             $modelData = array(
                 'code' => $rateData[0],
                 'tax_country_id' => $rateData[1],
@@ -266,7 +263,7 @@ class CsvImportHandler
                 'rate' => $rateData[4],
                 'zip_is_range' => $rateData[5],
                 'zip_from' => $rateData[6],
-                'zip_to' => $rateData[7],
+                'zip_to' => $rateData[7]
             );
 
             // try to load existing rate

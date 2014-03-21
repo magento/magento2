@@ -44,9 +44,8 @@ class Category implements \Magento\Option\ArrayInterface
      *
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
      */
-    public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
-    ) {
+    public function __construct(\Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory)
+    {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
     }
 
@@ -61,23 +60,15 @@ class Category implements \Magento\Option\ArrayInterface
         /** @var \Magento\Catalog\Model\Resource\Category\Collection $collection */
         $collection = $this->_categoryCollectionFactory->create();
 
-        $collection->addAttributeToSelect('name')
-            ->addRootLevelFilter()
-            ->load();
+        $collection->addAttributeToSelect('name')->addRootLevelFilter()->load();
 
         $options = array();
 
         if ($addEmpty) {
-            $options[] = array(
-                'label' => __('-- Please Select a Category --'),
-                'value' => ''
-            );
+            $options[] = array('label' => __('-- Please Select a Category --'), 'value' => '');
         }
         foreach ($collection as $category) {
-            $options[] = array(
-               'label' => $category->getName(),
-               'value' => $category->getId()
-            );
+            $options[] = array('label' => $category->getName(), 'value' => $category->getId());
         }
 
         return $options;

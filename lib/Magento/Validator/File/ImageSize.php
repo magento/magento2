@@ -25,7 +25,6 @@
  */
 namespace Magento\Validator\File;
 
-class ImageSize extends \Zend_Validate_File_ImageSize
-    implements \Magento\Validator\ValidatorInterface
+class ImageSize extends \Zend_Validate_File_ImageSize implements \Magento\Validator\ValidatorInterface
 {
 }

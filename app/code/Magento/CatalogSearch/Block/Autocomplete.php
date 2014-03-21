@@ -50,11 +50,8 @@ class Autocomplete extends AbstractBlock
      * @param Data $catalogsearchHelper
      * @param array $data
      */
-    public function __construct(
-        Context $context,
-        Data $catalogsearchHelper,
-        array $data = array()
-    ) {
+    public function __construct(Context $context, Data $catalogsearchHelper, array $data = array())
+    {
         $this->_catalogsearchHelper = $catalogsearchHelper;
         parent::__construct($context, $data);
     }
@@ -88,11 +85,19 @@ class Autocomplete extends AbstractBlock
             }
 
             $escapedTitle = $this->escapeHtml($item['title']);
-            $html .=  '<li title="'.$escapedTitle.'" class="'.$item['row_class'].'">'
-                . '<span class="amount">'.$item['num_of_results'].'</span>'.$escapedTitle.'</li>';
+            $html .= '<li title="' .
+                $escapedTitle .
+                '" class="' .
+                $item['row_class'] .
+                '">' .
+                '<span class="amount">' .
+                $item['num_of_results'] .
+                '</span>' .
+                $escapedTitle .
+                '</li>';
         }
 
-        $html.= '</ul>';
+        $html .= '</ul>';
 
         return $html;
     }
@@ -110,14 +115,13 @@ class Autocomplete extends AbstractBlock
             foreach ($collection as $item) {
                 $_data = array(
                     'title' => $item->getQueryText(),
-                    'row_class' => (++$counter)%2?'odd':'even',
+                    'row_class' => ++$counter % 2 ? 'odd' : 'even',
                     'num_of_results' => $item->getNumResults()
                 );
 
                 if ($item->getQueryText() == $query) {
                     array_unshift($data, $_data);
-                }
-                else {
+                } else {
                     $data[] = $_data;
                 }
             }
@@ -125,7 +129,4 @@ class Autocomplete extends AbstractBlock
         }
         return $this->_suggestData;
     }
-/*
- *
-*/
 }

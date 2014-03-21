@@ -23,12 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Configuration;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/AbstractLogger.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/AbstractLogger.php';
 class LoggerAbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,17 +55,24 @@ class LoggerAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->add('file1', \Magento\Tools\Migration\System\Configuration\AbstractLogger::FILE_KEY_VALID);
         $this->_model->add('file2', \Magento\Tools\Migration\System\Configuration\AbstractLogger::FILE_KEY_INVALID);
 
-        $expected = 'valid: 1' . PHP_EOL
-            . 'invalid: 1' . PHP_EOL
-            . 'Total: 2' . PHP_EOL
-            . '------------------------------' . PHP_EOL
-            . 'valid:' . PHP_EOL
-            . 'file1' . PHP_EOL
-            . '------------------------------' . PHP_EOL
-            . 'invalid:' . PHP_EOL
-            . 'file2';
+        $expected = 'valid: 1' .
+            PHP_EOL .
+            'invalid: 1' .
+            PHP_EOL .
+            'Total: 2' .
+            PHP_EOL .
+            '------------------------------' .
+            PHP_EOL .
+            'valid:' .
+            PHP_EOL .
+            'file1' .
+            PHP_EOL .
+            '------------------------------' .
+            PHP_EOL .
+            'invalid:' .
+            PHP_EOL .
+            'file2';
 
         $this->assertEquals($expected, (string)$this->_model);
     }
 }
-

@@ -44,7 +44,7 @@ class Step implements \Magento\Option\ArrayInterface
             array(
                 'value' => \Magento\Catalog\Model\Layer\Filter\Price::RANGE_CALCULATION_MANUAL,
                 'label' => __('Manual')
-            ),
+            )
         );
     }
 }

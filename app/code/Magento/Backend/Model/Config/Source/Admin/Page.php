@@ -69,9 +69,7 @@ class Page implements \Magento\Option\ArrayInterface
      */
     protected function _getMenuIterator(\Magento\Backend\Model\Menu $menu)
     {
-        return $this->_iteratorFactory->create(
-            array('iterator' => $menu->getIterator())
-        );
+        return $this->_iteratorFactory->create(array('iterator' => $menu->getIterator()));
     }
 
     /**
@@ -85,15 +83,15 @@ class Page implements \Magento\Option\ArrayInterface
     protected function _createOptions(&$optionArray, \Magento\Backend\Model\Menu $menu, $level = 0)
     {
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
-        $paddingString = str_repeat($nonEscapableNbspChar, ($level * 4));
+        $paddingString = str_repeat($nonEscapableNbspChar, $level * 4);
 
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
 
             /**@var  $menuItem \Magento\Backend\Model\Menu\Item */
             if ($menuItem->getAction()) {
                 $optionArray[] = array(
-                    'label' =>  $paddingString . $menuItem->getTitle(),
-                    'value' => $menuItem->getId(),
+                    'label' => $paddingString . $menuItem->getTitle(),
+                    'value' => $menuItem->getId()
                 );
 
                 if ($menuItem->hasChildren()) {
@@ -106,10 +104,7 @@ class Page implements \Magento\Option\ArrayInterface
                     $this->_createOptions($children, $menuItem->getChildren(), $level + 1);
                 }
 
-                $optionArray[] = array(
-                    'label' => $paddingString . $menuItem->getTitle(),
-                    'value' => $children,
-                );
+                $optionArray[] = array('label' => $paddingString . $menuItem->getTitle(), 'value' => $children);
             }
         }
     }

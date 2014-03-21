@@ -45,9 +45,8 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite;
  * @method string getLabel()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite setLegend($legend)
  */
-abstract class AbstractComposite
-    extends \Magento\Data\Form\Element\Fieldset
-    implements \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
+abstract class AbstractComposite extends \Magento\Data\Form\Element\Fieldset implements
+    \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ContainerInterface
 {
     /**
      * Delimiter for name parts in composite controls
@@ -153,9 +152,9 @@ abstract class AbstractComposite
         $components = $this->getComponents();
         $componentId = $this->getComponentId($type);
         if (!isset($components[$componentId])) {
-            throw new \Magento\Core\Exception(__(
-                'Component of the type "%1" is not found between elements of "%2"', $type, $this->getData('name')
-            ));
+            throw new \Magento\Core\Exception(
+                __('Component of the type "%1" is not found between elements of "%2"', $type, $this->getData('name'))
+            );
         }
         $component = $components[$componentId];
 

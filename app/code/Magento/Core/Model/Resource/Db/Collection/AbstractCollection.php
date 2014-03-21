@@ -60,42 +60,42 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      *
      * @var array|null
      */
-    protected $_fieldsToSelect         = null;
+    protected $_fieldsToSelect = null;
 
     /**
      * Fields initial fields to select like id_field
      *
      * @var array|null
      */
-    protected $_initialFieldsToSelect  = null;
+    protected $_initialFieldsToSelect = null;
 
     /**
      * Fields to select changed flag
      *
      * @var boolean
      */
-    protected $_fieldsToSelectChanged  = false;
+    protected $_fieldsToSelectChanged = false;
 
     /**
      * Store joined tables here
      *
      * @var array
      */
-    protected $_joinedTables           = array();
+    protected $_joinedTables = array();
 
     /**
      * Collection main table
      *
      * @var string
      */
-    protected $_mainTable              = null;
+    protected $_mainTable = null;
 
     /**
      * Reset items data changed flag
      *
      * @var boolean
      */
-    protected $_resetItemsDataChanged   = false;
+    protected $_resetItemsDataChanged = false;
 
     /**
      * Name prefix of events that are dispatched by model
@@ -222,11 +222,12 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         $columnsToSelect = array();
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
-            if ($correlationName !== 'main_table') { // Add joined fields to select
+            if ($correlationName !== 'main_table') {
+                // Add joined fields to select
                 if ($column instanceof \Zend_Db_Expr) {
                     $column = $column->__toString();
                 }
-                $key = ($alias !== null ? $alias : $column);
+                $key = $alias !== null ? $alias : $column;
                 $columnsToSelect[$key] = $columnEntry;
             }
         }
@@ -248,16 +249,20 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
                     $column = $field;
                 }
 
-                if (($alias !== null && in_array($alias, $columnsToSelect)) ||
+                if ($alias !== null && in_array(
+                    $alias,
+                    $columnsToSelect
+                ) ||
                     // If field already joined from another table
-                    ($alias === null && isset($alias, $columnsToSelect))) {
+                    $alias === null && isset($alias, $columnsToSelect)
+                ) {
                     continue;
                 }
 
                 $columnEntry = array('main_table', $field, $alias);
-                array_splice($columns, $insertIndex, 0, array($columnEntry)); // Insert column
-                $insertIndex ++;
-
+                array_splice($columns, $insertIndex, 0, array($columnEntry));
+                // Insert column
+                $insertIndex++;
             }
         } else {
             array_unshift($columns, array('main_table', '*', null));
@@ -306,7 +311,8 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
      */
     public function addFieldToSelect($field, $alias = null)
     {
-        if ($field === '*') { // If we will select all fields
+        if ($field === '*') {
+            // If we will select all fields
             $this->_fieldsToSelect = null;
             $this->_fieldsToSelectChanged = true;
             return $this;
@@ -318,11 +324,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
             }
 
             foreach ($field as $key => $value) {
-                $this->addFieldToSelect(
-                    $value,
-                    (is_string($key) ? $key : null),
-                    false
-                );
+                $this->addFieldToSelect($value, is_string($key) ? $key : null, false);
             }
 
             $this->_fieldsToSelectChanged = true;
@@ -358,11 +360,11 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         }
 
         $fullExpression = $expression;
-        foreach ($fields as $fieldKey=>$fieldItem) {
+        foreach ($fields as $fieldKey => $fieldItem) {
             $fullExpression = str_replace('{{' . $fieldKey . '}}', $fieldItem, $fullExpression);
         }
 
-        $this->getSelect()->columns(array($alias=>$fullExpression));
+        $this->getSelect()->columns(array($alias => $fullExpression));
 
         return $this;
     }
@@ -528,11 +530,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         }
 
         if (!isset($this->_joinedTables[$table])) {
-            $this->getSelect()->join(
-                array($alias => $this->getTable($table)),
-                $cond,
-                $cols
-            );
+            $this->getSelect()->join(array($alias => $this->getTable($table)), $cond, $cols);
             $this->_joinedTables[$alias] = true;
         }
         return $this;
@@ -548,9 +546,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         parent::_beforeLoad();
         $this->_eventManager->dispatch('core_collection_abstract_load_before', array('collection' => $this));
         if ($this->_eventPrefix && $this->_eventObject) {
-            $this->_eventManager->dispatch($this->_eventPrefix.'_load_before', array(
-                $this->_eventObject => $this
-            ));
+            $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', array($this->_eventObject => $this));
         }
         return $this;
     }
@@ -597,9 +593,7 @@ abstract class AbstractCollection extends \Magento\Data\Collection\Db
         }
         $this->_eventManager->dispatch('core_collection_abstract_load_after', array('collection' => $this));
         if ($this->_eventPrefix && $this->_eventObject) {
-            $this->_eventManager->dispatch($this->_eventPrefix.'_load_after', array(
-                $this->_eventObject => $this
-            ));
+            $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', array($this->_eventObject => $this));
         }
         return $this;
     }

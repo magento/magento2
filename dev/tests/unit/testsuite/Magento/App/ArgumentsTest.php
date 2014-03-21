@@ -79,17 +79,21 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'existing connection' => array(
-                'connection_one', false, array('name' => 'connection_one', 'dbName' => 'db_one')
+                'connection_one',
+                false,
+                array('name' => 'connection_one', 'dbName' => 'db_one')
             ),
-            'unknown connection' => array(
-                'connection_new', false, null
-            ),
+            'unknown connection' => array('connection_new', false, null),
             'existing connection, added' => array(
-                'connection_new', true, array('name' => 'connection_new', 'dbName' => 'db_new')
+                'connection_new',
+                true,
+                array('name' => 'connection_new', 'dbName' => 'db_new')
             ),
             'existing connection, overridden' => array(
-                'connection_one', true, array('name' => 'connection_one', 'dbName' => 'overridden_db_one')
-            ),
+                'connection_one',
+                true,
+                array('name' => 'connection_one', 'dbName' => 'overridden_db_one')
+            )
         );
     }
 
@@ -107,10 +111,7 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCacheFrontendSettings()
     {
-        $this->assertEquals(
-            self::$fixtureConfig['cache']['frontend'],
-            $this->_arguments->getCacheFrontendSettings()
-        );
+        $this->assertEquals(self::$fixtureConfig['cache']['frontend'], $this->_arguments->getCacheFrontendSettings());
         $this->assertEquals(
             self::$fixtureConfigMerged['cache']['frontend'],
             $this->_argumentsMerged->getCacheFrontendSettings()
@@ -132,10 +133,10 @@ class ArgumentsTest extends \PHPUnit_Framework_TestCase
     public function getCacheTypeFrontendIdDataProvider()
     {
         return array(
-            'existing cache type'               => array('cache_type_one', false, 'cache_frontend_one'),
-            'unknown cache type'                => array('cache_type_new', false, null),
-            'existing cache type, added'        => array('cache_type_new', true, 'cache_frontend_two'),
-            'existing cache type, overridden'   => array('cache_type_one', true, 'cache_frontend_new'),
+            'existing cache type' => array('cache_type_one', false, 'cache_frontend_one'),
+            'unknown cache type' => array('cache_type_new', false, null),
+            'existing cache type, added' => array('cache_type_new', true, 'cache_frontend_two'),
+            'existing cache type, overridden' => array('cache_type_one', true, 'cache_frontend_new')
         );
     }
 }

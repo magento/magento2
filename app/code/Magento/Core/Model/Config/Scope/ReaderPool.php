@@ -61,4 +61,4 @@ class ReaderPool implements \Magento\App\Config\Scope\ReaderPoolInterface
     {
         return $this->_readers[$scopeType];
     }
-} 
+}

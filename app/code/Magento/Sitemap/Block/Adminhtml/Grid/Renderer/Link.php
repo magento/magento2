@@ -81,5 +81,4 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
 
         return $url;
     }
-
 }

@@ -78,6 +78,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
      */
     protected $_customerBuilder;
+
     /**
      * @var \Magento\Customer\Helper\Address
      */
@@ -92,7 +93,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
      * @var \Magento\Stdlib\DateTime
      */
     protected $dateTime;
-    
+
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param CustomerAccountServiceInterface $accountService
@@ -175,7 +176,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     {
         $customer = $this->getCustomer();
 
-        if ($groupId = ($customer->getId() ? $customer->getGroupId() : null)) {
+        if ($groupId = $customer->getId() ? $customer->getGroupId() : null) {
             if ($group = $this->getGroup($groupId)) {
                 return $group->getCode();
             }
@@ -192,8 +193,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     public function getCustomerLog()
     {
         if (!$this->_customerLog) {
-            $this->_customerLog = $this->_logFactory->create()
-                ->loadByCustomer($this->getCustomerId());
+            $this->_customerLog = $this->_logFactory->create()->loadByCustomer($this->getCustomerId());
         }
         return $this->_customerLog;
     }
@@ -245,11 +245,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     {
         $date = $this->getCustomerLog()->getLoginAtTimestamp();
         if ($date) {
-            return $this->formatDate(
-                $date,
-                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
-                true
-            );
+            return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
         return __('Never');
     }
@@ -261,11 +257,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     {
         $date = $this->getCustomerLog()->getLoginAtTimestamp();
         if ($date) {
-            $date = $this->_localeDate->scopeDate(
-                $this->getCustomer()->getStoreId(),
-                $date,
-                true
-            );
+            $date = $this->_localeDate->scopeDate($this->getCustomer()->getStoreId(), $date, true);
             return $this->formatDate($date, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         }
         return __('Never');
@@ -289,8 +281,11 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     {
         $log = $this->getCustomerLog();
         $interval = $this->_modelVisitor->getOnlineMinutesInterval();
-        if ($log->getLogoutAt()
-            || (strtotime($this->dateTime->now()) - strtotime($log->getLastVisitAt()) > $interval * 60)
+        if ($log->getLogoutAt() || strtotime(
+            $this->dateTime->now()
+        ) - strtotime(
+            $log->getLastVisitAt()
+        ) > $interval * 60
         ) {
             return __('Offline');
         }
@@ -303,7 +298,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     public function getIsConfirmedStatus()
     {
         $id = $this->getCustomerId();
-        switch($this->_accountService->getConfirmationStatus($id)) {
+        switch ($this->_accountService->getConfirmationStatus($id)) {
             case CustomerAccountServiceInterface::ACCOUNT_CONFIRMED:
                 return __('Confirmed');
             case CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED:
@@ -340,7 +335,9 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
         } catch (NoSuchEntityException $e) {
             return __('The customer does not have default billing address.');
         }
-        return $this->_addressHelper->getFormatTypeRenderer('html')->renderArray(
+        return $this->_addressHelper->getFormatTypeRenderer(
+            'html'
+        )->renderArray(
             AddressConverter::toFlatArray($address)
         );
     }

@@ -75,13 +75,14 @@ class Language implements \Magento\Option\ArrayInterface
             $translationForSpecifiedLanguage = $this->_locale->getTranslation($localeCode, 'language', $languageCode);
             $translationForDefaultLanguage = $this->_locale->getTranslation($localeCode, 'language');
 
-            $label = sprintf('%s / %s (%s)', $this->_uppercaseFilter->filter($translationForSpecifiedLanguage),
-                $translationForDefaultLanguage, $languageCode);
-
-            $languages[] = array(
-                'value' => $languageCode,
-                'label' => $label,
+            $label = sprintf(
+                '%s / %s (%s)',
+                $this->_uppercaseFilter->filter($translationForSpecifiedLanguage),
+                $translationForDefaultLanguage,
+                $languageCode
             );
+
+            $languages[] = array('value' => $languageCode, 'label' => $label);
         }
         return $languages;
     }

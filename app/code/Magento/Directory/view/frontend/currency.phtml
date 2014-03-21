@@ -45,7 +45,7 @@
             <?php foreach ($currencies as $_code => $_name): ?>
                 <?php if($_code != $currentCurrencyCode): ?>
                     <li class="currency-<?php echo $_code ?>">
-                        <a href="<?php echo $this->getSwitchCurrencyUrl($_code) ?>"><?php echo $_code ?> - <?php echo $_name ?></a>
+                        <a href="#" data-post='<?php echo $this->getSwitchCurrencyPostData($_code); ?>'><?php echo $_code ?> - <?php echo $_name ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

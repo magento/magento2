@@ -46,11 +46,14 @@ class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
     {
         parent::_prepareLayout();
 
-        $this->addTab('bundle_items', array(
-            'label'     => __('Bundle Items'),
-            'url'   => $this->getUrl('adminhtml/*/bundles', array('_current' => true)),
-            'class' => 'ajax',
-        ));
+        $this->addTab(
+            'bundle_items',
+            array(
+                'label' => __('Bundle Items'),
+                'url' => $this->getUrl('adminhtml/*/bundles', array('_current' => true)),
+                'class' => 'ajax'
+            )
+        );
         $this->bindShadowTabs('bundle_items', 'customer_options');
     }
 }

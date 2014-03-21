@@ -40,8 +40,12 @@ class Reader extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState
     ) {
         parent::__construct(
-            $fileResolver, $converter, $schemaLocator, $validationState, 'address_formats.xml', array(
-                '/config/format' => 'code'
-        ));
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            'address_formats.xml',
+            array('/config/format' => 'code')
+        );
     }
 }

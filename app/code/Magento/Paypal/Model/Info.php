@@ -39,34 +39,52 @@ class Info
      *
      * @var string
      */
-    const PAYER_ID       = 'payer_id';
-    const PAYER_EMAIL    = 'email';
-    const PAYER_STATUS   = 'payer_status';
-    const ADDRESS_ID     = 'address_id';
+    const PAYER_ID = 'payer_id';
+
+    const PAYER_EMAIL = 'email';
+
+    const PAYER_STATUS = 'payer_status';
+
+    const ADDRESS_ID = 'address_id';
+
     const ADDRESS_STATUS = 'address_status';
-    const PROTECTION_EL  = 'protection_eligibility';
-    const FRAUD_FILTERS  = 'collected_fraud_filters';
+
+    const PROTECTION_EL = 'protection_eligibility';
+
+    const FRAUD_FILTERS = 'collected_fraud_filters';
+
     const CORRELATION_ID = 'correlation_id';
-    const AVS_CODE       = 'avs_result';
-    const CVV2_MATCH     = 'cvv2_check_result';
-    const CENTINEL_VPAS  = 'centinel_vpas_result';
-    const CENTINEL_ECI   = 'centinel_eci_result';
+
+    const AVS_CODE = 'avs_result';
+
+    const CVV2_MATCH = 'cvv2_check_result';
+
+    const CENTINEL_VPAS = 'centinel_vpas_result';
+
+    const CENTINEL_ECI = 'centinel_eci_result';
 
     // Next two fields are required for Brazil
-    const BUYER_TAX_ID   = 'buyer_tax_id';
+    const BUYER_TAX_ID = 'buyer_tax_id';
+
     const BUYER_TAX_ID_TYPE = 'buyer_tax_id_type';
 
     const PAYMENT_STATUS = 'payment_status';
+
     const PENDING_REASON = 'pending_reason';
-    const IS_FRAUD       = 'is_fraud_detected';
+
+    const IS_FRAUD = 'is_fraud_detected';
+
     const PAYMENT_STATUS_GLOBAL = 'paypal_payment_status';
+
     const PENDING_REASON_GLOBAL = 'paypal_pending_reason';
-    const IS_FRAUD_GLOBAL       = 'paypal_is_fraud_detected';
+
+    const IS_FRAUD_GLOBAL = 'paypal_is_fraud_detected';
 
     /**
      * Possible buyer's tax id types (Brazil only)
      */
     const BUYER_TAX_ID_TYPE_CPF = 'BR_CPF';
+
     const BUYER_TAX_ID_TYPE_CNPJ = 'BR_CNPJ';
 
     /**
@@ -75,20 +93,20 @@ class Info
      * @var array
      */
     protected $_paymentMap = array(
-        self::PAYER_ID       => 'paypal_payer_id',
-        self::PAYER_EMAIL    => 'paypal_payer_email',
-        self::PAYER_STATUS   => 'paypal_payer_status',
-        self::ADDRESS_ID     => 'paypal_address_id',
+        self::PAYER_ID => 'paypal_payer_id',
+        self::PAYER_EMAIL => 'paypal_payer_email',
+        self::PAYER_STATUS => 'paypal_payer_status',
+        self::ADDRESS_ID => 'paypal_address_id',
         self::ADDRESS_STATUS => 'paypal_address_status',
-        self::PROTECTION_EL  => 'paypal_protection_eligibility',
-        self::FRAUD_FILTERS  => 'paypal_fraud_filters',
+        self::PROTECTION_EL => 'paypal_protection_eligibility',
+        self::FRAUD_FILTERS => 'paypal_fraud_filters',
         self::CORRELATION_ID => 'paypal_correlation_id',
-        self::AVS_CODE       => 'paypal_avs_code',
-        self::CVV2_MATCH     => 'paypal_cvv2_match',
-        self::CENTINEL_VPAS  => self::CENTINEL_VPAS,
-        self::CENTINEL_ECI   => self::CENTINEL_ECI,
-        self::BUYER_TAX_ID   => self::BUYER_TAX_ID,
-        self::BUYER_TAX_ID_TYPE => self::BUYER_TAX_ID_TYPE,
+        self::AVS_CODE => 'paypal_avs_code',
+        self::CVV2_MATCH => 'paypal_cvv2_match',
+        self::CENTINEL_VPAS => self::CENTINEL_VPAS,
+        self::CENTINEL_ECI => self::CENTINEL_ECI,
+        self::BUYER_TAX_ID => self::BUYER_TAX_ID,
+        self::BUYER_TAX_ID_TYPE => self::BUYER_TAX_ID_TYPE
     );
 
     /**
@@ -99,7 +117,7 @@ class Info
     protected $_systemMap = array(
         self::PAYMENT_STATUS => self::PAYMENT_STATUS_GLOBAL,
         self::PENDING_REASON => self::PENDING_REASON_GLOBAL,
-        self::IS_FRAUD       => self::IS_FRAUD_GLOBAL,
+        self::IS_FRAUD => self::IS_FRAUD_GLOBAL
     );
 
     /**
@@ -107,31 +125,45 @@ class Info
      *
      * @var string
      */
-    const PAYMENTSTATUS_NONE         = 'none';
-    const PAYMENTSTATUS_COMPLETED    = 'completed';
-    const PAYMENTSTATUS_DENIED       = 'denied';
-    const PAYMENTSTATUS_EXPIRED      = 'expired';
-    const PAYMENTSTATUS_FAILED       = 'failed';
-    const PAYMENTSTATUS_INPROGRESS   = 'in_progress';
-    const PAYMENTSTATUS_PENDING      = 'pending';
-    const PAYMENTSTATUS_REFUNDED     = 'refunded';
+    const PAYMENTSTATUS_NONE = 'none';
+
+    const PAYMENTSTATUS_COMPLETED = 'completed';
+
+    const PAYMENTSTATUS_DENIED = 'denied';
+
+    const PAYMENTSTATUS_EXPIRED = 'expired';
+
+    const PAYMENTSTATUS_FAILED = 'failed';
+
+    const PAYMENTSTATUS_INPROGRESS = 'in_progress';
+
+    const PAYMENTSTATUS_PENDING = 'pending';
+
+    const PAYMENTSTATUS_REFUNDED = 'refunded';
+
     const PAYMENTSTATUS_REFUNDEDPART = 'partially_refunded';
-    const PAYMENTSTATUS_REVERSED     = 'reversed';
-    const PAYMENTSTATUS_UNREVERSED   = 'canceled_reversal';
-    const PAYMENTSTATUS_PROCESSED    = 'processed';
-    const PAYMENTSTATUS_VOIDED       = 'voided';
-    const PAYMENTSTATUS_REVIEW       = 'paymentreview';
+
+    const PAYMENTSTATUS_REVERSED = 'reversed';
+
+    const PAYMENTSTATUS_UNREVERSED = 'canceled_reversal';
+
+    const PAYMENTSTATUS_PROCESSED = 'processed';
+
+    const PAYMENTSTATUS_VOIDED = 'voided';
+
+    const PAYMENTSTATUS_REVIEW = 'paymentreview';
 
     /**
      * PayPal payment transaction type
      */
     const TXN_TYPE_ADJUSTMENT = 'adjustment';
-    const TXN_TYPE_NEW_CASE   = 'new_case';
+
+    const TXN_TYPE_NEW_CASE = 'new_case';
 
     /**
      * PayPal payment reason code when payment_status is Reversed, Refunded, or Canceled_Reversal.
      */
-    const PAYMENT_REASON_CODE_REFUND  = 'refund';
+    const PAYMENT_REASON_CODE_REFUND = 'refund';
 
     /**
      * PayPal order status for Reverse payment status
@@ -148,11 +180,7 @@ class Info
      *
      * @var string[]
      */
-    protected $_paymentPublicMap = array(
-        'paypal_payer_email',
-        self::BUYER_TAX_ID,
-        self::BUYER_TAX_ID_TYPE
-    );
+    protected $_paymentPublicMap = array('paypal_payer_email', self::BUYER_TAX_ID, self::BUYER_TAX_ID_TYPE);
 
     /**
      * Rendered payment map cache
@@ -224,7 +252,9 @@ class Info
     public function &exportFromPayment(\Magento\Payment\Model\Info $payment, $to, array $map = null)
     {
         $fullMap = array_merge($this->_paymentMap, $this->_systemMap);
-        \Magento\Object\Mapper::accumulateByMap(array($payment, 'getAdditionalInformation'), $to,
+        \Magento\Object\Mapper::accumulateByMap(
+            array($payment, 'getAdditionalInformation'),
+            $to,
             $map ? $map : array_flip($fullMap)
         );
         return $to;
@@ -254,8 +284,11 @@ class Info
      */
     public static function isFraudReviewAllowed(\Magento\Payment\Model\Info $payment)
     {
-        return self::isPaymentReviewRequired($payment)
-            && 1 == $payment->getAdditionalInformation(self::IS_FRAUD_GLOBAL);
+        return self::isPaymentReviewRequired(
+            $payment
+        ) && 1 == $payment->getAdditionalInformation(
+            self::IS_FRAUD_GLOBAL
+        );
     }
 
     /**
@@ -279,15 +312,25 @@ class Info
     public static function isPaymentSuccessful(\Magento\Payment\Model\Info $payment)
     {
         $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        if (in_array($paymentStatus, array(
-            self::PAYMENTSTATUS_COMPLETED, self::PAYMENTSTATUS_INPROGRESS, self::PAYMENTSTATUS_REFUNDED,
-            self::PAYMENTSTATUS_REFUNDEDPART, self::PAYMENTSTATUS_UNREVERSED, self::PAYMENTSTATUS_PROCESSED,
-        ))) {
+        if (in_array(
+            $paymentStatus,
+            array(
+                self::PAYMENTSTATUS_COMPLETED,
+                self::PAYMENTSTATUS_INPROGRESS,
+                self::PAYMENTSTATUS_REFUNDED,
+                self::PAYMENTSTATUS_REFUNDEDPART,
+                self::PAYMENTSTATUS_UNREVERSED,
+                self::PAYMENTSTATUS_PROCESSED
+            )
+        )
+        ) {
             return true;
         }
         $pendingReason = $payment->getAdditionalInformation(self::PENDING_REASON_GLOBAL);
-        return self::PAYMENTSTATUS_PENDING === $paymentStatus
-            && in_array($pendingReason, array('authorization', 'order'));
+        return self::PAYMENTSTATUS_PENDING === $paymentStatus && in_array(
+            $pendingReason,
+            array('authorization', 'order')
+        );
     }
 
     /**
@@ -299,10 +342,16 @@ class Info
     public static function isPaymentFailed(\Magento\Payment\Model\Info $payment)
     {
         $paymentStatus = $payment->getAdditionalInformation(self::PAYMENT_STATUS_GLOBAL);
-        return in_array($paymentStatus, array(
-            self::PAYMENTSTATUS_DENIED, self::PAYMENTSTATUS_EXPIRED, self::PAYMENTSTATUS_FAILED,
-            self::PAYMENTSTATUS_REVERSED, self::PAYMENTSTATUS_VOIDED,
-        ));
+        return in_array(
+            $paymentStatus,
+            array(
+                self::PAYMENTSTATUS_DENIED,
+                self::PAYMENTSTATUS_EXPIRED,
+                self::PAYMENTSTATUS_FAILED,
+                self::PAYMENTSTATUS_REVERSED,
+                self::PAYMENTSTATUS_VOIDED
+            )
+        );
     }
 
     /**
@@ -325,20 +374,28 @@ class Info
                 return __('The payment eCheck is not yet cleared.');
             case 'intl':
                 return __('The merchant holds a non-U.S. account and does not have a withdrawal mechanism.');
-            case 'multi-currency': // break is intentionally omitted
-            case 'multi_currency': // break is intentionally omitted
+            case 'multi-currency':
+                // break is intentionally omitted
+            case 'multi_currency':
+                // break is intentionally omitted
             case 'multicurrency':
                 return __('The payment currency does not match any of the merchant\'s balances currency.');
             case 'paymentreview':
                 return __('The payment is pending while it is being reviewed by PayPal for risk.');
             case 'unilateral':
-                return __('The payment is pending because it was made to an email address that is not yet registered or confirmed.');
+                return __(
+                    'The payment is pending because it was made to an email address that is not yet registered or confirmed.'
+                );
             case 'verify':
                 return __('The merchant account is not yet verified.');
             case 'upgrade':
-                return __('The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.');
-            case 'none': // break is intentionally omitted
-            case 'other': // break is intentionally omitted
+                return __(
+                    'The payment was made via credit card. In order to receive funds merchant must upgrade account to Business or Premier status.'
+                );
+            case 'none':
+                // break is intentionally omitted
+            case 'other':
+                // break is intentionally omitted
             default:
                 return __('Sorry, but something went wrong. Please contact PayPal customer service.');
         }
@@ -355,28 +412,42 @@ class Info
     public static function explainReasonCode($code)
     {
         $comments = array(
-            'chargeback'               => __('A reversal has occurred on this transaction due to a chargeback by your customer.'),
-            'guarantee'                => __('A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'),
-            'buyer-complaint'          => __('A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'),
-            'buyer_complaint'          => __('A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'),
-            'refund'                   => __('A reversal has occurred on this transaction because you have given the customer a refund.'),
-            'adjustment_reversal'      => __('Reversal of an adjustment.'),
-            'admin_fraud_reversal'     => __('Transaction reversal due to fraud detected by PayPal administrators.'),
-            'admin_reversal'           => __('Transaction reversal by PayPal administrators.'),
+            'chargeback' => __('A reversal has occurred on this transaction due to a chargeback by your customer.'),
+            'guarantee' => __(
+                'A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'
+            ),
+            'buyer-complaint' => __(
+                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+            ),
+            'buyer_complaint' => __(
+                'A reversal has occurred on this transaction due to a complaint about the transaction from your customer.'
+            ),
+            'refund' => __(
+                'A reversal has occurred on this transaction because you have given the customer a refund.'
+            ),
+            'adjustment_reversal' => __('Reversal of an adjustment.'),
+            'admin_fraud_reversal' => __('Transaction reversal due to fraud detected by PayPal administrators.'),
+            'admin_reversal' => __('Transaction reversal by PayPal administrators.'),
             'chargeback_reimbursement' => __('Reimbursement for a chargeback.'),
-            'chargeback_settlement'    => __('Settlement of a chargeback.'),
-            'unauthorized_spoof'       => __('A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'),
-            'non_receipt'              => __('Buyer claims that he did not receive goods or service.'),
-            'not_as_described'         => __('Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'),
-            'unauthorized'             => __('Buyer claims that he/she did not authorize transaction.'),
-            'adjustment_reimburse'     => __('A case that has been resolved and close requires a reimbursement.'),
-            'duplicate'                => __('Buyer claims that a possible duplicate payment was made to the merchant.'),
-            'merchandise'              => __('Buyer claims that the received merchandise is unsatisfactory, defective, or damaged.'),
+            'chargeback_settlement' => __('Settlement of a chargeback.'),
+            'unauthorized_spoof' => __(
+                'A reversal has occurred on this transaction because of a customer dispute suspecting unauthorized spoof.'
+            ),
+            'non_receipt' => __('Buyer claims that he did not receive goods or service.'),
+            'not_as_described' => __(
+                'Buyer claims that the goods or service received differ from merchant’s description of the goods or service.'
+            ),
+            'unauthorized' => __('Buyer claims that he/she did not authorize transaction.'),
+            'adjustment_reimburse' => __('A case that has been resolved and close requires a reimbursement.'),
+            'duplicate' => __('Buyer claims that a possible duplicate payment was made to the merchant.'),
+            'merchandise' => __('Buyer claims that the received merchandise is unsatisfactory, defective, or damaged.')
         );
-        $value = (array_key_exists($code, $comments) && !empty($comments[$code]))
-            ? $comments[$code]
-            : __('Unknown reason. Please contact PayPal customer service.'
-            );
+        $value = array_key_exists(
+            $code,
+            $comments
+        ) && !empty($comments[$code]) ? $comments[$code] : __(
+            'Unknown reason. Please contact PayPal customer service.'
+        );
         return $value;
     }
 
@@ -470,9 +541,9 @@ class Info
                 return __('Address Verification System Response');
             case 'paypal_cvv2_match':
                 return __('CVV2 Check Result by PayPal');
-            case self::BUYER_TAX_ID :
+            case self::BUYER_TAX_ID:
                 return __('Buyer\'s Tax ID');
-            case self::BUYER_TAX_ID_TYPE :
+            case self::BUYER_TAX_ID_TYPE:
                 return __('Buyer\'s Tax ID Type');
             case self::CENTINEL_VPAS:
                 return __('PayPal/Centinel Visa Payer Authentication Service Result');
@@ -490,12 +561,8 @@ class Info
      */
     public static function getCaseTypeLabel($key)
     {
-        $labels = array(
-            'chargeback' => __('Chargeback'),
-            'complaint'  => __('Complaint'),
-            'dispute'    => __('Dispute')
-        );
-        $value = (array_key_exists($key, $labels) && !empty($labels[$key])) ? $labels[$key] : '';
+        $labels = array('chargeback' => __('Chargeback'), 'complaint' => __('Complaint'), 'dispute' => __('Dispute'));
+        $value = array_key_exists($key, $labels) && !empty($labels[$key]) ? $labels[$key] : '';
         return $value;
     }
 
@@ -522,9 +589,9 @@ class Info
             case self::CENTINEL_ECI:
                 $label = $this->_getCentinelEciLabel($value);
                 break;
-            case self::BUYER_TAX_ID_TYPE :
+            case self::BUYER_TAX_ID_TYPE:
                 $value = $this->_getBuyerIdTypeValue($value);
-            // fall-through intentional
+                // fall-through intentional
             default:
                 return $value;
         }
@@ -545,17 +612,21 @@ class Info
             case 'A':
             case 'YN':
                 return __('Matched Address only (no ZIP)');
-            case 'B': // international "A"
+            case 'B':
+                // international "A"
                 return __('Matched Address only (no ZIP) International');
             case 'N':
                 return __('No Details matched');
-            case 'C': // international "N"
+            case 'C':
+                // international "N"
                 return __('No Details matched. International');
             case 'X':
                 return __('Exact Match. Address and nine-digit ZIP code');
-            case 'D': // international "X"
+            case 'D':
+                // international "X"
                 return __('Exact Match. Address and Postal Code. International');
-            case 'F': // UK-specific "X"
+            case 'F':
+                // UK-specific "X"
                 return __('Exact Match. Address and Postal Code. UK-specific');
             case 'E':
                 return __('N/A. Not allowed for MOTO (Internet/Phone) transactions');
@@ -566,7 +637,8 @@ class Info
             case 'Z':
             case 'NY':
                 return __('Matched five-digit ZIP only (no Address)');
-            case 'P': // international "Z"
+            case 'P':
+                // international "Z"
             case 'NY':
                 return __('Matched Postal Code only (no Address)');
             case 'R':
@@ -579,7 +651,7 @@ class Info
                 return __('Matched whole nine-didgit ZIP (no Address)');
             case 'Y':
                 return __('Yes. Matched Address and five-didgit ZIP');
-            // Maestro and Solo
+                // Maestro and Solo
             case '0':
                 return __('All the address information matched');
             case '1':
@@ -618,7 +690,7 @@ class Info
                 return __('N/A. Service not available');
             case 'X':
                 return __('N/A. No response');
-            // Maestro and Solo
+                // Maestro and Solo
             case '0':
                 return __('Matched (CVV2)');
             case '1':
@@ -700,10 +772,10 @@ class Info
     {
         $value = '';
         switch ($code) {
-            case self::BUYER_TAX_ID_TYPE_CNPJ :
+            case self::BUYER_TAX_ID_TYPE_CNPJ:
                 $value = __('CNPJ');
                 break;
-            case self::BUYER_TAX_ID_TYPE_CPF :
+            case self::BUYER_TAX_ID_TYPE_CPF:
                 $value = __('CPF');
                 break;
         }

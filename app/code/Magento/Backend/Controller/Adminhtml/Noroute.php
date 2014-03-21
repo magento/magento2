@@ -38,4 +38,4 @@ class Noroute extends \Magento\Backend\App\Action
         $this->_view->loadLayout(array('default', 'adminhtml_noroute'));
         $this->_view->renderLayout();
     }
-} 
+}

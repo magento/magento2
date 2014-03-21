@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
 class BooleanTest extends \PHPUnit_Framework_TestCase
@@ -55,12 +54,15 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     {
         $input = new \stdClass();
         $expected = new \stdClass();
-        $this->_booleanUtils
-            ->expects($this->once())
-            ->method('toBoolean')
-            ->with($this->identicalTo($input))
-            ->will($this->returnValue($expected))
-        ;
+        $this->_booleanUtils->expects(
+            $this->once()
+        )->method(
+            'toBoolean'
+        )->with(
+            $this->identicalTo($input)
+        )->will(
+            $this->returnValue($expected)
+        );
         $actual = $this->_model->evaluate(array('value' => $input));
         $this->assertSame($expected, $actual);
     }

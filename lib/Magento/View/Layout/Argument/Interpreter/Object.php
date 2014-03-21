@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument\Interpreter;
 
 use Magento\ObjectManager;
@@ -65,10 +64,10 @@ class Object implements InterpreterInterface
         }
         $className = $data['value'];
         $result = $this->objectManager->create($className);
-        if ($this->expectedClass && !($result instanceof $this->expectedClass)) {
-            throw new \UnexpectedValueException(sprintf(
-                "Instance of %s is expected, got %s instead.", $this->expectedClass, get_class($result)
-            ));
+        if ($this->expectedClass && !$result instanceof $this->expectedClass) {
+            throw new \UnexpectedValueException(
+                sprintf("Instance of %s is expected, got %s instead.", $this->expectedClass, get_class($result))
+            );
         }
         return $result;
     }

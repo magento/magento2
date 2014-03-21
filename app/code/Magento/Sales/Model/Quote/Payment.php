@@ -108,16 +108,7 @@ class Payment extends \Magento\Payment\Model\Info
         array $data = array()
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
-        parent::__construct(
-            $context,
-            $registry,
-            $paymentData,
-            $encryptor,
-            $resource,
-            $resourceCollection,
-            $data
-        );
-
+        parent::__construct($context, $registry, $paymentData, $encryptor, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -167,10 +158,7 @@ class Payment extends \Magento\Payment\Model\Info
         $data = new \Magento\Object($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
-            array(
-                $this->_eventObject=>$this,
-                'input'=>$data,
-            )
+            array($this->_eventObject => $this, 'input' => $data)
         );
 
         $this->setMethod($data->getMethod());
@@ -182,17 +170,22 @@ class Payment extends \Magento\Payment\Model\Info
          */
         $this->getQuote()->collectTotals();
 
-        if (!$method->isAvailable($this->getQuote())
-            || !$this->methodSpecificationFactory->create($data->getChecks())
-                ->isApplicable($method, $this->getQuote())
+        if (!$method->isAvailable(
+            $this->getQuote()
+        ) || !$this->methodSpecificationFactory->create(
+            $data->getChecks()
+        )->isApplicable(
+            $method,
+            $this->getQuote()
+        )
         ) {
             throw new \Magento\Core\Exception(__('The requested Payment Method is not available.'));
         }
 
         $method->assignData($data);
         /*
-        * validating the payment data
-        */
+         * validating the payment data
+         */
         $method->validate();
         return $this;
     }

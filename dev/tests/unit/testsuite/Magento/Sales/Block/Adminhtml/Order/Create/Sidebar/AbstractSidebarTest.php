@@ -21,9 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 
 class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,10 +39,11 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->itemMock = $this->getMock('Magento\Object', array('getQty'), array(), '', false);
-        $this->abstractSidebar =
-            $helper->getObject('Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar', array());
+        $this->abstractSidebar = $helper->getObject(
+            'Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar',
+            array()
+        );
     }
-
 
     /**
      * @param int $itemQty
@@ -60,10 +59,7 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
 
     public function getItemQtyDataProvider()
     {
-        return array(
-            'whenQtyIsset' => array(2, 10, 10),
-            'whenQtyNotIsset' => array(1, false, 1)
-        );
+        return array('whenQtyIsset' => array(2, 10, 10), 'whenQtyNotIsset' => array(1, false, 1));
     }
 
     public function testIsConfigurationRequired()
@@ -72,4 +68,3 @@ class AbstractSidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }
-

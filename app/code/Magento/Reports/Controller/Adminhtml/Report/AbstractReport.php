@@ -105,10 +105,16 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
             $blocks = array($blocks);
         }
 
-        $requestData = $this->_objectManager->get('Magento\Backend\Helper\Data')
-            ->prepareFilterString($this->getRequest()->getParam('filter'));
-        $inputFilter = new \Zend_Filter_Input(array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
-            array(), $requestData);
+        $requestData = $this->_objectManager->get(
+            'Magento\Backend\Helper\Data'
+        )->prepareFilterString(
+            $this->getRequest()->getParam('filter')
+        );
+        $inputFilter = new \Zend_Filter_Input(
+            array('from' => $this->_dateFilter, 'to' => $this->_dateFilter),
+            array(),
+            $requestData
+        );
         $requestData = $inputFilter->getUnescaped();
         $requestData['store_ids'] = $this->getRequest()->getParam('store_ids');
         $params = new \Magento\Object();
@@ -145,16 +151,27 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
                 $flag->getLastUpdate(),
                 \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
             );
-            $updatedAt = $this->_objectManager->get('Magento\Stdlib\DateTime\TimezoneInterface')
-                ->scopeDate(0, $date, true);
+            $updatedAt = $this->_objectManager->get(
+                'Magento\Stdlib\DateTime\TimezoneInterface'
+            )->scopeDate(
+                0,
+                $date,
+                true
+            );
         }
 
         $refreshStatsLink = $this->getUrl('reports/report_statistics');
         $directRefreshLink = $this->getUrl('reports/report_statistics/refreshRecent', array('code' => $refreshCode));
 
-        $this->messageManager
-            ->addNotice(__('Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, '
-                . 'click <a href="%3">here</a>.', $updatedAt, $refreshStatsLink, $directRefreshLink));
+        $this->messageManager->addNotice(
+            __(
+                'Last updated: %1. To refresh last day\'s <a href="%2">statistics</a>, ' .
+                'click <a href="%3">here</a>.',
+                $updatedAt,
+                $refreshStatsLink,
+                $directRefreshLink
+            )
+        );
         return $this;
     }
 }

@@ -76,11 +76,13 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
      */
     public function sendVary()
     {
-        $data = array_filter($this->context->getData());
-        if ($data) {
+        $data = $this->context->getData();
+        if (!empty($data)) {
             ksort($data);
             $vary = sha1(serialize($data));
             $this->cookie->set(self::COOKIE_VARY_STRING, $vary, null, '/');
+        } else {
+            $this->cookie->set(self::COOKIE_VARY_STRING, null, -1, '/');
         }
     }
 
@@ -106,8 +108,8 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
      */
     public function setPublicHeaders($ttl)
     {
-        if (!$ttl) {
-            throw new \InvalidArgumentException('time to live is a mandatory parameter for set public headers');
+        if ($ttl < 0 || !preg_match('/^[0-9]+$/', $ttl)) {
+            throw new \InvalidArgumentException('Time to live is a mandatory parameter for set public headers');
         }
         $this->setHeader('pragma', 'cache', true);
         $this->setHeader('cache-control', 'public, max-age=' . $ttl . ', s-maxage=' . $ttl, true);
@@ -124,7 +126,7 @@ class Http extends \Zend_Controller_Response_Http implements \Magento\App\Respon
     public function setPrivateHeaders($ttl)
     {
         if (!$ttl) {
-            throw new \InvalidArgumentException('time to live is a mandatory parameter for set private headers');
+            throw new \InvalidArgumentException('Time to live is a mandatory parameter for set private headers');
         }
         $this->setHeader('pragma', 'cache', true);
         $this->setHeader('cache-control', 'private, max-age=' . $ttl, true);

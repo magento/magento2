@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\Source\Override;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -55,10 +54,8 @@ class Base implements SourceInterface
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
-    public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory
-    ) {
+    public function __construct(Filesystem $filesystem, Factory $fileFactory)
+    {
         $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES_DIR);
         $this->fileFactory = $fileFactory;
     }
@@ -77,9 +74,10 @@ class Base implements SourceInterface
         $searchPattern = "{$themePath}/{$namespace}_{$module}/layout/override/base/{$filePath}.xml";
         $files = $this->themesDirectory->search($searchPattern);
         $result = array();
-        $pattern = "#(?<moduleName>[^/]+)/layout/override/base/"
-            . strtr(preg_quote($filePath), array('\*' => '[^/]+'))
-            . "\.xml$#i";
+        $pattern = "#(?<moduleName>[^/]+)/layout/override/base/" . strtr(
+            preg_quote($filePath),
+            array('\*' => '[^/]+')
+        ) . "\.xml$#i";
         foreach ($files as $file) {
             $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {

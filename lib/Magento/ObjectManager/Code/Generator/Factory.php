@@ -43,14 +43,12 @@ class Factory extends \Magento\Code\Generator\EntityAbstract
 
         // protected $_instanceName = null;
         $properties[] = array(
-            'name'       => '_instanceName',
+            'name' => '_instanceName',
             'visibility' => 'protected',
-            'docblock'   => array(
+            'docblock' => array(
                 'shortDescription' => 'Instance name to create',
-                'tags'             => array(
-                    array('name' => 'var', 'description' => 'string')
-                )
-            ),
+                'tags' => array(array('name' => 'var', 'description' => 'string'))
+            )
         );
         return $properties;
     }
@@ -64,31 +62,19 @@ class Factory extends \Magento\Code\Generator\EntityAbstract
     {
         // public function __construct(\Magento\ObjectManager $objectManager, $instanceName = <DEFAULT_INSTANCE_NAME>)
         return array(
-            'name'       => '__construct',
+            'name' => '__construct',
             'parameters' => array(
-                array(
-                    'name' => 'objectManager',
-                    'type' => '\Magento\ObjectManager'
-                ),
-                array(
-                    'name' => 'instanceName',
-                    'defaultValue' => $this->_getSourceClassName(),
-                ),
+                array('name' => 'objectManager', 'type' => '\Magento\ObjectManager'),
+                array('name' => 'instanceName', 'defaultValue' => $this->_getSourceClassName())
             ),
             'body' => "\$this->_objectManager = \$objectManager;\n\$this->_instanceName = \$instanceName;",
             'docblock' => array(
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
-                'tags'             => array(
-                    array(
-                        'name'        => 'param',
-                        'description' => '\Magento\ObjectManager $objectManager'
-                    ),
-                    array(
-                        'name'        => 'param',
-                        'description' => 'string $instanceName'
-                    ),
-                ),
-            ),
+                'tags' => array(
+                    array('name' => 'param', 'description' => '\Magento\ObjectManager $objectManager'),
+                    array('name' => 'param', 'description' => 'string $instanceName')
+                )
+            )
         );
     }
 
@@ -103,24 +89,19 @@ class Factory extends \Magento\Code\Generator\EntityAbstract
 
         // public function create(array $data = array())
         $create = array(
-            'name'       => 'create',
-            'parameters' => array(
-                array('name' => 'data', 'type' => 'array', 'defaultValue' => array()),
-            ),
+            'name' => 'create',
+            'parameters' => array(array('name' => 'data', 'type' => 'array', 'defaultValue' => array())),
             'body' => 'return $this->_objectManager->create($this->_instanceName, $data);',
             'docblock' => array(
                 'shortDescription' => 'Create class instance with specified parameters',
-                'tags'             => array(
+                'tags' => array(
+                    array('name' => 'param', 'description' => 'array $data'),
                     array(
-                        'name'        => 'param',
-                        'description' => 'array $data'
-                    ),
-                    array(
-                        'name'        => 'return',
+                        'name' => 'return',
                         'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
-                    ),
-                ),
-            ),
+                    )
+                )
+            )
         );
 
         return array($construct, $create);
@@ -138,8 +119,8 @@ class Factory extends \Magento\Code\Generator\EntityAbstract
             $resultClassName = $this->_getResultClassName();
 
             if ($resultClassName !== $sourceClassName . 'Factory') {
-                $this->_addError('Invalid Factory class name ['
-                    . $resultClassName . ']. Use ' . $sourceClassName . 'Factory'
+                $this->_addError(
+                    'Invalid Factory class name [' . $resultClassName . ']. Use ' . $sourceClassName . 'Factory'
                 );
                 $result = false;
             }

@@ -100,7 +100,7 @@ class Filter implements \Zend_Filter_Interface
     public function filter($value)
     {
         $value = $this->_localeFormat->getNumber($value);
-        $value = $this->_storeManager->getStore()->roundPrice($this->_rate*$value);
+        $value = $this->_storeManager->getStore()->roundPrice($this->_rate * $value);
         $value = sprintf("%f", $value);
         return $this->_currency->toCurrency($value);
     }

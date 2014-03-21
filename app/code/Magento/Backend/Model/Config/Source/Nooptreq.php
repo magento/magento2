@@ -33,10 +33,9 @@ class Nooptreq implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array('value'=>'', 'label'=>__('No')),
-            array('value'=>'opt', 'label'=>__('Optional')),
-            array('value'=>'req', 'label'=>__('Required')),
+            array('value' => '', 'label' => __('No')),
+            array('value' => 'opt', 'label' => __('Optional')),
+            array('value' => 'req', 'label' => __('Required'))
         );
     }
-
 }

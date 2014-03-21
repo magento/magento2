@@ -45,8 +45,8 @@ class TreeBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuild()
     {
-        $resourceList = require ($this->_fixturePath . 'resourceList.php');
-        $actual = require($this->_fixturePath . 'result.php');
+        $resourceList = require $this->_fixturePath . 'resourceList.php';
+        $actual = require $this->_fixturePath . 'result.php';
         $expected = $this->_model->build($resourceList);
         $this->assertEquals($actual, $expected);
     }

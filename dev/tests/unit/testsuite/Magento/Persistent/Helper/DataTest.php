@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Persistent\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -38,24 +37,26 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_modulesReader = $this->getMock(
-            '\Magento\Module\Dir\Reader',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->_modulesReader = $this->getMock('\Magento\Module\Dir\Reader', array(), array(), '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_helper = $objectManager->getObject('\Magento\Persistent\Helper\Data', array(
-            'modulesReader' => $this->_modulesReader,
-        ));
+        $this->_helper = $objectManager->getObject(
+            '\Magento\Persistent\Helper\Data',
+            array('modulesReader' => $this->_modulesReader)
+        );
     }
 
     public function testGetPersistentConfigFilePath()
     {
-        $this->_modulesReader->expects($this->once())->method('getModuleDir')
-            ->with('etc', 'Magento_Persistent')
-            ->will($this->returnValue('path123'));
+        $this->_modulesReader->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Persistent'
+        )->will(
+            $this->returnValue('path123')
+        );
         $this->assertEquals('path123/persistent.xml', $this->_helper->getPersistentConfigFilePath());
     }
 }

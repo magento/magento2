@@ -44,45 +44,45 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_soapConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_soapConfigMock = $this->getMockBuilder(
+            'Magento\Webapi\Model\Soap\Config'
+        )->disableOriginalConstructor()->getMock();
 
-        $_wsdlMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Wsdl')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                array(
-                    'addSchemaTypeSection',
-                    'addService',
-                    'addPortType',
-                    'addBinding',
-                    'addSoapBinding',
-                    'addElement',
-                    'addComplexType',
-                    'addMessage',
-                    'addPortOperation',
-                    'addBindingOperation',
-                    'addSoapOperation',
-                    'toXML'
-                )
+        $_wsdlMock = $this->getMockBuilder(
+            'Magento\Webapi\Model\Soap\Wsdl'
+        )->disableOriginalConstructor()->setMethods(
+            array(
+                'addSchemaTypeSection',
+                'addService',
+                'addPortType',
+                'addBinding',
+                'addSoapBinding',
+                'addElement',
+                'addComplexType',
+                'addMessage',
+                'addPortOperation',
+                'addBindingOperation',
+                'addSoapOperation',
+                'toXML'
             )
-            ->getMock();
-        $this->_wsdlFactoryMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Wsdl\Factory')
-            ->setMethods(array('create'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        )->getMock();
+        $this->_wsdlFactoryMock = $this->getMockBuilder(
+            'Magento\Webapi\Model\Soap\Wsdl\Factory'
+        )->setMethods(
+            array('create')
+        )->disableOriginalConstructor()->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
 
-        $this->_cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_cacheMock = $this->getMockBuilder(
+            'Magento\Webapi\Model\Cache\Type'
+        )->disableOriginalConstructor()->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(false));
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
         $this->_typeProcessor = $this->getMock(
             'Magento\Webapi\Model\Config\ClassReflector\TypeProcessor',
-            [],
-            [],
+            array(),
+            array(),
             '',
             false
         );
@@ -171,25 +171,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $genWSDL = 'generatedWSDL';
         $exceptionMsg = 'exception message';
-        $requestedService = array(
-            'catalogProduct',
-        );
+        $requestedService = array('catalogProduct');
 
         $wsdlGeneratorMock = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\Wsdl\Generator'
-        )
-            ->setMethods(array('_collectCallInfo'))
-            ->setConstructorArgs(
-                array(
-                    $this->_soapConfigMock,
-                    $this->_wsdlFactoryMock,
-                    $this->_cacheMock,
-                    $this->_typeProcessor
-                )
-            )
-            ->getMock();
+        )->setMethods(
+            array('_collectCallInfo')
+        )->setConstructorArgs(
+            array($this->_soapConfigMock, $this->_wsdlFactoryMock, $this->_cacheMock, $this->_typeProcessor)
+        )->getMock();
 
-        $wsdlGeneratorMock->expects($this->once())->method('_collectCallInfo')->will(
+        $wsdlGeneratorMock->expects(
+            $this->once()
+        )->method(
+            '_collectCallInfo'
+        )->will(
             $this->throwException(new \Magento\Webapi\Exception($exceptionMsg))
         );
 

@@ -49,7 +49,7 @@ class Compared extends \Magento\Reports\Model\Product\Index\AbstractIndex
      *
      * @var string
      */
-    protected $_countCacheKey   = 'product_index_compared_count';
+    protected $_countCacheKey = 'product_index_compared_count';
 
     /**
      * Catalog product compare

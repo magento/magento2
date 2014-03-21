@@ -72,7 +72,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param int|null $storeId
      * @return bool|null|string
      */
-    public function getConfigData($path, $storeId=null)
+    public function getConfigData($path, $storeId = null)
     {
         if (!empty($path)) {
             return $this->_coreStoreConfig->getConfig(self::OGONE_PAYMENT_PATH . $path, $storeId);
@@ -86,7 +86,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getShaInCode($storeId=null)
+    public function getShaInCode($storeId = null)
     {
         return $this->_encryptor->decrypt($this->getConfigData('secret_key_in', $storeId));
     }
@@ -96,7 +96,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getShaOutCode($storeId=null)
+    public function getShaOutCode($storeId = null)
     {
         return $this->_encryptor->decrypt($this->getConfigData('secret_key_out', $storeId));
     }
@@ -107,7 +107,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getGatewayPath($storeId=null)
+    public function getGatewayPath($storeId = null)
     {
         return $this->getConfigData('ogone_gateway', $storeId);
     }
@@ -118,7 +118,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param int|null $storeId
      * @return string
      */
-    public function getPSPID($storeId=null)
+    public function getPSPID($storeId = null)
     {
         return $this->getConfigData('pspid', $storeId);
     }

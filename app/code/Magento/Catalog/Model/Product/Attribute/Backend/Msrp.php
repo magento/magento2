@@ -47,10 +47,8 @@ class Msrp extends \Magento\Catalog\Model\Product\Attribute\Backend\Boolean
      * @param \Magento\Logger $logger
      * @param \Magento\Catalog\Helper\Data $catalogData
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Catalog\Helper\Data $catalogData
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Catalog\Helper\Data $catalogData)
+    {
         $this->_catalogData = $catalogData;
         parent::__construct($logger);
     }
@@ -63,9 +61,9 @@ class Msrp extends \Magento\Catalog\Model\Product\Attribute\Backend\Boolean
      */
     public function beforeSave($product)
     {
-        if (!($product instanceof \Magento\Catalog\Model\Product)
-            || $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-            || $product->getPriceType() != \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
+        if (!$product instanceof \Magento\Catalog\Model\Product ||
+            $product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE ||
+            $product->getPriceType() != \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
         ) {
             return parent::beforeSave($product);
         }

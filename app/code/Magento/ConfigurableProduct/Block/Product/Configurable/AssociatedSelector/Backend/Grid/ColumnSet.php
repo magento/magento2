@@ -28,8 +28,7 @@ namespace Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelec
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ColumnSet
-    extends \Magento\Backend\Block\Widget\Grid\ColumnSet
+class ColumnSet extends \Magento\Backend\Block\Widget\Grid\ColumnSet
 {
     /**
      * Registry instance

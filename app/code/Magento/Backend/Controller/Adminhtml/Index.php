@@ -44,10 +44,8 @@ class Index extends AbstractAction
      * @param \Magento\Backend\App\Action\Context $context
      * @param array $searchModules
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        array $searchModules = array()
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, array $searchModules = array())
+    {
         $this->_searchModules = $searchModules;
         parent::__construct($context);
     }
@@ -74,7 +72,9 @@ class Index extends AbstractAction
                     'id' => 'error',
                     'type' => __('Error'),
                     'name' => __('No search modules were registered'),
-                    'description' => __('Please make sure that all global admin search modules are installed and activated.')
+                    'description' => __(
+                        'Please make sure that all global admin search modules are installed and activated.'
+                    )
                 );
             } else {
                 $start = $this->getRequest()->getParam('start', 1);
@@ -82,7 +82,7 @@ class Index extends AbstractAction
                 $query = $this->getRequest()->getParam('query', '');
                 foreach ($this->_searchModules as $searchConfig) {
 
-                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])){
+                    if ($searchConfig['acl'] && !$this->_authorization->isAllowed($searchConfig['acl'])) {
                         continue;
                     }
 
@@ -91,19 +91,19 @@ class Index extends AbstractAction
                         continue;
                     }
                     $searchInstance = $this->_objectManager->create($className);
-                    $results = $searchInstance->setStart($start)
-                        ->setLimit($limit)
-                        ->setQuery($query)
-                        ->load()
-                        ->getResults();
+                    $results = $searchInstance->setStart(
+                        $start
+                    )->setLimit(
+                        $limit
+                    )->setQuery(
+                        $query
+                    )->load()->getResults();
                     $items = array_merge_recursive($items, $results);
                 }
             }
         }
 
-        $this->getResponse()->setBody(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($items)
-        );
+        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($items));
     }
 
     /**

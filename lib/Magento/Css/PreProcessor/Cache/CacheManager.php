@@ -35,14 +35,13 @@ class CacheManager
     /**
      * @var CacheInterface[]
      */
-    protected $cacheByType = [];
+    protected $cacheByType = array();
 
     /**
      * @param CacheFactory $cacheFactory
      */
-    public function __construct(
-        CacheFactory $cacheFactory
-    ) {
+    public function __construct(CacheFactory $cacheFactory)
+    {
         $this->cacheFactory = $cacheFactory;
     }
 

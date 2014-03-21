@@ -32,11 +32,9 @@
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Attribute;
 
-class Urlkey
-    extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
+class Urlkey extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element
 {
     /**
      * Catalog data
@@ -74,16 +72,13 @@ class Urlkey
     {
         /** @var \Magento\Data\Form\Element\AbstractElement $element */
         $element = $this->getElement();
-        if(!$element->getValue()) {
+        if (!$element->getValue()) {
             return parent::getElementHtml();
         }
         $element->setOnkeyup("onUrlkeyChanged('" . $element->getHtmlId() . "')");
         $element->setOnchange("onUrlkeyChanged('" . $element->getHtmlId() . "')");
 
-        $data = array(
-            'name' => $element->getData('name') . '_create_redirect',
-            'disabled' => true,
-        );
+        $data = array('name' => $element->getData('name') . '_create_redirect', 'disabled' => true);
         /** @var \Magento\Data\Form\Element\Hidden $hidden */
         $hidden = $this->_elementFactory->create('hidden', array('data' => $data));
         $hidden->setForm($element->getForm());
@@ -97,6 +92,10 @@ class Urlkey
         $checkbox = $this->_elementFactory->create('checkbox', array('data' => $data));
         $checkbox->setForm($element->getForm());
 
-        return parent::getElementHtml() . '<br/>' . $hidden->getElementHtml() . $checkbox->getElementHtml() . $checkbox->getLabelHtml();
+        return parent::getElementHtml() .
+            '<br/>' .
+            $hidden->getElementHtml() .
+            $checkbox->getElementHtml() .
+            $checkbox->getLabelHtml();
     }
 }

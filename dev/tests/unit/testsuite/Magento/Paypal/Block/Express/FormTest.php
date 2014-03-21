@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Block\Express;
 
 class FormTest extends \PHPUnit_Framework_TestCase
@@ -32,14 +31,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_paypalData;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_customerSession;
-
-    /**
      * @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_paypalConfig;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerCurrentService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $currentCustomer;
 
     /**
      * @var Form
@@ -49,14 +48,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_paypalData = $this->getMock('Magento\Paypal\Helper\Data', [], [], '', false);
-        $this->_customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->_paypalConfig = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
         $this->_paypalConfig->expects($this->once())
             ->method('setMethod')
             ->will($this->returnSelf());
         $paypalConfigFactory = $this->getMock('Magento\Paypal\Model\ConfigFactory', ['create'], [], '', false);
         $paypalConfigFactory->expects($this->once())->method('create')->will($this->returnValue($this->_paypalConfig));
-        $mark = $this->getMock('Magento\View\Element\Template', [], [], '', false);
+        $mark = $this->getMock('Magento\View\Element\Template', array(), array(), '', false);
         $mark->expects($this->once())->method('setTemplate')->will($this->returnSelf());
         $mark->expects($this->any())->method('__call')->will($this->returnSelf());
         $layout = $this->getMockForAbstractClass('Magento\View\LayoutInterface');
@@ -64,21 +62,23 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('createBlock')
             ->with('Magento\View\Element\Template')
             ->will($this->returnValue($mark));
+        $this->currentCustomer = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerCurrentService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $localeResolver = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false, false);
         $appMock = $this->getMock('\Magento\Core\Model\App', array('getLocaleResolver'), array(), '', false);
-        $appMock->expects($this->any())
-            ->method('getLocaleResolver')
-            ->will($this->returnValue($localeResolver));
+        $appMock->expects($this->any())->method('getLocaleResolver')->will($this->returnValue($localeResolver));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Paypal\Block\Express\Form',
-            [
+            array(
                 'paypalData' => $this->_paypalData,
-                'customerSession' => $this->_customerSession,
                 'paypalConfigFactory' => $paypalConfigFactory,
+                'currentCustomer' => $this->currentCustomer,
                 'layout' => $layout,
-                'app' => $appMock,
-            ]
+                'app' => $appMock
+            )
         );
     }
 
@@ -89,7 +89,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBillingAgreementCode($ask, $expected)
     {
-        $this->_customerSession->expects($this->once())
+        $this->currentCustomer->expects($this->once())
             ->method('getCustomerId')
             ->will($this->returnValue('customer id'));
         $this->_paypalData->expects($this->once())
@@ -101,9 +101,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function getBillingAgreementCodeDataProvider()
     {
-        return [
-            [true, \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT],
-            [false, null]
-        ];
+        return array(
+            array(true, \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT),
+            array(false, null)
+        );
     }
 }

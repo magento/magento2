@@ -25,6 +25,7 @@
  */
 namespace Magento\Outbound\Formatter;
 
+
 require_once __DIR__ . '/JsonTest/Data.php';
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,9 +64,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array(), "[]"),
-            array(
-                array('a' => array('b' => 'c', 'd' => 'e'), 'f' => 'g'), '{"a":{"b":"c","d":"e"},"f":"g"}'
-            ),
+            array(array('a' => array('b' => 'c', 'd' => 'e'), 'f' => 'g'), '{"a":{"b":"c","d":"e"},"f":"g"}'),
             array(array(null), '[null]'),
             array(array(true), '[true]'),
             array(array(false), '[false]'),

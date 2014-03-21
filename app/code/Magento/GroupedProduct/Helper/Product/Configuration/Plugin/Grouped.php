@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Helper\Product\Configuration\Plugin;
 
 class Grouped
@@ -42,7 +41,7 @@ class Grouped
         \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
     ) {
         $product = $item->getProduct();
-        $typeId  = $product->getTypeId();
+        $typeId = $product->getTypeId();
         if ($typeId == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
             $options = array();
             /** @var \Magento\GroupedProduct\Model\Product\Type\Grouped $typeInstance */
@@ -54,7 +53,7 @@ class Grouped
                     $qty = $item->getOptionByCode('associated_product_' . $associatedProduct->getId());
                     $option = array(
                         'label' => $associatedProduct->getName(),
-                        'value' => ($qty && $qty->getValue()) ? $qty->getValue() : 0
+                        'value' => $qty && $qty->getValue() ? $qty->getValue() : 0
                     );
                     $options[] = $option;
                 }
@@ -72,4 +71,4 @@ class Grouped
         }
         return $proceed($item);
     }
-} 
+}

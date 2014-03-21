@@ -76,8 +76,11 @@ class QueueHandler
         $job = $this->_jobQueueReader->poll();
         while (!is_null($job)) {
             $event = $job->getEvent();
-            $message = $this->_messageFactory->create($job->getSubscription()->getEndpoint(),
-                $event->getTopic(), $event->getBodyData());
+            $message = $this->_messageFactory->create(
+                $job->getSubscription()->getEndpoint(),
+                $event->getTopic(),
+                $event->getBodyData()
+            );
             $response = $this->_transport->dispatch($message);
             if ($response->isSuccessful()) {
                 $job->complete();

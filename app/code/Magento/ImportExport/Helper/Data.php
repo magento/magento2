@@ -38,7 +38,9 @@ class Data extends \Magento\Core\Helper\Data
      * XML path for config data
      */
     const XML_PATH_EXPORT_LOCAL_VALID_PATH = 'general/file/importexport_local_valid_paths';
+
     const XML_PATH_BUNCH_SIZE = 'general/file/bunch_size';
+
     /**#@-*/
 
     /**
@@ -63,13 +65,7 @@ class Data extends \Magento\Core\Helper\Data
         $dbCompatibleMode = true
     ) {
         $this->_fileSize = $fileSize;
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**

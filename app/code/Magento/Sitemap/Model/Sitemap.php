@@ -44,9 +44,13 @@ namespace Magento\Sitemap\Model;
 class Sitemap extends \Magento\Core\Model\AbstractModel
 {
     const OPEN_TAG_KEY = 'start';
+
     const CLOSE_TAG_KEY = 'end';
+
     const INDEX_FILE_PREFIX = 'sitemap';
+
     const TYPE_INDEX = 'sitemap';
+
     const TYPE_URL = 'url';
 
     /**
@@ -238,35 +242,45 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->_sitemapItems[] = new \Magento\Object(array(
-            'changefreq' => $helper->getCategoryChangefreq($storeId),
-            'priority' => $helper->getCategoryPriority($storeId),
-            'collection' => $this->_categoryFactory->create()->getCollection($storeId)
-        ));
+        $this->_sitemapItems[] = new \Magento\Object(
+            array(
+                'changefreq' => $helper->getCategoryChangefreq($storeId),
+                'priority' => $helper->getCategoryPriority($storeId),
+                'collection' => $this->_categoryFactory->create()->getCollection($storeId)
+            )
+        );
 
-        $this->_sitemapItems[] = new \Magento\Object(array(
-            'changefreq' => $helper->getProductChangefreq($storeId),
-            'priority' => $helper->getProductPriority($storeId),
-            'collection' => $this->_productFactory->create()->getCollection($storeId)
-        ));
+        $this->_sitemapItems[] = new \Magento\Object(
+            array(
+                'changefreq' => $helper->getProductChangefreq($storeId),
+                'priority' => $helper->getProductPriority($storeId),
+                'collection' => $this->_productFactory->create()->getCollection($storeId)
+            )
+        );
 
-        $this->_sitemapItems[] = new \Magento\Object(array(
-            'changefreq' => $helper->getPageChangefreq($storeId),
-            'priority' => $helper->getPagePriority($storeId),
-            'collection' => $this->_cmsFactory->create()->getCollection($storeId)
-        ));
+        $this->_sitemapItems[] = new \Magento\Object(
+            array(
+                'changefreq' => $helper->getPageChangefreq($storeId),
+                'priority' => $helper->getPagePriority($storeId),
+                'collection' => $this->_cmsFactory->create()->getCollection($storeId)
+            )
+        );
 
         $this->_tags = array(
             self::TYPE_INDEX => array(
-                self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL
-                . '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL,
+                self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
+                PHP_EOL .
+                '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
+                PHP_EOL,
                 self::CLOSE_TAG_KEY => '</sitemapindex>'
             ),
             self::TYPE_URL => array(
-                self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL
-                . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
-                . ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"'
-                . ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' . PHP_EOL,
+                self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
+                PHP_EOL .
+                '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
+                ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
+                ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
+                PHP_EOL,
                 self::CLOSE_TAG_KEY => '</urlset>'
             )
         );
@@ -292,19 +306,28 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
          * Check exists and writable path
          */
         if (!$this->_directory->isExist($path)) {
-            throw new \Magento\Core\Exception(__('Please create the specified folder "%1" before saving the sitemap.',
-                $this->_escaper->escapeHtml($this->getSitemapPath())));
+            throw new \Magento\Core\Exception(
+                __(
+                    'Please create the specified folder "%1" before saving the sitemap.',
+                    $this->_escaper->escapeHtml($this->getSitemapPath())
+                )
+            );
         }
 
         if (!$this->_directory->isWritable($path)) {
-            throw new \Magento\Core\Exception(__('Please make sure that "%1" is writable by the web-server.',
-                $this->getSitemapPath()));
+            throw new \Magento\Core\Exception(
+                __('Please make sure that "%1" is writable by the web-server.', $this->getSitemapPath())
+            );
         }
         /**
          * Check allow filename
          */
         if (!preg_match('#^[a-zA-Z0-9_\.]+$#', $this->getSitemapFilename())) {
-            throw new \Magento\Core\Exception(__('Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'));
+            throw new \Magento\Core\Exception(
+                __(
+                    'Please use only letters (a-z or A-Z), numbers (0-9) or underscores (_) in the filename. No spaces or other characters are allowed.'
+                )
+            );
         }
         if (!preg_match('#\.xml$#', $this->getSitemapFilename())) {
             $this->setSitemapFilename($this->getSitemapFilename() . '.xml');
@@ -353,8 +376,12 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
 
         if ($this->_sitemapIncrement == 1) {
             // In case when only one increment file was created use it as default sitemap
-            $path = rtrim($this->getSitemapPath(), '/') . '/' .
-                $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
+            $path = rtrim(
+                $this->getSitemapPath(),
+                '/'
+            ) . '/' . $this->_getCurrentSitemapFilename(
+                $this->_sitemapIncrement
+            );
             $destination = rtrim($this->getSitemapPath(), '/') . '/' . $this->getSitemapFilename();
 
             $this->_directory->renameFile($path, $destination);
@@ -430,7 +457,6 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
      * @param null|string $priority
      * @param null|array $images
      * @return string
-
      * Sitemap images
      * @see http://support.google.com/webmasters/bin/answer.py?hl=en&answer=178636
      *
@@ -463,9 +489,10 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
             }
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
-            $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) .'"/>';
-            $row .= '<Attribute name="src" value="'
-                . htmlspecialchars($this->_getMediaUrl($images->getThumbnail())) . '"/>';
+            $row .= '<Attribute name="name" value="' . htmlspecialchars($images->getTitle()) . '"/>';
+            $row .= '<Attribute name="src" value="' . htmlspecialchars(
+                $this->_getMediaUrl($images->getThumbnail())
+            ) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
@@ -631,7 +658,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
         $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
 
-        if ((strpos($baseDir, $documentRoot) === 0)) {
+        if (strpos($baseDir, $documentRoot) === 0) {
             //case when basedir is in document root
             $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
@@ -666,7 +693,7 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
         /** @var $helper \Magento\Sitemap\Helper\Data */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
-        return (bool) $helper->getEnableSubmissionRobots($storeId);
+        return (bool)$helper->getEnableSubmissionRobots($storeId);
     }
 
     /**
@@ -711,5 +738,4 @@ class Sitemap extends \Magento\Core\Model\AbstractModel
 
         return PHP_EOL;
     }
-
 }

@@ -34,8 +34,6 @@
  */
 namespace Magento\Catalog\Block\Product\View\Options\Type;
 
-class DefaultType
-    extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
+class DefaultType extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
-
 }

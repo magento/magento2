@@ -131,10 +131,16 @@ class View extends \Magento\Object
      */
     public function getUrl()
     {
-        $this->_helperImage->init($this->_product, $this->getType())
-            ->keepFrame($this->isWhiteBorders())
-            ->resize($this->getWidth(), $this->getHeight());
-        return (string) $this->_helperImage;
+        $this->_helperImage->init(
+            $this->_product,
+            $this->getType()
+        )->keepFrame(
+            $this->isWhiteBorders()
+        )->resize(
+            $this->getWidth(),
+            $this->getHeight()
+        );
+        return (string)$this->_helperImage;
     }
 
     /**

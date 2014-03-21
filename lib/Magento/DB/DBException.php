@@ -34,5 +34,4 @@ namespace Magento\DB;
  */
 class DBException extends \Magento\Exception
 {
-
 }

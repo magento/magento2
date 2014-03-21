@@ -48,10 +48,8 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function addOrderRelation($agreementId, $orderId)
     {
         $this->_getWriteAdapter()->insert(
-            $this->getTable('paypal_billing_agreement_order'), array(
-                'agreement_id'  => $agreementId,
-                'order_id'      => $orderId
-            )
+            $this->getTable('paypal_billing_agreement_order'),
+            array('agreement_id' => $agreementId, 'order_id' => $orderId)
         );
         return $this;
     }
@@ -65,13 +63,15 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function addOrdersFilter(\Magento\Sales\Model\Resource\Order\Collection $orderCollection, $agreementIds)
     {
-        $agreementIds = (is_array($agreementIds)) ? $agreementIds : [$agreementIds];
-        $orderCollection->getSelect()
-            ->joinInner(
-                array('pbao' => $this->getTable('paypal_billing_agreement_order')),
-                'main_table.entity_id = pbao.order_id',
-                array())
-            ->where('pbao.agreement_id IN(?)', $agreementIds);
+        $agreementIds = is_array($agreementIds) ? $agreementIds : array($agreementIds);
+        $orderCollection->getSelect()->joinInner(
+            array('pbao' => $this->getTable('paypal_billing_agreement_order')),
+            'main_table.entity_id = pbao.order_id',
+            array()
+        )->where(
+            'pbao.agreement_id IN(?)',
+            $agreementIds
+        );
         return $this;
     }
 }

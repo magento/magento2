@@ -61,10 +61,8 @@ class Pager extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\App\Helper\Context $context
      * @param \Magento\Backend\Model\Session $backendSession
      */
-    public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Backend\Model\Session $backendSession
-    ) {
+    public function __construct(\Magento\App\Helper\Context $context, \Magento\Backend\Model\Session $backendSession)
+    {
         $this->_backendSession = $backendSession;
         parent::__construct($context);
     }
@@ -102,7 +100,7 @@ class Pager extends \Magento\App\Helper\AbstractHelper
     protected function _loadItems()
     {
         if (is_null($this->_items)) {
-            $this->_items = (array) $this->_backendSession->getData($this->_getStorageKey());
+            $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
         }
     }
 

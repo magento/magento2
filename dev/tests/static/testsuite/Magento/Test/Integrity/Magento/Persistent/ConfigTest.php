@@ -30,7 +30,6 @@ namespace Magento\Test\Integrity\Magento\Persistent;
 
 class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
-
     /**
      * Returns the name of the XSD file to be used to validate the XML
      *
@@ -120,7 +119,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     {
         $expectedErrors = array(
             "Element 'welcome': This element is not expected.",
-            "Element 'models': This element is not expected.",
+            "Element 'models': This element is not expected."
         );
         parent::testSchemaUsingInvalidXml($expectedErrors);
     }

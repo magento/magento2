@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Generator;
 
 class Io
@@ -57,6 +56,7 @@ class Io
      * @var \Magento\Filesystem\Driver\File
      */
     private $filesystemDriver;
+
     /**
      * @param \Magento\Filesystem\Driver\File   $filesystemDriver
      * @param \Magento\Autoload\IncludePath     $autoLoader
@@ -64,11 +64,11 @@ class Io
      */
     public function __construct(
         \Magento\Filesystem\Driver\File $filesystemDriver,
-        \Magento\Autoload\IncludePath   $autoLoader = null,
+        \Magento\Autoload\IncludePath $autoLoader = null,
         $generationDirectory = null
     ) {
-        $this->_autoloader          = $autoLoader ? : new \Magento\Autoload\IncludePath();
-        $this->filesystemDriver     = $filesystemDriver;
+        $this->_autoloader = $autoLoader ?: new \Magento\Autoload\IncludePath();
+        $this->filesystemDriver = $filesystemDriver;
         $this->initGeneratorDirectory($generationDirectory);
     }
 

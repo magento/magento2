@@ -43,16 +43,15 @@ class ImportConfigFilesTest extends \PHPUnit_Framework_TestCase
         );
 
         $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')
-            ->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
         $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_model = $objectManager->create('Magento\ImportExport\Model\Import\Config\Reader', array(
-            'fileResolver' => $fileResolverMock,
-            'validationState' => $validationStateMock,
-        ));
+        $this->_model = $objectManager->create(
+            'Magento\ImportExport\Model\Import\Config\Reader',
+            array('fileResolver' => $fileResolverMock, 'validationState' => $validationStateMock)
+        );
     }
 
     public function testImportXmlFiles()

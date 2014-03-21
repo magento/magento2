@@ -54,10 +54,16 @@ class Send extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
      * @param \Magento\Registry $registry
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -65,6 +71,7 @@ class Send extends \Magento\View\Element\Template
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
         \Magento\Registry $registry,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
@@ -72,6 +79,7 @@ class Send extends \Magento\View\Element\Template
         $this->_sendfriendData = $sendfriendData;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
     }
 
     /**
@@ -89,7 +97,7 @@ class Send extends \Magento\View\Element\Template
         /* @var $session \Magento\Customer\Model\Session */
         $session = $this->_customerSession;
 
-        if ($session->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             return $session->getCustomer()->getName();
         }
 
@@ -111,7 +119,7 @@ class Send extends \Magento\View\Element\Template
         /* @var $session \Magento\Customer\Model\Session */
         $session = $this->_customerSession;
 
-        if ($session->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             return $session->getCustomer()->getEmail();
         }
 
@@ -196,10 +204,7 @@ class Send extends \Magento\View\Element\Template
      */
     public function getSendUrl()
     {
-        return $this->getUrl('*/*/sendmail', array(
-            'id'     => $this->getProductId(),
-            'cat_id' => $this->getCategoryId()
-        ));
+        return $this->getUrl('*/*/sendmail', array('id' => $this->getProductId(), 'cat_id' => $this->getCategoryId()));
     }
 
     /**

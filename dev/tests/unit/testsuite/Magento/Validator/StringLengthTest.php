@@ -68,7 +68,7 @@ class StringLengthTest extends \PHPUnit_Framework_TestCase
             array('строка', 6, true),
             array('строка', 5, false),
             array('string', 6, true),
-            array('string', 5, false),
+            array('string', 5, false)
         );
     }
 }

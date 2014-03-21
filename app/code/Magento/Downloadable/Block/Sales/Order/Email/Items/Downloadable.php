@@ -74,7 +74,6 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
         parent::__construct($context, $data);
     }
 
-
     /**
      * Enter description here...
      *
@@ -82,9 +81,14 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      */
     public function getLinks()
     {
-        $this->_purchased = $this->_purchasedFactory->create()->load($this->getItem()->getOrder()->getId(), 'order_id');
-        $purchasedLinks = $this->_itemsFactory->create()
-            ->addFieldToFilter('order_item_id', $this->getItem()->getOrderItem()->getId());
+        $this->_purchased = $this->_purchasedFactory->create()->load(
+            $this->getItem()->getOrder()->getId(),
+            'order_id'
+        );
+        $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter(
+            'order_item_id',
+            $this->getItem()->getOrderItem()->getId()
+        );
         $this->_purchased->setPurchasedItems($purchasedLinks);
 
         return $this->_purchased;
@@ -107,11 +111,14 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
      */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->_urlBuilder->getUrl('downloadable/download/link', array(
-            'id'        => $item->getLinkHash(),
-            '_scope'    => $this->getOrder()->getStore(),
-            '_secure'   => true,
-            '_nosid'    => true
-        ));
+        return $this->_urlBuilder->getUrl(
+            'downloadable/download/link',
+            array(
+                'id' => $item->getLinkHash(),
+                '_scope' => $this->getOrder()->getStore(),
+                '_secure' => true,
+                '_nosid' => true
+            )
+        );
     }
 }

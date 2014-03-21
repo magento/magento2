@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 class RelatedFileTest extends \PHPUnit_Framework_TestCase
@@ -62,34 +61,25 @@ class RelatedFileTest extends \PHPUnit_Framework_TestCase
                 'arguments' => array(
                     'relatedFilePath' => '../directory/file.css',
                     'parentRelativePath' => 'css/source.css',
-                    'params' => ['module' => false]
+                    'params' => array('module' => false)
                 ),
-                'expected' => array(
-                    'path' => 'directory/file.css',
-                    'params' => ['module' => false]
-                )
+                'expected' => array('path' => 'directory/file.css', 'params' => array('module' => false))
             ),
             array(
                 'arguments' => array(
                     'relatedFilePath' => '../some_dir/file.css',
                     'parentRelativePath' => 'css/source.css',
-                    'params' => ['module' => 'Magento_Theme']
+                    'params' => array('module' => 'Magento_Theme')
                 ),
-                'expected' => array(
-                    'path' => 'some_dir/file.css',
-                    'params' => ['module' => 'Magento_Theme']
-                )
+                'expected' => array('path' => 'some_dir/file.css', 'params' => array('module' => 'Magento_Theme'))
             ),
             array(
                 'arguments' => array(
                     'relatedFilePath' => 'Magento_Theme::some_dir/file.css',
                     'parentRelativePath' => 'css/source.css',
-                    'params' => ['module' => false]
+                    'params' => array('module' => false)
                 ),
-                'expected' => array(
-                    'path' => 'some_dir/file.css',
-                    'params' => ['module' => 'Magento_Theme']
-                )
+                'expected' => array('path' => 'some_dir/file.css', 'params' => array('module' => 'Magento_Theme'))
             )
         );
     }

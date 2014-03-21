@@ -65,8 +65,7 @@ class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
             }
             if ($addressId) {
                 $object->setDefaultBilling($addressId);
-                $this->getAttribute()->getEntity()
-                    ->saveAttribute($object, $this->getAttribute()->getAttributeCode());
+                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getAttributeCode());
             }
         }
     }

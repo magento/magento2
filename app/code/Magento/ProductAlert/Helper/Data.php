@@ -138,10 +138,13 @@ class Data extends \Magento\Core\Helper\Url
      */
     public function getSaveUrl($type)
     {
-        return $this->_getUrl('productalert/add/' . $type, array(
-            'product_id'    => $this->getProduct()->getId(),
-            \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
-        ));
+        return $this->_getUrl(
+            'productalert/add/' . $type,
+            array(
+                'product_id' => $this->getProduct()->getId(),
+                \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            )
+        );
     }
 
     /**

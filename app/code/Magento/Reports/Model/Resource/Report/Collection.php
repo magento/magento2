@@ -147,7 +147,7 @@ class Collection extends \Magento\Data\Collection
     public function setInterval($fromDate, $toDate)
     {
         $this->_from = $fromDate;
-        $this->_to   = $toDate;
+        $this->_to = $toDate;
 
         return $this;
     }
@@ -164,8 +164,8 @@ class Collection extends \Magento\Data\Collection
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart  =  $this->_dateFactory->create($this->_from);
-            $dateEnd    =  $this->_dateFactory->create($this->_to);
+            $dateStart = $this->_dateFactory->create($this->_from);
+            $dateEnd = $this->_dateFactory->create($this->_to);
 
             $interval = array();
             $firstInterval = true;
@@ -184,12 +184,12 @@ class Collection extends \Magento\Data\Collection
                         $firstInterval = false;
                         break;
                     default:
-                        break(2);
+                        break 2;
                 }
                 $this->_intervals[$interval['period']] = new \Magento\Object($interval);
             }
         }
-        return  $this->_intervals;
+        return $this->_intervals;
     }
 
     /**
@@ -202,8 +202,8 @@ class Collection extends \Magento\Data\Collection
     {
         $interval = array(
             'period' => $dateStart->toString($this->_localeDate->getDateFormat()),
-            'start'  => $dateStart->toString('yyyy-MM-dd HH:mm:ss'),
-            'end'    => $dateStart->toString('yyyy-MM-dd 23:59:59')
+            'start' => $dateStart->toString('yyyy-MM-dd HH:mm:ss'),
+            'end' => $dateStart->toString('yyyy-MM-dd 23:59:59')
         );
         return $interval;
     }
@@ -218,17 +218,18 @@ class Collection extends \Magento\Data\Collection
      */
     protected function _getMonthInterval(
         \Magento\Stdlib\DateTime\DateInterface $dateStart,
-        \Magento\Stdlib\DateTime\DateInterface $dateEnd, $firstInterval
+        \Magento\Stdlib\DateTime\DateInterface $dateEnd,
+        $firstInterval
     ) {
         $interval = array();
-        $interval['period'] =  $dateStart->toString('MM/yyyy');
+        $interval['period'] = $dateStart->toString('MM/yyyy');
         if ($firstInterval) {
             $interval['start'] = $dateStart->toString('yyyy-MM-dd 00:00:00');
         } else {
             $interval['start'] = $dateStart->toString('yyyy-MM-01 00:00:00');
         }
 
-        $lastInterval = ($dateStart->compareMonth($dateEnd->getMonth()) == 0);
+        $lastInterval = $dateStart->compareMonth($dateEnd->getMonth()) == 0;
 
         if ($lastInterval) {
             $interval['end'] = $dateStart->setDay($dateEnd->getDay())->toString('yyyy-MM-dd 23:59:59');
@@ -259,15 +260,24 @@ class Collection extends \Magento\Data\Collection
         $firstInterval
     ) {
         $interval = array();
-        $interval['period'] =  $dateStart->toString('yyyy');
-        $interval['start'] = ($firstInterval) ? $dateStart->toString('yyyy-MM-dd 00:00:00')
-            : $dateStart->toString('yyyy-01-01 00:00:00');
+        $interval['period'] = $dateStart->toString('yyyy');
+        $interval['start'] = $firstInterval ? $dateStart->toString(
+            'yyyy-MM-dd 00:00:00'
+        ) : $dateStart->toString(
+            'yyyy-01-01 00:00:00'
+        );
 
-        $lastInterval = ($dateStart->compareYear($dateEnd->getYear()) == 0);
+        $lastInterval = $dateStart->compareYear($dateEnd->getYear()) == 0;
 
-        $interval['end'] = ($lastInterval) ? $dateStart->setMonth($dateEnd->getMonth())
-            ->setDay($dateEnd->getDay())->toString('yyyy-MM-dd 23:59:59')
-            : $dateStart->toString('yyyy-12-31 23:59:59');
+        $interval['end'] = $lastInterval ? $dateStart->setMonth(
+            $dateEnd->getMonth()
+        )->setDay(
+            $dateEnd->getDay()
+        )->toString(
+            'yyyy-MM-dd 23:59:59'
+        ) : $dateStart->toString(
+            'yyyy-12-31 23:59:59'
+        );
         $dateStart->addYear(1);
 
         if ($dateStart->compareYear($dateEnd->getYear()) == 0) {
@@ -284,11 +294,7 @@ class Collection extends \Magento\Data\Collection
      */
     public function getPeriods()
     {
-        return array(
-            'day'   => __('Day'),
-            'month' => __('Month'),
-            'year'  => __('Year')
-        );
+        return array('day' => __('Day'), 'month' => __('Month'), 'year' => __('Year'));
     }
 
     /**
@@ -358,11 +364,13 @@ class Collection extends \Magento\Data\Collection
             return array();
         }
         $reportResource = $this->_collectionFactory->create($this->_reportCollection);
-        $reportResource
-            ->setDateRange($this->timeShift($fromDate), $this->timeShift($toDate))
-            ->setStoreIds($this->getStoreIds());
+        $reportResource->setDateRange(
+            $this->timeShift($fromDate),
+            $this->timeShift($toDate)
+        )->setStoreIds(
+            $this->getStoreIds()
+        );
         return $reportResource;
-
     }
 
     /**
@@ -375,9 +383,7 @@ class Collection extends \Magento\Data\Collection
         if (!$this->_reports) {
             $reports = array();
             foreach ($this->_getIntervals() as $interval) {
-                $interval->setChildren(
-                    $this->_getReport($interval->getStart(), $interval->getEnd())
-                );
+                $interval->setChildren($this->_getReport($interval->getStart(), $interval->getEnd()));
                 if (count($interval->getChildren()) == 0) {
                     $interval->setIsEmpty(true);
                 }
@@ -396,9 +402,14 @@ class Collection extends \Magento\Data\Collection
      */
     public function timeShift($datetime)
     {
-        return $this->_localeDate
-            ->utcDate(null, $datetime, true, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
-            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $this->_localeDate->utcDate(
+            null,
+            $datetime,
+            true,
+            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        )->toString(
+            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        );
     }
 
     /**

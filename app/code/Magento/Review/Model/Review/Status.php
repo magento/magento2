@@ -31,7 +31,6 @@
  * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Review\Model\Review;
 
 class Status extends \Magento\Core\Model\AbstractModel

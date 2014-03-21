@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="checkout_onepage_review_item_renderers" />
-    <block class="Magento\Checkout\Block\Onepage\Review\Info" name="order_review" output="1" template="onepage/review/info.phtml" cacheable="false">
+    <block class="Magento\Checkout\Block\Onepage\Review\Info" name="order_review" output="1" template="onepage/review/info.phtml">
         <block class="Magento\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list" />
-        <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.onepage.review.info.totals" as="totals" template="onepage/review/totals.phtml" cacheable="false"/>
+        <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.onepage.review.info.totals" as="totals" template="onepage/review/totals.phtml"/>
         <container name="checkout.onepage.review.info.items.before" as="items_before" label="Items Before"/>
         <container name="checkout.onepage.review.info.items.after" as="items_after" label="Items After"/>
         <block class="Magento\Checkout\Block\Agreements" name="checkout.onepage.agreements" as="agreements" template="agreements.phtml"/>

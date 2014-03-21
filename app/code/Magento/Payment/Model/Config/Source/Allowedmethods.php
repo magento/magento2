@@ -23,8 +23,7 @@
  */
 namespace Magento\Payment\Model\Config\Source;
 
-class Allowedmethods
-    extends \Magento\Payment\Model\Config\Source\Allmethods
+class Allowedmethods extends \Magento\Payment\Model\Config\Source\Allmethods
 {
     /**
      * Payment config model

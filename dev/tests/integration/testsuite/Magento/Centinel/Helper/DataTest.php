@@ -37,8 +37,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Payment\Helper\Data */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Payment\Helper\Data');
         /** @var $paymentInfo \Magento\Payment\Model\Info */
-        $paymentInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Payment\Model\Info');
+        $paymentInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Payment\Model\Info'
+        );
         $paymentInfo->setMethod('checkmo');
         $result = $block->getInfoBlock($paymentInfo);
         $this->assertInstanceOf('Magento\OfflinePayments\Block\Info\Checkmo', $result);

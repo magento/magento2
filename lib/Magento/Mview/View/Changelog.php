@@ -90,18 +90,21 @@ class Changelog implements ChangelogInterface
             throw new \Exception("Table {$changelogTableName} already exist");
         }
 
-        $table = $this->write->newTable($changelogTableName)
-            ->addColumn('version_id', \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
-                'identity'  => true,
-                'unsigned'  => true,
-                'nullable'  => false,
-                'primary'   => true,
-            ), 'Version ID')
-            ->addColumn($this->getColumnName(), \Magento\DB\Ddl\Table::TYPE_INTEGER, null, array(
-                'unsigned'  => true,
-                'nullable'  => false,
-                'default'   => '0',
-            ), 'Entity ID');
+        $table = $this->write->newTable(
+            $changelogTableName
+        )->addColumn(
+            'version_id',
+            \Magento\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
+            'Version ID'
+        )->addColumn(
+            $this->getColumnName(),
+            \Magento\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            array('unsigned' => true, 'nullable' => false, 'default' => '0'),
+            'Entity ID'
+        );
 
         $this->write->createTable($table);
     }
@@ -156,11 +159,18 @@ class Changelog implements ChangelogInterface
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
 
-        $select = $this->write->select()
-            ->distinct(true)
-            ->from($changelogTableName, array($this->getColumnName()))
-            ->where('version_id > ?', (int)$fromVersionId)
-            ->where('version_id <= ?', (int)$toVersionId);
+        $select = $this->write->select()->distinct(
+            true
+        )->from(
+            $changelogTableName,
+            array($this->getColumnName())
+        )->where(
+            'version_id > ?',
+            (int)$fromVersionId
+        )->where(
+            'version_id <= ?',
+            (int)$toVersionId
+        );
 
         return $this->write->fetchCol($select);
     }

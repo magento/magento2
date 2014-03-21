@@ -73,10 +73,14 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
      */
     public function getLinks()
     {
-        $this->_purchasedLinks = $this->_purchasedFactory->create()
-            ->load($this->getOrderItem()->getOrder()->getId(), 'order_id');
-        $purchasedItems = $this->_itemsFactory->create()
-            ->addFieldToFilter('order_item_id', $this->getOrderItem()->getId());
+        $this->_purchasedLinks = $this->_purchasedFactory->create()->load(
+            $this->getOrderItem()->getOrder()->getId(),
+            'order_id'
+        );
+        $purchasedItems = $this->_itemsFactory->create()->addFieldToFilter(
+            'order_item_id',
+            $this->getOrderItem()->getId()
+        );
         $this->_purchasedLinks->setPurchasedItems($purchasedItems);
 
         return $this->_purchasedLinks;

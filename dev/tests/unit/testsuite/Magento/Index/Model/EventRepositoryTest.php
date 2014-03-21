@@ -38,10 +38,18 @@ class EventRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_eventCollection = $this->getMock(
-            'Magento\Index\Model\Resource\Event\Collection', array(), array(), '', false
+            'Magento\Index\Model\Resource\Event\Collection',
+            array(),
+            array(),
+            '',
+            false
         );
         $collectionFactory = $this->getMock(
-            'Magento\Index\Model\Resource\Event\CollectionFactory', array('create'), array(), '', false
+            'Magento\Index\Model\Resource\Event\CollectionFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->_eventCollection));
         $this->_model = new \Magento\Index\Model\EventRepository($collectionFactory);
@@ -71,8 +79,14 @@ class EventRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUnprocessedReturnsConfiguredCollectionOfEvents()
     {
         $process = $this->getMock('Magento\Index\Model\Process', array(), array(), '', false);
-        $this->_eventCollection->expects($this->once())->method('addProcessFilter')
-            ->with($process, \Magento\Index\Model\Process::EVENT_STATUS_NEW);
+        $this->_eventCollection->expects(
+            $this->once()
+        )->method(
+            'addProcessFilter'
+        )->with(
+            $process,
+            \Magento\Index\Model\Process::EVENT_STATUS_NEW
+        );
         $this->assertEquals($this->_eventCollection, $this->_model->getUnprocessed($process));
     }
 }

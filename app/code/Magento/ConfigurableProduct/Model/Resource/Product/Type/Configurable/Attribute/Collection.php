@@ -28,8 +28,7 @@ namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\A
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Configurable attributes label table name
@@ -168,18 +167,18 @@ class Collection
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        \Magento\Profiler::start('TTT1:'.__METHOD__, array('group' => 'TTT1', 'method' => __METHOD__));
+        \Magento\Profiler::start('TTT1:' . __METHOD__, array('group' => 'TTT1', 'method' => __METHOD__));
         $this->_addProductAttributes();
-        \Magento\Profiler::stop('TTT1:'.__METHOD__);
-        \Magento\Profiler::start('TTT2:'.__METHOD__, array('group' => 'TTT2', 'method' => __METHOD__));
+        \Magento\Profiler::stop('TTT1:' . __METHOD__);
+        \Magento\Profiler::start('TTT2:' . __METHOD__, array('group' => 'TTT2', 'method' => __METHOD__));
         $this->_addAssociatedProductFilters();
-        \Magento\Profiler::stop('TTT2:'.__METHOD__);
-        \Magento\Profiler::start('TTT3:'.__METHOD__, array('group' => 'TTT3', 'method' => __METHOD__));
+        \Magento\Profiler::stop('TTT2:' . __METHOD__);
+        \Magento\Profiler::start('TTT3:' . __METHOD__, array('group' => 'TTT3', 'method' => __METHOD__));
         $this->_loadLabels();
-        \Magento\Profiler::stop('TTT3:'.__METHOD__);
-        \Magento\Profiler::start('TTT4:'.__METHOD__, array('group' => 'TTT4', 'method' => __METHOD__));
+        \Magento\Profiler::stop('TTT3:' . __METHOD__);
+        \Magento\Profiler::start('TTT4:' . __METHOD__, array('group' => 'TTT4', 'method' => __METHOD__));
         $this->_loadPrices();
-        \Magento\Profiler::stop('TTT4:'.__METHOD__);
+        \Magento\Profiler::stop('TTT4:' . __METHOD__);
         return $this;
     }
 
@@ -191,8 +190,10 @@ class Collection
     protected function _addProductAttributes()
     {
         foreach ($this->_items as $item) {
-            $productAttribute = $this->getProductType()
-                ->getAttributeById($item->getAttributeId(), $this->getProduct());
+            $productAttribute = $this->getProductType()->getAttributeById(
+                $item->getAttributeId(),
+                $this->getProduct()
+            );
             $item->setProductAttribute($productAttribute);
         }
         return $this;
@@ -206,7 +207,8 @@ class Collection
     public function _addAssociatedProductFilters()
     {
         $this->getProductType()->getUsedProducts(
-            $this->getProduct(), $this->getColumnValues('attribute_id') // Filter associated products
+            $this->getProduct(),
+            $this->getColumnValues('attribute_id') // Filter associated products
         );
         return $this;
     }
@@ -225,26 +227,24 @@ class Collection
                 'store.use_default'
             );
 
-            $labelCheck = $this->getConnection()->getCheckSql(
-                'store.value IS NULL',
-                'def.value',
-                'store.value'
-            );
+            $labelCheck = $this->getConnection()->getCheckSql('store.value IS NULL', 'def.value', 'store.value');
 
-            $select = $this->getConnection()->select()
-                ->from(array('def' => $this->_labelTable))
-                ->joinLeft(
-                    array('store' => $this->_labelTable),
-                    $this->getConnection()->quoteInto(
-                        'store.product_super_attribute_id = def.product_super_attribute_id AND store.store_id = ?',
-                        $this->getStoreId()
-                    ),
-                    array(
-                        'use_default' => $useDefaultCheck,
-                        'label' => $labelCheck
-                    ))
-                ->where('def.product_super_attribute_id IN (?)', array_keys($this->_items))
-                ->where('def.store_id = ?', 0);
+            $select = $this->getConnection()->select()->from(
+                array('def' => $this->_labelTable)
+            )->joinLeft(
+                array('store' => $this->_labelTable),
+                $this->getConnection()->quoteInto(
+                    'store.product_super_attribute_id = def.product_super_attribute_id AND store.store_id = ?',
+                    $this->getStoreId()
+                ),
+                array('use_default' => $useDefaultCheck, 'label' => $labelCheck)
+            )->where(
+                'def.product_super_attribute_id IN (?)',
+                array_keys($this->_items)
+            )->where(
+                'def.store_id = ?',
+                0
+            );
 
             $result = $this->getConnection()->fetchAll($select);
             foreach ($result as $data) {
@@ -265,9 +265,7 @@ class Collection
     protected function _loadPrices()
     {
         if ($this->count()) {
-            $pricings = array(
-                0 => array()
-            );
+            $pricings = array(0 => array());
 
             if ($this->_catalogData->isPriceGlobal()) {
                 $websiteId = 0;
@@ -276,9 +274,12 @@ class Collection
                 $pricing[$websiteId] = array();
             }
 
-            $select = $this->getConnection()->select()
-                ->from(array('price' => $this->_priceTable))
-                ->where('price.product_super_attribute_id IN (?)', array_keys($this->_items));
+            $select = $this->getConnection()->select()->from(
+                array('price' => $this->_priceTable)
+            )->where(
+                'price.product_super_attribute_id IN (?)',
+                array_keys($this->_items)
+            );
 
             if ($websiteId > 0) {
                 $select->where('price.website_id IN(?)', array(0, $websiteId));
@@ -297,7 +298,7 @@ class Collection
             if ($usedProducts) {
                 foreach ($this->_items as $item) {
                     $productAttribute = $item->getProductAttribute();
-                    if (!($productAttribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute)) {
+                    if (!$productAttribute instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute) {
                         continue;
                     }
                     $itemId = $item->getId();
@@ -310,13 +311,13 @@ class Collection
                                 if (!isset($values[$item->getId() . ':' . $option['value']])) {
                                     $values[$itemId . ':' . $option['value']] = array(
                                         'product_super_attribute_id' => $itemId,
-                                        'value_index'                => $option['value'],
-                                        'label'                      => $option['label'],
-                                        'default_label'              => $option['label'],
-                                        'store_label'                => $option['label'],
-                                        'is_percent'                 => 0,
-                                        'pricing_value'              => null,
-                                        'use_default_value'          => true
+                                        'value_index' => $option['value'],
+                                        'label' => $option['label'],
+                                        'default_label' => $option['label'],
+                                        'store_label' => $option['label'],
+                                        'is_percent' => 0,
+                                        'pricing_value' => null,
+                                        'use_default_value' => true
                                     );
                                 }
                             }
@@ -329,9 +330,9 @@ class Collection
                 // Addding pricing to options
                 $valueKey = $pricing['product_super_attribute_id'] . ':' . $pricing['value_index'];
                 if (isset($values[$valueKey])) {
-                    $values[$valueKey]['pricing_value']     = $pricing['pricing_value'];
-                    $values[$valueKey]['is_percent']        = $pricing['is_percent'];
-                    $values[$valueKey]['value_id']          = $pricing['value_id'];
+                    $values[$valueKey]['pricing_value'] = $pricing['pricing_value'];
+                    $values[$valueKey]['is_percent'] = $pricing['is_percent'];
+                    $values[$valueKey]['value_id'] = $pricing['value_id'];
                     $values[$valueKey]['use_default_value'] = true;
                 }
             }
@@ -340,9 +341,9 @@ class Collection
                 foreach ($pricings[$websiteId] as $pricing) {
                     $valueKey = $pricing['product_super_attribute_id'] . ':' . $pricing['value_index'];
                     if (isset($values[$valueKey])) {
-                        $values[$valueKey]['pricing_value']     = $pricing['pricing_value'];
-                        $values[$valueKey]['is_percent']        = $pricing['is_percent'];
-                        $values[$valueKey]['value_id']          = $pricing['value_id'];
+                        $values[$valueKey]['pricing_value'] = $pricing['pricing_value'];
+                        $values[$valueKey]['is_percent'] = $pricing['is_percent'];
+                        $values[$valueKey]['value_id'] = $pricing['value_id'];
                         $values[$valueKey]['use_default_value'] = false;
                     }
                 }

@@ -55,8 +55,8 @@ class AttributeMetadataBuilder extends \Magento\Service\Data\AbstractObjectBuild
         parent::__construct();
         $this->_optionBuilder = $optionBuilder;
         $this->_validationRuleBuilder = $validationRuleBuilder;
-        $this->_data[AttributeMetadata::OPTIONS] = [];
-        $this->_data[AttributeMetadata::VALIDATION_RULES] = [];
+        $this->_data[AttributeMetadata::OPTIONS] = array();
+        $this->_data[AttributeMetadata::VALIDATION_RULES] = array();
     }
 
     /**
@@ -146,7 +146,6 @@ class AttributeMetadataBuilder extends \Magento\Service\Data\AbstractObjectBuild
     {
         return $this->_set(AttributeMetadata::REQUIRED, $required);
     }
-
 
     /**
      * Set multiline count
@@ -251,13 +250,13 @@ class AttributeMetadataBuilder extends \Magento\Service\Data\AbstractObjectBuild
     protected function _setDataValues(array $data)
     {
         if (array_key_exists(AttributeMetadata::OPTIONS, $data)) {
-            $options = [];
+            $options = array();
             if (is_array($data[AttributeMetadata::OPTIONS])) {
                 foreach ($data[AttributeMetadata::OPTIONS] as $key => $option) {
                     $options[$key] = $this->_optionBuilder->populateWithArray($option)->create();
                 }
             }
-            $validationRules = [];
+            $validationRules = array();
             if (is_array($data[AttributeMetadata::VALIDATION_RULES])) {
                 foreach ($data[AttributeMetadata::VALIDATION_RULES] as $key => $value) {
                     $validationRules[$key] = $this->_validationRuleBuilder->populateWithArray($value)->create();

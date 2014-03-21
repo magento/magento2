@@ -34,17 +34,14 @@
  */
 namespace Magento\Reports\Model\Resource;
 
-class Helper extends \Magento\Core\Model\Resource\Helper
-    implements \Magento\Reports\Model\Resource\HelperInterface
+class Helper extends \Magento\Core\Model\Resource\Helper implements \Magento\Reports\Model\Resource\HelperInterface
 {
     /**
      * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        $modulePrefix = 'reports'
-    ) {
+    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'reports')
+    {
         parent::__construct($resource, $modulePrefix);
     }
 
@@ -73,10 +70,10 @@ class Helper extends \Magento\Core\Model\Resource\Helper
      */
     public function updateReportRatingPos($type, $column, $mainTable, $aggregationTable)
     {
-        $adapter         = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
         $periodSubSelect = $adapter->select();
         $ratingSubSelect = $adapter->select();
-        $ratingSelect    = $adapter->select();
+        $ratingSelect = $adapter->select();
 
         switch ($type) {
             case 'year':
@@ -91,11 +88,11 @@ class Helper extends \Magento\Core\Model\Resource\Helper
         }
 
         $columns = array(
-            'period'        => 't.period',
-            'store_id'      => 't.store_id',
-            'product_id'    => 't.product_id',
-            'product_name'  => 't.product_name',
-            'product_price' => 't.product_price',
+            'period' => 't.period',
+            'store_id' => 't.store_id',
+            'product_id' => 't.product_id',
+            'product_name' => 't.product_name',
+            'product_price' => 't.product_price'
         );
 
         if ($type == 'day') {
@@ -104,21 +101,27 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
         $cols = array_keys($columns);
         $cols['total_qty'] = new \Zend_Db_Expr('SUM(t.' . $column . ')');
-        $periodSubSelect->from(array('t' => $mainTable), $cols)
-            ->group(array('t.store_id', $periodCol, 't.product_id'))
-            ->order(array('t.store_id', $periodCol, 'total_qty DESC'));
+        $periodSubSelect->from(
+            array('t' => $mainTable),
+            $cols
+        )->group(
+            array('t.store_id', $periodCol, 't.product_id')
+        )->order(
+            array('t.store_id', $periodCol, 'total_qty DESC')
+        );
 
         $cols = $columns;
         $cols[$column] = 't.total_qty';
-        $cols['rating_pos']  = new \Zend_Db_Expr(
-            "(@pos := IF(t.`store_id` <> @prevStoreId OR {$periodCol} <> @prevPeriod, 1, @pos+1))");
+        $cols['rating_pos'] = new \Zend_Db_Expr(
+            "(@pos := IF(t.`store_id` <> @prevStoreId OR {$periodCol} <> @prevPeriod, 1, @pos+1))"
+        );
         $cols['prevStoreId'] = new \Zend_Db_Expr('(@prevStoreId := t.`store_id`)');
-        $cols['prevPeriod']  = new \Zend_Db_Expr("(@prevPeriod := {$periodCol})");
+        $cols['prevPeriod'] = new \Zend_Db_Expr("(@prevPeriod := {$periodCol})");
         $ratingSubSelect->from($periodSubSelect, $cols);
 
-        $cols               = $columns;
-        $cols['period']     = $periodCol;
-        $cols[$column]      = 't.' . $column;
+        $cols = $columns;
+        $cols['period'] = $periodCol;
+        $cols[$column] = 't.' . $column;
         $cols['rating_pos'] = 't.rating_pos';
         $ratingSelect->from($ratingSubSelect, $cols);
 

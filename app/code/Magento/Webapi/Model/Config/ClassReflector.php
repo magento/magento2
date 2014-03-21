@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Config;
 
 use Zend\Server\Reflection;
@@ -112,7 +111,7 @@ class ClassReflector
             $parameterData = array(
                 'type' => $this->_typeProcessor->process($parameter->getType()),
                 'required' => !$parameter->isOptional(),
-                'documentation' => $parameter->getDescription(),
+                'documentation' => $parameter->getDescription()
             );
             if ($parameter->isOptional()) {
                 $parameterData['default'] = $parameter->getDefaultValue();
@@ -123,7 +122,7 @@ class ClassReflector
             $methodData['interface']['out']['parameters']['result'] = array(
                 'type' => $this->_typeProcessor->process($prototype->getReturnType()),
                 'documentation' => $prototype->getReturnValue()->getDescription(),
-                'required' => true,
+                'required' => true
             );
         }
 

@@ -71,7 +71,7 @@ class Multiselect extends Select
             return $values;
         }
 
-        $output = [];
+        $output = array();
         foreach ($values as $value) {
             if (!$value) {
                 continue;

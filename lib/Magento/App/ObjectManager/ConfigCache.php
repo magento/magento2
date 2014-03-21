@@ -23,7 +23,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\ObjectManager;
 
 class ConfigCache implements \Magento\ObjectManager\ConfigCache
@@ -70,5 +69,4 @@ class ConfigCache implements \Magento\ObjectManager\ConfigCache
     {
         $this->_cacheFrontend->save(serialize($config), $this->_prefix . $key);
     }
-
 }

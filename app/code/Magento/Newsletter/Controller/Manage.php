@@ -110,11 +110,12 @@ class Manage extends \Magento\App\Action\Action
             return $this->_redirect('customer/account/');
         }
         try {
-            $this->_customerSession->getCustomer()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->setIsSubscribed((boolean)$this->getRequest()->getParam('is_subscribed', false))
-                ->save();
-            if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
+            $this->_customerSession->getCustomer()->setStoreId(
+                $this->_storeManager->getStore()->getId()
+            )->setIsSubscribed(
+                (bool)$this->getRequest()->getParam('is_subscribed', false)
+            )->save();
+            if ((bool)$this->getRequest()->getParam('is_subscribed', false)) {
                 $this->messageManager->addSuccess(__('We saved the subscription.'));
             } else {
                 $this->messageManager->addSuccess(__('We removed the subscription.'));

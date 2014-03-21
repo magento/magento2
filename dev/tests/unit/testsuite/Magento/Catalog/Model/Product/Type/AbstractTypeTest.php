@@ -21,20 +21,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testHasOptions()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getHasOptions', '__wakeup', '__sleep'],
-            [],
+            array('getHasOptions', '__wakeup', '__sleep'),
+            array(),
             '',
             false
         );

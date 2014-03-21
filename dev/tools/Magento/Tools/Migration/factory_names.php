@@ -71,11 +71,19 @@ foreach ($layouts as $file) {
 }
 
 // modules in configuration and layouts
-$configs = \Magento\TestFramework\Utility\Files::init()->getConfigFiles('*.xml',
-    array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'), false);
+$configs = \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
+    '*.xml',
+    array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
+    false
+);
 foreach (array_merge($layouts, $configs) as $file) {
-    $modules = array_unique(\Magento\TestFramework\Utility\Classes::getXmlAttributeValues(simplexml_load_file($file),
-            '//@module', 'module'));
+    $modules = array_unique(
+        \Magento\TestFramework\Utility\Classes::getXmlAttributeValues(
+            simplexml_load_file($file),
+            '//@module',
+            'module'
+        )
+    );
     $factoryNames = array_filter($modules, 'isFactoryName');
     if (!$factoryNames) {
         continue;
@@ -83,7 +91,7 @@ foreach (array_merge($layouts, $configs) as $file) {
     $search = array();
     $replace = array();
     foreach ($factoryNames as $factoryName) {
-        list($module,$name) = getModuleName($factoryName);
+        list($module, $name) = getModuleName($factoryName);
         if ($module) {
             $search[] = 'module="' . $factoryName . '"';
             $replace[] = 'module="' . implode('\\', array_map('ucfirst', explode('_', $module))) . '"';
@@ -103,8 +111,16 @@ foreach (array_merge($layouts, $configs) as $file) {
  */
 function isFactoryName($class)
 {
-    return (false !== strpos($class, '/') || preg_match('/^([A-Za-z\\d])+((_[A-Za-z\\d]+))+?$/', $class)
-        || preg_match('/^[a-z\d]+(_[A-Za-z\d]+)?$/', $class));
+    return false !== strpos(
+        $class,
+        '/'
+    ) || preg_match(
+        '/^([A-Za-z\\d])+((_[A-Za-z\\d]+))+?$/',
+        $class
+    ) || preg_match(
+        '/^[a-z\d]+(_[A-Za-z\d]+)?$/',
+        $class
+    );
 }
 
 /**

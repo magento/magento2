@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
@@ -56,29 +55,24 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_customerBuilderMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\CustomerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_addressBuilderMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\AddressBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_customerMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_addressMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_customerBuilderMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\CustomerBuilder'
+        )->disableOriginalConstructor()->getMock();
+        $this->_addressBuilderMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\AddressBuilder'
+        )->disableOriginalConstructor()->getMock();
+        $this->_customerMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Customer'
+        )->disableOriginalConstructor()->getMock();
+        $this->_addressMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Address'
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testConstructor()
     {
-        $this->_customerBuilderMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue('customer'));
-        $customerDetailsBuilder = new CustomerDetailsBuilder(
-            $this->_customerBuilderMock,
-            $this->_addressBuilderMock
-        );
+        $this->_customerBuilderMock->expects($this->once())->method('create')->will($this->returnValue('customer'));
+        $customerDetailsBuilder = new CustomerDetailsBuilder($this->_customerBuilderMock, $this->_addressBuilderMock);
         $customerDetails = $customerDetailsBuilder->create();
         $this->assertEquals('customer', $customerDetails->getCustomer());
         $this->assertEquals(null, $customerDetails->getAddresses());
@@ -86,13 +80,8 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomer()
     {
-        $this->_customerBuilderMock->expects($this->never())
-            ->method('create')
-            ->will($this->returnValue('customer'));
-        $customerDetailsBuilder = new CustomerDetailsBuilder(
-            $this->_customerBuilderMock,
-            $this->_addressBuilderMock
-        );
+        $this->_customerBuilderMock->expects($this->never())->method('create')->will($this->returnValue('customer'));
+        $customerDetailsBuilder = new CustomerDetailsBuilder($this->_customerBuilderMock, $this->_addressBuilderMock);
         $customerDetails = $customerDetailsBuilder->setCustomer($this->_customerMock)->create();
         $this->assertEquals($this->_customerMock, $customerDetails->getCustomer());
         $this->assertEquals(null, $customerDetails->getAddresses());
@@ -100,17 +89,13 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAddresses()
     {
-        $this->_customerBuilderMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue('customer'));
-        $customerDetailsBuilder = new CustomerDetailsBuilder(
-            $this->_customerBuilderMock,
-            $this->_addressBuilderMock
-        );
-        $customerDetails = $customerDetailsBuilder
-            ->setAddresses([$this->_addressMock, $this->_addressMock])->create();
+        $this->_customerBuilderMock->expects($this->once())->method('create')->will($this->returnValue('customer'));
+        $customerDetailsBuilder = new CustomerDetailsBuilder($this->_customerBuilderMock, $this->_addressBuilderMock);
+        $customerDetails = $customerDetailsBuilder->setAddresses(
+            array($this->_addressMock, $this->_addressMock)
+        )->create();
         $this->assertEquals('customer', $customerDetails->getCustomer());
-        $this->assertEquals([$this->_addressMock, $this->_addressMock], $customerDetails->getAddresses());
+        $this->assertEquals(array($this->_addressMock, $this->_addressMock), $customerDetails->getAddresses());
     }
 
     /**
@@ -122,32 +107,45 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testPopulateWithArray($data, $expectedCustomerStr, $expectedAddressesStr)
     {
 
-        $expectedCustomer = ($expectedCustomerStr == 'customerMock') ? $this->_customerMock : $expectedCustomerStr;
+        $expectedCustomer = $expectedCustomerStr == 'customerMock' ? $this->_customerMock : $expectedCustomerStr;
         $expectedAddresses = null;
         if (isset($expectedAddressesStr)) {
-            $expectedAddresses = [];
-            foreach ($expectedAddressesStr as $addressStr ) {
-                $expectedAddresses[] = ($addressStr == 'addressMock') ? $this->_addressMock : $addressStr;
+            $expectedAddresses = array();
+            foreach ($expectedAddressesStr as $addressStr) {
+                $expectedAddresses[] = $addressStr == 'addressMock' ? $this->_addressMock : $addressStr;
             }
         }
-        $this->_customerBuilderMock->expects($this->any())
-            ->method('populateWithArray')
-            ->will($this->returnValue($this->_customerBuilderMock));
-        $this->_customerBuilderMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_customerMock));
-
-        $this->_addressBuilderMock->expects($this->any())
-            ->method('populateWithArray')
-            ->will($this->returnValue($this->_addressBuilderMock));
-        $this->_addressBuilderMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_addressMock));
-
-        $customerDetailsBuilder = new CustomerDetailsBuilder(
-            $this->_customerBuilderMock,
-            $this->_addressBuilderMock
+        $this->_customerBuilderMock->expects(
+            $this->any()
+        )->method(
+            'populateWithArray'
+        )->will(
+            $this->returnValue($this->_customerBuilderMock)
         );
+        $this->_customerBuilderMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_customerMock)
+        );
+
+        $this->_addressBuilderMock->expects(
+            $this->any()
+        )->method(
+            'populateWithArray'
+        )->will(
+            $this->returnValue($this->_addressBuilderMock)
+        );
+        $this->_addressBuilderMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_addressMock)
+        );
+
+        $customerDetailsBuilder = new CustomerDetailsBuilder($this->_customerBuilderMock, $this->_addressBuilderMock);
         $customerDetails = $customerDetailsBuilder->populateWithArray($data)->create();
         $this->assertEquals($expectedCustomer, $customerDetails->getCustomer());
         $this->assertEquals($expectedAddresses, $customerDetails->getAddresses());
@@ -155,23 +153,30 @@ class CustomerDetailsBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function populateWithArrayDataProvider()
     {
-        return [
-            [['customer' => ['customerData']], 'customerMock', null],
-            [['customer' => ['customerData'], 'addresses' => []], 'customerMock', []],
-            [['customer' => ['customerData'], 'addresses' => null], 'customerMock', null],
-            [
-                ['customer' => ['customerData'], 'addresses' => [['addressData']]],
+        return array(
+            array(array('customer' => array('customerData')), 'customerMock', null),
+            array(array('customer' => array('customerData'), 'addresses' => array()), 'customerMock', array()),
+            array(array('customer' => array('customerData'), 'addresses' => null), 'customerMock', null),
+            array(
+                array('customer' => array('customerData'), 'addresses' => array(array('addressData'))),
                 'customerMock',
-                ['addressMock'],
-            ],
-            [
-                ['customer' => ['customerData'], 'addresses' => [['addressData'], ['addressData']]],
+                array('addressMock')
+            ),
+            array(
+                array(
+                    'customer' => array('customerData'),
+                    'addresses' => array(array('addressData'), array('addressData'))
+                ),
                 'customerMock',
-                ['addressMock', 'addressMock'],
-            ],
-            [['addresses' => [['addressData']]], 'customerMock', ['addressMock'],],
-            [['customer' => null, 'addresses' => [['addressData']]], 'customerMock', ['addressMock'],],
-            [[], 'customerMock', null,],
-        ];
+                array('addressMock', 'addressMock')
+            ),
+            array(array('addresses' => array(array('addressData'))), 'customerMock', array('addressMock')),
+            array(
+                array('customer' => null, 'addresses' => array(array('addressData'))),
+                'customerMock',
+                array('addressMock')
+            ),
+            array(array(), 'customerMock', null)
+        );
     }
 }

@@ -59,14 +59,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct(
-            $context,
-            $catalogData,
-            $customerSession,
-            $checkoutSession,
-            $salesConfig,
-            $data
-        );
+        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $salesConfig, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -90,7 +83,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getTotalExclTax()
     {
-        $excl = $this->getTotal()->getAddress()->getGrandTotal()-$this->getTotal()->getAddress()->getTaxAmount();
+        $excl = $this->getTotal()->getAddress()->getGrandTotal() - $this->getTotal()->getAddress()->getTaxAmount();
         $excl = max($excl, 0);
         return $excl;
     }

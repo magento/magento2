@@ -72,8 +72,7 @@ class Wishlist extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         if ($field == $this->_customerIdFieldName) {
-            $select->order('wishlist_id ' . \Zend_Db_Select::SQL_ASC)
-                ->limit(1);
+            $select->order('wishlist_id ' . \Zend_Db_Select::SQL_ASC)->limit(1);
         }
         return $select;
     }

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Circular\Data;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -36,23 +35,23 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     protected function createModule($name, $chains = array())
     {
         $objectManagerHelper = new ObjectManager($this);
-        return $objectManagerHelper->getObject('Magento\Tools\Dependency\Report\Circular\Data\Module', [
-            'name' => $name,
-            'chains' => $chains,
-        ]);
+        return $objectManagerHelper->getObject(
+            'Magento\Tools\Dependency\Report\Circular\Data\Module',
+            array('name' => $name, 'chains' => $chains)
+        );
     }
 
     public function testGetName()
     {
         $name = 'name';
-        $module = $this->createModule($name, []);
+        $module = $this->createModule($name, array());
 
         $this->assertEquals($name, $module->getName());
     }
 
     public function testGetChains()
     {
-        $chains = ['foo', 'baz', 'bar'];
+        $chains = array('foo', 'baz', 'bar');
         $module = $this->createModule('name', $chains);
 
         $this->assertEquals($chains, $module->getChains());
@@ -60,7 +59,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChainsCount()
     {
-        $module = $this->createModule('name', ['foo', 'baz', 'bar']);
+        $module = $this->createModule('name', array('foo', 'baz', 'bar'));
 
         $this->assertEquals(3, $module->getChainsCount());
     }

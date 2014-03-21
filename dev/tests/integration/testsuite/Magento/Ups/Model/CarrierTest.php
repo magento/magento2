@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Ups\Model;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
@@ -33,8 +32,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->carrier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Ups\Model\Carrier');
+        $this->carrier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Ups\Model\Carrier'
+        );
     }
 
     public function testGetShipAcceptUrl()
@@ -64,6 +64,9 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetShipConfirmUrlLive()
     {
-        $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
+        $this->assertEquals(
+            'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
+            $this->carrier->getShipConfirmUrl()
+        );
     }
 }

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -44,8 +43,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
     }
 
     public static function tearDownAfterClass()
@@ -55,8 +55,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
-            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $mediaDirectory = $objectManager->get(
+            'Magento\App\Filesystem'
+        )->getDirectoryWrite(
+            \Magento\App\Filesystem::MEDIA_DIR
+        );
 
         if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
             $mediaDirectory->delete($config->getBaseMediaPath());
@@ -80,25 +83,48 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRUD()
     {
-        $this->_model->setTypeId('simple')->setAttributeSetId(4)
-            ->setName('Simple Product')->setSku(uniqid())->setPrice(10)
-            ->setMetaTitle('meta title')->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-        ;
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product'
+        )->setSku(
+            uniqid()
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
         $crud = new \Magento\TestFramework\Entity($this->_model, array('sku' => uniqid()));
         $crud->testCrud();
     }
 
     public function testCleanCache()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->saveCache('test', 'catalog_product_999', array('catalog_product_999'));
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\App'
+        )->saveCache(
+            'test',
+            'catalog_product_999',
+            array('catalog_product_999')
+        );
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
         $this->_model->setId(999)->cleanCache();
         $this->assertFalse(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-                ->loadCache('catalog_product_999')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\App'
+            )->loadCache(
+                'catalog_product_999'
+            )
         );
     }
 
@@ -130,8 +156,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
         /** @var \Magento\Filesystem\Directory\WriteInterface $mediaDirectory */
-        $mediaDirectory = $objectManager->get('Magento\App\Filesystem')
-            ->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR);
+        $mediaDirectory = $objectManager->get(
+            'Magento\App\Filesystem'
+        )->getDirectoryWrite(
+            \Magento\App\Filesystem::MEDIA_DIR
+        );
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
@@ -146,10 +175,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicate()
     {
-        $this->_model->load(1); // fixture
+        $this->_model->load(1);
+        // fixture
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
-        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Copier');
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Copier'
+        );
         $duplicate = $copier->copy($this->_model);
         try {
             $this->assertNotEmpty($duplicate->getId());
@@ -175,8 +206,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->load(1);
         $this->assertEquals('simple', $this->_model->getSku());
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
-        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Copier');
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Copier'
+        );
         $duplicate = $copier->copy($this->_model);
         $this->assertEquals('simple-3', $duplicate->getSku());
     }
@@ -188,8 +220,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function _undo($duplicate)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setId(\Magento\Core\Model\Store::DEFAULT_STORE_ID);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->setId(
+            \Magento\Core\Model\Store::DEFAULT_STORE_ID
+        );
         $duplicate->delete();
     }
 
@@ -217,11 +252,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertTrue($this->_model->isVisibleInCatalog());
 
-        $this->assertEquals(array(
+        $this->assertEquals(
+            array(
                 \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
                 \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
                 \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-            ), $this->_model->getVisibleInSiteVisibilities()
+            ),
+            $this->_model->getVisibleInSiteVisibilities()
         );
 
         $this->assertFalse($this->_model->isVisibleInSiteVisibility());
@@ -252,7 +289,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSalable()
     {
-        $this->_model->load(1); // fixture
+        $this->_model->load(1);
+        // fixture
         $this->assertTrue((bool)$this->_model->isSalable());
         $this->assertTrue((bool)$this->_model->isSaleable());
         $this->assertTrue((bool)$this->_model->isAvailable());
@@ -317,16 +355,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoAppArea frontend
-     */
-    public function testSetOrigDataFrontend()
-    {
-        $this->assertEmpty($this->_model->getOrigData());
-        $this->_model->setOrigData('key', 'value');
-        $this->assertEmpty($this->_model->getOrigData());
-    }
-
-    /**
      * @magentoAppArea adminhtml
      */
     public function testSetOrigDataBackend()
@@ -357,8 +385,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->reset();
         $this->_assertEmpty($model);
 
-        $this->_model->addOption(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Option'));
+        $this->_model->addOption(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product\Option')
+        );
         $this->_model->reset();
         $this->_assertEmpty($model);
 
@@ -375,7 +404,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function _assertEmpty($model)
     {
         $this->assertEquals(array(), $model->getData());
-        $this->assertEquals(null, $model->getOrigData());
+        $this->assertEmpty($model->getOrigData());
         $this->assertEquals(array(), $model->getCustomOptions());
         // impossible to test $_optionInstance
         $this->assertEquals(array(), $model->getOptions());
@@ -393,7 +422,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $request = new \Magento\Object;
+        $request = new \Magento\Object();
         $result = $this->_model->processBuyRequest($request);
         $this->assertInstanceOf('Magento\Object', $result);
         $this->assertArrayHasKey('errors', $result->getData());
@@ -401,13 +430,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $this->_model->setTypeId('simple')->setAttributeSetId(4)->setName('Simple Product')
-            ->setSku(uniqid('', true) . uniqid('', true) . uniqid('', true))->setPrice(10)->setMetaTitle('meta title')
-            ->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-            ->setCollectExceptionMessages(true)
-        ;
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product'
+        )->setSku(
+            uniqid('', true) . uniqid('', true) . uniqid('', true)
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setCollectExceptionMessages(
+            true
+        );
         $validationResult = $this->_model->validate();
         $this->assertEquals('SKU length should be 64 characters maximum.', $validationResult['sku']);
         unset($validationResult['sku']);

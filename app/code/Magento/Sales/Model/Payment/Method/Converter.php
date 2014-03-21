@@ -43,11 +43,7 @@ class Converter
      * @var array
      */
     protected $_encryptFields = array(
-        'ccsave' => array(
-            'cc_owner' => true,
-            'cc_exp_year' => true,
-            'cc_exp_month' => true,
-        ),
+        'ccsave' => array('cc_owner' => true, 'cc_exp_year' => true, 'cc_exp_month' => true)
     );
 
     /**
@@ -58,9 +54,8 @@ class Converter
     /**
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      */
-    public function __construct(
-        \Magento\Encryption\EncryptorInterface $encryptor
-    ) {
+    public function __construct(\Magento\Encryption\EncryptorInterface $encryptor)
+    {
         $this->_encryptor = $encryptor;
     }
 
@@ -74,8 +69,7 @@ class Converter
     protected function _shouldBeEncrypted(\Magento\Core\Model\AbstractModel $object, $filedName)
     {
         $method = $object->getData('method');
-        return isset($this->_encryptFields[$method][$filedName]) &&
-            $this->_encryptFields[$method][$filedName];
+        return isset($this->_encryptFields[$method][$filedName]) && $this->_encryptFields[$method][$filedName];
     }
 
     /**

@@ -69,9 +69,10 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $collection = $this->ruleFactory->create()->getResourceCollection();
         $this->setCollection($collection);
 
-        $this->_eventManager->dispatch('adminhtml_block_promo_widget_chooser_prepare_collection', array(
-            'collection' => $collection
-        ));
+        $this->_eventManager->dispatch(
+            'adminhtml_block_promo_widget_chooser_prepare_collection',
+            array('collection' => $collection)
+        );
 
         return parent::_prepareCollection();
     }
@@ -87,12 +88,19 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
         $sourceUrl = $this->getUrl('sales_rule/promo_quote/chooser', array('uniq_id' => $uniqId));
 
-        $chooser = $this->getLayout()->createBlock('Magento\Widget\Block\Adminhtml\Widget\Chooser')
-            ->setElement($element)
-            ->setConfig($this->getConfig())
-            ->setFieldsetId($this->getFieldsetId())
-            ->setSourceUrl($sourceUrl)
-            ->setUniqId($uniqId);
+        $chooser = $this->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+        )->setElement(
+            $element
+        )->setConfig(
+            $this->getConfig()
+        )->setFieldsetId(
+            $this->getFieldsetId()
+        )->setSourceUrl(
+            $sourceUrl
+        )->setUniqId(
+            $uniqId
+        );
 
         if ($element->getValue()) {
             $rule = $this->ruleFactory->create()->load((int)$element->getValue());
@@ -118,9 +126,15 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
                 var trElement = Event.findElement(event, "tr");
                 var ruleName = trElement.down("td").next().innerHTML;
                 var ruleId = trElement.down("td").innerHTML.replace(/^\s+|\s+$/g,"");
-                '.$chooserJsObject.'.setElementValue(ruleId);
-                '.$chooserJsObject.'.setElementLabel(ruleName);
-                '.$chooserJsObject.'.close();
+                ' .
+            $chooserJsObject .
+            '.setElementValue(ruleId);
+                ' .
+            $chooserJsObject .
+            '.setElementLabel(ruleName);
+                ' .
+            $chooserJsObject .
+            '.close();
             }
         ';
         return $js;
@@ -133,54 +147,52 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('rule_id', array(
-            'header'    => __('ID'),
-            'align'     => 'right',
-            'width'     => '50px',
-            'index'     => 'rule_id',
-        ));
+        $this->addColumn(
+            'rule_id',
+            array('header' => __('ID'), 'align' => 'right', 'width' => '50px', 'index' => 'rule_id')
+        );
 
-        $this->addColumn('name', array(
-            'header'    => __('Rule'),
-            'align'     => 'left',
-            'index'     => 'name',
-        ));
+        $this->addColumn('name', array('header' => __('Rule'), 'align' => 'left', 'index' => 'name'));
 
-        $this->addColumn('coupon_code', array(
-            'header'    => __('Coupon Code'),
-            'align'     => 'left',
-            'width'     => '150px',
-            'index'     => 'code',
-        ));
+        $this->addColumn(
+            'coupon_code',
+            array('header' => __('Coupon Code'), 'align' => 'left', 'width' => '150px', 'index' => 'code')
+        );
 
-        $this->addColumn('from_date', array(
-            'header'    => __('Start on'),
-            'align'     => 'left',
-            'width'     => '120px',
-            'type'      => 'date',
-            'index'     => 'from_date',
-        ));
+        $this->addColumn(
+            'from_date',
+            array(
+                'header' => __('Start on'),
+                'align' => 'left',
+                'width' => '120px',
+                'type' => 'date',
+                'index' => 'from_date'
+            )
+        );
 
-        $this->addColumn('to_date', array(
-            'header'    => __('End on'),
-            'align'     => 'left',
-            'width'     => '120px',
-            'type'      => 'date',
-            'default'   => '--',
-            'index'     => 'to_date',
-        ));
+        $this->addColumn(
+            'to_date',
+            array(
+                'header' => __('End on'),
+                'align' => 'left',
+                'width' => '120px',
+                'type' => 'date',
+                'default' => '--',
+                'index' => 'to_date'
+            )
+        );
 
-        $this->addColumn('is_active', array(
-            'header'    => __('Status'),
-            'align'     => 'left',
-            'width'     => '80px',
-            'index'     => 'is_active',
-            'type'      => 'options',
-            'options'   => array(
-                1 => 'Active',
-                0 => 'Inactive',
-            ),
-        ));
+        $this->addColumn(
+            'is_active',
+            array(
+                'header' => __('Status'),
+                'align' => 'left',
+                'width' => '80px',
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => array(1 => 'Active', 0 => 'Inactive')
+            )
+        );
 
         return parent::_prepareColumns();
     }

@@ -23,20 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <!-- Comment within root node -->
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updaterter" />
     <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <!--Arguments only-->
     <type name="Magento\App\State">
         <arguments>
-            <argument name="test name" xsi:type="test_type">test value</argument>
+            <argument name="test name" xsi:type="string">test value</argument>
         </arguments>
     </type>
     <!--Arguments and plugins-->
     <type name="Magento\Core\Model\Config\Modules">
         <arguments>
-            <argument name="test name" xsi:type="test_type">test value</argument>
+            <argument name="test name" xsi:type="string">test value</argument>
         </arguments>
         <plugin name="simple_modules_plugin" type="Magento\Core\Model\Config\Modules\Plugin" disabled="true" sortOrder="10" />
         <plugin name="simple_modules_plugin_advanced" type="Magento\Core\Model\Config\Modules\PluginAdvanced" />
@@ -45,7 +45,7 @@
     <!--Shared type-->
     <type name="Magento\Http\Handler\Composite" shared="false">
         <arguments>
-            <argument name="test name" xsi:type="test_type">test value</argument>
+            <argument name="test name" xsi:type="string">test value</argument>
         </arguments>
     </type>
     <virtualType name="customCacheInstance" type="Magento\App\Cache" shared="true" />

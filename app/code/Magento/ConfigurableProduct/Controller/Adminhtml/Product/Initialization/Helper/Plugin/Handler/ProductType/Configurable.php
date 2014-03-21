@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface;
@@ -51,7 +50,7 @@ class Configurable implements HandlerInterface
                 $originalAttributesMainInfo[$originalAttribute['id']] = array();
                 foreach ($originalAttribute['values'] as $value) {
                     $originalAttributesMainInfo[$originalAttribute['id']][$value['value_index']] = array(
-                        'is_percent'    => $value['is_percent'],
+                        'is_percent' => $value['is_percent'],
                         'pricing_value' => $value['pricing_value']
                     );
                 }
@@ -64,8 +63,7 @@ class Configurable implements HandlerInterface
                 foreach ($data['values'] as &$value) {
                     $valueIndex = $value['value_index'];
                     if (isset($originalAttributesMainInfo[$id][$valueIndex])) {
-                        $value['pricing_value'] =
-                            $originalAttributesMainInfo[$id][$valueIndex]['pricing_value'];
+                        $value['pricing_value'] = $originalAttributesMainInfo[$id][$valueIndex]['pricing_value'];
                         $value['is_percent'] = $originalAttributesMainInfo[$id][$valueIndex]['is_percent'];
                     } else {
                         $value['pricing_value'] = 0;
@@ -76,4 +74,4 @@ class Configurable implements HandlerInterface
             $product->setConfigurableAttributesData($attributeData);
         }
     }
-} 
+}

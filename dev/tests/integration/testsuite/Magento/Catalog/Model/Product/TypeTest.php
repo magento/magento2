@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Product\Type');
+        $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Type'
+        );
     }
 
     /**
@@ -47,7 +47,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory($typeId, $expectedClass)
     {
-        $product = new \Magento\Object;
+        $product = new \Magento\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -65,9 +65,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Simple'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Virtual'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Type'),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            array(
+                \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
                 'Magento\Downloadable\Model\Product\Type'
-            ),
+            )
         );
     }
 
@@ -77,7 +78,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactoryReturnsSingleton($typeId)
     {
-        $product = new \Magento\Object;
+        $product = new \Magento\Object();
         if ($typeId) {
             $product->setTypeId($typeId);
         }
@@ -119,9 +120,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 'Magento\Catalog\Model\Product\Type\Price'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL, 'Magento\Catalog\Model\Product\Type\Price'),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, 'Magento\Bundle\Model\Product\Price'),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+            array(
+                \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
                 'Magento\Downloadable\Model\Product\Price'
-            ),
+            )
         );
     }
 
@@ -170,7 +172,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             array(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE),
             array(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL),
             array(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE),
-            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE),
+            array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
         );
     }
 
@@ -202,7 +204,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         // collect the types and priority in the same order as the method returns
         $result = array();
         foreach ($types as $typeId => $type) {
-            if (!isset($type['index_priority'])) { // possible bug: index_priority is not defined for each type
+            if (!isset($type['index_priority'])) {
+                // possible bug: index_priority is not defined for each type
                 $priority = 0;
             } else {
                 $priority = (int)$type['index_priority'];

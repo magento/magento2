@@ -102,12 +102,8 @@ class Switcher extends \Magento\View\Element\Template
         }
 
         $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-        $storeCollection = $this->_storeFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($websiteId);
-        $groupCollection = $this->_storeGroupFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($websiteId);
+        $storeCollection = $this->_storeFactory->create()->getCollection()->addWebsiteFilter($websiteId);
+        $groupCollection = $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($websiteId);
         foreach ($groupCollection as $group) {
             $this->_groups[$group->getId()] = $group;
         }

@@ -128,7 +128,7 @@ class Phrase
      */
     public function setQuote($quote)
     {
-        if (in_array($quote, [self::QUOTE_SINGLE, self::QUOTE_DOUBLE])) {
+        if (in_array($quote, array(self::QUOTE_SINGLE, self::QUOTE_DOUBLE))) {
             $this->_quote = $quote;
         }
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Plugin;
 
 use Magento\Authz\Model\UserIdentifier;
@@ -61,7 +60,6 @@ class Setup
      * @var \Magento\Authz\Model\UserIdentifier\Factory
      */
     protected $_userIdentifierFactory;
-
 
     /**
      * Construct Setup plugin instance
@@ -109,10 +107,7 @@ class Setup
                         UserIdentifier::USER_TYPE_INTEGRATION,
                         $integration->getId()
                     );
-                    $this->_authzService->grantPermissions(
-                        $userIdentifier,
-                        $integrations[$name]['resources']
-                    );
+                    $this->_authzService->grantPermissions($userIdentifier, $integrations[$name]['resources']);
                 }
             }
         }

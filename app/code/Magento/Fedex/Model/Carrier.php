@@ -35,7 +35,6 @@ use Magento\Shipping\Model\Rate\Result;
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-
     /**
      * Code of the carrier
      *
@@ -188,7 +187,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $directoryData,
             $data
         );
-        $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Fedex')  . '/wsdl/';
+        $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Fedex') . '/wsdl/';
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v5.wsdl';
@@ -205,9 +204,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _createSoapClient($wsdl, $trace = false)
     {
         $client = new \SoapClient($wsdl, array('trace' => $trace));
-        $client->__setLocation($this->getConfigFlag('sandbox_mode')
-            ? 'https://wsbeta.fedex.com:443/web-services/rate'
-            : 'https://ws.fedex.com:443/web-services/rate'
+        $client->__setLocation(
+            $this->getConfigFlag(
+                'sandbox_mode'
+            ) ? 'https://wsbeta.fedex.com:443/web-services/rate' : 'https://ws.fedex.com:443/web-services/rate'
         );
 
         return $client;
@@ -313,10 +313,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($request->getOrigPostcode()) {
             $r->setOrigPostal($request->getOrigPostcode());
         } else {
-            $r->setOrigPostal($this->_coreStoreConfig->getConfig(
-                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
-                $request->getStoreId()
-            ));
+            $r->setOrigPostal(
+                $this->_coreStoreConfig->getConfig(
+                    \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
+                    $request->getStoreId()
+                )
+            );
         }
 
         if ($request->getDestCountryId()) {
@@ -329,12 +331,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($request->getDestPostcode()) {
             $r->setDestPostal($request->getDestPostcode());
         } else {
-
         }
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeight($weight);
-        if ($request->getFreeMethodWeight()!= $request->getPackageWeight()) {
+        if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
 
@@ -371,12 +372,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getVersionInfo()
     {
-        return array(
-            'ServiceId'    => 'crs',
-            'Major'        => '10',
-            'Intermediate' => '0',
-            'Minor'        => '0'
-        );
+        return array('ServiceId' => 'crs', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0');
     }
 
     /**
@@ -390,60 +386,39 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $r = $this->_rawRequest;
         $ratesRequest = array(
             'WebAuthenticationDetail' => array(
-                'UserCredential' => array(
-                    'Key'      => $r->getKey(),
-                    'Password' => $r->getPassword()
-                )
+                'UserCredential' => array('Key' => $r->getKey(), 'Password' => $r->getPassword())
             ),
-            'ClientDetail' => array(
-                'AccountNumber' => $r->getAccount(),
-                'MeterNumber'   => $r->getMeterNumber()
-            ),
+            'ClientDetail' => array('AccountNumber' => $r->getAccount(), 'MeterNumber' => $r->getMeterNumber()),
             'Version' => $this->getVersionInfo(),
             'RequestedShipment' => array(
-                'DropoffType'   => $r->getDropoffType(),
+                'DropoffType' => $r->getDropoffType(),
                 'ShipTimestamp' => date('c'),
                 'PackagingType' => $r->getPackaging(),
-                'TotalInsuredValue' => array(
-                    'Amount'  => $r->getValue(),
-                    'Currency' => $this->getCurrencyCode()
-                ),
+                'TotalInsuredValue' => array('Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()),
                 'Shipper' => array(
-                    'Address' => array(
-                        'PostalCode'  => $r->getOrigPostal(),
-                        'CountryCode' => $r->getOrigCountry()
-                    )
+                    'Address' => array('PostalCode' => $r->getOrigPostal(), 'CountryCode' => $r->getOrigCountry())
                 ),
                 'Recipient' => array(
                     'Address' => array(
-                        'PostalCode'  => $r->getDestPostal(),
+                        'PostalCode' => $r->getDestPostal(),
                         'CountryCode' => $r->getDestCountry(),
                         'Residential' => (bool)$this->getConfigData('residence_delivery')
                     )
                 ),
                 'ShippingChargesPayment' => array(
                     'PaymentType' => 'SENDER',
-                    'Payor' => array(
-                        'AccountNumber' => $r->getAccount(),
-                        'CountryCode'   => $r->getOrigCountry()
-                    )
+                    'Payor' => array('AccountNumber' => $r->getAccount(), 'CountryCode' => $r->getOrigCountry())
                 ),
                 'CustomsClearanceDetail' => array(
-                    'CustomsValue' => array(
-                        'Amount' => $r->getValue(),
-                        'Currency' => $this->getCurrencyCode()
-                    )
+                    'CustomsValue' => array('Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode())
                 ),
                 'RateRequestTypes' => 'LIST',
-                'PackageCount'     => '1',
-                'PackageDetail'    => 'INDIVIDUAL_PACKAGES',
+                'PackageCount' => '1',
+                'PackageDetail' => 'INDIVIDUAL_PACKAGES',
                 'RequestedPackageLineItems' => array(
                     '0' => array(
-                        'Weight' => array(
-                            'Value' => (float)$r->getWeight(),
-                            'Units' => 'LB'
-                        ),
-                        'GroupPackageCount' => 1,
+                        'Weight' => array('Value' => (double)$r->getWeight(), 'Units' => 'LB'),
+                        'GroupPackageCount' => 1
                     )
                 )
             )
@@ -451,13 +426,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if ($purpose == self::RATE_REQUEST_GENERAL) {
             $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][0]['InsuredValue'] = array(
-                'Amount'  => $r->getValue(),
+                'Amount' => $r->getValue(),
                 'Currency' => $this->getCurrencyCode()
             );
         } else if ($purpose == self::RATE_REQUEST_SMARTPOST) {
             $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
             $ratesRequest['RequestedShipment']['SmartPostDetail'] = array(
-                'Indicia' => ((float)$r->getWeight() >= 1) ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
                 'HubId' => $this->getConfigData('smartpost_hubid')
             );
         }
@@ -515,7 +490,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // make general request for all methods
         $response = $this->_doRatesRequest(self::RATE_REQUEST_GENERAL);
         $preparedGeneral = $this->_prepareRateResponse($response);
-        if (!$preparedGeneral->getError() || ($this->_result->getError() && $preparedGeneral->getError())) {
+        if (!$preparedGeneral->getError() || $this->_result->getError() && $preparedGeneral->getError()) {
             $this->_result->append($preparedGeneral);
         }
         return $this->_result;
@@ -544,7 +519,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         $serviceName = (string)$rate->ServiceType;
                         if (in_array($serviceName, $allowedMethods)) {
                             $amount = $this->_getRateAmountOriginBased($rate);
-                            $costArr[$serviceName]  = $amount;
+                            $costArr[$serviceName] = $amount;
                             $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
                         }
                     }
@@ -554,7 +529,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     $serviceName = (string)$rate->ServiceType;
                     if (in_array($serviceName, $allowedMethods)) {
                         $amount = $this->_getRateAmountOriginBased($rate);
-                        $costArr[$serviceName]  = $amount;
+                        $costArr[$serviceName] = $amount;
                         $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
                     }
                 }
@@ -570,7 +545,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $error->setErrorMessage($this->getConfigData('specificerrmsg'));
             $result->append($error);
         } else {
-            foreach ($priceArr as $method=>$price) {
+            foreach ($priceArr as $method => $price) {
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier($this->_code);
                 $rate->setCarrierTitle($this->getConfigData('title'));
@@ -701,12 +676,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
                 $responseBody = curl_exec($ch);
-                curl_close ($ch);
+                curl_close($ch);
 
                 $debugData['result'] = $responseBody;
                 $this->_setCachedQuotes($request, $responseBody);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $debugData['result'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
                 $responseBody = '';
             }
@@ -726,7 +700,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $costArr = array();
         $priceArr = array();
 
-        if (strlen(trim($response))>0) {
+        if (strlen(trim($response)) > 0) {
             if ($xml = $this->_parseXml($response)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;
@@ -740,8 +714,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
                 foreach ($xml->Entry as $entry) {
                     if (in_array((string)$entry->Service, $allowedMethods)) {
-                        $costArr[(string)$entry->Service] =
-                            (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge;
+                        $costArr[(string)$entry->Service] = (string)$entry
+                            ->EstimatedCharges
+                            ->DiscountedCharges
+                            ->NetCharge;
                         $priceArr[(string)$entry->Service] = $this->getMethodPrice(
                             (string)$entry->EstimatedCharges->DiscountedCharges->NetCharge,
                             (string)$entry->Service
@@ -750,7 +726,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
 
                 asort($priceArr);
-
             } else {
                 $errorTitle = 'Response is in the wrong format.';
             }
@@ -766,7 +741,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $error->setErrorMessage($this->getConfigData('specificerrmsg'));
             $result->append($error);
         } else {
-            foreach ($priceArr as $method=>$price) {
+            foreach ($priceArr as $method => $price) {
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier('fedex');
                 $rate->setCarrierTitle($this->getConfigData('title'));
@@ -808,44 +783,44 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $code
      * @return array|false
      */
-    public function getCode($type, $code='')
+    public function getCode($type, $code = '')
     {
         $codes = array(
             'method' => array(
                 'EUROPE_FIRST_INTERNATIONAL_PRIORITY' => __('Europe First Priority'),
-                'FEDEX_1_DAY_FREIGHT'                 => __('1 Day Freight'),
-                'FEDEX_2_DAY_FREIGHT'                 => __('2 Day Freight'),
-                'FEDEX_2_DAY'                         => __('2 Day'),
-                'FEDEX_2_DAY_AM'                      => __('2 Day AM'),
-                'FEDEX_3_DAY_FREIGHT'                 => __('3 Day Freight'),
-                'FEDEX_EXPRESS_SAVER'                 => __('Express Saver'),
-                'FEDEX_GROUND'                        => __('Ground'),
-                'FIRST_OVERNIGHT'                     => __('First Overnight'),
-                'GROUND_HOME_DELIVERY'                => __('Home Delivery'),
-                'INTERNATIONAL_ECONOMY'               => __('International Economy'),
-                'INTERNATIONAL_ECONOMY_FREIGHT'       => __('Intl Economy Freight'),
-                'INTERNATIONAL_FIRST'                 => __('International First'),
-                'INTERNATIONAL_GROUND'                => __('International Ground'),
-                'INTERNATIONAL_PRIORITY'              => __('International Priority'),
-                'INTERNATIONAL_PRIORITY_FREIGHT'      => __('Intl Priority Freight'),
-                'PRIORITY_OVERNIGHT'                  => __('Priority Overnight'),
-                'SMART_POST'                          => __('Smart Post'),
-                'STANDARD_OVERNIGHT'                  => __('Standard Overnight'),
-                'FEDEX_FREIGHT'                       => __('Freight'),
-                'FEDEX_NATIONAL_FREIGHT'              => __('National Freight'),
+                'FEDEX_1_DAY_FREIGHT' => __('1 Day Freight'),
+                'FEDEX_2_DAY_FREIGHT' => __('2 Day Freight'),
+                'FEDEX_2_DAY' => __('2 Day'),
+                'FEDEX_2_DAY_AM' => __('2 Day AM'),
+                'FEDEX_3_DAY_FREIGHT' => __('3 Day Freight'),
+                'FEDEX_EXPRESS_SAVER' => __('Express Saver'),
+                'FEDEX_GROUND' => __('Ground'),
+                'FIRST_OVERNIGHT' => __('First Overnight'),
+                'GROUND_HOME_DELIVERY' => __('Home Delivery'),
+                'INTERNATIONAL_ECONOMY' => __('International Economy'),
+                'INTERNATIONAL_ECONOMY_FREIGHT' => __('Intl Economy Freight'),
+                'INTERNATIONAL_FIRST' => __('International First'),
+                'INTERNATIONAL_GROUND' => __('International Ground'),
+                'INTERNATIONAL_PRIORITY' => __('International Priority'),
+                'INTERNATIONAL_PRIORITY_FREIGHT' => __('Intl Priority Freight'),
+                'PRIORITY_OVERNIGHT' => __('Priority Overnight'),
+                'SMART_POST' => __('Smart Post'),
+                'STANDARD_OVERNIGHT' => __('Standard Overnight'),
+                'FEDEX_FREIGHT' => __('Freight'),
+                'FEDEX_NATIONAL_FREIGHT' => __('National Freight')
             ),
             'dropoff' => array(
-                'REGULAR_PICKUP'          => __('Regular Pickup'),
-                'REQUEST_COURIER'         => __('Request Courier'),
-                'DROP_BOX'                => __('Drop Box'),
+                'REGULAR_PICKUP' => __('Regular Pickup'),
+                'REQUEST_COURIER' => __('Request Courier'),
+                'DROP_BOX' => __('Drop Box'),
                 'BUSINESS_SERVICE_CENTER' => __('Business Service Center'),
-                'STATION'                 => __('Station')
+                'STATION' => __('Station')
             ),
             'packaging' => array(
                 'FEDEX_ENVELOPE' => __('FedEx Envelope'),
-                'FEDEX_PAK'      => __('FedEx Pak'),
-                'FEDEX_BOX'      => __('FedEx Box'),
-                'FEDEX_TUBE'     => __('FedEx Tube'),
+                'FEDEX_PAK' => __('FedEx Pak'),
+                'FEDEX_BOX' => __('FedEx Box'),
+                'FEDEX_TUBE' => __('FedEx Tube'),
                 'FEDEX_10KG_BOX' => __('FedEx 10kg Box'),
                 'FEDEX_25KG_BOX' => __('FedEx 25kg Box'),
                 'YOUR_PACKAGING' => __('Your Packaging')
@@ -853,7 +828,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'containers_filter' => array(
                 array(
                     'containers' => array('FEDEX_ENVELOPE', 'FEDEX_PAK'),
-                    'filters'    => array(
+                    'filters' => array(
                         'within_us' => array(
                             'method' => array(
                                 'FEDEX_EXPRESS_SAVER',
@@ -861,21 +836,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'FEDEX_2_DAY_AM',
                                 'STANDARD_OVERNIGHT',
                                 'PRIORITY_OVERNIGHT',
-                                'FIRST_OVERNIGHT',
+                                'FIRST_OVERNIGHT'
                             )
                         ),
                         'from_us' => array(
-                            'method' => array(
-                                'INTERNATIONAL_FIRST',
-                                'INTERNATIONAL_ECONOMY',
-                                'INTERNATIONAL_PRIORITY',
-                            )
+                            'method' => array('INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY')
                         )
                     )
                 ),
                 array(
                     'containers' => array('FEDEX_BOX', 'FEDEX_TUBE'),
-                    'filters'    => array(
+                    'filters' => array(
                         'within_us' => array(
                             'method' => array(
                                 'FEDEX_2_DAY',
@@ -887,30 +858,26 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'FEDEX_1_DAY_FREIGHT',
                                 'FEDEX_2_DAY_FREIGHT',
                                 'FEDEX_3_DAY_FREIGHT',
-                                'FEDEX_NATIONAL_FREIGHT',
+                                'FEDEX_NATIONAL_FREIGHT'
                             )
                         ),
                         'from_us' => array(
-                            'method' => array(
-                                'INTERNATIONAL_FIRST',
-                                'INTERNATIONAL_ECONOMY',
-                                'INTERNATIONAL_PRIORITY',
-                            )
+                            'method' => array('INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY')
                         )
                     )
                 ),
                 array(
                     'containers' => array('FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'),
-                    'filters'    => array(
+                    'filters' => array(
                         'within_us' => array(),
                         'from_us' => array('method' => array('INTERNATIONAL_PRIORITY'))
                     )
                 ),
                 array(
                     'containers' => array('YOUR_PACKAGING'),
-                    'filters'    => array(
+                    'filters' => array(
                         'within_us' => array(
-                            'method' =>array(
+                            'method' => array(
                                 'FEDEX_GROUND',
                                 'GROUND_HOME_DELIVERY',
                                 'SMART_POST',
@@ -924,11 +891,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'FEDEX_1_DAY_FREIGHT',
                                 'FEDEX_2_DAY_FREIGHT',
                                 'FEDEX_3_DAY_FREIGHT',
-                                'FEDEX_NATIONAL_FREIGHT',
+                                'FEDEX_NATIONAL_FREIGHT'
                             )
                         ),
                         'from_us' => array(
-                            'method' =>array(
+                            'method' => array(
                                 'INTERNATIONAL_FIRST',
                                 'INTERNATIONAL_ECONOMY',
                                 'INTERNATIONAL_PRIORITY',
@@ -939,19 +906,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'FEDEX_3_DAY_FREIGHT',
                                 'FEDEX_NATIONAL_FREIGHT',
                                 'INTERNATIONAL_ECONOMY_FREIGHT',
-                                'INTERNATIONAL_PRIORITY_FREIGHT',
+                                'INTERNATIONAL_PRIORITY_FREIGHT'
                             )
                         )
                     )
                 )
             ),
-
             'delivery_confirmation_types' => array(
                 'NO_SIGNATURE_REQUIRED' => __('Not Required'),
-                'ADULT'                 => __('Adult'),
-                'DIRECT'                => __('Direct'),
-                'INDIRECT'              => __('Indirect'),
-            ),
+                'ADULT' => __('Adult'),
+                'DIRECT' => __('Direct'),
+                'INDIRECT' => __('Indirect')
+            )
         );
 
         if (!isset($codes[$type])) {
@@ -972,7 +938,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @return string 3-digit currency code
      */
-    public function getCurrencyCode ()
+    public function getCurrencyCode()
     {
         $codes = array(
             'DOP' => 'RDD', // Dominican Peso
@@ -1006,7 +972,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->setTrackingReqeust();
 
         if (!is_array($trackings)) {
-            $trackings=array($trackings);
+            $trackings = array($trackings);
         }
 
         foreach ($trackings as $tracking) {
@@ -1042,29 +1008,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $trackRequest = array(
             'WebAuthenticationDetail' => array(
                 'UserCredential' => array(
-                    'Key'      => $this->getConfigData('key'),
+                    'Key' => $this->getConfigData('key'),
                     'Password' => $this->getConfigData('password')
                 )
             ),
             'ClientDetail' => array(
                 'AccountNumber' => $this->getConfigData('account'),
-                'MeterNumber'   => $this->getConfigData('meter_number')
+                'MeterNumber' => $this->getConfigData('meter_number')
             ),
-            'Version' => array(
-                'ServiceId'    => 'trck',
-                'Major'        => '5',
-                'Intermediate' => '0',
-                'Minor'        => '0'
-            ),
-            'PackageIdentifier' => array(
-                'Type'  => 'TRACKING_NUMBER_OR_DOORTAG',
-                'Value' => $tracking,
-            ),
+            'Version' => array('ServiceId' => 'trck', 'Major' => '5', 'Intermediate' => '0', 'Minor' => '0'),
+            'PackageIdentifier' => array('Type' => 'TRACKING_NUMBER_OR_DOORTAG', 'Value' => $tracking),
             /*
              * 0 = summary data, one signle scan structure with the most recent scan
              * 1 = multiple sacn activity for each package
              */
-            'IncludeDetailedScans' => 1,
+            'IncludeDetailedScans' => 1
         );
         $requestString = serialize($trackRequest);
         $response = $this->_getCachedQuotes($requestString);
@@ -1104,16 +1062,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $trackInfo = $response->TrackDetails;
                 $resultArray['status'] = (string)$trackInfo->StatusDescription;
                 $resultArray['service'] = (string)$trackInfo->ServiceInfo;
-                $timestamp = isset($trackInfo->EstimatedDeliveryTimestamp) ?
-                    $trackInfo->EstimatedDeliveryTimestamp : $trackInfo->ActualDeliveryTimestamp;
+                $timestamp = isset(
+                    $trackInfo->EstimatedDeliveryTimestamp
+                ) ? $trackInfo->EstimatedDeliveryTimestamp : $trackInfo->ActualDeliveryTimestamp;
                 $timestamp = strtotime((string)$timestamp);
                 if ($timestamp) {
                     $resultArray['deliverydate'] = date('Y-m-d', $timestamp);
                     $resultArray['deliverytime'] = date('H:i:s', $timestamp);
                 }
 
-                $deliveryLocation = isset($trackInfo->EstimatedDeliveryAddress) ?
-                    $trackInfo->EstimatedDeliveryAddress : $trackInfo->ActualDeliveryAddress;
+                $deliveryLocation = isset(
+                    $trackInfo->EstimatedDeliveryAddress
+                ) ? $trackInfo->EstimatedDeliveryAddress : $trackInfo->ActualDeliveryAddress;
                 $deliveryLocationArray = array();
                 if (isset($deliveryLocation->City)) {
                     $deliveryLocationArray[] = (string)$deliveryLocation->City;
@@ -1247,23 +1207,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         return array(
             'WebAuthenticationDetail' => array(
                 'UserCredential' => array(
-                    'Key'      => $this->getConfigData('key'),
+                    'Key' => $this->getConfigData('key'),
                     'Password' => $this->getConfigData('password')
                 )
             ),
             'ClientDetail' => array(
                 'AccountNumber' => $this->getConfigData('account'),
-                'MeterNumber'   => $this->getConfigData('meter_number')
+                'MeterNumber' => $this->getConfigData('meter_number')
             ),
             'TransactionDetail' => array(
                 'CustomerTransactionId' => '*** Express Domestic Shipping Request v9 using PHP ***'
             ),
-            'Version' => array(
-                'ServiceId'     => 'ship',
-                'Major'         => '10',
-                'Intermediate'  => '0',
-                'Minor'         => '0'
-            )
+            'Version' => array('ServiceId' => 'ship', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0')
         );
     }
 
@@ -1278,10 +1233,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($request->getReferenceData()) {
             $referenceData = $request->getReferenceData() . $request->getPackageId();
         } else {
-            $referenceData = 'Order #'
-                             . $request->getOrderShipment()->getOrder()->getIncrementId()
-                             . ' P'
-                             . $request->getPackageId();
+            $referenceData = 'Order #' .
+                $request->getOrderShipment()->getOrder()->getIncrementId() .
+                ' P' .
+                $request->getPackageId();
         }
         $packageParams = $request->getPackageParams();
         $customsValue = $packageParams->getCustomsValue();
@@ -1297,22 +1252,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $productIds = array();
         $packageItems = $request->getPackageItems();
         foreach ($packageItems as $itemShipment) {
-                $item = new \Magento\Object();
-                $item->setData($itemShipment);
+            $item = new \Magento\Object();
+            $item->setData($itemShipment);
 
-                $unitPrice  += $item->getPrice();
-                $itemsQty   += $item->getQty();
+            $unitPrice += $item->getPrice();
+            $itemsQty += $item->getQty();
 
-                $itemsDesc[]    = $item->getName();
-                $productIds[]   = $item->getProductId();
+            $itemsDesc[] = $item->getName();
+            $productIds[] = $item->getProductId();
         }
 
         // get countries of manufacture
-        $productCollection = $this->_productCollectionFactory
-            ->create()
-            ->addStoreFilter($request->getStoreId())
-            ->addFieldToFilter('entity_id', array('in' => $productIds))
-            ->addAttributeToSelect('country_of_manufacture');
+        $productCollection = $this->_productCollectionFactory->create()->addStoreFilter(
+            $request->getStoreId()
+        )->addFieldToFilter(
+            'entity_id',
+            array('in' => $productIds)
+        )->addAttributeToSelect(
+            'country_of_manufacture'
+        );
         foreach ($productCollection as $product) {
             $countriesOfManufacture[] = $product->getCountryOfManufacture();
         }
@@ -1321,7 +1279,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $requestClient = array(
             'RequestedShipment' => array(
                 'ShipTimestamp' => time(),
-                'DropoffType'   => $this->getConfigData('dropoff'),
+                'DropoffType' => $this->getConfigData('dropoff'),
                 'PackagingType' => $request->getPackagingType(),
                 'ServiceType' => $request->getShippingMethod(),
                 'Shipper' => array(
@@ -1351,31 +1309,28 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         'PostalCode' => $request->getRecipientAddressPostalCode(),
                         'CountryCode' => $request->getRecipientAddressCountryCode(),
                         'Residential' => (bool)$this->getConfigData('residence_delivery')
-                    ),
+                    )
                 ),
                 'ShippingChargesPayment' => array(
                     'PaymentType' => $paymentType,
                     'Payor' => array(
                         'AccountNumber' => $this->getConfigData('account'),
-                        'CountryCode'   => $this->_coreStoreConfig->getConfig(
+                        'CountryCode' => $this->_coreStoreConfig->getConfig(
                             \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
                             $request->getStoreId()
                         )
                     )
                 ),
-                'LabelSpecification' =>array(
+                'LabelSpecification' => array(
                     'LabelFormatType' => 'COMMON2D',
                     'ImageType' => 'PNG',
-                    'LabelStockType' => 'PAPER_8.5X11_TOP_HALF_LABEL',
+                    'LabelStockType' => 'PAPER_8.5X11_TOP_HALF_LABEL'
                 ),
-                'RateRequestTypes'  => array('ACCOUNT'),
-                'PackageCount'      => 1,
+                'RateRequestTypes' => array('ACCOUNT'),
+                'PackageCount' => 1,
                 'RequestedPackageLineItems' => array(
                     'SequenceNumber' => '1',
-                    'Weight' => array(
-                        'Units' => $weightUnits,
-                        'Value' =>  $request->getPackageWeight()
-                    ),
+                    'Weight' => array('Units' => $weightUnits, 'Value' => $request->getPackageWeight()),
                     'CustomerReferences' => array(
                         'CustomerReferenceType' => 'CUSTOMER_REFERENCE',
                         'Value' => $referenceData
@@ -1383,50 +1338,36 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'SpecialServicesRequested' => array(
                         'SpecialServiceTypes' => 'SIGNATURE_OPTION',
                         'SignatureOptionDetail' => array('OptionType' => $packageParams->getDeliveryConfirmation())
-                    ),
+                    )
                 )
             )
         );
 
         // for international shipping
         if ($request->getShipperAddressCountryCode() != $request->getRecipientAddressCountryCode()) {
-            $requestClient['RequestedShipment']['CustomsClearanceDetail'] =
-                array(
-                    'CustomsValue' =>
-                    array(
-                        'Currency' => $request->getBaseCurrencyCode(),
-                        'Amount' => $customsValue,
-                    ),
-                    'DutiesPayment' => array(
-                        'PaymentType' => $paymentType,
-                        'Payor' => array(
-                            'AccountNumber' => $this->getConfigData('account'),
-                            'CountryCode'   => $this->_coreStoreConfig->getConfig(
-                                \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                                $request->getStoreId()
-                            )
+            $requestClient['RequestedShipment']['CustomsClearanceDetail'] = array(
+                'CustomsValue' => array('Currency' => $request->getBaseCurrencyCode(), 'Amount' => $customsValue),
+                'DutiesPayment' => array(
+                    'PaymentType' => $paymentType,
+                    'Payor' => array(
+                        'AccountNumber' => $this->getConfigData('account'),
+                        'CountryCode' => $this->_coreStoreConfig->getConfig(
+                            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
+                            $request->getStoreId()
                         )
-                    ),
-                    'Commodities' => array(
-                        'Weight' => array(
-                            'Units' => $weightUnits,
-                            'Value' =>  $request->getPackageWeight()
-                        ),
-                        'NumberOfPieces' => 1,
-                        'CountryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
-                        'Description' => implode(', ', $itemsDesc),
-                        'Quantity' => ceil($itemsQty),
-                        'QuantityUnits' => 'pcs',
-                        'UnitPrice' => array(
-                            'Currency' => $request->getBaseCurrencyCode(),
-                            'Amount' =>  $unitPrice
-                        ),
-                        'CustomsValue' => array(
-                            'Currency' => $request->getBaseCurrencyCode(),
-                            'Amount' =>  $customsValue
-                        ),
                     )
-                );
+                ),
+                'Commodities' => array(
+                    'Weight' => array('Units' => $weightUnits, 'Value' => $request->getPackageWeight()),
+                    'NumberOfPieces' => 1,
+                    'CountryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
+                    'Description' => implode(', ', $itemsDesc),
+                    'Quantity' => ceil($itemsQty),
+                    'QuantityUnits' => 'pcs',
+                    'UnitPrice' => array('Currency' => $request->getBaseCurrencyCode(), 'Amount' => $unitPrice),
+                    'CustomsValue' => array('Currency' => $request->getBaseCurrencyCode(), 'Amount' => $customsValue)
+                )
+            );
         }
 
         if ($request->getMasterTrackingId()) {
@@ -1436,9 +1377,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // set dimensions
         if ($length || $width || $height) {
             $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = array();
-            $dimenssions = &$requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
+            $dimenssions =& $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
             $dimenssions['Length'] = $length;
-            $dimenssions['Width']  = $width;
+            $dimenssions['Width'] = $width;
             $dimenssions['Height'] = $height;
             $dimenssions['Units'] = $dimensionsUnits;
         }
@@ -1470,11 +1411,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $debugData = array(
                 'request' => $client->__getLastRequest(),
-                'result' => array(
-                    'error' => '',
-                    'code' => '',
-                    'xml' => $client->__getLastResponse()
-                )
+                'result' => array('error' => '', 'code' => '', 'xml' => $client->__getLastResponse())
             );
             if (is_array($response->Notifications)) {
                 foreach ($response->Notifications as $notification) {
@@ -1523,13 +1460,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if ($params == null) {
             return $this->_getAllowedContainers($params);
         }
-        $method             = $params->getMethod();
-        $countryShipper     = $params->getCountryShipper();
-        $countryRecipient   = $params->getCountryRecipient();
+        $method = $params->getMethod();
+        $countryShipper = $params->getCountryShipper();
+        $countryRecipient = $params->getCountryRecipient();
 
-        if (($countryShipper == self::USA_COUNTRY_ID && $countryRecipient == self::CANADA_COUNTRY_ID
-            || $countryShipper == self::CANADA_COUNTRY_ID && $countryRecipient == self::USA_COUNTRY_ID)
-            && $method == 'FEDEX_GROUND'
+        if (($countryShipper == self::USA_COUNTRY_ID && $countryRecipient == self::CANADA_COUNTRY_ID ||
+            $countryShipper == self::CANADA_COUNTRY_ID &&
+            $countryRecipient == self::USA_COUNTRY_ID) &&
+            $method == 'FEDEX_GROUND'
         ) {
             return array('YOUR_PACKAGING' => __('Your Packaging'));
         } else if ($method == 'INTERNATIONAL_ECONOMY' || $method == 'INTERNATIONAL_FIRST') {

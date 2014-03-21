@@ -82,23 +82,27 @@ class Factory implements FactoryInterface
         $formatter = $this->_formatterFactory->getFormatter($endpoint->getFormat());
         $headers = array(
             FactoryInterface::TOPIC_HEADER => $topic,
-            FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType(),
+            FormatterInterface::CONTENT_TYPE_HEADER => $formatter->getContentType()
         );
         $formattedBody = $formatter->format($bodyData);
 
         $headers = array_merge(
             $headers,
-            $this->_authFactory->getAuthentication($endpoint->getAuthenticationType())
-                ->getSignatureHeaders($formattedBody, $endpoint->getUser())
+            $this->_authFactory->getAuthentication(
+                $endpoint->getAuthenticationType()
+            )->getSignatureHeaders(
+                $formattedBody,
+                $endpoint->getUser()
+            )
         );
 
         return $this->_objectManager->create(
             'Magento\Outbound\Message',
             array(
-                 'endpointUrl' => $endpoint->getEndpointUrl(),
-                 'headers'     => $headers,
-                 'body'        => $formattedBody,
-                 'timeout'     => $endpoint->getTimeoutInSecs(),
+                'endpointUrl' => $endpoint->getEndpointUrl(),
+                'headers' => $headers,
+                'body' => $formattedBody,
+                'timeout' => $endpoint->getTimeoutInSecs()
             )
         );
     }

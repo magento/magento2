@@ -45,7 +45,9 @@ class SuggestConfigurableAttributes extends Action
      * @param \Magento\Core\Helper\Data $coreHelper
      */
     public function __construct(
-        Action\Context $context, SuggestedAttributeList $attributeList, \Magento\Core\Helper\Data $coreHelper
+        Action\Context $context,
+        SuggestedAttributeList $attributeList,
+        \Magento\Core\Helper\Data $coreHelper
     ) {
         $this->attributeList = $attributeList;
         $this->coreHelper = $coreHelper;

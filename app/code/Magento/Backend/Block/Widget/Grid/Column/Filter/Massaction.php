@@ -40,9 +40,9 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Checkb
     public function getCondition()
     {
         if ($this->getValue()) {
-            return array('in'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
+            return array('in' => $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0));
         } else {
-            return array('nin'=> ( $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0) ));
+            return array('nin' => $this->getColumn()->getSelected() ? $this->getColumn()->getSelected() : array(0));
         }
     }
 }

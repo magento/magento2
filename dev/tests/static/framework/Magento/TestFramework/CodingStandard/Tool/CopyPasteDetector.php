@@ -30,8 +30,7 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CopyPasteDetector
-    implements \Magento\TestFramework\CodingStandard\ToolInterface
+class CopyPasteDetector implements \Magento\TestFramework\CodingStandard\ToolInterface
 {
     /**
      * Report file
@@ -85,11 +84,9 @@ class CopyPasteDetector
             $blackListStr .= '--exclude ' . $file . ' ';
         }
 
-        $command =  'phpcpd'
-            . ' --log-pmd ' . escapeshellarg($this->_reportFile)
-            . ' --min-lines 13'
-            . $blackListStr
-            . ' ' .BP;
+        $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
+            $this->_reportFile
+        ) . ' --min-lines 13' . $blackListStr . ' ' . BP;
 
         exec($command, $output, $exitCode);
 

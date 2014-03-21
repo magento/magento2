@@ -26,9 +26,8 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 /**
  * Customer address region field renderer
  */
-class Region
-    extends \Magento\Backend\Block\AbstractBlock
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Region extends \Magento\Backend\Block\AbstractBlock implements
+    \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * @var \Magento\Directory\Helper\Data
@@ -70,20 +69,31 @@ class Region
         $html = '<div class="field field-state required">';
         $element->setClass('input-text');
         $element->setRequired(true);
-        $html .=  $element->getLabelHtml() . '<div class="control">';
+        $html .= $element->getLabelHtml() . '<div class="control">';
         $html .= $element->getElementHtml();
 
         $selectName = str_replace('region', 'region_id', $element->getName());
         $selectId = $element->getHtmlId() . '_id';
-        $html .= '<select id="' . $selectId . '" name="' . $selectName
-            . '" class="select required-entry" style="display:none">';
+        $html .= '<select id="' .
+            $selectId .
+            '" name="' .
+            $selectName .
+            '" class="select required-entry" style="display:none">';
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
 
         $html .= '<script type="text/javascript">' . "\n";
-        $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId.'");' . "\n";
-        $html .= 'new regionUpdater("' . $country->getHtmlId() . '", "' . $element->getHtmlId()
-            . '", "' . $selectId . '", ' . $this->_directoryHelper->getRegionJson() . ');' . "\n";
+        $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
+        $html .= 'new regionUpdater("' .
+            $country->getHtmlId() .
+            '", "' .
+            $element->getHtmlId() .
+            '", "' .
+            $selectId .
+            '", ' .
+            $this->_directoryHelper->getRegionJson() .
+            ');' .
+            "\n";
         $html .= '</script>' . "\n";
 
         $html .= '</div></div>' . "\n";

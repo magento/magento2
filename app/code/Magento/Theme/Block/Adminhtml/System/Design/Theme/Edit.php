@@ -71,18 +71,19 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $theme = $this->_getCurrentTheme();
         if ($theme) {
             if ($theme->isEditable()) {
-                $this->_addButton('save_and_continue', array(
-                    'label'     => __('Save and Continue Edit'),
-                    'class'     => 'save',
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array(
-                                'event'  => 'saveAndContinueEdit',
-                                'target' => '#edit_form'
-                            ),
-                        ),
+                $this->_addButton(
+                    'save_and_continue',
+                    array(
+                        'label' => __('Save and Continue Edit'),
+                        'class' => 'save',
+                        'data_attribute' => array(
+                            'mage-init' => array(
+                                'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
+                            )
+                        )
                     ),
-                ), 1);
+                    1
+                );
             } else {
                 $this->_removeButton('save');
                 $this->_removeButton('reset');
@@ -91,7 +92,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             if ($theme->isDeletable()) {
                 if ($theme->hasChildThemes()) {
                     $message = __('Are you sure you want to delete this theme?');
-                    $onClick = sprintf("deleteConfirm('%s', '%s')",
+                    $onClick = sprintf(
+                        "deleteConfirm('%s', '%s')",
                         $message,
                         $this->getUrl('adminhtml/*/delete', array('id' => $theme->getId()))
                     );

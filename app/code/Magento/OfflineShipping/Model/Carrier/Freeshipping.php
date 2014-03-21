@@ -32,11 +32,9 @@
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
-class Freeshipping
-    extends \Magento\Shipping\Model\Carrier\AbstractCarrier
-    implements \Magento\Shipping\Model\Carrier\CarrierInterface
+class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
+    \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-
     /**
      * @var string
      */
@@ -95,8 +93,9 @@ class Freeshipping
 
         $this->_updateFreeMethodQuote($request);
 
-        if (($request->getFreeShipping())
-            || ($request->getBaseSubtotalInclTax() >= $this->getConfigData('free_shipping_subtotal'))
+        if ($request->getFreeShipping() || $request->getBaseSubtotalInclTax() >= $this->getConfigData(
+            'free_shipping_subtotal'
+        )
         ) {
             /** @var \Magento\Sales\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_rateMethodFactory->create();
@@ -148,5 +147,4 @@ class Freeshipping
     {
         return array('freeshipping' => $this->getConfigData('name'));
     }
-
 }

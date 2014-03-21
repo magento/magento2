@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Controller\Billing;
 
 class AgreementTest extends \PHPUnit_Framework_TestCase
@@ -68,22 +67,31 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $this->_agreement = $this->getMock(
             'Magento\Paypal\Model\Billing\Agreement',
             array('load', 'getId', 'getCustomerId', 'getReferenceId', 'canCancel', 'cancel', '__wakeup'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
         $this->_agreement->expects($this->once())->method('load')->with(15)->will($this->returnSelf());
         $this->_agreement->expects($this->once())->method('getId')->will($this->returnValue(15));
         $this->_agreement->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
 
         $this->_objectManager = $this->getMock('Magento\ObjectManager');
-        $this->_objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap(array(
-            array('Magento\Customer\Model\Session', $this->_session),
-        )));
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\Paypal\Model\Billing\Agreement')
-            ->will($this->returnValue($this->_agreement))
-        ;
+        $this->_objectManager->expects(
+            $this->atLeastOnce()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValueMap(array(array('Magento\Customer\Model\Session', $this->_session)))
+        );
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Paypal\Model\Billing\Agreement'
+        )->will(
+            $this->returnValue($this->_agreement)
+        );
 
         $this->_request = $this->getMock('Magento\App\RequestInterface');
         $this->_request->expects($this->once())->method('getParam')->with('agreement')->will($this->returnValue(15));
@@ -119,11 +127,14 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $this->_messageManager->expects($this->once())->method('addNotice')->with($noticeMessage);
         $this->_messageManager->expects($this->never())->method('addError');
 
-        $this->_registry
-            ->expects($this->once())
-            ->method('register')
-            ->with('current_billing_agreement', $this->identicalTo($this->_agreement))
-        ;
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'register'
+        )->with(
+            'current_billing_agreement',
+            $this->identicalTo($this->_agreement)
+        );
 
         $this->_controller->cancelAction();
     }
@@ -151,11 +162,14 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $this->_messageManager->expects($this->never())->method('addNotice');
         $this->_messageManager->expects($this->never())->method('addError');
 
-        $this->_registry
-            ->expects($this->once())
-            ->method('register')
-            ->with('current_billing_agreement', $this->identicalTo($this->_agreement))
-        ;
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'register'
+        )->with(
+            'current_billing_agreement',
+            $this->identicalTo($this->_agreement)
+        );
 
         $this->_controller->cancelAction();
     }

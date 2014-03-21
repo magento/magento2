@@ -80,24 +80,23 @@ class Content extends \Magento\Backend\Block\Widget
     {
         $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader');
 
-        $this->getUploader()->getConfig()
-            ->setUrl(
-                $this->_urlBuilder->addSessionParam()
-                    ->getUrl('catalog/product_gallery/upload')
-            )
-            ->setFileField('image')
-            ->setFilters(array(
+        $this->getUploader()->getConfig()->setUrl(
+            $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
+        )->setFileField(
+            'image'
+        )->setFilters(
+            array(
                 'images' => array(
                     'label' => __('Images (.gif, .jpg, .png)'),
-                    'files' => array('*.gif', '*.jpg','*.jpeg', '*.png')
+                    'files' => array('*.gif', '*.jpg', '*.jpeg', '*.png')
                 )
-            ));
+            )
+        );
 
         $this->_eventManager->dispatch('catalog_product_gallery_prepare_layout', array('block' => $this));
 
         return parent::_prepareLayout();
     }
-
 
     /**
      * Retrieve uploader block
@@ -199,7 +198,7 @@ class Content extends \Magento\Backend\Block\Widget
     public function hasUseDefault()
     {
         foreach ($this->getMediaAttributes() as $attribute) {
-            if($this->getElement()->canDisplayUseDefault($attribute))  {
+            if ($this->getElement()->canDisplayUseDefault($attribute)) {
                 return true;
             }
         }
@@ -224,5 +223,4 @@ class Content extends \Magento\Backend\Block\Widget
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
     }
-
 }

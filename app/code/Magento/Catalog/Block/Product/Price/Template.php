@@ -81,10 +81,7 @@ class Template extends \Magento\View\Element\AbstractBlock
     public function addPriceBlockType($type, $block = '', $template = '')
     {
         if ($type) {
-            $this->_priceBlockTypes[$type] = array(
-                'block'     => $block,
-                'template'  => $template
-            );
+            $this->_priceBlockTypes[$type] = array('block' => $block, 'template' => $template);
         }
 
         return $this;

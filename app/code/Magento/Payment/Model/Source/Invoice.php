@@ -42,10 +42,7 @@ class Invoice implements \Magento\Option\ArrayInterface
                 'value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE,
                 'label' => __('Yes')
             ),
-            array(
-                'value' => '',
-                'label' => __('No')
-            ),
+            array('value' => '', 'label' => __('No'))
         );
     }
 }

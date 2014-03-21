@@ -39,7 +39,9 @@ class Soap implements \Magento\App\FrontControllerInterface
      * Content types used for responses processed by SOAP web API.
      */
     const CONTENT_TYPE_SOAP_CALL = 'application/soap+xml';
+
     const CONTENT_TYPE_WSDL_REQUEST = 'text/xml';
+
     /**#@-*/
 
     /** @var \Magento\Webapi\Model\Soap\Server */
@@ -208,8 +210,10 @@ class Soap implements \Magento\App\FrontControllerInterface
      */
     protected function _setResponseContentType($contentType = 'text/xml')
     {
-        $this->_response->clearHeaders()
-            ->setHeader('Content-Type', "$contentType; charset={$this->_soapServer->getApiCharset()}");
+        $this->_response->clearHeaders()->setHeader(
+            'Content-Type',
+            "{$contentType}; charset={$this->_soapServer->getApiCharset()}"
+        );
         return $this;
     }
 

@@ -30,8 +30,7 @@ namespace Magento\Fedex\Model\Source;
  * @category   Magento
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Freemethod
-    extends \Magento\Fedex\Model\Source\Method
+class Freemethod extends \Magento\Fedex\Model\Source\Method
 {
     /**
      * {@inheritdoc}

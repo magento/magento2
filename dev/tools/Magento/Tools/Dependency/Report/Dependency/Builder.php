@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Dependency;
 
 use Magento\Tools\Dependency\Report\Builder\AbstractBuilder;
@@ -39,9 +38,9 @@ class Builder extends AbstractBuilder
      */
     protected function buildData($modulesData)
     {
-        $modules = [];
+        $modules = array();
         foreach ($modulesData as $moduleData) {
-            $dependencies = [];
+            $dependencies = array();
             foreach ($moduleData['dependencies'] as $dependencyData) {
                 $dependencies[] = new Data\Dependency($dependencyData['module'], $dependencyData['type']);
             }

@@ -24,14 +24,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\TestAsset;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class ConstructorSevenArguments
-    extends \Magento\ObjectManager\TestAsset\ConstructorSixArguments
+class ConstructorSevenArguments extends \Magento\ObjectManager\TestAsset\ConstructorSixArguments
 {
     /**
      * @var \Magento\ObjectManager\TestAsset\Basic

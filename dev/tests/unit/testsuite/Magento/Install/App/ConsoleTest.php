@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\App;
 
 class ConsoleTest extends \PHPUnit_Framework_TestCase
@@ -71,8 +70,13 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_instFactoryMock = $this->getMock('\Magento\Install\Model\Installer\ConsoleFactory',
-            array('create'), array(), '', false);
+        $this->_instFactoryMock = $this->getMock(
+            '\Magento\Install\Model\Installer\ConsoleFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $this->_installerMock = $this->getMock('Magento\Install\Model\Installer\Console', array(), array(), '', false);
         $this->_dirVerifierMock = $this->getMock(
             'Magento\App\Filesystem\DirectoryList\Verification',
@@ -83,14 +87,26 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         );
         $this->_outputMock = $this->getMock('Magento\Install\App\Output', array(), array(), '', false);
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->_configLoaderMock = $this->getMockBuilder('Magento\App\ObjectManager\ConfigLoader')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_instFactoryMock->expects($this->any())->method('create')
-            ->will($this->returnValue($this->_installerMock));
+        $this->_configLoaderMock = $this->getMockBuilder(
+            'Magento\App\ObjectManager\ConfigLoader'
+        )->disableOriginalConstructor()->getMock();
+        $this->_instFactoryMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_installerMock)
+        );
 
-        $this->_configLoaderMock->expects($this->once())->method('load')
-            ->with('install')->will($this->returnValue(array('di' => 'config')));
+        $this->_configLoaderMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'install'
+        )->will(
+            $this->returnValue(array('di' => 'config'))
+        );
 
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
         $this->_objectManagerMock->expects($this->once())->method('configure')->with(array('di' => 'config'));
@@ -100,7 +116,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     {
         $directory = $this->getMock(
             'Magento\Filesystem\Directory\Read',
-            array('isExist','getRelativePath'),
+            array('isExist', 'getRelativePath'),
             array(),
             '',
             false
@@ -112,19 +128,34 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue($directory));
+        $filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue($directory)
+        );
         if (isset($params['config'])) {
-            $directory->expects($this->once())
-                ->method('getRelativePath')
-                ->with($params['config'])
-                ->will($this->returnValue($params['config']));
-            $directory->expects($this->once())
-                ->method('isExist')
-                ->with($params['config'])
-                ->will($this->returnValue(true));
+            $directory->expects(
+                $this->once()
+            )->method(
+                'getRelativePath'
+            )->with(
+                $params['config']
+            )->will(
+                $this->returnValue($params['config'])
+            );
+            $directory->expects(
+                $this->once()
+            )->method(
+                'isExist'
+            )->with(
+                $params['config']
+            )->will(
+                $this->returnValue(true)
+            );
         }
         $this->_responseMock = $this->getMock('Magento\App\Console\Response', array(), array(), '', false);
         return new \Magento\Install\App\Console(
@@ -148,13 +179,17 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
     public function testLaunchShowsRequestedData($param, $method, $testValue)
     {
         $model = $this->_createModel(array($param => true));
-        $this->_installerMock
-            ->expects($this->once())
-            ->method($method)
-            ->will($this->returnValue($testValue));
+        $this->_installerMock->expects($this->once())->method($method)->will($this->returnValue($testValue));
         $this->_outputMock->expects($this->once())->method('readableOutput')->with($testValue);
-        $this->_outputMock->expects($this->once())
-            ->method('prepareArray')->with($testValue)->will($this->returnArgument(0));
+        $this->_outputMock->expects(
+            $this->once()
+        )->method(
+            'prepareArray'
+        )->with(
+            $testValue
+        )->will(
+            $this->returnArgument(0)
+        );
         $this->assertEquals($this->_responseMock, $model->launch());
     }
 
@@ -163,7 +198,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         return array(
             array('show_locales', 'getAvailableLocales', array('locales')),
             array('show_currencies', 'getAvailableCurrencies', array('currencies')),
-            array('show_timezones', 'getAvailableTimezones', array('timezones')),
+            array('show_timezones', 'getAvailableTimezones', array('timezones'))
         );
     }
 
@@ -173,14 +208,20 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $optional = array('optional params');
 
         $model = $this->_createModel(array('show_install_options' => true));
-        $this->_installerMock
-            ->expects($this->once())
-            ->method('getRequiredParams')
-            ->will($this->returnValue($required));
-        $this->_installerMock
-            ->expects($this->once())
-            ->method('getOptionalParams')
-            ->will($this->returnValue($optional));
+        $this->_installerMock->expects(
+            $this->once()
+        )->method(
+            'getRequiredParams'
+        )->will(
+            $this->returnValue($required)
+        );
+        $this->_installerMock->expects(
+            $this->once()
+        )->method(
+            'getOptionalParams'
+        )->will(
+            $this->returnValue($optional)
+        );
         $this->_outputMock->expects($this->exactly(2))->method('alignArrayKeys');
         $this->_outputMock->expects($this->at(1))->method('alignArrayKeys')->with($required);
         $this->assertEquals($this->_responseMock, $model->launch());

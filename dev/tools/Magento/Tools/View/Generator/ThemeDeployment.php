@@ -147,7 +147,7 @@ class ThemeDeployment
             throw new \Magento\Exception("Config file does not exist: {$path}");
         }
 
-        $contents = include($path);
+        $contents = include $path;
         $contents = array_unique($contents);
         $contents = array_map('strtolower', $contents);
         $contents = $contents ? array_combine($contents, $contents) : array();
@@ -164,10 +164,7 @@ class ThemeDeployment
     {
         foreach ($copyRules as $copyRule) {
             $destinationContext = $copyRule['destinationContext'];
-            $context = array(
-                'source' => $copyRule['source'],
-                'destinationContext' => $destinationContext,
-            );
+            $context = array('source' => $copyRule['source'], 'destinationContext' => $destinationContext);
 
             $destDir = \Magento\View\DeployedFilesManager::buildDeployedFilePath(
                 $destinationContext['area'],
@@ -177,14 +174,9 @@ class ThemeDeployment
             );
             $destDir = rtrim($destDir, '\\/');
 
-            $this->_copyDirStructure(
-                $copyRule['source'],
-                $this->_destinationHomeDir . '/' . $destDir,
-                $context
-            );
+            $this->_copyDirStructure($copyRule['source'], $this->_destinationHomeDir . '/' . $destDir, $context);
         }
     }
-
 
     /**
      * Copy dir structure and files from $sourceDir to $destinationDir
@@ -208,21 +200,23 @@ class ThemeDeployment
             }
             $localPath = substr($fileSource, strlen($sourceDir) + 1);
             $themeModel = $this->themeFactory->create(
-                ['data' => [
-                    'theme_path' => $context['destinationContext']['themePath'],
-                    'area' => $context['destinationContext']['area'],
-                ]]
+                array(
+                    'data' => array(
+                        'theme_path' => $context['destinationContext']['themePath'],
+                        'area' => $context['destinationContext']['area']
+                    )
+                )
             );
             $fileObject = $this->fileFactory->create(
                 $localPath,
-                array_merge($context['destinationContext'], ['themeModel' => $themeModel]),
+                array_merge($context['destinationContext'], array('themeModel' => $themeModel)),
                 $fileSource
             );
             /** @var \Magento\View\Publisher\FileAbstract $fileObject */
             $fileObject = $this->appState->emulateAreaCode(
                 $context['destinationContext']['area'],
-                [$this->preProcessor, 'process'],
-                [$fileObject, $this->tmpDirectory]
+                array($this->preProcessor, 'process'),
+                array($fileObject, $this->tmpDirectory)
             );
 
             if ($fileObject->getSourcePath()) {
@@ -268,7 +262,8 @@ class ThemeDeployment
 
         // Copy file
         $extension = pathinfo($fileSource, PATHINFO_EXTENSION);
-        if (strtolower($extension) == 'css') { // For CSS files we need to process content and fix urls
+        if (strtolower($extension) == 'css') {
+            // For CSS files we need to process content and fix urls
             // Callback to resolve relative urls to the file names
             $destContext = $context['destinationContext'];
             $destHomeDir = $this->_destinationHomeDir;
@@ -280,7 +275,10 @@ class ThemeDeployment
                         throw new \Magento\Exception("Wrong module url: {$relativeUrl}");
                     }
                     $relPath = \Magento\View\DeployedFilesManager::buildDeployedFilePath(
-                        $destContext['area'], $destContext['themePath'], $file, $module
+                        $destContext['area'],
+                        $destContext['themePath'],
+                        $file,
+                        $module
                     );
 
                     $result = $destHomeDir . '/' . $relPath;

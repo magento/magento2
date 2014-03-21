@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code\Dictionary\Writer;
 
 class CsvTest extends \PHPUnit_Framework_TestCase
@@ -45,10 +44,20 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     {
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/test.csv';
 
-        $this->_phraseFirstMock = $this->getMock('Magento\Tools\I18n\Code\Dictionary\Phrase', array(), array(), '',
-            false);
-        $this->_phraseSecondMock = $this->getMock('Magento\Tools\I18n\Code\Dictionary\Phrase', array(), array(), '',
-            false);
+        $this->_phraseFirstMock = $this->getMock(
+            'Magento\Tools\I18n\Code\Dictionary\Phrase',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_phraseSecondMock = $this->getMock(
+            'Magento\Tools\I18n\Code\Dictionary\Phrase',
+            array(),
+            array(),
+            '',
+            false
+        );
     }
 
     protected function tearDown()
@@ -65,36 +74,78 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     public function testWrongOutputFile()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Dictionary\Writer\Csv', array(
-            'outputFilename' => 'wrong/path',
-        ));
+        $objectManagerHelper->getObject(
+            'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+            array('outputFilename' => 'wrong/path')
+        );
     }
 
     public function testWrite()
     {
-        $this->_phraseFirstMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue("phrase1_quote\\'"));
-        $this->_phraseFirstMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue("translation1_quote\\'"));
-        $this->_phraseFirstMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue("context_type1_quote\\'"));
-        $this->_phraseFirstMock->expects($this->once())->method('getContextValueAsString')
-            ->will($this->returnValue("content_value1_quote\\'"));
+        $this->_phraseFirstMock->expects(
+            $this->once()
+        )->method(
+            'getPhrase'
+        )->will(
+            $this->returnValue("phrase1_quote\\'")
+        );
+        $this->_phraseFirstMock->expects(
+            $this->once()
+        )->method(
+            'getTranslation'
+        )->will(
+            $this->returnValue("translation1_quote\\'")
+        );
+        $this->_phraseFirstMock->expects(
+            $this->once()
+        )->method(
+            'getContextType'
+        )->will(
+            $this->returnValue("context_type1_quote\\'")
+        );
+        $this->_phraseFirstMock->expects(
+            $this->once()
+        )->method(
+            'getContextValueAsString'
+        )->will(
+            $this->returnValue("content_value1_quote\\'")
+        );
 
-        $this->_phraseSecondMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue("phrase2_quote\\'"));
-        $this->_phraseSecondMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue("translation2_quote\\'"));
-        $this->_phraseSecondMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue("context_type2_quote\\'"));
-        $this->_phraseSecondMock->expects($this->once())->method('getContextValueAsString')
-            ->will($this->returnValue("content_value2_quote\\'"));
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getPhrase'
+        )->will(
+            $this->returnValue("phrase2_quote\\'")
+        );
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getTranslation'
+        )->will(
+            $this->returnValue("translation2_quote\\'")
+        );
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getContextType'
+        )->will(
+            $this->returnValue("context_type2_quote\\'")
+        );
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getContextValueAsString'
+        )->will(
+            $this->returnValue("content_value2_quote\\'")
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Code\Dictionary\Writer\Csv $writer */
-        $writer = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Dictionary\Writer\Csv', array(
-            'outputFilename' => $this->_testFile,
-        ));
+        $writer = $objectManagerHelper->getObject(
+            'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+            array('outputFilename' => $this->_testFile)
+        );
         $writer->write($this->_phraseFirstMock);
         $writer->write($this->_phraseSecondMock);
 
@@ -109,27 +160,45 @@ EXPECTED;
 
     public function testWriteWithoutContext()
     {
-        $this->_phraseFirstMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue('phrase1'));
-        $this->_phraseFirstMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue('translation1'));
-        $this->_phraseFirstMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue(''));
+        $this->_phraseFirstMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase1'));
+        $this->_phraseFirstMock->expects(
+            $this->once()
+        )->method(
+            'getTranslation'
+        )->will(
+            $this->returnValue('translation1')
+        );
+        $this->_phraseFirstMock->expects($this->once())->method('getContextType')->will($this->returnValue(''));
 
-        $this->_phraseSecondMock->expects($this->once())->method('getPhrase')
-            ->will($this->returnValue('phrase2'));
-        $this->_phraseSecondMock->expects($this->once())->method('getTranslation')
-            ->will($this->returnValue('translation2'));
-        $this->_phraseSecondMock->expects($this->once())->method('getContextType')
-            ->will($this->returnValue('context_type2'));
-        $this->_phraseSecondMock->expects($this->once())->method('getContextValueAsString')
-            ->will($this->returnValue(''));
+        $this->_phraseSecondMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase2'));
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getTranslation'
+        )->will(
+            $this->returnValue('translation2')
+        );
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getContextType'
+        )->will(
+            $this->returnValue('context_type2')
+        );
+        $this->_phraseSecondMock->expects(
+            $this->once()
+        )->method(
+            'getContextValueAsString'
+        )->will(
+            $this->returnValue('')
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Tools\I18n\Code\Dictionary\Writer\Csv $writer */
-        $writer = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Dictionary\Writer\Csv', array(
-            'outputFilename' => $this->_testFile,
-        ));
+        $writer = $objectManagerHelper->getObject(
+            'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+            array('outputFilename' => $this->_testFile)
+        );
         $writer->write($this->_phraseFirstMock);
         $writer->write($this->_phraseSecondMock);
 

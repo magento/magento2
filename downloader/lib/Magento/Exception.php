@@ -34,4 +34,5 @@
 namespace Magento;
 
 class Exception extends \Exception
-{}
+{
+}

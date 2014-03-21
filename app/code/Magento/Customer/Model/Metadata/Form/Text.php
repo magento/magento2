@@ -49,10 +49,10 @@ class Text extends AbstractData
         \Magento\Locale\ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
-        $isAjax = false,
+        $isAjax,
         \Magento\Stdlib\String $stringHelper
     ) {
-        parent::__construct($localeDate, $logger, $attribute, $localeResolver,  $value, $entityTypeCode, $isAjax);
+        parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->_string = $stringHelper;
     }
 
@@ -69,9 +69,9 @@ class Text extends AbstractData
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
-        $label      = __($attribute->getStoreLabel());
+        $errors = array();
+        $attribute = $this->getAttribute();
+        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it

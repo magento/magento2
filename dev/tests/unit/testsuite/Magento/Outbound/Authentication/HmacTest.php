@@ -27,7 +27,6 @@ namespace Magento\Outbound\Authentication;
 
 class HmacTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Outbound\Authentication\Hmac
      */
@@ -61,40 +60,36 @@ class HmacTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockStoreManager = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockStoreManager = $this->getMockBuilder(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->disableOriginalConstructor()->getMock();
         $this->_model = new \Magento\Outbound\Authentication\Hmac($this->_mockStoreManager);
 
-        $this->_mockMessage = $this->getMockBuilder('Magento\Outbound\MessageInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockMessage->expects($this->any())
-            ->method('getBody')
-            ->will($this->returnValue(self::BODY));
+        $this->_mockMessage = $this->getMockBuilder(
+            'Magento\Outbound\MessageInterface'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockMessage->expects($this->any())->method('getBody')->will($this->returnValue(self::BODY));
 
-        $this->_mockUser = $this->getMockBuilder('Magento\Outbound\UserInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockUser = $this->getMockBuilder(
+            'Magento\Outbound\UserInterface'
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testHeaders()
     {
-        $store = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockStoreManager->expects($this->once())
-            ->method('getSafeStore')
-            ->will($this->returnValue($store));
-        $store->expects($this->once())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://' . self::DOMAIN));
-        
-        $this->_mockUser->expects($this->once())
-            ->method('getSharedSecret')
-            ->will($this->returnValue(self::SHARED_SECRET));
+        $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
+        $this->_mockStoreManager->expects($this->once())->method('getSafeStore')->will($this->returnValue($store));
+        $store->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://' . self::DOMAIN));
 
-        $hash = (string) hash_hmac(
+        $this->_mockUser->expects(
+            $this->once()
+        )->method(
+            'getSharedSecret'
+        )->will(
+            $this->returnValue(self::SHARED_SECRET)
+        );
+
+        $hash = (string)hash_hmac(
             \Magento\Outbound\Authentication\Hmac::SHA256_ALGORITHM,
             self::BODY,
             self::SHARED_SECRET
@@ -105,7 +100,6 @@ class HmacTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::DOMAIN, $headers[\Magento\Outbound\Authentication\Hmac::DOMAIN_HEADER]);
         $this->assertArrayHasKey(\Magento\Outbound\Authentication\Hmac::HMAC_HEADER, $headers);
         $this->assertSame($hash, $headers[\Magento\Outbound\Authentication\Hmac::HMAC_HEADER]);
-
     }
 
     /**
@@ -114,9 +108,7 @@ class HmacTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptySecret()
     {
-        $this->_mockUser->expects($this->once())
-            ->method('getSharedSecret')
-            ->will($this->returnValue(''));
+        $this->_mockUser->expects($this->once())->method('getSharedSecret')->will($this->returnValue(''));
 
         $this->_model->getSignatureHeaders($this->_mockMessage, $this->_mockUser);
     }

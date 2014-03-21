@@ -266,7 +266,7 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
             if (isset($value['price'])) {
                 $resultValue .= " " . $order->formatPrice($value['price']);
             }
-            return  $resultValue;
+            return $resultValue;
         } else {
             return $value;
         }
@@ -288,30 +288,34 @@ abstract class AbstractItems extends \Magento\Core\Model\AbstractModel
     public function getItemPricesForDisplay()
     {
         $order = $this->getOrder();
-        $item  = $this->getItem();
+        $item = $this->getItem();
         if ($this->_taxData->displaySalesBothPrices()) {
             $prices = array(
                 array(
-                    'label'    => __('Excl. Tax') . ':',
-                    'price'    => $order->formatPriceTxt($item->getPrice()),
+                    'label' => __('Excl. Tax') . ':',
+                    'price' => $order->formatPriceTxt($item->getPrice()),
                     'subtotal' => $order->formatPriceTxt($item->getRowTotal())
                 ),
                 array(
-                    'label'    => __('Incl. Tax') . ':',
-                    'price'    => $order->formatPriceTxt($item->getPriceInclTax()),
+                    'label' => __('Incl. Tax') . ':',
+                    'price' => $order->formatPriceTxt($item->getPriceInclTax()),
                     'subtotal' => $order->formatPriceTxt($item->getRowTotalInclTax())
-                ),
+                )
             );
         } elseif ($this->_taxData->displaySalesPriceInclTax()) {
-            $prices = array(array(
-                'price' => $order->formatPriceTxt($item->getPriceInclTax()),
-                'subtotal' => $order->formatPriceTxt($item->getRowTotalInclTax()),
-            ));
+            $prices = array(
+                array(
+                    'price' => $order->formatPriceTxt($item->getPriceInclTax()),
+                    'subtotal' => $order->formatPriceTxt($item->getRowTotalInclTax())
+                )
+            );
         } else {
-            $prices = array(array(
-                'price' => $order->formatPriceTxt($item->getPrice()),
-                'subtotal' => $order->formatPriceTxt($item->getRowTotal()),
-            ));
+            $prices = array(
+                array(
+                    'price' => $order->formatPriceTxt($item->getPrice()),
+                    'subtotal' => $order->formatPriceTxt($item->getRowTotal())
+                )
+            );
         }
         return $prices;
     }

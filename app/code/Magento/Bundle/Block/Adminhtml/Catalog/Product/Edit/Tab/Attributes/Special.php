@@ -39,9 +39,19 @@ class Special extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\El
      */
     public function getElementHtml()
     {
-        $html = '<input id="'.$this->getElement()->getHtmlId().'" name="'.$this->getElement()->getName()
-             .'" value="'.$this->getElement()->getEscapedValue().'" '.$this->getElement()->serialize($this->getElement()->getHtmlAttributes()).'/>'."\n"
-             .'<label class="addafter" for="' . $this->getElement()->getHtmlId() . '"><strong>[%]</strong></label>';
+        $html = '<input id="' .
+            $this->getElement()->getHtmlId() .
+            '" name="' .
+            $this->getElement()->getName() .
+            '" value="' .
+            $this->getElement()->getEscapedValue() .
+            '" ' .
+            $this->getElement()->serialize($this->getElement()->getHtmlAttributes()) .
+            '/>' .
+            "\n" .
+            '<label class="addafter" for="' .
+            $this->getElement()->getHtmlId() .
+            '"><strong>[%]</strong></label>';
         return $html;
     }
 }

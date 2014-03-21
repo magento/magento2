@@ -29,7 +29,7 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Customer\Service\V1\Data\Address;
 use Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Customer\Service\V1\Data\AddressConverter;
+use Magento\Customer\Service\V1\Data\AddressConverter;
 
 /**
  * Test Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses
@@ -47,6 +47,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \Magento\Registry */
     private $_coreRegistry;
+
     /** @var \Magento\Backend\Model\Session */
     private $_backendSession;
 
@@ -83,7 +84,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
     public function testInitFormEmpty()
     {
         $block = $this->_objectManager->create('Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses');
-        $this->_backendSession->setCustomerData(['account' => [], 'address' => []]);
+        $this->_backendSession->setCustomerData(array('account' => array(), 'address' => array()));
 
         /** @var Addresses $block */
         $block = $block->initForm();
@@ -128,8 +129,11 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupExistingCustomerData();
         /** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses $block */
-        $block = $this->_objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses');
+        $block = $this->_objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses'
+        );
 
         $html = $block->initForm()->toHtml();
 
@@ -161,10 +165,10 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Customer $customer */
         $customer = $this->_customerAccountService->getCustomer(1);
-        $this->_customerData = [
+        $this->_customerData = array(
             'customer_id' => $customer->getId(),
-            'account' => \Magento\Service\DataObjectConverter::toFlatArray($customer),
-        ];
+            'account' => \Magento\Service\DataObjectConverter::toFlatArray($customer)
+        );
         $this->_customerData['account']['id'] = $customer->getId();
         /** @var Address[] $addresses */
         $addresses = $this->_addressService->getAddresses(1);

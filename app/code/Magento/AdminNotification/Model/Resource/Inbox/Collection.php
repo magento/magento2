@@ -51,8 +51,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addRemoveFilter()
     {
-        $this->getSelect()
-            ->where('is_remove=?', 0);
+        $this->getSelect()->where('is_remove=?', 0);
         return $this;
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument;
 
 use Magento\Config\Converter\Dom\Flat as FlatConverter;
@@ -60,13 +59,8 @@ class Parser
         if (!$this->converter) {
             $arrayNodeConfig = new ArrayNodeConfig(
                 new NodePathMatcher(),
-                array(
-                    'argument/param' => 'name',
-                    'argument(/item)+' => 'name',
-                ),
-                array(
-                    'argument/updater',
-                )
+                array('argument/param' => 'name', 'argument(/item)+' => 'name'),
+                array('argument/updater')
             );
             $this->converter = new FlatConverter($arrayNodeConfig);
         }

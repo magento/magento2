@@ -42,6 +42,27 @@ class Switcher extends \Magento\View\Element\Template
     protected $_storeInUrl;
 
     /**
+     * @var \Magento\Core\Helper\PostData
+     */
+    protected $_postDataHelper;
+
+    /**
+     * Constructs
+     *
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Core\Helper\PostData $postDataHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Core\Helper\PostData $postDataHelper,
+        array $data = array()
+    ) {
+        $this->_postDataHelper = $postDataHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * @return int|null|string
      */
     public function getCurrentWebsiteId()
@@ -97,9 +118,7 @@ class Switcher extends \Magento\View\Element\Template
                 }
                 $store->setLocaleCode($store->getConfig('general/locale/code'));
 
-                $params = array(
-                    '_query' => array()
-                );
+                $params = array('_query' => array());
                 if (!$this->isStoreInUrl()) {
                     $params['_query']['___store'] = $store->getCode();
                 }
@@ -204,5 +223,19 @@ class Switcher extends \Magento\View\Element\Template
     public function getStoreName()
     {
         return $this->_storeManager->getStore()->getName();
+    }
+
+    /**
+     * Returns target store post data
+     *
+     * @param \Magento\Core\Model\Store $store
+     * @return string
+     */
+    public function getTargetStorePostData(\Magento\Core\Model\Store $store)
+    {
+        return $this->_postDataHelper->getPostData(
+            $this->getHomeUrl(),
+            array('___store' => $store->getCode())
+        );
     }
 }

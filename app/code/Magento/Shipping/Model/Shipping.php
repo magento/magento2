@@ -179,19 +179,15 @@ class Shipping implements RateCollectorInterface
     {
         $storeId = $request->getStoreId();
         if (!$request->getOrig()) {
-            $request
-                ->setCountryId(
-                    $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $request->getStore())
-                )
-                ->setRegionId(
-                    $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_REGION_ID, $request->getStore())
-                )
-                ->setCity(
-                    $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_CITY, $request->getStore())
-                )
-                ->setPostcode(
-                    $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ZIP, $request->getStore())
-                );
+            $request->setCountryId(
+                $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_COUNTRY_ID, $request->getStore())
+            )->setRegionId(
+                $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_REGION_ID, $request->getStore())
+            )->setCity(
+                $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_CITY, $request->getStore())
+            )->setPostcode(
+                $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_ZIP, $request->getStore())
+            );
         }
 
         $limitCarrier = $request->getLimitCarrier();
@@ -233,13 +229,13 @@ class Shipping implements RateCollectorInterface
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
-        if (false !== $result && !($result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error)) {
+        if (false !== $result && !$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
             $result = $carrier->proccessAdditionalValidation($request);
         }
         /*
-        * Result will be false if the admin set not to show the shipping module
-        * if the delivery country is not within specific countries
-        */
+         * Result will be false if the admin set not to show the shipping module
+         * if the delivery country is not within specific countries
+         */
         if (false !== $result) {
             if (!$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
                 if ($carrier->getConfigData('shipment_requesttype')) {
@@ -305,54 +301,54 @@ class Shipping implements RateCollectorInterface
      */
     public function composePackagesForCarrier($carrier, $request)
     {
-        $allItems   = $request->getAllItems();
-        $fullItems  = array();
+        $allItems = $request->getAllItems();
+        $fullItems = array();
 
-        $maxWeight  = (float) $carrier->getConfigData('max_package_weight');
+        $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
         foreach ($allItems as $item) {
-            if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-                && $item->getProduct()->getShipmentType()
+            if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE &&
+                $item->getProduct()->getShipmentType()
             ) {
                 continue;
             }
 
-            $qty            = $item->getQty();
-            $changeQty      = true;
-            $checkWeight    = true;
-            $decimalItems   = array();
+            $qty = $item->getQty();
+            $changeQty = true;
+            $checkWeight = true;
+            $decimalItems = array();
 
             if ($item->getParentItem()) {
                 if (!$item->getParentItem()->getProduct()->getShipmentType()) {
                     continue;
                 }
-                $qty = $item->getIsQtyDecimal()
-                    ? $item->getParentItem()->getQty()
-                    : $item->getParentItem()->getQty() * $item->getQty();
+                $qty = $item->getIsQtyDecimal() ? $item->getParentItem()->getQty() : $item->getParentItem()->getQty() *
+                    $item->getQty();
             }
 
             $itemWeight = $item->getWeight();
-            if ($item->getIsQtyDecimal() && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            if ($item->getIsQtyDecimal() && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+            ) {
                 $stockItem = $item->getProduct()->getStockItem();
                 if ($stockItem->getIsDecimalDivided()) {
-                   if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
+                    if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
                         $itemWeight = $itemWeight * $stockItem->getQtyIncrements();
-                        $qty        = round(($item->getWeight() / $itemWeight) * $qty);
-                        $changeQty  = false;
-                   } else {
-                       $itemWeight = $itemWeight * $item->getQty();
-                       if ($itemWeight > $maxWeight) {
-                           $qtyItem = floor($itemWeight / $maxWeight);
-                           $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
-                           $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
-                           if ($weightItem) {
-                               $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
-                           }
-                           $checkWeight = false;
-                       } else {
-                           $itemWeight = $itemWeight * $item->getQty();
-                       }
-                   }
+                        $qty = round($item->getWeight() / $itemWeight * $qty);
+                        $changeQty = false;
+                    } else {
+                        $itemWeight = $itemWeight * $item->getQty();
+                        if ($itemWeight > $maxWeight) {
+                            $qtyItem = floor($itemWeight / $maxWeight);
+                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
+                            $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
+                            if ($weightItem) {
+                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
+                            }
+                            $checkWeight = false;
+                        } else {
+                            $itemWeight = $itemWeight * $item->getQty();
+                        }
+                    }
                 } else {
                     $itemWeight = $itemWeight * $item->getQty();
                 }
@@ -362,15 +358,18 @@ class Shipping implements RateCollectorInterface
                 return array();
             }
 
-            if ($changeQty && !$item->getParentItem() && $item->getIsQtyDecimal()
-                && $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
+            if ($changeQty &&
+                !$item->getParentItem() &&
+                $item->getIsQtyDecimal() &&
+                $item->getProductType() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ) {
                 $qty = 1;
             }
 
             if (!empty($decimalItems)) {
                 foreach ($decimalItems as $decimalItem) {
-                    $fullItems = array_merge($fullItems,
+                    $fullItems = array_merge(
+                        $fullItems,
                         array_fill(0, $decimalItem['qty'] * $qty, $decimalItem['weight'])
                     );
                 }
@@ -407,22 +406,22 @@ class Shipping implements RateCollectorInterface
                 unset($items[$key]);
                 $sumWeight = $weight;
                 foreach ($items as $key => $weight) {
-                    if (($sumWeight + $weight) < $maxWeight) {
+                    if ($sumWeight + $weight < $maxWeight) {
                         unset($items[$key]);
                         $sumWeight += $weight;
-                    } elseif (($sumWeight + $weight) > $maxWeight) {
-                        $pieces[] = (string)(float)$sumWeight;
+                    } elseif ($sumWeight + $weight > $maxWeight) {
+                        $pieces[] = (string)(double)$sumWeight;
                         break;
                     } else {
                         unset($items[$key]);
-                        $pieces[] = (string)(float)($sumWeight + $weight);
+                        $pieces[] = (string)(double)($sumWeight + $weight);
                         $sumWeight = 0;
                         break;
                     }
                 }
             }
             if ($sumWeight > 0) {
-                $pieces[] = (string)(float)$sumWeight;
+                $pieces[] = (string)(double)$sumWeight;
             }
             $pieces = array_count_values($pieces);
         }

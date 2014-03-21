@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Config\CatalogClone\Media;
 
 /**
@@ -95,11 +94,10 @@ class Image extends \Magento\Core\Model\Config\Value
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
             $prefixes[] = array(
                 'field' => $attribute->getAttributeCode() . '_',
-                'label' => $attribute->getFrontend()->getLabel(),
+                'label' => $attribute->getFrontend()->getLabel()
             );
         }
 
         return $prefixes;
     }
-
 }

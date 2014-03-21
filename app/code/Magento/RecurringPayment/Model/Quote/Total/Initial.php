@@ -27,8 +27,7 @@
  */
 namespace Magento\RecurringPayment\Model\Quote\Total;
 
-class Initial
-    extends \Magento\RecurringPayment\Model\Quote\Total\AbstractRecurring
+class Initial extends \Magento\RecurringPayment\Model\Quote\Total\AbstractRecurring
 {
     /**
      * Custom row total/payment keys

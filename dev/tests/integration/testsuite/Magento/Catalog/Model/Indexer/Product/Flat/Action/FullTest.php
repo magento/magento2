@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 /**
@@ -44,10 +43,12 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp()
     {
-        $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Indexer\Product\Flat\State');
-        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Indexer\Product\Flat\Processor');
+        $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Indexer\Product\Flat\State'
+        );
+        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Indexer\Product\Flat\Processor'
+        );
     }
 
     /**
@@ -61,10 +62,12 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($this->_state->isFlatEnabled());
         $this->_processor->reindexAll();
 
-        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\CategoryFactory');
-        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Block\Product\ListProduct');
+        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\CategoryFactory'
+        );
+        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Block\Product\ListProduct'
+        );
 
         $category = $categoryFactory->create()->load(2);
         $layer = $listProduct->getLayer();

@@ -80,7 +80,7 @@ class Checkbox extends AbstractElement
      * @param bool $value
      * @return Checkbox
      */
-    public function setIsChecked($value=false)
+    public function setIsChecked($value = false)
     {
         $this->setData('checked', $value);
         return $this;

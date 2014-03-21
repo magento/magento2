@@ -35,8 +35,10 @@ class App implements \Magento\AppInterface
     /**#@+
      * Product edition labels
      */
-    const EDITION_COMMUNITY    = 'Community';
-    const EDITION_ENTERPRISE   = 'Enterprise';
+    const EDITION_COMMUNITY = 'Community';
+
+    const EDITION_ENTERPRISE = 'Enterprise';
+
     /**#@-*/
 
     /**
@@ -50,7 +52,7 @@ class App implements \Magento\AppInterface
     /**
      * Magento version
      */
-    const VERSION = '2.0.0.0-dev69';
+    const VERSION = '2.0.0.0-dev70';
 
     /**
      * Application run code
@@ -450,9 +452,11 @@ class App implements \Magento\AppInterface
     public function getVersion()
     {
         $info = $this->getVersionInfo();
-        return trim("{$info['major']}.{$info['minor']}.{$info['revision']}"
-            . ($info['patch'] != '' ? ".{$info['patch']}" : "")
-            . "-{$info['stability']}{$info['number']}", '.-');
+        return trim(
+            "{$info['major']}.{$info['minor']}.{$info['revision']}" . ($info['patch'] !=
+            '' ? ".{$info['patch']}" : "") . "-{$info['stability']}{$info['number']}",
+            '.-'
+        );
     }
 
     /**
@@ -464,12 +468,12 @@ class App implements \Magento\AppInterface
     public function getVersionInfo()
     {
         return array(
-            'major'     => '2',
-            'minor'     => '0',
-            'revision'  => '0',
-            'patch'     => '0',
+            'major' => '2',
+            'minor' => '0',
+            'revision' => '0',
+            'patch' => '0',
             'stability' => 'dev',
-            'number'    => '69',
+            'number'    => '70',
         );
     }
 }

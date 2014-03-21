@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 class AbstractBlockTest extends \PHPUnit_Framework_TestCase
@@ -41,10 +40,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $block = $this->getMockForAbstractClass('Magento\View\Element\AbstractBlock', array(), '', false);
         $block->setNameInLayout($nameInLayout);
 
-        $this->assertEquals(
-            $expectedResult,
-            call_user_func_array(array($block, 'getUiId'), $methodArguments)
-        );
+        $this->assertEquals($expectedResult, call_user_func_array(array($block, 'getUiId'), $methodArguments));
     }
 
     /**
@@ -60,15 +56,17 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
             array(' data-ui-id="bl-ock" ', '--bl--ock---', array()),
             array(' data-ui-id="bl-ock" ', '--bL--Ock---', array()),
             array(' data-ui-id="b-l-o-c-k" ', '--b!@#$%^&**()L--O;:...c<_>k---', array()),
-            array(' data-ui-id="a0b1c2d3e4f5g6h7-i8-j9k0l1m2n-3o4p5q6r7-s8t9u0v1w2z3y4x5" ',
-                'a0b1c2d3e4f5g6h7', array('i8-j9k0l1m2n-3o4p5q6r7', 's8t9u0v1w2z3y4x5')
+            array(
+                ' data-ui-id="a0b1c2d3e4f5g6h7-i8-j9k0l1m2n-3o4p5q6r7-s8t9u0v1w2z3y4x5" ',
+                'a0b1c2d3e4f5g6h7',
+                array('i8-j9k0l1m2n-3o4p5q6r7', 's8t9u0v1w2z3y4x5')
             ),
-            array(' data-ui-id="capsed-block-name-cap-ed-param1-caps2-but-ton" ',
-                'CaPSed BLOCK NAME', array('cAp$Ed PaRaM1', 'caPs2', 'bUT-TOn')
+            array(
+                ' data-ui-id="capsed-block-name-cap-ed-param1-caps2-but-ton" ',
+                'CaPSed BLOCK NAME',
+                array('cAp$Ed PaRaM1', 'caPs2', 'bUT-TOn')
             ),
-            array(' data-ui-id="block-0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20" ',
-                '!block!', range(0, 20)
-            ),
+            array(' data-ui-id="block-0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20" ', '!block!', range(0, 20))
         );
     }
 
@@ -77,21 +75,26 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('MAGETWO-11727');
         $config = $this->getMock('Magento\Config\View', array('getVarValue'), array(), '', false);
         $module = uniqid();
-        $config->expects($this->at(0))
-            ->method('getVarValue')
-            ->with('Magento_Core', 'v1')
-            ->will($this->returnValue('one'));
+        $config->expects(
+            $this->at(0)
+        )->method(
+            'getVarValue'
+        )->with(
+            'Magento_Core',
+            'v1'
+        )->will(
+            $this->returnValue('one')
+        );
         $config->expects($this->at(1))->method('getVarValue')->with($module, 'v2')->will($this->returnValue('two'));
 
         $configManager = $this->getMock('Magento\View\ConfigInterface', array(), array(), '', false);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->will($this->returnValue($config));
 
         /** @var $block \Magento\View\Element\AbstractBlock|PHPUnit_Framework_MockObject_MockObject */
-        $params = array(
-            'viewConfig' => $configManager,
-        );
+        $params = array('viewConfig' => $configManager);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $block = $this->getMockForAbstractClass('Magento\View\Element\AbstractBlock',
+        $block = $this->getMockForAbstractClass(
+            'Magento\View\Element\AbstractBlock',
             $helper->getConstructArguments('Magento\View\Element\AbstractBlock', $params),
             uniqid('Magento\\Core\\Block\\AbstractBlock\\')
         );
@@ -102,8 +105,11 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testIsScopePrivate()
     {
-        $contextMock = $this->getMock('Magento\View\Element\Context', [], [], '', false);
-        $block = $this->getMockForAbstractClass('Magento\View\Element\AbstractBlock', ['context' => $contextMock]);
+        $contextMock = $this->getMock('Magento\View\Element\Context', array(), array(), '', false);
+        $block = $this->getMockForAbstractClass(
+            'Magento\View\Element\AbstractBlock',
+            array('context' => $contextMock)
+        );
         $this->assertEquals(false, $block->isScopePrivate());
     }
 }

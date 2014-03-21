@@ -80,26 +80,19 @@ class Configurable extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         if (!empty($delete)) {
-            $where = array(
-                'parent_id = ?'     => $mainProductId,
-                'product_id IN(?)'  => $delete
-            );
+            $where = array('parent_id = ?' => $mainProductId, 'product_id IN(?)' => $delete);
             $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
         }
         if (!empty($insert)) {
             $data = array();
             foreach ($insert as $childId) {
-                $data[] = array(
-                    'product_id' => (int)$childId,
-                    'parent_id'  => (int)$mainProductId
-                );
+                $data[] = array('product_id' => (int)$childId, 'parent_id' => (int)$mainProductId);
             }
             $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $data);
         }
 
         // configurable product relations should be added to relation table
-        $this->_catalogProductRelation
-            ->processRelations($mainProductId, $productIds);
+        $this->_catalogProductRelation->processRelations($mainProductId, $productIds);
 
         return $this;
     }
@@ -118,14 +111,17 @@ class Configurable extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getChildrenIds($parentId, $required = true)
     {
         $childrenIds = array();
-        $select = $this->_getReadAdapter()->select()
-            ->from(array('l' => $this->getMainTable()), array('product_id', 'parent_id'))
-            ->join(
-                array('e' => $this->getTable('catalog_product_entity')),
-                'e.entity_id = l.product_id AND e.required_options = 0',
-                array()
-            )
-            ->where('parent_id = ?', $parentId);
+        $select = $this->_getReadAdapter()->select()->from(
+            array('l' => $this->getMainTable()),
+            array('product_id', 'parent_id')
+        )->join(
+            array('e' => $this->getTable('catalog_product_entity')),
+            'e.entity_id = l.product_id AND e.required_options = 0',
+            array()
+        )->where(
+            'parent_id = ?',
+            $parentId
+        );
 
         $childrenIds = array(0 => array());
         foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
@@ -145,9 +141,13 @@ class Configurable extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $parentIds = array();
 
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), array('product_id', 'parent_id'))
-            ->where('product_id IN(?)', $childId);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            array('product_id', 'parent_id')
+        )->where(
+            'product_id IN(?)',
+            $childId
+        );
         foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
             $parentIds[] = $row['parent_id'];
         }
@@ -166,71 +166,67 @@ class Configurable extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $attributesOptionsData = array();
         foreach ($attributes as $superAttribute) {
-            $select = $this->_getReadAdapter()->select()
-                ->from(
+            $select = $this->_getReadAdapter()->select()->from(
+                array('super_attribute' => $this->getTable('catalog_product_super_attribute')),
+                array(
+                    'sku' => 'entity.sku',
+                    'product_id' => 'super_attribute.product_id',
+                    'attribute_code' => 'attribute.attribute_code',
+                    'option_title' => 'option_value.value',
+                    'pricing_value' => 'attribute_pricing.pricing_value',
+                    'pricing_is_percent' => 'attribute_pricing.is_percent'
+                )
+            )->joinInner(
+                array('product_link' => $this->getTable('catalog_product_super_link')),
+                'product_link.parent_id = super_attribute.product_id',
+                array()
+            )->joinInner(
+                array('attribute' => $this->getTable('eav_attribute')),
+                'attribute.attribute_id = super_attribute.attribute_id',
+                array()
+            )->joinInner(
+                array('entity' => $this->getTable('catalog_product_entity')),
+                'entity.entity_id = product_link.product_id',
+                array()
+            )->joinInner(
+                array('entity_value' => $superAttribute->getBackendTable()),
+                implode(
+                    ' AND ',
                     array(
-                        'super_attribute'       => $this->getTable('catalog_product_super_attribute')
-                    ),
-                    array(
-                        'sku'                   => 'entity.sku',
-                        'product_id'            => 'super_attribute.product_id',
-                        'attribute_code'        => 'attribute.attribute_code',
-                        'option_title'          => 'option_value.value',
-                        'pricing_value'         => 'attribute_pricing.pricing_value',
-                        'pricing_is_percent'    => 'attribute_pricing.is_percent'
+                        $this->_getReadAdapter()->quoteInto(
+                            'entity_value.entity_type_id = ?',
+                            $product->getEntityTypeId()
+                        ),
+                        'entity_value.attribute_id = super_attribute.attribute_id',
+                        'entity_value.store_id = 0',
+                        'entity_value.entity_id = product_link.product_id'
                     )
-                )->joinInner(
+                ),
+                array()
+            )->joinLeft(
+                array('option_value' => $this->getTable('eav_attribute_option_value')),
+                implode(
+                    ' AND ',
                     array(
-                        'product_link'          => $this->getTable('catalog_product_super_link')
-                    ),
-                    'product_link.parent_id = super_attribute.product_id',
-                    array()
-                )->joinInner(
-                    array(
-                        'attribute'             => $this->getTable('eav_attribute')
-                    ),
-                    'attribute.attribute_id = super_attribute.attribute_id',
-                    array()
-                )->joinInner(
-                    array(
-                        'entity'                => $this->getTable('catalog_product_entity')
-                    ),
-                    'entity.entity_id = product_link.product_id',
-                    array()
-                )->joinInner(
-                    array(
-                        'entity_value'          => $superAttribute->getBackendTable()
-                    ),
-                    implode(
-                        ' AND ',
-                        array(
-                            $this->_getReadAdapter()
-                                ->quoteInto('entity_value.entity_type_id = ?', $product->getEntityTypeId()),
-                            'entity_value.attribute_id = super_attribute.attribute_id',
-                            'entity_value.store_id = 0',
-                            'entity_value.entity_id = product_link.product_id'
-                        )
-                    ),
-                    array()
-                )->joinLeft(
-                    array(
-                        'option_value'          => $this->getTable('eav_attribute_option_value')
-                    ),
-                    implode(' AND ', array(
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . \Magento\Core\Model\Store::DEFAULT_STORE_ID,
-                    )),
-                    array()
-                )->joinLeft(
+                        'option_value.store_id = ' . \Magento\Core\Model\Store::DEFAULT_STORE_ID
+                    )
+                ),
+                array()
+            )->joinLeft(
+                array('attribute_pricing' => $this->getTable('catalog_product_super_attribute_pricing')),
+                implode(
+                    ' AND ',
                     array(
-                        'attribute_pricing'     => $this->getTable('catalog_product_super_attribute_pricing')
-                    ),
-                    implode(' AND ', array(
                         'super_attribute.product_super_attribute_id = attribute_pricing.product_super_attribute_id',
                         'entity_value.value = attribute_pricing.value_index'
-                    )),
-                    array()
-                )->where('super_attribute.product_id = ?', $product->getId());
+                    )
+                ),
+                array()
+            )->where(
+                'super_attribute.product_id = ?',
+                $product->getId()
+            );
 
             $attributesOptionsData[$superAttribute->getAttributeId()] = $this->_getReadAdapter()->fetchAll($select);
         }

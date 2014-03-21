@@ -43,7 +43,6 @@ abstract class AbstractEntity
      */
     protected $_attributeValues = array();
 
-
     /**
      * Attribute code to its values. Only attributes with options and only default store values used.
      *
@@ -182,7 +181,7 @@ abstract class AbstractEntity
         $this->_storeManager = $storeManager;
         $entityCode = $this->getEntityTypeCode();
         $this->_entityTypeId = $config->getEntityType($entityCode)->getEntityTypeId();
-        $this->_connection   = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection('write');
     }
 
     /**
@@ -195,7 +194,8 @@ abstract class AbstractEntity
         foreach ($this->_storeManager->getStores(true) as $store) {
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
-        ksort($this->_storeIdToCode); // to ensure that 'admin' store (ID is zero) goes first
+        ksort($this->_storeIdToCode);
+        // to ensure that 'admin' store (ID is zero) goes first
 
         return $this;
     }
@@ -222,8 +222,10 @@ abstract class AbstractEntity
     protected function _getExportAttrCodes()
     {
         if (null === self::$attrCodes) {
-            if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP])
-                    && is_array($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP])) {
+            if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]) && is_array(
+                $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]
+            )
+            ) {
                 $skipAttr = array_flip($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]);
             } else {
                 $skipAttr = array();
@@ -231,8 +233,13 @@ abstract class AbstractEntity
             $attrCodes = array();
 
             foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
-                if (!isset($skipAttr[$attribute->getAttributeId()])
-                        || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)) {
+                if (!isset(
+                    $skipAttr[$attribute->getAttributeId()]
+                ) || in_array(
+                    $attribute->getAttributeCode(),
+                    $this->_permanentAttributes
+                )
+                ) {
                     $attrCodes[] = $attribute->getAttributeCode();
                 }
             }
@@ -262,8 +269,12 @@ abstract class AbstractEntity
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
-        if (!isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])
-            || !is_array($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
+        if (!isset(
+            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]
+        ) || !is_array(
+            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]
+        )
+        ) {
             $exportFilter = array();
         } else {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
@@ -288,7 +299,7 @@ abstract class AbstractEntity
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_DATE == $attrFilterType) {
                     if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
                         $from = array_shift($exportFilter[$attrCode]);
-                        $to   = array_shift($exportFilter[$attrCode]);
+                        $to = array_shift($exportFilter[$attrCode]);
 
                         if (is_scalar($from) && !empty($from)) {
                             $date = $this->_localeDate->date($from, null, null, false)->toString('MM/dd/YYYY');
@@ -302,7 +313,7 @@ abstract class AbstractEntity
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_NUMBER == $attrFilterType) {
                     if (is_array($exportFilter[$attrCode]) && count($exportFilter[$attrCode]) == 2) {
                         $from = array_shift($exportFilter[$attrCode]);
-                        $to   = array_shift($exportFilter[$attrCode]);
+                        $to = array_shift($exportFilter[$attrCode]);
 
                         if (is_numeric($from)) {
                             $collection->addAttributeToFilter($attrCode, array('from' => $from));
@@ -330,9 +341,10 @@ abstract class AbstractEntity
     public function addRowError($errorCode, $errorRowNum)
     {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = $errorRowNum + 1; // one added for human readability
+        $this->_errors[$errorCode][] = $errorRowNum + 1;
+        // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
-        $this->_errorsCount ++;
+        $this->_errorsCount++;
 
         return $this;
     }
@@ -403,7 +415,8 @@ abstract class AbstractEntity
             try {
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     foreach (is_array($option['value']) ? $option['value'] : array($option) as $innerOption) {
-                        if (strlen($innerOption['value'])) { // skip ' -- Please Select -- ' option
+                        if (strlen($innerOption['value'])) {
+                            // skip ' -- Please Select -- ' option
                             $options[$innerOption['value']] = $innerOption[$index];
                         }
                     }
@@ -442,9 +455,14 @@ abstract class AbstractEntity
     {
         $messages = array();
         foreach ($this->_errors as $errorCode => $errorRows) {
-            $message = isset($this->_messageTemplates[$errorCode])
-                ? __($this->_messageTemplates[$errorCode])
-                : __("Please correct the value for '%1' column", $errorCode);
+            $message = isset(
+                $this->_messageTemplates[$errorCode]
+            ) ? __(
+                $this->_messageTemplates[$errorCode]
+            ) : __(
+                "Please correct the value for '%1' column",
+                $errorCode
+            );
             $messages[$message] = $errorRows;
         }
         return $messages;

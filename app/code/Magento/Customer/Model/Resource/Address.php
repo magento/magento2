@@ -61,7 +61,15 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     ) {
         $this->_validatorFactory = $validatorFactory;
         $this->_customerFactory = $customerFactory;
-        parent::__construct($resource, $eavConfig, $attrSetEntity, $localeFormat, $resourceHelper, $universalFactory, $data);
+        parent::__construct(
+            $resource,
+            $eavConfig,
+            $attrSetEntity,
+            $localeFormat,
+            $resourceHelper,
+            $universalFactory,
+            $data
+        );
     }
 
     /**
@@ -72,7 +80,9 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _construct()
     {
         $resource = $this->_resource;
-        $this->setType('customer_address')->setConnection(
+        $this->setType(
+            'customer_address'
+        )->setConnection(
             $resource->getConnection('customer_read'),
             $resource->getConnection('customer_write')
         );

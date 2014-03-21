@@ -34,5 +34,4 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Magento\PubSub\EventInterface', $event);
     }
-
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filesystem\File;
 
 use Magento\Filesystem\DriverInterface;
@@ -116,7 +115,7 @@ class Read implements ReadInterface
      */
     public function readAll($flag = null, $context = null)
     {
-       return $this->driver->fileGetContents($this->path, $flag, $context);
+        return $this->driver->fileGetContents($this->path, $flag, $context);
     }
 
     /**

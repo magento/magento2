@@ -49,10 +49,7 @@ abstract class AbstractDhl extends AbstractCarrierOnline
      */
     protected function _getShipDate()
     {
-        return $this->_determineShippingDay(
-            $this->getConfigData('shipment_days'),
-            date(self::REQUEST_DATE_FORMAT)
-        );
+        return $this->_determineShippingDay($this->getConfigData('shipment_days'), date(self::REQUEST_DATE_FORMAT));
     }
 
     /**
@@ -73,9 +70,9 @@ abstract class AbstractDhl extends AbstractCarrierOnline
         $i = -1;
         do {
             $i++;
-            $weekday = date('D', strtotime("$date +$i day"));
+            $weekday = date('D', strtotime("{$date} +{$i} day"));
         } while (!in_array($weekday, $shippingDays) && $i < 10);
 
-        return date(self::REQUEST_DATE_FORMAT, strtotime("$date +$i day"));
+        return date(self::REQUEST_DATE_FORMAT, strtotime("{$date} +{$i} day"));
     }
 }

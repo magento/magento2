@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Helper;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -50,27 +49,34 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\App\Helper\Context')->disableOriginalConstructor()->getMock();
-        $this->blockFactory = $this->getMockBuilder('Magento\View\Element\BlockFactory')
-            ->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')
-            ->disableOriginalConstructor()->getMock();
-        $this->coreStoreConfig = $this->getMockBuilder('Magento\Core\Model\Store\Config')
-            ->disableOriginalConstructor()->getMock();
+        $this->blockFactory = $this->getMockBuilder(
+            'Magento\View\Element\BlockFactory'
+        )->disableOriginalConstructor()->getMock();
+        $this->storeManager = $this->getMockBuilder(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->disableOriginalConstructor()->getMock();
+        $this->coreStoreConfig = $this->getMockBuilder(
+            'Magento\Core\Model\Store\Config'
+        )->disableOriginalConstructor()->getMock();
         $this->customerMetadataService = $this->getMockBuilder(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
         )->disableOriginalConstructor()->getMock();
-        $this->addressConfig = $this->getMockBuilder('Magento\Customer\Model\Address\Config')
-            ->disableOriginalConstructor()->getMock();
+        $this->addressConfig = $this->getMockBuilder(
+            'Magento\Customer\Model\Address\Config'
+        )->disableOriginalConstructor()->getMock();
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->helper = $objectManager->getObject('Magento\Customer\Helper\Address', [
-            'context' => $this->context,
-            'blockFactory' => $this->blockFactory,
-            'storeManager' => $this->storeManager,
-            'coreStoreConfig' => $this->coreStoreConfig,
-            'customerMetadataService' => $this->customerMetadataService,
-            'addressConfig' => $this->addressConfig
-        ]);
+        $this->helper = $objectManager->getObject(
+            'Magento\Customer\Helper\Address',
+            array(
+                'context' => $this->context,
+                'blockFactory' => $this->blockFactory,
+                'storeManager' => $this->storeManager,
+                'coreStoreConfig' => $this->coreStoreConfig,
+                'customerMetadataService' => $this->customerMetadataService,
+                'addressConfig' => $this->addressConfig
+            )
+        );
     }
 
     /**
@@ -80,12 +86,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStreetLines($numLines, $expectedNumLines)
     {
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $attributeMock = $this->getMockBuilder(
+            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
+        )->disableOriginalConstructor()->getMock();
         $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue($numLines));
 
-        $this->customerMetadataService->expects($this->any())->method('getAttributeMetadata')
-            ->will($this->returnValue($attributeMock));
+        $this->customerMetadataService->expects(
+            $this->any()
+        )->method(
+            'getAttributeMetadata'
+        )->will(
+            $this->returnValue($attributeMock)
+        );
 
         $store = $this->getMockBuilder('Magento\Core\Model\Store')->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -95,15 +107,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetStreetLines()
     {
-        return [
-            [-1, 2],
-            [0, 2],
-            [1, 1],
-            [2, 2],
-            [3, 3],
-            [4, 4],
-            [5, 4],
-            [10, 4]
-        ];
+        return array(
+            array(-1, 2),
+            array(0, 2),
+            array(1, 1),
+            array(2, 2),
+            array(3, 3),
+            array(4, 4),
+            array(5, 4),
+            array(10, 4)
+        );
     }
 }

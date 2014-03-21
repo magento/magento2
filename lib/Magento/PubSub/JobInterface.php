@@ -32,27 +32,27 @@ interface JobInterface
     /**
      * Status is assigned to newly created Job, identify that it is good to be sent to subscriber
      */
-    const STATUS_READY_TO_SEND         = 0;
+    const STATUS_READY_TO_SEND = 0;
 
     /**
      * Status is assigned to the Job when queue handler pick it up for processing
      */
-    const STATUS_IN_PROGRESS           = 1;
+    const STATUS_IN_PROGRESS = 1;
 
     /**
      * Status is assigned to the Job when queue handler successfully delivered the job to subscriber
      */
-    const STATUS_SUCCEEDED             = 2;
+    const STATUS_SUCCEEDED = 2;
 
     /**
      * Status is assigned to the Job when queue handler failed to delivered the job after N retries
      */
-    const STATUS_FAILED                = 3;
+    const STATUS_FAILED = 3;
 
     /**
      * Status is assigned to the Job when queue handler failed to delivered the job but will retry more
      */
-    const STATUS_RETRY                 = 4;
+    const STATUS_RETRY = 4;
 
     /**
      * Get the event this job is responsible for processing

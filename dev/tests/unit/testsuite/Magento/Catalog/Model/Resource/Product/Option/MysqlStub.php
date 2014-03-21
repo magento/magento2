@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
 /**
@@ -50,14 +49,8 @@ class MysqlStub extends \Magento\DB\Adapter\Pdo\Mysql
     {
         \PHPUnit_Framework_TestCase::assertEquals('catalog_product_option_type_title', $table);
         \PHPUnit_Framework_TestCase::assertInternalType('array', $where);
-        \PHPUnit_Framework_TestCase::assertEquals(
-            ValueTest::$valueTitleData['id'],
-            $where['option_type_id = ?']
-        );
-        \PHPUnit_Framework_TestCase::assertEquals(
-            ValueTest::$valueTitleData['store_id'],
-            $where['store_id = ?']
-        );
+        \PHPUnit_Framework_TestCase::assertEquals(ValueTest::$valueTitleData['id'], $where['option_type_id = ?']);
+        \PHPUnit_Framework_TestCase::assertEquals(ValueTest::$valueTitleData['store_id'], $where['store_id = ?']);
 
         return 0;
     }

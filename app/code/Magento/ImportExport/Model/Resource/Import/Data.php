@@ -32,9 +32,7 @@ namespace Magento\ImportExport\Model\Resource\Import;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data
-    extends \Magento\Core\Model\Resource\Db\AbstractDb
-    implements \IteratorAggregate
+class Data extends \Magento\Core\Model\Resource\Db\AbstractDb implements \IteratorAggregate
 {
     /**
      * @var \Iterator
@@ -55,7 +53,8 @@ class Data
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $arguments
      */
-    public function __construct(\Magento\App\Resource $resource,
+    public function __construct(
+        \Magento\App\Resource $resource,
         \Magento\Core\Helper\Data $coreHelper,
         array $arguments = array()
     ) {
@@ -81,9 +80,7 @@ class Data
     public function getIterator()
     {
         $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('data'))
-            ->order('id ASC');
+        $select = $adapter->select()->from($this->getMainTable(), array('data'))->order('id ASC');
         $stmt = $adapter->query($select);
 
         $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
@@ -138,15 +135,10 @@ class Data
     public function getUniqueColumnData($code)
     {
         $adapter = $this->_getReadAdapter();
-        $values = array_unique($adapter->fetchCol(
-            $adapter->select()
-                ->from($this->getMainTable(), array($code))
-        ));
+        $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), array($code))));
 
         if (count($values) != 1) {
-            throw new \Magento\Core\Exception(
-                __('Error in data structure: %1 values are mixed', $code)
-            );
+            throw new \Magento\Core\Exception(__('Error in data structure: %1 values are mixed', $code));
         }
         return $values[0];
     }
@@ -185,11 +177,7 @@ class Data
     {
         return $this->_getWriteAdapter()->insert(
             $this->getMainTable(),
-            array(
-                'behavior'       => $behavior,
-                'entity'         => $entity,
-                'data'           => $this->_jsonHelper->jsonEncode($data)
-            )
+            array('behavior' => $behavior, 'entity' => $entity, 'data' => $this->_jsonHelper->jsonEncode($data))
         );
     }
 }

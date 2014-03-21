@@ -91,9 +91,11 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
     {
         $results = array();
         /** @var $optionsBlock \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
-        $optionsBlock = $this->getLayout()
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option')
-            ->setIgnoreCaching(true);
+        $optionsBlock = $this->getLayout()->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option'
+        )->setIgnoreCaching(
+            true
+        );
 
         $products = $this->_coreRegistry->registry('import_option_products');
         if (is_array($products)) {

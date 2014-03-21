@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute;
 
 use Magento\Data\Form\Element\AbstractElement;
@@ -43,22 +42,22 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         /** @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Account $accountBlock */
-        $accountBlock = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Block\Adminhtml\Edit\Tab\Account');
+        $accountBlock = Bootstrap::getObjectManager()->get('Magento\Customer\Block\Adminhtml\Edit\Tab\Account');
         $accountBlock->initForm();
         $this->groupElement = $accountBlock->getForm()->getElement('group_id');
 
 
-        $this->groupRenderer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group');
-
+        $this->groupRenderer = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group'
+        );
     }
 
     public function testRender()
     {
         /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService */
-        $metadataService = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerMetadataServiceInterface');
+        $metadataService = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
+        );
         $autoGroupAttribute = $metadataService->getCustomerAttributeMetadata('disable_auto_group_change');
         $this->groupRenderer->setDisableAutoGroupChangeAttribute($autoGroupAttribute);
 

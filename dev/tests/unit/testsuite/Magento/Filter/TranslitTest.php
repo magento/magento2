@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 class TranslitTest extends \PHPUnit_Framework_TestCase
@@ -74,29 +73,31 @@ class TranslitTest extends \PHPUnit_Framework_TestCase
                 '         EUR ->         ',
                 $isIconv
             ),
-            array(
-                '™',
-                'tm',
-                'tm',
-                $isIconv
-            )
+            array('™', 'tm', 'tm', $isIconv)
         );
     }
 
     public function testFilterConfigured()
     {
-        $config = $this->getMockBuilder('Magento\App\ConfigInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'setValue', 'isSetFlag'])
-            ->getMock();
+        $config = $this->getMockBuilder(
+            'Magento\App\ConfigInterface'
+        )->disableOriginalConstructor()->setMethods(
+            array('getValue', 'setValue', 'isSetFlag')
+        )->getMock();
 
-        $config->expects($this->once())
-            ->method('getValue')
-            ->with('url/convert', 'default')
-            ->will($this->returnValue(['char8482' => ['from' => '™', 'to' => 'TM']]));
+        $config->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            'url/convert',
+            'default'
+        )->will(
+            $this->returnValue(array('char8482' => array('from' => '™', 'to' => 'TM')))
+        );
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Filter\Translit', ['config' => $config]);
+        $this->model = $objectManager->getObject('Magento\Filter\Translit', array('config' => $config));
 
         $this->assertEquals('TM', $this->model->filter('™'));
     }

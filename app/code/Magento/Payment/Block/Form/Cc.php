@@ -63,7 +63,7 @@ class Cc extends \Magento\Payment\Block\Form
             $availableTypes = $method->getConfigData('cctypes');
             if ($availableTypes) {
                 $availableTypes = explode(',', $availableTypes);
-                foreach ($types as $code=>$name) {
+                foreach ($types as $code => $name) {
                     if (!in_array($code, $availableTypes)) {
                         unset($types[$code]);
                     }
@@ -82,7 +82,7 @@ class Cc extends \Magento\Payment\Block\Form
     {
         $months = $this->getData('cc_months');
         if (is_null($months)) {
-            $months[0] =  __('Month');
+            $months[0] = __('Month');
             $months = array_merge($months, $this->_paymentConfig->getMonths());
             $this->setData('cc_months', $months);
         }
@@ -99,7 +99,7 @@ class Cc extends \Magento\Payment\Block\Form
         $years = $this->getData('cc_years');
         if (is_null($years)) {
             $years = $this->_paymentConfig->getYears();
-            $years = array(0=>__('Year'))+$years;
+            $years = array(0 => __('Year')) + $years;
             $this->setData('cc_years', $years);
         }
         return $years;
@@ -117,7 +117,7 @@ class Cc extends \Magento\Payment\Block\Form
             if (is_null($configData)) {
                 return true;
             }
-            return (bool) $configData;
+            return (bool)$configData;
         }
         return true;
     }
@@ -147,11 +147,11 @@ class Cc extends \Magento\Payment\Block\Form
         $years = array();
         $first = date("Y");
 
-        for ($index=5; $index>=0; $index--) {
+        for ($index = 5; $index >= 0; $index--) {
             $year = $first - $index;
             $years[$year] = $year;
         }
-        $years = array(0=>__('Year'))+$years;
+        $years = array(0 => __('Year')) + $years;
         return $years;
     }
 
@@ -162,9 +162,7 @@ class Cc extends \Magento\Payment\Block\Form
      */
     protected function _toHtml()
     {
-        $this->_eventManager->dispatch('payment_form_block_to_html_before', array(
-            'block'     => $this,
-        ));
+        $this->_eventManager->dispatch('payment_form_block_to_html_before', array('block' => $this));
         return parent::_toHtml();
     }
 }

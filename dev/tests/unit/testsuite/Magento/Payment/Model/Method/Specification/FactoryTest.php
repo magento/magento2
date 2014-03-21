@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Payment\Model\Method\Specification;
 
 /**
@@ -44,17 +43,25 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->factory = $objectManagerHelper->getObject('Magento\Payment\Model\Method\Specification\Factory', array(
-            'objectManager' => $this->objectManagerMock,
-        ));
+        $this->factory = $objectManagerHelper->getObject(
+            'Magento\Payment\Model\Method\Specification\Factory',
+            array('objectManager' => $this->objectManagerMock)
+        );
     }
 
     public function testCreateMethod()
     {
         $className = 'Magento\Payment\Model\Method\SpecificationInterface';
         $methodMock = $this->getMock($className);
-        $this->objectManagerMock->expects($this->once())->method('get')->with($className)
-            ->will($this->returnValue($methodMock));
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $className
+        )->will(
+            $this->returnValue($methodMock)
+        );
 
         $this->assertEquals($methodMock, $this->factory->create($className));
     }
@@ -67,8 +74,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'WrongClass';
         $methodMock = $this->getMock($className);
-        $this->objectManagerMock->expects($this->once())->method('get')->with($className)
-            ->will($this->returnValue($methodMock));
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $className
+        )->will(
+            $this->returnValue($methodMock)
+        );
 
         $this->factory->create($className);
     }

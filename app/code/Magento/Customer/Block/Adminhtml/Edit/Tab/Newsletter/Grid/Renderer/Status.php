@@ -41,12 +41,12 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     protected function _construct()
     {
         self::$_statuses = array(
-                \Magento\Newsletter\Model\Queue::STATUS_SENT 	=> __('Sent'),
-                \Magento\Newsletter\Model\Queue::STATUS_CANCEL	=> __('Cancel'),
-                \Magento\Newsletter\Model\Queue::STATUS_NEVER 	=> __('Not Sent'),
-                \Magento\Newsletter\Model\Queue::STATUS_SENDING => __('Sending'),
-                \Magento\Newsletter\Model\Queue::STATUS_PAUSE 	=> __('Paused'),
-            );
+            \Magento\Newsletter\Model\Queue::STATUS_SENT => __('Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_CANCEL => __('Cancel'),
+            \Magento\Newsletter\Model\Queue::STATUS_NEVER => __('Not Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_SENDING => __('Sending'),
+            \Magento\Newsletter\Model\Queue::STATUS_PAUSE => __('Paused')
+        );
         parent::_construct();
     }
 

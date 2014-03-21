@@ -39,21 +39,21 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_collection';
+    protected $_eventPrefix = 'sales_order_shipment_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_shipment_collection';
+    protected $_eventObject = 'order_shipment_collection';
 
     /**
      * Order field for setOrderFilter
      *
      * @var string
      */
-    protected $_orderField     = 'order_id';
+    protected $_orderField = 'order_id';
 
     /**
      * Model initialization

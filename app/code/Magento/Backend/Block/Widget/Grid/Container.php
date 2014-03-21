@@ -38,8 +38,11 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * Initialization parameters in pseudo-constructor
      */
     const PARAM_BLOCK_GROUP = 'block_group';
-    const PARAM_BUTTON_NEW  = 'button_new';
+
+    const PARAM_BUTTON_NEW = 'button_new';
+
     const PARAM_BUTTON_BACK = 'button_back';
+
     /**#@-*/
 
     /**
@@ -102,12 +105,19 @@ class Container extends \Magento\Backend\Block\Widget\Container
             $this->setChild(
                 'grid',
                 $this->getLayout()->createBlock(
-                    str_replace('_', \Magento\Autoload\IncludePath::NS_SEPARATOR, $this->_blockGroup)
-                        . '\\Block\\'
-                        . str_replace(' ', '\\', ucwords(str_replace('_', ' ', $this->_controller)))
-                        . '\\Grid',
-                    $this->_controller . '.grid')
-                    ->setSaveParametersInSession(true)
+                    str_replace(
+                        '_',
+                        \Magento\Autoload\IncludePath::NS_SEPARATOR,
+                        $this->_blockGroup
+                    ) . '\\Block\\' . str_replace(
+                        ' ',
+                        '\\',
+                        ucwords(str_replace('_', ' ', $this->_controller))
+                    ) . '\\Grid',
+                    $this->_controller . '.grid'
+                )->setSaveParametersInSession(
+                    true
+                )
             );
         }
         return parent::_prepareLayout();
@@ -152,11 +162,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _addNewButton()
     {
-        $this->_addButton('add', array(
-            'label'     => $this->getAddButtonLabel(),
-            'onclick'   => 'setLocation(\'' . $this->getCreateUrl() .'\')',
-            'class'     => 'add',
-        ));
+        $this->_addButton(
+            'add',
+            array(
+                'label' => $this->getAddButtonLabel(),
+                'onclick' => 'setLocation(\'' . $this->getCreateUrl() . '\')',
+                'class' => 'add'
+            )
+        );
     }
 
     /**
@@ -164,11 +177,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _addBackButton()
     {
-        $this->_addButton('back', array(
-            'label'     => $this->getBackButtonLabel(),
-            'onclick'   => 'setLocation(\'' . $this->getBackUrl() .'\')',
-            'class'     => 'back',
-        ));
+        $this->_addButton(
+            'back',
+            array(
+                'label' => $this->getBackButtonLabel(),
+                'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')',
+                'class' => 'back'
+            )
+        );
     }
 
     /**

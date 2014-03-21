@@ -140,7 +140,7 @@ class PhraseCollector
             'phrase' => $phrase,
             'arguments' => $argumentsAmount,
             'file' => $file,
-            'line' => $line,
+            'line' => $line
         );
     }
 }

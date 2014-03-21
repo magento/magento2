@@ -55,14 +55,14 @@ class FileResolver implements \Magento\Config\FileResolverInterface
      * @param \Magento\Config\FileIteratorFactory   $iteratorFactory
      */
     public function __construct(
-        \Magento\App\Filesystem                 $filesystem,
-        \Magento\Module\Dir\Reader          $moduleReader,
+        \Magento\App\Filesystem $filesystem,
+        \Magento\Module\Dir\Reader $moduleReader,
         \Magento\Config\FileIteratorFactory $iteratorFactory
     ) {
-        $this->themesDirectory  = $filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
+        $this->themesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::THEMES_DIR);
         $this->modulesDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::MODULES_DIR);
-        $this->iteratorFactory  = $iteratorFactory;
-        $this->_moduleReader    = $moduleReader;
+        $this->iteratorFactory = $iteratorFactory;
+        $this->_moduleReader = $moduleReader;
     }
 
     /**
@@ -81,7 +81,7 @@ class FileResolver implements \Magento\Config\FileResolverInterface
                 );
                 break;
             default:
-                $iterator = $this->iteratorFactory->create($this->themesDirectory, array());;
+                $iterator = $this->iteratorFactory->create($this->themesDirectory, array());
                 break;
         }
         return $iterator;

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Http;
 
 /**
@@ -37,15 +36,37 @@ class Context
     protected $data = array();
 
     /**
+     * @var array
+     */
+    protected $default = array();
+
+    /**
      * Data setter
      *
      * @param string $name
      * @param mixed $value
-     * @return void
+     * @param mixed $default
+     * @return \Magento\App\Http\Context
      */
-    public function setValue($name, $value)
+    public function setValue($name, $value, $default)
     {
+        if ($default !== null) {
+            $this->default[$name] = $default;
+        }
         $this->data[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * Unset data from vary array
+     *
+     * @param string $name
+     * @return null
+     */
+    public function unsValue($name)
+    {
+        unset($this->data[$name]);
+        return;
     }
 
     /**
@@ -56,7 +77,7 @@ class Context
      */
     public function getValue($name)
     {
-        return isset($this->data[$name]) ? $this->data[$name] : null;
+        return isset($this->data[$name]) ? $this->data[$name] : $this->default[$name];
     }
 
     /**
@@ -66,6 +87,12 @@ class Context
      */
     public function getData()
     {
-        return $this->data;
+        $data = [];
+        foreach ($this->data as $name => $value) {
+            if ($value && $value != $this->default[$name]) {
+                $data[$name] = $value;
+            }
+        }
+        return $data;
     }
 }

@@ -79,9 +79,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId    = 'invoice_id';
-        $this->_controller  = 'adminhtml_order_invoice';
-        $this->_mode        = 'view';
+        $this->_objectId = 'invoice_id';
+        $this->_controller = 'adminhtml_order_invoice';
+        $this->_mode = 'view';
         $this->_session = $this->_backendSession;
 
         parent::_construct();
@@ -94,64 +94,83 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             return;
         }
 
-        if ($this->_isAllowedAction('Magento_Sales::cancel') && $this->getInvoice()->canCancel() && !$this->_isPaymentReview()) {
-            $this->_addButton('cancel', array(
-                'label'     => __('Cancel'),
-                'class'     => 'delete',
-                'onclick'   => 'setLocation(\''.$this->getCancelUrl().'\')'
+        if ($this->_isAllowedAction(
+            'Magento_Sales::cancel'
+        ) && $this->getInvoice()->canCancel() && !$this->_isPaymentReview()
+        ) {
+            $this->_addButton(
+                'cancel',
+                array(
+                    'label' => __('Cancel'),
+                    'class' => 'delete',
+                    'onclick' => 'setLocation(\'' . $this->getCancelUrl() . '\')'
                 )
             );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::emails')) {
-            $this->addButton('send_notification', array(
-                'label'     => __('Send Email'),
-                'onclick'   => 'confirmSetLocation(\''
-                . __('Are you sure you want to send an Invoice email to customer?')
-                . '\', \'' . $this->getEmailUrl() . '\')'
-            ));
+            $this->addButton(
+                'send_notification',
+                array(
+                    'label' => __('Send Email'),
+                    'onclick' => 'confirmSetLocation(\'' . __(
+                        'Are you sure you want to send an Invoice email to customer?'
+                    ) . '\', \'' . $this->getEmailUrl() . '\')'
+                )
+            );
         }
 
         $orderPayment = $this->getInvoice()->getOrder()->getPayment();
 
         if ($this->_isAllowedAction('Magento_Sales::creditmemo') && $this->getInvoice()->getOrder()->canCreditmemo()) {
-            if (($orderPayment->canRefundPartialPerInvoice()
-                && $this->getInvoice()->canRefund()
-                && $orderPayment->getAmountPaid() > $orderPayment->getAmountRefunded())
-                || ($orderPayment->canRefund() && !$this->getInvoice()->getIsUsedForRefund())
+            if ($orderPayment->canRefundPartialPerInvoice() &&
+                $this->getInvoice()->canRefund() &&
+                $orderPayment->getAmountPaid() > $orderPayment->getAmountRefunded() ||
+                $orderPayment->canRefund() && !$this->getInvoice()->getIsUsedForRefund()
             ) {
-                $this->_addButton('capture', array( // capture?
-                    'label'     => __('Credit Memo'),
-                    'class'     => 'go',
-                    'onclick'   => 'setLocation(\''.$this->getCreditMemoUrl().'\')'
+                $this->_addButton(
+                    'capture',
+                    array( // capture?
+                        'label' => __('Credit Memo'),
+                        'class' => 'go',
+                        'onclick' => 'setLocation(\'' . $this->getCreditMemoUrl() . '\')'
                     )
                 );
             }
         }
 
-        if ($this->_isAllowedAction('Magento_Sales::capture') && $this->getInvoice()->canCapture() && !$this->_isPaymentReview()) {
-            $this->_addButton('capture', array(
-                'label'     => __('Capture'),
-                'class'     => 'save',
-                'onclick'   => 'setLocation(\''.$this->getCaptureUrl().'\')'
+        if ($this->_isAllowedAction(
+            'Magento_Sales::capture'
+        ) && $this->getInvoice()->canCapture() && !$this->_isPaymentReview()
+        ) {
+            $this->_addButton(
+                'capture',
+                array(
+                    'label' => __('Capture'),
+                    'class' => 'save',
+                    'onclick' => 'setLocation(\'' . $this->getCaptureUrl() . '\')'
                 )
             );
         }
 
         if ($this->getInvoice()->canVoid()) {
-            $this->_addButton('void', array(
-                'label'     => __('Void'),
-                'class'     => 'save',
-                'onclick'   => 'setLocation(\''.$this->getVoidUrl().'\')'
+            $this->_addButton(
+                'void',
+                array(
+                    'label' => __('Void'),
+                    'class' => 'save',
+                    'onclick' => 'setLocation(\'' . $this->getVoidUrl() . '\')'
                 )
             );
         }
 
         if ($this->getInvoice()->getId()) {
-            $this->_addButton('print', array(
-                'label'     => __('Print'),
-                'class'     => 'save',
-                'onclick'   => 'setLocation(\''.$this->getPrintUrl().'\')'
+            $this->_addButton(
+                'print',
+                array(
+                    'label' => __('Print'),
+                    'class' => 'save',
+                    'onclick' => 'setLocation(\'' . $this->getPrintUrl() . '\')'
                 )
             );
         }
@@ -190,7 +209,13 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         } else {
             $emailSent = __('the invoice email is not sent');
         }
-        return __('Invoice #%1 | %2 | %4 (%3)', $this->getInvoice()->getIncrementId(), $this->getInvoice()->getStateName(), $emailSent, $this->formatDate($this->getInvoice()->getCreatedAtDate(), 'medium', true));
+        return __(
+            'Invoice #%1 | %2 | %4 (%3)',
+            $this->getInvoice()->getIncrementId(),
+            $this->getInvoice()->getStateName(),
+            $emailSent,
+            $this->formatDate($this->getInvoice()->getCreatedAtDate(), 'medium', true)
+        );
     }
 
     /**
@@ -203,9 +228,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         return $this->getUrl(
             'sales/order/view',
             array(
-                'order_id'  => $this->getInvoice() ? $this->getInvoice()->getOrderId() : null,
-                'active_tab'=> 'order_invoices'
-            ));
+                'order_id' => $this->getInvoice() ? $this->getInvoice()->getOrderId() : null,
+                'active_tab' => 'order_invoices'
+            )
+        );
     }
 
     /**
@@ -215,7 +241,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCaptureUrl()
     {
-        return $this->getUrl('sales/*/capture', array('invoice_id'=>$this->getInvoice()->getId()));
+        return $this->getUrl('sales/*/capture', array('invoice_id' => $this->getInvoice()->getId()));
     }
 
     /**
@@ -225,7 +251,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getVoidUrl()
     {
-        return $this->getUrl('sales/*/void', array('invoice_id'=>$this->getInvoice()->getId()));
+        return $this->getUrl('sales/*/void', array('invoice_id' => $this->getInvoice()->getId()));
     }
 
     /**
@@ -235,7 +261,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCancelUrl()
     {
-        return $this->getUrl('sales/*/cancel', array('invoice_id'=>$this->getInvoice()->getId()));
+        return $this->getUrl('sales/*/cancel', array('invoice_id' => $this->getInvoice()->getId()));
     }
 
     /**
@@ -245,10 +271,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getEmailUrl()
     {
-        return $this->getUrl('sales/*/email', array(
-            'order_id'  => $this->getInvoice()->getOrder()->getId(),
-            'invoice_id'=> $this->getInvoice()->getId(),
-        ));
+        return $this->getUrl(
+            'sales/*/email',
+            array('order_id' => $this->getInvoice()->getOrder()->getId(), 'invoice_id' => $this->getInvoice()->getId())
+        );
     }
 
     /**
@@ -258,10 +284,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getCreditMemoUrl()
     {
-        return $this->getUrl('sales/order_creditmemo/start', array(
-            'order_id'  => $this->getInvoice()->getOrder()->getId(),
-            'invoice_id'=> $this->getInvoice()->getId(),
-        ));
+        return $this->getUrl(
+            'sales/order_creditmemo/start',
+            array('order_id' => $this->getInvoice()->getOrder()->getId(), 'invoice_id' => $this->getInvoice()->getId())
+        );
     }
 
     /**
@@ -271,9 +297,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getPrintUrl()
     {
-        return $this->getUrl('sales/*/print', array(
-            'invoice_id' => $this->getInvoice()->getId()
-        ));
+        return $this->getUrl('sales/*/print', array('invoice_id' => $this->getInvoice()->getId()));
     }
 
     /**
@@ -286,7 +310,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($flag) {
             if ($this->getInvoice()->getBackUrl()) {
-                return $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getInvoice()->getBackUrl() . '\')');
+                return $this->_updateButton(
+                    'back',
+                    'onclick',
+                    'setLocation(\'' . $this->getInvoice()->getBackUrl() . '\')'
+                );
             }
             return $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('sales/invoice/') . '\')');
         }

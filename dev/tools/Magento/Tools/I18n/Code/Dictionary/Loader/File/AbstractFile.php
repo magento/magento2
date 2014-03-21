@@ -74,12 +74,16 @@ abstract class AbstractFile implements FileInterface
         while ($data = $this->_readFile()) {
             $this->_position++;
             $data = array_pad($data, 4, null);
-            $dictionary->addPhrase($this->_createPhrase(array(
-                'phrase' => $data[0],
-                'translation' => $data[1],
-                'context_type' => $data[2],
-                'context_value' => $data[3],
-            )));
+            $dictionary->addPhrase(
+                $this->_createPhrase(
+                    array(
+                        'phrase' => $data[0],
+                        'translation' => $data[1],
+                        'context_type' => $data[2],
+                        'context_value' => $data[3]
+                    )
+                )
+            );
         }
         $this->_closeFile();
 

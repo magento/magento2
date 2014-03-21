@@ -58,12 +58,13 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
         $this->coreRegistry = $objectManager->get('Magento\Registry');
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
-        $this->block = $objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Orders',
-                '',
-                ['coreRegistry' => $this->coreRegistry]
-            );
+        $this->block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Orders',
+            '',
+            array('coreRegistry' => $this->coreRegistry)
+        );
         $this->block->getPreparedCollection();
     }
 
@@ -81,7 +82,7 @@ class OrdersTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRowUrl()
     {
-        $row = new \Magento\Object(['id' => 1]);
+        $row = new \Magento\Object(array('id' => 1));
         $this->assertContains('sales/order/view/order_id/1', $this->block->getRowUrl($row));
     }
 

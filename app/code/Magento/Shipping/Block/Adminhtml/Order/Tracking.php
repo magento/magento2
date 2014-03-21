@@ -65,11 +65,11 @@ class Tracking extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'   => __('Add Tracking Number'),
-            'class'   => '',
-            'onclick' => 'trackingControl.add()'
-        ));
+        $this->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('label' => __('Add Tracking Number'), 'class' => '', 'onclick' => 'trackingControl.add()')
+        );
     }
 
     /**
@@ -105,8 +105,6 @@ class Tracking extends \Magento\Backend\Block\Template
      */
     protected function _getCarriersInstances()
     {
-        return $this->_shippingConfig->getAllCarriers(
-            $this->getShipment()->getStoreId()
-        );
+        return $this->_shippingConfig->getAllCarriers($this->getShipment()->getStoreId());
     }
 }

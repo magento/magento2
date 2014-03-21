@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 /**
@@ -101,8 +100,11 @@ abstract class AbstractFactory implements FactoryInterface
      */
     public function createFilter($alias, array $arguments = array())
     {
-        $addToShared = !$arguments || isset($this->sharedInstances[$alias])
-            xor $this->isShared($this->invokableClasses[$alias]);
+        $addToShared = !$arguments || isset(
+            $this->sharedInstances[$alias]
+        ) xor $this->isShared(
+            $this->invokableClasses[$alias]
+        );
 
         if (!isset($this->sharedInstances[$alias])) {
             $filter = $this->objectManager->create($this->invokableClasses[$alias], $arguments);

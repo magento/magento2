@@ -27,5 +27,4 @@
 /** @var $installer \Magento\Core\Model\Resource\Setup */
 $installer = $this;
 
-$installer->getConnection()
-    ->dropColumn($installer->getTable('importexport_importdata'), 'entity_subtype');
+$installer->getConnection()->dropColumn($installer->getTable('importexport_importdata'), 'entity_subtype');

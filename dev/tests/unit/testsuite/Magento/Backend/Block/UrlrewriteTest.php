@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 class UrlrewriteTest extends \PHPUnit_Framework_TestCase
@@ -37,19 +36,28 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
     public function testGetCreateUrl(array $modes, $expectedUrl)
     {
         /** @var $selectorBlock \Magento\Backend\Block\Urlrewrite\Selector */
-        $selectorBlock = $modes
-            ? $this->getMock('Magento\Backend\Block\Urlrewrite\Selector', array('getModes'), array(), '', false)
-            : false;
+        $selectorBlock = $modes ? $this->getMock(
+            'Magento\Backend\Block\Urlrewrite\Selector',
+            array('getModes'),
+            array(),
+            '',
+            false
+        ) : false;
         if ($selectorBlock) {
             $selectorBlock->expects($this->once())->method('getModes')->with()->will($this->returnValue($modes));
         }
 
         $testedBlock = $this->getMock('Magento\Backend\Block\Urlrewrite', array('getUrl'), array(), '', false);
         $testedBlock->setSelectorBlock($selectorBlock);
-        $testedBlock->expects($this->once())
-            ->method('getUrl')
-            ->with('adminhtml/*/edit')
-            ->will($this->returnValue('http://localhost/admin/urlrewrite/edit/'));
+        $testedBlock->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            'adminhtml/*/edit'
+        )->will(
+            $this->returnValue('http://localhost/admin/urlrewrite/edit/')
+        );
 
         $this->assertEquals($expectedUrl, $testedBlock->getCreateUrl());
     }
@@ -62,30 +70,43 @@ class UrlrewriteTest extends \PHPUnit_Framework_TestCase
     public static function getCreateUrlData()
     {
         return array(
+            array(array(), 'http://localhost/admin/urlrewrite/edit/'),
             array(
-                array(),
-                'http://localhost/admin/urlrewrite/edit/',
+                array(
+                    'category' => 'For category',
+                    'product' => 'For product',
+                    'id' => 'Custom',
+                    'cms_page' => 'For CMS page'
+                ),
+                'http://localhost/admin/urlrewrite/edit/category'
             ),
             array(
-                array('category' => 'For category', 'product' => 'For product', 'id' => 'Custom',
-                    'cms_page' => 'For CMS page'),
-                'http://localhost/admin/urlrewrite/edit/category',
+                array(
+                    'product' => 'For product',
+                    'category' => 'For category',
+                    'id' => 'Custom',
+                    'cms_page' => 'For CMS page'
+                ),
+                'http://localhost/admin/urlrewrite/edit/product'
             ),
             array(
-                array('product' => 'For product', 'category' => 'For category', 'id' => 'Custom',
-                    'cms_page' => 'For CMS page'),
-                'http://localhost/admin/urlrewrite/edit/product',
+                array(
+                    'id' => 'Custom',
+                    'product' => 'For product',
+                    'category' => 'For category',
+                    'cms_page' => 'For CMS page'
+                ),
+                'http://localhost/admin/urlrewrite/edit/id'
             ),
             array(
-                array('id' => 'Custom', 'product' => 'For product', 'category' => 'For category',
-                    'cms_page' => 'For CMS page'),
-                'http://localhost/admin/urlrewrite/edit/id',
-            ),
-            array(
-                array('cms_page' => 'For CMS page', 'product' => 'For product', 'category' => 'For category',
-                    'id' => 'Custom'),
-                'http://localhost/admin/urlrewrite/edit/cms_page',
-            ),
+                array(
+                    'cms_page' => 'For CMS page',
+                    'product' => 'For product',
+                    'category' => 'For category',
+                    'id' => 'Custom'
+                ),
+                'http://localhost/admin/urlrewrite/edit/cms_page'
+            )
         );
     }
 }

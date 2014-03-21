@@ -40,12 +40,14 @@ abstract class AbstractEntity
      * Attribute collection name
      */
     const ATTRIBUTE_COLLECTION_NAME = 'Magento\Data\Collection';
+
     /**#@-*/
 
     /**#@+
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = '';
+
     /**#@-*/
 
     /**
@@ -189,13 +191,20 @@ abstract class AbstractEntity
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_storeManager   = $storeManager;
-        $this->_attributeCollection = isset($data['attribute_collection']) ? $data['attribute_collection']
-            : $collectionFactory->create(static::ATTRIBUTE_COLLECTION_NAME);
-        $this->_pageSize = isset($data['page_size']) ? $data['page_size']
-            : (static::XML_PATH_PAGE_SIZE ? (int) $this->_coreStoreConfig->getConfig(static::XML_PATH_PAGE_SIZE) : 0);
-        $this->_byPagesIterator = isset($data['collection_by_pages_iterator']) ? $data['collection_by_pages_iterator']
-            : $resourceColFactory->create();
+        $this->_storeManager = $storeManager;
+        $this->_attributeCollection = isset(
+            $data['attribute_collection']
+        ) ? $data['attribute_collection'] : $collectionFactory->create(
+            static::ATTRIBUTE_COLLECTION_NAME
+        );
+        $this->_pageSize = isset(
+            $data['page_size']
+        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(
+            static::XML_PATH_PAGE_SIZE
+        ) : 0);
+        $this->_byPagesIterator = isset(
+            $data['collection_by_pages_iterator']
+        ) ? $data['collection_by_pages_iterator'] : $resourceColFactory->create();
     }
 
     /**
@@ -209,7 +218,8 @@ abstract class AbstractEntity
         foreach ($this->_storeManager->getStores(true) as $store) {
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
-        ksort($this->_storeIdToCode); // to ensure that 'admin' store (ID is zero) goes first
+        ksort($this->_storeIdToCode);
+        // to ensure that 'admin' store (ID is zero) goes first
 
         return $this;
     }
@@ -239,7 +249,8 @@ abstract class AbstractEntity
     public function addRowError($errorCode, $errorRowNum)
     {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = $errorRowNum + 1; // one added for human readability
+        $this->_errors[$errorCode][] = $errorRowNum + 1;
+        // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
         $this->_errorsCount++;
 
@@ -345,9 +356,14 @@ abstract class AbstractEntity
     {
         $messages = array();
         foreach ($this->_errors as $errorCode => $errorRows) {
-            $message = isset($this->_messageTemplates[$errorCode])
-                ? __($this->_messageTemplates[$errorCode])
-                : __("Please correct the value for '%1' column", $errorCode);
+            $message = isset(
+                $this->_messageTemplates[$errorCode]
+            ) ? __(
+                $this->_messageTemplates[$errorCode]
+            ) : __(
+                "Please correct the value for '%1' column",
+                $errorCode
+            );
             $message = (string)$message;
             $messages[$message] = $errorRows;
         }

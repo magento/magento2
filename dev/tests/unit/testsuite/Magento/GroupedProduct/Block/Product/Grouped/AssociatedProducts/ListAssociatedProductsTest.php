@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts;
 
 class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
@@ -69,12 +68,20 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $this->typeInstanceMock = $this->getMock(
-            'Magento\GroupedProduct\Model\Product\Type\Grouped', array(), array(), '', false
+            'Magento\GroupedProduct\Model\Product\Type\Grouped',
+            array(),
+            array(),
+            '',
+            false
         );
 
-        $this->contextMock->expects($this->any())
-            ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManagerMock));
+        $this->contextMock->expects(
+            $this->any()
+        )->method(
+            'getStoreManager'
+        )->will(
+            $this->returnValue($this->storeManagerMock)
+        );
 
         $this->block = new ListAssociatedProducts($this->contextMock, $this->registryMock);
     }
@@ -85,28 +92,46 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAssociatedProducts()
     {
-        $this->storeMock->expects($this->any())
-            ->method('formatPrice')
-            ->with('1.00', false)
-            ->will($this->returnValue('1'));
+        $this->storeMock->expects(
+            $this->any()
+        )->method(
+            'formatPrice'
+        )->with(
+            '1.00',
+            false
+        )->will(
+            $this->returnValue('1')
+        );
 
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeInstance')
-            ->will($this->returnValue($this->typeInstanceMock));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeInstance'
+        )->will(
+            $this->returnValue($this->typeInstanceMock)
+        );
 
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue($this->productMock));
+        $this->registryMock->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue($this->productMock)
+        );
 
-        $this->typeInstanceMock->expects($this->once())
-            ->method('getAssociatedProducts')
-            ->with($this->productMock)
-            ->will($this->returnValue(array($this->generateAssociatedProduct(1), $this->generateAssociatedProduct(2))));
+        $this->typeInstanceMock->expects(
+            $this->once()
+        )->method(
+            'getAssociatedProducts'
+        )->with(
+            $this->productMock
+        )->will(
+            $this->returnValue(array($this->generateAssociatedProduct(1), $this->generateAssociatedProduct(2)))
+        );
 
         $expectedResult = array(
             '0' => array(
@@ -138,8 +163,12 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     protected function generateAssociatedProduct($productKey = 0)
     {
-        $associatedProduct = $this->getMock('Magento\Object',
-            array('getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice'), array(), '', false
+        $associatedProduct = $this->getMock(
+            'Magento\Object',
+            array('getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice'),
+            array(),
+            '',
+            false
         );
 
         $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue('id' . $productKey));

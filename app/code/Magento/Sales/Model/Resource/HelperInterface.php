@@ -43,7 +43,10 @@ interface HelperInterface
      * @param string $aggregationTable
      * @return $this
      */
-    public function getBestsellersReportUpdateRatingPos($aggregation, $aggregationAliases,
-        $mainTable, $aggregationTable
+    public function getBestsellersReportUpdateRatingPos(
+        $aggregation,
+        $aggregationAliases,
+        $mainTable,
+        $aggregationTable
     );
 }

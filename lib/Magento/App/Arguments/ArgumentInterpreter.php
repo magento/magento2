@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App\Arguments;
 
 use Magento\Data\Argument\InterpreterInterface;
@@ -64,7 +63,7 @@ class ArgumentInterpreter implements InterpreterInterface
         $argumentName = $this->constInterpreter->evaluate($data);
         $result = $this->arguments->get($argumentName);
         if ($result === null) {
-            throw new MissingOptionalValueException("Value of application argument '$argumentName' is not defined.");
+            throw new MissingOptionalValueException("Value of application argument '{$argumentName}' is not defined.");
         }
         return $result;
     }

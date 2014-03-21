@@ -41,7 +41,7 @@ class Survey
     /**
      * @var string
      */
-    protected $_flagCode  = 'admin_notification_survey';
+    protected $_flagCode = 'admin_notification_survey';
 
     /**
      * @var \Magento\Core\Model\Flag
@@ -62,10 +62,8 @@ class Survey
      * @param \Magento\Core\Model\FlagFactory $flagFactory
      * @param \Magento\App\RequestInterface $request
      */
-    public function __construct(
-        \Magento\Core\Model\FlagFactory $flagFactory,
-        \Magento\App\RequestInterface $request
-    ) {
+    public function __construct(\Magento\Core\Model\FlagFactory $flagFactory, \Magento\App\RequestInterface $request)
+    {
         $this->_request = $request;
         $this->_flagFactory = $flagFactory;
     }
@@ -78,8 +76,7 @@ class Survey
     public function isSurveyUrlValid()
     {
         $curl = new \Magento\HTTP\Adapter\Curl();
-        $curl->setConfig(array('timeout'   => 5))
-            ->write(\Zend_Http_Client::GET, $this->getSurveyUrl(), '1.0');
+        $curl->setConfig(array('timeout' => 5))->write(\Zend_Http_Client::GET, $this->getSurveyUrl(), '1.0');
         $response = $curl->read();
         $curl->close();
 
@@ -109,8 +106,8 @@ class Survey
     {
         if ($this->_flagModel === null) {
             $this->_flagModel = $this->_flagFactory->create(
-                array('data' => array('flag_code' => $this->_flagCode)))
-                ->loadSelf();
+                array('data' => array('flag_code' => $this->_flagCode))
+            )->loadSelf();
         }
         return $this->_flagModel;
     }

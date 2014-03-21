@@ -22,8 +22,9 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\Di\Compiler;
-use \Zend\Code\Scanner\FileScanner,
-    Magento\Tools\Di\Compiler\Log\Log;
+
+use Zend\Code\Scanner\FileScanner;
+use Magento\Tools\Di\Compiler\Log\Log;
 
 class Directory
 {

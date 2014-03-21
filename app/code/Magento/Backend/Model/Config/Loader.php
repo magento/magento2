@@ -58,17 +58,15 @@ class Loader
     public function getConfigByPath($path, $scope, $scopeId, $full = true)
     {
         $configDataCollection = $this->_configValueFactory->create();
-        $configDataCollection = $configDataCollection
-            ->getCollection()
-            ->addScopeFilter($scope, $scopeId, $path);
+        $configDataCollection = $configDataCollection->getCollection()->addScopeFilter($scope, $scopeId, $path);
 
         $config = array();
         $configDataCollection->load();
         foreach ($configDataCollection->getItems() as $data) {
             if ($full) {
                 $config[$data->getPath()] = array(
-                    'path'      => $data->getPath(),
-                    'value'     => $data->getValue(),
+                    'path' => $data->getPath(),
+                    'value' => $data->getValue(),
                     'config_id' => $data->getConfigId()
                 );
             } else {

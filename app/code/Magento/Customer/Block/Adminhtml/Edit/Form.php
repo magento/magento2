@@ -67,29 +67,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create(
-            [
-                'data' => [
+            array(
+                'data' => array(
                     'id' => 'edit_form',
                     'action' => $this->getUrl('customer/*/save'),
                     'method' => 'post',
-                    'enctype' => 'multipart/form-data',
-                ]
-            ]
+                    'enctype' => 'multipart/form-data'
+                )
+            )
         );
 
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
 
         if ($customerId) {
-            $form->addField(
-                'id',
-                'hidden',
-                [
-                    'name' => 'customer_id',
-                ]
-            );
+            $form->addField('id', 'hidden', array('name' => 'customer_id'));
             $customer = $this->_customerAccountService->getCustomer($customerId);
-            $form->setValues(\Magento\Service\DataObjectConverter::toFlatArray($customer))
-                ->addValues(['customer_id' => $customerId]);
+            $form->setValues(
+                \Magento\Service\DataObjectConverter::toFlatArray($customer)
+            )->addValues(
+                array('customer_id' => $customerId)
+            );
         }
 
         $form->setUseContainer(true);

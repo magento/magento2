@@ -34,5 +34,4 @@ namespace Magento\Sales\Block\Adminhtml\Order;
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid
 {
-
 }

@@ -59,7 +59,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $this->_mockAdapter = $this->getMock(
             'Magento\DB\Adapter\Pdo\Mysql',
             array('beginTransaction', 'getTransactionLevel'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
 
         $this->_mockAdapter->expects($this->any())
@@ -83,8 +85,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
 
         $resourceProperty = new \ReflectionProperty(
-                get_class($this->_adapter),
-                '_profiler'
+            get_class($this->_adapter),
+            '_profiler'
         );
         $resourceProperty->setAccessible(true);
         $resourceProperty->setValue($this->_adapter, $profiler);
@@ -432,15 +434,17 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $this->_adapter->expects($this->any())
             ->method('quote')
             ->will(
-                $this->returnCallback(function ($values) {
-                    if (!is_array($values)) {
-                        $values = [$values];
+                $this->returnCallback(
+                    function ($values) {
+                        if (!is_array($values)) {
+                            $values = [$values];
+                        }
+                        foreach ($values as &$value) {
+                            $value = "'" . $value . "'";
+                        }
+                        return implode(',', $values);
                     }
-                    foreach ($values as &$value) {
-                        $value = "'" . $value . "'";
-                    }
-                    return implode(',', $values);
-                })
+                )
             );
 
         $expectedSelect = $this->_adapter->select()
@@ -479,5 +483,4 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             $result[3]
         );
     }
-
 }

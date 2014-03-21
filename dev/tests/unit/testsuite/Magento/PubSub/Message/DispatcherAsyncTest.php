@@ -42,30 +42,34 @@ class DispatcherAsyncTest extends \PHPUnit_Framework_TestCase
     /** \PHPUnit_Framework_MockObject_MockObject */
     private $_queueWriter;
 
-
     protected function setUp()
     {
-        $this->_eventFactoryMock = $this->getMockBuilder('Magento\PubSub\Event\FactoryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventFactoryMock = $this->getMockBuilder(
+            'Magento\PubSub\Event\FactoryInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_queueWriter = $this->getMockBuilder('Magento\PubSub\Event\QueueWriterInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_queueWriter->expects($this->once())
-            ->method('offer');
+        $this->_queueWriter = $this->getMockBuilder(
+            'Magento\PubSub\Event\QueueWriterInterface'
+        )->disableOriginalConstructor()->getMock();
+        $this->_queueWriter->expects($this->once())->method('offer');
 
         // When the create method is called, program routes to the logEventData callback to log what arguments it
         // received.
-        $this->_eventFactoryMock->expects($this->once())
-            ->method('create')
-            ->with()
-            ->will($this->returnCallback(array($this, 'logEventData')));
-        $this->_eventMock = $this->getMockBuilder('Magento\PubSub\EventInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with()->will(
+            $this->returnCallback(array($this, 'logEventData'))
+        );
+        $this->_eventMock = $this->getMockBuilder(
+            'Magento\PubSub\EventInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_dispatcher = new \Magento\PubSub\Message\DispatcherAsync($this->_eventFactoryMock, $this->_queueWriter);
+        $this->_dispatcher = new \Magento\PubSub\Message\DispatcherAsync(
+            $this->_eventFactoryMock,
+            $this->_queueWriter
+        );
     }
 
     public function testDispatch()

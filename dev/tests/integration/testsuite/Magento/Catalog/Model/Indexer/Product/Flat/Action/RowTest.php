@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 /**
@@ -55,12 +54,15 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
 
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
-        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Indexer\Product\Flat\Processor');
+        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
+        $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Indexer\Product\Flat\Processor'
+        );
     }
 
     /**
@@ -70,16 +72,18 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductUpdate()
     {
-        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\CategoryFactory');
-        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Block\Product\ListProduct');
+        $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\CategoryFactory'
+        );
+        $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Block\Product\ListProduct'
+        );
 
         $this->_processor->getIndexer()->setScheduled(false);
         $this->assertFalse(
             $this->_processor->getIndexer()->isScheduled(),
             'Indexer is in scheduled mode when turned to update on save mode'
-         );
+        );
         $this->_processor->reindexAll();
 
         $this->_product->load(1);
@@ -92,7 +96,8 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
         $productCollection = $layer->getProductCollection();
         $this->assertTrue(
-            $productCollection->isEnabledFlat(), 'Product collection is not using flat resource when flat is on'
+            $productCollection->isEnabledFlat(),
+            'Product collection is not using flat resource when flat is on'
         );
 
         $this->assertEquals(2, $productCollection->count(), 'Product collection items count must be exactly 2');
@@ -101,7 +106,9 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
             /** @var $product \Magento\Catalog\Model\Product */
             if ($product->getId() == 1) {
                 $this->assertEquals(
-                    'Updated Product', $product->getName(), 'Product name from flat does not match with updated name'
+                    'Updated Product',
+                    $product->getName(),
+                    'Product name from flat does not match with updated name'
                 );
             }
         }

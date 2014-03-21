@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\Factory;
 
 use Magento\ObjectManager\Config\Config;
@@ -53,14 +52,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $interpreter;
+    private $interpreterMock;
 
     protected function setUp()
     {
-        $this->config = new Config;
+        $this->config = new Config();
         $this->objectFactory = new ObjectFactory($this->config);
-        $this->interpreter = $this->getMockForAbstractClass('\Magento\Data\Argument\InterpreterInterface');
-        $this->factory = new Factory($this->config, $this->interpreter, $this->objectFactory);
+        $this->interpreterMock = $this->getMockForAbstractClass('\Magento\Data\Argument\InterpreterInterface');
+        $this->factory = new Factory($this->config, $this->interpreterMock, $this->objectFactory);
         $this->objectManager = new ObjectManager($this->factory, $this->config);
         $this->objectFactory->setObjectManager($this->objectManager);
     }
@@ -68,6 +67,35 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateNoArgs()
     {
         $this->assertInstanceOf('StdClass', $this->factory->create('StdClass'));
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument of Magento\ObjectMan
+     */
+    public function testResolveArgumentsException()
+    {
+        $configMock = $this->getMock('\Magento\ObjectManager\Config\Config', array(), array(), '', false);
+        $configMock->expects($this->once())->method('getArguments')
+            ->will($this->returnValue(array(
+                'firstParam' => 1
+            )));
+
+        $definitionsMock = $this->getMock('\Magento\ObjectManager\Definition', array(), array(), '', false);
+        $definitionsMock->expects($this->once())->method('getParameters')
+            ->will($this->returnValue(array(array(
+                'firstParam', 'string', true, 'default_val'
+            ))));
+
+        $this->factory = new Factory(
+            $configMock,
+            $this->interpreterMock,
+            $this->objectFactory,
+            $definitionsMock
+        );
+        $this->objectManager = new ObjectManager($this->factory, $this->config);
+        $this->objectFactory->setObjectManager($this->objectManager);
+        $this->factory->create('Magento\ObjectManager\Factory\Fixture\OneScalar', array('foo' => 'bar'));
     }
 
     public function testCreateOneArg()
@@ -82,11 +110,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         // let's imitate that One is injectable by providing DI configuration for it
         $this->config->extend(
-            array('Magento\ObjectManager\Factory\Fixture\OneScalar' =>
-                array('arguments' => array('foo' => array('value' => 'bar')))
+            array(
+                'Magento\ObjectManager\Factory\Fixture\OneScalar' => array(
+                    'arguments' => array('foo' => array('value' => 'bar'))
+                )
             )
         );
-        $this->interpreter
+        $this->interpreterMock
             ->expects($this->once())
             ->method('evaluate')
             ->with(array('value' => 'bar'))
@@ -123,7 +153,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             array("{$prefix}CircularOne", "{$prefix}CircularThree"),
             array("{$prefix}CircularTwo", "{$prefix}CircularOne"),
-            array("{$prefix}CircularThree", "{$prefix}CircularTwo"),
+            array("{$prefix}CircularThree", "{$prefix}CircularTwo")
         );
     }
 
@@ -138,11 +168,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             array('seven', 'int', false, null), array('eight', 'int', false, null), array('nine', 'int', false, null),
             array('ten', 'int', false, null),
         )));
-        $factory = new Factory($this->config, $this->interpreter, $this->objectFactory, $definitions);
+        $factory = new Factory($this->config, $this->interpreterMock, $this->objectFactory, $definitions);
         $result = $factory->create($type, array(
             'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5,
             'six' => 6, 'seven' => 7, 'eight' => 8, 'nine' => 9, 'ten' => 10,
         ));
         $this->assertSame(10, $result->getArg(9));
     }
-} 
+}

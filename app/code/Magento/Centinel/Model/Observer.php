@@ -52,10 +52,8 @@ class Observer extends \Magento\Object
      * @param \Magento\Centinel\Helper\Data $centinelData
      * @param array $data
      */
-    public function __construct(
-        \Magento\Centinel\Helper\Data $centinelData,
-        array $data = array()
-    ) {
+    public function __construct(\Magento\Centinel\Helper\Data $centinelData, array $data = array())
+    {
         $this->_centinelData = $centinelData;
         parent::__construct($data);
     }
@@ -121,7 +119,7 @@ class Observer extends \Magento\Object
 
         if ($method && $method->getIsCentinelValidationEnabled()) {
             $paymentFormBlock->setChild(
-               'payment.method.' . $method->getCode() . 'centinel.logo',
+                'payment.method.' . $method->getCode() . 'centinel.logo',
                 $this->_centinelData->getMethodFormBlock($method)
             );
         }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase
@@ -43,22 +42,21 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_structureMock = $this->getMockBuilder('Magento\Data\Structure')
-            ->setMethods(array('createElement'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_blockFactoryMock  = $this->getMockBuilder('Magento\View\Element\BlockFactory')
-            ->setMethods(array('createBlock'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_structureMock = $this->getMockBuilder(
+            'Magento\Data\Structure'
+        )->setMethods(
+            array('createElement')
+        )->disableOriginalConstructor()->getMock();
+        $this->_blockFactoryMock = $this->getMockBuilder(
+            'Magento\View\Element\BlockFactory'
+        )->setMethods(
+            array('createBlock')
+        )->disableOriginalConstructor()->getMock();
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Core\Model\Layout',
-            array(
-                'structure' => $this->_structureMock,
-                'blockFactory' => $this->_blockFactoryMock
-            )
+            array('structure' => $this->_structureMock, 'blockFactory' => $this->_blockFactoryMock)
         );
     }
 
@@ -70,18 +68,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->_model->createBlock('type', 'blockname', array());
     }
 
-
     public function testCreateBlockSuccess()
     {
-        $blockMock = $this->getMockBuilder('Magento\View\Element\AbstractBlock')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->_blockFactoryMock->expects($this->once())
-            ->method('createBlock')
-            ->will($this->returnValue($blockMock));
+        $blockMock = $this->getMockBuilder(
+            'Magento\View\Element\AbstractBlock'
+        )->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->_blockFactoryMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
         $this->_model->createBlock('type', 'blockname', array());
         $this->assertInstanceOf('Magento\View\Element\AbstractBlock', $this->_model->getBlock('blockname'));
     }
 }
- 

@@ -126,7 +126,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function getFormattedOptionValue($option)
     {
-        $params = ['max_length' => 55];
+        $params = array('max_length' => 55);
         return $this->_productConfig->getFormattedOptionValue($option, $params);
     }
 
@@ -153,9 +153,9 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function _renderItemOptions(Product $product, array $options)
     {
-        $html = '<div class="bundle-product-options">'
-            . '<strong>' . $this->escapeHtml($product->getName()) . '</strong>'
-            . '<dl>';
+        $html = '<div class="bundle-product-options">' . '<strong>' . $this->escapeHtml(
+            $product->getName()
+        ) . '</strong>' . '<dl>';
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
             $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';

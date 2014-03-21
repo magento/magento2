@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend;
 
 /**
@@ -38,8 +37,9 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     public function testValidation($path, $value)
     {
         /** @var $model \Magento\Backend\Model\Config\Backend\Baseurl */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config\Backend\Baseurl');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\Config\Backend\Baseurl'
+        );
         $model->setPath($path)->setValue($value)->save();
         $this->assertNotEmpty((int)$model->getId());
     }
@@ -109,7 +109,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $unsecureSuffix),
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, ''),
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecurePlaceholder),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecureSuffix),
+            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $unsecureSuffix)
         );
     }
 
@@ -123,8 +123,9 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     public function testValidationException($path, $value)
     {
         /** @var $model \Magento\Backend\Model\Config\Backend\Baseurl */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config\Backend\Baseurl');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\Config\Backend\Baseurl'
+        );
         $model->setPath($path)->setValue($value)->save();
     }
 
@@ -175,7 +176,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL, $secureWrongSuffix),
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL, $secureWrongSuffix),
             array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL, $secureWrongSuffix),
-            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureWrongSuffix),
+            array(\Magento\Core\Model\Store::XML_PATH_SECURE_BASE_LIB_URL, $secureWrongSuffix)
         );
     }
 }

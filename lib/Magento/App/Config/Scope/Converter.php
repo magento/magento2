@@ -40,7 +40,6 @@ class Converter implements \Magento\Config\ConverterInterface
             $this->_setArrayValue($output, $key, $value);
         }
         return $output;
-
     }
 
     /**
@@ -54,12 +53,12 @@ class Converter implements \Magento\Config\ConverterInterface
     protected function _setArrayValue(array &$container, $path, $value)
     {
         $segments = explode('/', $path);
-        $currentPointer = &$container;
+        $currentPointer =& $container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {
                 $currentPointer[$segment] = array();
             }
-            $currentPointer = &$currentPointer[$segment];
+            $currentPointer =& $currentPointer[$segment];
         }
         $currentPointer = $value;
     }

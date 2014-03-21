@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Cache\Import;
 
 use Magento\Exception;
@@ -40,7 +39,7 @@ class Cache implements \Magento\Css\PreProcessor\Cache\CacheInterface
     /**
      * @var array
      */
-    protected $importEntities = [];
+    protected $importEntities = array();
 
     /**
      * @var null|\Magento\View\Publisher\FileInterface
@@ -103,7 +102,7 @@ class Cache implements \Magento\Css\PreProcessor\Cache\CacheInterface
     public function clear()
     {
         $this->cachedFile = null;
-        $this->importEntities = [];
+        $this->importEntities = array();
         $this->storage->delete($this->uniqueFileKey);
         return $this;
     }
@@ -171,7 +170,7 @@ class Cache implements \Magento\Css\PreProcessor\Cache\CacheInterface
     {
         $importEntities = unserialize($this->storage->load($this->uniqueFileKey));
         $this->cachedFile = isset($importEntities['cached_file']) ? $importEntities['cached_file'] : null;
-        $this->importEntities = isset($importEntities['imports']) ? $importEntities['imports'] : [];
+        $this->importEntities = isset($importEntities['imports']) ? $importEntities['imports'] : array();
         if (!$this->isValid()) {
             $this->clear();
         }
@@ -207,6 +206,6 @@ class Cache implements \Magento\Css\PreProcessor\Cache\CacheInterface
      */
     protected function prepareSaveData($cachedFile)
     {
-        return serialize(['cached_file' => clone $cachedFile, 'imports' => $this->importEntities]);
+        return serialize(array('cached_file' => clone $cachedFile, 'imports' => $this->importEntities));
     }
 }

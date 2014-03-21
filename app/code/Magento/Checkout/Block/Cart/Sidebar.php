@@ -26,9 +26,9 @@ namespace Magento\Checkout\Block\Cart;
 /**
  * Wishlist sidebar block
  */
-class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Magento\View\Block\IdentityInterface
+class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart implements \Magento\View\Block\IdentityInterface
 {
-    const XML_PATH_CHECKOUT_SIDEBAR_COUNT   = 'checkout/sidebar/count';
+    const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
 
     /**
      * Tax data
@@ -138,8 +138,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
             /* @var $item \Magento\Sales\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
                 $productId = $item->getProduct()->getId();
-                $products  = $this->_catalogUrl
-                    ->getRewriteByProductStore(array($productId => $item->getStoreId()));
+                $products = $this->_catalogUrl->getRewriteByProductStore(array($productId => $item->getStoreId()));
                 if (!isset($products[$productId])) {
                     continue;
                 }
@@ -175,12 +174,12 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
                 } else {
                     $subtotal = $totals['subtotal']->getValueInclTax();
                 }
-            } elseif($this->_taxConfig->displayCartSubtotalInclTax()) {
+            } elseif ($this->_taxConfig->displayCartSubtotalInclTax()) {
                 $subtotal = $totals['subtotal']->getValueInclTax();
             } else {
                 $subtotal = $totals['subtotal']->getValue();
                 if (!$skipTax && isset($totals['tax'])) {
-                    $subtotal+= $totals['tax']->getValue();
+                    $subtotal += $totals['tax']->getValue();
                 }
             }
         }
@@ -208,11 +207,12 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
      * @param bool $exclShippingTax
      * @return float
      */
-    private function _addTax($price, $exclShippingTax=true) {
+    private function _addTax($price, $exclShippingTax = true)
+    {
         $totals = $this->getTotals();
         if (isset($totals['tax'])) {
             if ($exclShippingTax) {
-                $price += $totals['tax']->getValue()-$this->_getShippingTaxAmount();
+                $price += $totals['tax']->getValue() - $this->_getShippingTaxAmount();
             } else {
                 $price += $totals['tax']->getValue();
             }
@@ -253,7 +253,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
     public function getIncExcTax($flag)
     {
         $text = $this->_taxData->getIncExcText($flag);
-        return $text ? ' ('.$text.')' : '';
+        return $text ? ' (' . $text . ')' : '';
     }
 
     /**
@@ -283,7 +283,7 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
      */
     public function getIsNeedToDisplaySideBar()
     {
-        return (bool) $this->_storeManager->getStore()->getConfig('checkout/sidebar/display');
+        return (bool)$this->_storeManager->getStore()->getConfig('checkout/sidebar/display');
     }
 
     /**
@@ -334,14 +334,19 @@ class Sidebar extends \Magento\Checkout\Block\Cart\AbstractCart  implements \Mag
     protected function _serializeRenders()
     {
         $result = array();
-        foreach ($this->getLayout()->getChildBlocks($this->_getRendererList()->getNameInLayout()) as $alias => $block) {
+        foreach ($this->getLayout()->getChildBlocks(
+            $this->_getRendererList()->getNameInLayout()
+        ) as $alias => $block) {
             /** @var $block \Magento\View\Element\Template */
-            $result[] = implode('|', array(
-                // skip $this->getNameInLayout() and '.'
-                $alias,
-                get_class($block),
-                $block->getTemplate()
-            ));
+            $result[] = implode(
+                '|',
+                array(
+                    // skip $this->getNameInLayout() and '.'
+                    $alias,
+                    get_class($block),
+                    $block->getTemplate()
+                )
+            );
         }
         return implode('|', $result);
     }

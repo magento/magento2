@@ -95,8 +95,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $html = '';
         $comments = $this->getChildBlock('shipment_comments');
         if ($comments) {
-            $comments->setEntity($shipment)
-                ->setTitle(__('About Your Shipment'));
+            $comments->setEntity($shipment)->setTitle(__('About Your Shipment'));
             $html = $comments->toHtml();
         }
         return $html;

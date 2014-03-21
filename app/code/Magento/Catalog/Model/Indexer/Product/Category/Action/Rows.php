@@ -60,7 +60,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     {
         $this->getWriteAdapter()->delete(
             $this->getMainTable(),
-            ['product_id IN (?)' => $this->limitationByProducts]
+            array('product_id IN (?)' => $this->limitationByProducts)
         );
     }
 

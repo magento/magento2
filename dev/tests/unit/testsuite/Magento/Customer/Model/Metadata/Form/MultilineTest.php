@@ -53,10 +53,7 @@ class MultilineTest extends TextTest
      */
     public function testValidateValueRequired($value, $expected)
     {
-        $this->attributeMetadataMock
-            ->expects($this->any())
-            ->method('getMultilineCount')
-            ->will($this->returnValue(5));
+        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(5));
 
         parent::testValidateValueRequired($value, $expected);
     }
@@ -65,11 +62,11 @@ class MultilineTest extends TextTest
     {
         return array_merge(
             parent::validateValueRequiredDataProvider(),
-            [
-                'lines'         => [['one', 'two'], true],
-                'mixed lines' => [['one', '', ''], true],
-                'empty lines' => [['', '', ''], true],
-            ]
+            array(
+                'lines' => array(array('one', 'two'), true),
+                'mixed lines' => array(array('one', '', ''), true),
+                'empty lines' => array(array('', '', ''), true)
+            )
         );
     }
 
@@ -80,10 +77,7 @@ class MultilineTest extends TextTest
      */
     public function testValidateValueLength($value, $expected)
     {
-        $this->attributeMetadataMock
-            ->expects($this->any())
-            ->method('getMultilineCount')
-            ->will($this->returnValue(5));
+        $this->attributeMetadataMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(5));
 
         parent::testValidateValueLength($value, $expected);
     }
@@ -92,11 +86,20 @@ class MultilineTest extends TextTest
     {
         return array_merge(
             parent::validateValueLengthDataProvider(),
-            [
-                'long lines' => [['0123456789', '0123456789'], '"" length must be equal or less than 8 characters.'],
-                'long and short' => [['0123456789', '01'], '"" length must be equal or less than 8 characters.'],
-                'short and long' => [['01', '0123456789'], '"" length must be equal or greater than 4 characters.'],
-            ]
+            array(
+                'long lines' => array(
+                    array('0123456789', '0123456789'),
+                    '"" length must be equal or less than 8 characters.'
+                ),
+                'long and short' => array(
+                    array('0123456789', '01'),
+                    '"" length must be equal or less than 8 characters.'
+                ),
+                'short and long' => array(
+                    array('01', '0123456789'),
+                    '"" length must be equal or greater than 4 characters.'
+                )
+            )
         );
     }
 }

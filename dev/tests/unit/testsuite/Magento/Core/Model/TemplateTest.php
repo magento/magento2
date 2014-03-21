@@ -48,10 +48,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'Magento\Core\Model\Template',
                 array(
                     'design' => $this->getMock('Magento\View\DesignInterface'),
-                    'data' => array(
-                        'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                        'store' => 1
-                    )
+                    'data' => array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 1)
                 )
             )
         );
@@ -69,20 +66,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDesignConfigWithValidInputParametersReturnsSuccess()
     {
-        $config = array(
-            'area' => 'some_area',
-            'store' => 1
-        );
+        $config = array('area' => 'some_area', 'store' => 1);
         $this->_model->setDesignConfig($config);
         $this->assertEquals($config, $this->_model->getDesignConfig()->getData());
     }
 
     public function invalidInputParametersDataProvider()
     {
-        return array(
-            array(array()),
-            array(array('area' => 'some_area')),
-            array(array('store' => 'any_store'))
-        );
+        return array(array(array()), array(array('area' => 'some_area')), array(array('store' => 'any_store')));
     }
 }

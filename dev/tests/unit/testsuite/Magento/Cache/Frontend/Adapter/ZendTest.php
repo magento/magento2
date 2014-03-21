@@ -37,8 +37,15 @@ class ZendTest extends \PHPUnit_Framework_TestCase
         $frontendMock = $this->getMock('Zend_Cache_Core');
         $object = new \Magento\Cache\Frontend\Adapter\Zend($frontendMock);
         $helper = new \Magento\TestFramework\Helper\ProxyTesting();
-        $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult, $method,
-            $expectedParams);
+        $result = $helper->invokeWithExpectations(
+            $object,
+            $frontendMock,
+            $method,
+            $params,
+            $expectedResult,
+            $method,
+            $expectedParams
+        );
         $this->assertSame($expectedResult, $result);
     }
 
@@ -54,33 +61,33 @@ class ZendTest extends \PHPUnit_Framework_TestCase
                 'save',
                 array('record_value', 'record_id', array('tag1', 'tag2'), 555),
                 array('record_value', 'RECORD_ID', array('TAG1', 'TAG2'), 555),
-                true,
+                true
             ),
             'remove' => array('remove', array('record_id'), array('RECORD_ID'), true),
             'clean mode "all"' => array(
                 'clean',
                 array(\Zend_Cache::CLEANING_MODE_ALL, array()),
                 array(\Zend_Cache::CLEANING_MODE_ALL, array()),
-                true,
+                true
             ),
             'clean mode "matching tag"' => array(
                 'clean',
                 array(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('tag1', 'tag2')),
                 array(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('TAG1', 'TAG2')),
-                true,
+                true
             ),
             'clean mode "matching any tag"' => array(
                 'clean',
                 array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag1', 'tag2')),
                 array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('TAG1', 'TAG2')),
-                true,
+                true
             ),
             'getBackend' => array(
                 'getBackend',
                 array(),
                 array(),
-                \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend'),
-            ),
+                \PHPUnit_Framework_MockObject_Generator::getMock('Zend_Cache_Backend')
+            )
         );
     }
 
@@ -101,16 +108,16 @@ class ZendTest extends \PHPUnit_Framework_TestCase
         return array(
             'cleaning mode "expired"' => array(
                 \Zend_Cache::CLEANING_MODE_OLD,
-                "Magento cache frontend does not support the cleaning mode 'old'.",
+                "Magento cache frontend does not support the cleaning mode 'old'."
             ),
             'cleaning mode "not matching tag"' => array(
                 \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                "Magento cache frontend does not support the cleaning mode 'notMatchingTag'.",
+                "Magento cache frontend does not support the cleaning mode 'notMatchingTag'."
             ),
             'non-existing cleaning mode' => array(
                 'nonExisting',
-                "Magento cache frontend does not support the cleaning mode 'nonExisting'.",
-            ),
+                "Magento cache frontend does not support the cleaning mode 'nonExisting'."
+            )
         );
     }
 

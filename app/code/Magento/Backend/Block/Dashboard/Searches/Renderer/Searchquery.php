@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 
 /**
@@ -62,8 +61,11 @@ class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
     {
         $value = $row->getData($this->getColumn()->getIndex());
         if ($this->stringHelper->strlen($value) > 30) {
-            $value = '<span title="' . $this->escapeHtml($value) . '">'
-                . $this->escapeHtml($this->filterManager->truncate($value, array('length' => 30))) . '</span>';
+            $value = '<span title="' . $this->escapeHtml(
+                $value
+            ) . '">' . $this->escapeHtml(
+                $this->filterManager->truncate($value, array('length' => 30))
+            ) . '</span>';
         } else {
             $value = $this->escapeHtml($value);
         }

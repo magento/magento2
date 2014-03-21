@@ -42,13 +42,13 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     protected $_associatedEntitiesMap = array(
         'website' => array(
             'associations_table' => 'salesrule_website',
-            'rule_id_field'      => 'rule_id',
-            'entity_id_field'    => 'website_id'
+            'rule_id_field' => 'rule_id',
+            'entity_id_field' => 'website_id'
         ),
         'customer_group' => array(
             'associations_table' => 'salesrule_customer_group',
-            'rule_id_field'      => 'rule_id',
-            'entity_id_field'    => 'customer_group_id'
+            'rule_id_field' => 'rule_id',
+            'entity_id_field' => 'customer_group_id'
         )
     );
 
@@ -136,12 +136,15 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
                     $connection->quoteInto(
                         '(main_table.coupon_type = ? AND main_table.use_auto_generation = 0 AND rule_coupons.type = 0)',
                         \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC
-                    ),
+                    )
                 );
                 $orWhereCondition = implode(' OR ', $orWhereConditions);
                 $select->orWhere('(' . $orWhereCondition . ') AND rule_coupons.code = ?', $couponCode);
             } else {
-                $this->addFieldToFilter('main_table.coupon_type', \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON);
+                $this->addFieldToFilter(
+                    'main_table.coupon_type',
+                    \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
+                );
             }
             $this->setOrder('sort_order', self::SORT_ORDER_ASC);
             $this->setFlag('validation_filter', true);
@@ -172,19 +175,26 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
 
             $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
             $connection = $this->getConnection();
-            $this->getSelect()
-                ->joinInner(
-                    array('customer_group_ids' => $this->getTable($entityInfo['associations_table'])),
-                    $connection->quoteInto(
-                        'main_table.' . $entityInfo['rule_id_field']
-                            . ' = customer_group_ids.' . $entityInfo['rule_id_field']
-                            . ' AND customer_group_ids.' . $entityInfo['entity_id_field'] . ' = ?',
-                        (int)$customerGroupId
-                    ),
-                    array()
-                )
-                ->where('from_date is null or from_date <= ?', $now)
-                ->where('to_date is null or to_date >= ?', $now);
+            $this->getSelect()->joinInner(
+                array('customer_group_ids' => $this->getTable($entityInfo['associations_table'])),
+                $connection->quoteInto(
+                    'main_table.' .
+                    $entityInfo['rule_id_field'] .
+                    ' = customer_group_ids.' .
+                    $entityInfo['rule_id_field'] .
+                    ' AND customer_group_ids.' .
+                    $entityInfo['entity_id_field'] .
+                    ' = ?',
+                    (int)$customerGroupId
+                ),
+                array()
+            )->where(
+                'from_date is null or from_date <= ?',
+                $now
+            )->where(
+                'to_date is null or to_date >= ?',
+                $now
+            );
 
             $this->addIsActiveFilter();
 
@@ -202,12 +212,11 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
     public function _initSelect()
     {
         parent::_initSelect();
-        $this->getSelect()
-            ->joinLeft(
-                array('rule_coupons' => $this->getTable('salesrule_coupon')),
-                'main_table.rule_id = rule_coupons.rule_id AND rule_coupons.is_primary = 1',
-                array('code')
-            );
+        $this->getSelect()->joinLeft(
+            array('rule_coupons' => $this->getTable('salesrule_coupon')),
+            'main_table.rule_id = rule_coupons.rule_id AND rule_coupons.is_primary = 1',
+            array('code')
+        );
         return $this;
     }
 
@@ -237,10 +246,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
      */
     public function addAllowedSalesRulesFilter()
     {
-        $this->addFieldToFilter(
-            'main_table.use_auto_generation',
-            array('neq' => 1)
-        );
+        $this->addFieldToFilter('main_table.use_auto_generation', array('neq' => 1));
 
         return $this;
     }

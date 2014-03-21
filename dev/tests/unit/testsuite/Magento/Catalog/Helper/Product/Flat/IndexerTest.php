@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper\Product\Flat;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
@@ -61,25 +60,33 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
 
         $this->_resourceMock = $this->getMock(
-            'Magento\App\Resource', array('getTableName', 'getConnection'), array(), '', false
+            'Magento\App\Resource',
+            array('getTableName', 'getConnection'),
+            array(),
+            '',
+            false
         );
-        $this->_resourceMock->expects($this->any())
-            ->method('getTableName')
-            ->will($this->returnArgument(0));
+        $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
 
         $flatHelperMock = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer', array('isAddChildData'), array(), '', false
+            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            array('isAddChildData'),
+            array(),
+            '',
+            false
         );
-        $flatHelperMock->expects($this->any())
-            ->method('isAddChildData')
-            ->will($this->returnValue(true));
+        $flatHelperMock->expects($this->any())->method('isAddChildData')->will($this->returnValue(true));
 
         $eavConfigMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
 
         $attributeConfigMock = $this->getMock('Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
 
         $resourceConfigFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\ConfigFactory', array(), array(), '', false
+            'Magento\Catalog\Model\Resource\ConfigFactory',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', array(), array(), '', false);
@@ -87,30 +94,34 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
 
         $this->_connectionMock = $this->getMock(
-            'Magento\DB\Adapter\Pdo\Mysql', array('getTables', 'dropTable'), array(), '', false
+            'Magento\DB\Adapter\Pdo\Mysql',
+            array('getTables', 'dropTable'),
+            array(),
+            '',
+            false
         );
 
-        $this->_changelogMock = $this->getMock(
-            'Magento\Mview\View\Changelog', array('getName'), array(), '', false
-        );
+        $this->_changelogMock = $this->getMock('Magento\Mview\View\Changelog', array('getName'), array(), '', false);
 
 
 
 
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $this->_objectManager->getObject('Magento\Catalog\Helper\Product\Flat\Indexer', array(
-            'context'             => $contextMock,
-            'resource'            => $this->_resourceMock,
-            'flatHelper'          => $flatHelperMock,
-            'eavConfig'           => $eavConfigMock,
-            'attributeConfig'     => $attributeConfigMock,
-            'configFactory'       => $resourceConfigFactoryMock,
-            'attributeFactory'    => $eavFactoryMock,
-            'storeManager'        => $this->_storeManagerMock,
-            'changelog'           => $this->_changelogMock,
-            'flatAttributeGroups' => array('catalog_product')
-        ));
-
+        $this->_model = $this->_objectManager->getObject(
+            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            array(
+                'context' => $contextMock,
+                'resource' => $this->_resourceMock,
+                'flatHelper' => $flatHelperMock,
+                'eavConfig' => $eavConfigMock,
+                'attributeConfig' => $attributeConfigMock,
+                'configFactory' => $resourceConfigFactoryMock,
+                'attributeFactory' => $eavFactoryMock,
+                'storeManager' => $this->_storeManagerMock,
+                'changelog' => $this->_changelogMock,
+                'flatAttributeGroups' => array('catalog_product')
+            )
+        );
     }
 
     public function testGetFlatColumnsDdlDefinition()
@@ -132,27 +143,35 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteAbandonedStoreFlatTables()
     {
-        $this->_changelogMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('catalog_product_flat_cl'));
+        $this->_changelogMock->expects(
+            $this->any()
+        )->method(
+            'getName'
+        )->will(
+            $this->returnValue('catalog_product_flat_cl')
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('getTables')
-            ->with('catalog_product_flat_%')
-            ->will($this->returnValue(array(
-                'catalog_product_flat_1',
-                'catalog_product_flat_2',
-                'catalog_product_flat_3'
-            )));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'getTables'
+        )->with(
+            'catalog_product_flat_%'
+        )->will(
+            $this->returnValue(array('catalog_product_flat_1', 'catalog_product_flat_2', 'catalog_product_flat_3'))
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('dropTable')
-            ->with('catalog_product_flat_3');
+        $this->_connectionMock->expects($this->once())->method('dropTable')->with('catalog_product_flat_3');
 
-        $this->_resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($this->_connectionMock));
+        $this->_resourceMock->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($this->_connectionMock)
+        );
 
         $this->_setStoreManagerExpectedStores(array(1, 2));
 
@@ -164,28 +183,43 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteNoStoresTables()
     {
-        $this->_changelogMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('catalog_product_flat_cl'));
+        $this->_changelogMock->expects(
+            $this->any()
+        )->method(
+            'getName'
+        )->will(
+            $this->returnValue('catalog_product_flat_cl')
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('getTables')
-            ->with('catalog_product_flat_%')
-            ->will($this->returnValue(array(
-                'catalog_product_flat_1',
-                'catalog_product_flat_2',
-                'catalog_product_flat_3',
-                'catalog_product_flat_4',
-                'catalog_product_flat_cl'
-            )));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'getTables'
+        )->with(
+            'catalog_product_flat_%'
+        )->will(
+            $this->returnValue(
+                array(
+                    'catalog_product_flat_1',
+                    'catalog_product_flat_2',
+                    'catalog_product_flat_3',
+                    'catalog_product_flat_4',
+                    'catalog_product_flat_cl'
+                )
+            )
+        );
 
-        $this->_connectionMock->expects($this->exactly(3))
-            ->method('dropTable');
+        $this->_connectionMock->expects($this->exactly(3))->method('dropTable');
 
-        $this->_resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($this->_connectionMock));
+        $this->_resourceMock->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($this->_connectionMock)
+        );
 
         $this->_setStoreManagerExpectedStores(array(1));
 
@@ -197,24 +231,35 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteCl()
     {
-        $this->_changelogMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('catalog_product_flat_cl'));
+        $this->_changelogMock->expects(
+            $this->any()
+        )->method(
+            'getName'
+        )->will(
+            $this->returnValue('catalog_product_flat_cl')
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('getTables')
-            ->with('catalog_product_flat_%')
-            ->will($this->returnValue(array(
-                'catalog_product_flat_cl'
-            )));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'getTables'
+        )->with(
+            'catalog_product_flat_%'
+        )->will(
+            $this->returnValue(array('catalog_product_flat_cl'))
+        );
 
-        $this->_connectionMock->expects($this->never())
-            ->method('dropTable');
+        $this->_connectionMock->expects($this->never())->method('dropTable');
 
-        $this->_resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($this->_connectionMock));
+        $this->_resourceMock->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($this->_connectionMock)
+        );
 
         $this->_setStoreManagerExpectedStores(array(1));
 
@@ -231,16 +276,16 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $stores = array();
         foreach ($storeIds as $storeId) {
             $store = $this->getMock(
-                'Magento\Core\Model\Store', array('getId', '__sleep', '__wakeup'), array(), '', false
+                'Magento\Core\Model\Store',
+                array('getId', '__sleep', '__wakeup'),
+                array(),
+                '',
+                false
             );
-            $store->expects($this->once())
-                ->method('getId')
-                ->will($this->returnValue($storeId));
+            $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
             $stores[] = $store;
         }
 
-        $this->_storeManagerMock->expects($this->once())
-            ->method('getStores')
-            ->will($this->returnValue($stores));
+        $this->_storeManagerMock->expects($this->once())->method('getStores')->will($this->returnValue($stores));
     }
 }

@@ -33,7 +33,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
     protected $_idAttributes = array(
         '/config/entity' => 'name',
         '/config/productType' => 'name',
-        '/config/fileFormat' => 'name',
+        '/config/fileFormat' => 'name'
     );
 
     /**
@@ -67,5 +67,4 @@ class Reader extends \Magento\Config\Reader\Filesystem
             $defaultScope
         );
     }
-
 }

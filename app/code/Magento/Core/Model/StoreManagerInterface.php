@@ -25,13 +25,15 @@ namespace Magento\Core\Model;
 
 interface StoreManagerInterface extends \Magento\Core\Model\Store\ListInterface
 {
-
     /**#@+
      * Available scope types
      */
-    const SCOPE_TYPE_STORE   = 'store';
-    const SCOPE_TYPE_GROUP   = 'group';
+    const SCOPE_TYPE_STORE = 'store';
+
+    const SCOPE_TYPE_GROUP = 'group';
+
     const SCOPE_TYPE_WEBSITE = 'website';
+
     /**#@-*/
 
     /**

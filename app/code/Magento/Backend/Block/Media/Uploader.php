@@ -72,20 +72,19 @@ class Uploader extends \Magento\Backend\Block\Widget
         $this->getConfig()->setUrl($uploadUrl);
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('file');
-        $this->getConfig()->setFilters(array(
-            'images' => array(
-                'label' => __('Images (.gif, .jpg, .png)'),
-                'files' => array('*.gif', '*.jpg', '*.png')
-            ),
-            'media' => array(
-                'label' => __('Media (.avi, .flv, .swf)'),
-                'files' => array('*.avi', '*.flv', '*.swf')
-            ),
-            'all' => array(
-                'label' => __('All Files'),
-                'files' => array('*.*')
+        $this->getConfig()->setFilters(
+            array(
+                'images' => array(
+                    'label' => __('Images (.gif, .jpg, .png)'),
+                    'files' => array('*.gif', '*.jpg', '*.png')
+                ),
+                'media' => array(
+                    'label' => __('Media (.avi, .flv, .swf)'),
+                    'files' => array('*.avi', '*.flv', '*.swf')
+                ),
+                'all' => array('label' => __('All Files'), 'files' => array('*.*'))
             )
-        ));
+        );
     }
 
     /**
@@ -110,9 +109,7 @@ class Uploader extends \Magento\Backend\Block\Widget
             $head->addChild(
                 'jquery-fileUploader-css-jquery-fileupload-ui-css',
                 'Magento\Theme\Block\Html\Head\Css',
-                array(
-                    'file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css'
-                )
+                array('file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css')
             );
         }
         return parent::_prepareLayout();

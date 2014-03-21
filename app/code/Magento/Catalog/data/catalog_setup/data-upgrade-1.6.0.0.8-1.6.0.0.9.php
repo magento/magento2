@@ -31,6 +31,10 @@ $installer = $this;
 $attribute = $installer->getAttribute('catalog_product', 'weight');
 
 if ($attribute) {
-    $installer->updateAttribute($attribute['entity_type_id'], $attribute['attribute_id'],
-        'frontend_input',  $attribute['attribute_code']);
+    $installer->updateAttribute(
+        $attribute['entity_type_id'],
+        $attribute['attribute_id'],
+        'frontend_input',
+        $attribute['attribute_code']
+    );
 }

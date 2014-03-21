@@ -59,16 +59,18 @@ class Accordion extends \Magento\Backend\Block\Widget
      */
     public function addItem($itemId, $config)
     {
-        $this->_items[$itemId] = $this->getLayout()
-            ->createBlock(
-                'Magento\Backend\Block\Widget\Accordion\Item',
-                $this->getNameInLayout() . '-' . $itemId
-            )
-            ->setData($config)
-            ->setAccordion($this)
-            ->setId($itemId);
+        $this->_items[$itemId] = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Accordion\Item',
+            $this->getNameInLayout() . '-' . $itemId
+        )->setData(
+            $config
+        )->setAccordion(
+            $this
+        )->setId(
+            $itemId
+        );
         if (isset($config['content']) && $config['content'] instanceof \Magento\View\Element\AbstractBlock) {
-            $this->_items[$itemId]->setChild($itemId.'_content', $config['content']);
+            $this->_items[$itemId]->setChild($itemId . '_content', $config['content']);
         }
 
         $this->setChild($itemId, $this->_items[$itemId]);

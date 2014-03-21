@@ -79,7 +79,6 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
         );
     }
 
-
     /**
      * Set current attribute to entry (for specified product)
      *

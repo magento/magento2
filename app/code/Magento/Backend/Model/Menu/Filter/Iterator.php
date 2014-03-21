@@ -47,6 +47,6 @@ class Iterator extends \FilterIterator
      */
     public function accept()
     {
-        return !($this->current()->isDisabled() || !($this->current()->isAllowed()));
+        return !($this->current()->isDisabled() || !$this->current()->isAllowed());
     }
 }

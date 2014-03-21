@@ -59,7 +59,7 @@ $count = $_helper->getItemCount();
             <a href="<?php echo $_helper->getListUrl() ?>" class="action compare"><span><?php echo __('Compare') ?></span></a>
         </div>
         <div class="secondary">
-            <a id="compare-clear-all" href="<?php echo $_helper->getClearListUrl() ?>" class="action clear">
+            <a id="compare-clear-all" href="#" data-post='<?php echo $_helper->getPostDataClearList() ?>' class="action clear">
                 <span><?php echo __('Clear All') ?></span>
             </a>
         </div>

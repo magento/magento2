@@ -63,7 +63,6 @@ class DependencyManager implements DependencyManagerInterface
         }
     }
 
-
     /**
      * Recursively identify all module dependencies and detect circular ones
      *
@@ -73,14 +72,14 @@ class DependencyManager implements DependencyManagerInterface
      * @return array
      * @throws \Exception
      */
-    public function getExtendedModuleDependencies($moduleName,  array $modules, array $usedModules = array())
+    public function getExtendedModuleDependencies($moduleName, array $modules, array $usedModules = array())
     {
         $usedModules[] = $moduleName;
         $dependencyList = $modules[$moduleName]['dependencies']['modules'];
         foreach ($dependencyList as $relatedModuleName) {
             if (in_array($relatedModuleName, $usedModules)) {
                 throw new \Exception(
-                    "Module '$moduleName' cannot depend on '$relatedModuleName' since it creates circular dependency."
+                    "Module '{$moduleName}' cannot depend on '{$relatedModuleName}' since it creates circular dependency."
                 );
             }
             if (empty($modules[$relatedModuleName])) {
@@ -113,8 +112,10 @@ class DependencyManager implements DependencyManagerInterface
         }
         if (!empty($extensionNames)) {
             throw new \Exception(
-                "Module '{$moduleName}' depends on at least one of the following PHP extensions: "
-                . implode(',', $extensionNames) . '.'
+                "Module '{$moduleName}' depends on at least one of the following PHP extensions: " . implode(
+                    ',',
+                    $extensionNames
+                ) . '.'
             );
         }
         return;

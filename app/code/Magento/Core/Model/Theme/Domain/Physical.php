@@ -104,17 +104,16 @@ class Physical implements \Magento\View\Design\Theme\Domain\PhysicalInterface
      */
     protected function _getVirtualThemeTitle($theme)
     {
-        $themeCopyCount = $this->_themeCollection->addAreaFilter(\Magento\Core\Model\App\Area::AREA_FRONTEND)
-            ->addTypeFilter(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
-            ->addFilter('parent_id', $theme->getId())
-            ->count();
+        $themeCopyCount = $this->_themeCollection->addAreaFilter(
+            \Magento\Core\Model\App\Area::AREA_FRONTEND
+        )->addTypeFilter(
+            \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+        )->addFilter(
+            'parent_id',
+            $theme->getId()
+        )->count();
 
-        $title = sprintf(
-            "%s - %s #%s",
-            $theme->getThemeTitle(),
-            __('Copy'),
-            ($themeCopyCount + 1)
-        );
+        $title = sprintf("%s - %s #%s", $theme->getThemeTitle(), __('Copy'), $themeCopyCount + 1);
         return $title;
     }
 }

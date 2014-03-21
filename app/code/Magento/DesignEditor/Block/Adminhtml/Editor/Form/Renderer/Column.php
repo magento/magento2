@@ -29,7 +29,6 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
-class Column
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
+class Column extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset
 {
 }

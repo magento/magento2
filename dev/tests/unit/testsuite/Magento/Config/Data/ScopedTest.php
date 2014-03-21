@@ -69,12 +69,8 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
     {
         $testData = array(
             'key_1' => array(
-                'key_1.1' => array(
-                    'key_1.1.1' => 'value_1.1.1',
-                ),
-                'key_1.2' => array(
-                    'some' => 'arrayValue',
-                ),
+                'key_1.1' => array('key_1.1.1' => 'value_1.1.1'),
+                'key_1.2' => array('some' => 'arrayValue')
             )
         );
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize(array())));
@@ -89,10 +85,10 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
             array('key_1/key_1.2', array('some' => 'arrayValue'), 'error'),
             array(
                 'key_1',
-                array('key_1.1' => array('key_1.1.1' => 'value_1.1.1'),'key_1.2' => array('some' => 'arrayValue')),
+                array('key_1.1' => array('key_1.1.1' => 'value_1.1.1'), 'key_1.2' => array('some' => 'arrayValue')),
                 'error'
             ),
-            array('key_1/notExistedKey', 'defaultValue', 'defaultValue'),
+            array('key_1/notExistedKey', 'defaultValue', 'defaultValue')
         );
     }
 
@@ -101,21 +97,35 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $testValue = array('some' => 'testValue');
 
         /** change current area */
-        $this->_configScopeMock->expects($this->any())
-            ->method('getCurrentScope')
-            ->will($this->returnValue('adminhtml'));
+        $this->_configScopeMock->expects(
+            $this->any()
+        )->method(
+            'getCurrentScope'
+        )->will(
+            $this->returnValue('adminhtml')
+        );
 
         /** set empty cache data */
-        $this->_cacheMock->expects($this->once())
-            ->method('load')
-            ->with('adminhtml::tag')
-            ->will($this->returnValue(false));
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'adminhtml::tag'
+        )->will(
+            $this->returnValue(false)
+        );
 
         /** get data from reader  */
-        $this->_readerMock->expects($this->once())
-            ->method('read')
-            ->with('adminhtml')
-            ->will($this->returnValue($testValue));
+        $this->_readerMock->expects(
+            $this->once()
+        )->method(
+            'read'
+        )->with(
+            'adminhtml'
+        )->will(
+            $this->returnValue($testValue)
+        );
 
         /** test cache saving  */
         $this->_cacheMock->expects($this->once())->method('save')->with(serialize($testValue), 'adminhtml::tag');
@@ -132,15 +142,24 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
         $testValue = array('some' => 'testValue');
 
         /** change current area */
-        $this->_configScopeMock->expects($this->any())
-            ->method('getCurrentScope')
-            ->will($this->returnValue('adminhtml'));
+        $this->_configScopeMock->expects(
+            $this->any()
+        )->method(
+            'getCurrentScope'
+        )->will(
+            $this->returnValue('adminhtml')
+        );
 
         /** set cache data */
-        $this->_cacheMock->expects($this->once())
-            ->method('load')
-            ->with('adminhtml::tag')
-            ->will($this->returnValue(serialize($testValue)));
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'adminhtml::tag'
+        )->will(
+            $this->returnValue(serialize($testValue))
+        );
 
         /** test preventing of getting data from reader  */
         $this->_readerMock->expects($this->never())->method('read');

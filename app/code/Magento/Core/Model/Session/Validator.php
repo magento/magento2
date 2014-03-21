@@ -32,16 +32,23 @@ use Magento\Session\ValidatorInterface;
  */
 class Validator implements ValidatorInterface
 {
-    const VALIDATOR_KEY                         = '_session_validator_data';
-    const VALIDATOR_HTTP_USER_AGENT_KEY         = 'http_user_agent';
-    const VALIDATOR_HTTP_X_FORWARDED_FOR_KEY    = 'http_x_forwarded_for';
-    const VALIDATOR_HTTP_VIA_KEY                = 'http_via';
-    const VALIDATOR_REMOTE_ADDR_KEY             = 'remote_addr';
+    const VALIDATOR_KEY = '_session_validator_data';
 
-    const XML_PATH_USE_REMOTE_ADDR      = 'web/session/use_remote_addr';
-    const XML_PATH_USE_HTTP_VIA         = 'web/session/use_http_via';
-    const XML_PATH_USE_X_FORWARDED      = 'web/session/use_http_x_forwarded_for';
-    const XML_PATH_USE_USER_AGENT       = 'web/session/use_http_user_agent';
+    const VALIDATOR_HTTP_USER_AGENT_KEY = 'http_user_agent';
+
+    const VALIDATOR_HTTP_X_FORWARDED_FOR_KEY = 'http_x_forwarded_for';
+
+    const VALIDATOR_HTTP_VIA_KEY = 'http_via';
+
+    const VALIDATOR_REMOTE_ADDR_KEY = 'remote_addr';
+
+    const XML_PATH_USE_REMOTE_ADDR = 'web/session/use_remote_addr';
+
+    const XML_PATH_USE_HTTP_VIA = 'web/session/use_http_via';
+
+    const XML_PATH_USE_X_FORWARDED = 'web/session/use_http_x_forwarded_for';
+
+    const XML_PATH_USE_USER_AGENT = 'web/session/use_http_user_agent';
 
     /**
      * @var \Magento\Core\Model\Store\Config
@@ -105,25 +112,30 @@ class Validator implements ValidatorInterface
         $sessionData = $_SESSION[self::VALIDATOR_KEY];
         $validatorData = $this->_getSessionEnvironment();
 
-        if ($this->_storeConfig->getConfig(self::XML_PATH_USE_REMOTE_ADDR)
-            && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]
+        if ($this->_storeConfig->getConfig(
+            self::XML_PATH_USE_REMOTE_ADDR
+        ) && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]
         ) {
             return false;
         }
-        if ($this->_storeConfig->getConfig(self::XML_PATH_USE_HTTP_VIA)
-            && $sessionData[self::VALIDATOR_HTTP_VIA_KEY] != $validatorData[self::VALIDATOR_HTTP_VIA_KEY]
+        if ($this->_storeConfig->getConfig(
+            self::XML_PATH_USE_HTTP_VIA
+        ) && $sessionData[self::VALIDATOR_HTTP_VIA_KEY] != $validatorData[self::VALIDATOR_HTTP_VIA_KEY]
         ) {
             return false;
         }
 
         $httpXForwardedKey = $sessionData[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY];
         $validatorXForwarded = $validatorData[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY];
-        if ($this->_storeConfig->getConfig(self::XML_PATH_USE_X_FORWARDED)
-            && $httpXForwardedKey != $validatorXForwarded ) {
+        if ($this->_storeConfig->getConfig(
+            self::XML_PATH_USE_X_FORWARDED
+        ) && $httpXForwardedKey != $validatorXForwarded
+        ) {
             return false;
         }
-        if ($this->_storeConfig->getConfig(self::XML_PATH_USE_USER_AGENT)
-            && $sessionData[self::VALIDATOR_HTTP_USER_AGENT_KEY] != $validatorData[self::VALIDATOR_HTTP_USER_AGENT_KEY]
+        if ($this->_storeConfig->getConfig(
+            self::XML_PATH_USE_USER_AGENT
+        ) && $sessionData[self::VALIDATOR_HTTP_USER_AGENT_KEY] != $validatorData[self::VALIDATOR_HTTP_USER_AGENT_KEY]
         ) {
             foreach ($this->_skippedAgentList as $agent) {
                 if (preg_match('/' . $agent . '/iu', $validatorData[self::VALIDATOR_HTTP_USER_AGENT_KEY])) {
@@ -144,10 +156,10 @@ class Validator implements ValidatorInterface
     protected function _getSessionEnvironment()
     {
         $parts = array(
-            self::VALIDATOR_REMOTE_ADDR_KEY             => '',
-            self::VALIDATOR_HTTP_VIA_KEY                => '',
-            self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY    => '',
-            self::VALIDATOR_HTTP_USER_AGENT_KEY         => ''
+            self::VALIDATOR_REMOTE_ADDR_KEY => '',
+            self::VALIDATOR_HTTP_VIA_KEY => '',
+            self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY => '',
+            self::VALIDATOR_HTTP_USER_AGENT_KEY => ''
         );
 
         // collect ip data

@@ -23,9 +23,8 @@
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
-class Tablerate
-    extends \Magento\Shipping\Model\Carrier\AbstractCarrier
-    implements \Magento\Shipping\Model\Carrier\CarrierInterface
+class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
+    \Magento\Shipping\Model\Carrier\CarrierInterface
 {
     /**
      * @var string
@@ -148,7 +147,7 @@ class Tablerate
             $request->setConditionName($conditionName ? $conditionName : $this->_defaultConditionName);
         }
 
-         // Package weight and qty free shipping
+        // Package weight and qty free shipping
         $oldWeight = $request->getPackageWeight();
         $oldQty = $request->getPackageQty();
 
@@ -172,7 +171,7 @@ class Tablerate
             $method->setMethod('bestway');
             $method->setMethodTitle($this->getConfigData('name'));
 
-            if ($request->getFreeShipping() === true || ($request->getPackageQty() == $freeQty)) {
+            if ($request->getFreeShipping() === true || $request->getPackageQty() == $freeQty) {
                 $shippingPrice = 0;
             } else {
                 $shippingPrice = $this->getFinalPriceWithHandlingFee($rate['price']);
@@ -184,11 +183,15 @@ class Tablerate
             $result->append($method);
         } else {
             /** @var \Magento\Sales\Model\Quote\Address\RateResult\Error $error */
-            $error = $this->_rateErrorFactory->create(array('data' => array(
-                'carrier'       => $this->_code,
-                'carrier_title' => $this->getConfigData('title'),
-                'error_message' => $this->getConfigData('specificerrmsg'),
-            )));
+            $error = $this->_rateErrorFactory->create(
+                array(
+                    'data' => array(
+                        'carrier' => $this->_code,
+                        'carrier_title' => $this->getConfigData('title'),
+                        'error_message' => $this->getConfigData('specificerrmsg')
+                    )
+                )
+            );
             $result->append($error);
         }
 
@@ -210,26 +213,23 @@ class Tablerate
      * @return array
      * @throws \Magento\Shipping\Exception
      */
-    public function getCode($type, $code='')
+    public function getCode($type, $code = '')
     {
         $codes = array(
-
-            'condition_name'=>array(
+            'condition_name' => array(
                 'package_weight' => __('Weight vs. Destination'),
-                'package_value'  => __('Price vs. Destination'),
-                'package_qty'    => __('# of Items vs. Destination'),
+                'package_value' => __('Price vs. Destination'),
+                'package_qty' => __('# of Items vs. Destination')
             ),
-
-            'condition_name_short'=>array(
+            'condition_name_short' => array(
                 'package_weight' => __('Weight (and above)'),
-                'package_value'  => __('Order Subtotal (and above)'),
-                'package_qty'    => __('# of Items (and above)'),
-            ),
-
+                'package_value' => __('Order Subtotal (and above)'),
+                'package_qty' => __('# of Items (and above)')
+            )
         );
 
         if (!isset($codes[$type])) {
-            throw new \Magento\Shipping\Exception( __('Please correct Table Rate code type: %1.', $type));
+            throw new \Magento\Shipping\Exception(__('Please correct Table Rate code type: %1.', $type));
         }
 
         if ('' === $code) {
@@ -250,7 +250,6 @@ class Tablerate
      */
     public function getAllowedMethods()
     {
-        return array('bestway'=>$this->getConfigData('name'));
+        return array('bestway' => $this->getConfigData('name'));
     }
-
 }

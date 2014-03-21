@@ -34,8 +34,7 @@ use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice\Abstract
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Groupprice
-    extends AbstractGroupprice
+class Groupprice extends AbstractGroupprice
 {
     /**
      * Initialize connection and define main table

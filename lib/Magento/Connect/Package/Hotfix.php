@@ -25,7 +25,7 @@
  */
 namespace Magento\Connect\Package;
 
- /**
+/**
  * Class to work with Magento Connect Hotfix
  *
  * @category    Magento
@@ -40,7 +40,7 @@ class Hotfix extends \Magento\Connect\Package
      * @param null|string $definition optional package definition xml
      * @return $this
      */
-    protected function _init($definition=null)
+    protected function _init($definition = null)
     {
 
         if (!is_null($definition)) {
@@ -88,7 +88,7 @@ END;
             $parent = $this->_getNode('dir', $parent, $directory);
         }
         $fileName = basename($path);
-        if ($fileName!='') {
+        if ($fileName != '') {
             $fileNode = $parent->addChild('file');
             $fileNode->addAttribute('name', $fileName);
         }
@@ -106,7 +106,7 @@ END;
      * @param string $include Include
      * @return $this
      */
-    public function addReplaceDir($targetName, $targetDir, $path, $exclude=null, $include=null)
+    public function addReplaceDir($targetName, $targetDir, $path, $exclude = null, $include = null)
     {
         $targetDirLen = strlen($targetDir);
         //get all subdirectories and files.
@@ -122,7 +122,7 @@ END;
                 }
                 if (is_dir($entry)) {
                     $baseName = basename($entry);
-                    if ('.'===$baseName || '..'===$baseName) {
+                    if ('.' === $baseName || '..' === $baseName) {
                         continue;
                     }
                     //for subdirectory call method recursively
@@ -134,5 +134,4 @@ END;
         }
         return $this;
     }
-
 }

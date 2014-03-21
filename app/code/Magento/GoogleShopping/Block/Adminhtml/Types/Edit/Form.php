@@ -126,55 +126,69 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $itemType = $this->getItemType();
 
-        $fieldset = $form->addFieldset('content_fieldset', array(
-            'legend'    => __('Attribute set mapping')
-        ));
+        $fieldset = $form->addFieldset('content_fieldset', array('legend' => __('Attribute set mapping')));
 
-        if ( !($targetCountry = $itemType->getTargetCountry()) ) {
+        if (!($targetCountry = $itemType->getTargetCountry())) {
             $isoKeys = array_keys($this->_getCountriesArray());
             $targetCountry = isset($isoKeys[0]) ? $isoKeys[0] : null;
         }
-        $countrySelect = $fieldset->addField('select_target_country', 'select', array(
-            'label'     => __('Target Country'),
-            'title'     => __('Target Country'),
-            'name'      => 'target_country',
-            'required'  => true,
-            'options'   => $this->_getCountriesArray(),
-            'value'     => $targetCountry,
-        ));
+        $countrySelect = $fieldset->addField(
+            'select_target_country',
+            'select',
+            array(
+                'label' => __('Target Country'),
+                'title' => __('Target Country'),
+                'name' => 'target_country',
+                'required' => true,
+                'options' => $this->_getCountriesArray(),
+                'value' => $targetCountry
+            )
+        );
         if ($itemType->getTargetCountry()) {
             $countrySelect->setDisabled(true);
         }
 
-        $attributeSetsSelect = $this->getAttributeSetsSelectElement($targetCountry)
-            ->setValue($itemType->getAttributeSetId());
+        $attributeSetsSelect = $this->getAttributeSetsSelectElement(
+            $targetCountry
+        )->setValue(
+            $itemType->getAttributeSetId()
+        );
         if ($itemType->getAttributeSetId()) {
             $attributeSetsSelect->setDisabled(true);
         }
 
-        $fieldset->addField('attribute_set', 'note', array(
-            'label'     => __('Attribute Set'),
-            'title'     => __('Attribute Set'),
-            'required'  => true,
-            'text'      => '<div id="attribute_set_select">' . $attributeSetsSelect->toHtml() . '</div>',
-        ));
+        $fieldset->addField(
+            'attribute_set',
+            'note',
+            array(
+                'label' => __('Attribute Set'),
+                'title' => __('Attribute Set'),
+                'required' => true,
+                'text' => '<div id="attribute_set_select">' . $attributeSetsSelect->toHtml() . '</div>'
+            )
+        );
 
         $categories = $this->_googleShoppingCategory->getCategories();
-        $fieldset->addField('category', 'select', array(
-            'label'     => __('Google Product Category'),
-            'title'     => __('Google Product Category'),
-            'required'  => true,
-            'name'      => 'category',
-            'options'   => array_combine($categories, array_map('htmlspecialchars_decode', $categories)),
-            'value'      => $itemType->getCategory(),
-        ));
+        $fieldset->addField(
+            'category',
+            'select',
+            array(
+                'label' => __('Google Product Category'),
+                'title' => __('Google Product Category'),
+                'required' => true,
+                'name' => 'category',
+                'options' => array_combine($categories, array_map('htmlspecialchars_decode', $categories)),
+                'value' => $itemType->getCategory()
+            )
+        );
 
-        $attributesBlock = $this->getLayout()
-            ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes')
-            ->setTargetCountry($targetCountry);
+        $attributesBlock = $this->getLayout()->createBlock(
+            'Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes'
+        )->setTargetCountry(
+            $targetCountry
+        );
         if ($itemType->getId()) {
-            $attributesBlock->setAttributeSetId($itemType->getAttributeSetId())
-                ->setAttributeSetSelected(true);
+            $attributesBlock->setAttributeSetId($itemType->getAttributeSetId())->setAttributeSetSelected(true);
         }
 
         $attributes = $this->_coreRegistry->registry('attributes');
@@ -182,10 +196,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $attributesBlock->setAttributesData($attributes);
         }
 
-        $fieldset->addField('attributes_box', 'note', array(
-            'label'     => __('Attributes Mapping'),
-            'text'      => '<div id="attributes_details">' . $attributesBlock->toHtml() . '</div>',
-        ));
+        $fieldset->addField(
+            'attributes_box',
+            'note',
+            array(
+                'label' => __('Attributes Mapping'),
+                'text' => '<div id="attributes_details">' . $attributesBlock->toHtml() . '</div>'
+            )
+        );
 
         $form->addValues($itemType->getData());
         $form->setUseContainer(true);
@@ -206,11 +224,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getAttributeSetsSelectElement($targetCountry)
     {
         $field = $this->_elementFactory->create('select');
-        $field->setName('attribute_set_id')
-            ->setId('select_attribute_set')
-            ->setForm($this->_formFactory->create())
-            ->addClass('required-entry')
-            ->setValues($this->_getAttributeSetsArray($targetCountry));
+        $field->setName(
+            'attribute_set_id'
+        )->setId(
+            'select_attribute_set'
+        )->setForm(
+            $this->_formFactory->create()
+        )->addClass(
+            'required-entry'
+        )->setValues(
+            $this->_getAttributeSetsArray($targetCountry)
+        );
         return $field;
     }
 

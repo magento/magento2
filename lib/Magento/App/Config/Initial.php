@@ -30,7 +30,7 @@ class Initial
     /**
      * Cache identifier used to store initial config
      */
-    const CACHE_ID  = 'initial_config';
+    const CACHE_ID = 'initial_config';
 
     /**
      * Config data
@@ -50,10 +50,8 @@ class Initial
      * @param \Magento\App\Config\Initial\Reader $reader
      * @param \Magento\App\Cache\Type\Config $cache
      */
-    public function __construct(
-        \Magento\App\Config\Initial\Reader $reader,
-        \Magento\App\Cache\Type\Config $cache
-    ) {
+    public function __construct(\Magento\App\Config\Initial\Reader $reader, \Magento\App\Cache\Type\Config $cache)
+    {
         $data = $cache->load(self::CACHE_ID);
         if (!$data) {
             $data = $reader->read();

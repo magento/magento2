@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Helper;
 
 /**
@@ -49,10 +48,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetServiceNameParts($className, $preserveVersion, $expected)
     {
-        $actual = $this->_helper->getServiceNameParts(
-            $className,
-            $preserveVersion
-        );
+        $actual = $this->_helper->getServiceNameParts($className, $preserveVersion);
         $this->assertEquals($expected, $actual);
     }
 
@@ -92,7 +88,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array('Magento\\Foo\\Service\\BarInterface'), // Version missed
             array('Magento\\Foo\\Service\\BarV1'), // 'Interface' missed
             array('Foo\\Service\\BarV1Interface'), // Module missed
-            array('Foo\\BarV1Interface'), // Module and 'Service' missed
+            array('Foo\\BarV1Interface') // Module and 'Service' missed
         );
     }
 
@@ -108,4 +104,3 @@ class DataTest extends \PHPUnit_Framework_TestCase
 }
 
 require_once realpath(__DIR__ . '/../_files/test_interfaces.php');
-

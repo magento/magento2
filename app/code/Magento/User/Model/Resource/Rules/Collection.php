@@ -52,7 +52,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function getByRoles($roleId)
     {
-        $this->addFieldToFilter('role_id', (int) $roleId);
+        $this->addFieldToFilter('role_id', (int)$roleId);
         return $this;
     }
 

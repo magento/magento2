@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Dependency;
 
 class Mapper
@@ -83,14 +82,16 @@ class Mapper
             /** @var \Magento\Backend\Model\Config\Structure\Element\Field $dependentField  */
             $dependentField = $this->_fieldLocator->getElement($depend['id']);
             /*
-            * If dependent field can't be shown in current scope and real dependent config value
-            * is not equal to preferred one, then hide dependence fields by adding dependence
-            * based on not shown field (not rendered field)
-            */
+             * If dependent field can't be shown in current scope and real dependent config value
+             * is not equal to preferred one, then hide dependence fields by adding dependence
+             * based on not shown field (not rendered field)
+             */
             if (false == $dependentField->isVisible()) {
-                $valueInStore = $this->_storeManager
-                    ->getStore($storeCode)
-                    ->getConfig($dependentField->getPath($fieldPrefix));
+                $valueInStore = $this->_storeManager->getStore(
+                    $storeCode
+                )->getConfig(
+                    $dependentField->getPath($fieldPrefix)
+                );
                 $shouldAddDependency = !$field->isValueSatisfy($valueInStore);
             }
             if ($shouldAddDependency) {

@@ -32,8 +32,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Wishlist
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
+class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
      * Storage action on selected item

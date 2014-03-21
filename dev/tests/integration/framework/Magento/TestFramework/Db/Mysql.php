@@ -127,11 +127,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function _createDefaultsExtra()
     {
-        $extraConfig = array(
-            '[client]',
-            'user=' . $this->_user,
-            'password="' . $this->_password . '"'
-        );
+        $extraConfig = array('[client]', 'user=' . $this->_user, 'password="' . $this->_password . '"');
         file_put_contents($this->_getDefaultsExtraFileName(), implode(PHP_EOL, $extraConfig));
         chmod($this->_getDefaultsExtraFileName(), 0644);
     }

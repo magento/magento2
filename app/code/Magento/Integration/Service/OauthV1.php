@@ -25,7 +25,7 @@ namespace Magento\Integration\Service;
 
 use Magento\Oauth\OauthInterface;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
-use Magento\Integration\Model\Oauth\Token as Token;
+use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\Token\Factory as TokenFactory;
 use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
 use Magento\Oauth\Helper\Oauth as OauthHelper;
@@ -208,7 +208,9 @@ class OauthV1 implements OauthV1Interface
             $consumer = $this->_consumerFactory->create()->load($consumerId);
             if (!$consumer->getId()) {
                 throw new \Magento\Oauth\Exception(
-                    __('A consumer with ID %1 does not exist', $consumerId), OauthInterface::ERR_PARAMETER_REJECTED);
+                    __('A consumer with ID %1 does not exist', $consumerId),
+                    OauthInterface::ERR_PARAMETER_REJECTED
+                );
             }
             $consumerData = $consumer->getData();
             $verifier = $this->_tokenFactory->create()->createVerifierToken($consumerId);

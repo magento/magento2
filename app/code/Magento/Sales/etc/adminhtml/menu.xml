@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
     <menu>
         <add id="Magento_Sales::sales" title="Sales" module="Magento_Sales" sortOrder="15" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
         <add id="Magento_Sales::sales_operation" title="Operations" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation" />

@@ -25,14 +25,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Model\Resource\Product\Type\Grouped;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AssociatedProductsCollection
-    extends \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+class AssociatedProductsCollection extends \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
 {
     /**
      * Core registry
@@ -137,12 +135,18 @@ class AssociatedProductsCollection
     public function _initSelect()
     {
         parent::_initSelect();
-        $this->setProduct($this->_getProduct())
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('sku')
-            ->addFilterByRequiredOptions()
-            ->addAttributeToFilter('type_id', $this->_config->getComposableTypes());
+        $this->setProduct(
+            $this->_getProduct()
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'sku'
+        )->addFilterByRequiredOptions()->addAttributeToFilter(
+            'type_id',
+            $this->_config->getComposableTypes()
+        );
 
         return $this;
     }

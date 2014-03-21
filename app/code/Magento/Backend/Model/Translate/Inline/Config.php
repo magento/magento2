@@ -44,10 +44,8 @@ class Config implements \Magento\Translate\Inline\ConfigInterface
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param \Magento\Core\Helper\Data $helper
      */
-    public function __construct(
-        \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Core\Helper\Data $helper
-    ) {
+    public function __construct(\Magento\Backend\App\ConfigInterface $config, \Magento\Core\Helper\Data $helper)
+    {
         $this->_config = $config;
         $this->_helper = $helper;
     }

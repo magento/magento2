@@ -48,4 +48,3 @@ class Price extends \Magento\Data\Form\Element\Select
         return parent::getElementHtml();
     }
 }
-

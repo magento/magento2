@@ -24,9 +24,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows;
-
 
 class TableDataTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,7 +54,11 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         $this->_connectionMock = $this->getMock('Magento\DB\Adapter\AdapterInterface');
         $this->_resourceMock = $this->getMock('Magento\App\Resource', array(), array(), '', false);
         $this->_productIndexerHelper = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer', array(), array(), '', false
+            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            array(),
+            array(),
+            '',
+            false
         );
     }
 
@@ -66,31 +68,38 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         $flatDropName = 'flat_table_to_drop';
         $temporaryFlatTableName = 'flat_tmp';
 
-        $this->_connectionMock->expects($this->exactly(2))
-            ->method('dropTable')
-            ->with($flatDropName);
-        $this->_connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($flatTable)
-            ->will($this->returnValue(false));
+        $this->_connectionMock->expects($this->exactly(2))->method('dropTable')->with($flatDropName);
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'isTableExists'
+        )->with(
+            $flatTable
+        )->will(
+            $this->returnValue(false)
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('renameTablesBatch')
-            ->with(array(
-                'oldName' => 'flat_tmp',
-                'newName' => 'flat_table',
-            ));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'renameTablesBatch'
+        )->with(
+            array('oldName' => 'flat_tmp', 'newName' => 'flat_table')
+        );
 
-        $this->_resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($this->_connectionMock));
+        $this->_resourceMock->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($this->_connectionMock)
+        );
 
         $model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData', array(
-                'resource' => $this->_resourceMock,
-                'productIndexerHelper' => $this->_productIndexerHelper
-            )
+            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData',
+            array('resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper)
         );
 
         $model->move($flatTable, $flatDropName, $temporaryFlatTableName);
@@ -115,54 +124,79 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         );
 
         $selectMock = $this->getMock('Magento\DB\Select', array(), array(), '', false);
-        $selectMock->expects($this->once())
-            ->method('from')
-            ->with(
-                array('tf' => sprintf('%s_tmp_indexer', $flatTable)),
-                array('column_2', 'column_3')
-            );
+        $selectMock->expects(
+            $this->once()
+        )->method(
+            'from'
+        )->with(
+            array('tf' => sprintf('%s_tmp_indexer', $flatTable)),
+            array('column_2', 'column_3')
+        );
         $sql = md5(time());
-        $selectMock->expects($this->once())
-            ->method('insertFromSelect')
-            ->with($flatTable, array('column_2', 'column_3'))
-            ->will($this->returnValue($sql));
+        $selectMock->expects(
+            $this->once()
+        )->method(
+            'insertFromSelect'
+        )->with(
+            $flatTable,
+            array('column_2', 'column_3')
+        )->will(
+            $this->returnValue($sql)
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('query')
-            ->with($sql);
+        $this->_connectionMock->expects($this->once())->method('query')->with($sql);
 
-        $this->_connectionMock->expects($this->once())
-            ->method('select')
-            ->will($this->returnValue($selectMock));
+        $this->_connectionMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
 
-        $this->_connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($flatTable)
-            ->will($this->returnValue(true));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'isTableExists'
+        )->with(
+            $flatTable
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('describeTable')
-            ->with($flatTable)
-            ->will($this->returnValue($describedColumns));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'describeTable'
+        )->with(
+            $flatTable
+        )->will(
+            $this->returnValue($describedColumns)
+        );
 
-        $this->_productIndexerHelper->expects($this->once())
-            ->method('getFlatColumns')
-            ->will($this->returnValue($flatColumns));
+        $this->_productIndexerHelper->expects(
+            $this->once()
+        )->method(
+            'getFlatColumns'
+        )->will(
+            $this->returnValue($flatColumns)
+        );
 
-        $this->_connectionMock->expects($this->once())
-            ->method('dropTable')
-            ->with(sprintf('%s_tmp_indexer', $flatTable));
+        $this->_connectionMock->expects(
+            $this->once()
+        )->method(
+            'dropTable'
+        )->with(
+            sprintf('%s_tmp_indexer', $flatTable)
+        );
 
-        $this->_resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->with('write')
-            ->will($this->returnValue($this->_connectionMock));
+        $this->_resourceMock->expects(
+            $this->any()
+        )->method(
+            'getConnection'
+        )->with(
+            'write'
+        )->will(
+            $this->returnValue($this->_connectionMock)
+        );
 
         $model = $this->_objectManager->getObject(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData', array(
-                'resource' => $this->_resourceMock,
-                'productIndexerHelper' => $this->_productIndexerHelper
-            )
+            'Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows\TableData',
+            array('resource' => $this->_resourceMock, 'productIndexerHelper' => $this->_productIndexerHelper)
         );
 
         $model->move($flatTable, $flatDropName, $temporaryFlatTableName);

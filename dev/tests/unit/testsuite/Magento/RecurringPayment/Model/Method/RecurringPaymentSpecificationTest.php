@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Model\Method;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -39,7 +38,7 @@ class RecurringPaymentSpecificationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
+        $this->configMock = $this->getMock('Magento\Payment\Model\Config', array(), array(), '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -47,19 +46,23 @@ class RecurringPaymentSpecificationTest extends \PHPUnit_Framework_TestCase
     public function testIsSatisfiedBy()
     {
         $paymentMethodCode = 'test';
-        $this->configMock->expects($this->once())
-            ->method('getMethodsInfo')
-            ->will($this->returnValue([
-                $paymentMethodCode => [
-                    \Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification::CONFIG_KEY => 1
-                ]
-            ]));
+        $this->configMock->expects(
+            $this->once()
+        )->method(
+            'getMethodsInfo'
+        )->will(
+            $this->returnValue(
+                array(
+                    $paymentMethodCode => array(
+                        \Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification::CONFIG_KEY => 1
+                    )
+                )
+            )
+        );
 
         $this->recurringPaymentSpecification = $this->objectManagerHelper->getObject(
             'Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification',
-            [
-                'paymentConfig' => $this->configMock
-            ]
+            array('paymentConfig' => $this->configMock)
         );
 
         $this->assertTrue($this->recurringPaymentSpecification->isSatisfiedBy($paymentMethodCode));

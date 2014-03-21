@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Entity\Product\Attribute\Group;
 
-use \Magento\Catalog\Model\Attribute;
+use Magento\Catalog\Model\Attribute;
 
 class AttributeMapper implements AttributeMapperInterface
 {
@@ -55,15 +55,15 @@ class AttributeMapper implements AttributeMapperInterface
         $isUnassignable = !in_array($attribute->getAttributeCode(), $this->unassignableAttributes);
 
         return array(
-            'text'              => $attribute->getAttributeCode(),
-            'id'                => $attribute->getAttributeId(),
-            'cls'               => $isUnassignable ? 'leaf' : 'system-leaf',
-            'allowDrop'         => false,
-            'allowDrag'         => true,
-            'leaf'              => true,
-            'is_user_defined'   => $attribute->getIsUserDefined(),
-            'is_unassignable'   => $isUnassignable,
-            'entity_id'         => $attribute->getEntityAttributeId()
+            'text' => $attribute->getAttributeCode(),
+            'id' => $attribute->getAttributeId(),
+            'cls' => $isUnassignable ? 'leaf' : 'system-leaf',
+            'allowDrop' => false,
+            'allowDrag' => true,
+            'leaf' => true,
+            'is_user_defined' => $attribute->getIsUserDefined(),
+            'is_unassignable' => $isUnassignable,
+            'entity_id' => $attribute->getEntityAttributeId()
         );
     }
-} 
+}

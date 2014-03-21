@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File\Storage\Directory;
 
 /**
@@ -102,13 +101,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
          * addData() is used because it's needed to clear only db storaged data
          */
         $this->addData(
-            array(
-                'directory_id'  => null,
-                'name'          => null,
-                'path'          => null,
-                'upload_time'   => null,
-                'parent_id'     => null
-            )
+            array('directory_id' => null, 'name' => null, 'path' => null, 'upload_time' => null, 'parent_id' => null)
         );
 
         $this->_getResource()->loadByPath($this, $path);
@@ -184,8 +177,8 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      */
     public function exportDirectories($offset = 0, $count = 100)
     {
-        $offset = ((int)$offset >= 0) ? (int)$offset : 0;
-        $count  = ((int)$count >= 1) ? (int)$count : 1;
+        $offset = (int)$offset >= 0 ? (int)$offset : 0;
+        $count = (int)$count >= 1 ? (int)$count : 1;
 
         $result = $this->_getResource()->exportDirectories($offset, $count);
 

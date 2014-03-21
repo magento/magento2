@@ -105,25 +105,36 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
             // get products to skip
             $skipProducts = array();
             if ($collection = $this->getCreateOrderModel()->getCustomerCompareList()) {
-                $collection = $collection->getItemCollection()
-                    ->useProductItem(true)
-                    ->setStoreId($this->getStoreId())
-                    ->setCustomerId($this->getCustomerId())
-                    ->load();
+                $collection = $collection->getItemCollection()->useProductItem(
+                    true
+                )->setStoreId(
+                    $this->getStoreId()
+                )->setCustomerId(
+                    $this->getCustomerId()
+                )->load();
                 foreach ($collection as $_item) {
                     $skipProducts[] = $_item->getProductId();
                 }
             }
 
             // prepare products collection and apply visitors log to it
-            $productCollection = $this->_productFactory->create()->getCollection()
-                ->setStoreId($this->getQuote()->getStoreId())
-                ->addStoreFilter($this->getQuote()->getStoreId())
-                ->addAttributeToSelect('name')
-                ->addAttributeToSelect('price')
-                ->addAttributeToSelect('small_image');
+            $productCollection = $this->_productFactory->create()->getCollection()->setStoreId(
+                $this->getQuote()->getStoreId()
+            )->addStoreFilter(
+                $this->getQuote()->getStoreId()
+            )->addAttributeToSelect(
+                'name'
+            )->addAttributeToSelect(
+                'price'
+            )->addAttributeToSelect(
+                'small_image'
+            );
             $this->_event->applyLogToCollection(
-                $productCollection, \Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE, $this->getCustomerId(), 0, $skipProducts
+                $productCollection,
+                \Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE,
+                $this->getCustomerId(),
+                0,
+                $skipProducts
             );
 
             $productCollection->load();
@@ -159,7 +170,8 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
      * @param \Magento\Object $item
      * @return int
      */
-    public function getProductId($item) {
+    public function getProductId($item)
+    {
         return $item->getId();
     }
 }

@@ -23,6 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="shipping_method" output="1" template="onepage/shipping_method/available.phtml" cacheable="false"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="shipping_method" output="1" template="onepage/shipping_method/available.phtml"/>
 </layout>

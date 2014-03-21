@@ -83,7 +83,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </integrations>',
                 array()
             ),
-
             /** Missing required elements */
             'empty root node' => array(
                 '<integrations/>',
@@ -104,7 +103,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </integrations>',
                 array("Element 'endpoint_url': This element is not expected. Expected is ( email ).")
             ),
-
             /** Empty nodes */
             'empty email' => array(
                 '<integrations>
@@ -115,8 +113,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'email': [facet 'pattern'] The value '' is not "
-                        . "accepted by the pattern '[^@]+@[^\.]+\..+'.",
+                    "Element 'email': [facet 'pattern'] The value '' is not " .
+                    "accepted by the pattern '[^@]+@[^\.]+\..+'.",
                     "Element 'email': '' is not a valid value of the atomic type 'emailType'."
                 )
             ),
@@ -128,8 +126,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this underruns"
-                    . " the allowed minimum length of '4'.",
+                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
+                    " the allowed minimum length of '4'.",
                     "Element 'endpoint_url': '' is not a valid value of the atomic type 'urlType'."
                 )
             ),
@@ -142,8 +140,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     </integration>
                 </integrations>',
                 array(
-                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns"
-                    . " the allowed minimum length of '4'.",
+                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
+                    " the allowed minimum length of '4'.",
                     "Element 'identity_link_url': '' is not a valid value of the atomic type 'urlType'."
                 )
             ),
@@ -185,7 +183,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 </integrations>',
                 array("Element 'invalid': This element is not expected.")
             ),
-
             /** Excessive attributes */
             'invalid attribute in root' => array(
                 '<integrations invalid="invalid">
@@ -256,15 +253,13 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                array
-                (
-                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; "
-                        . "this underruns the allowed minimum length of '2'.",
-                    "Element 'integration', attribute 'name': "
-                        . "'' is not a valid value of the atomic type 'integrationNameType'."
+                array(
+                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; " .
+                    "this underruns the allowed minimum length of '2'.",
+                    "Element 'integration', attribute 'name': " .
+                    "'' is not a valid value of the atomic type 'integrationNameType'."
                 )
             ),
-
             /** Invalid values */
             'invalid email' => array(
                 '<integrations>
@@ -274,11 +269,12 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                array("Element 'email': [facet 'pattern'] The value 'invalid' "
-                    . "is not accepted by the pattern '[^@]+@[^\.]+\..+'.",
+                array(
+                    "Element 'email': [facet 'pattern'] The value 'invalid' " .
+                    "is not accepted by the pattern '[^@]+@[^\.]+\..+'.",
                     "Element 'email': 'invalid' is not a valid value of the atomic type 'emailType'."
                 )
-            ),
+            )
         );
     }
 }

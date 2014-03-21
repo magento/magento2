@@ -71,7 +71,10 @@ class Quote extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('Cart Price Rules'));
 
-        $this->_coreRegistry->register('current_promo_quote_rule', $this->_objectManager->create('Magento\SalesRule\Model\Rule'));
+        $this->_coreRegistry->register(
+            'current_promo_quote_rule',
+            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+        );
         $id = (int)$this->getRequest()->getParam('id');
 
         if (!$id && $this->getRequest()->getParam('rule_id')) {
@@ -91,9 +94,7 @@ class Quote extends \Magento\Backend\App\Action
     protected function _initAction()
     {
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_SalesRule::promo_quote')
-            ->_addBreadcrumb(__('Promotions'), __('Promotions'))
-        ;
+        $this->_setActiveMenu('Magento_SalesRule::promo_quote')->_addBreadcrumb(__('Promotions'), __('Promotions'));
         return $this;
     }
 
@@ -106,8 +107,7 @@ class Quote extends \Magento\Backend\App\Action
     {
         $this->_title->add(__('Cart Price Rules'));
 
-        $this->_initAction()
-            ->_addBreadcrumb(__('Catalog'), __('Catalog'));
+        $this->_initAction()->_addBreadcrumb(__('Catalog'), __('Catalog'));
         $this->_view->renderLayout();
     }
 
@@ -133,7 +133,7 @@ class Quote extends \Magento\Backend\App\Action
 
         if ($id) {
             $model->load($id);
-            if (! $model->getRuleId()) {
+            if (!$model->getRuleId()) {
                 $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('sales_rule/*');
                 return;
@@ -154,16 +154,10 @@ class Quote extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('current_promo_quote_rule', $model);
 
         $this->_initAction();
-        $this->_view->getLayout()->getBlock('promo_quote_edit')
-            ->setData('action', $this->getUrl('sales_rule/*/save'));
+        $this->_view->getLayout()->getBlock('promo_quote_edit')->setData('action', $this->getUrl('sales_rule/*/save'));
 
-        $this->_addBreadcrumb(
-                $id ? __('Edit Rule')
-                    : __('New Rule'),
-                $id ? __('Edit Rule')
-                    : __('New Rule'));
+        $this->_addBreadcrumb($id ? __('Edit Rule') : __('New Rule'), $id ? __('Edit Rule') : __('New Rule'));
         $this->_view->renderLayout();
-
     }
 
     /**
@@ -179,10 +173,14 @@ class Quote extends \Magento\Backend\App\Action
                 $model = $this->_objectManager->create('Magento\SalesRule\Model\Rule');
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_salesrule_prepare_save',
-                    array('request' => $this->getRequest()));
+                    array('request' => $this->getRequest())
+                );
                 $data = $this->getRequest()->getPost();
                 $inputFilter = new \Zend_Filter_Input(
-                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter), array(), $data);
+                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter),
+                    array(),
+                    $data
+                );
                 $data = $inputFilter->getUnescaped();
                 $id = $this->getRequest()->getParam('rule_id');
                 if ($id) {
@@ -200,14 +198,17 @@ class Quote extends \Magento\Backend\App\Action
                         $this->messageManager->addError($errorMessage);
                     }
                     $session->setPageData($data);
-                    $this->_redirect('sales_rule/*/edit', array('id'=>$model->getId()));
+                    $this->_redirect('sales_rule/*/edit', array('id' => $model->getId()));
                     return;
                 }
 
-                if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
-                    && isset($data['discount_amount'])
+                if (isset(
+                    $data['simple_action']
+                ) && $data['simple_action'] == 'by_percent' && isset(
+                    $data['discount_amount']
+                )
                 ) {
-                    $data['discount_amount'] = min(100,$data['discount_amount']);
+                    $data['discount_amount'] = min(100, $data['discount_amount']);
                 }
                 if (isset($data['rule']['conditions'])) {
                     $data['conditions'] = $data['rule']['conditions'];
@@ -218,7 +219,7 @@ class Quote extends \Magento\Backend\App\Action
                 unset($data['rule']);
                 $model->loadPost($data);
 
-                $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+                $useAutoGeneration = (int)(!empty($data['use_auto_generation']));
                 $model->setUseAutoGeneration($useAutoGeneration);
 
                 $session->setPageData($model->getData());
@@ -241,7 +242,6 @@ class Quote extends \Magento\Backend\App\Action
                     $this->_redirect('sales_rule/*/new');
                 }
                 return;
-
             } catch (\Exception $e) {
                 $this->messageManager->addError(
                     __('An error occurred while saving the rule data. Please review the log and try again.')
@@ -275,7 +275,8 @@ class Quote extends \Magento\Backend\App\Action
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
-                    __('An error occurred while deleting the rule. Please review the log and try again.'));
+                    __('An error occurred while deleting the rule. Please review the log and try again.')
+                );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
                 $this->_redirect('sales_rule/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
@@ -296,11 +297,17 @@ class Quote extends \Magento\Backend\App\Action
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create($type)
-            ->setId($id)
-            ->setType($type)
-            ->setRule($this->_objectManager->create('Magento\SalesRule\Model\Rule'))
-            ->setPrefix('conditions');
+        $model = $this->_objectManager->create(
+            $type
+        )->setId(
+            $id
+        )->setType(
+            $type
+        )->setRule(
+            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+        )->setPrefix(
+            'conditions'
+        );
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }
@@ -325,11 +332,17 @@ class Quote extends \Magento\Backend\App\Action
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create($type)
-            ->setId($id)
-            ->setType($type)
-            ->setRule($this->_objectManager->create('Magento\SalesRule\Model\Rule'))
-            ->setPrefix('actions');
+        $model = $this->_objectManager->create(
+            $type
+        )->setId(
+            $id
+        )->setType(
+            $type
+        )->setRule(
+            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+        )->setPrefix(
+            'actions'
+        );
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }
@@ -376,9 +389,11 @@ class Quote extends \Magento\Backend\App\Action
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
         if ($rule->getId()) {
             $fileName = 'coupon_codes.xml';
-            $content = $this->_view->getLayout()
-                ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
-                ->getExcelFile($fileName);
+            $content = $this->_view->getLayout()->createBlock(
+                'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid'
+            )->getExcelFile(
+                $fileName
+            );
             return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
@@ -397,9 +412,9 @@ class Quote extends \Magento\Backend\App\Action
         $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
         if ($rule->getId()) {
             $fileName = 'coupon_codes.csv';
-            $content = $this->_view->getLayout()
-                ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid')
-                ->getCsvFile();
+            $content = $this->_view->getLayout()->createBlock(
+                'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid'
+            )->getCsvFile();
             return $this->_fileFactory->create($fileName, $content, \Magento\App\Filesystem::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
@@ -425,8 +440,12 @@ class Quote extends \Magento\Backend\App\Action
 
         if (is_array($codesIds)) {
 
-            $couponsCollection = $this->_objectManager->create('Magento\SalesRule\Model\Resource\Coupon\Collection')
-                ->addFieldToFilter('coupon_id', array('in' => $codesIds));
+            $couponsCollection = $this->_objectManager->create(
+                'Magento\SalesRule\Model\Resource\Coupon\Collection'
+            )->addFieldToFilter(
+                'coupon_id',
+                array('in' => $codesIds)
+            );
 
             foreach ($couponsCollection as $coupon) {
                 $coupon->delete();
@@ -471,12 +490,14 @@ class Quote extends \Magento\Backend\App\Action
                     $generated = $generator->getGeneratedCount();
                     $this->messageManager->addSuccess(__('%1 coupon(s) have been generated.', $generated));
                     $this->_view->getLayout()->initMessages();
-                    $result['messages']  = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
+                    $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
             } catch (\Magento\Core\Exception $e) {
                 $result['error'] = $e->getMessage();
             } catch (\Exception $e) {
-                $result['error'] = __('Something went wrong while generating coupons. Please review the log and try again.');
+                $result['error'] = __(
+                    'Something went wrong while generating coupons. Please review the log and try again.'
+                );
                 $this->_objectManager->get('Magento\Logger')->logException($e);
             }
         }

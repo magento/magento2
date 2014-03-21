@@ -32,8 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product\Attribute;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
     /**
      * Entity factory1
@@ -81,8 +80,9 @@ class Collection
      */
     protected function _initSelect()
     {
-        $entityTypeId = (int)$this->_eavEntityFactory->create()->setType(\Magento\Catalog\Model\Product::ENTITY)
-            ->getTypeId();
+        $entityTypeId = (int)$this->_eavEntityFactory->create()->setType(
+            \Magento\Catalog\Model\Product::ENTITY
+        )->getTypeId();
         $columns = $this->getConnection()->describeTable($this->getResource()->getMainTable());
         unset($columns['attribute_id']);
         $retColumns = array();
@@ -92,13 +92,16 @@ class Collection
                 $retColumns[$labelColumn] = 'main_table.' . $labelColumn;
             }
         }
-        $this->getSelect()
-            ->from(array('main_table' => $this->getResource()->getMainTable()), $retColumns)
-            ->join(
-                array('additional_table' => $this->getTable('catalog_eav_attribute')),
-                'additional_table.attribute_id = main_table.attribute_id'
-            )
-            ->where('main_table.entity_type_id = ?', $entityTypeId);
+        $this->getSelect()->from(
+            array('main_table' => $this->getResource()->getMainTable()),
+            $retColumns
+        )->join(
+            array('additional_table' => $this->getTable('catalog_eav_attribute')),
+            'additional_table.attribute_id = main_table.attribute_id'
+        )->where(
+            'main_table.entity_type_id = ?',
+            $entityTypeId
+        );
         return $this;
     }
 
@@ -210,8 +213,10 @@ class Collection
         );
 
         if ($addRequiredCodes) {
-            $conditions[] = $this->getConnection()->quoteInto('main_table.attribute_code IN (?)',
-                array('status', 'visibility'));
+            $conditions[] = $this->getConnection()->quoteInto(
+                'main_table.attribute_code IN (?)',
+                array('status', 'visibility')
+            );
         }
 
         $this->getSelect()->where(sprintf('(%s)', implode(' OR ', $conditions)));
@@ -227,8 +232,10 @@ class Collection
     public function addSearchableAttributeFilter()
     {
         $this->getSelect()->where(
-            'additional_table.is_searchable = 1 OR '.
-            $this->getConnection()->quoteInto('main_table.attribute_code IN (?)', array('status', 'visibility'))
+            'additional_table.is_searchable = 1 OR ' . $this->getConnection()->quoteInto(
+                'main_table.attribute_code IN (?)',
+                array('status', 'visibility')
+            )
         );
 
         return $this;

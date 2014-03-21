@@ -96,10 +96,10 @@ class Packaging extends \Magento\Backend\Block\Template
         $orderId = $this->getRequest()->getParam('order_id');
         $urlParams = array();
 
-        $itemsQty       = array();
-        $itemsPrice     = array();
-        $itemsName      = array();
-        $itemsWeight    = array();
+        $itemsQty = array();
+        $itemsPrice = array();
+        $itemsName = array();
+        $itemsWeight = array();
         $itemsProductId = array();
 
         if ($shipmentId) {
@@ -107,12 +107,12 @@ class Packaging extends \Magento\Backend\Block\Template
             $createLabelUrl = $this->getUrl('adminhtml/order_shipment/createLabel', $urlParams);
             $itemsGridUrl = $this->getUrl('adminhtml/order_shipment/getShippingItemsGrid', $urlParams);
             foreach ($this->getShipment()->getAllItems() as $item) {
-                $itemsQty[$item->getId()]           = $item->getQty();
-                $itemsPrice[$item->getId()]         = $item->getPrice();
-                $itemsName[$item->getId()]          = $item->getName();
-                $itemsWeight[$item->getId()]        = $item->getWeight();
-                $itemsProductId[$item->getId()]     = $item->getProductId();
-                $itemsOrderItemId[$item->getId()]   = $item->getOrderItemId();
+                $itemsQty[$item->getId()] = $item->getQty();
+                $itemsPrice[$item->getId()] = $item->getPrice();
+                $itemsName[$item->getId()] = $item->getName();
+                $itemsWeight[$item->getId()] = $item->getWeight();
+                $itemsProductId[$item->getId()] = $item->getProductId();
+                $itemsOrderItemId[$item->getId()] = $item->getOrderItemId();
             }
         } else if ($orderId) {
             $urlParams['order_id'] = $orderId;
@@ -120,27 +120,29 @@ class Packaging extends \Magento\Backend\Block\Template
             $itemsGridUrl = $this->getUrl('adminhtml/order_shipment/getShippingItemsGrid', $urlParams);
 
             foreach ($this->getShipment()->getAllItems() as $item) {
-                $itemsQty[$item->getOrderItemId()]          = $item->getQty()*1;
-                $itemsPrice[$item->getOrderItemId()]        = $item->getPrice();
-                $itemsName[$item->getOrderItemId()]         = $item->getName();
-                $itemsWeight[$item->getOrderItemId()]       = $item->getWeight();
-                $itemsProductId[$item->getOrderItemId()]    = $item->getProductId();
-                $itemsOrderItemId[$item->getOrderItemId()]  = $item->getOrderItemId();
+                $itemsQty[$item->getOrderItemId()] = $item->getQty() * 1;
+                $itemsPrice[$item->getOrderItemId()] = $item->getPrice();
+                $itemsName[$item->getOrderItemId()] = $item->getName();
+                $itemsWeight[$item->getOrderItemId()] = $item->getWeight();
+                $itemsProductId[$item->getOrderItemId()] = $item->getProductId();
+                $itemsOrderItemId[$item->getOrderItemId()] = $item->getOrderItemId();
             }
         }
         $data = array(
-            'createLabelUrl'            => $createLabelUrl,
-            'itemsGridUrl'              => $itemsGridUrl,
-            'errorQtyOverLimit'         => __('You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped.'),
-            'titleDisabledSaveBtn'      => __('Products should be added to package(s)'),
-            'validationErrorMsg'        => __('The value that you entered is not valid.'),
-            'shipmentItemsQty'          => $itemsQty,
-            'shipmentItemsPrice'        => $itemsPrice,
-            'shipmentItemsName'         => $itemsName,
-            'shipmentItemsWeight'       => $itemsWeight,
-            'shipmentItemsProductId'    => $itemsProductId,
-            'shipmentItemsOrderItemId'  => $itemsOrderItemId,
-            'customizable'              => $this->_getCustomizableContainers(),
+            'createLabelUrl' => $createLabelUrl,
+            'itemsGridUrl' => $itemsGridUrl,
+            'errorQtyOverLimit' => __(
+                'You are trying to add a quantity for some products that doesn\'t match the quantity that was shipped.'
+            ),
+            'titleDisabledSaveBtn' => __('Products should be added to package(s)'),
+            'validationErrorMsg' => __('The value that you entered is not valid.'),
+            'shipmentItemsQty' => $itemsQty,
+            'shipmentItemsPrice' => $itemsPrice,
+            'shipmentItemsName' => $itemsName,
+            'shipmentItemsWeight' => $itemsWeight,
+            'shipmentItemsProductId' => $itemsProductId,
+            'shipmentItemsOrderItemId' => $itemsOrderItemId,
+            'customizable' => $this->_getCustomizableContainers()
         );
         return $this->_jsonEncoder->encode($data);
     }
@@ -156,13 +158,18 @@ class Packaging extends \Magento\Backend\Block\Template
         $storeId = $this->getShipment()->getStoreId();
         $address = $order->getShippingAddress();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
-        $countryShipper = $this->_storeConfig->getConfig(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID, $storeId);
+        $countryShipper = $this->_storeConfig->getConfig(
+            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
+            $storeId
+        );
         if ($carrier) {
-            $params = new \Magento\Object(array(
-                'method' => $order->getShippingMethod(true)->getMethod(),
-                'country_shipper' => $countryShipper,
-                'country_recipient' => $address->getCountryId(),
-            ));
+            $params = new \Magento\Object(
+                array(
+                    'method' => $order->getShippingMethod(true)->getMethod(),
+                    'country_shipper' => $countryShipper,
+                    'country_recipient' => $address->getCountryId()
+                )
+            );
             return $carrier->getContainerTypes($params);
         }
         return array();
@@ -313,13 +320,11 @@ class Packaging extends \Magento\Backend\Block\Template
     {
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('adminhtml/order_shipment/printPackage', $data);
-        return $this->getLayout()
-            ->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'label'   => __('Print'),
-                'onclick' => 'setLocation(\'' . $url . '\')'
-            ))
-            ->toHtml();
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array('label' => __('Print'), 'onclick' => 'setLocation(\'' . $url . '\')')
+        )->toHtml();
     }
 
     /**
@@ -355,13 +360,18 @@ class Packaging extends \Magento\Backend\Block\Template
         $storeId = $this->getShipment()->getStoreId();
         $address = $order->getShippingAddress();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
-        $countryShipper = $this->_storeConfig->getConfig(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID, $storeId);
+        $countryShipper = $this->_storeConfig->getConfig(
+            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
+            $storeId
+        );
         if ($carrier) {
-            $params = new \Magento\Object(array(
-                'method' => $order->getShippingMethod(true)->getMethod(),
-                'country_shipper' => $countryShipper,
-                'country_recipient' => $address->getCountryId(),
-            ));
+            $params = new \Magento\Object(
+                array(
+                    'method' => $order->getShippingMethod(true)->getMethod(),
+                    'country_shipper' => $countryShipper,
+                    'country_recipient' => $address->getCountryId()
+                )
+            );
             return $carrier->getContentTypes($params);
         }
         return array();
@@ -410,7 +420,7 @@ class Packaging extends \Magento\Backend\Block\Template
     public function getQtyOrderedItem($itemId)
     {
         if ($itemId) {
-            return $this->getShipment()->getOrder()->getItemById($itemId)->getQtyOrdered()*1;
+            return $this->getShipment()->getOrder()->getItemById($itemId)->getQtyOrdered() * 1;
         } else {
             return;
         }

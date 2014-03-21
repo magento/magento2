@@ -27,7 +27,6 @@ namespace Magento\Index\Block\Adminhtml\Process\Edit;
 
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
-
     /**
      * @return void
      */

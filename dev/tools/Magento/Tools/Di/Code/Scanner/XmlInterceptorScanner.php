@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Di\Code\Scanner;
 
 class XmlInterceptorScanner implements ScannerInterface
@@ -82,9 +81,19 @@ class XmlInterceptorScanner implements ScannerInterface
             // @todo the controller handling logic below must be removed when controllers become PSR-0 compliant
             $controllerSuffix = 'Controller';
             $pathParts = explode('_', $entityName);
-            if (strrpos($entityName, $controllerSuffix) === strlen($entityName) - strlen($controllerSuffix)
-                && isset($pathParts[2])
-                && !in_array($pathParts[2], array('Block', 'Helper', 'Model'))
+            if (strrpos(
+                $entityName,
+                $controllerSuffix
+            ) === strlen(
+                $entityName
+            ) - strlen(
+                $controllerSuffix
+            ) && isset(
+                $pathParts[2]
+            ) && !in_array(
+                $pathParts[2],
+                array('Block', 'Helper', 'Model')
+            )
             ) {
                 $this->_handleControllerClassName($entityName);
             }

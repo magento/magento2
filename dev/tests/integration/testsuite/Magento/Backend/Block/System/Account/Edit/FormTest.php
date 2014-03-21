@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Account\Edit;
 
 /**
@@ -34,12 +33,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrepareForm()
     {
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\User')->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\User\Model\User'
+        )->loadByUsername(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME
+        );
 
         /** @var $session \Magento\Backend\Model\Auth\Session */
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Auth\Session');
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Auth\Session'
+        );
         $session->setUser($user);
 
         /** @var $layout \Magento\Core\Model\Layout */
@@ -82,21 +85,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'required' => true,
                 'value' => $user->getData('email')
             ),
-            'password' => array(
-                'name' => 'password',
-                'type' => 'password',
-                'required' => false
-            ),
-            'confirmation' => array(
-                'name' => 'password_confirmation',
-                'type' => 'password',
-                'required' => false
-            ),
-            'interface_locale' => array(
-                'name' => 'interface_locale',
-                'type' => 'select',
-                'required' => false
-            ),
+            'password' => array('name' => 'password', 'type' => 'password', 'required' => false),
+            'confirmation' => array('name' => 'password_confirmation', 'type' => 'password', 'required' => false),
+            'interface_locale' => array('name' => 'interface_locale', 'type' => 'select', 'required' => false)
         );
 
         foreach ($expectedFieldset as $fieldId => $field) {

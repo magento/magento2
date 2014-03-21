@@ -150,7 +150,7 @@ interface WrapperInterface
      * @param int $newSize
      * @return mixed
      */
-    public function stream_truncate ($newSize);
+    public function stream_truncate($newSize);
 
     /**
      * @param array $data
@@ -170,4 +170,4 @@ interface WrapperInterface
      * @return mixed
      */
     public function url_stat($path, $flags);
-} 
+}

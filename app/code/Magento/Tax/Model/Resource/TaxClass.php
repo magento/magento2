@@ -51,10 +51,14 @@ class TaxClass extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(array(
-            'field' => array('class_type', 'class_name'),
-            'title' => __('Something went wrong saving this tax class because a class with the same name already exists.'),
-        ));
+        $this->_uniqueFields = array(
+            array(
+                'field' => array('class_type', 'class_name'),
+                'title' => __(
+                    'Something went wrong saving this tax class because a class with the same name already exists.'
+                )
+            )
+        );
         return $this;
     }
 }

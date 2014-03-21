@@ -79,27 +79,21 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
      */
     public function draw()
     {
-        $item   = $this->getItem();
-        $pdf    = $this->getPdf();
-        $page   = $this->getPage();
-        $lines  = array();
+        $item = $this->getItem();
+        $pdf = $this->getPdf();
+        $page = $this->getPage();
+        $lines = array();
 
         // draw Product name
-        $lines[0] = array(array(
-            'text' => $this->string->split($item->getName(), 60, true, true),
-            'feed' => 100,
-        ));
+        $lines[0] = array(array('text' => $this->string->split($item->getName(), 60, true, true), 'feed' => 100));
 
         // draw QTY
-        $lines[0][] = array(
-            'text'  => $item->getQty() * 1,
-            'feed'  => 35
-        );
+        $lines[0][] = array('text' => $item->getQty() * 1, 'feed' => 35);
 
         // draw SKU
         $lines[0][] = array(
-            'text'  => $this->string->split($this->getSku($item), 25),
-            'feed'  => 565,
+            'text' => $this->string->split($this->getSku($item), 25),
+            'feed' => 565,
             'align' => 'right'
         );
 
@@ -116,24 +110,20 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 
                 // draw options value
                 if ($option['value']) {
-                    $printValue = isset($option['print_value'])
-                        ? $option['print_value']
-                        : $this->filterManager->stripTags($option['value']);
+                    $printValue = isset(
+                        $option['print_value']
+                    ) ? $option['print_value'] : $this->filterManager->stripTags(
+                        $option['value']
+                    );
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
-                        $lines[][] = array(
-                            'text' => $this->string->split($value, 50, true, true),
-                            'feed' => 115
-                        );
+                        $lines[][] = array('text' => $this->string->split($value, 50, true, true), 'feed' => 115);
                     }
                 }
             }
         }
 
-        $lineBlock = array(
-            'lines'  => $lines,
-            'height' => 20
-        );
+        $lineBlock = array('lines' => $lines, 'height' => 20);
 
         $page = $pdf->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
         $this->setPage($page);

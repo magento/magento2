@@ -25,10 +25,8 @@
  */
 namespace Magento\Connect\Command;
 
-final class Install
-extends \Magento\Connect\Command
+final class Install extends \Magento\Connect\Command
 {
-
     /**
      * Install action callback
      *
@@ -45,7 +43,7 @@ extends \Magento\Connect\Command
         $installFileMode = $command === 'install-file';
 
 
-         
+
 
         try {
             $packager = $this->getPackager();
@@ -58,29 +56,29 @@ extends \Magento\Connect\Command
 
             $rest = $this->rest();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $config = $this->config();
                 $cache = $this->getSconfig();
             }
-            if($installFileMode) {
-                if(count($params) < 1) {
+            if ($installFileMode) {
+                if (count($params) < 1) {
                     throw new \Exception("Argument should be: filename");
                 }
                 $filename = $params[0];
-                if(!@file_exists($filename)) {
+                if (!@file_exists($filename)) {
                     throw new \Exception("File '{$filename}' not found");
                 }
-                if(!@is_readable($filename)) {
+                if (!@is_readable($filename)) {
                     throw new \Exception("File '{$filename}' is not readable");
                 }
 
                 $package = new \Magento\Connect\Package($filename);
                 $package->validate();
                 $errors = $package->getErrors();
-                if(count($errors)) {
-                    throw new \Exception("Package file is invalid\n".implode("\n", $errors));
+                if (count($errors)) {
+                    throw new \Exception("Package file is invalid\n" . implode("\n", $errors));
                 }
 
                 $pChan = $package->getChannel();
@@ -88,26 +86,26 @@ extends \Magento\Connect\Command
                 $pVer = $package->getVersion();
 
 
-                if(!$cache->isChannel($pChan)) {
+                if (!$cache->isChannel($pChan)) {
                     throw new \Exception("'{$pChan}' is not installed channel");
                 }
 
                 $conflicts = $cache->hasConflicts($pChan, $pName, $pVer);
 
-                if(false !== $conflicts) {
-                    $conflicts = implode(", ",$conflicts);
-                    if($forceMode) {
-                        $this->doError($command, "Package {$pChan}/{$pName} {$pVer} conflicts with: ".$conflicts);
+                if (false !== $conflicts) {
+                    $conflicts = implode(", ", $conflicts);
+                    if ($forceMode) {
+                        $this->doError($command, "Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
                     } else {
-                        throw new \Exception("Package {$pChan}/{$pName} {$pVer} conflicts with: ".$conflicts);
+                        throw new \Exception("Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
                     }
                 }
 
                 $conflicts = $package->checkPhpDependencies();
-                if(true !== $conflicts) {
-                    $confilcts = implode(",",$conflicts);
-                    $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: ".$conflicts;
-                    if($forceMode) {
+                if (true !== $conflicts) {
+                    $confilcts = implode(",", $conflicts);
+                    $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: " . $conflicts;
+                    if ($forceMode) {
                         $this->doError($command, $err);
                     } else {
                         throw new \Exception($err);
@@ -115,9 +113,9 @@ extends \Magento\Connect\Command
                 }
 
                 $conflicts = $package->checkPhpVersion();
-                if(true !== $conflicts) {
-                    $err = "Package {$pChan}/{$pName} {$pVer}: ".$conflicts;
-                    if($forceMode) {
+                if (true !== $conflicts) {
+                    $err = "Package {$pChan}/{$pName} {$pVer}: " . $conflicts;
+                    if ($forceMode) {
                         $this->doError($command, $err);
                     } else {
                         throw new \Exception($err);
@@ -125,8 +123,8 @@ extends \Magento\Connect\Command
                 }
 
 
-                if(!$noFilesInstall) {
-                    if($ftp) {
+                if (!$noFilesInstall) {
+                    if ($ftp) {
                         $packager->processInstallPackageFtp($package, $filename, $config, $ftpObj);
                     } else {
                         $packager->processInstallPackage($package, $filename, $config);
@@ -135,14 +133,16 @@ extends \Magento\Connect\Command
                 $cache->addPackage($package);
                 $installedDeps = array();
                 $installedDepsAssoc = array();
-                $installedDepsAssoc[] = array('channel'=>$pChan, 'name'=>$pName, 'version'=>$pVer);
+                $installedDepsAssoc[] = array('channel' => $pChan, 'name' => $pName, 'version' => $pVer);
                 $installedDeps[] = array($pChan, $pName, $pVer);
 
 
                 $title = isset($options['title']) ? $options['title'] : "Package installed: ";
-                $out = array($command => array('data'=>$installedDeps, 'assoc'=>$installedDepsAssoc,  'title'=>$title));
+                $out = array(
+                    $command => array('data' => $installedDeps, 'assoc' => $installedDepsAssoc, 'title' => $title)
+                );
 
-                if($ftp) {
+                if ($ftp) {
                     $packager->writeToRemoteCache($cache, $ftpObj);
                     @unlink($config->getFilename());
                 }
@@ -151,56 +151,71 @@ extends \Magento\Connect\Command
                 return $out[$command]['data'];
             }
 
-            if(!$upgradeAllMode) {
+            if (!$upgradeAllMode) {
 
-                if(count($params) < 2) {
+                if (count($params) < 2) {
                     throw new \Exception("Argument should be: channelName packageName");
                 }
                 $channel = $params[0];
                 $package = $params[1];
-                $argVersionMax = isset($params[2]) ? $params[2]: false;
+                $argVersionMax = isset($params[2]) ? $params[2] : false;
                 $argVersionMin = false;
 
-                if($cache->isChannelName($channel)) {
+                if ($cache->isChannelName($channel)) {
                     $uri = $cache->chanUrl($channel);
-                } elseif($this->validator()->validateUrl($channel)) {
+                } elseif ($this->validator()->validateUrl($channel)) {
                     $uri = $channel;
-                } elseif($channel) {
-                    $uri = $config->protocol.'://'.$channel;
+                } elseif ($channel) {
+                    $uri = $config->protocol . '://' . $channel;
                 } else {
                     throw new \Exception("'{$channel}' is not existant channel name / valid uri");
                 }
 
-                if($uri && !$cache->isChannel($uri)) {
+                if ($uri && !$cache->isChannel($uri)) {
                     $rest->setChannel($uri);
                     $data = $rest->getChannelInfo();
                     $data->uri = $uri;
                     $cache->addChannel($data->name, $uri);
-                    $this->ui()->output("Successfully added channel: ".$uri);
+                    $this->ui()->output("Successfully added channel: " . $uri);
                 }
                 $channelName = $cache->chanName($channel);
                 //var_dump($channelName);
-                $packagesToInstall = $packager->getDependenciesList( $channelName, $package, $cache, $config, $argVersionMax, $argVersionMin, $withDepsMode);
+                $packagesToInstall = $packager->getDependenciesList(
+                    $channelName,
+                    $package,
+                    $cache,
+                    $config,
+                    $argVersionMax,
+                    $argVersionMin,
+                    $withDepsMode
+                );
                 $packagesToInstall = $packagesToInstall['result'];
                 //var_dump($packagesToInstall);
-
             } else {
-                if(empty($params[0])) {
+                if (empty($params[0])) {
                     $channels = $cache->getChannelNames();
                 } else {
                     $channel = $params[0];
-                    if(!$cache->isChannel($channel)) {
+                    if (!$cache->isChannel($channel)) {
                         throw new \Exception("'{$channel}' is not existant channel name / valid uri");
                     }
                     $channels = $cache->chanName($channel);
                 }
                 $packagesToInstall = array();
                 $neededToUpgrade = $packager->getUpgradesList($channels, $cache, $config);
-                foreach($neededToUpgrade as $chan=>$packages) {
-                    foreach($packages as $name=>$data) {
+                foreach ($neededToUpgrade as $chan => $packages) {
+                    foreach ($packages as $name => $data) {
                         $versionTo = $data['to'];
-                        $tmp = $packager->getDependenciesList( $chan, $name, $cache, $config, $versionTo, $versionTo, $withDepsMode);
-                        if(count($tmp['result'])) {
+                        $tmp = $packager->getDependenciesList(
+                            $chan,
+                            $name,
+                            $cache,
+                            $config,
+                            $versionTo,
+                            $versionTo,
+                            $withDepsMode
+                        );
+                        if (count($tmp['result'])) {
                             $packagesToInstall = array_merge($packagesToInstall, $tmp['result']);
                         }
                     }
@@ -214,7 +229,7 @@ extends \Magento\Connect\Command
             $installedDepsAssoc = array();
             $keys = array();
 
-            foreach($packagesToInstall as $package) {
+            foreach ($packagesToInstall as $package) {
                 try {
                     $pName = $package['name'];
                     $pChan = $package['channel'];
@@ -224,28 +239,31 @@ extends \Magento\Connect\Command
                     /**
                      * Upgrade mode
                      */
-                    if($upgradeMode && $cache->hasPackage($pChan, $pName, $pVer, $pVer)) {
+                    if ($upgradeMode && $cache->hasPackage($pChan, $pName, $pVer, $pVer)) {
                         $this->ui()->output("Already installed: {$pChan}/{$pName} {$pVer}, skipping");
                         continue;
                     }
 
                     $conflicts = $cache->hasConflicts($pChan, $pName, $pVer);
 
-                    if(false !== $conflicts) {
-                        $conflicts = implode(", ",$conflicts);
-                        if($forceMode) {
-                            $this->doError($command, "Package {$pChan}/{$pName} {$pVer} conflicts with: ".$conflicts);
+                    if (false !== $conflicts) {
+                        $conflicts = implode(", ", $conflicts);
+                        if ($forceMode) {
+                            $this->doError(
+                                $command,
+                                "Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts
+                            );
                         } else {
-                            throw new \Exception("Package {$pChan}/{$pName} {$pVer} conflicts with: ".$conflicts);
+                            throw new \Exception("Package {$pChan}/{$pName} {$pVer} conflicts with: " . $conflicts);
                         }
                     }
 
-                     
+
                     /**
                      * Modifications
                      */
                     if ($upgradeMode && !$ignoreModifiedMode) {
-                        if($ftp) {
+                        if ($ftp) {
                             $modifications = $packager->getRemoteModifiedFiles($pChan, $pName, $cache, $config, $ftp);
                         } else {
                             $modifications = $packager->getLocalModifiedFiles($pChan, $pName, $cache, $config);
@@ -253,7 +271,7 @@ extends \Magento\Connect\Command
                         if (count($modifications) > 0) {
                             $this->ui()->output('Changed locally: ');
                             foreach ($modifications as $row) {
-                                if(!$ftp) {
+                                if (!$ftp) {
                                     $this->ui()->output($config->magento_root . '/' . $row);
                                 } else {
                                     $this->ui()->output($row);
@@ -266,8 +284,8 @@ extends \Magento\Connect\Command
 
                     $dir = $config->getChannelCacheDir($pChan);
                     @mkdir($dir, 0777, true);
-                    $file = $dir . '/' . $pName."-".$pVer.".tgz";
-                    if(!@file_exists($file)) {
+                    $file = $dir . '/' . $pName . "-" . $pVer . ".tgz";
+                    if (!@file_exists($file)) {
                         $rest->downloadPackageFileOfRelease($pName, $pVer, $file);
                     }
                     $package = new \Magento\Connect\Package($file);
@@ -275,10 +293,10 @@ extends \Magento\Connect\Command
 
 
                     $conflicts = $package->checkPhpDependencies();
-                    if(true !== $conflicts) {                       
-                        $confilcts = implode(",",$conflicts);
-                        $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: ".$conflicts;
-                        if($forceMode) {
+                    if (true !== $conflicts) {
+                        $confilcts = implode(",", $conflicts);
+                        $err = "Package {$pChan}/{$pName} {$pVer} depends on PHP extensions: " . $conflicts;
+                        if ($forceMode) {
                             $this->doError($command, $err);
                         } else {
                             throw new \Exception($err);
@@ -286,17 +304,17 @@ extends \Magento\Connect\Command
                     }
 
                     $conflicts = $package->checkPhpVersion();
-                    if(true !== $conflicts) {
-                        $err = "Package {$pChan}/{$pName} {$pVer}: ".$conflicts;
-                        if($forceMode) {
+                    if (true !== $conflicts) {
+                        $err = "Package {$pChan}/{$pName} {$pVer}: " . $conflicts;
+                        if ($forceMode) {
                             $this->doError($command, $err);
                         } else {
                             throw new \Exception($err);
                         }
                     }
 
-                    if(!$noFilesInstall) {
-                        if($ftp) {
+                    if (!$noFilesInstall) {
+                        if ($ftp) {
                             $packager->processInstallPackageFtp($package, $file, $config, $ftpObj);
                         } else {
                             $packager->processInstallPackage($package, $file, $config);
@@ -304,10 +322,9 @@ extends \Magento\Connect\Command
                     }
                     $cache->addPackage($package);
 
-                    $installedDepsAssoc[] = array('channel'=>$pChan, 'name'=>$pName, 'version'=>$pVer);
+                    $installedDepsAssoc[] = array('channel' => $pChan, 'name' => $pName, 'version' => $pVer);
                     $installedDeps[] = array($pChan, $pName, $pVer);
-
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     $this->doError($command, $e->getMessage());
                 }
             }
@@ -315,18 +332,19 @@ extends \Magento\Connect\Command
 
 
             $title = isset($options['title']) ? $options['title'] : "Package installed: ";
-            $out = array($command => array('data'=>$installedDeps, 'assoc'=>$installedDepsAssoc,  'title'=>$title));
+            $out = array(
+                $command => array('data' => $installedDeps, 'assoc' => $installedDepsAssoc, 'title' => $title)
+            );
 
-            if($ftp) {
+            if ($ftp) {
                 $packager->writeToRemoteCache($cache, $ftpObj);
                 @unlink($config->getFilename());
             }
 
             $this->ui()->output($out);
             return $out[$command]['data'];
-
         } catch (\Exception $e) {
-            if($ftp) {
+            if ($ftp) {
                 $packager->writeToRemoteCache($cache, $ftpObj);
                 @unlink($config->getFilename());
             }
@@ -376,7 +394,7 @@ extends \Magento\Connect\Command
         //$this->splitPackageArgs($params);
 
         try {
-            if(count($params) != 2) {
+            if (count($params) != 2) {
                 throw new \Exception("Argument count should be = 2");
             }
 
@@ -387,7 +405,7 @@ extends \Magento\Connect\Command
             $forceMode = isset($options['force']);
 
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
@@ -396,58 +414,57 @@ extends \Magento\Connect\Command
 
             $chan = $cache->getChannel($channel);
             $channel = $cache->chanName($channel);
-            if(!$cache->hasPackage($channel, $package)) {
+            if (!$cache->hasPackage($channel, $package)) {
                 throw new \Exception("Package is not installed");
             }
 
             $deletedPackages = array();
             $list = $packager->getUninstallList($channel, $package, $cache, $config, $withDepsMode);
-            foreach($list['list'] as $packageData) {
+            foreach ($list['list'] as $packageData) {
                 try {
-                    $reqd = $cache->requiredByOtherPackages($packageData['channel'], $packageData['name'], $list['list']);
-                    if(count($reqd)) {
+                    $reqd = $cache->requiredByOtherPackages(
+                        $packageData['channel'],
+                        $packageData['name'],
+                        $list['list']
+                    );
+                    if (count($reqd)) {
                         $errMessage = "{$packageData['channel']}/{$packageData['name']} {$packageData['version']} is required by: ";
                         $t = array();
-                        foreach($reqd as $r) {
-                            $t[] = $r['channel']."/".$r['name']. " ".$r['version'];
+                        foreach ($reqd as $r) {
+                            $t[] = $r['channel'] . "/" . $r['name'] . " " . $r['version'];
                         }
                         $errMessage .= implode(", ", $t);
-                        if($forceMode) {
-                            $this->ui()->output("Warning: ".$errMessage);
+                        if ($forceMode) {
+                            $this->ui()->output("Warning: " . $errMessage);
                         } else {
                             throw new \Exception($errMessage);
                         }
                     }
 
                     list($chan, $pack) = array($packageData['channel'], $packageData['name']);
-                    if($ftp) {
-                        $packager->processUninstallPackageFtp($chan, $pack, $cache, $config,  $ftp);
+                    if ($ftp) {
+                        $packager->processUninstallPackageFtp($chan, $pack, $cache, $config, $ftp);
                     } else {
                         $packager->processUninstallPackage($chan, $pack, $cache, $config);
                     }
                     $cache->deletePackage($chan, $pack);
                     $deletedPackages[] = array($chan, $pack);
-
-                } catch(\Exception $e) {
-                    if($forceMode) {
+                } catch (\Exception $e) {
+                    if ($forceMode) {
                         $this->doError($command, $e->getMessage());
                     } else {
                         throw new \Exception($e->getMessage());
                     }
                 }
             }
-            if($ftp) {
+            if ($ftp) {
                 $packager->writeToRemoteCache($cache, $ftpObj);
                 @unlink($config->getFilename());
             }
-            $out = array($command=>array('data'=>$deletedPackages, 'title'=>'Package deleted: '));
+            $out = array($command => array('data' => $deletedPackages, 'title' => 'Package deleted: '));
             $this->ui()->output($out);
-
         } catch (\Exception $e) {
             return $this->doError($command, $e->getMessage());
         }
-
     }
-
 }
-

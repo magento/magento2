@@ -89,9 +89,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId    = 'order_id';
-        $this->_controller  = 'adminhtml_order';
-        $this->_mode        = 'view';
+        $this->_objectId = 'order_id';
+        $this->_controller = 'adminhtml_order';
+        $this->_mode = 'view';
 
         parent::_construct();
 
@@ -106,129 +106,163 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::actions_edit') && $order->canEdit()) {
-            $onclickJs = 'deleteConfirm(\''
-                . __('Are you sure? This order will be canceled and a new one will be created instead.')
-                . '\', \'' . $this->getEditUrl() . '\');';
-            $this->_addButton('order_edit', array(
-                'label'    => __('Edit'),
-                'onclick'  => $onclickJs,
-            ));
+            $onclickJs = 'deleteConfirm(\'' . __(
+                'Are you sure? This order will be canceled and a new one will be created instead.'
+            ) . '\', \'' . $this->getEditUrl() . '\');';
+            $this->_addButton('order_edit', array('label' => __('Edit'), 'onclick' => $onclickJs));
             // see if order has non-editable products as items
-            $nonEditableTypes = array_keys($this->getOrder()->getResource()->aggregateProductsByTypes(
-                $order->getId(),
-                $this->_salesConfig->getAvailableProductTypes(),
-                false
-            ));
+            $nonEditableTypes = array_keys(
+                $this->getOrder()->getResource()->aggregateProductsByTypes(
+                    $order->getId(),
+                    $this->_salesConfig->getAvailableProductTypes(),
+                    false
+                )
+            );
             if ($nonEditableTypes) {
-                $this->_updateButton('order_edit', 'onclick',
-                    'if (!confirm(\'' .
-                    __('This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.', implode(', ', $nonEditableTypes), implode(', ', $nonEditableTypes)) . '\')) return false;' . $onclickJs
+                $this->_updateButton(
+                    'order_edit',
+                    'onclick',
+                    'if (!confirm(\'' . __(
+                        'This order contains (%1) items and therefore cannot be edited through the admin interface. If you wish to continue editing, the (%2) items will be removed, the order will be canceled and a new order will be placed.',
+                        implode(', ', $nonEditableTypes),
+                        implode(', ', $nonEditableTypes)
+                    ) . '\')) return false;' . $onclickJs
                 );
             }
         }
 
         if ($this->_isAllowedAction('Magento_Sales::cancel') && $order->canCancel()) {
             $message = __('Are you sure you want to cancel this order?');
-            $this->_addButton('order_cancel', array(
-                'label'     => __('Cancel'),
-                'onclick'   => 'deleteConfirm(\''.$message.'\', \'' . $this->getCancelUrl() . '\')',
-            ));
+            $this->_addButton(
+                'order_cancel',
+                array(
+                    'label' => __('Cancel'),
+                    'onclick' => 'deleteConfirm(\'' . $message . '\', \'' . $this->getCancelUrl() . '\')'
+                )
+            );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::emails') && !$order->isCanceled()) {
             $message = __('Are you sure you want to send an order email to customer?');
-            $this->addButton('send_notification', array(
-                'label'     => __('Send Email'),
-                'onclick'   => "confirmSetLocation('{$message}', '{$this->getEmailUrl()}')",
-            ));
+            $this->addButton(
+                'send_notification',
+                array(
+                    'label' => __('Send Email'),
+                    'onclick' => "confirmSetLocation('{$message}', '{$this->getEmailUrl()}')"
+                )
+            );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::creditmemo') && $order->canCreditmemo()) {
-            $message = __('This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?');
+            $message = __(
+                'This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?'
+            );
             $onClick = "setLocation('{$this->getCreditmemoUrl()}')";
             if ($order->getPayment()->getMethodInstance()->isGateway()) {
                 $onClick = "confirmSetLocation('{$message}', '{$this->getCreditmemoUrl()}')";
             }
-            $this->_addButton('order_creditmemo', array(
-                'label'     => __('Credit Memo'),
-                'onclick'   => $onClick,
-                'class'     => 'go'
-            ));
+            $this->_addButton(
+                'order_creditmemo',
+                array('label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'go')
+            );
         }
 
         // invoice action intentionally
         if ($this->_isAllowedAction('Magento_Sales::invoice') && $order->canVoidPayment()) {
             $message = __('Are you sure you want to void the payment?');
-            $this->addButton('void_payment', array(
-                'label'     => __('Void'),
-                'onclick'   => "confirmSetLocation('{$message}', '{$this->getVoidPaymentUrl()}')",
-            ));
+            $this->addButton(
+                'void_payment',
+                array(
+                    'label' => __('Void'),
+                    'onclick' => "confirmSetLocation('{$message}', '{$this->getVoidPaymentUrl()}')"
+                )
+            );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::hold') && $order->canHold()) {
-            $this->_addButton('order_hold', array(
-                'label'     => __('Hold'),
-                'onclick'   => 'setLocation(\'' . $this->getHoldUrl() . '\')',
-            ));
+            $this->_addButton(
+                'order_hold',
+                array('label' => __('Hold'), 'onclick' => 'setLocation(\'' . $this->getHoldUrl() . '\')')
+            );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::unhold') && $order->canUnhold()) {
-            $this->_addButton('order_unhold', array(
-                'label'     => __('Unhold'),
-                'onclick'   => 'setLocation(\'' . $this->getUnholdUrl() . '\')',
-            ));
+            $this->_addButton(
+                'order_unhold',
+                array('label' => __('Unhold'), 'onclick' => 'setLocation(\'' . $this->getUnholdUrl() . '\')')
+            );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::review_payment')) {
             if ($order->canReviewPayment()) {
                 $message = __('Are you sure you want to accept this payment?');
-                $this->_addButton('accept_payment', array(
-                    'label'     => __('Accept Payment'),
-                    'onclick'   => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('accept')}')",
-                ));
+                $this->_addButton(
+                    'accept_payment',
+                    array(
+                        'label' => __('Accept Payment'),
+                        'onclick' => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('accept')}')"
+                    )
+                );
                 $message = __('Are you sure you want to deny this payment?');
-                $this->_addButton('deny_payment', array(
-                    'label'     => __('Deny Payment'),
-                    'onclick'   => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('deny')}')",
-                ));
+                $this->_addButton(
+                    'deny_payment',
+                    array(
+                        'label' => __('Deny Payment'),
+                        'onclick' => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('deny')}')"
+                    )
+                );
             }
             if ($order->canFetchPaymentReviewUpdate()) {
-                $this->_addButton('get_review_payment_update', array(
-                    'label'     => __('Get Payment Update'),
-                    'onclick'   => 'setLocation(\'' . $this->getReviewPaymentUrl('update') . '\')',
-                ));
+                $this->_addButton(
+                    'get_review_payment_update',
+                    array(
+                        'label' => __('Get Payment Update'),
+                        'onclick' => 'setLocation(\'' . $this->getReviewPaymentUrl('update') . '\')'
+                    )
+                );
             }
         }
 
         if ($this->_isAllowedAction('Magento_Sales::invoice') && $order->canInvoice()) {
-            $_label = $order->getForcedShipmentWithInvoice() ?
-                __('Invoice and Ship') :
-                __('Invoice');
-            $this->_addButton('order_invoice', array(
-                'label'     => $_label,
-                'onclick'   => 'setLocation(\'' . $this->getInvoiceUrl() . '\')',
-                'class'     => 'go'
-            ));
+            $_label = $order->getForcedShipmentWithInvoice() ? __('Invoice and Ship') : __('Invoice');
+            $this->_addButton(
+                'order_invoice',
+                array(
+                    'label' => $_label,
+                    'onclick' => 'setLocation(\'' . $this->getInvoiceUrl() . '\')',
+                    'class' => 'go'
+                )
+            );
         }
 
-        if ($this->_isAllowedAction('Magento_Sales::ship') && $order->canShip()
-            && !$order->getForcedShipmentWithInvoice()) {
-            $this->_addButton('order_ship', array(
-                'label'     => __('Ship'),
-                'onclick'   => 'setLocation(\'' . $this->getShipUrl() . '\')',
-                'class'     => 'go'
-            ));
-        }
-
-        if ($this->_isAllowedAction('Magento_Sales::reorder')
-            && $this->_reorderHelper->isAllowed($order->getStore())
-            && $order->canReorderIgnoreSalable()
+        if ($this->_isAllowedAction(
+            'Magento_Sales::ship'
+        ) && $order->canShip() && !$order->getForcedShipmentWithInvoice()
         ) {
-            $this->_addButton('order_reorder', array(
-                'label'     => __('Reorder'),
-                'onclick'   => 'setLocation(\'' . $this->getReorderUrl() . '\')',
-                'class'     => 'go'
-            ));
+            $this->_addButton(
+                'order_ship',
+                array(
+                    'label' => __('Ship'),
+                    'onclick' => 'setLocation(\'' . $this->getShipUrl() . '\')',
+                    'class' => 'go'
+                )
+            );
+        }
+
+        if ($this->_isAllowedAction(
+            'Magento_Sales::reorder'
+        ) && $this->_reorderHelper->isAllowed(
+            $order->getStore()
+        ) && $order->canReorderIgnoreSalable()
+        ) {
+            $this->_addButton(
+                'order_reorder',
+                array(
+                    'label' => __('Reorder'),
+                    'onclick' => 'setLocation(\'' . $this->getReorderUrl() . '\')',
+                    'class' => 'go'
+                )
+            );
         }
     }
 
@@ -265,7 +299,12 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         } else {
             $_extOrderId = '';
         }
-        return __('Order # %1 %2 | %3', $this->getOrder()->getRealOrderId(), $_extOrderId, $this->formatDate($this->getOrder()->getCreatedAtDate(), 'medium', true));
+        return __(
+            'Order # %1 %2 | %3',
+            $this->getOrder()->getRealOrderId(),
+            $_extOrderId,
+            $this->formatDate($this->getOrder()->getCreatedAtDate(), 'medium', true)
+        );
     }
 
     /**
@@ -275,7 +314,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param array $params2
      * @return string
      */
-    public function getUrl($params='', $params2=array())
+    public function getUrl($params = '', $params2 = array())
     {
         $params2['order_id'] = $this->getOrderId();
         return parent::getUrl($params, $params2);

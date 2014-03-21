@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<theme>
+<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/Magento/Config/etc/theme.xsd">
     <title>Iphone</title>
     <version>2.0.0.0</version>
     <parent>magento_default</parent>

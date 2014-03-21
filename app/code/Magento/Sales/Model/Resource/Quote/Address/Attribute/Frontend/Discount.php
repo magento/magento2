@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Discount
-    extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
+class Discount extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Frontend
 {
     /**
      * Fetch discount
@@ -50,11 +49,7 @@ class Discount
             if (strlen($couponCode)) {
                 $title .= sprintf(' (%s)', $couponCode);
             }
-            $address->addTotal(array(
-                'code'  => 'discount',
-                'title' => $title,
-                'value' => -$amount
-            ));
+            $address->addTotal(array('code' => 'discount', 'title' => $title, 'value' => -$amount));
         }
         return $this;
     }

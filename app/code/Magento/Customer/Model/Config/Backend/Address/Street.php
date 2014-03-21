@@ -69,7 +69,7 @@ class Street extends \Magento\Core\Model\Config\Value
     protected function _afterSave()
     {
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
-        $value  = $this->getValue();
+        $value = $this->getValue();
         switch ($this->getScope()) {
             case 'websites':
                 $website = $this->_storeManager->getWebsite($this->getWebsiteCode());

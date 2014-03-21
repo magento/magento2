@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Widget\Controller\Adminhtml;
 
 /**
@@ -37,12 +36,16 @@ class WidgetTest extends \Magento\Backend\Utility\Controller
      */
     public function testLoadOptionsAction()
     {
-        $this->getRequest()->setPost('widget',
-            '{"widget_type":"Magento\\\\Cms\\\\Block\\\\Widget\\\\Page\\\\Link","values":{}}');
+        $this->getRequest()->setPost(
+            'widget',
+            '{"widget_type":"Magento\\\\Cms\\\\Block\\\\Widget\\\\Page\\\\Link","values":{}}'
+        );
         $this->dispatch('backend/admin/widget/loadOptions');
         $output = $this->getResponse()->getBody();
         //searching for label with text "CMS Page"
-        $this->assertContains('data-ui-id="wysiwyg-widget-options-fieldset-element-label-parameters-page-id-label" >'
-            . '<span>CMS Page', $output);
+        $this->assertContains(
+            'data-ui-id="wysiwyg-widget-options-fieldset-element-label-parameters-page-id-label" >' . '<span>CMS Page',
+            $output
+        );
     }
 }

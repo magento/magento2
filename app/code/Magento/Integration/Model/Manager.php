@@ -97,7 +97,6 @@ class Manager
             } else {
                 $this->_integrationService->create($integrationData);
             }
-
         }
         return $integrationNames;
     }

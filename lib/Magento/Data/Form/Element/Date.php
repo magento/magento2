@@ -81,7 +81,6 @@ class Date extends AbstractElement
         return $value;
     }
 
-
     /**
      * Set date value
      * If \Magento\Stdlib\DateTime\Date instance is provided instead of value, other params will be ignored.
@@ -116,7 +115,7 @@ class Date extends AbstractElement
         }
         // last check, if locale was set
         if (null === $locale) {
-            if (!$locale = $this->getLocale()) {
+            if (!($locale = $this->getLocale())) {
                 $locale = null;
             }
         }
@@ -174,12 +173,14 @@ class Date extends AbstractElement
         $dateFormat = $this->getDateFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
-            throw new \Exception('Output format is not specified. '
-                . 'Please, specify "format" key in constructor, or set it using setFormat().');
+            throw new \Exception(
+                'Output format is not specified. ' .
+                'Please, specify "format" key in constructor, or set it using setFormat().'
+            );
         }
 
-        $dataInit = 'data-mage-init="'
-            . $this->_escape(json_encode(
+        $dataInit = 'data-mage-init="' . $this->_escape(
+            json_encode(
                 array(
                     'calendar' => array(
                         'dateFormat' => $dateFormat,
@@ -187,11 +188,11 @@ class Date extends AbstractElement
                         'timeFormat' => $timeFormat,
                         'buttonImage' => $this->getImage(),
                         'buttonText' => 'Select Date',
-                        'disabled' => $this->getDisabled(),
+                        'disabled' => $this->getDisabled()
                     )
                 )
-            ))
-            . '"';
+            )
+        ) . '"';
 
         $html = sprintf(
             '<input name="%s" id="%s" value="%s" %s %s />',

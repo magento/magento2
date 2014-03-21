@@ -105,83 +105,106 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', array(
-            'header'    => __('Invoice'),
-            'index'     => 'increment_id',
-            'type'      => 'text',
-            'header_css_class'  => 'col-invoice-number',
-            'column_css_class'  => 'col-invoice-number'
-        ));
-
-        $this->addColumn('created_at', array(
-            'header'    => __('Invoice Date'),
-            'index'     => 'created_at',
-            'type'      => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
-
-        $this->addColumn('order_increment_id', array(
-            'header'    => __('Order'),
-            'index'     => 'order_increment_id',
-            'type'      => 'text',
-            'header_css_class'  => 'col-order-number',
-            'column_css_class'  => 'col-order-number'
-        ));
-
-        $this->addColumn('order_created_at', array(
-            'header'    => __('Order Date'),
-            'index'     => 'order_created_at',
-            'type'      => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
-
-        $this->addColumn('billing_name', array(
-            'header' => __('Bill-to Name'),
-            'index' => 'billing_name',
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
-
-        $this->addColumn('state', array(
-            'header'    => __('Status'),
-            'index'     => 'state',
-            'type'      => 'options',
-            'options'   => $this->_invoiceFactory->create()->getStates(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
-
-        $this->addColumn('grand_total', array(
-            'header'    => __('Amount'),
-            'index'     => 'grand_total',
-            'type'      => 'currency',
-            'align'     => 'right',
-            'currency'  => 'order_currency_code',
-            'header_css_class'  => 'col-qty',
-            'column_css_class'  => 'col-qty'
-        ));
-
-        $this->addColumn('action',
+        $this->addColumn(
+            'increment_id',
             array(
-                'header'    => __('Action'),
-                'width'     => '50px',
-                'type'      => 'action',
-                'getter'     => 'getId',
-                'actions'   => array(
+                'header' => __('Invoice'),
+                'index' => 'increment_id',
+                'type' => 'text',
+                'header_css_class' => 'col-invoice-number',
+                'column_css_class' => 'col-invoice-number'
+            )
+        );
+
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Invoice Date'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
+
+        $this->addColumn(
+            'order_increment_id',
+            array(
+                'header' => __('Order'),
+                'index' => 'order_increment_id',
+                'type' => 'text',
+                'header_css_class' => 'col-order-number',
+                'column_css_class' => 'col-order-number'
+            )
+        );
+
+        $this->addColumn(
+            'order_created_at',
+            array(
+                'header' => __('Order Date'),
+                'index' => 'order_created_at',
+                'type' => 'datetime',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
+
+        $this->addColumn(
+            'billing_name',
+            array(
+                'header' => __('Bill-to Name'),
+                'index' => 'billing_name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
+
+        $this->addColumn(
+            'state',
+            array(
+                'header' => __('Status'),
+                'index' => 'state',
+                'type' => 'options',
+                'options' => $this->_invoiceFactory->create()->getStates(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
+
+        $this->addColumn(
+            'grand_total',
+            array(
+                'header' => __('Amount'),
+                'index' => 'grand_total',
+                'type' => 'currency',
+                'align' => 'right',
+                'currency' => 'order_currency_code',
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            )
+        );
+
+        $this->addColumn(
+            'action',
+            array(
+                'header' => __('Action'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
                     array(
                         'caption' => __('View'),
-                        'url'     => array('base'=>'sales/invoice/view'),
-                        'field'   => 'invoice_id'
+                        'url' => array('base' => 'sales/invoice/view'),
+                        'field' => 'invoice_id'
                     )
                 ),
-                'filter'    => false,
-                'sortable'  => false,
+                'filter' => false,
+                'sortable' => false,
                 'is_system' => true,
-                'header_css_class'  => 'col-actions',
-                'column_css_class'  => 'col-actions'
-        ));
+                'header_css_class' => 'col-actions',
+                'column_css_class' => 'col-actions'
+            )
+        );
 
         $this->addExportType('*/*/exportCsv', __('CSV'));
         $this->addExportType('*/*/exportExcel', __('Excel XML'));
@@ -200,10 +223,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getMassactionBlock()->setFormFieldName('invoice_ids');
         $this->getMassactionBlock()->setUseSelectAll(false);
 
-        $this->getMassactionBlock()->addItem('pdfinvoices_order', array(
-             'label'=> __('PDF Invoices'),
-             'url'  => $this->getUrl('sales/invoice/pdfinvoices'),
-        ));
+        $this->getMassactionBlock()->addItem(
+            'pdfinvoices_order',
+            array('label' => __('PDF Invoices'), 'url' => $this->getUrl('sales/invoice/pdfinvoices'))
+        );
 
         return $this;
     }
@@ -220,11 +243,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             return false;
         }
 
-        return $this->getUrl('sales/invoice/view',
-            array(
-                'invoice_id'=> $row->getId(),
-            )
-        );
+        return $this->getUrl('sales/invoice/view', array('invoice_id' => $row->getId()));
     }
 
     /**

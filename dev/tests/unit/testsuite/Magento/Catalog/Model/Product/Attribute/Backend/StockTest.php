@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 class StockTest extends \PHPUnit_Framework_TestCase
@@ -57,16 +56,26 @@ class StockTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $stockItemFactory = $this->getMock('Magento\CatalogInventory\Model\Stock\ItemFactory', array('create'),
-            array(), '', false);
+        $stockItemFactory = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\ItemFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $stockItemFactory->expects($this->any())->method('create')->will($this->returnValue($this->_inventory));
-        $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Product\Attribute\Backend\Stock', array(
-            'data' => array('inventory' => $this->_inventory),
-            'stockItemFactory' => $stockItemFactory,
-        ));
+        $this->_model = $this->_objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
+            array('data' => array('inventory' => $this->_inventory), 'stockItemFactory' => $stockItemFactory)
+        );
         $attribute = $this->getMock('Magento\Object', array('getAttributeCode'));
-        $attribute->expects($this->atLeastOnce())->method('getAttributeCode')
-            ->will($this->returnValue(self::ATTRIBUTE_NAME));
+        $attribute->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getAttributeCode'
+        )->will(
+            $this->returnValue(self::ATTRIBUTE_NAME)
+        );
         $this->_model->setAttribute($attribute);
     }
 
@@ -83,10 +92,12 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSave()
     {
-        $object = new \Magento\Object(array(
-            self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => 5),
-            'stock_data'         => array('is_in_stock' => 2, 'qty' => 2)
-        ));
+        $object = new \Magento\Object(
+            array(
+                self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => 5),
+                'stock_data' => array('is_in_stock' => 2, 'qty' => 2)
+            )
+        );
         $stockData = $object->getStockData();
         $this->assertEquals(2, $stockData['is_in_stock']);
         $this->assertEquals(2, $stockData['qty']);
@@ -102,10 +113,12 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveQtyIsEmpty()
     {
-        $object = new \Magento\Object(array(
-            self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => ''),
-            'stock_data'         => array('is_in_stock' => 2, 'qty' => '')
-        ));
+        $object = new \Magento\Object(
+            array(
+                self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => ''),
+                'stock_data' => array('is_in_stock' => 2, 'qty' => '')
+            )
+        );
 
         $this->_model->beforeSave($object);
 
@@ -115,10 +128,12 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveQtyIsZero()
     {
-        $object = new \Magento\Object(array(
-            self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => 0),
-            'stock_data'         => array('is_in_stock' => 2, 'qty' => 0)
-        ));
+        $object = new \Magento\Object(
+            array(
+                self::ATTRIBUTE_NAME => array('is_in_stock' => 1, 'qty' => 0),
+                'stock_data' => array('is_in_stock' => 2, 'qty' => 0)
+            )
+        );
 
         $this->_model->beforeSave($object);
 

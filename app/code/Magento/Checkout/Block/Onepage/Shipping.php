@@ -55,6 +55,7 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param CustomerAccountService $customerAccountService
      * @param CustomerAddressService $customerAddressService
      * @param AddressConfig $addressConfig
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param array $data
      */
@@ -69,6 +70,7 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         CustomerAccountService $customerAccountService,
         CustomerAddressService $customerAddressService,
         AddressConfig $addressConfig,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         array $data = array()
     ) {
@@ -84,6 +86,7 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $customerAccountService,
             $customerAddressService,
             $addressConfig,
+            $httpContext,
             $data
         );
         $this->_isScopePrivate = true;
@@ -96,10 +99,10 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     protected function _construct()
     {
-        $this->getCheckout()->setStepData('shipping', array(
-            'label'     => __('Shipping Information'),
-            'is_show'   => $this->isShow()
-        ));
+        $this->getCheckout()->setStepData(
+            'shipping',
+            array('label' => __('Shipping Information'), 'is_show' => $this->isShow())
+        );
 
         parent::_construct();
     }

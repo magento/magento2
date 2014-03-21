@@ -54,10 +54,10 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
             return $this;
         }
 
-        $method             = $address->getShippingMethod();
-        $freeAddress        = $address->getFreeShipping();
-        $addressWeight      = $address->getWeight();
-        $freeMethodWeight   = $address->getFreeMethodWeight();
+        $method = $address->getShippingMethod();
+        $freeAddress = $address->getFreeShipping();
+        $addressWeight = $address->getWeight();
+        $freeMethodWeight = $address->getFreeMethodWeight();
 
         $addressQty = 0;
 
@@ -85,8 +85,8 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
                     if (!$item->getProduct()->getWeightType()) {
                         $itemWeight = $child->getWeight();
-                        $itemQty    = $child->getTotalQty();
-                        $rowWeight  = $itemWeight * $itemQty;
+                        $itemQty = $child->getTotalQty();
+                        $rowWeight = $itemWeight * $itemQty;
                         $addressWeight += $rowWeight;
                         if ($freeAddress || $child->getFreeShipping() === true) {
                             $rowWeight = 0;
@@ -104,14 +104,14 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                 }
                 if ($item->getProduct()->getWeightType()) {
                     $itemWeight = $item->getWeight();
-                    $rowWeight  = $itemWeight*$item->getQty();
+                    $rowWeight = $itemWeight * $item->getQty();
                     $addressWeight += $rowWeight;
                     if ($freeAddress || $item->getFreeShipping() === true) {
                         $rowWeight = 0;
                     } elseif (is_numeric($item->getFreeShipping())) {
                         $freeQty = $item->getFreeShipping();
                         if ($item->getQty() > $freeQty) {
-                            $rowWeight = $itemWeight*($item->getQty()-$freeQty);
+                            $rowWeight = $itemWeight * ($item->getQty() - $freeQty);
                         } else {
                             $rowWeight = 0;
                         }
@@ -124,7 +124,7 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                     $addressQty += $item->getQty();
                 }
                 $itemWeight = $item->getWeight();
-                $rowWeight  = $itemWeight * $item->getQty();
+                $rowWeight = $itemWeight * $item->getQty();
                 $addressWeight += $rowWeight;
                 if ($freeAddress || $item->getFreeShipping() === true) {
                     $rowWeight = 0;
@@ -180,15 +180,14 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         $shippingDescription = $address->getShippingDescription();
 
         if ($amount != 0 || $shippingDescription) {
-            $title = $shippingDescription
-                ? __('Shipping & Handling (%1)', $shippingDescription)
-                : __('Shipping & Handling');
+            $title = $shippingDescription ? __(
+                'Shipping & Handling (%1)',
+                $shippingDescription
+            ) : __(
+                'Shipping & Handling'
+            );
 
-            $address->addTotal(array(
-                'code' => $this->getCode(),
-                'title' => $title,
-                'value' => $amount
-            ));
+            $address->addTotal(array('code' => $this->getCode(), 'title' => $title, 'value' => $amount));
         }
 
         return $this;

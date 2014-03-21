@@ -40,14 +40,8 @@ class Orderitemstatus implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Sales\Model\Order\Item::STATUS_PENDING,
-                'label' => __('Pending')
-            ),
-            array(
-                'value' => \Magento\Sales\Model\Order\Item::STATUS_INVOICED,
-                'label' => __('Invoiced')
-            )
+            array('value' => \Magento\Sales\Model\Order\Item::STATUS_PENDING, 'label' => __('Pending')),
+            array('value' => \Magento\Sales\Model\Order\Item::STATUS_INVOICED, 'label' => __('Invoiced'))
         );
     }
 }

@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Collection;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractCollection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Check if $attribute is \Magento\Eav\Model\Entity\Attribute and convert to string field name
@@ -107,8 +106,7 @@ abstract class AbstractCollection
      */
     public function setPage($pageNum, $pageSize)
     {
-        $this->setCurPage($pageNum)
-            ->setPageSize($pageSize);
+        $this->setCurPage($pageNum)->setPageSize($pageSize);
         return $this;
     }
 
@@ -142,10 +140,7 @@ abstract class AbstractCollection
      */
     public function getAllIds($limit = null, $offset = null)
     {
-        return $this->getConnection()->fetchCol(
-            $this->_getAllIdsSelect($limit, $offset),
-            $this->_bindParams
-        );
+        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
 
     /**

@@ -45,10 +45,8 @@ class Block extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -62,9 +60,15 @@ class Block extends \Magento\Backend\App\Action
     {
         // load layout, set active menu and breadcrumbs
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Cms::cms_block')
-            ->_addBreadcrumb(__('CMS'), __('CMS'))
-            ->_addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
+        $this->_setActiveMenu(
+            'Magento_Cms::cms_block'
+        )->_addBreadcrumb(
+            __('CMS'),
+            __('CMS')
+        )->_addBreadcrumb(
+            __('Static Blocks'),
+            __('Static Blocks')
+        );
         return $this;
     }
 
@@ -108,7 +112,7 @@ class Block extends \Magento\Backend\App\Action
         // 2. Initial checking
         if ($id) {
             $model->load($id);
-            if (! $model->getId()) {
+            if (!$model->getId()) {
                 $this->messageManager->addError(__('This block no longer exists.'));
                 $this->_redirect('*/*/');
                 return;
@@ -119,7 +123,7 @@ class Block extends \Magento\Backend\App\Action
 
         // 3. Set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
-        if (! empty($data)) {
+        if (!empty($data)) {
             $model->setData($data);
         }
 
@@ -127,8 +131,10 @@ class Block extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('cms_block', $model);
 
         // 5. Build edit form
-        $this->_initAction()
-            ->_addBreadcrumb($id ? __('Edit Block') : __('New Block'), $id ? __('Edit Block') : __('New Block'));
+        $this->_initAction()->_addBreadcrumb(
+            $id ? __('Edit Block') : __('New Block'),
+            $id ? __('Edit Block') : __('New Block')
+        );
         $this->_view->renderLayout();
     }
 
@@ -171,7 +177,6 @@ class Block extends \Magento\Backend\App\Action
                 // go to grid
                 $this->_redirect('*/*/');
                 return;
-
             } catch (\Exception $e) {
                 // display error message
                 $this->messageManager->addError($e->getMessage());

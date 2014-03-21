@@ -29,13 +29,11 @@
  * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main;
 
 use Magento\Backend\Block\Widget\Form;
 
-class Filter
-    extends \Magento\Backend\Block\Widget\Form\Generic
+class Filter extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
@@ -68,19 +66,18 @@ class Filter
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $collection = $this->_setFactory->create()
-            ->getResourceCollection()
-            ->load()
-            ->toOptionArray();
+        $collection = $this->_setFactory->create()->getResourceCollection()->load()->toOptionArray();
 
-        $form->addField('set_switcher', 'select',
+        $form->addField(
+            'set_switcher',
+            'select',
             array(
                 'name' => 'set_switcher',
                 'required' => true,
                 'class' => 'left-col-block',
                 'no_span' => true,
                 'values' => $collection,
-                'onchange' => 'this.form.submit()',
+                'onchange' => 'this.form.submit()'
             )
         );
 

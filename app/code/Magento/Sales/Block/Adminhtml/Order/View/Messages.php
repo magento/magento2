@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
-use \Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order;
 
 /**
  * Order view messages

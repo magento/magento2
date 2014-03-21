@@ -48,8 +48,8 @@ abstract class AbstractMethod extends \Magento\Dhl\Model\Source\Method\Generic
     public function toOptionArray()
     {
         /* @var $carrierModel \Magento\Dhl\Model\Carrier */
-        $carrierModel   = $this->_shippingDhl;
-        $dhlProducts    = $carrierModel->getDhlProducts($this->_contentType);
+        $carrierModel = $this->_shippingDhl;
+        $dhlProducts = $carrierModel->getDhlProducts($this->_contentType);
 
         $options = array();
         foreach ($dhlProducts as $code => $title) {

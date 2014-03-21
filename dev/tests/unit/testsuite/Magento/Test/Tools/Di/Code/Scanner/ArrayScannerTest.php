@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Di\Code\Scanner;
 
 class ArrayScannerTest extends \PHPUnit_Framework_TestCase
@@ -45,10 +44,7 @@ class ArrayScannerTest extends \PHPUnit_Framework_TestCase
     public function testCollectEntities()
     {
         $actual = $this->_model->collectEntities(array($this->_testDir . '/additional.php'));
-        $expected = array(
-            'Some_Model_Proxy',
-            'Some_Model_EntityFactory'
-        );
+        $expected = array('Some_Model_Proxy', 'Some_Model_EntityFactory');
         $this->assertEquals($expected, $actual);
     }
 }

@@ -127,12 +127,12 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $this->_init('rating_option', 'option_id');
 
-        $this->_reviewTable         = $this->getTable('review');
-        $this->_ratingOptionTable   = $this->getTable('rating_option');
-        $this->_ratingVoteTable     = $this->getTable('rating_option_vote');
-        $this->_aggregateTable      = $this->getTable('rating_option_vote_aggregated');
-        $this->_reviewStoreTable    = $this->getTable('review_store');
-        $this->_ratingStoreTable    = $this->getTable('rating_store');
+        $this->_reviewTable = $this->getTable('review');
+        $this->_ratingOptionTable = $this->getTable('rating_option');
+        $this->_ratingVoteTable = $this->getTable('rating_option_vote');
+        $this->_aggregateTable = $this->getTable('rating_option_vote_aggregated');
+        $this->_reviewStoreTable = $this->getTable('review_store');
+        $this->_ratingStoreTable = $this->getTable('rating_store');
     }
 
     /**
@@ -146,27 +146,24 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter = $this->_getWriteAdapter();
         $optionData = $this->loadDataById($option->getId());
         $data = array(
-            'option_id'     => $option->getId(),
-            'review_id'     => $option->getReviewId(),
-            'percent'       => (($optionData['value'] / 5) * 100),
-            'value'         => $optionData['value']
+            'option_id' => $option->getId(),
+            'review_id' => $option->getReviewId(),
+            'percent' => $optionData['value'] / 5 * 100,
+            'value' => $optionData['value']
         );
 
         if (!$option->getDoUpdate()) {
-            $data['remote_ip']       = $this->_remoteAddress->getRemoteAddress();
-            $data['remote_ip_long']  = $this->_remoteAddress->getRemoteAddress(true);
-            $data['customer_id']     = $this->_customerSession->getCustomerId();
+            $data['remote_ip'] = $this->_remoteAddress->getRemoteAddress();
+            $data['remote_ip_long'] = $this->_remoteAddress->getRemoteAddress(true);
+            $data['customer_id'] = $this->_customerSession->getCustomerId();
             $data['entity_pk_value'] = $option->getEntityPkValue();
-            $data['rating_id']       = $option->getRatingId();
+            $data['rating_id'] = $option->getRatingId();
         }
 
         $adapter->beginTransaction();
         try {
             if ($option->getDoUpdate()) {
-                $condition = array(
-                    'vote_id = ?'   => $option->getVoteId(),
-                    'review_id = ?' => $option->getReviewId()
-                );
+                $condition = array('vote_id = ?' => $option->getVoteId(), 'review_id = ?' => $option->getReviewId());
                 $adapter->update($this->_ratingVoteTable, $data, $condition);
                 $this->aggregate($option);
             } else {
@@ -203,55 +200,66 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function aggregateEntityByRatingId($ratingId, $entityPkValue)
     {
-        $readAdapter  = $this->_getReadAdapter();
+        $readAdapter = $this->_getReadAdapter();
         $writeAdapter = $this->_getWriteAdapter();
 
-        $select = $readAdapter->select()
-            ->from($this->_aggregateTable, array('store_id', 'primary_id'))
-            ->where('rating_id = :rating_id')
-            ->where('entity_pk_value = :pk_value');
+        $select = $readAdapter->select()->from(
+            $this->_aggregateTable,
+            array('store_id', 'primary_id')
+        )->where(
+            'rating_id = :rating_id'
+        )->where(
+            'entity_pk_value = :pk_value'
+        );
         $bind = array(':rating_id' => $ratingId, ':pk_value' => $entityPkValue);
         $oldData = $readAdapter->fetchPairs($select, $bind);
 
-        $appVoteCountCond    = $readAdapter->getCheckSql('review.status_id=1', 'vote.vote_id', 'NULL');
+        $appVoteCountCond = $readAdapter->getCheckSql('review.status_id=1', 'vote.vote_id', 'NULL');
         $appVoteValueSumCond = $readAdapter->getCheckSql('review.status_id=1', 'vote.value', '0');
 
-        $select = $readAdapter->select()
-            ->from(array('vote'=>$this->_ratingVoteTable),
-                array(
-                    'vote_count'         => new \Zend_Db_Expr('COUNT(vote.vote_id)'),
-                    'vote_value_sum'     => new \Zend_Db_Expr('SUM(vote.value)'),
-                    'app_vote_count'     => new \Zend_Db_Expr("COUNT({$appVoteCountCond})"),
-                    'app_vote_value_sum' => new \Zend_Db_Expr("SUM({$appVoteValueSumCond})") ))
-            ->join(array('review'   =>$this->_reviewTable),
-                'vote.review_id=review.review_id',
-                array())
-            ->joinLeft(array('store'=>$this->_reviewStoreTable),
-                'vote.review_id=store.review_id', 'store_id')
-            ->join(array('rstore'   =>$this->_ratingStoreTable),
-                'vote.rating_id=rstore.rating_id AND rstore.store_id=store.store_id',
-                array())
-            ->where('vote.rating_id = :rating_id')
-            ->where('vote.entity_pk_value = :pk_value')
-            ->group(array(
-                'vote.rating_id',
-                'vote.entity_pk_value',
-                'store.store_id'
-            ));
+        $select = $readAdapter->select()->from(
+            array('vote' => $this->_ratingVoteTable),
+            array(
+                'vote_count' => new \Zend_Db_Expr('COUNT(vote.vote_id)'),
+                'vote_value_sum' => new \Zend_Db_Expr('SUM(vote.value)'),
+                'app_vote_count' => new \Zend_Db_Expr("COUNT({$appVoteCountCond})"),
+                'app_vote_value_sum' => new \Zend_Db_Expr("SUM({$appVoteValueSumCond})")
+            )
+        )->join(
+            array('review' => $this->_reviewTable),
+            'vote.review_id=review.review_id',
+            array()
+        )->joinLeft(
+            array('store' => $this->_reviewStoreTable),
+            'vote.review_id=store.review_id',
+            'store_id'
+        )->join(
+            array('rstore' => $this->_ratingStoreTable),
+            'vote.rating_id=rstore.rating_id AND rstore.store_id=store.store_id',
+            array()
+        )->where(
+            'vote.rating_id = :rating_id'
+        )->where(
+            'vote.entity_pk_value = :pk_value'
+        )->group(
+            array('vote.rating_id', 'vote.entity_pk_value', 'store.store_id')
+        );
 
         $perStoreInfo = $readAdapter->fetchAll($select, $bind);
 
         $usedStores = array();
         foreach ($perStoreInfo as $row) {
             $saveData = array(
-                'rating_id'        => $ratingId,
-                'entity_pk_value'  => $entityPkValue,
-                'vote_count'       => $row['vote_count'],
-                'vote_value_sum'   => $row['vote_value_sum'],
-                'percent'          => (($row['vote_value_sum']/$row['vote_count'])/5) * 100,
-                'percent_approved' => ($row['app_vote_count']
-                    ? ((($row['app_vote_value_sum']/$row['app_vote_count'])/5) * 100) : 0),
-                'store_id'         => $row['store_id'],
+                'rating_id' => $ratingId,
+                'entity_pk_value' => $entityPkValue,
+                'vote_count' => $row['vote_count'],
+                'vote_value_sum' => $row['vote_value_sum'],
+                'percent' => $row['vote_value_sum'] / $row['vote_count'] / 5 * 100,
+                'percent_approved' => $row['app_vote_count'] ? $row['app_vote_value_sum'] /
+                $row['app_vote_count'] /
+                5 *
+                100 : 0,
+                'store_id' => $row['store_id']
             );
 
             if (isset($oldData[$row['store_id']])) {
@@ -284,8 +292,7 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
         if (!$this->_optionData || $this->_optionId != $optionId) {
             $adapter = $this->_getReadAdapter();
             $select = $adapter->select();
-            $select->from($this->_ratingOptionTable)
-                ->where('option_id = :option_id');
+            $select->from($this->_ratingOptionTable)->where('option_id = :option_id');
 
             $data = $adapter->fetchRow($select, array(':option_id' => $optionId));
 

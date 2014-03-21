@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model\Export\Entity\Eav\Customer;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
@@ -39,22 +38,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_websites = array(
-        \Magento\Core\Model\Store::DEFAULT_STORE_ID  => 'admin',
-        1 => 'website1',
-    );
+    protected $_websites = array(\Magento\Core\Model\Store::DEFAULT_STORE_ID => 'admin', 1 => 'website1');
 
     /**
      * Attributes array
      *
      * @var array
      */
-    protected $_attributes = array(
-        array(
-            'attribute_id'   => 1,
-            'attribute_code' => self::ATTRIBUTE_CODE,
-        )
-    );
+    protected $_attributes = array(array('attribute_id' => 1, 'attribute_code' => self::ATTRIBUTE_CODE));
 
     /**
      * Customer data
@@ -62,13 +53,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_customerData = array(
-        'id'                 => 1,
-        'website_id'         => 1,
-        'store_id'           => 1,
-        'email'              => '@email@domain.com',
+        'id' => 1,
+        'website_id' => 1,
+        'store_id' => 1,
+        'email' => '@email@domain.com',
         self::ATTRIBUTE_CODE => 1,
-        'default_billing'    => 1,
-        'default_shipping'   => 1,
+        'default_billing' => 1,
+        'default_shipping' => 1
     );
 
     /**
@@ -76,12 +67,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_addressData = array(
-        'id'                 => 1,
-        'entity_id'          => 1,
-        'parent_id'          => 1,
-        self::ATTRIBUTE_CODE => 1,
-    );
+    protected $_addressData = array('id' => 1, 'entity_id' => 1, 'parent_id' => 1, self::ATTRIBUTE_CODE => 1);
 
     /**
      * ObjectManager helper
@@ -101,9 +87,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
 
         $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $storeManager->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnCallback(array($this, 'getWebsites')));
+        $storeManager->expects(
+            $this->once()
+        )->method(
+            'getWebsites'
+        )->will(
+            $this->returnCallback(array($this, 'getWebsites'))
+        );
 
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = new \Magento\ImportExport\Model\Export\Entity\Eav\Customer\Address(
@@ -111,12 +101,22 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', array(), array(), '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory', array(), array(), '', false
+                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             $this->getMock('Magento\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory', array(), array(), '', false),
+            $this->getMock(
+                'Magento\ImportExport\Model\Export\Entity\Eav\CustomerFactory',
+                array(),
+                array(),
+                '',
+                false
+            ),
             $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', array(), array(), '', false),
             $this->_getModelDependencies()
         );
@@ -140,51 +140,66 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
 
         /** @var $attributeCollection \Magento\Data\Collection|PHPUnit_Framework_TestCase */
-        $attributeCollection = $this->getMock('Magento\Data\Collection',
+        $attributeCollection = $this->getMock(
+            'Magento\Data\Collection',
             array('getEntityTypeCode'),
             array($entityFactory)
         );
-        $attributeCollection->expects($this->once())
-            ->method('getEntityTypeCode')
-            ->will($this->returnValue('customer_address'));
+        $attributeCollection->expects(
+            $this->once()
+        )->method(
+            'getEntityTypeCode'
+        )->will(
+            $this->returnValue('customer_address')
+        );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $this->_objectManager->getConstructArguments(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
                 array('eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory'))
             );
             $arguments['data'] = $attributeData;
-            $attribute = $this->getMockForAbstractClass('Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                $arguments, '', true, true, true, array('_construct')
+            $attribute = $this->getMockForAbstractClass(
+                'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+                $arguments,
+                '',
+                true,
+                true,
+                true,
+                array('_construct')
             );
             $attributeCollection->addItem($attribute);
         }
 
         $byPagesIterator = $this->getMock('stdClass', array('iterate'));
-        $byPagesIterator->expects($this->once())
-            ->method('iterate')
-            ->will($this->returnCallback(array($this, 'iterate')));
+        $byPagesIterator->expects(
+            $this->once()
+        )->method(
+            'iterate'
+        )->will(
+            $this->returnCallback(array($this, 'iterate'))
+        );
 
         $customerCollection = $this->getMock(
-            'Magento\Data\Collection\Db', array('addAttributeToSelect'), array(), '', false
+            'Magento\Data\Collection\Db',
+            array('addAttributeToSelect'),
+            array(),
+            '',
+            false
         );
 
         $customerEntity = $this->getMock('stdClass', array('filterEntityCollection', 'setParameters'));
-        $customerEntity->expects($this->any())
-            ->method('filterEntityCollection')
-            ->will($this->returnArgument(0));
-        $customerEntity->expects($this->any())
-            ->method('setParameters')
-            ->will($this->returnSelf());
+        $customerEntity->expects($this->any())->method('filterEntityCollection')->will($this->returnArgument(0));
+        $customerEntity->expects($this->any())->method('setParameters')->will($this->returnSelf());
 
         $data = array(
-            'translator'                   => $translator,
-            'attribute_collection'         => $attributeCollection,
-            'page_size'                    => 1,
+            'translator' => $translator,
+            'attribute_collection' => $attributeCollection,
+            'page_size' => 1,
             'collection_by_pages_iterator' => $byPagesIterator,
-            'entity_type_id'               => 1,
-            'customer_collection'          => $customerCollection,
-            'customer_entity'              => $customerEntity,
-            'address_collection'           => 'not_used',
+            'entity_type_id' => 1,
+            'customer_collection' => $customerCollection,
+            'customer_entity' => $customerEntity,
+            'address_collection' => 'not_used'
         );
 
         return $data;
@@ -206,10 +221,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             if (!$withDefault && $id == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
                 continue;
             }
-            $websiteData = array(
-                'id'   => $id,
-                'code' => $code,
-            );
+            $websiteData = array('id' => $id, 'code' => $code);
             $websites[$id] = new \Magento\Object($websiteData);
         }
 
@@ -228,11 +240,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function iterate(\Magento\Data\Collection\Db $collection, $pageSize, array $callbacks)
     {
         $resource = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer', array('getIdFieldName'), array(), '', false
+            'Magento\Customer\Model\Resource\Customer',
+            array('getIdFieldName'),
+            array(),
+            '',
+            false
         );
-        $resource->expects($this->any())
-            ->method('getIdFieldName')
-            ->will($this->returnValue('id'));
+        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('id'));
         $arguments = array(
             'data' => $this->_customerData,
             'resource' => $resource,
@@ -240,7 +254,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Customer\Model\AddressFactory', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', array(), array(), '', false),
             $this->getMock('Magento\Customer\Model\GroupFactory', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\AttributeFactory', array(), array(), '', false),
+            $this->getMock('Magento\Customer\Model\AttributeFactory', array(), array(), '', false)
         );
         /** @var $customer \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
         $customer = $this->_objectManager->getObject('Magento\Customer\Model\Customer', $arguments);
@@ -257,13 +271,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportItem()
     {
-        $writer = $this->getMockForAbstractClass('Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
-            array(), '', false, false, true, array('writeRow')
+        $writer = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
+            array(),
+            '',
+            false,
+            false,
+            true,
+            array('writeRow')
         );
 
-        $writer->expects($this->once())
-            ->method('writeRow')
-            ->will($this->returnCallback(array($this, 'validateWriteRow')));
+        $writer->expects(
+            $this->once()
+        )->method(
+            'writeRow'
+        )->will(
+            $this->returnCallback(array($this, 'validateWriteRow'))
+        );
 
         $this->_model->setWriter($writer);
         $this->_model->setParameters(array());

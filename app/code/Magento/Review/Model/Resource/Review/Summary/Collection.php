@@ -70,8 +70,7 @@ class Collection extends \Magento\Data\Collection\Db
      */
     public function addEntityFilter($entityId, $entityType = 1)
     {
-        $this->_select->where('entity_pk_value IN(?)', $entityId)
-            ->where('entity_type = ?', $entityType);
+        $this->_select->where('entity_pk_value IN(?)', $entityId)->where('entity_type = ?', $entityType);
         return $this;
     }
 

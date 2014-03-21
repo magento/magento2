@@ -32,15 +32,14 @@ namespace Magento\Sales\Model\Resource\Report\Collection;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class AbstractCollection
-    extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
+class AbstractCollection extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
      * Order status
      *
      * @var string
      */
-    protected $_orderStatus        = null;
+    protected $_orderStatus = null;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory

@@ -98,18 +98,25 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     public function getLastOrder()
     {
         $storeIds = $this->getQuote()->getStore()->getWebsite()->getStoreIds();
-        $collection = $this->_ordersFactory->create()
-            ->addFieldToFilter('customer_id', $this->getCustomerId())
-            ->addFieldToFilter('store_id', array('in' => $storeIds))
-            ->setOrder('created_at', 'desc')
-            ->setPageSize(1)
-            ->load();
+        $collection = $this->_ordersFactory->create()->addFieldToFilter(
+            'customer_id',
+            $this->getCustomerId()
+        )->addFieldToFilter(
+            'store_id',
+            array('in' => $storeIds)
+        )->setOrder(
+            'created_at',
+            'desc'
+        )->setPageSize(
+            1
+        )->load();
         foreach ($collection as $order) {
             return $order;
         }
 
         return false;
     }
+
     /**
      * Retrieve item collection
      *

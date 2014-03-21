@@ -114,31 +114,19 @@ return array(
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_MODULE_DIR'
     ),
-    array(
-        'PUBLIC_MODULE_DIR',
-        'Magento\View\Publisher',
-        'Magento\View\Publisher\FileInterface::PUBLIC_MODULE_DIR'
-    ),
+    array('PUBLIC_MODULE_DIR', 'Magento\View\Publisher', 'Magento\View\Publisher\FileInterface::PUBLIC_MODULE_DIR'),
     array(
         'PUBLIC_THEME_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_THEME_DIR'
     ),
-    array(
-        'PUBLIC_THEME_DIR',
-        'Magento\View\Publisher',
-        'Magento\View\Publisher\FileInterface::PUBLIC_THEME_DIR'
-    ),
+    array('PUBLIC_THEME_DIR', 'Magento\View\Publisher', 'Magento\View\Publisher\FileInterface::PUBLIC_THEME_DIR'),
     array(
         'PUBLIC_VIEW_DIR',
         'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::PUBLIC_VIEW_DIR'
     ),
-    array(
-        'PUBLIC_VIEW_DIR',
-        'Magento\View\Publisher',
-        'Magento\View\Publisher\FileInterface::PUBLIC_VIEW_DIR'
-    ),
+    array('PUBLIC_VIEW_DIR', 'Magento\View\Publisher', 'Magento\View\Publisher\FileInterface::PUBLIC_VIEW_DIR'),
     array('REGISTRY_FORM_PARAMS_KEY', null, 'direct value'),
     array('RULE_PERM_ALLOW', '\Magento\Math\Random'),
     array('RULE_PERM_DENY', '\Magento\Math\Random'),
@@ -179,7 +167,9 @@ return array(
         'Magento_Core_Model_LocaleInterface::XML_PATH_ALLOW_CURRENCIES'
     ),
     array('XML_PATH_ALLOW_CODES', 'Magento\LocaleInterface'),
-    array('XML_PATH_ALLOW_DUPLICATION', 'Magento\Core\Model\Design\PackageInterface',
+    array(
+        'XML_PATH_ALLOW_DUPLICATION',
+        'Magento\Core\Model\Design\PackageInterface',
         'Magento_Core_Model_Design_Package::XML_PATH_ALLOW_DUPLICATION'
     ),
     array('XML_PATH_ALLOW_MAP_UPDATE', 'Mage_Core_Model_Design_PackageInterface'),
@@ -199,11 +189,7 @@ return array(
         'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS'
     ),
     array('XML_PATH_DEFAULT_COUNTRY', 'Magento\Locale'),
-    array(
-        'XML_PATH_DEFAULT_LOCALE',
-        'Magento\Locale',
-        'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'
-    ),
+    array('XML_PATH_DEFAULT_LOCALE', 'Magento\Locale', 'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_LOCALE'),
     array(
         'XML_PATH_DEFAULT_TIMEZONE',
         'Magento\Locale',
@@ -393,31 +379,11 @@ return array(
         '\Magento\Core\Helper\Data',
         '\Magento\Catalog\Helper\Catalog::XML_PATH_PUBLIC_FILES_VALID_PATHS'
     ),
-    array(
-        'TYPE_PHYSICAL',
-        '\Magento\Core\Model\Theme',
-        '\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL'
-    ),
-    array(
-        'TYPE_VIRTUAL',
-        '\Magento\Core\Model\Theme',
-        '\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL'
-    ),
-    array(
-        'TYPE_STAGING',
-        '\Magento\Core\Model\Theme',
-        '\Magento\View\Design\ThemeInterface::TYPE_STAGING'
-    ),
-    array(
-        'PATH_SEPARATOR',
-        '\Magento\Core\Model\Theme',
-        '\Magento\View\Design\ThemeInterface::PATH_SEPARATOR'
-    ),
-    array(
-        'CODE_SEPARATOR',
-        '\Magento\Core\Model\Theme',
-        '\Magento\View\Design\ThemeInterface::CODE_SEPARATOR'
-    ),
+    array('TYPE_PHYSICAL', '\Magento\Core\Model\Theme', '\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL'),
+    array('TYPE_VIRTUAL', '\Magento\Core\Model\Theme', '\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL'),
+    array('TYPE_STAGING', '\Magento\Core\Model\Theme', '\Magento\View\Design\ThemeInterface::TYPE_STAGING'),
+    array('PATH_SEPARATOR', '\Magento\Core\Model\Theme', '\Magento\View\Design\ThemeInterface::PATH_SEPARATOR'),
+    array('CODE_SEPARATOR', '\Magento\Core\Model\Theme', '\Magento\View\Design\ThemeInterface::CODE_SEPARATOR'),
     array(
         'XML_PATH_IMAGE_ADAPTER',
         '\Magento\Core\Model\Image\AdapterFactory',
@@ -492,15 +458,11 @@ return array(
         'Magento\Core\Model\Session\AbstractSession',
         'Magento\Core\Model\Session\Config::PARAM_SESSION_SAVE_METHOD'
     ),
-    array(
-        'XML_PATH_LOG_EXCEPTION_FILE',
-        'Magento\Core\Model\Session\AbstractSession'
-    ),
-
+    array('XML_PATH_LOG_EXCEPTION_FILE', 'Magento\Core\Model\Session\AbstractSession'),
     array(
         'XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS',
         'Magento\Theme\Helper\Robots',
-        'Magento\Backend\Block\Page\System\Config\Robots::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS',
+        'Magento\Backend\Block\Page\System\Config\Robots::XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS'
     ),
     array(
         'XML_PATH_MERGE_CSS_FILES',
@@ -555,27 +517,26 @@ return array(
     array('CONTAINER_OPT_HTML_CLASS', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('CONTAINER_OPT_HTML_ID', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
     array('CONTAINER_OPT_LABEL', '\Magento\Core\Model\Layout', '\Magento\View\Layout\Element'),
-    array(
-        'XML_PATH_THEME_ID',
-        '\Magento\Core\Model\View\Design',
-        '\Magento\View\DesignInterface::XML_PATH_THEME_ID',
-    ),
+    array('XML_PATH_THEME_ID', '\Magento\Core\Model\View\Design', '\Magento\View\DesignInterface::XML_PATH_THEME_ID'),
     array('UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Logo'),
     array('UPLOAD_ROOT', 'Magento\Backend\Model\Config\Backend\Favicon'),
     array('DIRECTORY_SEPARATOR', 'Magento\Filesystem'),
-
-    array('MAX_QTY_VALUE', '\Magento\Catalog\Controller\Adminhtml\Product',
+    array(
+        'MAX_QTY_VALUE',
+        '\Magento\Catalog\Controller\Adminhtml\Product',
         'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::MAX_QTY_VALUE'
     ),
-    array('LINK_TYPE_GROUPED', '\Magento\Catalog\Model\Product\Link',
+    array(
+        'LINK_TYPE_GROUPED',
+        '\Magento\Catalog\Model\Product\Link',
         '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED'
     ),
-    array('TYPE_GROUPED', '\Magento\Catalog\Model\Product\Type',
+    array(
+        'TYPE_GROUPED',
+        '\Magento\Catalog\Model\Product\Type',
         '\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED'
     ),
-
     array('PARAM_APP_URIS', 'Magento\Filesystem'),
-
     array('ROOT', '\Magento\Filesystem', '\Magento\App\Filesystem::ROOT_DIR'),
     array('APP', '\Magento\Filesystem', '\Magento\App\Filesystem::APP_DIR'),
     array('MODULES', '\Magento\Filesystem', '\Magento\App\Filesystem::MODULES_DIR'),
@@ -603,27 +564,34 @@ return array(
         '\Magento\Catalog\Model\Product\Type',
         '\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE'
     ),
-    ['PERIOD_UNIT_DAY', '\Magento\Payment\Model\Recurring\Profile', '\Magento\RecurringPayment\Model\PeriodUnits::DAY'],
-    [
+    array(
+        'PERIOD_UNIT_DAY',
+        '\Magento\Payment\Model\Recurring\Profile',
+        '\Magento\RecurringPayment\Model\PeriodUnits::DAY'
+    ),
+    array(
         'PERIOD_UNIT_WEEK',
         '\Magento\Payment\Model\Recurring\Profile',
         '\Magento\RecurringPayment\Model\PeriodUnits::WEEK'
-    ],
-    [
+    ),
+    array(
         'PERIOD_UNIT_SEMI_MONTH',
         '\Magento\Payment\Model\Recurring\Profile',
         '\Magento\RecurringPayment\Model\PeriodUnits::SEMI_MONTH'
-    ],
-    [
+    ),
+    array(
         'PERIOD_UNIT_MONTH',
         '\Magento\Payment\Model\Recurring\Profile',
         '\Magento\RecurringPayment\Model\PeriodUnits::MONTH'
-    ],
-    [
+    ),
+    array(
         'PERIOD_UNIT_YEAR',
         '\Magento\Payment\Model\Recurring\Profile',
         '\Magento\RecurringPayment\Model\PeriodUnits::YEAR'
-    ],
-    array('XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY', '\Magento\Catalog\Helper\Category\Flat',
-        '\Magento\Catalog\Model\Indexer\Category\Flat\Config::XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY'),
+    ),
+    array(
+        'XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY',
+        '\Magento\Catalog\Helper\Category\Flat',
+        '\Magento\Catalog\Model\Indexer\Category\Flat\Config::XML_PATH_IS_ENABLED_FLAT_CATALOG_CATEGORY'
+    )
 );

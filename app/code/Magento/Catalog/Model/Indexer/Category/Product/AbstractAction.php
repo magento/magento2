@@ -50,28 +50,28 @@ abstract class AbstractAction
      *
      * @var \Magento\DB\Select[]
      */
-    protected $nonAnchorSelects = [];
+    protected $nonAnchorSelects = array();
 
     /**
      * Cached anchor categories select by store id
      *
      * @var \Magento\DB\Select[]
      */
-    protected $anchorSelects = [];
+    protected $anchorSelects = array();
 
     /**
      * Cached all product select by store id
      *
      * @var \Magento\DB\Select[]
      */
-    protected $productsSelects = [];
+    protected $productsSelects = array();
 
     /**
      * Category path by id
      *
      * @var string[]
      */
-    protected $categoryPath = [];
+    protected $categoryPath = array();
 
     /**
      * @var \Magento\App\Resource
@@ -161,8 +161,9 @@ abstract class AbstractAction
      */
     protected function getMainTmpTable()
     {
-        return $this->useTempTable ? $this->getTable(self::MAIN_INDEX_TABLE . self::TEMPORARY_TABLE_SUFFIX)
-            : $this->getMainTable();
+        return $this->useTempTable ? $this->getTable(
+            self::MAIN_INDEX_TABLE . self::TEMPORARY_TABLE_SUFFIX
+        ) : $this->getMainTable();
     }
 
     /**
@@ -200,9 +201,13 @@ abstract class AbstractAction
     {
         if (!isset($this->categoryPath[$categoryId])) {
             $this->categoryPath[$categoryId] = $this->getReadAdapter()->fetchOne(
-                $this->getReadAdapter()->select()
-                    ->from($this->getTable('catalog_category_entity'), ['path'])
-                    ->where('entity_id = ?', $categoryId)
+                $this->getReadAdapter()->select()->from(
+                    $this->getTable('catalog_category_entity'),
+                    array('path')
+                )->where(
+                    'entity_id = ?',
+                    $categoryId
+                )
             );
         }
         return $this->categoryPath[$categoryId];
@@ -218,75 +223,78 @@ abstract class AbstractAction
     {
         if (!isset($this->nonAnchorSelects[$store->getId()])) {
             $statusAttributeId = $this->config->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY, 'status'
+                \Magento\Catalog\Model\Product::ENTITY,
+                'status'
             )->getId();
             $visibilityAttributeId = $this->config->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY, 'visibility'
+                \Magento\Catalog\Model\Product::ENTITY,
+                'visibility'
             )->getId();
 
             $rootPath = $this->getPathFromCategoryId($store->getRootCategoryId());
 
-            $select = $this->getWriteAdapter()->select()
-                ->from(['cc' => $this->getTable('catalog_category_entity')], [])
-                ->joinInner(
-                    ['ccp' => $this->getTable('catalog_category_product')],
-                    'ccp.category_id = cc.entity_id',
-                    []
+            $select = $this->getWriteAdapter()->select()->from(
+                array('cc' => $this->getTable('catalog_category_entity')),
+                array()
+            )->joinInner(
+                array('ccp' => $this->getTable('catalog_category_product')),
+                'ccp.category_id = cc.entity_id',
+                array()
+            )->joinInner(
+                array('cpw' => $this->getTable('catalog_product_website')),
+                'cpw.product_id = ccp.product_id',
+                array()
+            )->joinInner(
+                array('cpsd' => $this->getTable('catalog_product_entity_int')),
+                'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0' .
+                ' AND cpsd.attribute_id = ' .
+                $statusAttributeId,
+                array()
+            )->joinLeft(
+                array('cpss' => $this->getTable('catalog_product_entity_int')),
+                'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id' .
+                ' AND cpss.store_id = ' .
+                $store->getId(),
+                array()
+            )->joinInner(
+                array('cpvd' => $this->getTable('catalog_product_entity_int')),
+                'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0' .
+                ' AND cpvd.attribute_id = ' .
+                $visibilityAttributeId,
+                array()
+            )->joinLeft(
+                array('cpvs' => $this->getTable('catalog_product_entity_int')),
+                'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id' .
+                ' AND cpvs.store_id = ' .
+                $store->getId(),
+                array()
+            )->where(
+                'cc.path LIKE ' . $this->getWriteAdapter()->quote($rootPath . '/%')
+            )->where(
+                'cpw.website_id = ?',
+                $store->getWebsiteId()
+            )->where(
+                $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            )->where(
+                $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
+                array(
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
                 )
-                ->joinInner(
-                    ['cpw' => $this->getTable('catalog_product_website')],
-                    'cpw.product_id = ccp.product_id',
-                    []
+            )->columns(
+                array(
+                    'category_id' => 'cc.entity_id',
+                    'product_id' => 'ccp.product_id',
+                    'position' => 'ccp.position',
+                    'is_parent' => new \Zend_Db_Expr('1'),
+                    'store_id' => new \Zend_Db_Expr($store->getId()),
+                    'visibility' => new \Zend_Db_Expr(
+                        $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value')
+                    )
                 )
-                ->joinInner(
-                    ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                    'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0'
-                        . ' AND cpsd.attribute_id = ' . $statusAttributeId,
-                    []
-                )
-                ->joinLeft(
-                    ['cpss' => $this->getTable('catalog_product_entity_int')],
-                    'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id'
-                        . ' AND cpss.store_id = ' . $store->getId(),
-                    []
-                )
-                ->joinInner(
-                    ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                    'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0'
-                        . ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
-                    []
-                )
-                ->joinLeft(
-                    ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                    'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id'
-                        . ' AND cpvs.store_id = ' . $store->getId(),
-                    []
-                )
-                ->where('cc.path LIKE ' . $this->getWriteAdapter()->quote($rootPath . '/%'))
-                ->where('cpw.website_id = ?', $store->getWebsiteId())
-                ->where(
-                    $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
-                    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-                )
-                ->where(
-                    $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                    [
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-                    ]
-                )
-                ->columns(
-                    [
-                        'category_id' => 'cc.entity_id',
-                        'product_id'  => 'ccp.product_id',
-                        'position'    => 'ccp.position',
-                        'is_parent'   => new \Zend_Db_Expr('1'),
-                        'store_id'    => new \Zend_Db_Expr($store->getId()),
-                        'visibility'  => new \Zend_Db_Expr(
-                                $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value')),
-                    ]
-                );
+            );
 
             $this->nonAnchorSelects[$store->getId()] = $select;
         }
@@ -314,9 +322,13 @@ abstract class AbstractAction
      */
     protected function prepareSelectsByRange(\Magento\DB\Select $select, $field, $range = self::RANGE_CATEGORY_STEP)
     {
-        return $this->isRangingNeeded()
-            ? $this->getWriteAdapter()->selectsByRange($field, $select, $range)
-            : array($select);
+        return $this->isRangingNeeded() ? $this->getWriteAdapter()->selectsByRange(
+            $field,
+            $select,
+            $range
+        ) : array(
+            $select
+        );
     }
 
     /**
@@ -333,7 +345,7 @@ abstract class AbstractAction
                 $this->getWriteAdapter()->insertFromSelect(
                     $select,
                     $this->getMainTmpTable(),
-                    ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                    array('category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'),
                     \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -359,97 +371,95 @@ abstract class AbstractAction
      */
     protected function createAnchorSelect(\Magento\Core\Model\Store $store)
     {
-        $isAnchorAttributeId = $this->config->getAttribute(\Magento\Catalog\Model\Category::ENTITY, 'is_anchor')
-            ->getId();
-        $statusAttributeId = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')
-            ->getId();
-        $visibilityAttributeId = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'visibility')
-            ->getId();
+        $isAnchorAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'is_anchor'
+        )->getId();
+        $statusAttributeId = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId();
+        $visibilityAttributeId = $this->config->getAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'visibility'
+        )->getId();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
-        return $this->getWriteAdapter()->select()
-            ->from(['cc' => $this->getTable('catalog_category_entity')], [])
-            ->joinInner(
-                ['cc2' => $this->getTable('catalog_category_entity')],
-                'cc2.path LIKE ' . $this->getWriteAdapter()->getConcatSql(
-                    [
-                        $this->getWriteAdapter()->quoteIdentifier('cc.path'),
-                        $this->getWriteAdapter()->quote('/%')
-                    ]
-                ) . ' AND cc.entity_id NOT IN (' . implode(',', $rootCatIds) . ')',
-                []
+        return $this->getWriteAdapter()->select()->from(
+            array('cc' => $this->getTable('catalog_category_entity')),
+            array()
+        )->joinInner(
+            array('cc2' => $this->getTable('catalog_category_entity')),
+            'cc2.path LIKE ' . $this->getWriteAdapter()->getConcatSql(
+                array($this->getWriteAdapter()->quoteIdentifier('cc.path'), $this->getWriteAdapter()->quote('/%'))
+            ) . ' AND cc.entity_id NOT IN (' . implode(
+                ',',
+                $rootCatIds
+            ) . ')',
+            array()
+        )->joinInner(
+            array('ccp' => $this->getTable('catalog_category_product')),
+            'ccp.category_id = cc2.entity_id',
+            array()
+        )->joinInner(
+            array('cpw' => $this->getTable('catalog_product_website')),
+            'cpw.product_id = ccp.product_id',
+            array()
+        )->joinInner(
+            array('cpsd' => $this->getTable('catalog_product_entity_int')),
+            'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0' . ' AND cpsd.attribute_id = ' . $statusAttributeId,
+            array()
+        )->joinLeft(
+            array('cpss' => $this->getTable('catalog_product_entity_int')),
+            'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id' .
+            ' AND cpss.store_id = ' .
+            $store->getId(),
+            array()
+        )->joinInner(
+            array('cpvd' => $this->getTable('catalog_product_entity_int')),
+            'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0' .
+            ' AND cpvd.attribute_id = ' .
+            $visibilityAttributeId,
+            array()
+        )->joinLeft(
+            array('cpvs' => $this->getTable('catalog_product_entity_int')),
+            'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id ' .
+            'AND cpvs.store_id = ' .
+            $store->getId(),
+            array()
+        )->joinInner(
+            array('ccad' => $this->getTable('catalog_category_entity_int')),
+            'ccad.entity_id = cc.entity_id AND ccad.store_id = 0' . ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
+            array()
+        )->joinLeft(
+            array('ccas' => $this->getTable('catalog_category_entity_int')),
+            'ccas.entity_id = cc.entity_id AND ccas.attribute_id = ccad.attribute_id' .
+            ' AND ccas.store_id = ' .
+            $store->getId(),
+            array()
+        )->where(
+            'cpw.website_id = ?',
+            $store->getWebsiteId()
+        )->where(
+            $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->where(
+            $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
+            array(
+                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
+                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
             )
-            ->joinInner(
-                ['ccp' => $this->getTable('catalog_category_product')],
-                'ccp.category_id = cc2.entity_id',
-                []
+        )->where(
+            $this->getWriteAdapter()->getIfNullSql('ccas.value', 'ccad.value') . ' = ?',
+            1
+        )->columns(
+            array(
+                'category_id' => 'cc.entity_id',
+                'product_id' => 'ccp.product_id',
+                'position' => new \Zend_Db_Expr('ccp.position + 10000'),
+                'is_parent' => new \Zend_Db_Expr('0'),
+                'store_id' => new \Zend_Db_Expr($store->getId()),
+                'visibility' => new \Zend_Db_Expr($this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value'))
             )
-            ->joinInner(
-                ['cpw' => $this->getTable('catalog_product_website')],
-                'cpw.product_id = ccp.product_id',
-                []
-            )
-            ->joinInner(
-                ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                'cpsd.entity_id = ccp.product_id AND cpsd.store_id = 0'
-                . ' AND cpsd.attribute_id = ' . $statusAttributeId,
-                []
-            )
-            ->joinLeft(
-                ['cpss' => $this->getTable('catalog_product_entity_int')],
-                'cpss.entity_id = ccp.product_id AND cpss.attribute_id = cpsd.attribute_id'
-                . ' AND cpss.store_id = ' . $store->getId(),
-                []
-            )
-            ->joinInner(
-                ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                'cpvd.entity_id = ccp.product_id AND cpvd.store_id = 0'
-                . ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
-                []
-            )
-            ->joinLeft(
-                ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                'cpvs.entity_id = ccp.product_id AND cpvs.attribute_id = cpvd.attribute_id '
-                . 'AND cpvs.store_id = ' . $store->getId(),
-                []
-            )
-            ->joinInner(
-                ['ccad' => $this->getTable('catalog_category_entity_int')],
-                'ccad.entity_id = cc.entity_id AND ccad.store_id = 0'
-                . ' AND ccad.attribute_id = ' . $isAnchorAttributeId,
-                []
-            )
-            ->joinLeft(
-                ['ccas' => $this->getTable('catalog_category_entity_int')],
-                'ccas.entity_id = cc.entity_id AND ccas.attribute_id = ccad.attribute_id'
-                . ' AND ccas.store_id = ' . $store->getId(),
-                []
-            )
-            ->where('cpw.website_id = ?', $store->getWebsiteId())
-            ->where(
-                $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-            )
-            ->where(
-                $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-                ]
-            )
-            ->where($this->getWriteAdapter()->getIfNullSql('ccas.value', 'ccad.value') . ' = ?', 1)
-            ->columns(
-                [
-                    'category_id' => 'cc.entity_id',
-                    'product_id'  => 'ccp.product_id',
-                    'position'    => new \Zend_Db_Expr('ccp.position + 10000'),
-                    'is_parent'   => new \Zend_Db_Expr('0'),
-                    'store_id'    => new \Zend_Db_Expr($store->getId()),
-                    'visibility'  => new \Zend_Db_Expr(
-                            $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value')),
-                ]
-            );
+        );
     }
 
     /**
@@ -481,7 +491,7 @@ abstract class AbstractAction
                 $this->getWriteAdapter()->insertFromSelect(
                     $select,
                     $this->getMainTmpTable(),
-                    ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                    array('category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'),
                     \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -498,76 +508,80 @@ abstract class AbstractAction
     {
         if (!isset($this->productsSelects[$store->getId()])) {
             $statusAttributeId = $this->config->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY, 'status'
+                \Magento\Catalog\Model\Product::ENTITY,
+                'status'
             )->getId();
             $visibilityAttributeId = $this->config->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY, 'visibility'
+                \Magento\Catalog\Model\Product::ENTITY,
+                'visibility'
             )->getId();
 
-            $select = $this->getWriteAdapter()->select()
-                ->from(['cp' => $this->getTable('catalog_product_entity')], [])
-                ->joinInner(
-                    ['cpw' => $this->getTable('catalog_product_website')],
-                    'cpw.product_id = cp.entity_id',
-                    []
+            $select = $this->getWriteAdapter()->select()->from(
+                array('cp' => $this->getTable('catalog_product_entity')),
+                array()
+            )->joinInner(
+                array('cpw' => $this->getTable('catalog_product_website')),
+                'cpw.product_id = cp.entity_id',
+                array()
+            )->joinInner(
+                array('cpsd' => $this->getTable('catalog_product_entity_int')),
+                'cpsd.entity_id = cp.entity_id AND cpsd.store_id = 0' .
+                ' AND cpsd.attribute_id = ' .
+                $statusAttributeId,
+                array()
+            )->joinLeft(
+                array('cpss' => $this->getTable('catalog_product_entity_int')),
+                'cpss.entity_id = cp.entity_id AND cpss.attribute_id = cpsd.attribute_id' .
+                ' AND cpss.store_id = ' .
+                $store->getId(),
+                array()
+            )->joinInner(
+                array('cpvd' => $this->getTable('catalog_product_entity_int')),
+                'cpvd.entity_id = cp.entity_id AND cpvd.store_id = 0' .
+                ' AND cpvd.attribute_id = ' .
+                $visibilityAttributeId,
+                array()
+            )->joinLeft(
+                array('cpvs' => $this->getTable('catalog_product_entity_int')),
+                'cpvs.entity_id = cp.entity_id AND cpvs.attribute_id = cpvd.attribute_id ' .
+                ' AND cpvs.store_id = ' .
+                $store->getId(),
+                array()
+            )->joinLeft(
+                array('ccp' => $this->getTable('catalog_category_product')),
+                'ccp.product_id = cp.entity_id',
+                array()
+            )->where(
+                'cpw.website_id = ?',
+                $store->getWebsiteId()
+            )->where(
+                $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            )->where(
+                $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
+                array(
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
                 )
-                ->joinInner(
-                    ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                    'cpsd.entity_id = cp.entity_id AND cpsd.store_id = 0'
-                        . ' AND cpsd.attribute_id = ' . $statusAttributeId,
-                    []
+            )->group(
+                'cp.entity_id'
+            )->columns(
+                array(
+                    'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
+                    'product_id' => 'cp.entity_id',
+                    'position' => new \Zend_Db_Expr(
+                        $this->getWriteAdapter()->getCheckSql('ccp.product_id IS NOT NULL', 'ccp.position', '0')
+                    ),
+                    'is_parent' => new \Zend_Db_Expr(
+                        $this->getWriteAdapter()->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')
+                    ),
+                    'store_id' => new \Zend_Db_Expr($store->getId()),
+                    'visibility' => new \Zend_Db_Expr(
+                        $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value')
+                    )
                 )
-                ->joinLeft(
-                    ['cpss' => $this->getTable('catalog_product_entity_int')],
-                    'cpss.entity_id = cp.entity_id AND cpss.attribute_id = cpsd.attribute_id'
-                        . ' AND cpss.store_id = ' . $store->getId(),
-                    []
-                )
-                ->joinInner(
-                    ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                    'cpvd.entity_id = cp.entity_id AND cpvd.store_id = 0'
-                        . ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
-                    []
-                )
-                ->joinLeft(
-                    ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                    'cpvs.entity_id = cp.entity_id AND cpvs.attribute_id = cpvd.attribute_id '
-                        . ' AND cpvs.store_id = ' . $store->getId(),
-                    []
-                )
-                ->joinLeft(
-                    ['ccp' => $this->getTable('catalog_category_product')],
-                    'ccp.product_id = cp.entity_id',
-                    []
-                )
-                ->where('cpw.website_id = ?', $store->getWebsiteId())
-                ->where(
-                    $this->getWriteAdapter()->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
-                    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-                )
-                ->where(
-                    $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                    [
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                        \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-                    ]
-                )
-                ->group('cp.entity_id')
-                ->columns(
-                    [
-                        'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
-                        'product_id'  => 'cp.entity_id',
-                        'position'    => new \Zend_Db_Expr(
-                                $this->getWriteAdapter()->getCheckSql('ccp.product_id IS NOT NULL', 'ccp.position', '0')
-                            ),
-                        'is_parent'   => new \Zend_Db_Expr(
-                                $this->getWriteAdapter()->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')),
-                        'store_id'    => new \Zend_Db_Expr($store->getId()),
-                        'visibility'  => new \Zend_Db_Expr(
-                                $this->getWriteAdapter()->getIfNullSql('cpvs.value', 'cpvd.value')),
-                    ]
-                );
+            );
 
             $this->productsSelects[$store->getId()] = $select;
         }
@@ -595,7 +609,9 @@ abstract class AbstractAction
     {
         if ($this->isIndexRootCategoryNeeded()) {
             $selects = $this->prepareSelectsByRange(
-                $this->getAllProducts($store), 'entity_id', self::RANGE_PRODUCT_STEP
+                $this->getAllProducts($store),
+                'entity_id',
+                self::RANGE_PRODUCT_STEP
             );
 
             foreach ($selects as $select) {
@@ -603,7 +619,7 @@ abstract class AbstractAction
                     $this->getWriteAdapter()->insertFromSelect(
                         $select,
                         $this->getMainTmpTable(),
-                        ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                        array('category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'),
                         \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                     )
                 );

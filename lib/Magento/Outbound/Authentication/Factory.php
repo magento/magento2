@@ -45,10 +45,8 @@ class Factory
      * @param array $authenticationMap
      * @param ObjectManager $objectManager
      */
-    public function __construct(
-        array $authenticationMap,
-        ObjectManager $objectManager
-    ) {
+    public function __construct(array $authenticationMap, ObjectManager $objectManager)
+    {
         $this->_authenticationMap = $authenticationMap;
         $this->_objectManager = $objectManager;
     }
@@ -66,7 +64,7 @@ class Factory
             throw new \LogicException("There is no authentication for the type given: {$authenticationType}");
         }
 
-        $authentication =  $this->_objectManager->get($this->_authenticationMap[$authenticationType]);
+        $authentication = $this->_objectManager->get($this->_authenticationMap[$authenticationType]);
         if (!$authentication instanceof AuthenticationInterface) {
             throw new \LogicException(
                 "Authentication class for {$authenticationType} does not implement authentication interface"
@@ -74,5 +72,4 @@ class Factory
         }
         return $authentication;
     }
-
 }

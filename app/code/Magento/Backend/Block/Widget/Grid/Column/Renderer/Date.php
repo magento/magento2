@@ -28,8 +28,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Backend grid item renderer date
  */
-class Date
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var int
@@ -47,10 +46,8 @@ class Date
      * @param \Magento\Backend\Block\Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Backend\Block\Context $context,
-        array $data = array()
-    ) {
+    public function __construct(\Magento\Backend\Block\Context $context, array $data = array())
+    {
         parent::__construct($context, $data);
     }
 
@@ -68,8 +65,7 @@ class Date
                     self::$_format = $this->_localeDate->getDateFormat(
                         \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     );
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $this->_logger->logException($e);
                 }
             }
@@ -90,15 +86,23 @@ class Date
             $format = $this->_getFormat();
             try {
                 if ($this->getColumn()->getGmtoffset()) {
-                    $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_localeDate->date(
+                        $data,
+                        \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                    )->toString(
+                        $format
+                    );
                 } else {
                     $data = $this->_localeDate->date($data, \Zend_Date::ISO_8601, null, false)->toString($format);
                 }
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 if ($this->getColumn()->getTimezone()) {
-                    $data = $this->_localeDate->date($data, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)->toString($format);
+                    $data = $this->_localeDate->date(
+                        $data,
+                        \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                    )->toString(
+                        $format
+                    );
                 } else {
                     $data = $this->_localeDate->date($data, null, null, false)->toString($format);
                 }

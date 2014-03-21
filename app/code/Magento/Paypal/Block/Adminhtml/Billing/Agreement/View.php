@@ -56,10 +56,10 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId    = 'agreement';
-        $this->_controller  = 'adminhtml_billing_agreement';
-        $this->_mode        = 'view';
-        $this->_blockGroup  = 'Magento_Paypal';
+        $this->_objectId = 'agreement';
+        $this->_controller = 'adminhtml_billing_agreement';
+        $this->_mode = 'view';
+        $this->_blockGroup = 'Magento_Paypal';
 
         parent::_construct();
 
@@ -70,22 +70,28 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         $this->_removeButton('save');
         $this->setId('billing_agreement_view');
 
-        $this->_addButton('back', array(
-            'label'     => __('Back'),
-            'onclick'   => 'setLocation(\'' . $this->getBackUrl() . '\')',
-            'class'     => 'back',
-        ), -1);
+        $this->_addButton(
+            'back',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')',
+                'class' => 'back'
+            ),
+            -1
+        );
 
         $agreement = $this->_getBillingAgreement();
         if ($agreement && $agreement->canCancel() && $this->_isAllowed('Magento_Paypal::actions_manage')) {
             $confirmText = __('Are you sure you want to do this?');
-            $this->_addButton('cancel', array(
-                'label'     => __('Cancel'),
-                'onclick'   => "confirmSetLocation("
-                    . "'{$confirmText}', '{$this->_getCancelUrl()}'"
-                . ")",
-                'class'     => 'cancel',
-            ), -1);
+            $this->_addButton(
+                'cancel',
+                array(
+                    'label' => __('Cancel'),
+                    'onclick' => "confirmSetLocation(" . "'{$confirmText}', '{$this->_getCancelUrl()}'" . ")",
+                    'class' => 'cancel'
+                ),
+                -1
+            );
         }
     }
 

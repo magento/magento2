@@ -35,6 +35,6 @@ class Reader extends \Magento\Config\Reader\Filesystem
     protected $_idAttributes = array(
         '/payment/credit_cards/type' => 'id',
         '/payment/groups/group' => 'id',
-        '/payment/methods/method' => 'name',
+        '/payment/methods/method' => 'name'
     );
 }

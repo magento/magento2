@@ -60,10 +60,8 @@ class Version
      * @param \Magento\Stdlib\Cookie $cookie
      * @param \Magento\App\Request\Http $request
      */
-    public function __construct(
-        \Magento\Stdlib\Cookie $cookie,
-        \Magento\App\Request\Http $request
-    ) {
+    public function __construct(\Magento\Stdlib\Cookie $cookie, \Magento\App\Request\Http $request)
+    {
         $this->cookie = $cookie;
         $this->request = $request;
     }

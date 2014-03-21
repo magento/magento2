@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
 class StoreGroupTest extends \PHPUnit_Framework_TestCase
@@ -47,12 +46,20 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->processorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor', array('markIndexerAsInvalid'), array(), '', false
+            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
+            array('markIndexerAsInvalid'),
+            array(),
+            '',
+            false
         );
 
         $this->subjectMock = $this->getMock('Magento\Core\Model\Resource\Store\Group', array(), array(), '', false);
         $this->storeGroupMock = $this->getMock(
-            'Magento\Core\Model\Store\Group', array('getId', '__wakeup', 'dataHasChangedFor'), array(), '', false
+            'Magento\Core\Model\Store\Group',
+            array('getId', '__wakeup', 'dataHasChangedFor'),
+            array(),
+            '',
+            false
         );
     }
 
@@ -63,12 +70,9 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($matcherMethod, $storeId)
     {
-        $this->processorMock->expects($this->$matcherMethod())
-            ->method('markIndexerAsInvalid');
+        $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($storeId));
+        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -81,16 +85,19 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangedWebsiteBeforeSave($matcherMethod, $websiteChanged)
     {
-        $this->processorMock->expects($this->$matcherMethod())
-            ->method('markIndexerAsInvalid');
+        $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
 
-        $this->storeGroupMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(1));
+        $this->storeGroupMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $this->storeGroupMock->expects($this->once())
-            ->method('dataHasChangedFor')->with('root_category_id')
-            ->will($this->returnValue($websiteChanged));
+        $this->storeGroupMock->expects(
+            $this->once()
+        )->method(
+            'dataHasChangedFor'
+        )->with(
+            'root_category_id'
+        )->will(
+            $this->returnValue($websiteChanged)
+        );
 
         $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
@@ -101,14 +108,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function storeGroupWebsiteDataProvider()
     {
-        return array(
-            array(
-                'once', true
-            ),
-            array(
-                'never', false
-            )
-        );
+        return array(array('once', true), array('never', false));
     }
 
     /**
@@ -116,15 +116,6 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
      */
     public function storeGroupDataProvider()
     {
-        return array(
-            array(
-                'once',
-                null
-            ),
-            array(
-                'never',
-                1
-            )
-        );
+        return array(array('once', null), array('never', 1));
     }
 }

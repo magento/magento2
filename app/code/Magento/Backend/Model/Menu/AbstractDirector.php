@@ -50,6 +50,8 @@ abstract class AbstractDirector
      * @return void
      */
     abstract public function direct(
-        array $config, \Magento\Backend\Model\Menu\Builder $builder, \Magento\Logger $logger
+        array $config,
+        \Magento\Backend\Model\Menu\Builder $builder,
+        \Magento\Logger $logger
     );
 }

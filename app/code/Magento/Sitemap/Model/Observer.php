@@ -45,12 +45,12 @@ class Observer
     /**
      * Error email template configuration
      */
-    const XML_PATH_ERROR_TEMPLATE  = 'sitemap/generate/error_email_template';
+    const XML_PATH_ERROR_TEMPLATE = 'sitemap/generate/error_email_template';
 
     /**
      * Error email identity configuration
      */
-    const XML_PATH_ERROR_IDENTITY  = 'sitemap/generate/error_email_identity';
+    const XML_PATH_ERROR_IDENTITY = 'sitemap/generate/error_email_identity';
 
     /**
      * 'Send error emails to' configuration
@@ -127,8 +127,7 @@ class Observer
 
             try {
                 $sitemap->generateXml();
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
@@ -137,17 +136,20 @@ class Observer
             $translate = $this->_translateModel->getTranslateInline();
             $this->_translateModel->setTranslateInline(false);
 
-            $this->_transportBuilder
-                ->setTemplateIdentifier(
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
-                )
-                ->setTemplateOptions(array(
+            $this->_transportBuilder->setTemplateIdentifier(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+            )->setTemplateOptions(
+                array(
                     'area' => \Magento\Core\Model\App\Area::AREA_ADMIN,
-                    'store' => $this->_storeManager->getStore()->getId(),
-                ))
-                ->setTemplateVars(array('warnings' => join("\n", $errors)))
-                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY))
-                ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT));
+                    'store' => $this->_storeManager->getStore()->getId()
+                )
+            )->setTemplateVars(
+                array('warnings' => join("\n", $errors))
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY)
+            )->addTo(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)
+            );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

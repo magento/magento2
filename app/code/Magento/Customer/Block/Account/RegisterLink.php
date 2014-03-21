@@ -31,9 +31,9 @@ class RegisterLink extends \Magento\View\Element\Html\Link
     /**
      * Customer session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * @var \Magento\Customer\Helper\Data
@@ -42,18 +42,18 @@ class RegisterLink extends \Magento\View\Element\Html\Link
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $session
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $session,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
         parent::__construct($context, $data);
-        $this->_customerSession = $session;
+        $this->httpContext = $httpContext;
         $this->_customerHelper = $customerHelper;
         $this->_isScopePrivate = true;
     }
@@ -71,7 +71,7 @@ class RegisterLink extends \Magento\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if ($this->_customerSession->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             return '';
         }
         return parent::_toHtml();

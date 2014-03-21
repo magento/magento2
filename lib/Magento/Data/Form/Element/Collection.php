@@ -37,7 +37,6 @@ use Magento\Data\Form\AbstractForm;
  */
 class Collection implements \ArrayAccess, \IteratorAggregate
 {
-
     /**
      * Elements storage
      *
@@ -210,5 +209,4 @@ class Collection implements \ArrayAccess, \IteratorAggregate
         }
         return null;
     }
-
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 /**
@@ -47,10 +46,8 @@ class RelatedFile
      * @param Service $viewService
      * @param FileSystem $viewFileSystem
      */
-    public function __construct(
-        Service $viewService,
-        FileSystem $viewFileSystem
-    ) {
+    public function __construct(Service $viewService, FileSystem $viewFileSystem)
+    {
         $this->viewService = $viewService;
         $this->viewFileSystem = $viewFileSystem;
     }

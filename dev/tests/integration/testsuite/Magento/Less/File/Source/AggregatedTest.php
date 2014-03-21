@@ -37,32 +37,42 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => dirname(dirname(__DIR__)) . '/_files/lib'),
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(dirname(__DIR__)) . '/_files/design'),
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => dirname(dirname(__DIR__)) . '/_files/lib'),
+                    \Magento\App\Filesystem::THEMES_DIR => array(
+                        'path' => dirname(dirname(__DIR__)) . '/_files/design'
+                    )
+                )
             )
-        ));
+        );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->objectManager->get('Magento\App\State')->setAreaCode('frontend');
 
         /** @var \Magento\Filesystem $filesystem */
         $filesystem = $this->objectManager->create(
             'Magento\App\Filesystem',
-            array('directoryList' => $this->objectManager->create(
-                'Magento\Filesystem\DirectoryList',
-                array(
-                    'root' => BP,
-                    'directories' => array(
-                        \Magento\App\Filesystem::MODULES_DIR
-                            => array('path' => dirname(dirname(__DIR__)) . '/_files/code')
+            array(
+                'directoryList' => $this->objectManager->create(
+                    'Magento\Filesystem\DirectoryList',
+                    array(
+                        'root' => BP,
+                        'directories' => array(
+                            \Magento\App\Filesystem::MODULES_DIR => array(
+                                'path' => dirname(dirname(__DIR__)) . '/_files/code'
+                            )
+                        )
                     )
                 )
-            ))
+            )
         );
 
         /** @var \Magento\Less\File\Source\Base $sourceBase */
-        $sourceBase = $this->objectManager->create('Magento\Less\File\Source\Base', array('filesystem' => $filesystem));
+        $sourceBase = $this->objectManager->create(
+            'Magento\Less\File\Source\Base',
+            array('filesystem' => $filesystem)
+        );
         $this->model = $this->objectManager->create(
             'Magento\Less\File\Source\Aggregated',
             array('baseFiles' => $sourceBase)
@@ -107,11 +117,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                 '1.file',
                 'test_default',
                 array(
-                    str_replace(
-                        '\\',
-                        '/',
-                        dirname(dirname(__DIR__)) . '/_files/design/frontend/test_default/1.file'
-                    ),
+                    str_replace('\\', '/', dirname(dirname(__DIR__)) . '/_files/design/frontend/test_default/1.file'),
                     str_replace(
                         '\\',
                         '/',
@@ -127,28 +133,14 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             array(
                 '2.file',
                 'test_default',
-                array(
-                    str_replace(
-                        '\\',
-                        '/',
-                        dirname(dirname(__DIR__)) . '/_files/lib/2.file'
-                    )
-                )
+                array(str_replace('\\', '/', dirname(dirname(__DIR__)) . '/_files/lib/2.file'))
             ),
-            array(
-                'doesNotExist',
-                'test_default',
-                array()
-            ),
+            array('doesNotExist', 'test_default', array()),
             array(
                 '3',
                 'test_default',
                 array(
-                    str_replace(
-                        '\\',
-                        '/',
-                        dirname(dirname(__DIR__)) . '/_files/lib/3.less'
-                    ),
+                    str_replace('\\', '/', dirname(dirname(__DIR__)) . '/_files/lib/3.less'),
                     str_replace(
                         '\\',
                         '/',
@@ -160,7 +152,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                         dirname(dirname(__DIR__)) . '/_files/design/frontend/test_default/Magento_Third/3.less'
                     )
                 )
-            ),
+            )
         );
     }
 }

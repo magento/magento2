@@ -45,15 +45,16 @@ class AttributeMetadataBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_builder =
-            $this->_objectManager->create('Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder');
+        $this->_builder = $this->_objectManager->create(
+            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder'
+        );
     }
 
     public function testCreate()
     {
         $attributeMetadata = $this->_builder->create();
         $this->assertInstanceOf('\Magento\Customer\Service\V1\Data\Eav\AttributeMetadata', $attributeMetadata);
-        $this->assertEquals([], $attributeMetadata->getOptions());
+        $this->assertEquals(array(), $attributeMetadata->getOptions());
     }
 
     /**
@@ -94,105 +95,92 @@ class AttributeMetadataBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function populateWithArrayDataProvider()
     {
-        $dataNoOptions = [
+        $dataNoOptions = array(
             'attribute_code' => 'prefix',
             'front_end_input' => 'text',
             'input_filter' => null,
             'store_label' => 'Prefix',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '0',
-            'options' => []
-        ];
+            'options' => array()
+        );
 
-        $dataWithOptions = [
+        $dataWithOptions = array(
             'attribute_code' => 'country_id',
             'front_end_input' => 'select',
             'input_filter' => null,
             'store_label' => 'Country',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '1',
-            'options' => [
-                ['label' => '', 'value' => ''],
-                'Afghanistan' => ['label' => 'Afghanistan', 'value' => 'AF'],
-            ]
-        ];
+            'options' => array(
+                array('label' => '', 'value' => ''),
+                'Afghanistan' => array('label' => 'Afghanistan', 'value' => 'AF')
+            )
+        );
 
 
-        return [
-            [[]],
-            [$dataNoOptions],
-            [$dataWithOptions, true],
-        ];
+        return array(array(array()), array($dataNoOptions), array($dataWithOptions, true));
     }
 
     public function testMergeDataObjects()
     {
-        $dataNoOptions = [
+        $dataNoOptions = array(
             'attribute_code' => 'prefix',
             'front_end_input' => 'text',
             'input_filter' => null,
             'store_label' => 'Prefix',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '0',
-            'options' => []
-        ];
+            'options' => array()
+        );
 
-        $dataWithOptions = [
+        $dataWithOptions = array(
             'attribute_code' => 'country_id',
             'front_end_input' => 'select',
             'input_filter' => null,
             'store_label' => 'Country',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '1',
-            'options' => [
-                ['label' => '', 'value' => ''],
-                'Afghanistan' => ['label' => 'Afghanistan', 'value' => 'AF'],
-            ]
-        ];
+            'options' => array(
+                array('label' => '', 'value' => ''),
+                'Afghanistan' => array('label' => 'Afghanistan', 'value' => 'AF')
+            )
+        );
 
-        $attributeMetadata = $this->_builder
-            ->populateWithArray($dataNoOptions)
-            ->create();
-        $attributeMetadataA = $this->_builder
-            ->populateWithArray($dataWithOptions)
-            ->create();
+        $attributeMetadata = $this->_builder->populateWithArray($dataNoOptions)->create();
+        $attributeMetadataA = $this->_builder->populateWithArray($dataWithOptions)->create();
         $merged = $this->_builder->mergeDataObjects($attributeMetadata, $attributeMetadataA);
         $this->assertEquals($attributeMetadataA, $merged);
     }
 
     public function testMergeDataObjectWithArray()
     {
-        $dataNoOptions = [
+        $dataNoOptions = array(
             'attribute_code' => 'prefix',
             'front_end_input' => 'text',
             'input_filter' => null,
             'store_label' => 'Prefix',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '0',
-            'options' => []
-        ];
+            'options' => array()
+        );
 
-        $dataWithOptions = [
+        $dataWithOptions = array(
             'attribute_code' => 'country_id',
             'front_end_input' => 'select',
             'input_filter' => null,
             'store_label' => 'Country',
-            'validation_rules' => [],
+            'validation_rules' => array(),
             'visible' => '1',
-            'options' => [
-                ['label' => '', 'value' => ''],
-                'Afghanistan' => ['label' => 'Afghanistan', 'value' => 'AF'],
-            ]
-        ];
+            'options' => array(
+                array('label' => '', 'value' => ''),
+                'Afghanistan' => array('label' => 'Afghanistan', 'value' => 'AF')
+            )
+        );
 
-        $attributeMetadata = $this->_builder
-            ->populateWithArray($dataNoOptions)
-            ->create();
-        $attributeMetadataA = $this->_builder
-            ->populateWithArray($dataWithOptions)
-            ->create();
+        $attributeMetadata = $this->_builder->populateWithArray($dataNoOptions)->create();
+        $attributeMetadataA = $this->_builder->populateWithArray($dataWithOptions)->create();
         $merged = $this->_builder->mergeDataObjectWithArray($attributeMetadata, $dataWithOptions);
         $this->assertEquals($attributeMetadataA, $merged);
     }
 }
-

@@ -41,7 +41,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $path = $basePath . 'routes.xml';
         $domDocument = new \DOMDocument();
         $domDocument->load($path);
-        $expectedData = include($basePath . 'routes.php');
+        $expectedData = include $basePath . 'routes.php';
         $this->assertEquals($expectedData, $this->_model->convert($domDocument));
     }
 }

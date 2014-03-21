@@ -37,18 +37,26 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * XML configuration paths for Price Layered Navigation
      */
-    const XML_PATH_RANGE_CALCULATION       = 'catalog/layered_navigation/price_range_calculation';
-    const XML_PATH_RANGE_STEP              = 'catalog/layered_navigation/price_range_step';
-    const XML_PATH_RANGE_MAX_INTERVALS     = 'catalog/layered_navigation/price_range_max_intervals';
-    const XML_PATH_ONE_PRICE_INTERVAL      = 'catalog/layered_navigation/one_price_interval';
+    const XML_PATH_RANGE_CALCULATION = 'catalog/layered_navigation/price_range_calculation';
+
+    const XML_PATH_RANGE_STEP = 'catalog/layered_navigation/price_range_step';
+
+    const XML_PATH_RANGE_MAX_INTERVALS = 'catalog/layered_navigation/price_range_max_intervals';
+
+    const XML_PATH_ONE_PRICE_INTERVAL = 'catalog/layered_navigation/one_price_interval';
+
     const XML_PATH_INTERVAL_DIVISION_LIMIT = 'catalog/layered_navigation/interval_division_limit';
 
     /**
      * Price layered navigation modes: Automatic (equalize price ranges), Automatic (equalize product counts), Manual
      */
-    const RANGE_CALCULATION_AUTO     = 'auto'; // equalize price ranges
-    const RANGE_CALCULATION_IMPROVED = 'improved'; // equalize product counts
-    const RANGE_CALCULATION_MANUAL   = 'manual';
+    const RANGE_CALCULATION_AUTO = 'auto';
+
+    // equalize price ranges
+    const RANGE_CALCULATION_IMPROVED = 'improved';
+
+    // equalize product counts
+    const RANGE_CALCULATION_MANUAL = 'manual';
 
     /**
      * Minimal size of the range
@@ -86,7 +94,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm
@@ -96,7 +104,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
@@ -107,7 +115,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         $this->_customerSession = $customerSession;
         $this->_priceAlgorithm = $priceAlgorithm;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
+        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
         $this->_requestVar = 'price';
     }
 
@@ -143,13 +151,12 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
                 if ($calculation == self::RANGE_CALCULATION_AUTO) {
                     $index = 1;
                     do {
-                        $range = pow(10, (strlen(floor($maxPrice)) - $index));
+                        $range = pow(10, strlen(floor($maxPrice)) - $index);
                         $items = $this->getRangeItemCounts($range);
                         $index++;
-                    }
-                    while($range > self::MIN_RANGE_POWER && count($items) < 2);
+                    } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
                 } else {
-                    $range = (float)$this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_STEP);
+                    $range = (double)$this->_storeManager->getStore()->getConfig(self::XML_PATH_RANGE_STEP);
                 }
             }
 
@@ -218,9 +225,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderItemLabel($range, $value)
     {
-        $store      = $this->_storeManager->getStore();
-        $fromPrice  = $store->formatPrice(($value - 1) * $range);
-        $toPrice    = $store->formatPrice($value*$range);
+        $store = $this->_storeManager->getStore();
+        $fromPrice = $store->formatPrice(($value - 1) * $range);
+        $toPrice = $store->formatPrice($value * $range);
 
         return __('%1 - %2', $fromPrice, $toPrice);
     }
@@ -234,12 +241,13 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
-        $store      = $this->_storeManager->getStore();
-        $formattedFromPrice  = $store->formatPrice($fromPrice);
+        $store = $this->_storeManager->getStore();
+        $formattedFromPrice = $store->formatPrice($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
-        } elseif (
-            $fromPrice == $toPrice && $this->_storeManager->getStore()->getConfig(self::XML_PATH_ONE_PRICE_INTERVAL)
+        } elseif ($fromPrice == $toPrice && $this->_storeManager->getStore()->getConfig(
+            self::XML_PATH_ONE_PRICE_INTERVAL
+        )
         ) {
             return $formattedFromPrice;
         } else {
@@ -279,12 +287,12 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     {
         $collection = $this->getLayer()->getProductCollection();
         $appliedInterval = $this->getInterval();
-        if ($appliedInterval
-            && $collection->getPricesCount() <= $this->getIntervalDivisionLimit()
-        ) {
+        if ($appliedInterval && $collection->getPricesCount() <= $this->getIntervalDivisionLimit()) {
             return array();
         }
-        $this->_priceAlgorithm->setPricesModel($this)->setStatistics(
+        $this->_priceAlgorithm->setPricesModel(
+            $this
+        )->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
@@ -302,9 +310,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         foreach ($this->_priceAlgorithm->calculateSeparators() as $separator) {
             $items[] = array(
                 'label' => $this->_renderRangeLabel($separator['from'], $separator['to']),
-                'value' => (($separator['from'] == 0) ? '' : $separator['from'])
-                    . '-' . $separator['to'] . $this->_getAdditionalRequestData(),
-                'count' => $separator['count'],
+                'value' => ($separator['from'] ==
+                0 ? '' : $separator['from']) . '-' . $separator['to'] . $this->_getAdditionalRequestData(),
+                'count' => $separator['count']
             );
         }
 
@@ -318,30 +326,31 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        if ($this->_storeManager->getStore()
-            ->getConfig(self::XML_PATH_RANGE_CALCULATION) == self::RANGE_CALCULATION_IMPROVED
+        if ($this->_storeManager->getStore()->getConfig(
+            self::XML_PATH_RANGE_CALCULATION
+        ) == self::RANGE_CALCULATION_IMPROVED
         ) {
             return $this->_getCalculatedItemsData();
         } elseif ($this->getInterval()) {
             return array();
         }
 
-        $range      = $this->getPriceRange();
-        $dbRanges   = $this->getRangeItemCounts($range);
-        $data       = array();
+        $range = $this->getPriceRange();
+        $dbRanges = $this->getRangeItemCounts($range);
+        $data = array();
 
         if (!empty($dbRanges)) {
             $lastIndex = array_keys($dbRanges);
             $lastIndex = $lastIndex[count($lastIndex) - 1];
 
             foreach ($dbRanges as $index => $count) {
-                $fromPrice = ($index == 1) ? '' : (($index - 1) * $range);
-                $toPrice = ($index == $lastIndex) ? '' : ($index * $range);
+                $fromPrice = $index == 1 ? '' : ($index - 1) * $range;
+                $toPrice = $index == $lastIndex ? '' : $index * $range;
 
                 $data[] = array(
                     'label' => $this->_renderRangeLabel($fromPrice, $toPrice),
                     'value' => $fromPrice . '-' . $toPrice,
-                    'count' => $count,
+                    'count' => $count
                 );
             }
         }
@@ -373,7 +382,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             return false;
         }
         foreach ($filter as $v) {
-            if (($v !== '' && $v !== '0' && (float)$v <= 0) || is_infinite((float)$v)) {
+            if ($v !== '' && $v !== '0' && (double)$v <= 0 || is_infinite((double)$v)) {
                 return false;
             }
         }
@@ -385,10 +394,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply price range filter
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @param \Magento\Object $filterBlock
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
         /**
          * Filter must be string: $fromPrice-$toPrice
@@ -425,10 +433,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         }
 
         $this->_applyPriceRange();
-        $this->getLayer()->getState()->addFilter($this->_createItem(
-            $this->_renderRangeLabel(empty($from) ? 0 : $from, $to),
-            $filter
-        ));
+        $this->getLayer()->getState()->addFilter(
+            $this->_createItem($this->_renderRangeLabel(empty($from) ? 0 : $from, $to), $filter)
+        );
 
         return $this;
     }
@@ -545,9 +552,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function getClearLinkText()
     {
-        if ($this->_storeManager->getStore()
-            ->getConfig(self::XML_PATH_RANGE_CALCULATION) == self::RANGE_CALCULATION_IMPROVED
-            && $this->getPriorIntervals()
+        if ($this->_storeManager->getStore()->getConfig(
+            self::XML_PATH_RANGE_CALCULATION
+        ) == self::RANGE_CALCULATION_IMPROVED && $this->getPriorIntervals()
         ) {
             return __('Clear Price');
         }

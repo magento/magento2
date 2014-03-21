@@ -29,8 +29,7 @@
  */
 namespace Magento\TestFramework\Performance\Scenario\Handler;
 
-class Jmeter
-    implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
+class Jmeter implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
 {
     /**
      * @var \Magento\Shell
@@ -60,7 +59,8 @@ class Jmeter
     protected function _validateScenarioExecutable()
     {
         if ($this->_validateExecutable) {
-            $this->_validateExecutable = false; // validate only once
+            $this->_validateExecutable = false;
+            // validate only once
             $this->_shell->execute('jmeter --version');
         }
     }
@@ -84,13 +84,15 @@ class Jmeter
         if ($reportFile) {
             if (!file_exists($reportFile)) {
                 throw new \Magento\Exception(
-                    "Report file '$reportFile' for '{$scenario->getTitle()}' has not been created."
+                    "Report file '{$reportFile}' for '{$scenario->getTitle()}' has not been created."
                 );
             }
             $reportErrors = $this->_getReportErrors($reportFile);
             if ($reportErrors) {
-                throw new \Magento\TestFramework\Performance\Scenario\FailureException($scenario,
-                    implode(PHP_EOL, $reportErrors));
+                throw new \Magento\TestFramework\Performance\Scenario\FailureException(
+                    $scenario,
+                    implode(PHP_EOL, $reportErrors)
+                );
             }
         }
     }
@@ -112,7 +114,7 @@ class Jmeter
         }
         foreach ($scenario->getArguments() as $key => $value) {
             $command .= ' %s';
-            $arguments[] = "-J$key=$value";
+            $arguments[] = "-J{$key}={$value}";
         }
         return array($command, $arguments);
     }

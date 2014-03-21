@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options;
 
 /**
@@ -34,25 +33,40 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetOptionValuesCaching()
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option'
+        );
         /** @var $productWithOptions \Magento\Catalog\Model\Product */
-        $productWithOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $productWithOptions->setTypeId('simple')
-            ->setId(1)
-            ->setAttributeSetId(4)
-            ->setWebsiteIds(array(1))
-            ->setName('Simple Product With Custom Options')
-            ->setSku('simple')
-            ->setPrice(10)
-
-            ->setMetaTitle('meta title')
-            ->setMetaKeyword('meta keyword')
-            ->setMetaDescription('meta description')
-
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $productWithOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $productWithOptions->setTypeId(
+            'simple'
+        )->setId(
+            1
+        )->setAttributeSetId(
+            4
+        )->setWebsiteIds(
+            array(1)
+        )->setName(
+            'Simple Product With Custom Options'
+        )->setSku(
+            'simple'
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
 
         $product = clone $productWithOptions;
         /** @var $option \Magento\Catalog\Model\Product\Option */

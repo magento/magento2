@@ -79,29 +79,29 @@ class Frontend extends \Magento\Connect\Frontend
 
         $this->_out = $data;
 
-        if ('stdout'===$this->_logStream) {
+        if ('stdout' === $this->_logStream) {
             if (is_string($data)) {
-                echo $data."<br/>".str_repeat(" ", 256);
+                echo $data . "<br/>" . str_repeat(" ", 256);
             } elseif (is_array($data)) {
                 $data = array_pop($data);
                 if (!empty($data['message']) && is_string($data['message'])) {
-                    echo $data['message']."<br/>".str_repeat(" ", 256);
+                    echo $data['message'] . "<br/>" . str_repeat(" ", 256);
                 } elseif (!empty($data['data'])) {
                     if (is_string($data['data'])) {
-                        echo $data['data']."<br/>".str_repeat(" ", 256);
+                        echo $data['data'] . "<br/>" . str_repeat(" ", 256);
                     } else {
                         if (isset($data['title'])) {
-                            echo $data['title']."<br/>".str_repeat(" ", 256);
+                            echo $data['title'] . "<br/>" . str_repeat(" ", 256);
                         }
                         if (is_array($data['data'])) {
                             foreach ($data['data'] as $row) {
                                 foreach ($row as $msg) {
-                                    echo "&nbsp;".$msg;
+                                    echo "&nbsp;" . $msg;
                                 }
-                                echo "<br/>".str_repeat(" ", 256);
+                                echo "<br/>" . str_repeat(" ", 256);
                             }
                         } else {
-                            echo "&nbsp;".$data['data'];
+                            echo "&nbsp;" . $data['data'];
                         }
                     }
                 }
@@ -138,10 +138,10 @@ SCRIPT;
     }
 
     /**
-    * Retrieve output cache
-    *
-    * @return array
-    */
+     * Retrieve output cache
+     *
+     * @return array
+     */
     public function getOutput()
     {
         return $this->_out;

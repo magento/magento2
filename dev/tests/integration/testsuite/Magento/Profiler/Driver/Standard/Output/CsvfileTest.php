@@ -53,11 +53,9 @@ class CsvfileTest extends \PHPUnit_Framework_TestCase
      */
     public function testDisplay($statFile, $expectedFile, $delimiter = ',', $enclosure = '"')
     {
-        $this->_output = new \Magento\Profiler\Driver\Standard\Output\Csvfile(array(
-            'filePath' => $this->_outputFile,
-            'delimiter' => $delimiter,
-            'enclosure' => $enclosure
-        ));
+        $this->_output = new \Magento\Profiler\Driver\Standard\Output\Csvfile(
+            array('filePath' => $this->_outputFile, 'delimiter' => $delimiter, 'enclosure' => $enclosure)
+        );
         $stat = include $statFile;
         $this->_output->display($stat);
         $this->assertFileEquals($expectedFile, $this->_outputFile);
@@ -78,7 +76,7 @@ class CsvfileTest extends \PHPUnit_Framework_TestCase
                 'expectedHtmlFile' => __DIR__ . '/_files/output_custom.csv',
                 '.',
                 '`'
-            ),
+            )
         );
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Layout;
 
 class MergeTest extends \PHPUnit_Framework_TestCase
@@ -94,7 +93,11 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_logger = $this->getMock('Magento\Logger', array(), array(), '', false);
 
         $this->_layoutValidator = $this->getMock(
-            'Magento\Core\Model\Layout\Update\Validator', array(), array(), '', false
+            'Magento\Core\Model\Layout\Update\Validator',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_cache = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
@@ -111,27 +114,30 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $directory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
 
         $fileDriver = $objectHelper->getObject('Magento\Filesystem\Driver\File');
-        $directory->expects($this->any())
-            ->method('readFile')
-            ->will($this->returnCallback(
+        $directory->expects($this->any())->method('readFile')->will(
+            $this->returnCallback(
                 function ($filename) use ($fileDriver) {
                     return $fileDriver->fileGetContents($filename);
                 }
-            ));
+            )
+        );
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directory));
 
-        $this->_model = $objectHelper->getObject('Magento\Core\Model\Layout\Merge', array(
-            'design' => $design,
-            'storeManager' => $storeManager,
-            'fileSource' => $fileSource,
-            'resource' => $this->_resource,
-            'appState' => $this->_appState,
-            'cache' => $this->_cache,
-            'theme' => $this->_theme,
-            'validator' => $this->_layoutValidator,
-            'logger' => $this->_logger,
-            'filesystem' => $filesystem,
-        ));
+        $this->_model = $objectHelper->getObject(
+            'Magento\Core\Model\Layout\Merge',
+            array(
+                'design' => $design,
+                'storeManager' => $storeManager,
+                'fileSource' => $fileSource,
+                'resource' => $this->_resource,
+                'appState' => $this->_appState,
+                'cache' => $this->_cache,
+                'theme' => $this->_theme,
+                'validator' => $this->_layoutValidator,
+                'logger' => $this->_logger,
+                'filesystem' => $filesystem
+            )
+        );
     }
 
     public function testAddUpdate()
@@ -169,9 +175,16 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         /* test that only the first existing handle is taken into account */
         $handlesToTry = array(
-            'default', 'catalog_category_default', 'catalog_product_view', 'catalog_product_view_type_simple');
+            'default',
+            'catalog_category_default',
+            'catalog_product_view',
+            'catalog_product_view_type_simple'
+        );
         $expectedPageHandles = array(
-            'default', 'catalog_category_default', 'catalog_product_view', 'catalog_product_view_type_simple'
+            'default',
+            'catalog_category_default',
+            'catalog_product_view',
+            'catalog_product_view_type_simple'
         );
         $this->assertTrue($this->_model->addPageHandles($handlesToTry));
         $this->assertEquals($expectedPageHandles, $this->_model->getPageHandles());
@@ -198,8 +211,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function pageHandleExistsDataProvider()
     {
         return array(
-            'non-existing handle'  => array('non_existing_handle', false),
-            'existing page type'   => array('default',             true),
+            'non-existing handle' => array('non_existing_handle', false),
+            'existing page type' => array('default', true)
         );
     }
 
@@ -222,12 +235,15 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadCache()
     {
-        $this->_cache
-            ->expects($this->at(0))
-            ->method('load')
-            ->with('LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961')
-            ->will($this->returnValue(self::FIXTURE_LAYOUT_XML))
-        ;
+        $this->_cache->expects(
+            $this->at(0)
+        )->method(
+            'load'
+        )->with(
+            'LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961'
+        )->will(
+            $this->returnValue(self::FIXTURE_LAYOUT_XML)
+        );
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
         $handles = array('fixture_handle_one', 'fixture_handle_two');
@@ -239,12 +255,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testLoadDbAppInstalled()
     {
         $this->_appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_resource
-            ->expects($this->once())
-            ->method('fetchUpdatesByHandle')
-            ->with('fixture_handle', $this->_theme, $this->_store)
-            ->will($this->returnValue(self::FIXTURE_LAYOUT_XML))
-        ;
+        $this->_resource->expects(
+            $this->once()
+        )->method(
+            'fetchUpdatesByHandle'
+        )->with(
+            'fixture_handle',
+            $this->_theme,
+            $this->_store
+        )->will(
+            $this->returnValue(self::FIXTURE_LAYOUT_XML)
+        );
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
         $handles = array('fixture_handle');
@@ -268,9 +289,15 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testGetFileLayoutUpdatesXml()
     {
         $errorString = "Theme layout update file '" . __DIR__ . "/_files/layout/file_wrong.xml' is not valid.";
-        $this->_logger->expects($this->atLeastOnce())
-            ->method('log')
-            ->with($this->stringStartsWith($errorString), \Zend_Log::ERR, \Magento\Logger::LOGGER_SYSTEM);
+        $this->_logger->expects(
+            $this->atLeastOnce()
+        )->method(
+            'log'
+        )->with(
+            $this->stringStartsWith($errorString),
+            \Zend_Log::ERR,
+            \Magento\Logger::LOGGER_SYSTEM
+        );
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/merged.xml', $actualXml->asNiceXml());
@@ -283,9 +310,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_model->addPageHandles(array('catalog_product_view_type_configurable'));
         $this->_model->load();
         $expected = array(
-            'content'                         => 'Main Content Area',
-            'product.info.extrahint'          => 'Product View Extra Hint',
-            'product.info.configurable.extra' => 'Configurable Product Extra Info',
+            'content' => 'Main Content Area',
+            'product.info.extrahint' => 'Product View Extra Hint',
+            'product.info.configurable.extra' => 'Configurable Product Extra Info'
         );
         $this->assertEquals($expected, $this->_model->getContainers());
     }
@@ -293,12 +320,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testGetAllDesignAbstractions()
     {
         $expected = array(
-            'customer_account'  => array(
+            'customer_account' => array(
                 'name' => 'customer_account',
                 'label' => 'Customer My Account (All Pages)',
                 'design_abstraction' => 'custom'
             ),
-            'page_empty'  => array(
+            'page_empty' => array(
                 'name' => 'page_empty',
                 'label' => 'All Empty Layout Pages',
                 'design_abstraction' => 'page_layout'
@@ -311,17 +338,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testIsPageLayoutDesignAbstractions()
     {
         $expected = array(
-            'customer_account'  => array(
+            'customer_account' => array(
                 'name' => 'customer_account',
                 'label' => 'Customer My Account (All Pages)',
                 'design_abstraction' => 'custom'
             ),
-            'page_empty'  => array(
+            'page_empty' => array(
                 'name' => 'page_empty',
                 'label' => 'All Empty Layout Pages',
                 'design_abstraction' => 'page_layout'
             ),
-            'empty_data' => array(),
+            'empty_data' => array()
         );
 
         $this->assertTrue($this->_model->isPageLayoutDesignAbstraction($expected['page_empty']));
@@ -332,17 +359,17 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testIsCustomDesignAbstractions()
     {
         $expected = array(
-            'customer_account'  => array(
+            'customer_account' => array(
                 'name' => 'customer_account',
                 'label' => 'Customer My Account (All Pages)',
                 'design_abstraction' => 'custom'
             ),
-            'page_empty'  => array(
+            'page_empty' => array(
                 'name' => 'page_empty',
                 'label' => 'All Empty Layout Pages',
                 'design_abstraction' => 'page_layout'
             ),
-            'empty_data' => array(),
+            'empty_data' => array()
         );
         $this->assertTrue($this->_model->isCustomerDesignAbstraction($expected['customer_account']));
         $this->assertFalse($this->_model->isCustomerDesignAbstraction($expected['page_empty']));
@@ -365,28 +392,31 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->addPageHandles(array('default'));
 
-        $this->_appState->expects($this->any())
-            ->method('getMode')
-            ->will($this->returnValue('developer'));
+        $this->_appState->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
 
-        $this->_layoutValidator->expects($this->any())
-            ->method('getMessages')
-            ->will($this->returnValue(array('testMessage1', 'testMessage2')));
+        $this->_layoutValidator->expects(
+            $this->any()
+        )->method(
+            'getMessages'
+        )->will(
+            $this->returnValue(array('testMessage1', 'testMessage2'))
+        );
 
-        $this->_layoutValidator->expects($this->any())
-            ->method('isValid')
-            ->will($this->returnValue(false));
+        $this->_layoutValidator->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $suffix = md5(implode('|', $this->_model->getHandles()));
         $cacheId = "LAYOUT_{$this->_theme->getArea()}_STORE{$this->_store->getId()}_{$this->_theme->getId()}{$suffix}";
         $messages = $this->_layoutValidator->getMessages();
 
         // Testing error message is logged with logger
-        $this->_logger->expects($this->once())
-            ->method('log')
-            ->with(
-                'Cache file with merged layout: ' . $cacheId. ': ' . array_shift($messages),
-                \Zend_Log::ERR);
+        $this->_logger->expects(
+            $this->once()
+        )->method(
+            'log'
+        )->with(
+            'Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages),
+            \Zend_Log::ERR
+        );
 
         $this->_model->load();
     }

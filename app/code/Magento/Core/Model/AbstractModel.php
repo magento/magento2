@@ -62,6 +62,7 @@ abstract class AbstractModel extends \Magento\Object
      * @var \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
      */
     protected $_resourceCollection;
+
     /**
      * Name of the resource model
      *
@@ -255,7 +256,7 @@ abstract class AbstractModel extends \Magento\Object
      */
     public function getResourceName()
     {
-        return ($this->_resource) ? get_class($this->_resource) : ($this->_resourceName ? $this->_resourceName : null);
+        return $this->_resource ? get_class($this->_resource) : ($this->_resourceName ? $this->_resourceName : null);
     }
 
     /**
@@ -268,15 +269,13 @@ abstract class AbstractModel extends \Magento\Object
     public function getResourceCollection()
     {
         if (empty($this->_resourceCollection) && empty($this->_collectionName)) {
-            throw new \Magento\Core\Exception(
-                __('Model collection resource name is not defined.')
-            );
+            throw new \Magento\Core\Exception(__('Model collection resource name is not defined.'));
         }
-        return $this->_resourceCollection
-            ? clone $this->_resourceCollection
-            : \Magento\App\ObjectManager::getInstance()->create(
-                $this->_collectionName
-            );
+        return $this->_resourceCollection ? clone $this
+            ->_resourceCollection : \Magento\App\ObjectManager::getInstance()
+                ->create(
+                    $this->_collectionName
+                );
     }
 
     /**
@@ -313,10 +312,7 @@ abstract class AbstractModel extends \Magento\Object
      */
     protected function _getEventData()
     {
-        return array(
-            'data_object'       => $this,
-            $this->_eventObject => $this,
-        );
+        return array('data_object' => $this, $this->_eventObject => $this);
     }
 
     /**
@@ -396,8 +392,7 @@ abstract class AbstractModel extends \Magento\Object
                 $this->_getResource()->save($this);
                 $this->_afterSave();
             }
-            $this->_getResource()->addCommitCallback(array($this, 'afterCommitCallback'))
-                ->commit();
+            $this->_getResource()->addCommitCallback(array($this, 'afterCommitCallback'))->commit();
             $this->_hasDataChanges = false;
         } catch (\Exception $e) {
             $this->_getResource()->rollBack();
@@ -543,31 +538,6 @@ abstract class AbstractModel extends \Magento\Object
                 } else {
                     $tags = array($this->_cacheTag);
                 }
-                $idTags = $this->getCacheIdTags();
-                if ($idTags) {
-                    $tags = array_merge($tags, $idTags);
-                }
-            }
-        }
-        return $tags;
-    }
-
-    /**
-     * Get cache tags associated with object id
-     *
-     * @return string[]|false
-     */
-    public function getCacheIdTags()
-    {
-        $tags = false;
-        if ($this->getId() && $this->_cacheTag) {
-            $tags = array();
-            if (is_array($this->_cacheTag)) {
-                foreach ($this->_cacheTag as $_tag) {
-                    $tags[] = $_tag . '_' . $this->getId();
-                }
-            } else {
-                $tags[] = $this->_cacheTag . '_' . $this->getId();
             }
         }
         return $tags;
@@ -613,6 +583,7 @@ abstract class AbstractModel extends \Magento\Object
         try {
             $this->_beforeDelete();
             $this->_getResource()->delete($this);
+            $this->isDeleted(true);
             $this->_afterDelete();
 
             $this->_getResource()->commit();

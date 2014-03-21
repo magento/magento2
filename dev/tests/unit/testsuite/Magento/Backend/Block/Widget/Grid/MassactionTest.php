@@ -65,35 +65,45 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_gridMock = $this->getMock('Magento\Backend\Block\Widget\Grid', array('getId'), array(), '', false);
-        $this->_gridMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue('test_grid'));
+        $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array('getParentName', 'getBlock', 'helper'),
-            array(), '', false, false
+        $this->_layoutMock = $this->getMock(
+            'Magento\Core\Model\Layout',
+            array('getParentName', 'getBlock', 'helper'),
+            array(),
+            '',
+            false,
+            false
         );
 
-        $this->_layoutMock->expects($this->any())
-            ->method('getParentName')
-            ->with('test_grid_massaction')
-            ->will($this->returnValue('test_grid'));
-        $this->_layoutMock->expects($this->any())
-            ->method('getBlock')
-            ->with('test_grid')
-            ->will($this->returnValue($this->_gridMock));
+        $this->_layoutMock->expects(
+            $this->any()
+        )->method(
+            'getParentName'
+        )->with(
+            'test_grid_massaction'
+        )->will(
+            $this->returnValue('test_grid')
+        );
+        $this->_layoutMock->expects(
+            $this->any()
+        )->method(
+            'getBlock'
+        )->with(
+            'test_grid'
+        )->will(
+            $this->returnValue($this->_gridMock)
+        );
 
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
 
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
 
         $arguments = array(
-            'layout'       => $this->_layoutMock,
-            'request'      => $this->_requestMock,
-            'urlBuilder'   => $this->_urlModelMock,
-            'data'         => array(
-                'massaction_id_field'  => 'test_id',
-                'massaction_id_filter' => 'test_id'
-            )
+            'layout' => $this->_layoutMock,
+            'request' => $this->_requestMock,
+            'urlBuilder' => $this->_urlModelMock,
+            'data' => array('massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id')
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -134,17 +144,19 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     public function testItemsProcessing($itemId, $item, $expectedItem)
     {
 
-        $this->_urlModelMock->expects($this->any())
-            ->method('getBaseUrl')
-            ->will($this->returnValue('http://localhost/index.php'));
+        $this->_urlModelMock->expects(
+            $this->any()
+        )->method(
+            'getBaseUrl'
+        )->will(
+            $this->returnValue('http://localhost/index.php')
+        );
 
         $urlReturnValueMap = array(
             array('*/*/test1', array(), 'http://localhost/index.php/backend/admin/test/test1'),
             array('*/*/test2', array(), 'http://localhost/index.php/backend/admin/test/test2')
         );
-        $this->_urlModelMock->expects($this->any())
-            ->method('getUrl')
-            ->will($this->returnValueMap($urlReturnValueMap));
+        $this->_urlModelMock->expects($this->any())->method('getUrl')->will($this->returnValueMap($urlReturnValueMap));
 
         $this->_block->addItem($itemId, $item);
         $this->assertEquals(1, $this->_block->getCount());
@@ -168,23 +180,18 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
                     array(
                         "label" => "Test Item One",
                         "url" => "http://localhost/index.php/backend/admin/test/test1",
-                        "id" => 'test_id1',
+                        "id" => 'test_id1'
                     )
                 )
             ),
             array(
                 'test_id2',
-                new \Magento\Object(
-                    array(
-                        "label" => "Test Item Two",
-                        "url" => "*/*/test2"
-                    )
-                ),
+                new \Magento\Object(array("label" => "Test Item Two", "url" => "*/*/test2")),
                 new \Magento\Object(
                     array(
                         "label" => "Test Item Two",
                         "url" => "http://localhost/index.php/backend/admin/test/test2",
-                        "id" => 'test_id2',
+                        "id" => 'test_id2'
                     )
                 )
             )
@@ -199,10 +206,15 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSelected($param, $expectedJson, $expected)
     {
-        $this->_requestMock->expects($this->any())
-            ->method('getParam')
-            ->with($this->_block->getFormFieldNameInternal())
-            ->will($this->returnValue($param));
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getParam'
+        )->with(
+            $this->_block->getFormFieldNameInternal()
+        )->will(
+            $this->returnValue($param)
+        );
 
         $this->assertEquals($expectedJson, $this->_block->getSelectedJson());
         $this->assertEquals($expected, $this->_block->getSelected());
@@ -211,16 +223,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     public function selectedDataProvider()
     {
         return array(
-            array(
-                '',
-                '',
-                array()
-            ),
-            array(
-                'test_id1,test_id2',
-                'test_id1,test_id2',
-                array('test_id1','test_id2')
-            )
+            array('', '', array()),
+            array('test_id1,test_id2', 'test_id1,test_id2', array('test_id1', 'test_id2'))
         );
     }
 

@@ -56,13 +56,7 @@ class Data extends \Magento\Core\Helper\Data
         $installDate,
         $dbCompatibleMode = true
     ) {
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
         $this->_installDate = $installDate;
     }
 
@@ -98,10 +92,10 @@ class Data extends \Magento\Core\Helper\Data
     {
         return array(
             '24h' => __('Last 24 Hours'),
-            '7d'  => __('Last 7 Days'),
-            '1m'  => __('Current Month'),
-            '1y'  => __('YTD'),
-            '2y'  => __('2YTD')
+            '7d' => __('Last 7 Days'),
+            '1m' => __('Current Month'),
+            '1y' => __('YTD'),
+            '2y' => __('2YTD')
         );
     }
 

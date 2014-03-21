@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 
 class HandlerFactory
@@ -54,14 +53,16 @@ class HandlerFactory
 
         if (!is_subclass_of(
             $instance,
-            '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface')
+            '\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
+        )
         ) {
             throw new \InvalidArgumentException(
-                $instance . ' does not implement '
-                 . 'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
+                $instance .
+                ' does not implement ' .
+                'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
             );
         }
 
         return $this->objectManager->create($instance, $arguments);
     }
-} 
+}

@@ -116,4 +116,3 @@ class CartTest extends \Magento\Backend\Utility\Controller
         $this->assertRedirect($this->stringContains('catalog/product/showUpdateResult'));
     }
 }
- 

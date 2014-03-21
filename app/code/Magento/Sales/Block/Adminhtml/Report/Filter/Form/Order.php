@@ -49,15 +49,15 @@ class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 
         if (is_object($fieldset) && $fieldset instanceof \Magento\Data\Form\Element\Fieldset) {
 
-            $fieldset->addField('show_actual_columns', 'select', array(
-                'name'       => 'show_actual_columns',
-                'options'    => array(
-                    '1' => __('Yes'),
-                    '0' => __('No')
-                ),
-                'label'      => __('Show Actual Values'),
-            ));
-
+            $fieldset->addField(
+                'show_actual_columns',
+                'select',
+                array(
+                    'name' => 'show_actual_columns',
+                    'options' => array('1' => __('Yes'), '0' => __('No')),
+                    'label' => __('Show Actual Values')
+                )
+            );
         }
 
         return $this;

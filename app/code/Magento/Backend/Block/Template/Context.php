@@ -1,5 +1,4 @@
 <?php
-
 namespace Magento\Backend\Block\Template;
 
 /**

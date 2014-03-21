@@ -74,11 +74,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 $this->_addButton(
                     'save_in_new_set',
                     array(
-                        'label'     => __('Save in New Attribute Set'),
-                        'class'     => 'save',
-                        'onclick'   => 'saveAttributeInNewSet(\''
-                            . __('Enter Name for New Attribute Set')
-                            . '\')',
+                        'label' => __('Save in New Attribute Set'),
+                        'class' => 'save',
+                        'onclick' => 'saveAttributeInNewSet(\'' . __('Enter Name for New Attribute Set') . '\')'
                     )
                 );
             }
@@ -86,13 +84,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->_addButton(
                 'save_and_edit_button',
                 array(
-                    'label'     => __('Save and Continue Edit'),
-                    'class'     => 'save',
-                    'data_attribute'  => array(
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
+                    'data_attribute' => array(
                         'mage-init' => array(
-                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
-                        ),
-                    ),
+                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
+                        )
+                    )
                 ),
                 100
             );
@@ -100,11 +98,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->_updateButton('save', 'label', __('Save Attribute'));
         $this->_updateButton('save', 'class', 'save primary');
-        $this->_updateButton('save', 'data_attribute', array(
-            'mage-init' => array(
-                'button' => array('event' => 'save', 'target' => '#edit_form'),
-            ),
-        ));
+        $this->_updateButton(
+            'save',
+            'data_attribute',
+            array('mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form')))
+        );
 
         $entityAttribute = $this->_coreRegistry->registry('entity_attribute');
         if (!$entityAttribute || !$entityAttribute->getIsUserDefined()) {
@@ -138,7 +136,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('catalog/*/validate', array('_current'=>true));
+        return $this->getUrl('catalog/*/validate', array('_current' => true));
     }
 
     /**
@@ -148,10 +146,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('catalog/product_attribute/save', array(
-            '_current' => true,
-            'back' => null,
-            'product_tab' => $this->getRequest()->getParam('product_tab')
-        ));
+        return $this->getUrl(
+            'catalog/product_attribute/save',
+            array('_current' => true, 'back' => null, 'product_tab' => $this->getRequest()->getParam('product_tab'))
+        );
     }
 }

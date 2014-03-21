@@ -85,6 +85,7 @@ class Config implements \Iterator
      * Default paths
      */
     const DEFAULT_DOWNLOADER_PATH = "downloader";
+
     const DEFAULT_CACHE_PATH = ".cache";
 
     /**
@@ -118,91 +119,85 @@ class Config implements \Iterator
      */
     protected function initProperties()
     {
-        $this->defaultProperties = array (
-           'php_ini' => array(
+        $this->defaultProperties = array(
+            'php_ini' => array(
                 'type' => 'file',
                 'value' => '',
                 'prompt' => 'location of php.ini',
                 'doc' => "It's a location of PHP.ini to use blah",
-                'possible' => '/path/php.ini',
+                'possible' => '/path/php.ini'
             ),
-           'protocol' => array(
+            'protocol' => array(
                 'type' => 'set',
                 'value' => 'http',
                 'prompt' => 'preffered protocol',
                 'doc' => 'preffered protocol',
                 'rules' => array('http', 'ftp')
             ),
-           'preferred_state' => array(
+            'preferred_state' => array(
                 'type' => 'set',
                 'value' => 'stable',
                 'prompt' => 'preferred package state',
                 'doc' => 'preferred package state',
-                'rules' => array('beta','alpha','stable','devel')
+                'rules' => array('beta', 'alpha', 'stable', 'devel')
             ),
-           'use_custom_permissions_mode'  => array (
+            'use_custom_permissions_mode' => array(
                 'type' => 'bool',
                 'value' => false,
                 'prompt' => 'Use custom permissions for directory and file creation',
                 'doc' => 'Use custom permissions for directory and file creation',
-                'possible' => 'true, false',
+                'possible' => 'true, false'
             ),
-           'global_dir_mode' => array (
+            'global_dir_mode' => array(
                 'type' => 'octal',
                 'value' => 0777,
                 'prompt' => 'directory creation mode',
                 'doc' => 'directory creation mode',
-                'possible' => '0777, 0666 etc.',
+                'possible' => '0777, 0666 etc.'
             ),
-           'global_file_mode' => array (
+            'global_file_mode' => array(
                 'type' => 'octal',
                 'value' => 0666,
                 'prompt' => 'file creation mode',
                 'doc' => 'file creation mode',
-                'possible' => '0777, 0666 etc.',
+                'possible' => '0777, 0666 etc.'
             ),
             'downloader_path' => array(
                 'type' => 'dir',
                 'value' => 'downloader',
                 'prompt' => 'relative path, location of magento downloader',
                 'doc' => "relative path, location of magento downloader",
-                'possible' => 'path',
+                'possible' => 'path'
             ),
             'magento_root' => array(
                 'type' => 'dir',
                 'value' => '',
                 'prompt' => 'location of magento root dir',
                 'doc' => "Location of magento",
-                'possible' => '/path',
+                'possible' => '/path'
             ),
             'root_channel_uri' => array(
                 'type' => 'string',
                 'value' => 'connect20.magentocommerce.com/community',
                 'prompt' => '',
                 'doc' => "",
-                'possible' => '',
+                'possible' => ''
             ),
             'root_channel' => array(
                 'type' => 'string',
                 'value' => 'community',
                 'prompt' => '',
                 'doc' => "",
-                'possible' => '',
+                'possible' => ''
             ),
             'remote_config' => array(
                 'type' => 'string',
                 'value' => '',
                 'prompt' => '',
                 'doc' => "",
-                'possible' => 'ftp://name:password@host.com:port/path/to/folder/',
+                'possible' => 'ftp://name:password@host.com:port/path/to/folder/'
             ),
-            'sync_pear' => array(
-                'type' => 'boolean',
-                'value' => false,
-                'prompt' => '',
-                'doc' => "",
-                'possible' => '',
-            )
+            'sync_pear' => array('type' => 'boolean', 'value' => false, 'prompt' => '', 'doc' => "", 'possible' => '')
         );
         $this->properties = $this->defaultProperties;
     }
@@ -235,8 +230,8 @@ class Config implements \Iterator
      */
     public function getChannelCacheDir($channel)
     {
-        $channel = trim( $channel, "\\/");
-        return $this->getPackagesCacheDir(). '/' . $channel;
+        $channel = trim($channel, "\\/");
+        return $this->getPackagesCacheDir() . '/' . $channel;
     }
 
     /**
@@ -256,12 +251,12 @@ class Config implements \Iterator
      */
     public function load()
     {
-        $this->_configLoaded=false;
+        $this->_configLoaded = false;
         if (!is_file($this->_configFile)) {
             if (!$this->save()) {
                 $this->_configError = 'Config file does not exists please save Settings';
             } else {
-                $this->_configLoaded=true;
+                $this->_configLoaded = true;
                 return true;
             }
             return false;
@@ -293,8 +288,8 @@ class Config implements \Iterator
             $size -= $headerLen;
             $contents = fread($f, $size);
         } catch (\Exception $e) {
-            $this->_configError = "Configuration file {$this->_configFile} read error '{$e->getMessage()}'"
-                                . " please save Settings again";
+            $this->_configError = "Configuration file {$this->_configFile} read error '{$e->getMessage()}'" .
+                " please save Settings again";
             return false;
         }
         $data = @unserialize($contents);
@@ -302,11 +297,11 @@ class Config implements \Iterator
             $this->_configError = "Wrong configuration file {$this->_configFile} please save Settings again";
             return false;
         }
-        foreach($data as $k=>$v) {
-            $this->$k = $v;
+        foreach ($data as $k => $v) {
+            $this->{$k} = $v;
         }
         @fclose($f);
-        $this->_configLoaded=true;
+        $this->_configLoaded = true;
         return true;
     }
 
@@ -318,36 +313,36 @@ class Config implements \Iterator
     public function store()
     {
         $result = false;
-        if ($this->_forceSave || $this->_configLoaded || strlen($this->remote_config)>0) {
+        if ($this->_forceSave || $this->_configLoaded || strlen($this->remote_config) > 0) {
             $data = serialize($this->toArray());
-            if (strlen($this->remote_config)>0) {
+            if (strlen($this->remote_config) > 0) {
                 //save config over ftp
                 $confFile = $this->downloader_path . '/' . "connect.cfg";
                 try {
                     $ftpObj = new \Magento\Connect\Ftp();
                     $ftpObj->connect($this->remote_config);
                 } catch (\Exception $e) {
-                    $this->_configError = 'Cannot access to deployment FTP path. '
-                                          . 'Check deployment FTP Installation path settings.';
+                    $this->_configError = 'Cannot access to deployment FTP path. ' .
+                        'Check deployment FTP Installation path settings.';
                     return $result;
                 }
                 try {
-                    $tempFile = tempnam(sys_get_temp_dir(),'config');
+                    $tempFile = tempnam(sys_get_temp_dir(), 'config');
                     $f = fopen($tempFile, "w+");
                     fwrite($f, self::HEADER);
                     fwrite($f, $data);
                     fclose($f);
                 } catch (\Exception $e) {
-                    $this->_configError = 'Cannot access to temporary file storage to save Settings.'
-                                          . 'Contact your system administrator.';
+                    $this->_configError = 'Cannot access to temporary file storage to save Settings.' .
+                        'Contact your system administrator.';
                     return $result;
                 }
                 try {
                     $result = $ftpObj->upload($confFile, $tempFile);
                     $ftpObj->close();
                 } catch (\Exception $e) {
-                    $this->_configError = 'Cannot write file over FTP. '
-                                          . 'Check deployment FTP Installation path settings.';
+                    $this->_configError = 'Cannot write file over FTP. ' .
+                        'Check deployment FTP Installation path settings.';
                     return $result;
                 }
                 if (!$result) {
@@ -380,7 +375,7 @@ class Config implements \Iterator
         $rules = $this->extractField($key, 'rules');
         if (null === $rules) {
             return true;
-        } elseif ( is_array($rules) ) {
+        } elseif (is_array($rules)) {
             return in_array($val, $rules);
         }
         return false;
@@ -395,7 +390,7 @@ class Config implements \Iterator
     public function possible($key)
     {
         $data = $this->getKey($key);
-        if (! $data) {
+        if (!$data) {
             return null;
         }
         if ('set' == $data['type']) {
@@ -474,7 +469,8 @@ class Config implements \Iterator
      *
      * @return void
      */
-    public function rewind() {
+    public function rewind()
+    {
         reset($this->properties);
     }
 
@@ -483,7 +479,8 @@ class Config implements \Iterator
      *
      * @return bool
      */
-    public function valid() {
+    public function valid()
+    {
         return current($this->properties) !== false;
     }
 
@@ -492,7 +489,8 @@ class Config implements \Iterator
      *
      * @return mixed
      */
-    public function key() {
+    public function key()
+    {
         return key($this->properties);
     }
 
@@ -501,7 +499,8 @@ class Config implements \Iterator
      *
      * @return mixed
      */
-    public function current() {
+    public function current()
+    {
         return current($this->properties);
     }
 
@@ -510,7 +509,8 @@ class Config implements \Iterator
      *
      * @return void
      */
-    public function next() {
+    public function next()
+    {
         next($this->properties);
     }
 
@@ -560,18 +560,18 @@ class Config implements \Iterator
     public function toArray($withRules = false)
     {
         $out = array();
-        foreach ($this as $k=>$v) {
+        foreach ($this as $k => $v) {
             $out[$k] = $withRules ? $v : $v['value'];
         }
         return $out;
     }
 
     /**
-    * Return default config value by key
-    *
-    * @param string $key
-    * @return mixed
-    */
+     * Return default config value by key
+     *
+     * @param string $key
+     * @return mixed
+     */
     public function getDefaultValue($key)
     {
         if (isset($this->defaultProperties[$key]['value'])) {

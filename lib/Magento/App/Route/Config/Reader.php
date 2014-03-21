@@ -33,9 +33,9 @@ class Reader extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        '/config/router'               => 'id',
-        '/config/router/route'         => 'id',
-        '/config/router/route/module'  => 'name'
+        '/config/router' => 'id',
+        '/config/router/route' => 'id',
+        '/config/router/route/module' => 'name'
     );
 
     /**
@@ -52,7 +52,13 @@ class Reader extends \Magento\Config\Reader\Filesystem
         \Magento\Config\ValidationStateInterface $validationState,
         $fileName = 'routes.xml'
     ) {
-        parent::__construct($fileResolver, $converter, $schemaLocator, $validationState, $fileName,
-            $this->_idAttributes);
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            $fileName,
+            $this->_idAttributes
+        );
     }
 }

@@ -64,7 +64,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     ) {
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($fileOrStream), 'r');
-        } catch(\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \LogicException("Unable to open file or stream: '{$fileOrStream}'");
         }
         $this->_delimiter = $delimiter;
@@ -100,7 +100,8 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     public function rewind()
     {
         $this->_file->seek(0);
-        $this->_getNextRow(); // skip first line with the header
+        $this->_getNextRow();
+        // skip first line with the header
         parent::rewind();
     }
 }

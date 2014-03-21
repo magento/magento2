@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Config;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -41,22 +40,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_readerMock = $this->getMockBuilder('Magento\Sales\Model\Config\Reader')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_cacheMock = $this->getMockBuilder('Magento\App\Cache\Type\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_readerMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Config\Reader'
+        )->disableOriginalConstructor()->getMock();
+        $this->_cacheMock = $this->getMockBuilder(
+            'Magento\App\Cache\Type\Config'
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testGet()
     {
-        $expected = array(
-            'someData' => array(
-                'someValue',
-                'someKey' => 'someValue'
-            )
-        );
+        $expected = array('someData' => array('someValue', 'someKey' => 'someValue'));
         $this->_cacheMock->expects($this->any())->method('load')->will($this->returnValue(serialize($expected)));
         $configData = new \Magento\Sales\Model\Config\Data($this->_readerMock, $this->_cacheMock);
 

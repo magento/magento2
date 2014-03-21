@@ -103,55 +103,49 @@ class Creditmemo extends AbstractPdf
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0, 0, 0));
 
         //columns headers
-        $lines[0][] = array(
-            'text' => __('Products'),
-            'feed' => 35,
-        );
+        $lines[0][] = array('text' => __('Products'), 'feed' => 35);
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('SKU'), 12, true, true),
-            'feed'  => 255,
+            'text' => $this->string->split(__('SKU'), 12, true, true),
+            'feed' => 255,
             'align' => 'right'
         );
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('Total (ex)'), 12, true, true),
-            'feed'  => 330,
-            'align' => 'right',
+            'text' => $this->string->split(__('Total (ex)'), 12, true, true),
+            'feed' => 330,
+            'align' => 'right'
             //'width' => 50,
         );
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('Discount'), 12, true, true),
-            'feed'  => 380,
-            'align' => 'right',
+            'text' => $this->string->split(__('Discount'), 12, true, true),
+            'feed' => 380,
+            'align' => 'right'
             //'width' => 50,
         );
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('Qty'), 12, true, true),
-            'feed'  => 445,
-            'align' => 'right',
+            'text' => $this->string->split(__('Qty'), 12, true, true),
+            'feed' => 445,
+            'align' => 'right'
             //'width' => 30,
         );
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('Tax'), 12, true, true),
-            'feed'  => 495,
-            'align' => 'right',
+            'text' => $this->string->split(__('Tax'), 12, true, true),
+            'feed' => 495,
+            'align' => 'right'
             //'width' => 45,
         );
 
         $lines[0][] = array(
-            'text'  => $this->string->split(__('Total (inc)'), 12, true, true),
-            'feed'  => 565,
+            'text' => $this->string->split(__('Total (inc)'), 12, true, true),
+            'feed' => 565,
             'align' => 'right'
         );
 
-        $lineBlock = array(
-            'lines'  => $lines,
-            'height' => 10
-        );
+        $lineBlock = array('lines' => $lines, 'height' => 10);
 
         $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
@@ -179,7 +173,7 @@ class Creditmemo extends AbstractPdf
                 $this->_localeResolver->emulate($creditmemo->getStoreId());
                 $this->_storeManager->setCurrentStore($creditmemo->getStoreId());
             }
-            $page  = $this->newPage();
+            $page = $this->newPage();
             $order = $creditmemo->getOrder();
             /* Add image */
             $this->insertLogo($page, $creditmemo->getStore());
@@ -192,12 +186,10 @@ class Creditmemo extends AbstractPdf
                 $this->_coreStoreConfig->getConfigFlag(
                     self::XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID,
                     $order->getStoreId()
-            ));
-            /* Add document text and number */
-            $this->insertDocumentNumber(
-                $page,
-                __('Credit Memo # ') . $creditmemo->getIncrementId()
+                )
             );
+            /* Add document text and number */
+            $this->insertDocumentNumber($page, __('Credit Memo # ') . $creditmemo->getIncrementId());
             /* Add table head */
             $this->_drawHeader($page);
             /* Add body */

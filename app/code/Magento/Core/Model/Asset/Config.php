@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Asset;
 
 /**
@@ -34,12 +33,12 @@ class Config implements \Magento\View\Asset\ConfigInterface
     /**
      * XML path for CSS files merge configuration
      */
-    const XML_PATH_MERGE_CSS_FILES  = 'dev/css/merge_css_files';
+    const XML_PATH_MERGE_CSS_FILES = 'dev/css/merge_css_files';
 
     /**
      * XML path for JavaScript files merge configuration
      */
-    const XML_PATH_MERGE_JS_FILES   = 'dev/js/merge_files';
+    const XML_PATH_MERGE_JS_FILES = 'dev/js/merge_files';
 
     /**
      * XML path for asset minification configuration

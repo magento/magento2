@@ -42,27 +42,25 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFile()
     {
-        $streamMock = $this->getMockBuilder('Magento\Filesystem\File\Write')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $streamMock = $this->getMockBuilder('Magento\Filesystem\File\Write')->disableOriginalConstructor()->getMock();
 
-        $directoryMock = $this->getMockBuilder('Magento\Filesystem\Directory\Write')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $directoryMock->expects($this->exactly(2))
-            ->method('create');
+        $directoryMock = $this->getMockBuilder(
+            'Magento\Filesystem\Directory\Write'
+        )->disableOriginalConstructor()->getMock();
+        $directoryMock->expects($this->exactly(2))->method('create');
 
-        $directoryMock->expects($this->any())
-            ->method('openFile')
-            ->will($this->returnValue($streamMock));
+        $directoryMock->expects($this->any())->method('openFile')->will($this->returnValue($streamMock));
 
-        $filesystemMock = $this->getMockBuilder('Magento\App\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::VAR_DIR)
-            ->will($this->returnValue($directoryMock));
+        $filesystemMock = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
+        $filesystemMock->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::VAR_DIR
+        )->will(
+            $this->returnValue($directoryMock)
+        );
 
         $fileModel = $this->getMock('Magento\Index\Model\Process\File', array(), array($streamMock), '');
 
@@ -73,9 +71,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $fileFactory->expects($this->exactly(2))
-            ->method('create')
-            ->will($this->returnValue($fileModel));
+        $fileFactory->expects($this->exactly(2))->method('create')->will($this->returnValue($fileModel));
 
         $storage = new \Magento\Index\Model\Lock\Storage($fileFactory, $filesystemMock);
 

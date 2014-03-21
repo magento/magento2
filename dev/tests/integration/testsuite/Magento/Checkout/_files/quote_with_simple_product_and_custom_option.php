@@ -28,8 +28,7 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->load(1);
 
 $options = array();
@@ -46,19 +45,14 @@ foreach ($product->getOptions() as $option) {
         default:
             $value = 'test';
             break;
-
     }
     $options[$option->getId()] = $value;
 }
 
-$requestInfo = new \Magento\Object(array(
-    'qty' => 1,
-    'options' => $options,
-));
+$requestInfo = new \Magento\Object(array('qty' => 1, 'options' => $options));
 
 /** @var $cart \Magento\Checkout\Model\Cart */
-$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Checkout\Model\Cart');
+$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Cart');
 $cart->addProduct($product, $requestInfo);
 $cart->save();
 

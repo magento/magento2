@@ -138,17 +138,13 @@ class Config
             $configDom = $this->_domFactory->createDom(
                 array(
                     'xml' => $xml,
-                    'idAttributes' => array(
-                        'config/instances/blocks/reference' => 'id',
-                    ),
-                    'schemaFile' => $this->_moduleReader
-                        ->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd'
+                    'idAttributes' => array('config/instances/blocks/reference' => 'id'),
+                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd'
                 )
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
         }
         return $this->_configDomXPath;
-
     }
 
     /**
@@ -238,10 +234,13 @@ class Config
      */
     public function fireOne($info, $instance = false)
     {
-        if (!$instance
-            || (isset($info['block_type']) && !($instance instanceof $info['block_type']))
-            || !isset($info['class'])
-            || !isset($info['method'])
+        if (!$instance || isset(
+            $info['block_type']
+        ) && !$instance instanceof $info['block_type'] || !isset(
+            $info['class']
+        ) || !isset(
+            $info['method']
+        )
         ) {
             return $this;
         }
@@ -249,9 +248,11 @@ class Config
         $method = $info['method'];
 
         if (method_exists($object, $method)) {
-            $object->$method($instance);
+            $object->{$method}($instance);
         } elseif ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
-            throw new \Magento\Core\Exception('Method "' . $method.'" is not defined in "' . get_class($object) . '"');
+            throw new \Magento\Core\Exception(
+                'Method "' . $method . '" is not defined in "' . get_class($object) . '"'
+            );
         }
 
         return $this;

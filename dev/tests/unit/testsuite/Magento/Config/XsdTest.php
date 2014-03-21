@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +44,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $errorsQty = count(libxml_get_errors());
         libxml_use_internal_errors(false);
 
-        if ($expectedErrorsQty >0) {
+        if ($expectedErrorsQty > 0) {
             $this->assertFalse($result);
         }
         $this->assertEquals($expectedErrorsQty, $errorsQty);
@@ -56,9 +55,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidXmlFileDataProvider()
     {
-        return array(
-            array('view.xsd', 'view_invalid.xml', 1),
-            array('theme.xsd', 'theme_invalid.xml', 0),
-        );
+        return array(array('view.xsd', 'view_invalid.xml', 1), array('theme.xsd', 'theme_invalid.xml', 0));
     }
 }

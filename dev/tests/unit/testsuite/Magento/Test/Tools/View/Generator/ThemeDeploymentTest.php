@@ -23,12 +23,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\View\Generator;
 
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/View/Generator/ThemeDeployment.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../'
+) . '/tools/Magento/Tools/View/Generator/ThemeDeployment.php';
 class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,15 +55,18 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
     {
         $methods = array('getDirectoryWrite', 'getPath', '__wakeup');
         $this->filesystem = $this->getMock('Magento\App\Filesystem', $methods, array(), '', false);
-        $this->filesystem->expects($this->any())
-            ->method('getPath')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue(str_replace('\\', '/', BP)));
+        $this->filesystem->expects(
+            $this->any()
+        )->method(
+            'getPath'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue(str_replace('\\', '/', BP))
+        );
 
         $viewFilesystem = $this->getMock('Magento\View\Filesystem', array('normalizePath'), array(), '', false);
-        $viewFilesystem->expects($this->any())
-            ->method('normalizePath')
-            ->will($this->returnArgument(0));
+        $viewFilesystem->expects($this->any())->method('normalizePath')->will($this->returnArgument(0));
 
         $this->_cssUrlResolver = new \Magento\View\Url\CssResolver($this->filesystem, $viewFilesystem);
         $this->_tmpDir = TESTS_TEMP_DIR . '/tool_theme_deployment';
@@ -97,19 +100,19 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
             'no permitted config' => array(
                 'non_existing_config.txt',
                 $conflictForbidden,
-                'Config file does not exist: non_existing_config.txt',
+                'Config file does not exist: non_existing_config.txt'
             ),
             'no forbidden config' => array(
                 $conflictPermitted,
                 'non_existing_config.txt',
-                'Config file does not exist: non_existing_config.txt',
+                'Config file does not exist: non_existing_config.txt'
             ),
             'config conflicts' => array(
                 $conflictPermitted,
                 $conflictForbidden,
                 'Conflicts: the following extensions are added both to permitted and forbidden lists: ' .
-                'conflict1, conflict2',
-            ),
+                'conflict1, conflict2'
+            )
         );
     }
 
@@ -209,13 +212,11 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
                     'locale' => 'not_important',
                     'themePath' => 'theme_path',
                     'module' => null
-                ),
-            ),
+                )
+            )
         );
         $object->run($copyRules);
-        $this->assertFileExists(
-            $this->_tmpDir . '/frontend/theme_path/file.JS'
-        );
+        $this->assertFileExists($this->_tmpDir . '/frontend/theme_path/file.JS');
     }
 
     /**
@@ -228,11 +229,17 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createThemeDeployment($permitted, $forbidden = null, $isDryRun = false)
     {
-        $filesystem     = $this->getMock('Magento\App\Filesystem', [], [], '', false);
-        $preProcessor   = $this->getMock('Magento\View\Asset\PreProcessor\PreProcessorInterface', [], [], '', false);
-        $fileFactory    = $this->getMock('Magento\View\Publisher\FileFactory', [], [], '', false);
-        $appState       = $this->getMock('Magento\App\State', [], [], '', false);
-        $themeFactory   = $this->getMock('Magento\Core\Model\Theme\DataFactory', ['create'], [], '', false);
+        $filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $preProcessor = $this->getMock(
+            'Magento\View\Asset\PreProcessor\PreProcessorInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $fileFactory = $this->getMock('Magento\View\Publisher\FileFactory', array(), array(), '', false);
+        $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $themeFactory = $this->getMock('Magento\Core\Model\Theme\DataFactory', array('create'), array(), '', false);
 
         $object = new \Magento\Tools\View\Generator\ThemeDeployment(
             $this->_cssUrlResolver,
@@ -247,7 +254,7 @@ class ThemeDeploymentTest extends \PHPUnit_Framework_TestCase
             $isDryRun
         );
 
-        $fileObject = $this->getMock('Magento\View\Publisher\File', [], [], '', false);
+        $fileObject = $this->getMock('Magento\View\Publisher\File', array(), array(), '', false);
         $fileFactory->expects($this->any())->method('create')->will($this->returnValue($fileObject));
         $appState->expects($this->any())->method('emulateAreaCode')->will($this->returnValue($fileObject));
         $fileObject->expects($this->any())->method('getSourcePath')->will($this->returnValue(false));

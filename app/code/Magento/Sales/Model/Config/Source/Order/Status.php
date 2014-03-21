@@ -41,7 +41,7 @@ class Status implements \Magento\Option\ArrayInterface
         \Magento\Sales\Model\Order::STATE_COMPLETE,
         \Magento\Sales\Model\Order::STATE_CLOSED,
         \Magento\Sales\Model\Order::STATE_CANCELED,
-        \Magento\Sales\Model\Order::STATE_HOLDED,
+        \Magento\Sales\Model\Order::STATE_HOLDED
     );
 
     /**
@@ -68,15 +68,9 @@ class Status implements \Magento\Option\ArrayInterface
             $statuses = $this->_orderConfig->getStatuses();
         }
         $options = array();
-        $options[] = array(
-           'value' => '',
-           'label' => __('-- Please Select --')
-        );
+        $options[] = array('value' => '', 'label' => __('-- Please Select --'));
         foreach ($statuses as $code => $label) {
-            $options[] = array(
-               'value' => $code,
-               'label' => $label
-            );
+            $options[] = array('value' => $code, 'label' => $label);
         }
         return $options;
     }

@@ -90,7 +90,6 @@ abstract class AbstractBackup implements \Magento\Backup\BackupInterface
      */
     protected $_lastErrorMessage;
 
-
     /**
      * Set Backup Extension
      *

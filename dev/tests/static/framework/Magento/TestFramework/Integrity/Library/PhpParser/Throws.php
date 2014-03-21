@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
 /**
@@ -77,9 +76,11 @@ class Throws implements Parser, DependenciesCollector
             $class = '';
             if ($this->tokens->getTokenCodeByKey($throw + 2) == T_NEW) {
                 $step = 4;
-                while ($this->tokens->getTokenCodeByKey($throw+$step) == T_STRING
-                    || $this->tokens->getTokenCodeByKey($throw+$step) == T_NS_SEPARATOR
-                ) {
+                while ($this->tokens->getTokenCodeByKey(
+                    $throw + $step
+                ) == T_STRING || $this->tokens->getTokenCodeByKey(
+                    $throw + $step
+                ) == T_NS_SEPARATOR) {
                     $class .= trim($this->tokens->getTokenValueByKey($throw + $step));
                     $step++;
                 }

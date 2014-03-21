@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -90,9 +89,7 @@ class Cache extends Action
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {
             $cacheFrontend->getBackend()->clean();
         }
-        $this->messageManager->addSuccess(
-            __("You flushed the cache storage.")
-        );
+        $this->messageManager->addSuccess(__("You flushed the cache storage."));
         $this->_redirect('adminhtml/*');
     }
 
@@ -134,9 +131,7 @@ class Cache extends Action
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->messageManager->addSuccess(
-                    __("%1 cache type(s) enabled.", $updatedTypes)
-                );
+                $this->messageManager->addSuccess(__("%1 cache type(s) enabled.", $updatedTypes));
             }
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
@@ -169,17 +164,12 @@ class Cache extends Action
             }
             if ($updatedTypes > 0) {
                 $this->_cacheState->persist();
-                $this->messageManager->addSuccess(
-                    __("%1 cache type(s) disabled.", $updatedTypes)
-                );
+                $this->messageManager->addSuccess(__("%1 cache type(s) disabled.", $updatedTypes));
             }
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while disabling cache.')
-            );
+            $this->messageManager->addException($e, __('An error occurred while disabling cache.'));
         }
         $this->_redirect('adminhtml/*');
     }
@@ -241,17 +231,13 @@ class Cache extends Action
     public function cleanMediaAction()
     {
         try {
-            $this->_objectManager->get('Magento\View\Asset\MergeService')
-                ->cleanMergedJsCss();
+            $this->_objectManager->get('Magento\View\Asset\MergeService')->cleanMergedJsCss();
             $this->_eventManager->dispatch('clean_media_cache_after');
             $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while clearing the JavaScript/CSS cache.')
-            );
+            $this->messageManager->addException($e, __('An error occurred while clearing the JavaScript/CSS cache.'));
         }
         $this->_redirect('adminhtml/*');
     }
@@ -266,16 +252,11 @@ class Cache extends Action
         try {
             $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
             $this->_eventManager->dispatch('clean_catalog_images_cache_after');
-            $this->messageManager->addSuccess(
-                __('The image cache was cleaned.')
-            );
+            $this->messageManager->addSuccess(__('The image cache was cleaned.'));
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while clearing the image cache.')
-            );
+            $this->messageManager->addException($e, __('An error occurred while clearing the image cache.'));
         }
         $this->_redirect('adminhtml/*');
     }

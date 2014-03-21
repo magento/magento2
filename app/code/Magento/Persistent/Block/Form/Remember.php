@@ -70,8 +70,8 @@ class Remember extends \Magento\View\Element\Template
      */
     protected function _toHtml()
     {
-        return ($this->_persistentData->isEnabled() && $this->_persistentData->isRememberMeEnabled())
-            ? parent::_toHtml() : '';
+        return $this->_persistentData->isEnabled() &&
+            $this->_persistentData->isRememberMeEnabled() ? parent::_toHtml() : '';
     }
 
     /**
@@ -81,9 +81,9 @@ class Remember extends \Magento\View\Element\Template
      */
     public function isRememberMeChecked()
     {
-        return $this->_persistentData->isEnabled()
-            && $this->_persistentData->isRememberMeEnabled()
-            && $this->_persistentData->isRememberMeCheckedDefault();
+        return $this->_persistentData->isEnabled() &&
+            $this->_persistentData->isRememberMeEnabled() &&
+            $this->_persistentData->isRememberMeCheckedDefault();
     }
 
     /**

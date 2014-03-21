@@ -35,14 +35,14 @@ class Grand extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
-        $grandTotal     = $address->getGrandTotal();
+        $grandTotal = $address->getGrandTotal();
         $baseGrandTotal = $address->getBaseGrandTotal();
 
-        $totals     = array_sum($address->getAllTotalAmounts());
+        $totals = array_sum($address->getAllTotalAmounts());
         $baseTotals = array_sum($address->getAllBaseTotalAmounts());
 
-        $address->setGrandTotal($grandTotal+$totals);
-        $address->setBaseGrandTotal($baseGrandTotal+$baseTotals);
+        $address->setGrandTotal($grandTotal + $totals);
+        $address->setBaseGrandTotal($baseGrandTotal + $baseTotals);
         return $this;
     }
 
@@ -54,12 +54,14 @@ class Grand extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      */
     public function fetch(\Magento\Sales\Model\Quote\Address $address)
     {
-        $address->addTotal(array(
-            'code'  => $this->getCode(),
-            'title' => __('Grand Total'),
-            'value' => $address->getGrandTotal(),
-            'area'  => 'footer',
-        ));
+        $address->addTotal(
+            array(
+                'code' => $this->getCode(),
+                'title' => __('Grand Total'),
+                'value' => $address->getGrandTotal(),
+                'area' => 'footer'
+            )
+        );
         return $this;
     }
 }

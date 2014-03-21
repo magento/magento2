@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\App\Area;
 
 /**
@@ -35,7 +34,7 @@ class DesignExceptions
     /**
      * Design exception key
      */
-    const XML_PATH_DESIGN_EXCEPTION = 'design/package/ua_regexp';
+    const XML_PATH_DESIGN_EXCEPTION = 'design/theme/ua_regexp';
 
     /**
      * Core store config

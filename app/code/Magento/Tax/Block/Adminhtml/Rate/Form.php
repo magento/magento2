@@ -31,7 +31,6 @@
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
@@ -120,7 +119,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         parent::_construct();
         $this->setDestElementId(self::FORM_ELEMENT_ID);
-
     }
 
     /**
@@ -136,19 +134,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         unset($countries[0]);
 
         if (!$rateObject->hasTaxCountryId()) {
-            $rateObject->setTaxCountryId($this->_storeConfig->getConfig(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY
-            ));
+            $rateObject->setTaxCountryId(
+                $this->_storeConfig->getConfig(\Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_COUNTRY)
+            );
         }
 
         if (!$rateObject->hasTaxRegionId()) {
-            $rateObject->setTaxRegionId($this->_storeConfig->getConfig(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION
-            ));
+            $rateObject->setTaxRegionId(
+                $this->_storeConfig->getConfig(\Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_REGION)
+            );
         }
 
-        $regionCollection = $this->_regionFactory->create()->getCollection()
-            ->addCountryFilter($rateObject->getTaxCountryId());
+        $regionCollection = $this->_regionFactory->create()->getCollection()->addCountryFilter(
+            $rateObject->getTaxCountryId()
+        );
 
         $regions = $regionCollection->toOptionArray();
         if ($regions) {
@@ -161,77 +160,99 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => $legend));
 
         if ($rateObject->getTaxCalculationRateId() > 0) {
-            $fieldset->addField('tax_calculation_rate_id', 'hidden', array(
-                'name'  => 'tax_calculation_rate_id',
-                'value' => $rateObject->getTaxCalculationRateId()
-            ));
+            $fieldset->addField(
+                'tax_calculation_rate_id',
+                'hidden',
+                array('name' => 'tax_calculation_rate_id', 'value' => $rateObject->getTaxCalculationRateId())
+            );
         }
 
-        $fieldset->addField('code', 'text', array(
-            'name'     => 'code',
-            'label'    => __('Tax Identifier'),
-            'title'    => __('Tax Identifier'),
-            'class'    => 'required-entry',
-            'required' => true,
-        ));
+        $fieldset->addField(
+            'code',
+            'text',
+            array(
+                'name' => 'code',
+                'label' => __('Tax Identifier'),
+                'title' => __('Tax Identifier'),
+                'class' => 'required-entry',
+                'required' => true
+            )
+        );
 
-        $fieldset->addField('zip_is_range', 'checkbox', array(
-            'name'    => 'zip_is_range',
-            'label'   => __('Zip/Post is Range'),
-            'value'   => '1'
-        ));
+        $fieldset->addField(
+            'zip_is_range',
+            'checkbox',
+            array('name' => 'zip_is_range', 'label' => __('Zip/Post is Range'), 'value' => '1')
+        );
 
         if (!$rateObject->hasTaxPostcode()) {
-            $rateObject->setTaxPostcode($this->_storeConfig->getConfig(
-                \Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE
-            ));
+            $rateObject->setTaxPostcode(
+                $this->_storeConfig->getConfig(\Magento\Tax\Model\Config::CONFIG_XML_PATH_DEFAULT_POSTCODE)
+            );
         }
 
-        $fieldset->addField('tax_postcode', 'text', array(
-            'name'  => 'tax_postcode',
-            'label' => __('Zip/Post Code'),
-            'note'  => __("'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
-                $this->_taxData->getPostCodeSubStringLength()),
-        ));
+        $fieldset->addField(
+            'tax_postcode',
+            'text',
+            array(
+                'name' => 'tax_postcode',
+                'label' => __('Zip/Post Code'),
+                'note' => __(
+                    "'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
+                    $this->_taxData->getPostCodeSubStringLength()
+                )
+            )
+        );
 
-        $fieldset->addField('zip_from', 'text', array(
-            'name'      => 'zip_from',
-            'label'     => __('Range From'),
-            'required'  => true,
-            'maxlength' => 9,
-            'class'     => 'validate-digits',
-            'css_class'     => 'hidden',
-        ));
+        $fieldset->addField(
+            'zip_from',
+            'text',
+            array(
+                'name' => 'zip_from',
+                'label' => __('Range From'),
+                'required' => true,
+                'maxlength' => 9,
+                'class' => 'validate-digits',
+                'css_class' => 'hidden'
+            )
+        );
 
-        $fieldset->addField('zip_to', 'text', array(
-            'name'      => 'zip_to',
-            'label'     => __('Range To'),
-            'required'  => true,
-            'maxlength' => 9,
-            'class'     => 'validate-digits',
-            'css_class'     => 'hidden',
-        ));
+        $fieldset->addField(
+            'zip_to',
+            'text',
+            array(
+                'name' => 'zip_to',
+                'label' => __('Range To'),
+                'required' => true,
+                'maxlength' => 9,
+                'class' => 'validate-digits',
+                'css_class' => 'hidden'
+            )
+        );
 
-        $fieldset->addField('tax_region_id', 'select', array(
-            'name'   => 'tax_region_id',
-            'label'  => __('State'),
-            'values' => $regions
-        ));
+        $fieldset->addField(
+            'tax_region_id',
+            'select',
+            array('name' => 'tax_region_id', 'label' => __('State'), 'values' => $regions)
+        );
 
-        $fieldset->addField('tax_country_id', 'select', array(
-            'name'     => 'tax_country_id',
-            'label'    => __('Country'),
-            'required' => true,
-            'values'   => $countries
-        ));
+        $fieldset->addField(
+            'tax_country_id',
+            'select',
+            array('name' => 'tax_country_id', 'label' => __('Country'), 'required' => true, 'values' => $countries)
+        );
 
-        $fieldset->addField('rate', 'text', array(
-            'name'     => 'rate',
-            'label'    => __('Rate Percent'),
-            'title'    => __('Rate Percent'),
-            'required' => true,
-            'class'    => 'validate-not-negative-number'
-        ));
+        $fieldset->addField(
+            'rate',
+            'text',
+            array(
+                'name' => 'rate',
+                'label' => __('Rate Percent'),
+                'title' => __('Rate Percent'),
+                'required' => true,
+                'class' => 'validate-not-negative-number'
+            )
+        );
 
         $form->setAction($this->getUrl('tax/rate/save'));
         $form->setUseContainer(true);
@@ -239,9 +260,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setMethod('post');
 
         if (!$this->_storeManager->hasSingleStore()) {
-            $form->addElement(
-                $this->_fieldsetFactory->create()->setLegend(__('Tax Titles'))
-            );
+            $form->addElement($this->_fieldsetFactory->create()->setLegend(__('Tax Titles')));
         }
 
         $rateData = $rateObject->getData();
@@ -253,8 +272,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\View\Element\Template')
-                ->setTemplate('Magento_Tax::rate/js.phtml')
+            $this->getLayout()->createBlock('Magento\View\Element\Template')->setTemplate('Magento_Tax::rate/js.phtml')
         );
 
         return parent::_prepareForm();
@@ -268,8 +286,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getRateCollection()
     {
         if ($this->getData('rate_collection') == null) {
-            $rateCollection = $this->_rateFactory->create()->getCollection()
-                ->joinRegionTable();
+            $rateCollection = $this->_rateFactory->create()->getCollection()->joinRegionTable();
             $rates = array();
 
             foreach ($rateCollection as $rate) {

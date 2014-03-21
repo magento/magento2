@@ -165,10 +165,10 @@ class Rule extends \Magento\Core\Model\AbstractModel
             foreach ($ptc as $p) {
                 foreach ($rates as $r) {
                     $dataArray = array(
-                        'tax_calculation_rule_id'   =>$this->getId(),
-                        'tax_calculation_rate_id'   =>$r,
-                        'customer_tax_class_id'     =>$c,
-                        'product_tax_class_id'      =>$p,
+                        'tax_calculation_rule_id' => $this->getId(),
+                        'tax_calculation_rate_id' => $r,
+                        'customer_tax_class_id' => $c,
+                        'product_tax_class_id' => $p
                     );
                     $this->_calculation->setData($dataArray)->save();
                 }
@@ -258,12 +258,8 @@ class Rule extends \Magento\Core\Model\AbstractModel
      */
     public function getAllOptionsForClass($classFilter)
     {
-        $classes = $this->_taxClass
-            ->getCollection()
-            ->setClassTypeFilter($classFilter)
-            ->toOptionArray();
+        $classes = $this->_taxClass->getCollection()->setClassTypeFilter($classFilter)->toOptionArray();
 
         return $classes;
     }
 }
-

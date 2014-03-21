@@ -39,14 +39,8 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
         $frontendMock = $this->getMock('Magento\Cache\FrontendInterface');
 
         $cacheEnabler = $this->getMock('Magento\App\Cache\StateInterface');
-        $cacheEnabler->expects($this->at(0))
-            ->method('isEnabled')
-            ->with($identifier)
-            ->will($this->returnValue(false));
-        $cacheEnabler->expects($this->at(1))
-            ->method('isEnabled')
-            ->with($identifier)
-            ->will($this->returnValue(true));
+        $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->will($this->returnValue(false));
+        $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->will($this->returnValue(true));
 
         $object = new \Magento\App\Cache\Type\AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new \Magento\TestFramework\Helper\ProxyTesting();
@@ -70,7 +64,7 @@ class AccessProxyTest extends \PHPUnit_Framework_TestCase
             array('load', array('record_id'), false, '111'),
             array('save', array('record_value', 'record_id', array('tag'), 555), true, false),
             array('remove', array('record_id'), true, false),
-            array('clean', array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true, false),
+            array('clean', array(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array('tag')), true, false)
         );
     }
 }

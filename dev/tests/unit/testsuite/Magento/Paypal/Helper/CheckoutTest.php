@@ -50,14 +50,16 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_session = $this->getMockBuilder('Magento\Checkout\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup'))
-            ->getMock();
-        $this->_quoteFactory = $this->getMockBuilder('Magento\Sales\Model\QuoteFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create', '__wakeup'))
-            ->getMock();
+        $this->_session = $this->getMockBuilder(
+            'Magento\Checkout\Model\Session'
+        )->disableOriginalConstructor()->setMethods(
+            array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup')
+        )->getMock();
+        $this->_quoteFactory = $this->getMockBuilder(
+            'Magento\Sales\Model\QuoteFactory'
+        )->disableOriginalConstructor()->setMethods(
+            array('create', '__wakeup')
+        )->getMock();
 
         $this->_checkout = new \Magento\Paypal\Helper\Checkout($this->_session, $this->_quoteFactory);
     }
@@ -71,13 +73,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getOrderMock($hasOrderId, $mockMethods = array())
     {
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
-            ->disableOriginalConstructor()
-            ->setMethods(array_merge(array('getId', '__wakeup'), $mockMethods))
-            ->getMock();
-        $order->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($hasOrderId ? 'order id' : null));
+        $order = $this->getMockBuilder(
+            'Magento\Sales\Model\Order'
+        )->disableOriginalConstructor()->setMethods(
+            array_merge(array('getId', '__wakeup'), $mockMethods)
+        )->getMock();
+        $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         return $order;
     }
 
@@ -91,24 +92,27 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     {
         $comment = 'Some test comment';
         $order = $this->_getOrderMock($hasOrderId, array('registerCancellation', 'save'));
-        $order->setData('state', $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state');
+        $order->setData(
+            'state',
+            $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state'
+        );
         if ($expectedResult) {
-            $order->expects($this->once())
-                ->method('registerCancellation')
-                ->with($this->equalTo($comment))
-                ->will($this->returnSelf());
-            $order->expects($this->once())
-                ->method('save');
+            $order->expects(
+                $this->once()
+            )->method(
+                'registerCancellation'
+            )->with(
+                $this->equalTo($comment)
+            )->will(
+                $this->returnSelf()
+            );
+            $order->expects($this->once())->method('save');
         } else {
-            $order->expects($this->never())
-                ->method('registerCancellation');
-            $order->expects($this->never())
-                ->method('save');
+            $order->expects($this->never())->method('registerCancellation');
+            $order->expects($this->never())->method('save');
         }
 
-        $this->_session->expects($this->any())
-            ->method('getLastRealOrder')
-            ->will($this->returnValue($order));
+        $this->_session->expects($this->any())->method('getLastRealOrder')->will($this->returnValue($order));
         $this->assertEquals($expectedResult, $this->_checkout->cancelCurrentOrder($comment));
     }
 
@@ -121,7 +125,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             array(true, false, true),
             array(true, true, false),
             array(false, true, false),
-            array(false, false, false),
+            array(false, false, false)
         );
     }
 }

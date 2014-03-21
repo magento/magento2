@@ -47,10 +47,8 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\App\Resource $resource
      * @param \Magento\Locale\ResolverInterface $localeResolver
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Locale\ResolverInterface $localeResolver
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Locale\ResolverInterface $localeResolver)
+    {
         parent::__construct($resource);
         $this->_localeResolver = $localeResolver;
     }
@@ -76,10 +74,10 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getLoadSelect($field, $value, $object)
     {
-        $select  = parent::_getLoadSelect($field, $value, $object);
+        $select = parent::_getLoadSelect($field, $value, $object);
         $adapter = $this->_getReadAdapter();
 
-        $locale       = $this->_localeResolver->getLocaleCode();
+        $locale = $this->_localeResolver->getLocaleCode();
         $systemLocale = \Magento\Core\Model\App::DISTRO_LOCALE_CODE;
 
         $regionField = $adapter->quoteIdentifier($this->getMainTable() . '.' . $this->getIdFieldName());
@@ -88,15 +86,17 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
         $select->joinLeft(
             array('lrn' => $this->_regionNameTable),
             "{$regionField} = lrn.region_id AND {$condition}",
-            array());
+            array()
+        );
 
         if ($locale != $systemLocale) {
-            $nameExpr  = $adapter->getCheckSql('lrn.region_id is null', 'srn.name', 'lrn.name');
+            $nameExpr = $adapter->getCheckSql('lrn.region_id is null', 'srn.name', 'lrn.name');
             $condition = $adapter->quoteInto('srn.locale = ?', $systemLocale);
             $select->joinLeft(
                 array('srn' => $this->_regionNameTable),
                 "{$regionField} = srn.region_id AND {$condition}",
-                array('name' => $nameExpr));
+                array('name' => $nameExpr)
+            );
         } else {
             $select->columns(array('name'), 'lrn');
         }
@@ -115,17 +115,22 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
-        $adapter        = $this->_getReadAdapter();
-        $locale         = $this->_localeResolver->getLocaleCode();
-        $joinCondition  = $adapter->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
-        $select         = $adapter->select()
-            ->from(array('region' => $this->getMainTable()))
-            ->joinLeft(
-                array('rname' => $this->_regionNameTable),
-                $joinCondition,
-                array('name'))
-            ->where('region.country_id = ?', $countryId)
-            ->where("region.{$field} = ?", $value);
+        $adapter = $this->_getReadAdapter();
+        $locale = $this->_localeResolver->getLocaleCode();
+        $joinCondition = $adapter->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
+        $select = $adapter->select()->from(
+            array('region' => $this->getMainTable())
+        )->joinLeft(
+            array('rname' => $this->_regionNameTable),
+            $joinCondition,
+            array('name')
+        )->where(
+            'region.country_id = ?',
+            $countryId
+        )->where(
+            "region.{$field} = ?",
+            $value
+        );
 
         $data = $adapter->fetchRow($select);
         if ($data) {

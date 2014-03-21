@@ -32,17 +32,20 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Website
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * {@inheritdoc}
      */
     public function render(\Magento\Object $row)
     {
-        return '<a title="' . __('Edit Web Site') . '"
-            href="' . $this->getUrl('adminhtml/*/editWebsite', array('website_id' => $row->getWebsiteId())) . '">'
-            . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
+        return '<a title="' . __(
+            'Edit Web Site'
+        ) . '"
+            href="' .
+        $this->getUrl('adminhtml/*/editWebsite', array('website_id' => $row->getWebsiteId())) .
+        '">' .
+        $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
+        '</a>';
     }
-
 }

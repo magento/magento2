@@ -42,18 +42,10 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     public function constructorErrorDataProvider()
     {
         return array(
-            'duplicate nodes' => array(
-                array(1, 2, 2), array()
-            ),
-            'self-link' => array(
-                array(1, 2), array(array(1, 2), array(2, 2))
-            ),
-            'broken reference "from"' => array(
-                array(1, 2), array(array(1, 2), array(3, 1))
-            ),
-            'broken reference "to"' => array(
-                array(1, 2), array(array(1, 2), array(1, 3))
-            ),
+            'duplicate nodes' => array(array(1, 2, 2), array()),
+            'self-link' => array(array(1, 2), array(array(1, 2), array(2, 2))),
+            'broken reference "from"' => array(array(1, 2), array(array(1, 2), array(3, 1))),
+            'broken reference "to"' => array(array(1, 2), array(array(1, 2), array(1, 3)))
         );
     }
 
@@ -75,7 +67,8 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         // inverse
         $model = new \Magento\Data\Graph(array(1, 2, 3), array(array(1, 2), array(2, 3)));
         $this->assertEquals(
-            array(2 => array(1 => 1), 3 => array(2 => 2)), $model->getRelations(\Magento\Data\Graph::INVERSE)
+            array(2 => array(1 => 1), 3 => array(2 => 2)),
+            $model->getRelations(\Magento\Data\Graph::INVERSE)
         );
 
         // non-directional
@@ -88,32 +81,26 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     public function testFindCycle()
     {
         $nodes = array(1, 2, 3, 4);
-        $model = new \Magento\Data\Graph($nodes, array(
-            array(1, 2), array(2, 3), array(3, 4),
-        ));
+        $model = new \Magento\Data\Graph($nodes, array(array(1, 2), array(2, 3), array(3, 4)));
         $this->assertEquals(array(), $model->findCycle());
 
-        $model = new \Magento\Data\Graph($nodes, array(
-            array(1, 2), array(2, 3), array(3, 4), array(4, 2)
-        ));
+        $model = new \Magento\Data\Graph($nodes, array(array(1, 2), array(2, 3), array(3, 4), array(4, 2)));
         $this->assertEquals(array(), $model->findCycle(1));
         $cycle = $model->findCycle();
         sort($cycle);
         $this->assertEquals(array(2, 2, 3, 4), $cycle);
         $this->assertEquals(array(3, 4, 2, 3), $model->findCycle(3));
 
-        $model = new \Magento\Data\Graph($nodes, array(
-            array(1, 2), array(2, 3), array(3, 4), array(4, 2), array(3, 1)
-        ));
+        $model = new \Magento\Data\Graph(
+            $nodes,
+            array(array(1, 2), array(2, 3), array(3, 4), array(4, 2), array(3, 1))
+        );
         //find cycles for each node
         $cycles = $model->findCycle(null, false);
         $this->assertEquals(
-            array(
-                array(1, 2, 3, 1),
-                array(2, 3, 4, 2),
-                array(3, 4, 2, 3),
-                array(4, 2, 3, 4),
-            ), $cycles);
+            array(array(1, 2, 3, 1), array(2, 3, 4, 2), array(3, 4, 2, 3), array(4, 2, 3, 4)),
+            $cycles
+        );
     }
 
     public function testDfs()

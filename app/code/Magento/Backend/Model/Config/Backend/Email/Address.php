@@ -41,9 +41,7 @@ class Address extends \Magento\Core\Model\Config\Value
     {
         $value = $this->getValue();
         if (!\Zend_Validate::is($value, 'EmailAddress')) {
-            throw new Exception(
-                __('Please correct the email address: "%1".', $value)
-            );
+            throw new Exception(__('Please correct the email address: "%1".', $value));
         }
         return $this;
     }

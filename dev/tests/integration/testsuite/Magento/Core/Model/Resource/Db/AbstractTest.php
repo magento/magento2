@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Db;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -37,11 +36,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Resource');
-        $this->_model = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\Core\Model\Resource\Db\AbstractDb',
             array('resource' => $resource)
         );
     }
-
 
     public function testConstruct()
     {
@@ -66,16 +65,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($idFieldName, $this->_model->getIdFieldName());
     }
 
-
     public function testGetTableName()
     {
         $tableNameOrig = 'core_website';
         $tableSuffix = 'suffix';
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Resource', array('tablePrefix' => 'prefix_')
+            'Magento\App\Resource',
+            array('tablePrefix' => 'prefix_')
         );
 
-        $model = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
+        $model = $this->getMockForAbstractClass(
+            'Magento\Core\Model\Resource\Db\AbstractDb',
             array('resource' => $resource)
         );
 

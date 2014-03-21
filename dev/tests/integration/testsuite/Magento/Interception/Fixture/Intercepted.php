@@ -22,9 +22,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Interception\Fixture;
-
 
 class Intercepted extends InterceptedParent implements InterceptedInterface
 {
@@ -51,7 +49,7 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
         return '<D>' . $this->_key . $param1 . '</D>';
     }
 
-    public final function E($param1)
+    final public function E($param1)
     {
         return '<E>' . $this->_key . $param1 . '</E>';
     }

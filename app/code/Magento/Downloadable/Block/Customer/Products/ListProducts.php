@@ -37,9 +37,9 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 class ListProducts extends \Magento\View\Element\Template
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Customer\Service\V1\CustomerCurrentService
      */
-    protected $_customerSession;
+    protected $currentCustomer;
 
     /**
      * @var \Magento\Downloadable\Model\Resource\Link\Purchased\CollectionFactory
@@ -53,19 +53,19 @@ class ListProducts extends \Magento\View\Element\Template
 
     /**
      * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\CollectionFactory $linksFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Service\V1\CustomerCurrentService $currentCustomer,
         \Magento\Downloadable\Model\Resource\Link\Purchased\CollectionFactory $linksFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = array()
     ) {
-        $this->_customerSession = $customerSession;
+        $this->currentCustomer = $currentCustomer;
         $this->_linksFactory = $linksFactory;
         $this->_itemsFactory = $itemsFactory;
         parent::__construct($context, $data);
@@ -81,7 +81,7 @@ class ListProducts extends \Magento\View\Element\Template
     {
         parent::_construct();
         $purchased = $this->_linksFactory->create()
-            ->addFieldToFilter('customer_id', $this->_customerSession->getCustomerId())
+            ->addFieldToFilter('customer_id', $this->currentCustomer->getCustomerId())
             ->addOrder('created_at', 'desc');
         $this->setPurchased($purchased);
         $purchasedIds = array();
@@ -91,17 +91,16 @@ class ListProducts extends \Magento\View\Element\Template
         if (empty($purchasedIds)) {
             $purchasedIds = array(null);
         }
-        $purchasedItems = $this->_itemsFactory->create()
-            ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
-            ->addFieldToFilter('status',
-                array(
-                    'nin' => array(
-                        Item::LINK_STATUS_PENDING_PAYMENT,
-                        Item::LINK_STATUS_PAYMENT_REVIEW
-                    )
-                )
-            )
-            ->setOrder('item_id', 'desc');
+        $purchasedItems = $this->_itemsFactory->create()->addFieldToFilter(
+            'purchased_id',
+            array('in' => $purchasedIds)
+        )->addFieldToFilter(
+            'status',
+            array('nin' => array(Item::LINK_STATUS_PENDING_PAYMENT, Item::LINK_STATUS_PAYMENT_REVIEW))
+        )->setOrder(
+            'item_id',
+            'desc'
+        );
         $this->setItems($purchasedItems);
     }
 
@@ -114,8 +113,12 @@ class ListProducts extends \Magento\View\Element\Template
     {
         parent::_prepareLayout();
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'downloadable.customer.products.pager')
-            ->setCollection($this->getItems());
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager',
+            'downloadable.customer.products.pager'
+        )->setCollection(
+            $this->getItems()
+        );
         $this->setChild('pager', $pager);
         $this->getItems()->load();
         foreach ($this->getItems() as $item) {
@@ -183,5 +186,4 @@ class ListProducts extends \Magento\View\Element\Template
     {
         return $this->_storeConfig->getConfigFlag(\Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW);
     }
-
 }

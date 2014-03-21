@@ -50,10 +50,7 @@ class ApplicationInitializerTest extends \PHPUnit_Framework_TestCase
         $this->applicationMock = $this->getMock('Magento\AppInterface');
         $this->sidResolverMock = $this->getMock('\Magento\Session\SidResolverInterface', array(), array(), '', false);
         $this->subjectMock = $this->getMock('Magento\App\Cron', array(), array(), '', false);
-        $this->model = new ApplicationInitializer(
-            $this->applicationMock,
-            $this->sidResolverMock
-        );
+        $this->model = new ApplicationInitializer($this->applicationMock, $this->sidResolverMock);
     }
 
     public function testBeforeExecutePerformsRequiredChecks()

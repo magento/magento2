@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument\Interpreter;
 
 use Magento\ObjectManager;
@@ -58,10 +57,10 @@ class Options implements InterpreterInterface
         }
         $modelClass = $data['model'];
         $modelInstance = $this->objectManager->get($modelClass);
-        if (!($modelInstance instanceof \Magento\Data\OptionSourceInterface)) {
-            throw new \UnexpectedValueException(sprintf(
-                "Instance of the options source model is expected, got %s instead.", get_class($modelInstance)
-            ));
+        if (!$modelInstance instanceof \Magento\Data\OptionSourceInterface) {
+            throw new \UnexpectedValueException(
+                sprintf("Instance of the options source model is expected, got %s instead.", get_class($modelInstance))
+            );
         }
         $result = array();
         foreach ($modelInstance->toOptionArray() as $value => $label) {

@@ -90,30 +90,28 @@ class Observer
         }
 
         /** @var \Magento\RecurringPayment\Model\RecurringPayment $payment */
-        $payment = $this->_recurringPaymentFactory->create(['locale' => $this->_locale]);
-        $payment->setStore($this->_storeManager->getStore())
-            ->importBuyRequest($buyRequest)
-            ->importProduct($product);
+        $payment = $this->_recurringPaymentFactory->create(array('locale' => $this->_locale));
+        $payment->setStore($this->_storeManager->getStore())->importBuyRequest($buyRequest)->importProduct($product);
         if (!$payment) {
             return;
         }
 
         // add the start datetime as product custom option
-        $product->addCustomOption(\Magento\RecurringPayment\Model\RecurringPayment::PRODUCT_OPTIONS_KEY,
+        $product->addCustomOption(
+            \Magento\RecurringPayment\Model\RecurringPayment::PRODUCT_OPTIONS_KEY,
             serialize(array('start_datetime' => $payment->getStartDatetime()))
         );
 
         // duplicate as 'additional_options' to render with the product statically
-        $infoOptions = array(array(
-            'label' => $this->_fields->getFieldLabel('start_datetime'),
-            'value' => $payment->exportStartDatetime(),
-        ));
+        $infoOptions = array(
+            array(
+                'label' => $this->_fields->getFieldLabel('start_datetime'),
+                'value' => $payment->exportStartDatetime()
+            )
+        );
 
         foreach ($payment->exportScheduleInfo() as $info) {
-            $infoOptions[] = array(
-                'label' => $info->getTitle(),
-                'value' => $info->getSchedule(),
-            );
+            $infoOptions[] = array('label' => $info->getTitle(), 'value' => $info->getSchedule());
         }
         $product->addCustomOption('additional_options', serialize($infoOptions));
     }
@@ -129,7 +127,7 @@ class Observer
         $collection = $observer->getEvent()->getCollection();
 
         foreach ($collection as $product) {
-            if ($product->getIsRecurring() && $payment = $product->getRecurringPayment()) {
+            if ($product->getIsRecurring() && ($payment = $product->getRecurringPayment())) {
                 $product->setRecurringPayment(unserialize($payment));
             }
         }
@@ -159,7 +157,7 @@ class Observer
     {
         $block = $observer->getEvent()->getObject();
 
-        $block->setFormExcludedFieldList(array_merge($block->getFormExcludedFieldList(), ['recurring_payment']));
+        $block->setFormExcludedFieldList(array_merge($block->getFormExcludedFieldList(), array('recurring_payment')));
     }
 
     /**
@@ -173,8 +171,9 @@ class Observer
         $form = $observer->getEvent()->getForm();
 
         $recurringPaymentElement = $form->getElement('recurring_payment');
-        $recurringPaymentBlock = $observer->getEvent()->getLayout()
-            ->createBlock('Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price\Recurring');
+        $recurringPaymentBlock = $observer->getEvent()->getLayout()->createBlock(
+            'Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price\Recurring'
+        );
 
         if ($recurringPaymentElement) {
             $recurringPaymentElement->setRenderer($recurringPaymentBlock);

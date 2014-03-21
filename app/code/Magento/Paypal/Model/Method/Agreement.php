@@ -32,8 +32,8 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Paypal Billing Agreement method
  */
-class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement
-    implements \Magento\Paypal\Model\Billing\Agreement\MethodInterface
+class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement implements
+    \Magento\Paypal\Model\Billing\Agreement\MethodInterface
 {
     /**
      * Method code
@@ -47,28 +47,28 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      *
      * @var bool
      */
-    protected $_canAuthorize            = true;
+    protected $_canAuthorize = true;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canCapture              = true;
+    protected $_canCapture = true;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canCapturePartial       = true;
+    protected $_canCapturePartial = true;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canRefund               = true;
+    protected $_canRefund = true;
 
     /**
      * Method instance setting
@@ -82,21 +82,21 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      *
      * @var bool
      */
-    protected $_canVoid                 = true;
+    protected $_canVoid = true;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canUseCheckout          = false;
+    protected $_canUseCheckout = false;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canUseInternal          = false;
+    protected $_canUseInternal = false;
 
     /**
      * Method instance setting
@@ -110,7 +110,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      *
      * @var bool
      */
-    protected $_canReviewPayment        = true;
+    protected $_canReviewPayment = true;
 
     /**
      * Website Payments Pro instance
@@ -172,7 +172,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
             $data
         );
         $proInstance = array_shift($data);
-        if ($proInstance && ($proInstance instanceof \Magento\Paypal\Model\Pro)) {
+        if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
             $this->_pro = $proInstance;
         } else {
             $this->_pro = $proTypeFactory->create('Magento\Paypal\Model\Pro');
@@ -205,15 +205,16 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      */
     public function initBillingAgreementToken(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement)
     {
-        $api = $this->_pro->getApi()
-            ->setReturnUrl($agreement->getReturnUrl())
-            ->setCancelUrl($agreement->getCancelUrl())
-            ->setBillingType($this->_pro->getApi()->getBillingAgreementType());
+        $api = $this->_pro->getApi()->setReturnUrl(
+            $agreement->getReturnUrl()
+        )->setCancelUrl(
+            $agreement->getCancelUrl()
+        )->setBillingType(
+            $this->_pro->getApi()->getBillingAgreementType()
+        );
 
         $api->callSetCustomerBillingAgreement();
-        $agreement->setRedirectUrl(
-            $this->_pro->getConfig()->getStartBillingAgreementUrl($api->getToken())
-        );
+        $agreement->setRedirectUrl($this->_pro->getConfig()->getStartBillingAgreementUrl($api->getToken()));
         return $this;
     }
 
@@ -225,14 +226,13 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      */
     public function getBillingAgreementTokenInfo(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement)
     {
-        $api = $this->_pro->getApi()
-            ->setToken($agreement->getToken());
+        $api = $this->_pro->getApi()->setToken($agreement->getToken());
         $api->callGetBillingAgreementCustomerDetails();
         $responseData = array(
-            'token'         => $api->getData('token'),
-            'email'         => $api->getData('email'),
-            'payer_id'      => $api->getData('payer_id'),
-            'payer_status'  => $api->getData('payer_status')
+            'token' => $api->getData('token'),
+            'email' => $api->getData('email'),
+            'payer_id' => $api->getData('payer_id'),
+            'payer_status' => $api->getData('payer_status')
         );
         $agreement->addData($responseData);
         return $responseData;
@@ -246,8 +246,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      */
     public function placeBillingAgreement(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement)
     {
-        $api = $this->_pro->getApi()
-            ->setToken($agreement->getToken());
+        $api = $this->_pro->getApi()->setToken($agreement->getToken());
         $api->callCreateBillingAgreement();
         $agreement->setBillingAgreementId($api->getData('billing_agreement_id'));
         return $this;
@@ -263,15 +262,18 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     public function updateBillingAgreementStatus(\Magento\Paypal\Model\Billing\AbstractAgreement $agreement)
     {
         $targetStatus = $agreement->getStatus();
-        $api = $this->_pro->getApi()
-            ->setReferenceId($agreement->getReferenceId())
-            ->setBillingAgreementStatus($targetStatus);
+        $api = $this->_pro->getApi()->setReferenceId(
+            $agreement->getReferenceId()
+        )->setBillingAgreementStatus(
+            $targetStatus
+        );
         try {
             $api->callUpdateBillingAgreement();
         } catch (\Magento\Core\Exception $e) {
             // when BA was already canceled, just pretend that the operation succeeded
-            if (!(\Magento\Paypal\Model\Billing\Agreement::STATUS_CANCELED == $targetStatus
-                && $api->getIsBillingAgreementAlreadyCancelled())) {
+            if (!(\Magento\Paypal\Model\Billing\Agreement::STATUS_CANCELED == $targetStatus &&
+                $api->getIsBillingAgreementAlreadyCancelled())
+            ) {
                 throw $e;
             }
         }
@@ -409,15 +411,23 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
 
         $proConfig = $this->_pro->getConfig();
-        $api = $this->_pro->getApi()
-            ->setReferenceId($billingAgreement->getReferenceId())
-            ->setPaymentAction($proConfig->paymentAction)
-            ->setAmount($amount)
-            ->setCurrencyCode($payment->getOrder()->getBaseCurrencyCode())
-            ->setNotifyUrl($this->_urlBuilder->getUrl('paypal/ipn/'))
-            ->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($proConfig->lineItemsEnabled)
-            ->setInvNum($order->getIncrementId());
+        $api = $this->_pro->getApi()->setReferenceId(
+            $billingAgreement->getReferenceId()
+        )->setPaymentAction(
+            $proConfig->paymentAction
+        )->setAmount(
+            $amount
+        )->setCurrencyCode(
+            $payment->getOrder()->getBaseCurrencyCode()
+        )->setNotifyUrl(
+            $this->_urlBuilder->getUrl('paypal/ipn/')
+        )->setPaypalCart(
+            $cart
+        )->setIsLineItemsEnabled(
+            $proConfig->lineItemsEnabled
+        )->setInvNum(
+            $order->getIncrementId()
+        );
 
         // call api and import transaction and other payment information
         $api->callDoReferenceTransaction();
@@ -425,8 +435,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         $api->callGetTransactionDetails();
         $this->_pro->importPaymentInfo($api, $payment);
 
-        $payment->setTransactionId($api->getTransactionId())
-            ->setIsTransactionClosed(0);
+        $payment->setTransactionId($api->getTransactionId())->setIsTransactionClosed(0);
 
         if ($api->getBillingAgreementId()) {
             $order->addRelatedObject($billingAgreement);

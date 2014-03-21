@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Controller;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
@@ -152,7 +151,8 @@ class Rest implements \Magento\App\FrontControllerInterface
                     array(),
                     'authorization',
                     "Consumer ID = {$consumerId}",
-                    implode($route->getAclResources(), ', '));
+                    implode($route->getAclResources(), ', ')
+                );
             }
 
             if ($route->isSecure() && !$this->_request->isSecure()) {
@@ -165,7 +165,7 @@ class Rest implements \Magento\App\FrontControllerInterface
             $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Service\Data\AbstractObject $outputData */
-            $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+            $outputData = call_user_func_array(array($service, $serviceMethodName), $inputParams);
             $outputArray = $this->_processServiceOutput($outputData);
             $this->_response->prepareResponse($outputArray);
         } catch (\Exception $e) {
@@ -190,7 +190,7 @@ class Rest implements \Magento\App\FrontControllerInterface
     protected function _processServiceOutput($data)
     {
         if (is_array($data)) {
-            $result = [];
+            $result = array();
             foreach ($data as $datum) {
                 if (is_object($datum)) {
                     $result[] = $this->_convertDataObjectToArray($datum);
@@ -200,8 +200,8 @@ class Rest implements \Magento\App\FrontControllerInterface
             }
         } else if (is_object($data)) {
             $result = $this->_convertDataObjectToArray($data);
-        } else if (is_null($data)) {
-            $result = [];
+        } elseif (is_null($data)) {
+            $result = array();
         } else {
             /** No processing is required for scalar types */
             $result = $data;

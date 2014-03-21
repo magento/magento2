@@ -28,8 +28,9 @@ interface AdapterInterface
     /**
      * Adapter type
      */
-    const ADAPTER_GD2   = 'GD2';
-    const ADAPTER_IM    = 'IMAGEMAGICK';
+    const ADAPTER_GD2 = 'GD2';
+
+    const ADAPTER_IM = 'IMAGEMAGICK';
 
     /**
      * Returns rgba array of the specified pixel

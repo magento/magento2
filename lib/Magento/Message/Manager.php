@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Message;
 
 use Magento\Logger;
@@ -240,7 +239,8 @@ class Manager implements ManagerInterface
             if ($message instanceof MessageInterface) {
                 $text = $message->getText();
             } else {
-                continue; // Some unknown object, add it anyway
+                // Some unknown object, add it anyway
+                continue;
             }
 
             // Check for duplication

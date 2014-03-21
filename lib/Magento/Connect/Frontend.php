@@ -43,7 +43,6 @@ class Frontend
      */
     protected $_capture = false;
 
-
     /**
      * Push/pop variable for capture
      *
@@ -84,7 +83,7 @@ class Frontend
      */
     public function getErrors($clear = true)
     {
-        if(!$clear) {
+        if (!$clear) {
             return $this->_errors;
         }
         $out = $this->_errors;
@@ -176,7 +175,6 @@ class Frontend
      */
     public function log($msg)
     {
-
     }
 
     /**
@@ -187,7 +185,6 @@ class Frontend
      */
     public function output($data)
     {
-
     }
 
     /**
@@ -198,7 +195,7 @@ class Frontend
      */
     public static function getInstance($class)
     {
-        $class = __CLASS__."_".$class;
+        $class = __CLASS__ . "_" . $class;
         return new $class();
     }
 
@@ -211,9 +208,7 @@ class Frontend
      */
     public function getOutput($clearPrevious = true)
     {
-
     }
-
 
     /**
      * Save silent mode
@@ -245,7 +240,7 @@ class Frontend
      */
     public function setSilent($value = true)
     {
-        $this->_silent = (bool) $value;
+        $this->_silent = (bool)$value;
         return $this;
     }
 
@@ -256,7 +251,7 @@ class Frontend
      */
     public function isSilent()
     {
-        return (bool) $this->_silent;
+        return (bool)$this->_silent;
     }
 
     /**
@@ -267,7 +262,5 @@ class Frontend
      */
     public function confirm($string)
     {
-
     }
 }
-

@@ -26,7 +26,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<view>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/Magento/Config/etc/view.xsd">
    <vars module="Namespace_Module1">
         <var name="var1">Value1</var>
         <var name="var1">Value1</var><!-- duplicate var name -->

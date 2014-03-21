@@ -47,13 +47,10 @@ class Cctype implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $options =  array();
+        $options = array();
 
         foreach ($this->_paymentConfig->getCcTypes() as $code => $name) {
-            $options[] = array(
-               'value' => $code,
-               'label' => $name
-            );
+            $options[] = array('value' => $code, 'label' => $name);
         }
 
         return $options;

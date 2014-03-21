@@ -33,10 +33,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/service' => 'class',
-        '/config/service/rest-route' => 'method',
-    );
+    protected $_idAttributes = array('/config/service' => 'class', '/config/service/rest-route' => 'method');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver

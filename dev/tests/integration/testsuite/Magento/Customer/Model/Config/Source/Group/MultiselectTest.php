@@ -33,14 +33,13 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         /** @var Multiselect $multiselect */
-        $multiselect = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Config\Source\Group\Multiselect');
+        $multiselect = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Source\Group\Multiselect');
         $this->assertEquals(
-            [
-                ['value' => 1, 'label' => 'General'],
-                ['value' => 2, 'label' => 'Wholesale'],
-                ['value' => 3, 'label' => 'Retailer']
-            ],
+            array(
+                array('value' => 1, 'label' => 'General'),
+                array('value' => 2, 'label' => 'Wholesale'),
+                array('value' => 3, 'label' => 'Retailer')
+            ),
             $multiselect->toOptionArray()
         );
     }

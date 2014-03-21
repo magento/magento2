@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Theme;
 
 class LabelTest extends \PHPUnit_Framework_TestCase
@@ -34,8 +33,9 @@ class LabelTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\Theme\Label');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\Theme\Label'
+        );
     }
 
     /**
@@ -44,8 +44,9 @@ class LabelTest extends \PHPUnit_Framework_TestCase
     public function testGetLabelsCollection()
     {
         /** @var $expectedCollection \Magento\Core\Model\Resource\Theme\Collection */
-        $expectedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\Theme\Label\ListInterface');
+        $expectedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\View\Design\Theme\Label\ListInterface'
+        );
 
         $expectedItemsCount = count($expectedCollection->getLabels());
 

@@ -68,7 +68,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             }
         }
 
-        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_prepare_form', array('form'=>$form));
+        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_prepare_form', array('form' => $form));
         $form->addValues($values);
         $form->setFieldNameSuffix('product');
         $this->setForm($form);
@@ -80,16 +80,16 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
     protected function _getAdditionalElementTypes()
     {
         $result = array(
-            'price'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
-            'image'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
-            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean',
+            'price' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
+            'image' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
+            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean'
         );
 
         $response = new \Magento\Object();
         $response->setTypes(array());
-        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', array('response'=>$response));
+        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', array('response' => $response));
 
-        foreach ($response->getTypes() as $typeName=>$typeClass) {
+        foreach ($response->getTypes() as $typeName => $typeClass) {
             $result[$typeName] = $typeClass;
         }
 

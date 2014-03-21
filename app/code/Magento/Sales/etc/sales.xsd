@@ -116,8 +116,8 @@
             <xs:element name="renderer" type="rendererDeclaration" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="instance" type="xs:string" use="required"/>
-        <xs:attribute name="sort_order" type="xs:integer" use="required"/>
+        <xs:attribute name="instance" type="xs:string" use="optional"/>
+        <xs:attribute name="sort_order" type="xs:integer" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="rendererDeclaration">

@@ -57,24 +57,35 @@ use Magento\Core\Model\AbstractModel;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 class Option extends AbstractModel
 {
-    const OPTION_GROUP_TEXT   = 'text';
-    const OPTION_GROUP_FILE   = 'file';
-    const OPTION_GROUP_SELECT = 'select';
-    const OPTION_GROUP_DATE   = 'date';
+    const OPTION_GROUP_TEXT = 'text';
 
-    const OPTION_TYPE_FIELD     = 'field';
-    const OPTION_TYPE_AREA      = 'area';
-    const OPTION_TYPE_FILE      = 'file';
+    const OPTION_GROUP_FILE = 'file';
+
+    const OPTION_GROUP_SELECT = 'select';
+
+    const OPTION_GROUP_DATE = 'date';
+
+    const OPTION_TYPE_FIELD = 'field';
+
+    const OPTION_TYPE_AREA = 'area';
+
+    const OPTION_TYPE_FILE = 'file';
+
     const OPTION_TYPE_DROP_DOWN = 'drop_down';
-    const OPTION_TYPE_RADIO     = 'radio';
-    const OPTION_TYPE_CHECKBOX  = 'checkbox';
-    const OPTION_TYPE_MULTIPLE  = 'multiple';
-    const OPTION_TYPE_DATE      = 'date';
+
+    const OPTION_TYPE_RADIO = 'radio';
+
+    const OPTION_TYPE_CHECKBOX = 'checkbox';
+
+    const OPTION_TYPE_MULTIPLE = 'multiple';
+
+    const OPTION_TYPE_DATE = 'date';
+
     const OPTION_TYPE_DATE_TIME = 'date_time';
-    const OPTION_TYPE_TIME      = 'time';
+
+    const OPTION_TYPE_TIME = 'time';
 
     /**
      * @var Product
@@ -288,10 +299,10 @@ class Option extends AbstractModel
             self::OPTION_TYPE_MULTIPLE => self::OPTION_GROUP_SELECT,
             self::OPTION_TYPE_DATE => self::OPTION_GROUP_DATE,
             self::OPTION_TYPE_DATE_TIME => self::OPTION_GROUP_DATE,
-            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
+            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE
         );
 
-        return isset($optionGroupsToTypes[$type])?$optionGroupsToTypes[$type]:'';
+        return isset($optionGroupsToTypes[$type]) ? $optionGroupsToTypes[$type] : '';
     }
 
     /**
@@ -320,16 +331,22 @@ class Option extends AbstractModel
     public function saveOptions()
     {
         foreach ($this->getOptions() as $option) {
-            $this->setData($option)
-                ->setData('product_id', $this->getProduct()->getId())
-                ->setData('store_id', $this->getProduct()->getStoreId());
+            $this->setData(
+                $option
+            )->setData(
+                'product_id',
+                $this->getProduct()->getId()
+            )->setData(
+                'store_id',
+                $this->getProduct()->getStoreId()
+            );
 
             if ($this->getData('option_id') == '0') {
                 $this->unsetData('option_id');
             } else {
                 $this->setId($this->getData('option_id'));
             }
-            $isEdit = (bool)$this->getId()? true:false;
+            $isEdit = (bool)$this->getId() ? true : false;
 
             if ($this->getData('is_delete') == '1') {
                 if ($isEdit) {
@@ -378,7 +395,8 @@ class Option extends AbstractModel
                 }
                 $this->save();
             }
-        }//eof foreach()
+        }
+        //eof foreach()
         return $this;
     }
 
@@ -394,8 +412,7 @@ class Option extends AbstractModel
                 $this->getValueInstance()->addValue($value);
             }
 
-            $this->getValueInstance()->setOption($this)
-                ->saveValues();
+            $this->getValueInstance()->setOption($this)->saveValues();
         } elseif ($this->getGroupByType($this->getType()) == self::OPTION_GROUP_SELECT) {
             throw new Exception(__('Select type options required values rows.'));
         }
@@ -410,11 +427,11 @@ class Option extends AbstractModel
      * @param bool $flag
      * @return float
      */
-    public function getPrice($flag=false)
+    public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
             $basePrice = $this->getProduct()->getFinalPrice();
-            $price = $basePrice*($this->_getData('price')/100);
+            $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }
         return $this->_getData('price');
@@ -452,12 +469,20 @@ class Option extends AbstractModel
      */
     public function getProductOptionCollection(Product $product)
     {
-        $collection = $this->getCollection()
-            ->addFieldToFilter('product_id', $product->getId())
-            ->addTitleToResult($product->getStoreId())
-            ->addPriceToResult($product->getStoreId())
-            ->setOrder('sort_order', 'asc')
-            ->setOrder('title', 'asc');
+        $collection = $this->getCollection()->addFieldToFilter(
+            'product_id',
+            $product->getId()
+        )->addTitleToResult(
+            $product->getStoreId()
+        )->addPriceToResult(
+            $product->getStoreId()
+        )->setOrder(
+            'sort_order',
+            'asc'
+        )->setOrder(
+            'title',
+            'asc'
+        );
 
         if ($this->getAddRequiredFilter()) {
             $collection->addRequiredFilter($this->getAddRequiredFilterValue());
@@ -474,8 +499,7 @@ class Option extends AbstractModel
      */
     public function getValuesCollection()
     {
-        $collection = $this->getValueInstance()
-            ->getValuesCollection($this);
+        $collection = $this->getValueInstance()->getValuesCollection($this);
 
         return $collection;
     }

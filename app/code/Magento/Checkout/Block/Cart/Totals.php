@@ -66,7 +66,6 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         $this->_salesConfig = $salesConfig;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
-
     }
 
     /**
@@ -127,11 +126,15 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         if ($total->getAs()) {
             $code = $total->getAs();
         }
-        return $this->_getTotalRenderer($code)
-            ->setTotal($total)
-            ->setColspan($colspan)
-            ->setRenderingArea(is_null($area) ? -1 : $area)
-            ->toHtml();
+        return $this->_getTotalRenderer(
+            $code
+        )->setTotal(
+            $total
+        )->setColspan(
+            $colspan
+        )->setRenderingArea(
+            is_null($area) ? -1 : $area
+        )->toHtml();
     }
 
     /**
@@ -144,7 +147,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     public function renderTotals($area = null, $colspan = 1)
     {
         $html = '';
-        foreach($this->getTotals() as $total) {
+        foreach ($this->getTotals() as $total) {
             if ($total->getArea() != $area && $area != -1) {
                 continue;
             }
@@ -160,7 +163,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function needDisplayBaseGrandtotal()
     {
-        $quote  = $this->getQuote();
+        $quote = $this->getQuote();
         if ($quote->getBaseCurrencyCode() != $quote->getQuoteCurrencyCode()) {
             return true;
         }

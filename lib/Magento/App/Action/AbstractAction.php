@@ -41,11 +41,9 @@ abstract class AbstractAction implements \Magento\App\ActionInterface
      * @param \Magento\App\RequestInterface $request
      * @param \Magento\App\ResponseInterface $response
      */
-    public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\App\ResponseInterface $response
-    ) {
-        $this->_request  = $request;
+    public function __construct(\Magento\App\RequestInterface $request, \Magento\App\ResponseInterface $response)
+    {
+        $this->_request = $request;
         $this->_response = $response;
     }
 

@@ -76,8 +76,7 @@ class Plugin
         }
 
         // Required attributes of simple product for configurable creation
-        if ($request->getParam('popup')
-            && $requiredAttributes = $request->getParam('required')) {
+        if ($request->getParam('popup') && ($requiredAttributes = $request->getParam('required'))) {
             $requiredAttributes = explode(",", $requiredAttributes);
             foreach ($product->getAttributes() as $attribute) {
                 if (in_array($attribute->getId(), $requiredAttributes)) {
@@ -86,24 +85,28 @@ class Plugin
             }
         }
 
-        if ($request->getParam('popup')
-            && $request->getParam('product')
-            && !is_array($request->getParam('product'))
-            && $request->getParam('id', false) === false
+        if ($request->getParam(
+            'popup'
+        ) && $request->getParam(
+            'product'
+        ) && !is_array(
+            $request->getParam('product')
+        ) && $request->getParam(
+            'id',
+            false
+        ) === false
         ) {
             $configProduct = $this->productFactory->create();
-            $configProduct->setStoreId(0)
-                ->load($request->getParam('product'))
-                ->setTypeId($request->getParam('type'));
+            $configProduct->setStoreId(0)->load($request->getParam('product'))->setTypeId($request->getParam('type'));
 
             $data = array();
             foreach ($configProduct->getTypeInstance()->getEditableAttributes($configProduct) as $attribute) {
                 /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                if (!$attribute->getIsUnique()
-                    && $attribute->getFrontend()->getInputType() != 'gallery'
-                    && $attribute->getAttributeCode() != 'required_options'
-                    && $attribute->getAttributeCode() != 'has_options'
-                    && $attribute->getAttributeCode() != $configProduct->getIdFieldName()
+                if (!$attribute->getIsUnique() &&
+                    $attribute->getFrontend()->getInputType() != 'gallery' &&
+                    $attribute->getAttributeCode() != 'required_options' &&
+                    $attribute->getAttributeCode() != 'has_options' &&
+                    $attribute->getAttributeCode() != $configProduct->getIdFieldName()
                 ) {
                     $data[$attribute->getAttributeCode()] = $configProduct->getData($attribute->getAttributeCode());
                 }

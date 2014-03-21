@@ -78,9 +78,9 @@ class Builder
      */
     public function build(RequestInterface $request)
     {
-        $productId  = (int)$request->getParam('id');
+        $productId = (int)$request->getParam('id');
         /** @var $product \Magento\Catalog\Model\Product */
-        $product    = $this->productFactory->create();
+        $product = $this->productFactory->create();
         $product->setStoreId($request->getParam('store', 0));
 
         $typeId = $request->getParam('type');

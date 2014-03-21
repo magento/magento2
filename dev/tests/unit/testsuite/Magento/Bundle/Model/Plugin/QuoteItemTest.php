@@ -59,12 +59,23 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     public function testAroundItemToOrderItemPositive()
     {
         $productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $bundleAttribute = $this->getMock('Magento\Catalog\Model\Product\Configuration\Item\Option',
-            array(), array(), '', false);
-        $productMock->expects($this->once())->method('getCustomOption')->with('bundle_selection_attributes')
-            ->will($this->returnValue($bundleAttribute));
-        $this->quoteItemMock->expects($this->once())->method('getProduct')
-            ->will($this->returnValue($productMock));
+        $bundleAttribute = $this->getMock(
+            'Magento\Catalog\Model\Product\Configuration\Item\Option',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $productMock->expects(
+            $this->once()
+        )->method(
+            'getCustomOption'
+        )->with(
+            'bundle_selection_attributes'
+        )->will(
+            $this->returnValue($bundleAttribute)
+        );
+        $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $this->orderItemMock->expects($this->once())->method('setProductOptions');
 
         $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);
@@ -74,10 +85,16 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     public function testAroundItemToOrderItemNegative()
     {
         $productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $productMock->expects($this->once())->method('getCustomOption')->with('bundle_selection_attributes')
-            ->will($this->returnValue(false));
-        $this->quoteItemMock->expects($this->once())->method('getProduct')
-            ->will($this->returnValue($productMock));
+        $productMock->expects(
+            $this->once()
+        )->method(
+            'getCustomOption'
+        )->with(
+            'bundle_selection_attributes'
+        )->will(
+            $this->returnValue(false)
+        );
+        $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $this->orderItemMock->expects($this->never())->method('setProductOptions');
 
         $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);

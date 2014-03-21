@@ -59,19 +59,19 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
     public function legacyCommentDataProvider()
     {
         $root = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
-        $recursiveIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(
-            $root, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS
-        ));
+        $recursiveIterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS)
+        );
 
         $rootFolderName = substr(strrchr($root, '/'), 1);
         $extensions = '(xml|css|php|phtml|js|dist|sample|additional)';
-        $paths =  array(
+        $paths = array(
             $rootFolderName . '/[^/]+\.' . $extensions,
             $rootFolderName . '/app/.+\.' . $extensions,
             $rootFolderName . '/dev/(?!tests/integration/tmp|tests/functional).+\.' . $extensions,
             $rootFolderName . '/downloader/.+\.' . $extensions,
             $rootFolderName . '/lib/(Mage|Magento|Varien)/.+\.' . $extensions,
-            $rootFolderName . '/pub/.+\.' . $extensions,
+            $rootFolderName . '/pub/.+\.' . $extensions
         );
         $regexIterator = new \RegexIterator($recursiveIterator, '#(' . implode(' | ', $paths) . ')$#x');
 

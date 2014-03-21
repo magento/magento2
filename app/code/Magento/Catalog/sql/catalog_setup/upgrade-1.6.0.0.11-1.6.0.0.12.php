@@ -25,7 +25,7 @@
  */
 
 /** @var $installer \Magento\Catalog\Model\Resource\Setup */
-$installer  = $this;
+$installer = $this;
 $indexFields = array('website_id', 'customer_group_id', 'min_price');
 $installer->getConnection()->addIndex(
     $installer->getTable('catalog_product_index_price'),

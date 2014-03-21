@@ -93,18 +93,21 @@ class Payment extends \Magento\View\Element\Template
     {
         if ($this->_payment->getStartDateIsEditable()) {
             $this->setDateHtmlId('recurring_start_date');
-            $calendar = $this->getLayout()
-                ->createBlock('Magento\View\Element\Html\Date')
-                ->setId('recurring_start_date')
-                ->setName(\Magento\RecurringPayment\Model\RecurringPayment::BUY_REQUEST_START_DATETIME)
-                ->setClass('datetime-picker input-text')
-                ->setImage($this->getViewFileUrl('Magento_Core::calendar.gif'))
-                ->setDateFormat($this->_localeDate->getDateFormat(
-                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
-                ))
-                ->setTimeFormat($this->_localeDate->getTimeFormat(
-                    \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
-                ));
+            $calendar = $this->getLayout()->createBlock(
+                'Magento\View\Element\Html\Date'
+            )->setId(
+                'recurring_start_date'
+            )->setName(
+                \Magento\RecurringPayment\Model\RecurringPayment::BUY_REQUEST_START_DATETIME
+            )->setClass(
+                'datetime-picker input-text'
+            )->setImage(
+                $this->getViewFileUrl('Magento_Core::calendar.gif')
+            )->setDateFormat(
+                $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            )->setTimeFormat(
+                $this->_localeDate->getTimeFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+            );
             return $calendar->getHtml();
         }
         return '';

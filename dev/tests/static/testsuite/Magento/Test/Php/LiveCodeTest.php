@@ -60,8 +60,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$reportDir = Utility\Files::init()->getPathToSource()
-            . '/dev/tests/static/report';
+        self::$reportDir = Utility\Files::init()->getPathToSource() . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
             mkdir(self::$reportDir, 0777);
         }
@@ -93,11 +92,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         $reportFile = self::$reportDir . '/phpcs_psr2_report.xml';
         $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(
-            'PSR2',
-            $reportFile,
-            $wrapper
-        );
+        $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
@@ -110,11 +105,10 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $reportFile,
             'Expected ' . $reportFile . ' to be created by phpcs run with PSR2 standard'
         );
-        $this->markTestIncomplete("PHP Code Sniffer has found $result error(s): See detailed report in $reportFile");
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
+            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }
 
@@ -127,11 +121,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         $reportFile = self::$reportDir . '/phpcs_report.xml';
         $wrapper = new Wrapper();
-        $codeSniffer = new CodeSniffer(
-            realpath(__DIR__ . '/_files/phpcs'),
-            $reportFile,
-            $wrapper
-        );
+        $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
@@ -140,7 +130,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
+            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }
 
@@ -172,7 +162,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found $result error(s): See detailed report in $reportFile"
+            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }
 
@@ -184,10 +174,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.xml';
-        $codeMessDetector = new CodeMessDetector(
-            realpath(__DIR__ . '/_files/phpmd/ruleset.xml'),
-            $reportFile
-        );
+        $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
@@ -197,7 +184,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             PHP_PMD_TextUI_Command::EXIT_SUCCESS,
             $codeMessDetector->run(self::$whiteList, self::$blackList),
-            "PHP Code Mess has found error(s): See detailed report in $reportFile"
+            "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
         );
     }
 
@@ -223,7 +210,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $copyPasteDetector->run(array(), $blackList),
-            "PHP Copy/Paste Detector has found error(s): See detailed report in $reportFile"
+            "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
         );
     }
 }

@@ -26,9 +26,8 @@ namespace Magento\RecurringPayment\Block\Adminhtml\Payment\View\Tab;
 /**
  * Recurring payment orders grid
  */
-class Orders
-    extends \Magento\Backend\Block\Widget\Grid\Extended
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Orders extends \Magento\Backend\Block\Widget\Grid\Extended implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
@@ -85,9 +84,7 @@ class Orders
     protected function _construct()
     {
         parent::_construct();
-        $this->setId('recurring_payment_orders')
-            ->setUseAjax(true)
-            ->setSkipGenerateContent(true);
+        $this->setId('recurring_payment_orders')->setUseAjax(true)->setSkipGenerateContent(true);
     }
 
     /**
@@ -114,81 +111,85 @@ class Orders
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('real_order_id', array(
-            'header'=> __('Order'),
-            'width' => '80px',
-            'type'  => 'text',
-            'index' => 'increment_id',
-        ));
+        $this->addColumn(
+            'real_order_id',
+            array('header' => __('Order'), 'width' => '80px', 'type' => 'text', 'index' => 'increment_id')
+        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'    => __('Purchase Point'),
-                'index'     => 'store_id',
-                'type'      => 'store',
-                'store_view'=> true,
-                'display_deleted' => true,
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Purchase Point'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_view' => true,
+                    'display_deleted' => true
+                )
+            );
         }
 
-        $this->addColumn('created_at', array(
-            'header' => __('Purchased Date'),
-            'index' => 'created_at',
-            'type' => 'datetime',
-            'width' => '100px',
-        ));
+        $this->addColumn(
+            'created_at',
+            array('header' => __('Purchased Date'), 'index' => 'created_at', 'type' => 'datetime', 'width' => '100px')
+        );
 
-        $this->addColumn('billing_name', array(
-            'header' => __('Bill-to Name'),
-            'index' => 'billing_name',
-        ));
+        $this->addColumn('billing_name', array('header' => __('Bill-to Name'), 'index' => 'billing_name'));
 
-        $this->addColumn('shipping_name', array(
-            'header' => __('Ship-to Name'),
-            'index' => 'shipping_name',
-        ));
+        $this->addColumn('shipping_name', array('header' => __('Ship-to Name'), 'index' => 'shipping_name'));
 
-        $this->addColumn('base_grand_total', array(
-            'header' => __('Grand Total (Base)'),
-            'index' => 'base_grand_total',
-            'type'  => 'currency',
-            'currency' => 'base_currency_code',
-        ));
+        $this->addColumn(
+            'base_grand_total',
+            array(
+                'header' => __('Grand Total (Base)'),
+                'index' => 'base_grand_total',
+                'type' => 'currency',
+                'currency' => 'base_currency_code'
+            )
+        );
 
-        $this->addColumn('grand_total', array(
-            'header' => __('Grand Total (Purchased)'),
-            'index' => 'grand_total',
-            'type'  => 'currency',
-            'currency' => 'order_currency_code',
-        ));
+        $this->addColumn(
+            'grand_total',
+            array(
+                'header' => __('Grand Total (Purchased)'),
+                'index' => 'grand_total',
+                'type' => 'currency',
+                'currency' => 'order_currency_code'
+            )
+        );
 
-        $this->addColumn('status', array(
-            'header' => __('Status'),
-            'index' => 'status',
-            'type'  => 'options',
-            'width' => '70px',
-            'options' => $this->_orderConfig->create()->getStatuses(),
-        ));
+        $this->addColumn(
+            'status',
+            array(
+                'header' => __('Status'),
+                'index' => 'status',
+                'type' => 'options',
+                'width' => '70px',
+                'options' => $this->_orderConfig->create()->getStatuses()
+            )
+        );
 
         if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-            $this->addColumn('action',
+            $this->addColumn(
+                'action',
                 array(
-                    'header'    => __('Action'),
-                    'width'     => '50px',
-                    'type'      => 'action',
-                    'getter'     => 'getId',
-                    'actions'   => array(
+                    'header' => __('Action'),
+                    'width' => '50px',
+                    'type' => 'action',
+                    'getter' => 'getId',
+                    'actions' => array(
                         array(
                             'caption' => __('View'),
-                            'url'     => array('base'=>'sales/order/view'),
-                            'field'   => 'order_id'
+                            'url' => array('base' => 'sales/order/view'),
+                            'field' => 'order_id'
                         )
                     ),
-                    'filter'    => false,
-                    'sortable'  => false,
-                    'index'     => 'stores',
-                    'is_system' => true,
-            ));
+                    'filter' => false,
+                    'sortable' => false,
+                    'index' => 'stores',
+                    'is_system' => true
+                )
+            );
         }
 
         return parent::_prepareColumns();

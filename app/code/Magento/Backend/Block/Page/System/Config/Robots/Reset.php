@@ -88,12 +88,15 @@ class Reset extends \Magento\Backend\Block\System\Config\Form\Field
      */
     public function getButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'id'      => 'reset_to_default_button',
-                'label'   => __('Reset to Default'),
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
+                'id' => 'reset_to_default_button',
+                'label' => __('Reset to Default'),
                 'onclick' => 'javascript:resetRobotsToDefault(); return false;'
-            ));
+            )
+        );
 
         return $button->toHtml();
     }

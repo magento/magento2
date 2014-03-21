@@ -34,10 +34,8 @@ class Contenttype implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array('label' => __('Documents'),
-                'value' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_DOC),
-            array('label' => __('Non documents'),
-                'value' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_NON_DOC),
+            array('label' => __('Documents'), 'value' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_DOC),
+            array('label' => __('Non documents'), 'value' => \Magento\Dhl\Model\Carrier::DHL_CONTENT_TYPE_NON_DOC)
         );
     }
 }

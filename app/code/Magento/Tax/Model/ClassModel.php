@@ -38,7 +38,6 @@
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Tax\Model;
 
 class ClassModel extends \Magento\Core\Model\AbstractModel
@@ -101,12 +100,22 @@ class ClassModel extends \Magento\Core\Model\AbstractModel
         $typeModel = $this->_classFactory->create($this);
 
         if ($typeModel->getAssignedToRules()->getSize() > 0) {
-            throw new \Magento\Core\Exception(__('You cannot delete this tax class because it is used in Tax Rules. You have to delete the rules it is used in first.'));
+            throw new \Magento\Core\Exception(
+                __(
+                    'You cannot delete this tax class because it is used in Tax Rules. You have to delete the rules it is used in first.'
+                )
+            );
         }
 
         $objectCount = $typeModel->getAssignedToObjects()->getSize();
         if ($objectCount > 0) {
-            throw new \Magento\Core\Exception(__('You cannot delete this tax class because it is used for %1 %2(s).', $objectCount, $typeModel->getObjectTypeName()));
+            throw new \Magento\Core\Exception(
+                __(
+                    'You cannot delete this tax class because it is used for %1 %2(s).',
+                    $objectCount,
+                    $typeModel->getObjectTypeName()
+                )
+            );
         }
 
         return true;

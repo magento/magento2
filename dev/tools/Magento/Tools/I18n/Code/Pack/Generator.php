@@ -81,7 +81,11 @@ class Generator
      * @return void
      * @throws \RuntimeException
      */
-    public function generate($dictionaryPath, $packPath, $locale, $mode = WriterInterface::MODE_REPLACE,
+    public function generate(
+        $dictionaryPath,
+        $packPath,
+        $locale,
+        $mode = WriterInterface::MODE_REPLACE,
         $allowDuplicates = false
     ) {
         $locale = $this->_factory->createLocale($locale);
@@ -106,8 +110,11 @@ class Generator
         foreach ($duplicates as $phrases) {
             /** @var \Magento\Tools\I18n\Code\Dictionary\Phrase $phrase */
             $phrase = $phrases[0];
-            $error .= sprintf("Error. The phrase \"%s\" is translated differently in %d places.\n",
-                $phrase->getPhrase(), count($phrases));
+            $error .= sprintf(
+                "Error. The phrase \"%s\" is translated differently in %d places.\n",
+                $phrase->getPhrase(),
+                count($phrases)
+            );
         }
         return $error;
     }

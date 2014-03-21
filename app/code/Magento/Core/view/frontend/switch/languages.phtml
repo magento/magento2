@@ -41,7 +41,8 @@
             <?php foreach ($this->getStores() as $_lang): ?>
                 <?php if($_lang->getId()!=$this->getCurrentStoreId()): ?>
                     <li class="view-<?php echo $this->escapeHtml($_lang->getCode()); ?>">
-                        <a href="<?php echo $_lang->getCurrentUrl() ?>"><?php echo $this->escapeHtml($_lang->getName()) ?></a>
+                        <a href="#" data-post='<?php echo $this->getTargetStorePostData($_lang); ?>'>
+                            <?php echo $this->escapeHtml($_lang->getName()) ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>

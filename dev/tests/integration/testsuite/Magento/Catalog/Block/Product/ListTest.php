@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -41,10 +40,12 @@ class ListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->setAreaCode('frontend');
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Product\ListProduct');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Catalog\Block\Product\ListProduct'
+        );
     }
 
     public function testGetLayer()
@@ -56,10 +57,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->setShowRootCategory(true);
         $collection = $this->_block->getLoadedProductCollection();
-        $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Collection',
-            $collection
-        );
+        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
         /* Check that root category was defined for Layer as current */
         $this->assertEquals(2, $this->_block->getLayer()->getCurrentCategory()->getId());
     }
@@ -85,7 +83,6 @@ class ListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('grid', $parent->getMode(), 'Default Mode'); /* default mode */
         $this->assertNotEmpty($parent->getToolbarHtml(), 'Toolbar HTML'); /* toolbar for one simple product */
     }
-
 
     public function testGetAdditionalHtmlEmpty()
     {
@@ -123,8 +120,9 @@ class ListTest extends \PHPUnit_Framework_TestCase
     public function testPrepareSortableFieldsByCategory()
     {
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Category');
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Category'
+        );
         $category->setDefaultSortBy('name');
         $this->_block->prepareSortableFieldsByCategory($category);
         $this->assertEquals('name', $this->_block->getSortBy());

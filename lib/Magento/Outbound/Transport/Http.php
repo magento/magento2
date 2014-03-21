@@ -61,10 +61,7 @@ class Http implements TransportInterface
      */
     public function dispatch(MessageInterface $message)
     {
-        $config = array(
-            'verifypeer' => TRUE,
-            'verifyhost' => 2
-        );
+        $config = array('verifypeer' => true, 'verifyhost' => 2);
 
         $timeout = $message->getTimeout();
         if (!is_null($timeout) && $timeout > 0) {
@@ -74,7 +71,8 @@ class Http implements TransportInterface
         }
         $this->_curl->setConfig($config);
 
-        $this->_curl->write(\Zend_Http_Client::POST,
+        $this->_curl->write(
+            \Zend_Http_Client::POST,
             $message->getEndpointUrl(),
             self::HTTP_VERSION,
             $this->_prepareHeaders($message->getHeaders()),

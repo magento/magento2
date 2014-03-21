@@ -217,7 +217,11 @@ class Read implements ReadInterface
      */
     public function openFile($path, $protocol = null)
     {
-        return $this->fileFactory->create($this->driver->getAbsolutePath($this->path, $path), $protocol, $this->driver);
+        return $this->fileFactory->create(
+            $this->driver->getAbsolutePath($this->path, $path),
+            $protocol,
+            $this->driver
+        );
     }
 
     /**

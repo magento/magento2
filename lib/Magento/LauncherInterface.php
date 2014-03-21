@@ -31,4 +31,4 @@ interface LauncherInterface
      * @return \Magento\App\ResponseInterface
      */
     public function launch();
-} 
+}

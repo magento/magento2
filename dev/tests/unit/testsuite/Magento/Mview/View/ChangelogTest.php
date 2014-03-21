@@ -47,7 +47,12 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
 
         $this->resourceMock = $this->getMock(
-            'Magento\App\Resource', array('getConnection', 'getTableName'), array(), '', false, false
+            'Magento\App\Resource',
+            array('getConnection', 'getTableName'),
+            array(),
+            '',
+            false,
+            false
         );
         $this->mockGetConnection($this->connectionMock);
 
@@ -57,9 +62,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testInstanceOf()
     {
         $resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue(true));
+        $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(true));
         $model = new \Magento\Mview\View\Changelog($resourceMock);
         $this->assertInstanceOf('\Magento\Mview\View\ChangelogInterface', $model);
     }
@@ -71,9 +74,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnectionException()
     {
         $resourceMock = $this->getMock('Magento\App\Resource', array('getConnection'), array(), '', false, false);
-        $resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue(null));
+        $resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue(null));
         $model = new \Magento\Mview\View\Changelog($resourceMock);
         $model->setViewId('ViewIdTest');
         $this->assertNull($model);
@@ -150,22 +151,24 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockGetConnection($connection)
     {
-        $this->resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->will($this->returnValue($connection));
+        $this->resourceMock->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
     }
 
     protected function mockGetTableName()
     {
-        $this->resourceMock->expects($this->once())
-            ->method('getTableName')
-            ->will($this->returnArgument(0));
+        $this->resourceMock->expects($this->once())->method('getTableName')->will($this->returnArgument(0));
     }
 
     protected function mockIsTableExists($changelogTableName, $result)
     {
-        $this->connectionMock->expects($this->once())->method('isTableExists')
-            ->with($this->equalTo($changelogTableName))
-            ->will($this->returnValue($result));
+        $this->connectionMock->expects(
+            $this->once()
+        )->method(
+            'isTableExists'
+        )->with(
+            $this->equalTo($changelogTableName)
+        )->will(
+            $this->returnValue($result)
+        );
     }
 }

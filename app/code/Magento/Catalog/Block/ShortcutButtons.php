@@ -31,7 +31,9 @@ class ShortcutButtons extends Template
      * Position of "OR" label against shortcut
      */
     const POSITION_BEFORE = 'before';
+
     const POSITION_AFTER = 'after';
+
     /**#@-*/
 
     /**

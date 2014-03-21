@@ -63,7 +63,8 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
         // aggregate collected amounts into one to have sort of grand total per item
         foreach ($address->getAllNominalItems() as $item) {
-            $rowTotal = 0; $baseRowTotal = 0;
+            $rowTotal = 0;
+            $baseRowTotal = 0;
             $totalDetails = array();
             foreach ($collector->getCollectors() as $model) {
                 $itemRowTotal = $model->getItemRowTotal($item);
@@ -74,12 +75,10 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                 } else {
                     $isCompounded = false;
                 }
-                if ((float)$itemRowTotal > 0 && $label = $model->getLabel()) {
-                    $totalDetails[] = new \Magento\Object(array(
-                        'label'  => $label,
-                        'amount' => $itemRowTotal,
-                        'is_compounded' => $isCompounded,
-                    ));
+                if ((double)$itemRowTotal > 0 && ($label = $model->getLabel())) {
+                    $totalDetails[] = new \Magento\Object(
+                        array('label' => $label, 'amount' => $itemRowTotal, 'is_compounded' => $isCompounded)
+                    );
                 }
             }
             $item->setNominalRowTotal($rowTotal);
@@ -100,12 +99,14 @@ class Nominal extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     {
         $items = $address->getAllNominalItems();
         if ($items) {
-            $address->addTotal(array(
-                'code'    => $this->getCode(),
-                'title'   => __('Subscription Items'),
-                'items'   => $items,
-                'area'    => 'footer',
-            ));
+            $address->addTotal(
+                array(
+                    'code' => $this->getCode(),
+                    'title' => __('Subscription Items'),
+                    'items' => $items,
+                    'area' => 'footer'
+                )
+            );
         }
         return $this;
     }

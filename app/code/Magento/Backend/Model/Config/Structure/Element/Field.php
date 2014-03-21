@@ -27,8 +27,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Field
-    extends \Magento\Backend\Model\Config\Structure\AbstractElement
+class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
 {
     /**
      * Default value for useEmptyValueOption for service option
@@ -198,7 +197,6 @@ class Field
     {
         return $this->_getRequiredElements($fieldPrefix, 'group');
     }
-
 
     /**
      * Get required fields paths for the field
@@ -394,7 +392,7 @@ class Field
      * @param array $options
      * @return array
      */
-    protected  function _getStaticOptions(array $options)
+    protected function _getStaticOptions(array $options)
     {
         foreach (array_keys($options) as $key) {
             $options[$key]['label'] = $this->_translateLabel($options[$key]['label']);
@@ -402,7 +400,6 @@ class Field
         }
         return $options;
     }
-
 
     /**
      * Translate a label
@@ -449,10 +446,10 @@ class Field
         }
         if ($method) {
             if ($this->getType() == 'multiselect') {
-                $optionArray = $sourceModel->$method();
+                $optionArray = $sourceModel->{$method}();
             } else {
                 $optionArray = array();
-                foreach ($sourceModel->$method() as $key => $value) {
+                foreach ($sourceModel->{$method}() as $key => $value) {
                     if (is_array($value)) {
                         $optionArray[] = $value;
                     } else {

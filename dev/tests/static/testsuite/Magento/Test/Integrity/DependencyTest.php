@@ -35,14 +35,17 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      * Types of dependencies between modules
      */
     const TYPE_SOFT = 'soft';
+
     const TYPE_HARD = 'hard';
 
     /**
      * Types of dependencies map arrays
      */
-    const MAP_TYPE_DECLARED      = 'declared';
-    const MAP_TYPE_FOUND         = 'found';
-    const MAP_TYPE_REDUNDANT     = 'redundant';
+    const MAP_TYPE_DECLARED = 'declared';
+
+    const MAP_TYPE_FOUND = 'found';
+
+    const MAP_TYPE_REDUNDANT = 'redundant';
 
     /**
      * Count of directories in path
@@ -170,7 +173,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $defaultThemes = array();
         foreach (self::$_listConfigXml as $file) {
             $config = simplexml_load_file($file);
-            $nodes = @ ($config->xpath("/config/*/design/theme/full_name") ?: array());
+            $nodes = @($config->xpath("/config/*/design/theme/full_name") ?: array());
             foreach ($nodes as $node) {
                 $defaultThemes[] = (string)$node;
             }
@@ -186,7 +189,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/dependency_test/*.php';
         $dbRuleTables = array();
         foreach (glob($replaceFilePattern) as $fileName) {
-            $dbRuleTables = array_merge($dbRuleTables, @include($fileName));
+            $dbRuleTables = array_merge($dbRuleTables, @include $fileName);
         }
         self::$_rulesInstances = array(
             new \Magento\TestFramework\Dependency\PhpRule(self::$_mapRouters, self::$_mapLayoutBlocks),
@@ -195,7 +198,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 self::$_mapRouters,
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
-            ),
+            )
         );
     }
 
@@ -325,7 +328,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $soft = $this->_getDependencies($currentModule, self::TYPE_SOFT, self::MAP_TYPE_DECLARED);
         $hard = $this->_getDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
 
-        $declared = ($type == self::TYPE_SOFT) ? array_merge($soft, $hard) : $hard;
+        $declared = $type == self::TYPE_SOFT ? array_merge($soft, $hard) : $hard;
         if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($module)) {
             $undeclared[$type][] = $module;
         } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($module)) {
@@ -369,8 +372,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             foreach ($this->_getTypes() as $type) {
                 $redundant = $this->_getDependencies($module, $type, self::MAP_TYPE_REDUNDANT);
                 if (count($redundant)) {
-                    $result[] = sprintf("\r\nModule %s: %s [%s]",
-                        $module, $type, implode(', ', array_values($redundant)));
+                    $result[] = sprintf(
+                        "\r\nModule %s: %s [%s]",
+                        $module,
+                        $type,
+                        implode(', ', array_values($redundant))
+                    );
                 }
             }
             if (count($result)) {
@@ -388,7 +395,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      * @param string $absoluteFilename
      * @return string
      */
-    static protected function _getRelativeFilename($absoluteFilename)
+    protected static function _getRelativeFilename($absoluteFilename)
     {
         $pathToSource = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
         $relativeFileName = str_replace($pathToSource, '', $absoluteFilename);
@@ -422,7 +429,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         foreach (array_keys($files) as $file) {
-            if (!$skip && (substr_count(self::_getRelativeFilename($file), '/') < self::DIR_PATH_COUNT)) {
+            if (!$skip && substr_count(self::_getRelativeFilename($file), '/') < self::DIR_PATH_COUNT) {
                 continue;
             }
             $result[$file] = array($fileType, $file);
@@ -440,21 +447,32 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $files = array();
 
         // Get all php files
-        $files = array_merge($files,
-            $this->_prepareFiles('php',
-                \Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, false, false, true), true));
+        $files = array_merge(
+            $files,
+            $this->_prepareFiles(
+                'php',
+                \Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, false, false, true),
+                true
+            )
+        );
 
         // Get all configuration files
-        $files = array_merge($files,
-            $this->_prepareFiles('config', \Magento\TestFramework\Utility\Files::init()->getConfigFiles()));
+        $files = array_merge(
+            $files,
+            $this->_prepareFiles('config', \Magento\TestFramework\Utility\Files::init()->getConfigFiles())
+        );
 
         //Get all layout updates files
-        $files = array_merge($files,
-            $this->_prepareFiles('layout', \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()));
+        $files = array_merge(
+            $files,
+            $this->_prepareFiles('layout', \Magento\TestFramework\Utility\Files::init()->getLayoutFiles())
+        );
 
         // Get all template files
-        $files = array_merge($files,
-            $this->_prepareFiles('template', \Magento\TestFramework\Utility\Files::init()->getPhtmlFiles()));
+        $files = array_merge(
+            $files,
+            $this->_prepareFiles('template', \Magento\TestFramework\Utility\Files::init()->getPhtmlFiles())
+        );
 
         return $files;
     }
@@ -492,8 +510,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareMapRouters()
     {
-        $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/'
-            . '(?<path>[\/\w]*).php/';
+        $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
+            '(?<path>[\/\w]*).php/';
 
         $files = \Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, false, false, false);
         foreach ($files as $file) {
@@ -510,7 +528,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                             continue;
                         }
                         if (!isset(self::$_mapRouters[$id])) {
-                            self::$_mapRouters[$id] = [];
+                            self::$_mapRouters[$id] = array();
                         }
                         if (!in_array($module, self::$_mapRouters[$id])) {
                             self::$_mapRouters[$id][] = $module;
@@ -531,7 +549,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $area = 'default';
             if (preg_match('/[\/](?<area>adminhtml|frontend)[\/]/', $file, $matches)) {
                 $area = $matches['area'];
-                self::$_mapLayoutBlocks[$area] = @ (self::$_mapLayoutBlocks[$area] ?: array());
+                self::$_mapLayoutBlocks[$area] = @(self::$_mapLayoutBlocks[$area] ?: array());
             }
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -541,7 +559,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $attributes = $element->attributes();
                     $block = (string)$attributes->name;
                     if (!empty($block)) {
-                        self::$_mapLayoutBlocks[$area][$block] = @ (self::$_mapLayoutBlocks[$area][$block] ?: []);
+                        self::$_mapLayoutBlocks[$area][$block] = @(self::$_mapLayoutBlocks[$area][$block] ?: array());
                         self::$_mapLayoutBlocks[$area][$block][$module] = $module;
                     }
                 }
@@ -559,16 +577,16 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $area = 'default';
             if (preg_match('/\/(?<area>adminhtml|frontend)\//', $file, $matches)) {
                 $area = $matches['area'];
-                self::$_mapLayoutHandles[$area] = @ (self::$_mapLayoutHandles[$area] ?: array());
+                self::$_mapLayoutHandles[$area] = @(self::$_mapLayoutHandles[$area] ?: array());
             }
-            if (preg_match('/app\/code\/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/',
-                    $file, $matches)) {
+            if (preg_match('/app\/code\/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)
+            ) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
                 $xml = simplexml_load_file($file);
                 foreach ((array)$xml->xpath('/layout/child::*') as $element) {
                     /** @var \SimpleXMLElement $element */
                     $handle = $element->getName();
-                    self::$_mapLayoutHandles[$area][$handle] = @ (self::$_mapLayoutHandles[$area][$handle] ?: array());
+                    self::$_mapLayoutHandles[$area][$handle] = @(self::$_mapLayoutHandles[$area][$handle] ?: array());
                     self::$_mapLayoutHandles[$area][$handle][$module] = $module;
                 }
             }
@@ -582,10 +600,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _getTypes()
     {
-        return array(
-            self::TYPE_HARD,
-            self::TYPE_SOFT,
-        );
+        return array(self::TYPE_HARD, self::TYPE_SOFT);
     }
 
     /**
@@ -600,25 +615,30 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $module = $config->xpath("/config/module");
             $moduleName = (string)$module[0]->attributes()->name;
             $moduleName = str_replace('_', '\\', $moduleName);
-            self::$_mapDependencies[$moduleName] = @ (self::$_mapDependencies[$moduleName] ?: array());
+            self::$_mapDependencies[$moduleName] = @(self::$_mapDependencies[$moduleName] ?: array());
 
             foreach (self::_getTypes() as $type) {
                 if (!isset(self::$_mapDependencies[$moduleName][$type])) {
                     self::$_mapDependencies[$moduleName][$type] = array(
-                        self::MAP_TYPE_DECLARED      => array(),
-                        self::MAP_TYPE_FOUND         => array(),
-                        self::MAP_TYPE_REDUNDANT     => array(),
+                        self::MAP_TYPE_DECLARED => array(),
+                        self::MAP_TYPE_FOUND => array(),
+                        self::MAP_TYPE_REDUNDANT => array()
                     );
                 }
             }
 
             foreach ($module[0]->depends->children() as $dependency) {
                 /** @var \SimpleXMLElement $dependency */
-                $type = (isset($dependency['type']) && (string)$dependency['type'] == self::TYPE_SOFT)
-                    ? self::TYPE_SOFT : self::TYPE_HARD;
+                $type = isset(
+                    $dependency['type']
+                ) && (string)$dependency['type'] == self::TYPE_SOFT ? self::TYPE_SOFT : self::TYPE_HARD;
                 if ($dependency->getName() == 'module') {
-                    self::_addDependencies($moduleName, $type, self::MAP_TYPE_DECLARED,
-                        str_replace('_', '\\', (string)$dependency->attributes()->name));
+                    self::_addDependencies(
+                        $moduleName,
+                        $type,
+                        self::MAP_TYPE_DECLARED,
+                        str_replace('_', '\\', (string)$dependency->attributes()->name)
+                    );
                 }
             }
         }

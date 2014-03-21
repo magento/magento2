@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\TaxClass\Type;
 
 use Magento\Customer\Service\V1\Data\CustomerGroup;
@@ -92,9 +91,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      */
     public function getAssignedToObjects()
     {
-        return $this->_modelCustomerGroup
-            ->getCollection()
-            ->addFieldToFilter('tax_class_id', $this->getId());
+        return $this->_modelCustomerGroup->getCollection()->addFieldToFilter('tax_class_id', $this->getId());
     }
 
     /**
@@ -104,9 +101,9 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      */
     public function getAssignedDataObjects()
     {
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($this->filterBuilder->setField('tax_class_id')->setValue($this->getId())->create())
-            ->create();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            $this->filterBuilder->setField('tax_class_id')->setValue($this->getId())->create()
+        )->create();
         $result = $this->groupService->searchGroups($searchCriteria);
         return $result->getItems();
     }

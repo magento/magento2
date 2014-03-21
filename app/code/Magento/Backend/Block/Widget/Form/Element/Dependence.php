@@ -111,10 +111,9 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     {
         if (!is_object($refField)) {
             /** @var $refField \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
-            $refField = $this->_fieldFactory->create(array(
-                'fieldData' => array('value' => (string)$refField),
-                'fieldPrefix' => '',
-            ));
+            $refField = $this->_fieldFactory->create(
+                array('fieldData' => array('value' => (string)$refField), 'fieldPrefix' => '')
+            );
         }
         $this->_depends[$fieldName][$fieldNameFrom] = $refField;
         return $this;
@@ -141,11 +140,12 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script type="text/javascript"> new FormElementDependenceController('
-            . $this->_getDependsJson()
-            . ($this->_configOptions ? ', '
-            . $this->_jsonEncoder->encode($this->_configOptions) : '')
-            . '); </script>';
+        return '<script type="text/javascript"> new FormElementDependenceController(' .
+            $this->_getDependsJson() .
+            ($this->_configOptions ? ', ' .
+            $this->_jsonEncoder->encode(
+                $this->_configOptions
+            ) : '') . '); </script>';
     }
 
     /**
@@ -160,7 +160,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
                 $result[$this->_fields[$to]][$this->_fields[$from]] = array(
                     'values' => $field->getValues(),
-                    'negative' => $field->isNegative(),
+                    'negative' => $field->isNegative()
                 );
             }
         }

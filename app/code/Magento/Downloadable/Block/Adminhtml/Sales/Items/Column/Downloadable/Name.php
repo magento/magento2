@@ -71,7 +71,10 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      */
     public function getLinks()
     {
-        $this->_purchased = $this->_purchasedFactory->create()->load($this->getItem()->getOrder()->getId(), 'order_id');
+        $this->_purchased = $this->_purchasedFactory->create()->load(
+            $this->getItem()->getOrder()->getId(),
+            'order_id'
+        );
         $purchasedItem = $this->_itemsFactory->create()->addFieldToFilter('order_item_id', $this->getItem()->getId());
         $this->_purchased->setPurchasedItems($purchasedItem);
         return $this->_purchased;
@@ -88,4 +91,3 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
         return $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE);
     }
 }
-?>

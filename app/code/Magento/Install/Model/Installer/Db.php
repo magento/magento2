@@ -106,23 +106,25 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
                 );
             }
 
-            $version    = $resource->getVersion();
-            $requiredVersion = isset($this->_dbConfig['mysql4']['min_version'])
-                ? $this->_dbConfig['mysql4']['min_version']
-                : 0;
+            $version = $resource->getVersion();
+            $requiredVersion = isset(
+                $this->_dbConfig['mysql4']['min_version']
+            ) ? $this->_dbConfig['mysql4']['min_version'] : 0;
 
             // check DB server version
             if (version_compare($version, $requiredVersion) == -1) {
                 throw new \Magento\Core\Exception(
-                    __('The database server version doesn\'t match system requirements (required: %1, actual: %2).', $requiredVersion, $version)
+                    __(
+                        'The database server version doesn\'t match system requirements (required: %1, actual: %2).',
+                        $requiredVersion,
+                        $version
+                    )
                 );
             }
 
             // check InnoDB support
             if (!$resource->supportEngine()) {
-                throw new \Magento\Core\Exception(
-                    __('Database server does not support the InnoDB storage engine.')
-                );
+                throw new \Magento\Core\Exception(__('Database server does not support the InnoDB storage engine.'));
             }
 
             // TODO: check user roles
@@ -156,24 +158,26 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
         if ($data['db_prefix'] != '') {
             if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $data['db_prefix'])) {
                 throw new \Magento\Core\Exception(
-                    __('The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.')
+                    __(
+                        'The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_); the first character should be a letter.'
+                    )
                 );
             }
         }
         //set db type according the db model
         if (!isset($data['db_type'])) {
-            $data['db_type'] = isset($this->_dbConfig[(string)$data['db_model']]['type'])
-                ? $this->_dbConfig[(string)$data['db_model']]['type']
-                : null;
+            $data['db_type'] = isset(
+                $this->_dbConfig[(string)$data['db_model']]['type']
+            ) ? $this->_dbConfig[(string)$data['db_model']]['type'] : null;
         }
 
         $dbResource = $this->_getDbResource();
         $data['db_pdo_type'] = $dbResource->getPdoType();
 
         if (!isset($data['db_init_statements'])) {
-            $data['db_init_statements'] = isset($this->_dbConfig[(string)$data['db_model']]['initStatements'])
-                ? $this->_dbConfig[(string)$data['db_model']]['initStatements']
-                : null;
+            $data['db_init_statements'] = isset(
+                $this->_dbConfig[(string)$data['db_model']]['initStatements']
+            ) ? $this->_dbConfig[(string)$data['db_model']]['initStatements'] : null;
         }
 
         return $data;

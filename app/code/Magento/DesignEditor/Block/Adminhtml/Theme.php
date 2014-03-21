@@ -122,10 +122,7 @@ class Theme extends \Magento\Backend\Block\Template
     public function getOptionsJson()
     {
         $theme = $this->getTheme();
-        $options = array(
-            'theme_id'    => $theme->getId(),
-            'theme_title' => $theme->getThemeTitle()
-        );
+        $options = array('theme_id' => $theme->getId(), 'theme_title' => $theme->getThemeTitle());
 
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->_coreHelper;
@@ -141,10 +138,7 @@ class Theme extends \Magento\Backend\Block\Template
     {
         /** @var $saveButton Button */
         $saveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $saveButton->setData(array(
-            'label'     => __('Save'),
-            'class'     => 'action-save',
-        ));
+        $saveButton->setData(array('label' => __('Save'), 'class' => 'action-save'));
         return $saveButton;
     }
 }

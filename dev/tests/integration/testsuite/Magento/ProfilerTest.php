@@ -49,10 +49,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function applyConfigDataProvider()
     {
         return array(
-            'Empty config does not create any driver' => array(
-                'config' => array(),
-                'drivers' => array()
-            ),
+            'Empty config does not create any driver' => array('config' => array(), 'drivers' => array()),
             'Integer 0 does not create any driver' => array(
                 'config' => array('drivers' => array(0)),
                 'drivers' => array()
@@ -66,9 +63,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                 'drivers' => array(new \Magento\Profiler\Driver\Standard())
             ),
             'Config array key ignored when type set' => array(
-                'config' => array(
-                    'drivers' => array('custom' => array('type' => 'standard'))
-                ),
+                'config' => array('drivers' => array('custom' => array('type' => 'standard'))),
                 'drivers' => array(new \Magento\Profiler\Driver\Standard())
             ),
             'Config with outputs element as integer 1 creates output' => array(
@@ -77,29 +72,19 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                     'baseDir' => '/some/base/dir'
                 ),
                 'drivers' => array(
-                    new \Magento\Profiler\Driver\Standard(array(
-                        'outputs' => array(array(
-                            'type' => 'html',
-                            'baseDir' => '/some/base/dir'
-                        ))
-                    ))
+                    new \Magento\Profiler\Driver\Standard(
+                        array('outputs' => array(array('type' => 'html', 'baseDir' => '/some/base/dir')))
+                    )
                 )
             ),
             'Config with outputs element as integer 0 does not create output' => array(
-                'config' => array(
-                    'drivers' => array(array('outputs' => array('html' => 0)))
-                ),
+                'config' => array('drivers' => array(array('outputs' => array('html' => 0)))),
                 'drivers' => array(new \Magento\Profiler\Driver\Standard())
             ),
             'Config with shortly defined outputs element' => array(
-                'config' => array(
-                    'drivers' => array(
-                        array('outputs' => array('foo' => 'html'))
-                    ),
-                ),
-                'drivers' => array(new \Magento\Profiler\Driver\Standard(array(
-                        'outputs' => array(array('type' => 'html'))
-                    ))
+                'config' => array('drivers' => array(array('outputs' => array('foo' => 'html')))),
+                'drivers' => array(
+                    new \Magento\Profiler\Driver\Standard(array('outputs' => array(array('type' => 'html'))))
                 )
             ),
             'Config with fully defined outputs element options' => array(
@@ -118,28 +103,24 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
                     )
                 ),
                 'drivers' => array(
-                    new \Magento\Profiler\Driver\Standard(array(
-                        'outputs' => array(array(
-                            'type' => 'html',
-                            'filterName' => '/someFilter/',
-                            'thresholds' => array('someKey' => 123),
-                            'baseDir' => '/custom/dir'
-                        ))
+                    new \Magento\Profiler\Driver\Standard(
+                        array(
+                            'outputs' => array(
+                                array(
+                                    'type' => 'html',
+                                    'filterName' => '/someFilter/',
+                                    'thresholds' => array('someKey' => 123),
+                                    'baseDir' => '/custom/dir'
+                                )
+                            )
+                        )
                     )
-                ))
+                )
             ),
             'Config with shortly defined output' => array(
-                'config' => array(
-                    'drivers' => array(
-                        array('output' => 'html')
-                    )
-                ),
+                'config' => array('drivers' => array(array('output' => 'html'))),
                 'drivers' => array(
-                    new \Magento\Profiler\Driver\Standard(array(
-                        'outputs' => array(array(
-                            'type' => 'html'
-                        ))
-                    ))
+                    new \Magento\Profiler\Driver\Standard(array('outputs' => array(array('type' => 'html'))))
                 )
             )
         );

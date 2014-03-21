@@ -56,7 +56,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
      */
     public function forgotpasswordAction()
     {
-        $email = (string) $this->getRequest()->getParam('email');
+        $email = (string)$this->getRequest()->getParam('email');
         $params = $this->getRequest()->getParams();
 
         if (!empty($email) && !empty($params)) {
@@ -72,8 +72,9 @@ class Auth extends \Magento\Backend\App\AbstractAction
                         /** @var \Magento\User\Model\User $user */
                         $user = $this->_userFactory->create()->load($item->getId());
                         if ($user->getId()) {
-                            $newPassResetToken = $this->_objectManager->get('Magento\User\Helper\Data')
-                                ->generateResetPasswordLinkToken();
+                            $newPassResetToken = $this->_objectManager->get(
+                                'Magento\User\Helper\Data'
+                            )->generateResetPasswordLinkToken();
                             $user->changeResetPasswordLinkToken($newPassResetToken);
                             $user->save();
                             $user->sendPasswordResetConfirmationEmail();
@@ -82,8 +83,12 @@ class Auth extends \Magento\Backend\App\AbstractAction
                     }
                 }
                 // @codingStandardsIgnoreStart
-                $this->messageManager
-                    ->addSuccess(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->_objectManager->get('Magento\Escaper')->escapeHtml($email)));
+                $this->messageManager->addSuccess(
+                    __(
+                        'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+                        $this->_objectManager->get('Magento\Escaper')->escapeHtml($email)
+                    )
+                );
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
@@ -108,8 +113,8 @@ class Auth extends \Magento\Backend\App\AbstractAction
      */
     public function resetPasswordAction()
     {
-        $passwordResetToken = (string) $this->getRequest()->getQuery('token');
-        $userId = (int) $this->getRequest()->getQuery('id');
+        $passwordResetToken = (string)$this->getRequest()->getQuery('token');
+        $userId = (int)$this->getRequest()->getQuery('id');
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
 
@@ -117,15 +122,12 @@ class Auth extends \Magento\Backend\App\AbstractAction
 
             $content = $this->_view->getLayout()->getBlock('content');
             if ($content) {
-                $content->setData('user_id', $userId)
-                    ->setData('reset_password_link_token', $passwordResetToken);
+                $content->setData('user_id', $userId)->setData('reset_password_link_token', $passwordResetToken);
             }
 
             $this->_view->renderLayout();
         } catch (\Exception $exception) {
-            $this->messageManager->addError(
-                __('Your password reset link has expired.')
-            );
+            $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->_redirect('adminhtml/auth/forgotpassword', array('_nosecret' => true));
             return;
         }
@@ -140,17 +142,15 @@ class Auth extends \Magento\Backend\App\AbstractAction
      */
     public function resetPasswordPostAction()
     {
-        $passwordResetToken = (string) $this->getRequest()->getQuery('token');
-        $userId = (int) $this->getRequest()->getQuery('id');
-        $password = (string) $this->getRequest()->getPost('password');
-        $passwordConfirmation = (string) $this->getRequest()->getPost('confirmation');
+        $passwordResetToken = (string)$this->getRequest()->getQuery('token');
+        $userId = (int)$this->getRequest()->getQuery('id');
+        $password = (string)$this->getRequest()->getPost('password');
+        $passwordConfirmation = (string)$this->getRequest()->getPost('confirmation');
 
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
         } catch (\Exception $exception) {
-            $this->messageManager->addError(
-                __('Your password reset link has expired.')
-            );
+            $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );
@@ -170,21 +170,16 @@ class Auth extends \Magento\Backend\App\AbstractAction
         $user->setRpTokenCreatedAt(null);
         try {
             $user->save();
-            $this->messageManager->addSuccess(
-                __('Your password has been updated.')
-            );
+            $this->messageManager->addSuccess(__('Your password has been updated.'));
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );
         } catch (\Magento\Core\Exception $exception) {
             $this->messageManager->addMessages($exception->getMessages());
-            $this->_redirect('adminhtml/auth/resetpassword', array(
-                '_nosecret' => true,
-                '_query' => array(
-                    'id' => $userId,
-                    'token' => $passwordResetToken
-                )
-            ));
+            $this->_redirect(
+                'adminhtml/auth/resetpassword',
+                array('_nosecret' => true, '_query' => array('id' => $userId, 'token' => $passwordResetToken))
+            );
         }
     }
 
@@ -198,11 +193,11 @@ class Auth extends \Magento\Backend\App\AbstractAction
      */
     protected function _validateResetPasswordLinkToken($userId, $resetPasswordToken)
     {
-        if (!is_int($userId)
-            || !is_string($resetPasswordToken)
-            || empty($resetPasswordToken)
-            || empty($userId)
-            || $userId < 0
+        if (!is_int(
+            $userId
+        ) || !is_string(
+            $resetPasswordToken
+        ) || empty($resetPasswordToken) || empty($userId) || $userId < 0
         ) {
             throw new \Magento\Core\Exception(__('Please correct the password reset token.'));
         }

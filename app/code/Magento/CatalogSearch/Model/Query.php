@@ -82,10 +82,13 @@ class Query extends AbstractModel
      */
     protected $_eventObject = 'catalogsearch_query';
 
-    const CACHE_TAG                     = 'SEARCH_QUERY';
-    const XML_PATH_MIN_QUERY_LENGTH     = 'catalog/search/min_query_length';
-    const XML_PATH_MAX_QUERY_LENGTH     = 'catalog/search/max_query_length';
-    const XML_PATH_MAX_QUERY_WORDS      = 'catalog/search/max_query_words';
+    const CACHE_TAG = 'SEARCH_QUERY';
+
+    const XML_PATH_MIN_QUERY_LENGTH = 'catalog/search/min_query_length';
+
+    const XML_PATH_MAX_QUERY_LENGTH = 'catalog/search/max_query_length';
+
+    const XML_PATH_MAX_QUERY_WORDS = 'catalog/search/max_query_words';
 
     /**
      * Core store config
@@ -182,10 +185,7 @@ class Query extends AbstractModel
                 $text = $this->getQueryText();
             }
 
-            $collection->addSearchFilter($text)
-                ->addStoreFilter()
-                ->addMinimalPrice()
-                ->addTaxPercents();
+            $collection->addSearchFilter($text)->addStoreFilter()->addMinimalPrice()->addTaxPercents();
             $this->setData('result_collection', $collection);
         }
         return $collection;
@@ -200,9 +200,11 @@ class Query extends AbstractModel
     {
         $collection = $this->getData('suggest_collection');
         if (is_null($collection)) {
-            $collection = $this->_queryCollectionFactory->create()
-                ->setStoreId($this->getStoreId())
-                ->setQueryFilter($this->getQueryText());
+            $collection = $this->_queryCollectionFactory->create()->setStoreId(
+                $this->getStoreId()
+            )->setQueryFilter(
+                $this->getQueryText()
+            );
             $this->setData('suggest_collection', $collection);
         }
         return $collection;
@@ -254,7 +256,7 @@ class Query extends AbstractModel
      */
     public function getStoreId()
     {
-        if (!$storeId = $this->getData('store_id')) {
+        if (!($storeId = $this->getData('store_id'))) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
         return $storeId;

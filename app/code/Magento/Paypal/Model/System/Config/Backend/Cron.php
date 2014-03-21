@@ -28,6 +28,7 @@ namespace Magento\Paypal\Model\System\Config\Backend;
 class Cron extends \Magento\Core\Model\Config\Value
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/paypal_fetch_settlement_reports/schedule/cron_expr';
+
     const CRON_MODEL_PATH_INTERVAL = 'paypal/fetch_reports/schedule';
 
     /**
@@ -56,9 +57,7 @@ class Cron extends \Magento\Core\Model\Config\Value
         array $data = array()
     ) {
         $this->_configValueFactory = $configValueFactory;
-        parent::__construct(
-            $context, $registry, $storeManager, $config, $resource, $resourceCollection, $data
-        );
+        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -69,19 +68,24 @@ class Cron extends \Magento\Core\Model\Config\Value
     protected function _afterSave()
     {
         $cronExprString = '';
-        $time = explode(',', $this->_configValueFactory->create()
-            ->load('paypal/fetch_reports/time', 'path')->getValue());
+        $time = explode(
+            ',',
+            $this->_configValueFactory->create()->load('paypal/fetch_reports/time', 'path')->getValue()
+        );
 
         if ($this->_configValueFactory->create()->load('paypal/fetch_reports/active', 'path')->getValue()) {
             $interval = $this->_configValueFactory->create()->load(self::CRON_MODEL_PATH_INTERVAL, 'path')->getValue();
             $cronExprString = "{$time[1]} {$time[0]} */{$interval} * *";
         }
 
-        $this->_configValueFactory->create()
-            ->load(self::CRON_STRING_PATH, 'path')
-            ->setValue($cronExprString)
-            ->setPath(self::CRON_STRING_PATH)
-            ->save();
+        $this->_configValueFactory->create()->load(
+            self::CRON_STRING_PATH,
+            'path'
+        )->setValue(
+            $cronExprString
+        )->setPath(
+            self::CRON_STRING_PATH
+        )->save();
 
         return parent::_afterSave();
     }

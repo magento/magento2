@@ -44,9 +44,8 @@ class Format implements \Magento\Option\ArrayInterface
     /**
      * @param \Magento\SalesRule\Helper\Coupon $salesRuleCoupon
      */
-    public function __construct(
-        \Magento\SalesRule\Helper\Coupon $salesRuleCoupon
-    ) {
+    public function __construct(\Magento\SalesRule\Helper\Coupon $salesRuleCoupon)
+    {
         $this->_salesRuleCoupon = $salesRuleCoupon;
     }
 
@@ -58,10 +57,7 @@ class Format implements \Magento\Option\ArrayInterface
         $formatsList = $this->_salesRuleCoupon->getFormatsList();
         $result = array();
         foreach ($formatsList as $formatId => $formatTitle) {
-            $result[] = array(
-                'value' => $formatId,
-                'label' => $formatTitle
-            );
+            $result[] = array('value' => $formatId, 'label' => $formatTitle);
         }
 
         return $result;

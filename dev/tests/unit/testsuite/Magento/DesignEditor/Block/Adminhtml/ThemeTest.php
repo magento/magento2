@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
@@ -35,12 +34,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testButtons()
     {
-        $themeMock  =  $this->getMock('Magento\DesignEditor\Block\Adminhtml\Theme', null, array(), '', false);
+        $themeMock = $this->getMock('Magento\DesignEditor\Block\Adminhtml\Theme', null, array(), '', false);
         $buttonMock = $this->getMock('StdClass', array('toHtml'));
 
-        $buttonMock->expects($this->once())
-            ->method('toHtml')
-            ->will($this->returnValue('Block html data'));
+        $buttonMock->expects($this->once())->method('toHtml')->will($this->returnValue('Block html data'));
 
         $themeMock->addButton($buttonMock);
         $this->assertEquals('Block html data', $themeMock->getButtonsHtml());

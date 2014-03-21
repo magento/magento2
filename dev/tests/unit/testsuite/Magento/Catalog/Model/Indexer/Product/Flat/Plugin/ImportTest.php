@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Plugin;
 
 class ImportTest extends \PHPUnit_Framework_TestCase
@@ -36,12 +35,15 @@ class ImportTest extends \PHPUnit_Framework_TestCase
          *      \PHPUnit_Framework_MockObject_MockObject $processorMock
          */
         $processorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor', array('markIndexerAsInvalid'), array(), '', false
+            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
+            array('markIndexerAsInvalid'),
+            array(),
+            '',
+            false
         );
 
         $subjectMock = $this->getMock('Magento\ImportExport\Model\Import', array(), array(), '', false);
-        $processorMock->expects($this->once())
-            ->method('markIndexerAsInvalid');
+        $processorMock->expects($this->once())->method('markIndexerAsInvalid');
 
         $someData = array(1, 2, 3);
 

@@ -53,9 +53,11 @@ class PaymentMethodsList implements \Magento\Option\ArrayInterface
         $result = array();
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if ($this->specification->isSatisfiedBy($code)) {
-                $result[$code] =  isset($data['title'])
-                    ? $data['title']
-                    : $this->paymentHelper->getMethodInstance($code)->getTitle();
+                $result[$code] = isset(
+                    $data['title']
+                ) ? $data['title'] : $this->paymentHelper->getMethodInstance(
+                    $code
+                )->getTitle();
             }
         }
         return $result;

@@ -63,11 +63,8 @@ class Adjustments extends \Magento\Backend\Block\Template
     public function initTotals()
     {
         $parent = $this->getParentBlock();
-        $this->_source  = $parent->getSource();
-        $total = new \Magento\Object(array(
-            'code'      => 'agjustments',
-            'block_name'=> $this->getNameInLayout()
-        ));
+        $this->_source = $parent->getSource();
+        $total = new \Magento\Object(array('code' => 'agjustments', 'block_name' => $this->getNameInLayout()));
         $parent->removeTotal('shipping');
         $parent->removeTotal('adjustment_positive');
         $parent->removeTotal('adjustment_negative');

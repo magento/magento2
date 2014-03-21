@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code\Dictionary;
 
 use Magento\Tools\I18n\Code\Context;
@@ -59,19 +58,32 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_parserMock = $this->getMock('Magento\Tools\I18n\Code\Parser\Parser', array(), array(), '', false);
-        $this->_contextualParserMock = $this->getMock('Magento\Tools\I18n\Code\Parser\Contextual', array(), array(), '',
-            false);
+        $this->_contextualParserMock = $this->getMock(
+            'Magento\Tools\I18n\Code\Parser\Contextual',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_writerMock = $this->getMock('Magento\Tools\I18n\Code\Dictionary\WriterInterface');
         $this->_factoryMock = $this->getMock('Magento\Tools\I18n\Code\Factory', array(), array(), '', false);
-        $this->_factoryMock->expects($this->any())->method('createDictionaryWriter')
-            ->will($this->returnValue($this->_writerMock));
+        $this->_factoryMock->expects(
+            $this->any()
+        )->method(
+            'createDictionaryWriter'
+        )->will(
+            $this->returnValue($this->_writerMock)
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_generator = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Dictionary\Generator', array(
-            'parser' => $this->_parserMock,
-            'contextualParser' => $this->_contextualParserMock,
-            'factory' => $this->_factoryMock,
-        ));
+        $this->_generator = $objectManagerHelper->getObject(
+            'Magento\Tools\I18n\Code\Dictionary\Generator',
+            array(
+                'parser' => $this->_parserMock,
+                'contextualParser' => $this->_contextualParserMock,
+                'factory' => $this->_factoryMock
+            )
+        );
     }
 
     public function testCreatingDictionaryWriter()
@@ -108,11 +120,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $phrases = array(
             $this->getMock('Magento\Tools\I18n\Code\Dictionary\Phrase', array(), array(), '', false),
-            $this->getMock('Magento\Tools\I18n\Code\Dictionary\Phrase', array(), array(), '', false),
+            $this->getMock('Magento\Tools\I18n\Code\Dictionary\Phrase', array(), array(), '', false)
         );
 
-        $this->_parserMock->expects($this->once())->method('getPhrases')
-            ->will($this->returnValue($phrases));
+        $this->_parserMock->expects($this->once())->method('getPhrases')->will($this->returnValue($phrases));
 
         $this->_writerMock->expects($this->at(0))->method('write')->with($phrases[0]);
         $this->_writerMock->expects($this->at(1))->method('write')->with($phrases[1]);

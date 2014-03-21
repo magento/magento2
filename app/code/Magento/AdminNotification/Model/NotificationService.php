@@ -42,9 +42,8 @@ class NotificationService
     /**
      * @param \Magento\AdminNotification\Model\InboxFactory $notificationFactory
      */
-    public function __construct(
-        \Magento\AdminNotification\Model\InboxFactory $notificationFactory
-    ) {
+    public function __construct(\Magento\AdminNotification\Model\InboxFactory $notificationFactory)
+    {
         $this->_notificationFactory = $notificationFactory;
     }
 

@@ -44,8 +44,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager\ObjectManager',
-            array('create'), array(), '', false);
+        $this->_objectManagerMock = $this->getMock(
+            'Magento\ObjectManager\ObjectManager',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $this->_factory = new \Magento\Data\Form\Element\Factory($this->_objectManagerMock);
     }
 
@@ -57,10 +62,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'Magento\Data\Form\Element\\' . ucfirst($type);
         $elementMock = $this->getMock($className, array(), array(), '', false);
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($className, array())
-            ->will($this->returnValue($elementMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $className,
+            array()
+        )->will(
+            $this->returnValue($elementMock)
+        );
         $this->assertSame($elementMock, $this->_factory->create($type));
     }
 
@@ -73,10 +84,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $config = array('data' => array('attr1' => 'attr1', 'attr2' => 'attr2'));
         $className = 'Magento\Data\Form\Element\\' . ucfirst($type);
         $elementMock = $this->getMock($className, array(), array(), '', false);
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($className, $config)
-            ->will($this->returnValue($elementMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $className,
+            $config
+        )->will(
+            $this->returnValue($elementMock)
+        );
         $this->assertSame($elementMock, $this->_factory->create($type, $config));
     }
 
@@ -113,7 +130,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'submit' => array('submit'),
             'text' => array('text'),
             'textarea' => array('textarea'),
-            'time' => array('time'),
+            'time' => array('time')
         );
     }
 
@@ -124,10 +141,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateExceptionReflectionException($type)
     {
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($type, array())
-            ->will($this->throwException(new \ReflectionException()));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $type,
+            array()
+        )->will(
+            $this->throwException(new \ReflectionException())
+        );
         $this->_factory->create($type);
     }
 
@@ -139,7 +162,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         return array(
             'factory' => array('factory'),
             'collection' => array('collection'),
-            'abstract' => array('abstract'),
+            'abstract' => array('abstract')
         );
     }
 
@@ -151,10 +174,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateExceptionInvalidArgument($type)
     {
         $elementMock = $this->getMock($type, array(), array(), '', false);
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($type, array())
-            ->will($this->returnValue($elementMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $type,
+            array()
+        )->will(
+            $this->returnValue($elementMock)
+        );
         $this->_factory->create($type);
     }
 
@@ -165,7 +194,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'Magento\Data\Form\Element\Factory' => array('Magento\Data\Form\Element\Factory'),
-            'Magento\Data\Form\Element\Collection' => array('Magento\Data\Form\Element\Collection'),
+            'Magento\Data\Form\Element\Collection' => array('Magento\Data\Form\Element\Collection')
         );
     }
 }

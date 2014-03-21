@@ -36,7 +36,6 @@ namespace Magento\Simplexml;
 
 class Element extends \SimpleXMLElement
 {
-
     /**
      * Would keep reference to parent node
      *
@@ -93,7 +92,7 @@ class Element extends \SimpleXMLElement
         }
 
         // simplexml bug: @attributes is in children() but invisible in foreach
-        foreach ($this->children() as $k=>$child) {
+        foreach ($this->children() as $k => $child) {
             return true;
         }
         return false;
@@ -105,7 +104,8 @@ class Element extends \SimpleXMLElement
      * @param string $name
      * @return string|null
      */
-    public function getAttribute($name){
+    public function getAttribute($name)
+    {
         $attrs = $this->attributes();
         return isset($attrs[$name]) ? (string)$attrs[$name] : null;
     }
@@ -129,20 +129,19 @@ class Element extends \SimpleXMLElement
             // Simple exploding by / does not suffice,
             // as an attribute value may contain a / inside
             // Note that there are three matches for different kinds of attribute values specification
-            if(strpos($path, "@") === false) {
+            if (strpos($path, "@") === false) {
                 $pathArr = explode('/', $path);
-            }
-            else {
+            } else {
                 $regex = "#([^@/\\\"]+(?:@[^=/]+=(?:\\\"[^\\\"]*\\\"|[^/]*))?)/?#";
                 $pathArr = $pathMatches = array();
-                if(preg_match_all($regex, $path, $pathMatches)) {
+                if (preg_match_all($regex, $path, $pathMatches)) {
                     $pathArr = $pathMatches[1];
                 }
             }
         }
         $desc = $this;
         foreach ($pathArr as $nodeName) {
-            if (strpos($nodeName, '@')!==false) {
+            if (strpos($nodeName, '@') !== false) {
                 $a = explode('@', $nodeName);
                 $b = explode('=', $a[1]);
                 $nodeName = $a[0];
@@ -153,8 +152,8 @@ class Element extends \SimpleXMLElement
                 //
                 $attributeValue = trim($attributeValue, '"');
                 $found = false;
-                foreach ($desc->$nodeName as $subdesc) {
-                    if ((string)$subdesc[$attributeName]===$attributeValue) {
+                foreach ($desc->{$nodeName} as $subdesc) {
+                    if ((string)$subdesc[$attributeName] === $attributeValue) {
                         $found = true;
                         $desc = $subdesc;
                         break;
@@ -164,7 +163,7 @@ class Element extends \SimpleXMLElement
                     $desc = false;
                 }
             } else {
-                $desc = $desc->$nodeName;
+                $desc = $desc->{$nodeName};
             }
             if (!$desc) {
                 return false;
@@ -217,10 +216,10 @@ class Element extends \SimpleXMLElement
         } else {
             if (empty($result)) {
                 // return as string, if nothing was found
-                $result = (string) $this;
+                $result = (string)$this;
             } else {
                 // value has zero key element
-                $result[0] = (string) $this;
+                $result[0] = (string)$this;
             }
         }
         return $result;
@@ -233,29 +232,29 @@ class Element extends \SimpleXMLElement
      * @param int|boolean $level if false
      * @return string
      */
-    public function asNiceXml($filename='', $level=0)
+    public function asNiceXml($filename = '', $level = 0)
     {
         if (is_numeric($level)) {
-            $pad = str_pad('', $level*3, ' ', STR_PAD_LEFT);
+            $pad = str_pad('', $level * 3, ' ', STR_PAD_LEFT);
             $nl = "\n";
         } else {
             $pad = '';
             $nl = '';
         }
 
-        $out = $pad.'<'.$this->getName();
+        $out = $pad . '<' . $this->getName();
 
         $attributes = $this->attributes();
         if ($attributes) {
-            foreach ($attributes as $key=>$value) {
-                $out .= ' '.$key.'="'.str_replace('"', '\"', (string)$value).'"';
+            foreach ($attributes as $key => $value) {
+                $out .= ' ' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
             }
         }
 
         $attributes = $this->attributes('xsi', true);
         if ($attributes) {
-            foreach ($attributes as $key=>$value) {
-                $out .= ' xsi:'.$key.'="'.str_replace('"', '\"', (string)$value).'"';
+            foreach ($attributes as $key => $value) {
+                $out .= ' xsi:' . $key . '="' . str_replace('"', '\"', (string)$value) . '"';
             }
         }
 
@@ -267,19 +266,19 @@ class Element extends \SimpleXMLElement
             }
             $out .= $nl;
             foreach ($this->children() as $child) {
-                $out .= $child->asNiceXml('', is_numeric($level) ? $level+1 : true);
+                $out .= $child->asNiceXml('', is_numeric($level) ? $level + 1 : true);
             }
-            $out .= $pad.'</'.$this->getName().'>'.$nl;
+            $out .= $pad . '</' . $this->getName() . '>' . $nl;
         } else {
             $value = (string)$this;
             if (strlen($value)) {
-                $out .= '>'.$this->xmlentities($value).'</'.$this->getName().'>'.$nl;
+                $out .= '>' . $this->xmlentities($value) . '</' . $this->getName() . '>' . $nl;
             } else {
-                $out .= '/>'.$nl;
+                $out .= '/>' . $nl;
             }
         }
 
-        if ((0===$level || false===$level) && !empty($filename)) {
+        if ((0 === $level || false === $level) && !empty($filename)) {
             file_put_contents($filename, $out);
         }
 
@@ -292,7 +291,7 @@ class Element extends \SimpleXMLElement
      * @param int $level
      * @return string
      */
-    public function innerXml($level=0)
+    public function innerXml($level = 0)
     {
         $out = '';
         foreach ($this->children() as $child) {
@@ -339,7 +338,7 @@ class Element extends \SimpleXMLElement
         $child->setParent($this);
 
         $attributes = $source->attributes();
-        foreach ($attributes as $key=>$value) {
+        foreach ($attributes as $key => $value) {
             $child->addAttribute($key, $this->xmlentities($value));
         }
 
@@ -359,7 +358,7 @@ class Element extends \SimpleXMLElement
      * @param boolean $overwrite
      * @return $this
      */
-    public function extend($source, $overwrite=false)
+    public function extend($source, $overwrite = false)
     {
         if (!$source instanceof \Magento\Simplexml\Element) {
             return $this;
@@ -379,7 +378,7 @@ class Element extends \SimpleXMLElement
      * @param boolean $overwrite
      * @return $this
      */
-    public function extendChild($source, $overwrite=false)
+    public function extendChild($source, $overwrite = false)
     {
         // this will be our new target node
         $targetChild = null;
@@ -392,13 +391,13 @@ class Element extends \SimpleXMLElement
 
         if (!$source->hasChildren()) {
             // handle string node
-            if (isset($this->$sourceName)) {
+            if (isset($this->{$sourceName})) {
                 // if target already has children return without regard
-                if ($this->$sourceName->hasChildren()) {
+                if ($this->{$sourceName}->hasChildren()) {
                     return $this;
                 }
                 if ($overwrite) {
-                    unset($this->$sourceName);
+                    unset($this->{$sourceName});
                 } else {
                     return $this;
                 }
@@ -406,27 +405,27 @@ class Element extends \SimpleXMLElement
 
             $targetChild = $this->addChild($sourceName, $source->xmlentities());
             $targetChild->setParent($this);
-            foreach ($source->attributes() as $key=>$value) {
+            foreach ($source->attributes() as $key => $value) {
                 $targetChild->addAttribute($key, $this->xmlentities($value));
             }
             return $this;
         }
 
-        if (isset($this->$sourceName)) {
-            $targetChild = $this->$sourceName;
+        if (isset($this->{$sourceName})) {
+            $targetChild = $this->{$sourceName};
         }
 
         if (is_null($targetChild)) {
             // if child target is not found create new and descend
             $targetChild = $this->addChild($sourceName);
             $targetChild->setParent($this);
-            foreach ($source->attributes() as $key=>$value) {
+            foreach ($source->attributes() as $key => $value) {
                 $targetChild->addAttribute($key, $this->xmlentities($value));
             }
         }
 
         // finally add our source node children to resulting new target node
-        foreach ($sourceChildren as $childKey=>$childNode) {
+        foreach ($sourceChildren as $childKey => $childNode) {
             $targetChild->extendChild($childNode, $overwrite);
         }
 
@@ -441,28 +440,29 @@ class Element extends \SimpleXMLElement
      * @param bool $overwrite
      * @return $this
      */
-    public function setNode($path, $value, $overwrite=true)
+    public function setNode($path, $value, $overwrite = true)
     {
         $arr1 = explode('/', $path);
         $arr = array();
         foreach ($arr1 as $v) {
-            if (!empty($v)) $arr[] = $v;
+            if (!empty($v)) {
+                $arr[] = $v;
+            }
         }
-        $last = sizeof($arr)-1;
+        $last = sizeof($arr) - 1;
         $node = $this;
-        foreach ($arr as $i=>$nodeName) {
-            if ($last===$i) {
-                if (!isset($node->$nodeName) || $overwrite) {
-                    $node->$nodeName = $value;
+        foreach ($arr as $i => $nodeName) {
+            if ($last === $i) {
+                if (!isset($node->{$nodeName}) || $overwrite) {
+                    $node->{$nodeName} = $value;
                 }
             } else {
-                if (!isset($node->$nodeName)) {
+                if (!isset($node->{$nodeName})) {
                     $node = $node->addChild($nodeName);
                 } else {
-                    $node = $node->$nodeName;
+                    $node = $node->{$nodeName};
                 }
             }
-
         }
         return $this;
     }

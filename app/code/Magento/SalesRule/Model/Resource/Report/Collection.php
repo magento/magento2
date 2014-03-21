@@ -53,7 +53,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
      * Array where rules ids stored
@@ -96,24 +96,26 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         if ('month' == $this->_period) {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat =
-                $adapter->getDateExtractSql('period', \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR);
+            $this->_periodFormat = $adapter->getDateExtractSql(
+                'period',
+                \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+            );
         } else {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals() && !$this->isSubTotals()) {
             $this->_selectedColumns = array(
-                'period'                  => $this->_periodFormat,
+                'period' => $this->_periodFormat,
                 'coupon_code',
                 'rule_name',
-                'coupon_uses'             => 'SUM(coupon_uses)',
-                'subtotal_amount'         => 'SUM(subtotal_amount)',
-                'discount_amount'         => 'SUM(discount_amount)',
-                'total_amount'            => 'SUM(total_amount)',
-                'subtotal_amount_actual'  => 'SUM(subtotal_amount_actual)',
-                'discount_amount_actual'  => 'SUM(discount_amount_actual)',
-                'total_amount_actual'     => 'SUM(total_amount_actual)',
+                'coupon_uses' => 'SUM(coupon_uses)',
+                'subtotal_amount' => 'SUM(subtotal_amount)',
+                'discount_amount' => 'SUM(discount_amount)',
+                'total_amount' => 'SUM(total_amount)',
+                'subtotal_amount_actual' => 'SUM(subtotal_amount_actual)',
+                'discount_amount_actual' => 'SUM(discount_amount_actual)',
+                'total_amount_actual' => 'SUM(total_amount_actual)'
             );
         }
 
@@ -122,9 +124,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         }
 
         if ($this->isSubTotals()) {
-            $this->_selectedColumns =
-                $this->getAggregatedColumns() +
-                    array('period' => $this->_periodFormat);
+            $this->_selectedColumns = $this->getAggregatedColumns() + array('period' => $this->_periodFormat);
         }
 
         return $this->_selectedColumns;
@@ -140,11 +140,13 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if ($this->isSubTotals()) {
             $this->getSelect()->group($this->_periodFormat);
-        } else if (!$this->isTotals()) {
-            $this->getSelect()->group(array(
-                $this->_periodFormat,
-                'coupon_code'
-            ));
+        } elseif (!$this->isTotals()) {
+            $this->getSelect()->group(
+                array(
+                    $this->_periodFormat,
+                    'coupon_code'
+                )
+            );
         }
 
         return parent::_initSelect();

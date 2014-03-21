@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 class TranslitUrlTest extends \PHPUnit_Framework_TestCase
@@ -74,12 +73,7 @@ class TranslitUrlTest extends \PHPUnit_Framework_TestCase
                 'eur',
                 $isIconv
             ),
-            array(
-                '™',
-                'tm',
-                'tm',
-                $isIconv
-            )
+            array('™', 'tm', 'tm', $isIconv)
         );
     }
 }

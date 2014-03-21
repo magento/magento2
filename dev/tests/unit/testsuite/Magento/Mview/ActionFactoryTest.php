@@ -48,22 +48,30 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetWithException()
     {
         $notActionInterfaceMock = $this->getMock('NotAction', array(), array(), '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('NotAction')
-            ->will($this->returnValue($notActionInterfaceMock));
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'NotAction'
+        )->will(
+            $this->returnValue($notActionInterfaceMock)
+        );
         $this->model->get('NotAction');
     }
 
     public function testGet()
     {
-        $actionInterfaceMock = $this->getMockForAbstractClass(
-            'Magento\Mview\ActionInterface', array(), '', false
+        $actionInterfaceMock = $this->getMockForAbstractClass('Magento\Mview\ActionInterface', array(), '', false);
+        $this->objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Magento\Mview\ActionInterface'
+        )->will(
+            $this->returnValue($actionInterfaceMock)
         );
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Mview\ActionInterface')
-            ->will($this->returnValue($actionInterfaceMock));
         $this->model->get('Magento\Mview\ActionInterface');
         $this->assertInstanceOf('Magento\Mview\ActionInterface', $actionInterfaceMock);
     }

@@ -47,11 +47,8 @@ class BackupFactory
      * @param string $backupInstanceName
      * @param string $backupDbInstanceName
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        $backupInstanceName,
-        $backupDbInstanceName
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager, $backupInstanceName, $backupDbInstanceName)
+    {
         $this->_objectManager = $objectManager;
         $this->_backupInstanceName = $backupInstanceName;
         $this->_backupDbInstanceName = $backupDbInstanceName;

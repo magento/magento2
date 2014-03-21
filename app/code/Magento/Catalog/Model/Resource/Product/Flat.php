@@ -133,8 +133,7 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getTypeId()
     {
-        return $this->_catalogConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
-            ->getEntityTypeId();
+        return $this->_catalogConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getEntityTypeId();
     }
 
     /**
@@ -204,8 +203,7 @@ class Flat extends \Magento\Core\Model\Resource\Db\AbstractDb
         } elseif (is_string($attribute)) {
             $attributeCode = $attribute;
         } elseif (is_numeric($attribute)) {
-            $attributeCode = $this->getAttribute($attribute)
-                ->getAttributeCode();
+            $attributeCode = $this->getAttribute($attribute)->getAttributeCode();
         }
 
         if ($attributeCode) {

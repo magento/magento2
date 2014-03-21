@@ -30,7 +30,6 @@
  * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Widget\Model\Resource\Widget\Instance\Options;
 
 class Types implements \Magento\Option\ArrayInterface

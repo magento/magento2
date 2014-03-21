@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class BooleanTest extends AbstractFormTestCase
@@ -49,13 +48,13 @@ class BooleanTest extends AbstractFormTestCase
 
     public function getOptionTextDataProvider()
     {
-        return [
-            '0' => ['0', 'No'],
-            '1' => ['1', 'Yes'],
-            'int 5' => [5, ''],
-            'Null' => [null, ''],
-            'Invalid' => ['Invalid', ''],
-            'Empty string' => ['', ''],
-        ];
+        return array(
+            '0' => array('0', 'No'),
+            '1' => array('1', 'Yes'),
+            'int 5' => array(5, ''),
+            'Null' => array(null, ''),
+            'Invalid' => array('Invalid', ''),
+            'Empty string' => array('', '')
+        );
     }
 }

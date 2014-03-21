@@ -46,15 +46,22 @@ namespace Magento\Widget\Model\Widget;
 class Instance extends \Magento\Core\Model\AbstractModel
 {
     const SPECIFIC_ENTITIES = 'specific';
-    const ALL_ENTITIES      = 'all';
 
-    const DEFAULT_LAYOUT_HANDLE            = 'default';
-    const PRODUCT_LAYOUT_HANDLE            = 'catalog_product_view';
-    const SINGLE_PRODUCT_LAYOUT_HANLDE     = 'catalog_product_view_id_{{ID}}';
-    const PRODUCT_TYPE_LAYOUT_HANDLE       = 'catalog_product_view_type_{{TYPE}}';
-    const ANCHOR_CATEGORY_LAYOUT_HANDLE    = 'catalog_category_view_type_layered';
+    const ALL_ENTITIES = 'all';
+
+    const DEFAULT_LAYOUT_HANDLE = 'default';
+
+    const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
+
+    const SINGLE_PRODUCT_LAYOUT_HANLDE = 'catalog_product_view_id_{{ID}}';
+
+    const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
+
+    const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
+
     const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
-    const SINGLE_CATEGORY_LAYOUT_HANDLE    = 'catalog_category_view_{{ID}}';
+
+    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_{{ID}}';
 
     /**
      * @var array
@@ -183,7 +190,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         $this->_specificEntitiesLayoutHandles = array(
             'anchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
             'notanchor_categories' => self::SINGLE_CATEGORY_LAYOUT_HANDLE,
-            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANLDE,
+            'all_products' => self::SINGLE_PRODUCT_LAYOUT_HANLDE
         );
         foreach (array_keys($this->_productType->getTypes()) as $typeId) {
             $layoutHandle = str_replace('{{TYPE}}', $typeId, self::PRODUCT_TYPE_LAYOUT_HANDLE);
@@ -225,13 +232,16 @@ class Instance extends \Magento\Core\Model\AbstractModel
                         'block_reference' => $pageGroupData['block'],
                         'entities' => '',
                         'layout_handle_updates' => array($layoutHandle),
-                        'template' => $pageGroupData['template']?$pageGroupData['template']:''
+                        'template' => $pageGroupData['template'] ? $pageGroupData['template'] : ''
                     );
                     if ($pageGroupData['for'] == self::SPECIFIC_ENTITIES) {
                         $layoutHandleUpdates = array();
                         foreach (explode(',', $pageGroupData['entities']) as $entity) {
-                            $layoutHandleUpdates[] = str_replace('{{ID}}', $entity,
-                                $this->_specificEntitiesLayoutHandles[$pageGroup['page_group']]);
+                            $layoutHandleUpdates[] = str_replace(
+                                '{{ID}}',
+                                $entity,
+                                $this->_specificEntitiesLayoutHandles[$pageGroup['page_group']]
+                            );
                         }
                         $tmpPageGroup['entities'] = $pageGroupData['entities'];
                         $tmpPageGroup['layout_handle_updates'] = $layoutHandleUpdates;
@@ -370,7 +380,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         } else if (is_null($this->getData('widget_parameters'))) {
             return array();
         }
-        return (is_array($this->getData('widget_parameters'))) ? $this->getData('widget_parameters') : array();
+        return is_array($this->getData('widget_parameters')) ? $this->getData('widget_parameters') : array();
     }
 
     /**
@@ -384,10 +394,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         $widgets = array();
         $widgetsArr = $this->_widgetModel->getWidgetsArray();
         foreach ($widgetsArr as $widget) {
-            $widgets[] = array(
-                'value' => $widget[$value],
-                'label' => $widget['name']
-            );
+            $widgets[] = array('value' => $widget[$value], 'label' => $widget['name']);
         }
         return $widgets;
     }
@@ -423,13 +430,17 @@ class Instance extends \Magento\Core\Model\AbstractModel
         if ($this->_widgetConfigXml === null) {
             $this->_widgetConfigXml = $this->_widgetModel->getWidgetByClassType($this->getType());
             if ($this->_widgetConfigXml) {
-                $configFile = $this->_viewFileSystem->getFilename('widget.xml', array(
-                    'area'   => $this->getArea(),
-                    'theme'  => $this->getThemeId(),
-                    'module' => $this->_namespaceResolver->determineOmittedNamespace(
-                        preg_replace('/^(.+?)\/.+$/', '\\1', $this->getType()), true
-                    ),
-                ));
+                $configFile = $this->_viewFileSystem->getFilename(
+                    'widget.xml',
+                    array(
+                        'area' => $this->getArea(),
+                        'theme' => $this->getThemeId(),
+                        'module' => $this->_namespaceResolver->determineOmittedNamespace(
+                            preg_replace('/^(.+?)\/.+$/', '\\1', $this->getType()),
+                            true
+                        )
+                    )
+                );
 
                 $isReadable = $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
                 if ($isReadable) {
@@ -438,7 +449,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
                     $themeWidgetConfig = null;
                     if (!is_null($widgetName)) {
                         foreach ($config as $widget) {
-                            if (isset($widget['name']) && ($widgetName === $widget['name'])) {
+                            if (isset($widget['name']) && $widgetName === $widget['name']) {
                                 $themeWidgetConfig = $widget;
                                 break;
                             }
@@ -462,8 +473,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
     {
         $templates = array();
         $widgetConfig = $this->getWidgetConfigAsArray();
-        if ($widgetConfig && isset($widgetConfig['parameters'])
-            && isset($widgetConfig['parameters']['template'])) {
+        if ($widgetConfig && isset($widgetConfig['parameters']) && isset($widgetConfig['parameters']['template'])) {
             $configTemplates = $widgetConfig['parameters']['template'];
             if (isset($configTemplates['values'])) {
                 foreach ($configTemplates['values'] as $name => $template) {
@@ -514,7 +524,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
             }
             $configNodes = $widgetConfig['supported_containers'];
             foreach ($configNodes as $node) {
-                if (isset($node['container_name']) && ((string)$node['container_name'] == $containerName)) {
+                if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
                     if (isset($node['template'])) {
                         $templateChildren = $node['template'];
                         foreach ($templateChildren as $template) {
@@ -540,12 +550,15 @@ class Instance extends \Magento\Core\Model\AbstractModel
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
-        $templateFilename = $this->_viewFileSystem->getFilename($templatePath, array(
-            'area'    => $this->getArea(),
-            'themeId' => $this->getThemeId(),
-            'module'  => \Magento\View\Element\AbstractBlock::extractModuleName($this->getType()),
-        ));
-        if (!$this->getId() && !$this->isCompleteToCreate() || ($templatePath && !is_readable($templateFilename))) {
+        $templateFilename = $this->_viewFileSystem->getFilename(
+            $templatePath,
+            array(
+                'area' => $this->getArea(),
+                'themeId' => $this->getThemeId(),
+                'module' => \Magento\View\Element\AbstractBlock::extractModuleName($this->getType())
+            )
+        );
+        if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
         }
         $parameters = $this->getWidgetParameters();
@@ -565,11 +578,14 @@ class Instance extends \Magento\Core\Model\AbstractModel
                 $value = implode(',', $value);
             }
             if ($name && strlen((string)$value)) {
-                $xml .= '<action method="setData">'
-                    . '<argument name="name" xsi:type="string">' . $name . '</argument>'
-                    . '<argument name="value" xsi:type="string">'
-                    . $this->_escaper->escapeHtml($value) . '</argument>'
-                    . '</action>';
+                $xml .= '<action method="setData">' .
+                    '<argument name="name" xsi:type="string">' .
+                    $name .
+                    '</argument>' .
+                    '<argument name="value" xsi:type="string">' .
+                    $this->_escaper->escapeHtml(
+                        $value
+                    ) . '</argument>' . '</action>';
             }
         }
         $xml .= '</block></referenceContainer>';

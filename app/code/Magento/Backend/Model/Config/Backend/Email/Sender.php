@@ -47,9 +47,7 @@ class Sender extends \Magento\Core\Model\Config\Value
         }
 
         if (strlen($value) > 255) {
-            throw new \Magento\Core\Exception(
-                __('Maximum sender name length is 255. Please correct your settings.')
-            );
+            throw new \Magento\Core\Exception(__('Maximum sender name length is 255. Please correct your settings.'));
         }
         return $this;
     }

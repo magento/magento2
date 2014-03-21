@@ -63,7 +63,8 @@ class RelativePathConverter
             if ($path === '*') {
                 if (false == array_key_exists($index, $pathParts)) {
                     throw new \InvalidArgumentException(
-                        sprintf('Invalid relative path %s in %s node', $relativePath, $nodePath));
+                        sprintf('Invalid relative path %s in %s node', $relativePath, $nodePath)
+                    );
                 }
                 $path = $pathParts[$index];
             }

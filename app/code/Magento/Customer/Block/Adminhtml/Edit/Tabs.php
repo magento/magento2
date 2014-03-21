@@ -75,57 +75,81 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     {
         \Magento\Profiler::start('customer/tabs');
 
-        $this->addTab('account', array(
-            'label'     => __('Account Information'),
-            'content'   => $this->getLayout()
-                ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Account')->initForm()->toHtml(),
-            'active'    => $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID) ? false : true
-        ));
+        $this->addTab(
+            'account',
+            array(
+                'label' => __('Account Information'),
+                'content' => $this->getLayout()->createBlock(
+                    'Magento\Customer\Block\Adminhtml\Edit\Tab\Account'
+                )->initForm()->toHtml(),
+                'active' => $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID) ? false : true
+            )
+        );
 
-        $this->addTab('addresses', array(
-            'label'     => __('Addresses'),
-            'content'   => $this->getLayout()
-                ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses')->initForm()->toHtml(),
-        ));
+        $this->addTab(
+            'addresses',
+            array(
+                'label' => __('Addresses'),
+                'content' => $this->getLayout()->createBlock(
+                    'Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses'
+                )->initForm()->toHtml()
+            )
+        );
 
         // load: Orders, Shopping Cart, Wishlist, Product Reviews, Product Tags - with ajax
 
         if ($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)) {
 
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-                $this->addTab('orders', array(
-                    'label'     => __('Orders'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('customer/*/orders', array('_current' => true)),
-                 ));
+                $this->addTab(
+                    'orders',
+                    array(
+                        'label' => __('Orders'),
+                        'class' => 'ajax',
+                        'url' => $this->getUrl('customer/*/orders', array('_current' => true))
+                    )
+                );
             }
 
-            $this->addTab('cart', array(
-                'label'     => __('Shopping Cart'),
-                'class'     => 'ajax',
-                'url'       => $this->getUrl('customer/*/carts', array('_current' => true)),
-            ));
+            $this->addTab(
+                'cart',
+                array(
+                    'label' => __('Shopping Cart'),
+                    'class' => 'ajax',
+                    'url' => $this->getUrl('customer/*/carts', array('_current' => true))
+                )
+            );
 
-            $this->addTab('wishlist', array(
-                'label'     => __('Wishlist'),
-                'class'     => 'ajax',
-                'url'       => $this->getUrl('customer/*/wishlist', array('_current' => true)),
-            ));
+            $this->addTab(
+                'wishlist',
+                array(
+                    'label' => __('Wishlist'),
+                    'class' => 'ajax',
+                    'url' => $this->getUrl('customer/*/wishlist', array('_current' => true))
+                )
+            );
 
             if ($this->_authorization->isAllowed('Magento_Newsletter::subscriber')) {
-                $this->addTab('newsletter', array(
-                    'label'     => __('Newsletter'),
-                    'content'   => $this->getLayout()
-                        ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter')->initForm()->toHtml()
-                ));
+                $this->addTab(
+                    'newsletter',
+                    array(
+                        'label' => __('Newsletter'),
+                        'content' => $this->getLayout()->createBlock(
+                            'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter'
+                        )->initForm()->toHtml()
+                    )
+                );
             }
 
             if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-                $this->addTab('reviews', array(
-                    'label'     => __('Product Reviews'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('customer/*/productReviews', array('_current' => true)),
-                ));
+                $this->addTab(
+                    'reviews',
+                    array(
+                        'label' => __('Product Reviews'),
+                        'class' => 'ajax',
+                        'url' => $this->getUrl('customer/*/productReviews', array('_current' => true))
+                    )
+                );
             }
         }
 

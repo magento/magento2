@@ -100,12 +100,15 @@ class Price extends \Magento\Data\Form\Element\Text
                 $storeId = $this->getForm()->getDataObject()->getStoreId();
             }
             $store = $this->_storeManager->getStore($storeId);
-            $html .= '<strong>' . $this->_localeCurrency->getCurrency($store->getBaseCurrencyCode())->getSymbol() . '</strong>';
+            $html .= '<strong>' . $this->_localeCurrency->getCurrency(
+                $store->getBaseCurrencyCode()
+            )->getSymbol() . '</strong>';
             if ($this->_taxData->priceIncludesTax($store)) {
-                if ($attribute->getAttributeCode()!=='cost') {
+                if ($attribute->getAttributeCode() !== 'cost') {
                     $addJsObserver = true;
-                    $html .= ' <strong>[' . __('Inc. Tax') . '<span id="dynamic-tax-'
-                        . $attribute->getAttributeCode() . '"></span>]</strong>';
+                    $html .= ' <strong>[' . __(
+                        'Inc. Tax'
+                    ) . '<span id="dynamic-tax-' . $attribute->getAttributeCode() . '"></span>]</strong>';
                 }
             }
         }
@@ -132,7 +135,7 @@ class Price extends \Magento\Data\Form\Element\Text
      * @param null|int|string $index
      * @return null|string
      */
-    public function getEscapedValue($index=null)
+    public function getEscapedValue($index = null)
     {
         $value = $this->getValue();
 

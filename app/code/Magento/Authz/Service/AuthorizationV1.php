@@ -246,12 +246,17 @@ class AuthorizationV1 implements AuthorizationV1Interface
                 throw new \LogicException("Unknown user type: '{$userType}'.");
         }
         $role = $this->_roleFactory->create();
-        $role->setRoleName($roleName)
-            ->setUserType($userType)
-            ->setUserId($userId)
-            ->setRoleType($roleType)
-            ->setParentId($parentId)
-            ->save();
+        $role->setRoleName(
+            $roleName
+        )->setUserType(
+            $userType
+        )->setUserId(
+            $userId
+        )->setRoleType(
+            $roleType
+        )->setParentId(
+            $parentId
+        )->save();
         return $role;
     }
 

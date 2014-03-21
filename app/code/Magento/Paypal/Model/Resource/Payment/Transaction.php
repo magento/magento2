@@ -40,9 +40,7 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
      * Initialize main table and the primary key field name
@@ -64,7 +62,7 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function loadObjectByTxnId(\Magento\Paypal\Model\Payment\Transaction $transaction, $txnId)
     {
         $select = $this->_getLoadByUniqueKeySelect($txnId);
-        $data   = $this->_getWriteAdapter()->fetchRow($select);
+        $data = $this->_getWriteAdapter()->fetchRow($select);
         $transaction->setData($data);
         $this->unserializeFields($transaction);
         $this->_afterLoad($transaction);
@@ -79,7 +77,7 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $transaction)
     {
-        $txnId       = $transaction->getData('txn_id');
+        $txnId = $transaction->getData('txn_id');
         $idFieldName = $this->getIdFieldName();
 
         // make sure unique key won't cause trouble
@@ -119,8 +117,6 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     private function _getLoadByUniqueKeySelect($txnId, $columns = '*')
     {
-        return $this->_getWriteAdapter()->select()
-            ->from($this->getMainTable(), $columns)
-            ->where('txn_id = ?', $txnId);
+        return $this->_getWriteAdapter()->select()->from($this->getMainTable(), $columns)->where('txn_id = ?', $txnId);
     }
 }

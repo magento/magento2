@@ -58,12 +58,12 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
     {
         $adapter = $this->_getReadAdapter();
         $bind = array(':payment_id' => $object->getId());
-        $select = $adapter->select()
-            ->from(
-                array('main_table' => $this->getTable('recurring_payment_order')),
-                array('order_id')
-            )
-            ->where('payment_id=:payment_id');
+        $select = $adapter->select()->from(
+            array('main_table' => $this->getTable('recurring_payment_order')),
+            array('order_id')
+        )->where(
+            'payment_id=:payment_id'
+        );
 
         return $adapter->fetchCol($select, $bind);
     }
@@ -79,10 +79,7 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
     {
         $this->_getWriteAdapter()->insert(
             $this->getTable('recurring_payment_order'),
-            array(
-                'payment_id' => $recurringPaymentId,
-                'order_id' => $orderId
-            )
+            array('payment_id' => $recurringPaymentId, 'order_id' => $orderId)
         );
         return $this;
     }

@@ -48,6 +48,7 @@ namespace Magento\Core\Model;
 class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     const ENTITY = 'core_website';
+
     const CACHE_TAG = 'website';
 
     /**
@@ -315,9 +316,7 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
      */
     public function getGroupCollection()
     {
-        return $this->_storeGroupFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($this->getId());
+        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId());
     }
 
     /**
@@ -423,9 +422,7 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
      */
     public function getStoreCollection()
     {
-        return $this->_storeFactory->create()
-            ->getCollection()
-            ->addWebsiteFilter($this->getId());
+        return $this->_storeFactory->create()->getCollection()->addWebsiteFilter($this->getId());
     }
 
     /**
@@ -491,8 +488,8 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
             return false;
         }
         if (is_null($this->_isCanDelete)) {
-            $this->_isCanDelete = ($this->_websiteFactory->create()->getCollection()->getSize() > 1)
-                && !$this->getIsDefault();
+            $this->_isCanDelete = $this->_websiteFactory->create()->getCollection()->getSize() > 1 &&
+                !$this->getIsDefault();
         }
         return $this->_isCanDelete;
     }
@@ -552,8 +549,9 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
      */
     public function getBaseCurrencyCode()
     {
-        if ($this->getConfig(\Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE)
-            == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL
+        if ($this->getConfig(
+            \Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE
+        ) == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL
         ) {
             return $this->_app->getBaseCurrencyCode();
         } else {

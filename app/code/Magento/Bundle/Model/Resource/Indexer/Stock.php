@@ -68,39 +68,41 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
     {
         $this->_cleanBundleOptionStockData();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
-        $adapter  = $this->_getWriteAdapter();
-        $select   = $adapter->select()
-            ->from(array('bo' => $this->getTable('catalog_product_bundle_option')), array('parent_id'));
+        $adapter = $this->_getWriteAdapter();
+        $select = $adapter->select()->from(
+            array('bo' => $this->getTable('catalog_product_bundle_option')),
+            array('parent_id')
+        );
         $this->_addWebsiteJoinToSelect($select, false);
-        $status = new \Zend_Db_Expr('MAX(' .
-                $adapter->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')');
-        $select->columns('website_id', 'cw')
-            ->join(
-                array('cis' => $this->getTable('cataloginventory_stock')),
-                '',
-                array('stock_id')
-            )
-            ->joinLeft(
-                array('bs' => $this->getTable('catalog_product_bundle_selection')),
-                'bs.option_id = bo.option_id',
-                array()
-            )
-            ->joinLeft(
-                array('i' => $idxTable),
-                'i.product_id = bs.product_id AND i.website_id = cw.website_id AND i.stock_id = cis.stock_id',
-                array()
-            )
-            ->joinLeft(
-                array('e' => $this->getTable('catalog_product_entity')),
-                'e.entity_id = bs.product_id',
-                array()
-            )
-            ->where('cw.website_id != 0')
-            ->group(array('bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id'))
-            ->columns(array(
-                'option_id' => 'bo.option_id',
-                'status'    => $status
-            ));
+        $status = new \Zend_Db_Expr(
+            'MAX(' . $adapter->getCheckSql('e.required_options = 0', 'i.stock_status', '0') . ')'
+        );
+        $select->columns(
+            'website_id',
+            'cw'
+        )->join(
+            array('cis' => $this->getTable('cataloginventory_stock')),
+            '',
+            array('stock_id')
+        )->joinLeft(
+            array('bs' => $this->getTable('catalog_product_bundle_selection')),
+            'bs.option_id = bo.option_id',
+            array()
+        )->joinLeft(
+            array('i' => $idxTable),
+            'i.product_id = bs.product_id AND i.website_id = cw.website_id AND i.stock_id = cis.stock_id',
+            array()
+        )->joinLeft(
+            array('e' => $this->getTable('catalog_product_entity')),
+            'e.entity_id = bs.product_id',
+            array()
+        )->where(
+            'cw.website_id != 0'
+        )->group(
+            array('bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id')
+        )->columns(
+            array('option_id' => 'bo.option_id', 'status' => $status)
+        );
 
         if (!is_null($entityIds)) {
             $select->where('bo.parent_id IN(?)', $entityIds);
@@ -110,8 +112,7 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         $selectNonRequired = clone $select;
 
         $select->where('bo.required = ?', 1);
-        $selectNonRequired->where('bo.required = ?', 0)
-            ->having($status . ' = 1');
+        $selectNonRequired->where('bo.required = ?', 0)->having($status . ' = 1');
         $query = $select->insertFromSelect($this->_getBundleOptionTable());
         $adapter->query($query);
 
@@ -133,30 +134,36 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
 
         $adapter = $this->_getWriteAdapter();
-        $select  = $adapter->select()
-            ->from(array('e' => $this->getTable('catalog_product_entity')), array('entity_id'));
+        $select = $adapter->select()->from(
+            array('e' => $this->getTable('catalog_product_entity')),
+            array('entity_id')
+        );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns('cw.website_id')
-            ->join(
-                array('cis' => $this->getTable('cataloginventory_stock')),
-                '',
-                array('stock_id')
-            )
-            ->joinLeft(
-                array('cisi' => $this->getTable('cataloginventory_stock_item')),
-                'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-                array()
-            )
-            ->joinLeft(
-                array('o' => $this->_getBundleOptionTable()),
-                'o.entity_id = e.entity_id AND o.website_id = cw.website_id AND o.stock_id = cis.stock_id',
-                array()
-            )
-            ->columns(array('qty' => new \Zend_Db_Expr('0')))
-            ->where('cw.website_id != 0')
-            ->where('e.type_id = ?', $this->getTypeId())
-            ->group(array('e.entity_id', 'cw.website_id', 'cis.stock_id'));
+        $select->columns(
+            'cw.website_id'
+        )->join(
+            array('cis' => $this->getTable('cataloginventory_stock')),
+            '',
+            array('stock_id')
+        )->joinLeft(
+            array('cisi' => $this->getTable('cataloginventory_stock_item')),
+            'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            array()
+        )->joinLeft(
+            array('o' => $this->_getBundleOptionTable()),
+            'o.entity_id = e.entity_id AND o.website_id = cw.website_id AND o.stock_id = cis.stock_id',
+            array()
+        )->columns(
+            array('qty' => new \Zend_Db_Expr('0'))
+        )->where(
+            'cw.website_id != 0'
+        )->where(
+            'e.type_id = ?',
+            $this->getTypeId()
+        )->group(
+            array('e.entity_id', 'cw.website_id', 'cis.stock_id')
+        );
 
         // add limitation of status
         $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
@@ -176,10 +183,18 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
             );
         }
 
-        $select->columns(array('status' => $adapter->getLeastSql(array(
-            new \Zend_Db_Expr('MIN(' . $adapter->getCheckSql('o.stock_status IS NOT NULL','o.stock_status', '0') .')'),
-            new \Zend_Db_Expr('MIN(' . $statusExpr . ')'),
-        ))));
+        $select->columns(
+            array(
+                'status' => $adapter->getLeastSql(
+                    array(
+                        new \Zend_Db_Expr(
+                            'MIN(' . $adapter->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
+                        ),
+                        new \Zend_Db_Expr('MIN(' . $statusExpr . ')')
+                    )
+                )
+            )
+        );
 
         if (!is_null($entityIds)) {
             $select->where('e.entity_id IN(?)', $entityIds);

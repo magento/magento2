@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Entity;
 
 class TableTest extends \PHPUnit_Framework_TestCase
@@ -38,12 +37,14 @@ class TableTest extends \PHPUnit_Framework_TestCase
     {
         // @codingStandardsIgnoreStart
         $config = new \Magento\Simplexml\Config();
-        $config->table      = 'test_table';
-        $config->test_key   = 'test';
+        $config->table = 'test_table';
+        $config->test_key = 'test';
         // @codingStandardsIgnoreEnd
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Entity\Table', array('config' => $config));
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Resource\Entity\Table',
+            array('config' => $config)
+        );
     }
 
     public function testGetTable()

@@ -67,13 +67,15 @@ class SalesTest extends \PHPUnit_Framework_TestCase
         $this->coreRegistry = $objectManager->get('Magento\Registry');
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
 
-        $this->block = $objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales',
-                'sales_' . mt_rand(),
-                ['coreRegistry' => $this->coreRegistry]
-            )
-            ->setTemplate('tab/view/sales.phtml');
+        $this->block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales',
+            'sales_' . mt_rand(),
+            array('coreRegistry' => $this->coreRegistry)
+        )->setTemplate(
+            'tab/view/sales.phtml'
+        );
         $this->html = $this->block->toHtml();
     }
 
@@ -111,12 +113,7 @@ class SalesTest extends \PHPUnit_Framework_TestCase
     public function testGetTotals()
     {
         $this->assertEquals(
-            [
-                'lifetime' => 0,
-                'base_lifetime' => 0,
-                'base_avgsale' => 0,
-                'num_orders' => 0
-            ],
+            array('lifetime' => 0, 'base_lifetime' => 0, 'base_avgsale' => 0, 'num_orders' => 0),
             $this->block->getTotals()->getData()
         );
     }

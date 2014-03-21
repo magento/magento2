@@ -39,6 +39,6 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
-//        echo 'discount';
+        //        echo 'discount';
     }
 }

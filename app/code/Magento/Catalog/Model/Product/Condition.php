@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 use Magento\DB\Adapter\AdapterInterface;
@@ -41,8 +40,8 @@ class Condition extends \Magento\Object implements \Magento\Catalog\Model\Produc
         if ($this->getTable() && $this->getPkFieldName()) {
             $collection->joinTable(
                 $this->getTable(),
-                $this->getPkFieldName().'=entity_id',
-                array('affected_product_id'=>$this->getPkFieldName())
+                $this->getPkFieldName() . '=entity_id',
+                array('affected_product_id' => $this->getPkFieldName())
             );
         }
         return $this;
@@ -55,8 +54,7 @@ class Condition extends \Magento\Object implements \Magento\Catalog\Model\Produc
     public function getIdsSelect($dbAdapter)
     {
         if ($this->getTable() && $this->getPkFieldName()) {
-            $select = $dbAdapter->select()
-                ->from($this->getTable(), $this->getPkFieldName());
+            $select = $dbAdapter->select()->from($this->getTable(), $this->getPkFieldName());
             return $select;
         }
         return '';

@@ -28,7 +28,7 @@ namespace Magento\Catalog\Model;
  */
 class Config extends \Magento\Eav\Model\Config
 {
-    const XML_PATH_LIST_DEFAULT_SORT_BY     = 'catalog/frontend/default_sort_by';
+    const XML_PATH_LIST_DEFAULT_SORT_BY = 'catalog/frontend/default_sort_by';
 
     /**
      * @var mixed
@@ -215,12 +215,11 @@ class Config extends \Magento\Eav\Model\Config
             return $this;
         }
 
-        $attributeSetCollection = $this->_setCollectionFactory->create()
-            ->load();
+        $attributeSetCollection = $this->_setCollectionFactory->create()->load();
 
         $this->_attributeSetsById = array();
         $this->_attributeSetsByName = array();
-        foreach ($attributeSetCollection as $id=>$attributeSet) {
+        foreach ($attributeSetCollection as $id => $attributeSet) {
             $entityTypeId = $attributeSet->getEntityTypeId();
             $name = $attributeSet->getAttributeSetName();
             $this->_attributeSetsById[$entityTypeId][$id] = $name;
@@ -244,7 +243,9 @@ class Config extends \Magento\Eav\Model\Config
         if (!is_numeric($entityTypeId)) {
             $entityTypeId = $this->getEntityType($entityTypeId)->getId();
         }
-        return isset($this->_attributeSetsById[$entityTypeId][$id]) ? $this->_attributeSetsById[$entityTypeId][$id] : false;
+        return isset(
+            $this->_attributeSetsById[$entityTypeId][$id]
+        ) ? $this->_attributeSetsById[$entityTypeId][$id] : false;
     }
 
     /**
@@ -263,7 +264,9 @@ class Config extends \Magento\Eav\Model\Config
             $entityTypeId = $this->getEntityType($entityTypeId)->getId();
         }
         $name = strtolower($name);
-        return isset($this->_attributeSetsByName[$entityTypeId][$name]) ? $this->_attributeSetsByName[$entityTypeId][$name] : false;
+        return isset(
+            $this->_attributeSetsByName[$entityTypeId][$name]
+        ) ? $this->_attributeSetsByName[$entityTypeId][$name] : false;
     }
 
     /**
@@ -275,12 +278,11 @@ class Config extends \Magento\Eav\Model\Config
             return $this;
         }
 
-        $attributeSetCollection = $this->_groupCollectionFactory->create()
-            ->load();
+        $attributeSetCollection = $this->_groupCollectionFactory->create()->load();
 
         $this->_attributeGroupsById = array();
         $this->_attributeGroupsByName = array();
-        foreach ($attributeSetCollection as $id=>$attributeGroup) {
+        foreach ($attributeSetCollection as $id => $attributeGroup) {
             $attributeSetId = $attributeGroup->getAttributeSetId();
             $name = $attributeGroup->getAttributeGroupName();
             $this->_attributeGroupsById[$attributeSetId][$id] = $name;
@@ -305,7 +307,9 @@ class Config extends \Magento\Eav\Model\Config
         if (!is_numeric($attributeSetId)) {
             $attributeSetId = $this->getAttributeSetId($attributeSetId);
         }
-        return isset($this->_attributeGroupsById[$attributeSetId][$id]) ? $this->_attributeGroupsById[$attributeSetId][$id] : false;
+        return isset(
+            $this->_attributeGroupsById[$attributeSetId][$id]
+        ) ? $this->_attributeGroupsById[$attributeSetId][$id] : false;
     }
 
     /**
@@ -325,7 +329,9 @@ class Config extends \Magento\Eav\Model\Config
             $attributeSetId = $this->getAttributeSetId($attributeSetId);
         }
         $name = strtolower($name);
-        return isset($this->_attributeGroupsByName[$attributeSetId][$name]) ? $this->_attributeGroupsByName[$attributeSetId][$name] : false;
+        return isset(
+            $this->_attributeGroupsByName[$attributeSetId][$name]
+        ) ? $this->_attributeGroupsByName[$attributeSetId][$name] : false;
     }
 
     /**
@@ -337,12 +343,11 @@ class Config extends \Magento\Eav\Model\Config
             return $this;
         }
 
-        $productTypeCollection = $this->_productTypeFactory->create()
-            ->getOptionArray();
+        $productTypeCollection = $this->_productTypeFactory->create()->getOptionArray();
 
         $this->_productTypesById = array();
         $this->_productTypesByName = array();
-        foreach ($productTypeCollection as $id=>$type) {
+        foreach ($productTypeCollection as $id => $type) {
             $name = $type;
             $this->_productTypesById[$id] = $name;
             $this->_productTypesByName[strtolower($name)] = $id;
@@ -389,7 +394,7 @@ class Config extends \Magento\Eav\Model\Config
     public function getSourceOptionId($source, $value)
     {
         foreach ($source->getAllOptions() as $option) {
-            if (strcasecmp($option['label'], $value)==0 || $option['value'] == $value) {
+            if (strcasecmp($option['label'], $value) == 0 || $option['value'] == $value) {
                 return $option['value'];
             }
         }
@@ -429,14 +434,14 @@ class Config extends \Magento\Eav\Model\Config
         if (is_null($this->_usedInProductListing)) {
             $this->_usedInProductListing = array();
             $entityType = \Magento\Catalog\Model\Product::ENTITY;
-            $attributesData = $this->_getResource()
-                ->setStoreId($this->getStoreId())
-                ->getAttributesUsedInListing();
+            $attributesData = $this->_getResource()->setStoreId($this->getStoreId())->getAttributesUsedInListing();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);
             foreach ($attributesData as $attributeData) {
                 $attributeCode = $attributeData['attribute_code'];
-                $this->_usedInProductListing[$attributeCode] = $this->_eavConfig
-                    ->getAttribute($entityType, $attributeCode);
+                $this->_usedInProductListing[$attributeCode] = $this->_eavConfig->getAttribute(
+                    $entityType,
+                    $attributeCode
+                );
             }
         }
         return $this->_usedInProductListing;
@@ -451,14 +456,12 @@ class Config extends \Magento\Eav\Model\Config
     {
         if (is_null($this->_usedForSortBy)) {
             $this->_usedForSortBy = array();
-            $entityType     = \Magento\Catalog\Model\Product::ENTITY;
-            $attributesData = $this->_getResource()
-                ->getAttributesUsedForSortBy();
+            $entityType = \Magento\Catalog\Model\Product::ENTITY;
+            $attributesData = $this->_getResource()->getAttributesUsedForSortBy();
             $this->_eavConfig->importAttributesData($entityType, $attributesData);
             foreach ($attributesData as $attributeData) {
                 $attributeCode = $attributeData['attribute_code'];
-                $this->_usedForSortBy[$attributeCode] = $this->_eavConfig
-                    ->getAttribute($entityType, $attributeCode);
+                $this->_usedForSortBy[$attributeCode] = $this->_eavConfig->getAttribute($entityType, $attributeCode);
             }
         }
         return $this->_usedForSortBy;
@@ -472,9 +475,7 @@ class Config extends \Magento\Eav\Model\Config
      */
     public function getAttributeUsedForSortByArray()
     {
-        $options = array(
-            'position'  => __('Position')
-        );
+        $options = array('position' => __('Position'));
         foreach ($this->getAttributesUsedForSortBy() as $attribute) {
             /* @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
             $options[$attribute->getAttributeCode()] = $attribute->getStoreLabel();

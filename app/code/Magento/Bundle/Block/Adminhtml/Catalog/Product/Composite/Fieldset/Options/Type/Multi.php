@@ -32,8 +32,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Opti
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Multi
-    extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi
+class Multi extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi
 {
     /**
      * @var string
@@ -48,7 +47,11 @@ class Multi
     public function setValidationContainer($elementId, $containerId)
     {
         return '<script type="text/javascript">
-            $(\'' . $elementId . '\').advaiceContainer = \'' . $containerId . '\';
+            $(\'' .
+            $elementId .
+            '\').advaiceContainer = \'' .
+            $containerId .
+            '\';
             </script>';
     }
 }

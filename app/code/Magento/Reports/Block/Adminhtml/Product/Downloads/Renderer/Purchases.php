@@ -30,8 +30,7 @@ namespace Magento\Reports\Block\Adminhtml\Product\Downloads\Renderer;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Purchases
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Purchases extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders Purchases value
@@ -41,7 +40,7 @@ class Purchases
      */
     public function render(\Magento\Object $row)
     {
-        if ( ($value = $row->getData($this->getColumn()->getIndex())) > 0) {
+        if (($value = $row->getData($this->getColumn()->getIndex())) > 0) {
             return $value;
         }
         return __('Unlimited');

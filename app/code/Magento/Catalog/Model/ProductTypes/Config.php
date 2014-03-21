@@ -91,8 +91,10 @@ class Config extends \Magento\Config\Data implements \Magento\Catalog\Model\Prod
     {
         $availableProductTypes = array();
         foreach ($this->getAll() as $type) {
-            if (!isset($type['custom_attributes'][$attributeName])
-                || $type['custom_attributes'][$attributeName] == $value) {
+            if (!isset(
+                $type['custom_attributes'][$attributeName]
+            ) || $type['custom_attributes'][$attributeName] == $value
+            ) {
                 $availableProductTypes[$type['name']] = $type['name'];
             }
         }

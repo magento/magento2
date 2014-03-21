@@ -103,8 +103,9 @@ class Wizard
     public function getStepByRequest(\Magento\App\RequestInterface $request)
     {
         foreach ($this->_steps as $step) {
-            if ($step->getController() == $request->getControllerName()
-                    && $step->getAction() == $request->getActionName()) {
+            if ($step->getController() == $request->getControllerName() &&
+                $step->getAction() == $request->getActionName()
+            ) {
                 return $step;
             }
         }

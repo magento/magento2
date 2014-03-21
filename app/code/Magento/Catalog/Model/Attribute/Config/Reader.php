@@ -33,10 +33,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/group' => 'name',
-        '/config/group/attribute' => 'name',
-    );
+    protected $_idAttributes = array('/config/group' => 'name', '/config/group/attribute' => 'name');
 
     /**
      * Construct the FileSystem Reader Class

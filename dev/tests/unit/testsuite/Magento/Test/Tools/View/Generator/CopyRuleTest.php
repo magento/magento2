@@ -25,6 +25,7 @@
  */
 namespace Magento\Test\Tools\View\Generator;
 
+
 require_once __DIR__ . '/../../../../../../../../tools/Magento/Tools/View/Generator/CopyRule.php';
 class CopyRuleTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +52,11 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filesystemMock = $this->getMock(
-            'Magento\App\Filesystem', array('getDirectoryRead', '__wakeup'), array(), '', false
+            'Magento\App\Filesystem',
+            array('getDirectoryRead', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $this->_directoryMock = $this->getMock(
             '\Magento\Filesystem\Directory\Read',
@@ -60,9 +65,13 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->_directoryMock));
+        $filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($this->_directoryMock)
+        );
         $this->_themeCollection = $this->getMock(
             'Magento\Core\Model\Theme\Collection',
             array('isLoaded'),
@@ -97,40 +106,32 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getCopyRulesDataProvider
      */
     public function testGetCopyRules(
-        array $fixtureThemes, array $patternDirMap, array $filesystemGlobMap, array $expectedResult
+        array $fixtureThemes,
+        array $patternDirMap,
+        array $filesystemGlobMap,
+        array $expectedResult
     ) {
         foreach ($fixtureThemes as $theme) {
             $this->_themeCollection->addItem($theme);
         }
-        $this->_fallbackRule
-            ->expects($this->atLeastOnce())
-            ->method('getPatternDirs')
-            ->will($this->returnValueMap($patternDirMap))
-        ;
-        $this->_directoryMock
-            ->expects($this->atLeastOnce())
-            ->method('search')
-            ->will($this->returnValueMap($filesystemGlobMap))
-        ;
-        $this->_directoryMock
-            ->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0))
-        ;
-        $this->_directoryMock
-            ->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnArgument(0))
-        ;
-        $this->_directoryMock
-            ->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $this->_directoryMock
-            ->expects($this->atLeastOnce())
-            ->method('isDirectory')
-            ->will($this->returnValue(true))
-        ;
+        $this->_fallbackRule->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getPatternDirs'
+        )->will(
+            $this->returnValueMap($patternDirMap)
+        );
+        $this->_directoryMock->expects(
+            $this->atLeastOnce()
+        )->method(
+            'search'
+        )->will(
+            $this->returnValueMap($filesystemGlobMap)
+        );
+        $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->any())->method('getAbsolutePath')->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->atLeastOnce())->method('isDirectory')->will($this->returnValue(true));
         $this->assertEquals($expectedResult, $this->_object->getCopyRules());
     }
 
@@ -150,7 +151,7 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
                 array($fixture['theme_customizing_one_module']['theme']),
                 $patternDirMap,
                 $filesystemGlobMap,
-                $fixture['theme_customizing_one_module']['expected_result'],
+                $fixture['theme_customizing_one_module']['expected_result']
             ),
             'themes in the same area' => array(
                 array(
@@ -162,7 +163,7 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
                 array_merge(
                     $fixture['theme_customizing_one_module']['expected_result'],
                     $fixture['theme_customizing_two_modules']['expected_result']
-                ),
+                )
             ),
             'themes in different areas' => array(
                 array(
@@ -174,8 +175,8 @@ class CopyRuleTest extends \PHPUnit_Framework_TestCase
                 array_merge(
                     $fixture['theme_customizing_one_module']['expected_result'],
                     $fixture['theme_customizing_no_modules']['expected_result']
-                ),
-            ),
+                )
+            )
         );
     }
 }

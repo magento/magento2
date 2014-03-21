@@ -92,10 +92,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     {
         $price = 0.0;
 
-        $product->getTypeInstance()
-                ->setStoreFilter($product->getStore(), $product);
-        $attributes = $product->getTypeInstance()
-                ->getConfigurableAttributes($product);
+        $product->getTypeInstance()->setStoreFilter($product->getStore(), $product);
+        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
 
         $selectedAttributes = array();
         if ($product->getCustomOption('attributes')) {
@@ -132,7 +130,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     protected function _calcSelectionPrice($priceInfo, $productPrice)
     {
         if ($priceInfo['is_percent']) {
-            $ratio = $priceInfo['pricing_value']/100;
+            $ratio = $priceInfo['pricing_value'] / 100;
             $price = $productPrice * $ratio;
         } else {
             $price = $priceInfo['pricing_value'];

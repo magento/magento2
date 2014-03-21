@@ -23,6 +23,7 @@
  */
 namespace Magento\Test\Tools\View\Generator;
 
+
 require_once __DIR__ . '/../../../../../../../../tools/Magento/Tools/View/Generator/Config.php';
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,12 +40,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_rootDirectory = $this->getMockForAbstractClass('Magento\Filesystem\Directory\WriteInterface');
-        $this->_rootDirectory->expects($this->never())
-            ->method('getAbsolutePath');
+        $this->_rootDirectory->expects($this->never())->method('getAbsolutePath');
         $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
-        $this->_filesystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->_rootDirectory));
+        $this->_filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->will(
+            $this->returnValue($this->_rootDirectory)
+        );
     }
 
     /**
@@ -69,17 +73,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException('\Magento\Exception', $exceptionMessage);
         }
 
-        $this->_rootDirectory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnValueMap($relativePathsMap));
-        $this->_rootDirectory->expects($this->any())
-            ->method('isDirectory')
-            ->will($this->returnValueMap($dirExistenceMap));
+        $this->_rootDirectory->expects(
+            $this->any()
+        )->method(
+            'getRelativePath'
+        )->will(
+            $this->returnValueMap($relativePathsMap)
+        );
+        $this->_rootDirectory->expects(
+            $this->any()
+        )->method(
+            'isDirectory'
+        )->will(
+            $this->returnValueMap($dirExistenceMap)
+        );
 
         if ($expectsReadingDir) {
-            $this->_rootDirectory->expects($this->once())
-                ->method('read')
-                ->will($this->returnValue(array('destination/one', 'destination/two')));
+            $this->_rootDirectory->expects(
+                $this->once()
+            )->method(
+                'read'
+            )->will(
+                $this->returnValue(array('destination/one', 'destination/two'))
+            );
         }
 
         new \Magento\Tools\View\Generator\Config($this->_filesystem, $cmdOptions, $allowedFiles);
@@ -95,58 +111,36 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return array(
             'exception: non-empty destination dir' => array(
                 array('source' => $sourceDir, 'destination' => $destinationDir),
-                array(
-                    array($sourceDir, $relativeSourceDir),
-                    array($destinationDir, $relativeDestinationDir),
-                ),
-                array(
-                    array($relativeSourceDir, true),
-                    array($relativeDestinationDir, true),
-                ),
+                array(array($sourceDir, $relativeSourceDir), array($destinationDir, $relativeDestinationDir)),
+                array(array($relativeSourceDir, true), array($relativeDestinationDir, true)),
                 array('one'),
                 true,
-                'Destination directory must be empty',
+                'Destination directory must be empty'
             ),
             'exception: nonexistent destination directory' => array(
                 array('source' => $sourceDir, 'destination' => $destinationDir),
-                array(
-                    array($sourceDir, $relativeSourceDir),
-                    array($destinationDir, $relativeDestinationDir),
-                ),
-                array(
-                    array($relativeSourceDir, true),
-                    array($relativeDestinationDir, false),
-                ),
+                array(array($sourceDir, $relativeSourceDir), array($destinationDir, $relativeDestinationDir)),
+                array(array($relativeSourceDir, true), array($relativeDestinationDir, false)),
                 array(),
                 false,
-                'Destination directory does not exist',
+                'Destination directory does not exist'
             ),
             'exception: nonexistent source directory' => array(
                 array('source' => $sourceDir),
-                array(
-                    array($sourceDir, $relativeSourceDir),
-                ),
-                array(
-                    array($relativeSourceDir, false),
-                ),
+                array(array($sourceDir, $relativeSourceDir)),
+                array(array($relativeSourceDir, false)),
                 array(),
                 false,
-                'Source directory does not exist',
+                'Source directory does not exist'
             ),
             'no exception' => array(
                 array('source' => $sourceDir, 'destination' => $destinationDir),
-                array(
-                    array($sourceDir, $relativeSourceDir),
-                    array($destinationDir, $relativeDestinationDir),
-                ),
-                array(
-                    array($relativeSourceDir, true),
-                    array($relativeDestinationDir, true),
-                ),
+                array(array($sourceDir, $relativeSourceDir), array($destinationDir, $relativeDestinationDir)),
+                array(array($relativeSourceDir, true), array($relativeDestinationDir, true)),
                 array('one', 'two'),
                 true,
-                null,
-            ),
+                null
+            )
         );
     }
 }

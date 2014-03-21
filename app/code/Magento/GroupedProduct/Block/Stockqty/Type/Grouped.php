@@ -23,11 +23,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
 
-class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite
-    implements \Magento\View\Block\IdentityInterface
+class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite implements
+    \Magento\View\Block\IdentityInterface
 {
     /**
      * Retrieve child products

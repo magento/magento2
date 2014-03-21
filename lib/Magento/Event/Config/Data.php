@@ -66,8 +66,10 @@ class Data extends \Magento\Config\Data\Scoped
      */
     public function get($path = null, $default = null)
     {
-        if (!$this->_appState->isInstalled()
-            && !in_array($this->_configScope->getCurrentScope(), array('global', 'install'))
+        if (!$this->_appState->isInstalled() && !in_array(
+            $this->_configScope->getCurrentScope(),
+            array('global', 'install')
+        )
         ) {
             return $default;
         }

@@ -40,7 +40,7 @@ class Block extends \Magento\App\Action\Action
         }
 
         $blocks = $this->_getBlocks();
-        $data = [];
+        $data = array();
         foreach ($blocks as $blockName => $blockInstance) {
             $data[$blockName] = $blockInstance->toHtml();
         }
@@ -65,8 +65,10 @@ class Block extends \Magento\App\Action\Action
             $blockInstance = array_shift($blocks);
             $html = $blockInstance->toHtml();
             $ttl = $blockInstance->getTtl();
+            if ($blockInstance instanceof \Magento\View\Block\IdentityInterface) {
+                $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
+            }
         }
-
         $response->appendBody($html);
         $response->setPublicHeaders($ttl);
     }
@@ -82,7 +84,7 @@ class Block extends \Magento\App\Action\Action
         $handles = $this->getRequest()->getParam('handles', '');
 
         if (!$handles || !$blocks) {
-            return [];
+            return array();
         }
         $blocks = json_decode($blocks);
         $handles = json_decode($handles);

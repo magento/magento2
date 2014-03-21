@@ -121,10 +121,14 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
         }
 
         // retrieve product types by processIds
-        $select = $adapter->select()
-            ->from($this->getTable('catalog_product_entity'), array('entity_id', 'type_id'))
-            ->where('entity_id IN(?)', $processIds);
-        $pairs  = $adapter->fetchPairs($select);
+        $select = $adapter->select()->from(
+            $this->getTable('catalog_product_entity'),
+            array('entity_id', 'type_id')
+        )->where(
+            'entity_id IN(?)',
+            $processIds
+        );
+        $pairs = $adapter->fetchPairs($select);
 
         $byType = array();
         foreach ($pairs as $productId => $typeId) {
@@ -164,7 +168,7 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
 
         $adapter = $this->_getWriteAdapter();
 
-        $parentIds  = array();
+        $parentIds = array();
         foreach ($data['reindex_stock_parent_ids'] as $parentId => $parentType) {
             $parentIds[$parentType][$parentId] = $parentId;
         }
@@ -200,8 +204,7 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
 
         $adapter = $this->_getWriteAdapter();
         $processIds = $data['reindex_stock_product_ids'];
-        $select = $adapter->select()
-            ->from($this->getTable('catalog_product_entity'), 'COUNT(*)');
+        $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'COUNT(*)');
         $pCount = $adapter->fetchOne($select);
 
         // if affected more 30% of all products - run reindex all products
@@ -210,13 +213,21 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
         }
 
         // calculate relations
-        $select = $adapter->select()
-            ->from($this->getTable('catalog_product_relation'), 'COUNT(DISTINCT parent_id)')
-            ->where('child_id IN(?)', $processIds);
+        $select = $adapter->select()->from(
+            $this->getTable('catalog_product_relation'),
+            'COUNT(DISTINCT parent_id)'
+        )->where(
+            'child_id IN(?)',
+            $processIds
+        );
         $aCount = $adapter->fetchOne($select);
-        $select = $adapter->select()
-            ->from($this->getTable('catalog_product_relation'), 'COUNT(DISTINCT child_id)')
-            ->where('parent_id IN(?)', $processIds);
+        $select = $adapter->select()->from(
+            $this->getTable('catalog_product_relation'),
+            'COUNT(DISTINCT child_id)'
+        )->where(
+            'parent_id IN(?)',
+            $processIds
+        );
         $bCount = $adapter->fetchOne($select);
 
         // if affected with relations more 30% of all products - run reindex all products
@@ -232,10 +243,14 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
         }
 
         // retrieve products types
-        $select = $adapter->select()
-            ->from($this->getTable('catalog_product_entity'), array('entity_id', 'type_id'))
-            ->where('entity_id IN(?)', $processIds);
-        $query  = $select->query(\Zend_Db::FETCH_ASSOC);
+        $select = $adapter->select()->from(
+            $this->getTable('catalog_product_entity'),
+            array('entity_id', 'type_id')
+        )->where(
+            'entity_id IN(?)',
+            $processIds
+        );
+        $query = $select->query(\Zend_Db::FETCH_ASSOC);
         $byType = array();
         while ($row = $query->fetch()) {
             $byType[$row['type_id']][] = $row['entity_id'];
@@ -295,9 +310,13 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
             foreach ($this->_productType->getTypesByPriority() as $typeId => $typeInfo) {
                 $indexerClassName = isset($typeInfo['stock_indexer']) ? $typeInfo['stock_indexer'] : '';
 
-                $indexer = $this->_indexerFactory->create($indexerClassName)
-                    ->setTypeId($typeId)
-                    ->setIsComposite(!empty($typeInfo['composite']));
+                $indexer = $this->_indexerFactory->create(
+                    $indexerClassName
+                )->setTypeId(
+                    $typeId
+                )->setIsComposite(
+                    !empty($typeInfo['composite'])
+                );
 
                 $this->_indexers[$typeId] = $indexer;
             }
@@ -331,14 +350,16 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
     public function getProductParentsByChild($childId)
     {
         $write = $this->_getWriteAdapter();
-        $select = $write->select()
-            ->from(array('l' => $this->getTable('catalog_product_relation')), array('parent_id'))
-            ->join(
-                array('e' => $this->getTable('catalog_product_entity')),
-                'l.parent_id=e.entity_id',
-                array('e.type_id')
-            )
-            ->where('l.child_id = :child_id');
+        $select = $write->select()->from(
+            array('l' => $this->getTable('catalog_product_relation')),
+            array('parent_id')
+        )->join(
+            array('e' => $this->getTable('catalog_product_entity')),
+            'l.parent_id=e.entity_id',
+            array('e.type_id')
+        )->where(
+            'l.child_id = :child_id'
+        );
         return $write->fetchPairs($select, array(':child_id' => $childId));
     }
 

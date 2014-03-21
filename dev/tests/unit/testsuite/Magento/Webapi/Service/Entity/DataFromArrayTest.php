@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Service\Entity;
 
 use Magento\Service\Data\AbstractObject;
@@ -43,9 +42,8 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testSimpleProperties()
     {
-        $data = ['entityId' => 15, 'name' => 'Test'];
-        $result = $this->serializer
-                       ->getInputData('\\Magento\\Webapi\\Service\\Entity\\TestService', 'simple', $data);
+        $data = array('entityId' => 15, 'name' => 'Test');
+        $result = $this->serializer->getInputData('\\Magento\\Webapi\\Service\\Entity\\TestService', 'simple', $data);
         $this->assertNotNull($result);
         $this->assertEquals(15, $result[0]);
         $this->assertEquals('Test', $result[1]);
@@ -53,11 +51,14 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedDataProperties()
     {
-        $data = ['nested' => ['details' => ['entityId' => 15, 'name' => 'Test']]];
-        $result = $this->serializer
-            ->getInputData('\\Magento\\Webapi\\Service\\Entity\\TestService', 'nestedData', $data);
+        $data = array('nested' => array('details' => array('entityId' => 15, 'name' => 'Test')));
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'nestedData',
+            $data
+        );
         $this->assertNotNull($result);
-        $this->assertTrue( $result[0] instanceof NestedData);
+        $this->assertTrue($result[0] instanceof NestedData);
         /** @var array $result */
         $this->assertEquals(1, count($result));
         $this->assertNotEmpty($result[0]);
@@ -74,7 +75,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testSimpleArrayProperties()
     {
-        $data = ['ids'=>[1,2,3,4]];
+        $data = array('ids' => array(1, 2, 3, 4));
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'simpleArray',
@@ -92,7 +93,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociativeArrayProperties()
     {
-        $data = ['associativeArray' => ['key' => 'value', 'key_two' => 'value_two']];
+        $data = array('associativeArray' => array('key' => 'value', 'key_two' => 'value_two'));
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'associativeArray',
@@ -110,7 +111,12 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfDataObjectProperties()
     {
-        $data = ['dataObjects' => [ ['entityId' => 14, 'name' => 'First'], [ 'entityId' => 15, 'name' => 'Second' ] ]];
+        $data = array(
+            'dataObjects' => array(
+                array('entityId' => 14, 'name' => 'First'),
+                array('entityId' => 15, 'name' => 'Second')
+            )
+        );
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'dataArray',
@@ -136,9 +142,12 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedSimpleArrayProperties()
     {
-        $data = ['arrayData' => ['ids' => [1, 2, 3, 4]]];
-        $result = $this->serializer
-            ->getInputData('\\Magento\\Webapi\\Service\\Entity\\TestService', 'nestedSimpleArray', $data);
+        $data = array('arrayData' => array('ids' => array(1, 2, 3, 4)));
+        $result = $this->serializer->getInputData(
+            '\\Magento\\Webapi\\Service\\Entity\\TestService',
+            'nestedSimpleArray',
+            $data
+        );
         $this->assertNotNull($result);
         /** @var array $result */
         $this->assertEquals(1, count($result));
@@ -154,7 +163,9 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedAssociativeArrayProperties()
     {
-        $data = ['associativeArrayData' => ['associativeArray' => ['key' => 'value', 'key2' => 'value2']]];
+        $data = array(
+            'associativeArrayData' => array('associativeArray' => array('key' => 'value', 'key2' => 'value2'))
+        );
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedAssociativeArray',
@@ -175,14 +186,11 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
 
     public function testNestedArrayOfDataObjectProperties()
     {
-        $data = [
-            'dataObjects' => [
-                'items' => [
-                    ['entityId' => 1, 'name' => 'First'],
-                    ['entityId' => 2, 'name' => 'Second']
-                ]
-            ]
-        ];
+        $data = array(
+            'dataObjects' => array(
+                'items' => array(array('entityId' => 1, 'name' => 'First'), array('entityId' => 2, 'name' => 'Second'))
+            )
+        );
         $result = $this->serializer->getInputData(
             '\\Magento\\Webapi\\Service\\Entity\\TestService',
             'nestedDataArray',

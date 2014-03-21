@@ -32,8 +32,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Price extends
-    \Magento\Backend\Block\Widget\Grid\Column\Renderer\Price
+class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Price
 {
     /**
      * Render minimal price for downloadable products

@@ -59,8 +59,7 @@ class Factory
         $model = $this->_objectManager->create($className, $data);
 
         if (!$model instanceof \Magento\Core\Model\AbstractModel) {
-            throw new \Magento\Core\Exception($className
-                . ' doesn\'t extends \Magento\Core\Model\AbstractModel');
+            throw new \Magento\Core\Exception($className . ' doesn\'t extends \Magento\Core\Model\AbstractModel');
         }
         return $model;
     }

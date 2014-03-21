@@ -27,5 +27,4 @@ namespace Magento\Payment\Model\Paygate;
 
 class Result extends \Magento\Object
 {
-    
 }

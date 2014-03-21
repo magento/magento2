@@ -199,7 +199,7 @@ class Observer
                 $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setUsername($login);
                 $beforeUrl = $this->_session->getBeforeAuthUrl();
-                $url =  $beforeUrl ? $beforeUrl : $this->_customerData->getLoginUrl();
+                $url = $beforeUrl ? $beforeUrl : $this->_customerData->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }
         }
@@ -294,9 +294,7 @@ class Observer
         if ($captchaModel->isRequired($login)) {
             if (!$captchaModel->isCorrect($this->_getCaptchaString($this->_request, $formId))) {
                 $captchaModel->logAttempt($login);
-                throw new \Magento\Backend\Model\Auth\Plugin\Exception(
-                    __('Incorrect CAPTCHA.')
-                );
+                throw new \Magento\Backend\Model\Auth\Plugin\Exception(__('Incorrect CAPTCHA.'));
             }
         }
         $captchaModel->logAttempt($login);
@@ -314,17 +312,18 @@ class Observer
         $formId = 'backend_forgotpassword';
         $captchaModel = $this->_helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
-        $email = (string) $observer->getControllerAction()->getRequest()->getParam('email');
+        $email = (string)$observer->getControllerAction()->getRequest()->getParam('email');
         $params = $observer->getControllerAction()->getRequest()->getParams();
 
         if (!empty($email) && !empty($params)) {
             if ($captchaModel->isRequired()) {
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
-                    $this->_session->setEmail((string) $controller->getRequest()->getPost('email'));
+                    $this->_session->setEmail((string)$controller->getRequest()->getPost('email'));
                     $this->_actionFlag->set('', \Magento\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $this->messageManager->addError(__('Incorrect CAPTCHA'));
-                    $controller->getResponse()
-                        ->setRedirect($controller->getUrl('*/*/forgotpassword', array('_nosecret' => true)));
+                    $controller->getResponse()->setRedirect(
+                        $controller->getUrl('*/*/forgotpassword', array('_nosecret' => true))
+                    );
                 }
             }
         }
@@ -339,9 +338,7 @@ class Observer
      */
     public function resetAttemptForFrontend($observer)
     {
-        return $this->_getResourceModel()->deleteUserAttempts(
-            $observer->getModel()->getEmail()
-        );
+        return $this->_getResourceModel()->deleteUserAttempts($observer->getModel()->getEmail());
     }
 
     /**
@@ -352,9 +349,7 @@ class Observer
      */
     public function resetAttemptForBackend($observer)
     {
-        return $this->_getResourceModel()->deleteUserAttempts(
-            $observer->getUser()->getUsername()
-        );
+        return $this->_getResourceModel()->deleteUserAttempts($observer->getUser()->getUsername());
     }
 
     /**

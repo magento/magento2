@@ -53,7 +53,7 @@ class Reader
     /**
      * pattern to find all system.xml files
      */
-    CONST SYSTEM_CONFIG_PATH_PATTERN = 'app/code/*/*/*/etc/system.xml';
+    const SYSTEM_CONFIG_PATH_PATTERN = 'app/code/*/*/*/etc/system.xml';
 
     /**
      * @param \Magento\Tools\Migration\System\FileManager $fileManager
@@ -80,17 +80,12 @@ class Reader
     public function getConfiguration()
     {
         $files = $this->_fileManager->getFileList(
-            $this->_basePath . '/'
-            . \Magento\Tools\Migration\System\Configuration\Reader::SYSTEM_CONFIG_PATH_PATTERN
+            $this->_basePath . '/' . \Magento\Tools\Migration\System\Configuration\Reader::SYSTEM_CONFIG_PATH_PATTERN
         );
         $result = array();
         foreach ($files as $fileName) {
             $result[$fileName] = $this->_mapper->transform(
-                $this->_parser->parse(
-                    $this->_getDOMDocument(
-                        $this->_fileManager->getContents($fileName)
-                    )
-                )
+                $this->_parser->parse($this->_getDOMDocument($this->_fileManager->getContents($fileName)))
             );
         }
 

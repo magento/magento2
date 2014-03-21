@@ -115,24 +115,30 @@ class Emulation extends \Magento\Object
      * @param bool $emulateStoreInlineTranslation emulate inline translation of the specified store or just disable it
      * @return \Magento\Object information about environment of the initial store
      */
-    public function startEnvironmentEmulation($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                                              $emulateStoreInlineTranslation = false
+    public function startEnvironmentEmulation(
+        $storeId,
+        $area = \Magento\Core\Model\App\Area::AREA_FRONTEND,
+        $emulateStoreInlineTranslation = false
     ) {
         if ($area === null) {
             $area = \Magento\Core\Model\App\Area::AREA_FRONTEND;
         }
-        $initialTranslateInline = $emulateStoreInlineTranslation
-            ? $this->_emulateInlineTranslation($storeId)
-            : $this->_emulateInlineTranslation();
+        $initialTranslateInline = $emulateStoreInlineTranslation ? $this->_emulateInlineTranslation(
+            $storeId
+        ) : $this->_emulateInlineTranslation();
         $initialDesign = $this->_emulateDesign($storeId, $area);
         // Current store needs to be changed right before locale change and after design change
         $this->_storeManager->setCurrentStore($storeId);
         $initialLocaleCode = $this->_emulateLocale($storeId, $area);
 
         $initialEnvironmentInfo = new \Magento\Object();
-        $initialEnvironmentInfo->setInitialTranslateInline($initialTranslateInline)
-            ->setInitialDesign($initialDesign)
-            ->setInitialLocaleCode($initialLocaleCode);
+        $initialEnvironmentInfo->setInitialTranslateInline(
+            $initialTranslateInline
+        )->setInitialDesign(
+            $initialDesign
+        )->setInitialLocaleCode(
+            $initialLocaleCode
+        );
 
         return $initialEnvironmentInfo;
     }
@@ -215,10 +221,7 @@ class Emulation extends \Magento\Object
     protected function _emulateLocale($storeId, $area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
     {
         $initialLocaleCode = $this->_localeResolver->getLocaleCode();
-        $newLocaleCode = $this->_coreStoreConfig->getConfig(
-            $this->_localeResolver->getDefaultLocalePath(),
-            $storeId
-        );
+        $newLocaleCode = $this->_coreStoreConfig->getConfig($this->_localeResolver->getDefaultLocalePath(), $storeId);
         $this->_localeResolver->setLocaleCode($newLocaleCode);
         $this->_translate->initLocale($newLocaleCode, $area);
         return $initialLocaleCode;
@@ -255,8 +258,10 @@ class Emulation extends \Magento\Object
      * @param string $initialArea
      * @return $this
      */
-    protected function _restoreInitialLocale($initialLocaleCode, $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN)
-    {
+    protected function _restoreInitialLocale(
+        $initialLocaleCode,
+        $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN
+    ) {
         $this->_localeResolver->setLocaleCode($initialLocaleCode);
         $this->_translate->initLocale($initialLocaleCode);
         return $this;

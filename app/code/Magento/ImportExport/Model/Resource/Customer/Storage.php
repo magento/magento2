@@ -86,11 +86,13 @@ class Storage
         \Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory $colIteratorFactory,
         array $data = array()
     ) {
-        $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
-            : $collectionFactory->create();
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $collectionFactory->create();
         $this->_pageSize = isset($data['page_size']) ? $data['page_size'] : 0;
-        $this->_byPagesIterator = isset($data['collection_by_pages_iterator']) ? $data['collection_by_pages_iterator']
-            : $colIteratorFactory->create();
+        $this->_byPagesIterator = isset(
+            $data['collection_by_pages_iterator']
+        ) ? $data['collection_by_pages_iterator'] : $colIteratorFactory->create();
     }
 
     /**
@@ -106,7 +108,9 @@ class Storage
             $tableName = $collection->getResource()->getEntityTable();
             $collection->getSelect()->from($tableName, array('entity_id', 'website_id', 'email'));
 
-            $this->_byPagesIterator->iterate($this->_customerCollection, $this->_pageSize,
+            $this->_byPagesIterator->iterate(
+                $this->_customerCollection,
+                $this->_pageSize,
                 array(array($this, 'addCustomer'))
             );
 

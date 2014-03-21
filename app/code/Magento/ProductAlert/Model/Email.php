@@ -35,8 +35,10 @@ namespace Magento\ProductAlert\Model;
 class Email extends \Magento\Core\Model\AbstractModel
 {
     const XML_PATH_EMAIL_PRICE_TEMPLATE = 'catalog/productalert/email_price_template';
+
     const XML_PATH_EMAIL_STOCK_TEMPLATE = 'catalog/productalert/email_stock_template';
-    const XML_PATH_EMAIL_IDENTITY       = 'catalog/productalert/email_identity';
+
+    const XML_PATH_EMAIL_IDENTITY = 'catalog/productalert/email_identity';
 
     /**
      * Type
@@ -232,7 +234,7 @@ class Email extends \Magento\Core\Model\AbstractModel
      */
     public function clean()
     {
-        $this->_customer      = null;
+        $this->_customer = null;
         $this->_priceProducts = array();
         $this->_stockProducts = array();
 
@@ -271,8 +273,7 @@ class Email extends \Magento\Core\Model\AbstractModel
     protected function _getPriceBlock()
     {
         if (is_null($this->_priceBlock)) {
-            $this->_priceBlock = $this->_productAlertData
-                ->createBlock('Magento\ProductAlert\Block\Email\Price');
+            $this->_priceBlock = $this->_productAlertData->createBlock('Magento\ProductAlert\Block\Email\Price');
         }
         return $this->_priceBlock;
     }
@@ -285,8 +286,7 @@ class Email extends \Magento\Core\Model\AbstractModel
     protected function _getStockBlock()
     {
         if (is_null($this->_stockBlock)) {
-            $this->_stockBlock = $this->_productAlertData
-                ->createBlock('Magento\ProductAlert\Block\Email\Stock');
+            $this->_stockBlock = $this->_productAlertData->createBlock('Magento\ProductAlert\Block\Email\Stock');
         }
         return $this->_stockBlock;
     }
@@ -301,8 +301,11 @@ class Email extends \Magento\Core\Model\AbstractModel
         if (is_null($this->_website) || is_null($this->_customer)) {
             return false;
         }
-        if (($this->_type == 'price' && count($this->_priceProducts) == 0)
-            || ($this->_type == 'stock' && count($this->_stockProducts) == 0)
+        if ($this->_type == 'price' && count(
+            $this->_priceProducts
+        ) == 0 || $this->_type == 'stock' && count(
+            $this->_stockProducts
+        ) == 0
         ) {
             return false;
         }
@@ -310,12 +313,20 @@ class Email extends \Magento\Core\Model\AbstractModel
             return false;
         }
 
-        $store      = $this->_website->getDefaultStore();
-        $storeId    = $store->getId();
+        $store = $this->_website->getDefaultStore();
+        $storeId = $store->getId();
 
-        if ($this->_type == 'price' && !$this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_PRICE_TEMPLATE, $storeId)) {
+        if ($this->_type == 'price' && !$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_EMAIL_PRICE_TEMPLATE,
+            $storeId
+        )
+        ) {
             return false;
-        } elseif ($this->_type == 'stock' && !$this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_STOCK_TEMPLATE, $storeId)) {
+        } elseif ($this->_type == 'stock' && !$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_EMAIL_STOCK_TEMPLATE,
+            $storeId
+        )
+        ) {
             return false;
         }
 
@@ -326,9 +337,7 @@ class Email extends \Magento\Core\Model\AbstractModel
         $initialEnvironmentInfo = $this->_appEmulation->startEnvironmentEmulation($storeId);
 
         if ($this->_type == 'price') {
-            $this->_getPriceBlock()
-                ->setStore($store)
-                ->reset();
+            $this->_getPriceBlock()->setStore($store)->reset();
             foreach ($this->_priceProducts as $product) {
                 $product->setCustomerGroupId($this->_customer->getGroupId());
                 $this->_getPriceBlock()->addProduct($product);
@@ -336,9 +345,7 @@ class Email extends \Magento\Core\Model\AbstractModel
             $block = $this->_getPriceBlock()->toHtml();
             $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_PRICE_TEMPLATE, $storeId);
         } else {
-            $this->_getStockBlock()
-                ->setStore($store)
-                ->reset();
+            $this->_getStockBlock()->setStore($store)->reset();
             foreach ($this->_stockProducts as $product) {
                 $product->setCustomerGroupId($this->_customer->getGroupId());
                 $this->_getStockBlock()->addProduct($product);
@@ -349,19 +356,18 @@ class Email extends \Magento\Core\Model\AbstractModel
 
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
 
-        $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($templateId)
-            ->setTemplateOptions(array(
-                'area'  => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => $storeId
-            ))
-            ->setTemplateVars(array(
-                'customerName'  => $this->_customer->getName(),
-                'alertGrid'     => $block
-            ))
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
-            ->addTo($this->_customer->getEmail(), $this->_customer->getName())
-            ->getTransport();
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $templateId
+        )->setTemplateOptions(
+            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+        )->setTemplateVars(
+            array('customerName' => $this->_customer->getName(), 'alertGrid' => $block)
+        )->setFrom(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId)
+        )->addTo(
+            $this->_customer->getEmail(),
+            $this->_customer->getName()
+        )->getTransport();
 
         $transport->sendMessage();
 

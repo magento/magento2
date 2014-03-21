@@ -46,17 +46,27 @@ namespace Magento\Newsletter\Model;
 class Subscriber extends \Magento\Core\Model\AbstractModel
 {
     const STATUS_SUBSCRIBED = 1;
+
     const STATUS_NOT_ACTIVE = 2;
+
     const STATUS_UNSUBSCRIBED = 3;
+
     const STATUS_UNCONFIRMED = 4;
 
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'newsletter/subscription/confirm_email_template';
+
     const XML_PATH_CONFIRM_EMAIL_IDENTITY = 'newsletter/subscription/confirm_email_identity';
+
     const XML_PATH_SUCCESS_EMAIL_TEMPLATE = 'newsletter/subscription/success_email_template';
+
     const XML_PATH_SUCCESS_EMAIL_IDENTITY = 'newsletter/subscription/success_email_identity';
+
     const XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE = 'newsletter/subscription/un_email_template';
+
     const XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY = 'newsletter/subscription/un_email_identity';
+
     const XML_PATH_CONFIRMATION_FLAG = 'newsletter/subscription/confirm';
+
     const XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG = 'newsletter/subscription/allow_guest_subscribe';
 
     /**
@@ -268,7 +278,6 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
      * @param boolean $scope
      * @return $this
      */
-
     public function setMessagesScope($scope)
     {
         $this->getResource()->setMessagesScope($scope);
@@ -304,7 +313,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
      */
     public function setIsStatusChanged($value)
     {
-        $this->_isStatusChanged = (boolean) $value;
+        $this->_isStatusChanged = (bool)$value;
         return $this;
     }
 
@@ -402,16 +411,18 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
             $this->setSubscriberConfirmCode($this->randomSequence());
         }
 
-        $isConfirmNeed = ($this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1) ? true : false;
+        $isConfirmNeed = $this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRMATION_FLAG) == 1 ? true : false;
         $isOwnSubscribes = false;
-        $ownerId = $this->_customerFactory->create()
-            ->setWebsiteId($this->_storeManager->getStore()->getWebsiteId())
-            ->loadByEmail($email)
-            ->getId();
+        $ownerId = $this->_customerFactory->create()->setWebsiteId(
+            $this->_storeManager->getStore()->getWebsiteId()
+        )->loadByEmail(
+            $email
+        )->getId();
         $isSubscribeOwnEmail = $this->_customerSession->isLoggedIn() && $ownerId == $this->_customerSession->getId();
 
-        if (!$this->getId() || $this->getStatus() == self::STATUS_UNSUBSCRIBED
-            || $this->getStatus() == self::STATUS_NOT_ACTIVE
+        if (!$this->getId() ||
+            $this->getStatus() == self::STATUS_UNSUBSCRIBED ||
+            $this->getStatus() == self::STATUS_NOT_ACTIVE
         ) {
             if ($isConfirmNeed === true) {
                 // if user subscribes own login email - confirmation is not needed
@@ -441,9 +452,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
 
         try {
             $this->save();
-            if ($isConfirmNeed === true
-                && $isOwnSubscribes === false
-            ) {
+            if ($isConfirmNeed === true && $isOwnSubscribes === false) {
                 $this->sendConfirmationRequestEmail();
             } else {
                 $this->sendConfirmationSuccessEmail();
@@ -518,26 +527,26 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
          * Logical mismatch between customer registration confirmation code and customer password confirmation
          */
         $confirmation = null;
-        if ($customer->isConfirmationRequired() && ($customer->getConfirmation() != $customer->getPassword())) {
+        if ($customer->isConfirmationRequired() && $customer->getConfirmation() != $customer->getPassword()) {
             $confirmation = $customer->getConfirmation();
         }
 
         $sendInformationEmail = false;
         if ($customer->hasIsSubscribed()) {
-            $status = $customer->getIsSubscribed()
-                ? (!is_null($confirmation) ? self::STATUS_UNCONFIRMED : self::STATUS_SUBSCRIBED)
-                : self::STATUS_UNSUBSCRIBED;
+            $status = $customer->getIsSubscribed() ? !is_null(
+                $confirmation
+            ) ? self::STATUS_UNCONFIRMED : self::STATUS_SUBSCRIBED : self::STATUS_UNSUBSCRIBED;
             /**
              * If subscription status has been changed then send email to the customer
              */
             if ($status != self::STATUS_UNCONFIRMED && $status != $this->getStatus()) {
                 $sendInformationEmail = true;
             }
-        } elseif (($this->getStatus() == self::STATUS_UNCONFIRMED) && (is_null($confirmation))) {
+        } elseif ($this->getStatus() == self::STATUS_UNCONFIRMED && is_null($confirmation)) {
             $status = self::STATUS_SUBSCRIBED;
             $sendInformationEmail = true;
         } else {
-            $status = ($this->getStatus() == self::STATUS_NOT_ACTIVE ? self::STATUS_UNSUBSCRIBED : $this->getStatus());
+            $status = $this->getStatus() == self::STATUS_NOT_ACTIVE ? self::STATUS_UNSUBSCRIBED : $this->getStatus();
         }
 
         if ($status != $this->getStatus()) {
@@ -551,12 +560,9 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
             if ($customer->getStoreId() == 0) {
                 $storeId = $this->_storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
             }
-            $this->setStoreId($storeId)
-                ->setCustomerId($customer->getId())
-                ->setEmail($customer->getEmail());
+            $this->setStoreId($storeId)->setCustomerId($customer->getId())->setEmail($customer->getEmail());
         } else {
-            $this->setStoreId($customer->getStoreId())
-                ->setEmail($customer->getEmail());
+            $this->setStoreId($customer->getStoreId())->setEmail($customer->getEmail());
         }
 
         $this->save();
@@ -580,9 +586,7 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
     public function confirm($code)
     {
         if ($this->getCode() == $code) {
-            $this->setStatus(self::STATUS_SUBSCRIBED)
-                ->setIsStatusChanged(true)
-                ->save();
+            $this->setStatus(self::STATUS_SUBSCRIBED)->setIsStatusChanged(true)->save();
             return true;
         }
 
@@ -612,8 +616,11 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY)
+        if (!$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_CONFIRM_EMAIL_TEMPLATE
+        ) || !$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_CONFIRM_EMAIL_IDENTITY
+        )
         ) {
             return $this;
         }
@@ -621,20 +628,21 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         $translate = $this->_translate->getTranslateInline();
         $this->_translate->setTranslateInline(false);
 
-        $this->_transportBuilder
-            ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE)
-            )
-            ->setTemplateOptions(array(
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_TEMPLATE)
+        )->setTemplateOptions(
+            array(
                 'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
-            ))
-            ->setTemplateVars(array(
-                'subscriber' => $this,
-                'store' => $this->_storeManager->getStore(),
-            ))
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName());
+                'store' => $this->_storeManager->getStore()->getId()
+            )
+        )->setTemplateVars(
+            array('subscriber' => $this, 'store' => $this->_storeManager->getStore())
+        )->setFrom(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_CONFIRM_EMAIL_IDENTITY)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 
@@ -653,8 +661,11 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
+        if (!$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_SUCCESS_EMAIL_TEMPLATE
+        ) || !$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_SUCCESS_EMAIL_IDENTITY
+        )
         ) {
             return $this;
         }
@@ -662,17 +673,21 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         $translate = $this->_translate->getTranslateInline();
         $this->_translate->setTranslateInline(false);
 
-        $this->_transportBuilder
-            ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE)
-            )
-            ->setTemplateOptions(array(
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_TEMPLATE)
+        )->setTemplateOptions(
+            array(
                 'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
-            ))
-            ->setTemplateVars(array('subscriber' => $this))
-            ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName());
+                'store' => $this->_storeManager->getStore()->getId()
+            )
+        )->setTemplateVars(
+            array('subscriber' => $this)
+        )->setFrom(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_SUCCESS_EMAIL_IDENTITY)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 
@@ -690,8 +705,11 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         if ($this->getImportMode()) {
             return $this;
         }
-        if (!$this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE)
-            || !$this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
+        if (!$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE
+        ) || !$this->_coreStoreConfig->getConfig(
+            self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY
+        )
         ) {
             return $this;
         }
@@ -699,19 +717,21 @@ class Subscriber extends \Magento\Core\Model\AbstractModel
         $translate = $this->_translate->getTranslateInline();
         $this->_translate->setTranslateInline(false);
 
-        $this->_transportBuilder
-                ->setTemplateIdentifier(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE)
-            )
-            ->setTemplateOptions(array(
+        $this->_transportBuilder->setTemplateIdentifier(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE)
+        )->setTemplateOptions(
+            array(
                 'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId(),
-            ))
-            ->setTemplateVars(array('subscriber' => $this))
-            ->setFrom(
-                $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
+                'store' => $this->_storeManager->getStore()->getId()
             )
-            ->addTo($this->getEmail(), $this->getName());
+        )->setTemplateVars(
+            array('subscriber' => $this)
+        )->setFrom(
+            $this->_coreStoreConfig->getConfig(self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
 

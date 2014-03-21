@@ -177,7 +177,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                     }
                     foreach ($this->_definitions->getMethodList($pluginType) as $pluginMethod => $methodTypes) {
                         $current = isset($lastPerMethod[$pluginMethod]) ? $lastPerMethod[$pluginMethod] : '__self';
-                        $currentKey = $type . '_'. $pluginMethod . '_' . $current;
+                        $currentKey = $type . '_' . $pluginMethod . '_' . $current;
                         if ($methodTypes & Definition::LISTENER_AROUND) {
                             $this->_processed[$currentKey][Definition::LISTENER_AROUND] = $key;
                             $lastPerMethod[$pluginMethod] = $key;

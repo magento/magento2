@@ -25,22 +25,29 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Store');
-$websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')
-    ->getWebsite()->getId();
-$groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-    ->getWebsite()->getDefaultGroupId();
-$store->setCode('fixturestore') // fixture_store conflicts with "current_store" notation
-    ->setWebsiteId($websiteId)
-    ->setGroupId($groupId)
-    ->setName('Fixture Store')
-    ->setSortOrder(10)
-    ->setIsActive(1)
-;
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
+$websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Core\Model\StoreManagerInterface'
+)->getWebsite()->getId();
+$groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Core\Model\StoreManagerInterface'
+)->getWebsite()->getDefaultGroupId();
+$store->setCode(
+    'fixturestore' // fixture_store conflicts with "current_store" notation
+)->setWebsiteId(
+    $websiteId
+)->setGroupId(
+    $groupId
+)->setName(
+    'Fixture Store'
+)->setSortOrder(
+    10
+)->setIsActive(
+    1
+);
 $store->save();
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-    ->reinitStores();
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Core\Model\StoreManagerInterface'
+)->reinitStores();

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 class Date extends AbstractData
@@ -42,9 +41,9 @@ class Date extends AbstractData
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
-        $label      = $attribute->getStoreLabel();
+        $errors = array();
+        $attribute = $this->getAttribute();
+        $label = $attribute->getStoreLabel();
 
         if ($value === false) {
             // try to load original value and validate it
@@ -66,15 +65,31 @@ class Date extends AbstractData
 
         //range validation
         $validateRules = $attribute->getValidationRules();
-        if ((!empty($validateRules['date_range_min']) && (strtotime($value) < $validateRules['date_range_min']))
-            || (!empty($validateRules['date_range_max']) && (strtotime($value) > $validateRules['date_range_max']))
+        if (!empty($validateRules['date_range_min']) && strtotime(
+            $value
+        ) < $validateRules['date_range_min'] || !empty($validateRules['date_range_max']) && strtotime(
+            $value
+        ) > $validateRules['date_range_max']
         ) {
             if (!empty($validateRules['date_range_min']) && !empty($validateRules['date_range_max'])) {
-                $errors[] = __('Please enter a valid date between %1 and %2 at %3.', date('d/m/Y', $validateRules['date_range_min']), date('d/m/Y', $validateRules['date_range_max']), $label);
+                $errors[] = __(
+                    'Please enter a valid date between %1 and %2 at %3.',
+                    date('d/m/Y', $validateRules['date_range_min']),
+                    date('d/m/Y', $validateRules['date_range_max']),
+                    $label
+                );
             } elseif (!empty($validateRules['date_range_min'])) {
-                $errors[] = __('Please enter a valid date equal to or greater than %1 at %2.', date('d/m/Y', $validateRules['date_range_min']), $label);
+                $errors[] = __(
+                    'Please enter a valid date equal to or greater than %1 at %2.',
+                    date('d/m/Y', $validateRules['date_range_min']),
+                    $label
+                );
             } elseif (!empty($validateRules['date_range_max'])) {
-                $errors[] = __('Please enter a valid date less than or equal to %1 at %2.', date('d/m/Y', $validateRules['date_range_max']), $label);
+                $errors[] = __(
+                    'Please enter a valid date less than or equal to %1 at %2.',
+                    date('d/m/Y', $validateRules['date_range_max']),
+                    $label
+                );
             }
         }
 
@@ -98,7 +113,6 @@ class Date extends AbstractData
         }
         return false;
     }
-
 
     /**
      * {@inheritdoc}

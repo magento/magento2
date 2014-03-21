@@ -30,8 +30,8 @@ namespace Magento\Catalog\Block\Product;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
-    implements \Magento\View\Block\IdentityInterface
+class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
+    \Magento\View\Block\IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -46,11 +46,9 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productsCount;
 
     /**
-     * Customer session
-     *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * Catalog product visibility
@@ -80,7 +78,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      * @param array $priceBlockTypes
      *
@@ -100,13 +98,13 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         parent::__construct(
             $context,
             $catalogConfig,
@@ -134,16 +132,26 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         parent::_construct();
 
-        $this->addColumnCountLayoutDepend('empty', 6)
-            ->addColumnCountLayoutDepend('one_column', 5)
-            ->addColumnCountLayoutDepend('two_columns_left', 4)
-            ->addColumnCountLayoutDepend('two_columns_right', 4)
-            ->addColumnCountLayoutDepend('three_columns', 3);
+        $this->addColumnCountLayoutDepend(
+            'empty',
+            6
+        )->addColumnCountLayoutDepend(
+            'one_column',
+            5
+        )->addColumnCountLayoutDepend(
+            'two_columns_left',
+            4
+        )->addColumnCountLayoutDepend(
+            'two_columns_right',
+            4
+        )->addColumnCountLayoutDepend(
+            'three_columns',
+            3
+        );
 
-        $this->addData(array(
-            'cache_lifetime'    => 86400,
-            'cache_tags'        => array(\Magento\Catalog\Model\Product::CACHE_TAG),
-        ));
+        $this->addData(
+            array('cache_lifetime' => 86400, 'cache_tags' => array(\Magento\Catalog\Model\Product::CACHE_TAG))
+        );
     }
 
     /**
@@ -157,7 +165,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
            'CATALOG_PRODUCT_NEW',
            $this->_storeManager->getStore()->getId(),
            $this->_design->getDesignTheme()->getId(),
-           $this->_customerSession->getCustomerGroupId(),
+           $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_GROUP),
            'template' => $this->getTemplate(),
            $this->getProductsCount()
         );
@@ -170,39 +178,56 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     protected function _getProductCollection()
     {
-        $todayStartOfDayDate  = $this->_localeDate->date()
-            ->setTime('00:00:00')
-            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        $todayStartOfDayDate = $this->_localeDate->date()->setTime(
+            '00:00:00'
+        )->toString(
+            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        );
 
-        $todayEndOfDayDate  = $this->_localeDate->date()
-            ->setTime('23:59:59')
-            ->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        $todayEndOfDayDate = $this->_localeDate->date()->setTime(
+            '23:59:59'
+        )->toString(
+            \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+        );
 
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
 
-        $collection = $this->_addProductAttributesAndPrices($collection)
-            ->addStoreFilter()
-            ->addAttributeToFilter('news_from_date', array('or'=> array(
-                0 => array('date' => true, 'to' => $todayEndOfDayDate),
-                1 => array('is' => new \Zend_Db_Expr('null')))
-            ), 'left')
-            ->addAttributeToFilter('news_to_date', array('or'=> array(
-                0 => array('date' => true, 'from' => $todayStartOfDayDate),
-                1 => array('is' => new \Zend_Db_Expr('null')))
-            ), 'left')
-            ->addAttributeToFilter(
-                array(
-                    array('attribute' => 'news_from_date', 'is'=>new \Zend_Db_Expr('not null')),
-                    array('attribute' => 'news_to_date', 'is'=>new \Zend_Db_Expr('not null'))
-                    )
-              )
-            ->addAttributeToSort('news_from_date', 'desc')
-            ->setPageSize($this->getProductsCount())
-            ->setCurPage(1)
-        ;
+        $collection = $this->_addProductAttributesAndPrices(
+            $collection
+        )->addStoreFilter()->addAttributeToFilter(
+            'news_from_date',
+            array(
+                'or' => array(
+                    0 => array('date' => true, 'to' => $todayEndOfDayDate),
+                    1 => array('is' => new \Zend_Db_Expr('null'))
+                )
+            ),
+            'left'
+        )->addAttributeToFilter(
+            'news_to_date',
+            array(
+                'or' => array(
+                    0 => array('date' => true, 'from' => $todayStartOfDayDate),
+                    1 => array('is' => new \Zend_Db_Expr('null'))
+                )
+            ),
+            'left'
+        )->addAttributeToFilter(
+            array(
+                array('attribute' => 'news_from_date', 'is' => new \Zend_Db_Expr('not null')),
+                array('attribute' => 'news_to_date', 'is' => new \Zend_Db_Expr('not null'))
+            )
+        )->addAttributeToSort(
+            'news_from_date',
+            'desc'
+        )->setPageSize(
+            $this->getProductsCount()
+        )->setCurPage(
+            1
+        );
 
         return $collection;
     }

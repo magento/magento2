@@ -35,7 +35,9 @@ interface WriterInterface
      * Save pack modes
      */
     const MODE_REPLACE = 'replace';
+
     const MODE_MERGE = 'merge';
+
     /**#@-*/
 
     /**

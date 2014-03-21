@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 class Observer
@@ -118,14 +117,20 @@ class Observer
             if (date(\Zend_Date::HOUR_SHORT, $timestamp) == '00') {
                 $format = '%Y-%m-%d %H:%i:%s';
                 $this->_refreshSpecialPriceByStore(
-                    $store->getId(), 'special_from_date', $connection->getDateFormatSql($currDateExpr, $format)
+                    $store->getId(),
+                    'special_from_date',
+                    $connection->getDateFormatSql($currDateExpr, $format)
                 );
 
                 $dateTo = $connection->getDateAddSql(
-                    $currDateExpr, -1, \Magento\DB\Adapter\AdapterInterface::INTERVAL_DAY
+                    $currDateExpr,
+                    -1,
+                    \Magento\DB\Adapter\AdapterInterface::INTERVAL_DAY
                 );
                 $this->_refreshSpecialPriceByStore(
-                    $store->getId(), 'special_to_date', $connection->getDateFormatSql($dateTo, $format)
+                    $store->getId(),
+                    'special_to_date',
+                    $connection->getDateFormatSql($dateTo, $format)
                 );
             }
         }
@@ -146,14 +151,20 @@ class Observer
 
         $connection = $this->_getWriteConnection();
 
-        $select = $connection->select()
-            ->from($this->_resource->getTableName(array('catalog_product_entity', 'datetime')), array('entity_id'))
-            ->where('attribute_id = ?', $attributeId)
-            ->where('store_id = ?', $storeId)
-            ->where('value = ?', $attrConditionValue);
-
-        $this->_processor->getIndexer()->reindexList(
-            $connection->fetchCol($select, array('entity_id'))
+        $select = $connection->select()->from(
+            $this->_resource->getTableName(array('catalog_product_entity', 'datetime')),
+            array('entity_id')
+        )->where(
+            'attribute_id = ?',
+            $attributeId
+        )->where(
+            'store_id = ?',
+            $storeId
+        )->where(
+            'value = ?',
+            $attrConditionValue
         );
+
+        $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, array('entity_id')));
     }
 }

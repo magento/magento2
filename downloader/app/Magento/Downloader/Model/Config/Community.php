@@ -32,7 +32,8 @@ namespace Magento\Downloader\Model\Config;
  * @package    Magento_Connect
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Community extends \Magento\Downloader\Model\Config\AbstractConfig implements \Magento\Downloader\Model\Config\ConfigInterface
+class Community extends \Magento\Downloader\Model\Config\AbstractConfig implements
+    \Magento\Downloader\Model\Config\ConfigInterface
 {
     /**
      * Initialization
@@ -81,7 +82,8 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
      *
      * @return string Root channel URI
      */
-    public function getRootChannelUri(){
+    public function getRootChannelUri()
+    {
         if (!$this->get('root_channel_uri')) {
             $this->set('root_channel_uri', 'connect20.magentocommerce.com/community');
         }
@@ -110,4 +112,3 @@ class Community extends \Magento\Downloader\Model\Config\AbstractConfig implemen
     {
     }
 }
-?>

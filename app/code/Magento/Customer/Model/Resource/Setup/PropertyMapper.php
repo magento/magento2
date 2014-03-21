@@ -39,13 +39,13 @@ class PropertyMapper extends PropertyMapperAbstract
     public function map(array $input, $entityTypeId)
     {
         return array(
-            'is_visible'                => $this->_getValue($input, 'visible', 1),
-            'is_system'                 => $this->_getValue($input, 'system', 1),
-            'input_filter'              => $this->_getValue($input, 'input_filter', null),
-            'multiline_count'           => $this->_getValue($input, 'multiline_count', 0),
-            'validate_rules'            => $this->_getValue($input, 'validate_rules', null),
-            'data_model'                => $this->_getValue($input, 'data', null),
-            'sort_order'                => $this->_getValue($input, 'position', 0)
+            'is_visible' => $this->_getValue($input, 'visible', 1),
+            'is_system' => $this->_getValue($input, 'system', 1),
+            'input_filter' => $this->_getValue($input, 'input_filter', null),
+            'multiline_count' => $this->_getValue($input, 'multiline_count', 0),
+            'validate_rules' => $this->_getValue($input, 'validate_rules', null),
+            'data_model' => $this->_getValue($input, 'data', null),
+            'sort_order' => $this->_getValue($input, 'position', 0)
         );
     }
-} 
+}

@@ -85,10 +85,9 @@ class Logo extends \Magento\View\Element\Template
      */
     protected function _toHtml()
     {
-        $type = $this->getLogoType(); // assigned in layout etc.
-        $logoUrl = $this->_getConfig()->getAdditionalOptionsLogoUrl(
-            $this->_localeResolver->getLocaleCode(), $type
-        );
+        $type = $this->getLogoType();
+        // assigned in layout etc.
+        $logoUrl = $this->_getConfig()->getAdditionalOptionsLogoUrl($this->_localeResolver->getLocaleCode(), $type);
         if (!$logoUrl) {
             return '';
         }

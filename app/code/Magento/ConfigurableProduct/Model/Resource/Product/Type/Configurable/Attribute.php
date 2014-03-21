@@ -102,31 +102,32 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getWriteAdapter();
 
-        $select = $adapter->select()
-            ->from($this->_labelTable, 'value_id')
-            ->where('product_super_attribute_id = :product_super_attribute_id')
-            ->where('store_id = :store_id');
+        $select = $adapter->select()->from(
+            $this->_labelTable,
+            'value_id'
+        )->where(
+            'product_super_attribute_id = :product_super_attribute_id'
+        )->where(
+            'store_id = :store_id'
+        );
         $bind = array(
             'product_super_attribute_id' => (int)$attribute->getId(),
-            'store_id'                   => (int)$attribute->getStoreId()
+            'store_id' => (int)$attribute->getStoreId()
         );
         $valueId = $adapter->fetchOne($select, $bind);
         if ($valueId) {
             $adapter->update(
                 $this->_labelTable,
-                array(
-                    'use_default' => (int) $attribute->getUseDefault(),
-                    'value'       => $attribute->getLabel()
-                ),
-                $adapter->quoteInto('value_id = ?', (int) $valueId)
+                array('use_default' => (int)$attribute->getUseDefault(), 'value' => $attribute->getLabel()),
+                $adapter->quoteInto('value_id = ?', (int)$valueId)
             );
         } else {
             $adapter->insert(
                 $this->_labelTable,
                 array(
-                    'product_super_attribute_id' => (int) $attribute->getId(),
-                    'store_id' => (int) $attribute->getStoreId(),
-                    'use_default' => (int) $attribute->getUseDefault(),
+                    'product_super_attribute_id' => (int)$attribute->getId(),
+                    'store_id' => (int)$attribute->getStoreId(),
+                    'use_default' => (int)$attribute->getUseDefault(),
                     'value' => $attribute->getLabel()
                 )
             );
@@ -145,7 +146,7 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function savePrices($attribute)
     {
-        $write      = $this->_getWriteAdapter();
+        $write = $this->_getWriteAdapter();
         // define website id scope
         if ($this->getCatalogHelper()->isPriceGlobal()) {
             $websiteId = 0;
@@ -153,7 +154,7 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
             $websiteId = (int)$this->_storeManager->getStore($attribute->getStoreId())->getWebsite()->getId();
         }
 
-        $values     = $attribute->getValues();
+        $values = $attribute->getValues();
         if (!is_array($values)) {
             $values = array();
         }
@@ -162,15 +163,15 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
         $old = array();
 
         // retrieve old values
-        $select = $write->select()
-            ->from($this->_priceTable)
-            ->where('product_super_attribute_id = :product_super_attribute_id')
-            ->where('website_id = :website_id');
-
-        $bind = array(
-            'product_super_attribute_id' => (int)$attribute->getId(),
-            'website_id'                   => $websiteId
+        $select = $write->select()->from(
+            $this->_priceTable
+        )->where(
+            'product_super_attribute_id = :product_super_attribute_id'
+        )->where(
+            'website_id = :website_id'
         );
+
+        $bind = array('product_super_attribute_id' => (int)$attribute->getId(), 'website_id' => $websiteId);
         $rowSet = $write->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
             $key = implode('-', array($row['website_id'], $row['value_index']));
@@ -190,11 +191,11 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
             $key = implode('-', array($websiteId, $v['value_index']));
             $new[$key] = array(
-                'value_index'   => $v['value_index'],
+                'value_index' => $v['value_index'],
                 'pricing_value' => $v['pricing_value'],
-                'is_percent'    => $v['is_percent'],
-                'website_id'    => $websiteId,
-                'use_default'   => !empty($v['use_default_value']) ? true : false
+                'is_percent' => $v['is_percent'],
+                'website_id' => $websiteId,
+                'use_default' => !empty($v['use_default_value']) ? true : false
             );
         }
 
@@ -212,18 +213,17 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
             $needUpdate = false;
             $needDelete = false;
 
-            $isGlobal   = true;
+            $isGlobal = true;
             if (!$this->getCatalogHelper()->isPriceGlobal() && $websiteId != 0) {
                 $isGlobal = false;
             }
 
-            $hasValue   = ($isGlobal && !empty($v['pricing_value']))
-                || (!$isGlobal && !$v['use_default']);
+            $hasValue = $isGlobal && !empty($v['pricing_value']) || !$isGlobal && !$v['use_default'];
 
             if (isset($old[$k])) {
                 // data changed
-                $dataChanged = ($old[$k]['is_percent'] != $v['is_percent'])
-                    || ($old[$k]['pricing_value'] != $v['pricing_value']);
+                $dataChanged = $old[$k]['is_percent'] != $v['is_percent'] ||
+                    $old[$k]['pricing_value'] != $v['pricing_value'];
                 if (!$hasValue) {
                     $needDelete = true;
                 } else if ($dataChanged) {
@@ -235,21 +235,21 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
 
             if (!$isGlobal && empty($v['pricing_value'])) {
                 $v['pricing_value'] = 0;
-                $v['is_percent']    = 0;
+                $v['is_percent'] = 0;
             }
 
             if ($needInsert) {
                 $insert[] = array(
                     'product_super_attribute_id' => $attribute->getId(),
-                    'value_index'                => $v['value_index'],
-                    'is_percent'                 => $v['is_percent'],
-                    'pricing_value'              => $v['pricing_value'],
-                    'website_id'                 => $websiteId
+                    'value_index' => $v['value_index'],
+                    'is_percent' => $v['is_percent'],
+                    'pricing_value' => $v['pricing_value'],
+                    'website_id' => $websiteId
                 );
             }
             if ($needUpdate) {
                 $update[$old[$k]['value_id']] = array(
-                    'is_percent'    => $v['is_percent'],
+                    'is_percent' => $v['is_percent'],
                     'pricing_value' => $v['pricing_value']
                 );
             }
@@ -284,20 +284,24 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getUsedAttributes($setId)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->distinct(true)
-            ->from(array('e' => $this->getTable('catalog_product_entity')), null)
-            ->join(
-                array('a' => $this->getMainTable()),
-                'e.entity_id = a.product_id',
-                array('attribute_id')
-            )
-            ->where('e.attribute_set_id = :attribute_set_id')
-            ->where('e.type_id = :type_id');
+        $select = $adapter->select()->distinct(
+            true
+        )->from(
+            array('e' => $this->getTable('catalog_product_entity')),
+            null
+        )->join(
+            array('a' => $this->getMainTable()),
+            'e.entity_id = a.product_id',
+            array('attribute_id')
+        )->where(
+            'e.attribute_set_id = :attribute_set_id'
+        )->where(
+            'e.type_id = :type_id'
+        );
 
         $bind = array(
             'attribute_set_id' => $setId,
-            'type_id'          => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
+            'type_id' => \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
 
         return $adapter->fetchCol($select, $bind);
@@ -315,10 +319,16 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getIdByProductIdAndAttributeId($attribute, $productId, $attributeId)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), $this->getIdFieldName())
-            ->where('product_id = ?', $productId)
-            ->where('attribute_id = ?', $attributeId);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            $this->getIdFieldName()
+        )->where(
+            'product_id = ?',
+            $productId
+        )->where(
+            'attribute_id = ?',
+            $attributeId
+        );
         return $this->_getReadAdapter()->fetchOne($select);
     }
 
@@ -330,9 +340,13 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function deleteAttributesByProductId($productId)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), $this->getIdFieldName())
-            ->where('product_id = ?', $productId);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            $this->getIdFieldName()
+        )->where(
+            'product_id = ?',
+            $productId
+        );
         $this->_getWriteAdapter()->query($this->_getReadAdapter()->deleteFromSelect($select, $this->getMainTable()));
     }
 }

@@ -31,8 +31,8 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
  * @method string getHtml()
  * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive setHtml($html)
  */
-class Recursive extends \Magento\Backend\Block\Template
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Recursive extends \Magento\Backend\Block\Template implements
+    \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element to render

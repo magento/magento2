@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class TabTest extends \PHPUnit_Framework_TestCase
@@ -47,12 +46,17 @@ class TabTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_iteratorMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Iterator\Field', array(), array(), '', false
+            'Magento\Backend\Model\Config\Structure\Element\Iterator\Field',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Tab(
-            $this->_storeManagerMock, $this->_iteratorMock
+            $this->_storeManagerMock,
+            $this->_iteratorMock
         );
     }
 

@@ -83,7 +83,7 @@ class Flat
 
                 if (isset($value[$nodeName]) && !$isArrayNode) {
                     throw new \UnexpectedValueException(
-                        "Node path '$nodePath' is not unique, but it has not been marked as array."
+                        "Node path '{$nodePath}' is not unique, but it has not been marked as array."
                     );
                 }
 
@@ -97,13 +97,13 @@ class Flat
                         $value[$nodeName][$arrayKeyValue] = $nodeData;
                     } else {
                         throw new \UnexpectedValueException(
-                            "Array is expected to contain value for key '$arrayKeyAttribute'."
+                            "Array is expected to contain value for key '{$arrayKeyAttribute}'."
                         );
                     }
                 } else {
                     $value[$nodeName] = $nodeData;
                 }
-            } else if ($node->nodeType == XML_CDATA_SECTION_NODE
+            } elseif ($node->nodeType == XML_CDATA_SECTION_NODE
                 || ($node->nodeType == XML_TEXT_NODE && trim($node->nodeValue) != '')
             ) {
                 $value = $node->nodeValue;

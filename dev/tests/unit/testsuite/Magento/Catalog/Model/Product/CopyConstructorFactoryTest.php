@@ -34,7 +34,7 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManagerMock;
-    
+
     protected function setUp()
     {
         $this->_objectManagerMock = $this->getMock('\Magento\ObjectManager');
@@ -53,9 +53,15 @@ class CopyConstructorFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithValidType()
     {
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')->with('Magento\Catalog\Model\Product\CopyConstructor\Composite')
-            ->will($this->returnValue('object'));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Catalog\Model\Product\CopyConstructor\Composite'
+        )->will(
+            $this->returnValue('object')
+        );
         $this->assertEquals(
             'object',
             $this->_model->create('Magento\Catalog\Model\Product\CopyConstructor\Composite')

@@ -32,8 +32,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class SkipList
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+class SkipList extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * {@inheritdoc}

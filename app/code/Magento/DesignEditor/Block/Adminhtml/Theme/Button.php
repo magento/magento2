@@ -73,14 +73,14 @@ class Button extends \Magento\View\Element\Template
     protected function _prepareAttributes($title, $classes, $disabled)
     {
         return array(
-            'id'        => $this->getId(),
-            'name'      => $this->getElementName(),
-            'href'      => $this->getHref(),
-            'title'     => $title,
-            'class'     => implode(' ', $classes),
-            'style'     => $this->getStyle(),
-            'target'    => $this->getTarget(),
-            'disabled'  => $disabled
+            'id' => $this->getId(),
+            'name' => $this->getElementName(),
+            'href' => $this->getHref(),
+            'title' => $title,
+            'class' => implode(' ', $classes),
+            'style' => $this->getStyle(),
+            'target' => $this->getTarget(),
+            'disabled' => $disabled
         );
     }
 

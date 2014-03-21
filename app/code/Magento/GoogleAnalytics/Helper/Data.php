@@ -38,7 +38,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Config paths for using throughout the code
      */
-    const XML_PATH_ACTIVE  = 'google/analytics/active';
+    const XML_PATH_ACTIVE = 'google/analytics/active';
+
     const XML_PATH_ACCOUNT = 'google/analytics/account';
 
     /**

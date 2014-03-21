@@ -62,11 +62,20 @@ class Validator
     protected function _setVersionValidators()
     {
         $versionValidators = array(
-            array('name' => 'not_empty', 'class' => 'Zend_Validate_NotEmpty', 'break' => true, 'options' => array(),
-                  'message' => __('Field can\'t be empty')),
-            array('name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
-                  'options' => array('pattern' => '/^(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
-                  'message' => __('Theme version has not compatible format.'))
+            array(
+                'name' => 'not_empty',
+                'class' => 'Zend_Validate_NotEmpty',
+                'break' => true,
+                'options' => array(),
+                'message' => __('Field can\'t be empty')
+            ),
+            array(
+                'name' => 'available',
+                'class' => 'Zend_Validate_Regex',
+                'break' => true,
+                'options' => array('pattern' => '/^(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
+                'message' => __('Theme version has not compatible format.')
+            )
         );
 
         $this->addDataValidators('theme_version', $versionValidators);
@@ -118,7 +127,7 @@ class Validator
                     'haystack' => array(
                         \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL,
                         \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL,
-                        \Magento\View\Design\ThemeInterface::TYPE_STAGING,
+                        \Magento\View\Design\ThemeInterface::TYPE_STAGING
                     )
                 ),
                 'message' => __('Theme type is invalid')
@@ -189,15 +198,18 @@ class Validator
      */
     protected function _validateDataItem($validator, $dataKey, $dataValue)
     {
-        if ($validator['class'] instanceof \Zend_Validate_NotEmpty && !$validator['class']->isValid($dataValue)
-            || !empty($dataValue) && !$validator['class']->isValid($dataValue)
+        if ($validator['class'] instanceof \Zend_Validate_NotEmpty && !$validator['class']->isValid(
+            $dataValue
+        ) || !empty($dataValue) && !$validator['class']->isValid(
+            $dataValue
+        )
         ) {
             $this->_errorMessages[$dataKey][] = $validator['message'];
             if ($validator['break']) {
                 return false;
             }
         }
-        return  true;
+        return true;
     }
 
     /**

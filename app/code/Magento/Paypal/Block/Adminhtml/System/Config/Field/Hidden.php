@@ -29,8 +29,7 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
-class Hidden
-    extends \Magento\Backend\Block\System\Config\Form\Field
+class Hidden extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
      * Decorate field row html to be invisible

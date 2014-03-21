@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
 
 /**
@@ -110,6 +109,7 @@ class Head extends \Magento\View\Element\Template
         $this->_pageAssets = $assets;
         $this->_localeResolver = $localeResolver;
     }
+
     /**
      * Add RSS element to HEAD entity
      *
@@ -119,13 +119,13 @@ class Head extends \Magento\View\Element\Template
      */
     public function addRss($title, $href)
     {
-        $asset = $this->_objectManager->create(
-            'Magento\View\Asset\Remote', array('url' => (string)$href)
-        );
+        $asset = $this->_objectManager->create('Magento\View\Asset\Remote', array('url' => (string)$href));
 
-        $this->_pageAssets->add("link/$href", $asset, array(
-            'attributes' => 'rel="alternate" type="application/rss+xml" title="' . $title . '"',
-        ));
+        $this->_pageAssets->add(
+            "link/{$href}",
+            $asset,
+            array('attributes' => 'rel="alternate" type="application/rss+xml" title="' . $title . '"')
+        );
 
         return $this;
     }
@@ -180,7 +180,7 @@ class Head extends \Magento\View\Element\Template
                 }
             }
 
-            if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_JS ) {
+            if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_JS) {
                 $groupTemplate = '<script' . $attributes . ' type="text/javascript" src="%s"></script>' . "\n";
             } else {
                 if ($contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS) {
@@ -276,9 +276,11 @@ class Head extends \Magento\View\Element\Template
             $this->_pureTitle = $title;
         }
 
-        $this->_data['title'] = $this->_storeConfig->getConfig('design/head/title_prefix')
-            . ' ' . $title
-            . ' ' . $this->_storeConfig->getConfig('design/head/title_suffix');
+        $this->_data['title'] = $this->_storeConfig->getConfig(
+            'design/head/title_prefix'
+        ) . ' ' . $title . ' ' . $this->_storeConfig->getConfig(
+            'design/head/title_suffix'
+        );
 
         return $this;
     }
@@ -395,8 +397,7 @@ class Head extends \Magento\View\Element\Template
         $folderName = \Magento\Backend\Model\Config\Backend\Image\Favicon::UPLOAD_DIR;
         $storeConfig = $this->_storeConfig->getConfig('design/head/shortcut_icon');
         $path = $folderName . '/' . $storeConfig;
-        $faviconFile = $this->_storeManager->getStore()
-            ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $path;
+        $faviconFile = $this->_storeManager->getStore()->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . $path;
 
         if (!is_null($storeConfig) && $this->_isFile($path)) {
             $url = $faviconFile;

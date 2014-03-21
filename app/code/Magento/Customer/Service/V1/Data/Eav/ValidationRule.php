@@ -29,6 +29,7 @@ class ValidationRule extends \Magento\Service\Data\AbstractObject
      * Constants used as keys into $_data
      */
     const NAME = 'name';
+
     const VALUE = 'value';
 
     /**

@@ -33,8 +33,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type;
 
-class Price
-    extends \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type
+class Price extends \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type
 {
     /**
      * Get value from the store configuration settings
@@ -88,10 +87,7 @@ class Price
     {
         if (!$this->_options) {
             $this->_options = parent::getAllOptions();
-            $this->_options[] = array(
-                'label' => __('Use config'),
-                'value' => self::TYPE_USE_CONFIG
-            );
+            $this->_options[] = array('label' => __('Use config'), 'value' => self::TYPE_USE_CONFIG);
         }
         return $this->_options;
     }
@@ -105,13 +101,9 @@ class Price
     {
         $attributeType = $this->getAttribute()->getBackendType();
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array(
-            'unsigned'  => false,
-            'default'   => null,
-            'extra'     => null
-        );
+        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type']     = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
+        $column['type'] = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
         $column['nullable'] = true;
 
         return array($attributeCode => $column);
@@ -125,7 +117,6 @@ class Price
      */
     public function getFlatUpdateSelect($store)
     {
-        return $this->_entityAttributeFactory->create()
-            ->getFlatUpdateSelect($this->getAttribute(), $store);
+        return $this->_entityAttributeFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
     }
 }

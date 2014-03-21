@@ -42,8 +42,9 @@ use Magento\Core\Model\Website;
 
 class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
-    const ENTITY         = 'store_group';
-    const CACHE_TAG      = 'store_group';
+    const ENTITY = 'store_group';
+
+    const CACHE_TAG = 'store_group';
 
     /**
      * @var bool
@@ -141,7 +142,6 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Init model
      *
@@ -168,7 +168,7 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
             if ($this->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount ++;
+            $this->_storesCount++;
         }
     }
 
@@ -189,7 +189,7 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
             if ($this->getDefaultStoreId() == $store->getId()) {
                 $this->_defaultStore = $store;
             }
-            $this->_storesCount ++;
+            $this->_storesCount++;
         }
     }
 
@@ -200,9 +200,7 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
      */
     public function getStoreCollection()
     {
-        return $this->_store
-            ->getCollection()
-            ->addGroupFilter($this->getId());
+        return $this->_store->getCollection()->addGroupFilter($this->getId());
     }
 
     /**

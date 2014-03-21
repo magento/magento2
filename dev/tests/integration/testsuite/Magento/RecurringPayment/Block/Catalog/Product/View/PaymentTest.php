@@ -48,12 +48,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $html = $block->getDateHtml();
         $this->assertNotEmpty($html);
-        $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Stdlib\DateTime\TimezoneInterface')
-            ->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-        $timeFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Stdlib\DateTime\TimezoneInterface')
-            ->getTimeFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Stdlib\DateTime\TimezoneInterface'
+        )->getDateFormat(
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+        );
+        $timeFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Stdlib\DateTime\TimezoneInterface'
+        )->getTimeFormat(
+            \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+        );
         $this->assertContains('dateFormat: "' . $dateFormat . '",', $html);
         $this->assertContains('timeFormat: "' . $timeFormat . '",', $html);
     }

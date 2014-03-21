@@ -43,5 +43,4 @@ class Sitemap extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Add Sitemap');
         parent::_construct();
     }
-
 }

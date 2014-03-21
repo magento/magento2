@@ -101,8 +101,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      */
     public function getIframeSourceUrl()
     {
-        if (!$this->_survey->isSurveyUrlValid()
-            || $this->_installer->getHideIframe()) {
+        if (!$this->_survey->isSurveyUrlValid() || $this->_installer->getHideIframe()) {
             return null;
         }
         return $this->_survey->getSurveyUrl();

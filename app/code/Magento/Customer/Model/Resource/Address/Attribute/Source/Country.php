@@ -65,8 +65,9 @@ class Country extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->_createCountriesCollection()
-                ->loadByStore($this->getAttribute()->getStoreId())->toOptionArray();
+            $this->_options = $this->_createCountriesCollection()->loadByStore(
+                $this->getAttribute()->getStoreId()
+            )->toOptionArray();
         }
         return $this->_options;
     }

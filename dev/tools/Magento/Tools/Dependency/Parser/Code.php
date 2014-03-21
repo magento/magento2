@@ -48,20 +48,19 @@ class Code implements ParserInterface
 
         $this->declaredNamespaces = $options['declared_namespaces'];
 
-        $pattern = '#\b((?<module>(' . implode('[\\\\]|', $this->declaredNamespaces)
-            . '[\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b#';
+        $pattern = '#\b((?<module>(' . implode(
+            '[\\\\]|',
+            $this->declaredNamespaces
+        ) . '[\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b#';
 
-        $modules = [];
+        $modules = array();
         foreach ($options['files_for_parse'] as $file) {
             $content = file_get_contents($file);
             $module = $this->extractModuleName($file);
 
             // also collect modules without dependencies
             if (!isset($modules[$module])) {
-                $modules[$module] = [
-                    'name' => $module,
-                    'dependencies' => [],
-                ];
+                $modules[$module] = array('name' => $module, 'dependencies' => array());
             }
 
             if (preg_match_all($pattern, $content, $matches)) {
@@ -73,10 +72,10 @@ class Code implements ParserInterface
                     if (isset($modules[$module]['dependencies'][$dependency])) {
                         $modules[$module]['dependencies'][$dependency]['count'] += $count;
                     } else {
-                        $modules[$module]['dependencies'][$dependency] = [
+                        $modules[$module]['dependencies'][$dependency] = array(
                             'lib' => $dependency,
-                            'count' => $count,
-                        ];
+                            'count' => $count
+                        );
                     }
                 }
             }
@@ -93,13 +92,21 @@ class Code implements ParserInterface
      */
     protected function checkOptions($options)
     {
-        if (!isset($options['files_for_parse']) || !is_array($options['files_for_parse'])
-            || !$options['files_for_parse']) {
+        if (!isset(
+            $options['files_for_parse']
+        ) || !is_array(
+            $options['files_for_parse']
+        ) || !$options['files_for_parse']
+        ) {
             throw new \InvalidArgumentException('Parse error: Option "files_for_parse" is wrong.');
         }
 
-        if (!isset($options['declared_namespaces']) || !is_array($options['declared_namespaces'])
-            || !$options['declared_namespaces']) {
+        if (!isset(
+            $options['declared_namespaces']
+        ) || !is_array(
+            $options['declared_namespaces']
+        ) || !$options['declared_namespaces']
+        ) {
             throw new \InvalidArgumentException('Parse error: Option "declared_namespaces" is wrong.');
         }
     }

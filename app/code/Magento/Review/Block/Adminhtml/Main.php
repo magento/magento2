@@ -97,7 +97,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         $productName = null;
         if ($productId) {
             $product = $this->_productFactory->create()->load($productId);
-            $productName =  $this->escapeHtml($product->getName());
+            $productName = $this->escapeHtml($product->getName());
         }
 
         if ($this->_coreRegistry->registry('usePendingFilter') === true) {

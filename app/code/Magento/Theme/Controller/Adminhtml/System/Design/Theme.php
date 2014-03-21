@@ -149,16 +149,21 @@ class Theme extends \Magento\Backend\App\Action
         /** @var $cssService \Magento\Theme\Model\Theme\Customization\File\CustomCss */
         $cssService = $this->_objectManager->get('Magento\Theme\Model\Theme\Customization\File\CustomCss');
         /** @var $singleFile \Magento\Theme\Model\Theme\SingleFile */
-        $singleFile = $this->_objectManager->create('Magento\Theme\Model\Theme\SingleFile',
-            array('fileService' => $cssService));
+        $singleFile = $this->_objectManager->create(
+            'Magento\Theme\Model\Theme\SingleFile',
+            array('fileService' => $cssService)
+        );
         try {
             if ($this->getRequest()->getPost()) {
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {
                     $parentTheme = $themeFactory->create($themeData['parent_id']);
-                    $theme = $parentTheme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL)
-                        ->createVirtualTheme($parentTheme);
+                    $theme = $parentTheme->getDomainModel(
+                        \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
+                    )->createVirtualTheme(
+                        $parentTheme
+                    );
                 }
                 if ($theme && !$theme->isEditable()) {
                     throw new \Magento\Core\Exception(__('Theme isn\'t editable.'));
@@ -185,9 +190,12 @@ class Theme extends \Magento\Backend\App\Action
             $this->messageManager->addError('The theme was not saved');
             $this->_objectManager->get('Magento\Logger')->logException($e);
         }
-        $redirectBack
-            ? $this->_redirect('adminhtml/*/edit', array('id' => $theme->getId()))
-            : $this->_redirect('adminhtml/*/');
+        $redirectBack ? $this->_redirect(
+            'adminhtml/*/edit',
+            array('id' => $theme->getId())
+        ) : $this->_redirect(
+            'adminhtml/*/'
+        );
     }
 
     /**
@@ -275,8 +283,10 @@ class Theme extends \Magento\Backend\App\Action
             $jsFile->save();
 
             /** @var $customization \Magento\View\Design\Theme\Customization */
-            $customization = $this->_objectManager->create('Magento\View\Design\Theme\CustomizationInterface',
-                array('theme' => $theme));
+            $customization = $this->_objectManager->create(
+                'Magento\View\Design\Theme\CustomizationInterface',
+                array('theme' => $theme)
+            );
             $customJsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
             $result = array('error' => false, 'files' => $customization->generateFileInfo($customJsFiles));
         } catch (\Magento\Core\Exception $e) {
@@ -312,10 +322,7 @@ class Theme extends \Magento\Backend\App\Action
             if ($customCssFile && $customCssFile->getContent()) {
                 return $this->_fileFactory->create(
                     $customCssFile->getFileName(),
-                    array(
-                        'type'  => 'filename',
-                        'value' => $customCssFile->getFullPath()
-                    ),
+                    array('type' => 'filename', 'value' => $customCssFile->getFullPath()),
                     \Magento\App\Filesystem::ROOT_DIR
                 );
             }
@@ -355,10 +362,7 @@ class Theme extends \Magento\Backend\App\Action
 
             return $this->_fileFactory->create(
                 $fileName,
-                array(
-                    'type'  => 'filename',
-                    'value' => $themeCss[$fileName]['path']
-                ),
+                array('type' => 'filename', 'value' => $themeCss[$fileName]['path']),
                 \Magento\App\Filesystem::ROOT_DIR
             );
         } catch (\Exception $e) {

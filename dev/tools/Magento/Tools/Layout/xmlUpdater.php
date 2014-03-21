@@ -26,19 +26,19 @@ $basePath = realpath(__DIR__ . '/../../../../../');
 require_once $basePath . '/app/autoload.php';
 require __DIR__ . '/Formatter.php';
 
-\Magento\Autoload\IncludePath::addIncludePath(array(
-    $basePath . '/lib',
-));
+\Magento\Autoload\IncludePath::addIncludePath(array($basePath . '/lib'));
 
 try {
-    $opt = new \Zend_Console_Getopt(array(
-        'file|f=s' => 'File to process(required)',
-        'processor|p=s' => 'Processor file (required)',
-        'overwrite|o' => 'Overwrite file',
-    ));
+    $opt = new \Zend_Console_Getopt(
+        array(
+            'file|f=s' => 'File to process(required)',
+            'processor|p=s' => 'Processor file (required)',
+            'overwrite|o' => 'Overwrite file'
+        )
+    );
     $opt->parse();
 
-    $doc  = new \DOMDocument();
+    $doc = new \DOMDocument();
     $doc->preserveWhiteSpace = true;
     $doc->load($opt->file);
 
@@ -59,7 +59,7 @@ try {
         echo $result;
     }
     exit(0);
-} catch  (\Zend_Console_Getopt_Exception $e) {
+} catch (\Zend_Console_Getopt_Exception $e) {
     echo $e->getUsageMessage();
     exit(255);
 } catch (\Exception $e) {

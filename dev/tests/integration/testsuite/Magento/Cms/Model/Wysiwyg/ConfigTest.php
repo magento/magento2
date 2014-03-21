@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
@@ -39,10 +38,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Cms\Model\Wysiwyg\Config');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Cms\Model\Wysiwyg\Config'
+        );
     }
 
     /**
@@ -89,29 +92,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    'files_browser_window_url'      => 'http://example.com/111/',
-                    'directives_url'                => 'http://example.com/222/',
-                    'popup_css'                     => 'http://example.com/333/popup.css',
-                    'content_css'                   => 'http://example.com/444/content.css',
-                    'directives_url_quoted'         => 'http://example.com/555/'
+                    'files_browser_window_url' => 'http://example.com/111/',
+                    'directives_url' => 'http://example.com/222/',
+                    'popup_css' => 'http://example.com/333/popup.css',
+                    'content_css' => 'http://example.com/444/content.css',
+                    'directives_url_quoted' => 'http://example.com/555/'
                 )
             ),
             array(
                 array(
-                    'files_browser_window_url'      => '/111/',
-                    'directives_url'                => '/222/',
-                    'popup_css'                     => '/333/popup.css',
-                    'content_css'                   => '/444/content.css',
-                    'directives_url_quoted'         => '/555/'
+                    'files_browser_window_url' => '/111/',
+                    'directives_url' => '/222/',
+                    'popup_css' => '/333/popup.css',
+                    'content_css' => '/444/content.css',
+                    'directives_url_quoted' => '/555/'
                 )
             ),
             array(
                 array(
-                    'files_browser_window_url'      => '111/',
-                    'directives_url'                => '222/',
-                    'popup_css'                     => '333/popup.css',
-                    'content_css'                   => '444/content.css',
-                    'directives_url_quoted'         => '555/'
+                    'files_browser_window_url' => '111/',
+                    'directives_url' => '222/',
+                    'popup_css' => '333/popup.css',
+                    'content_css' => '444/content.css',
+                    'directives_url_quoted' => '555/'
                 )
             )
         );

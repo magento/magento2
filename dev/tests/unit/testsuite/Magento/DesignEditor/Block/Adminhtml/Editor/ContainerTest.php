@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
@@ -55,9 +54,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getBlockArguments()
     {
-        return array(
-            'urlBuilder'    => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false),
-        );
+        return array('urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false));
     }
 
     /**
@@ -66,9 +63,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSetFrameUrl()
     {
-        $arguments = array(
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false),
-        );
+        $arguments = array('urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false));
 
         /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Container */
         $block = $this->_helper->getObject('Magento\DesignEditor\Block\Adminhtml\Editor\Container', $arguments);
@@ -94,12 +89,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $block->setLayout($layout);
 
         $expectedButtonData = array(
-            'back_button'    => array(
-                'label'      => $buttonTitle,
-                'onclick'    => 'setLocation(\'\')',
-                'class'      => 'back',
-                'id'         => 'back_button',
-                'region'     => 'header',
+            'back_button' => array(
+                'label' => $buttonTitle,
+                'onclick' => 'setLocation(\'\')',
+                'class' => 'back',
+                'id' => 'back_button',
+                'region' => 'header',
                 'sort_order' => 10
             )
         );

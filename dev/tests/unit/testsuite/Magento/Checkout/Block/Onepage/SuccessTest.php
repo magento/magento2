@@ -39,11 +39,16 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Checkout\Block\Onepage\Success $block */
         $block = $this->objectManager->getObject('Magento\Checkout\Block\Onepage\Success');
-        $layout = $this->getMock('Magento\View\LayoutInterface', [], [], '', false);
-        $layout->expects($this->once())
-            ->method('renderElement')
-            ->with('order.success.additional.info')
-            ->will($this->returnValue('AdditionalInfoHtml'));
+        $layout = $this->getMock('Magento\View\LayoutInterface', array(), array(), '', false);
+        $layout->expects(
+            $this->once()
+        )->method(
+            'renderElement'
+        )->with(
+            'order.success.additional.info'
+        )->will(
+            $this->returnValue('AdditionalInfoHtml')
+        );
         $block->setLayout($layout);
         $this->assertEquals('AdditionalInfoHtml', $block->getAdditionalInfoHtml());
     }

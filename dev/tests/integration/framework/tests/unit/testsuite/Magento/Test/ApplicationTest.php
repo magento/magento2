@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
 use Magento\App\State;
@@ -46,12 +45,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $directoryList,
             new \Magento\Filesystem\Directory\ReadFactory(),
             new \Magento\Filesystem\Directory\WriteFactory(),
-            new \Magento\Filesystem\File\ReadFactory(
-                new \Magento\Filesystem\DriverFactory($directoryList)
-            ),
-            new \Magento\Filesystem\File\WriteFactory(
-                new \Magento\Filesystem\DriverFactory($directoryList)
-            )
+            new \Magento\Filesystem\File\ReadFactory(new \Magento\Filesystem\DriverFactory($directoryList)),
+            new \Magento\Filesystem\File\WriteFactory(new \Magento\Filesystem\DriverFactory($directoryList))
         );
 
         $object = new \Magento\TestFramework\Application(
@@ -69,10 +64,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
-        $this->assertArrayHasKey(\Magento\App\Filesystem::PARAM_APP_DIRS, $initParams,
-            'Directories are not configured');
-        $this->assertArrayHasKey(State::PARAM_MODE, $initParams,
-            'Application mode is not configured');
+        $this->assertArrayHasKey(
+            \Magento\App\Filesystem::PARAM_APP_DIRS,
+            $initParams,
+            'Directories are not configured'
+        );
+        $this->assertArrayHasKey(State::PARAM_MODE, $initParams, 'Application mode is not configured');
         $this->assertEquals(
             \Magento\App\State::MODE_DEVELOPER,
             $initParams[State::PARAM_MODE],

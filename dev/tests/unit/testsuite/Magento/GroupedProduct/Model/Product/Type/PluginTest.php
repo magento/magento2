@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Model\Product\Type;
 
 class PluginTest extends \PHPUnit_Framework_TestCase
@@ -52,8 +51,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetOptionArray()
     {
         $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->will($this->returnValue(false));
-        $this->assertEquals(array(),
+        $this->assertEquals(
+            array(),
             $this->object->afterGetOptionArray($this->subjectMock, array('grouped' => 'test'))
         );
     }
-} 
+}

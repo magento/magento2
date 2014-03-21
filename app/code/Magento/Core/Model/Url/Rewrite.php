@@ -57,8 +57,10 @@ namespace Magento\Core\Model\Url;
 class Rewrite extends \Magento\Core\Model\AbstractModel
 {
     const TYPE_CATEGORY = 1;
-    const TYPE_PRODUCT  = 2;
-    const TYPE_CUSTOM   = 3;
+
+    const TYPE_PRODUCT = 2;
+
+    const TYPE_CUSTOM = 3;
 
     /**
      * Cache tag for clear cache in after save and after delete
@@ -134,7 +136,10 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
     protected function _afterSave()
     {
         if ($this->hasCategoryId()) {
-            $this->_cacheTag = array(\Magento\Catalog\Model\Category::CACHE_TAG, \Magento\Core\Model\Store\Group::CACHE_TAG);
+            $this->_cacheTag = array(
+                \Magento\Catalog\Model\Category::CACHE_TAG,
+                \Magento\Core\Model\Store\Group::CACHE_TAG
+            );
         }
 
         parent::_afterSave();
@@ -248,7 +253,7 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
 
         foreach ($removeTags as $t) {
             if (!is_numeric($k)) {
-                $t = $k.'='.$t;
+                $t = $k . '=' . $t;
             }
 
             $key = array_search($t, $curTags);
@@ -261,7 +266,6 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
 
         return $this;
     }
-
 
     /**
      * Perform custom url rewrites
@@ -285,13 +289,14 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
          */
         $requestCases = array();
         $pathInfo = $request->getPathInfo();
-        $origSlash = (substr($pathInfo, -1) == '/') ? '/' : '';
+        $origSlash = substr($pathInfo, -1) == '/' ? '/' : '';
         $requestPath = trim($pathInfo, '/');
 
         // If there were final slash - add nothing to less priority paths. And vice versa.
         $altSlash = $origSlash ? '' : '/';
 
-        $queryString = $this->_getQueryString(); // Query params in request, matching "path + query" has more priority
+        $queryString = $this->_getQueryString();
+        // Query params in request, matching "path + query" has more priority
         if ($queryString) {
             $requestCases[] = $requestPath . $origSlash . '?' . $queryString;
             $requestCases[] = $requestPath . $altSlash . '?' . $queryString;
@@ -319,7 +324,6 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
 
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $currentStore->getCode(), true);
-            $this->_httpContext->setValue(\Magento\Core\Model\Store::ENTITY, $currentStore->getCode());
             $targetUrl = $request->getBaseUrl(). '/' . $this->getRequestPath();
 
             $this->_sendRedirectHeaders($targetUrl, true);
@@ -336,28 +340,33 @@ class Rewrite extends \Magento\Core\Model\AbstractModel
         if ($external === 'http:/' || $external === 'https:') {
             $destinationStoreCode = $this->_storeManager->getStore($this->getStoreId())->getCode();
             $this->_app->getCookie()->set(\Magento\Core\Model\Store::COOKIE_NAME, $destinationStoreCode, true);
-            $this->_httpContext->setValue(\Magento\Core\Model\Store::ENTITY, $destinationStoreCode);
 
             $this->_sendRedirectHeaders($this->getTargetPath(), $isPermanentRedirectOption);
         } else {
-            $targetUrl = $request->getBaseUrl(). '/' . $this->getTargetPath();
+            $targetUrl = $request->getBaseUrl() . '/' . $this->getTargetPath();
         }
         $isRedirectOption = $this->hasOption('R');
         if ($isRedirectOption || $isPermanentRedirectOption) {
-            if ($this->_coreStoreConfig->getConfig('web/url/use_store') && $storeCode = $this->_storeManager->getStore()->getCode()) {
-                $targetUrl = $request->getBaseUrl(). '/' . $storeCode . '/' .$this->getTargetPath();
+            if ($this->_coreStoreConfig->getConfig(
+                'web/url/use_store'
+            ) && ($storeCode = $this->_storeManager->getStore()->getCode())
+            ) {
+                $targetUrl = $request->getBaseUrl() . '/' . $storeCode . '/' . $this->getTargetPath();
             }
 
             $this->_sendRedirectHeaders($targetUrl, $isPermanentRedirectOption);
         }
 
-        if ($this->_coreStoreConfig->getConfig('web/url/use_store') && $storeCode = $this->_storeManager->getStore()->getCode()) {
-            $targetUrl = $request->getBaseUrl(). '/' . $storeCode . '/' .$this->getTargetPath();
+        if ($this->_coreStoreConfig->getConfig(
+            'web/url/use_store'
+        ) && ($storeCode = $this->_storeManager->getStore()->getCode())
+        ) {
+            $targetUrl = $request->getBaseUrl() . '/' . $storeCode . '/' . $this->getTargetPath();
         }
 
         $queryString = $this->_getQueryString();
         if ($queryString) {
-            $targetUrl .= '?'.$queryString;
+            $targetUrl .= '?' . $queryString;
         }
 
         $request->setRequestUri($targetUrl);

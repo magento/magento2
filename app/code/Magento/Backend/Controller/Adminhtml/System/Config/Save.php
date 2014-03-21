@@ -90,7 +90,7 @@ class Save extends AbstractConfig
             $this->_saveSection();
             $section = $this->getRequest()->getParam('section');
             $website = $this->getRequest()->getParam('website');
-            $store   = $this->getRequest()->getParam('store');
+            $store = $this->getRequest()->getParam('store');
 
             $configData = array(
                 'section' => $section,
@@ -102,9 +102,7 @@ class Save extends AbstractConfig
             $configModel = $this->_configFactory->create(array('data' => $configData));
             $configModel->save();
 
-            $this->messageManager->addSuccess(
-                __('You saved the configuration.')
-            );
+            $this->messageManager->addSuccess(__('You saved the configuration.'));
         } catch (\Magento\Core\Exception $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
@@ -187,11 +185,9 @@ class Save extends AbstractConfig
      */
     protected function _saveSection()
     {
-        $method = '_save' . $this->string->upperCaseWords(
-            $this->getRequest()->getParam('section'), '_', ''
-        );
+        $method = '_save' . $this->string->upperCaseWords($this->getRequest()->getParam('section'), '_', '');
         if (method_exists($this, $method)) {
-            $this->$method();
+            $this->{$method}();
         }
     }
 

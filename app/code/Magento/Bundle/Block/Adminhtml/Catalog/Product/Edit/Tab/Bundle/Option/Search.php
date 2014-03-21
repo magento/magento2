@@ -71,8 +71,7 @@ class Search extends \Magento\Backend\Block\Widget
      */
     protected function _beforeToHtml()
     {
-        $this->getChildBlock('grid')->setIndex($this->getIndex())
-            ->setFirstShow($this->getFirstShow());
+        $this->getChildBlock('grid')->setIndex($this->getIndex())->setFirstShow($this->getFirstShow());
         return parent::_beforeToHtml();
     }
 }

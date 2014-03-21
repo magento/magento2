@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Block;
 
 class SwitchTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +49,8 @@ class SwitchTest extends \PHPUnit_Framework_TestCase
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $helper->getObject(
-            'Magento\Core\Block\Switcher', array('storeManager' => $this->_storeManagerMock)
+            'Magento\Core\Block\Switcher',
+            array('storeManager' => $this->_storeManagerMock)
         );
     }
 
@@ -75,9 +75,6 @@ class SwitchTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsStoreInUrlDataProvider()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return array(array(true), array(false));
     }
 }

@@ -54,12 +54,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id' => 'edit_form',
-                'action' => $this->getUrl('catalog_rule/promo_catalog/save'),
-                'method' => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'edit_form',
+                    'action' => $this->getUrl('catalog_rule/promo_catalog/save'),
+                    'method' => 'post'
+                )
+            )
         );
         $form->setUseContainer(true);
         $this->setForm($form);

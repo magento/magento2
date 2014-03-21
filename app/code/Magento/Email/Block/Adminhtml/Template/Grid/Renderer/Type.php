@@ -41,7 +41,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected static $_types = array(
         \Magento\App\TemplateTypesInterface::TYPE_HTML => 'HTML',
-        \Magento\App\TemplateTypesInterface::TYPE_TEXT => 'Text',
+        \Magento\App\TemplateTypesInterface::TYPE_TEXT => 'Text'
     );
 
     /**

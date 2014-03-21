@@ -42,9 +42,8 @@ class Entity implements \Magento\Option\ArrayInterface
     /**
      * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
      */
-    public function __construct(
-        \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
-    ) {
+    public function __construct(\Magento\ImportExport\Model\Import\ConfigInterface $importConfig)
+    {
         $this->_importConfig = $importConfig;
     }
 
@@ -54,14 +53,10 @@ class Entity implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         $options = array();
-        $options[] = array(
-            'label' => __('-- Please Select --'),
-            'value' => ''
-        );
+        $options[] = array('label' => __('-- Please Select --'), 'value' => '');
         foreach ($this->_importConfig->getEntities() as $entityName => $entityConfig) {
             $options[] = array('label' => __($entityConfig['label']), 'value' => $entityName);
         }
         return $options;
-
     }
 }

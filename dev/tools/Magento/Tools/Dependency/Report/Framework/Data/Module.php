@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Dependency\Report\Framework\Data;
 
 /**
@@ -49,7 +48,7 @@ class Module
      * @param array $name
      * @param \Magento\Tools\Dependency\Report\Framework\Data\Dependency[] $dependencies
      */
-    public function __construct($name, array $dependencies = [])
+    public function __construct($name, array $dependencies = array())
     {
         $this->name = $name;
         $this->dependencies = $dependencies;

@@ -70,10 +70,7 @@ class ResourceResolver implements \Magento\Module\ResourceResolverInterface
             foreach (glob($moduleDataDir . '/*', GLOB_ONLYDIR) as $resourceDir) {
                 $dataResources[] = basename($resourceDir);
             }
-            $this->_moduleResources[$moduleName] = array_unique(array_merge(
-                $sqlResources,
-                $dataResources
-            ));
+            $this->_moduleResources[$moduleName] = array_unique(array_merge($sqlResources, $dataResources));
         }
         return $this->_moduleResources[$moduleName];
     }

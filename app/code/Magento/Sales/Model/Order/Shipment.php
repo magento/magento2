@@ -57,24 +57,35 @@ namespace Magento\Sales\Model\Order;
  */
 class Shipment extends \Magento\Sales\Model\AbstractModel
 {
-    const STATUS_NEW    = 1;
+    const STATUS_NEW = 1;
 
-    const XML_PATH_EMAIL_TEMPLATE               = 'sales_email/shipment/template';
-    const XML_PATH_EMAIL_GUEST_TEMPLATE         = 'sales_email/shipment/guest_template';
-    const XML_PATH_EMAIL_IDENTITY               = 'sales_email/shipment/identity';
-    const XML_PATH_EMAIL_COPY_TO                = 'sales_email/shipment/copy_to';
-    const XML_PATH_EMAIL_COPY_METHOD            = 'sales_email/shipment/copy_method';
-    const XML_PATH_EMAIL_ENABLED                = 'sales_email/shipment/enabled';
+    const XML_PATH_EMAIL_TEMPLATE = 'sales_email/shipment/template';
 
-    const XML_PATH_UPDATE_EMAIL_TEMPLATE        = 'sales_email/shipment_comment/template';
-    const XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE  = 'sales_email/shipment_comment/guest_template';
-    const XML_PATH_UPDATE_EMAIL_IDENTITY        = 'sales_email/shipment_comment/identity';
-    const XML_PATH_UPDATE_EMAIL_COPY_TO         = 'sales_email/shipment_comment/copy_to';
-    const XML_PATH_UPDATE_EMAIL_COPY_METHOD     = 'sales_email/shipment_comment/copy_method';
-    const XML_PATH_UPDATE_EMAIL_ENABLED         = 'sales_email/shipment_comment/enabled';
+    const XML_PATH_EMAIL_GUEST_TEMPLATE = 'sales_email/shipment/guest_template';
 
-    const REPORT_DATE_TYPE_ORDER_CREATED        = 'order_created';
-    const REPORT_DATE_TYPE_SHIPMENT_CREATED     = 'shipment_created';
+    const XML_PATH_EMAIL_IDENTITY = 'sales_email/shipment/identity';
+
+    const XML_PATH_EMAIL_COPY_TO = 'sales_email/shipment/copy_to';
+
+    const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/shipment/copy_method';
+
+    const XML_PATH_EMAIL_ENABLED = 'sales_email/shipment/enabled';
+
+    const XML_PATH_UPDATE_EMAIL_TEMPLATE = 'sales_email/shipment_comment/template';
+
+    const XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE = 'sales_email/shipment_comment/guest_template';
+
+    const XML_PATH_UPDATE_EMAIL_IDENTITY = 'sales_email/shipment_comment/identity';
+
+    const XML_PATH_UPDATE_EMAIL_COPY_TO = 'sales_email/shipment_comment/copy_to';
+
+    const XML_PATH_UPDATE_EMAIL_COPY_METHOD = 'sales_email/shipment_comment/copy_method';
+
+    const XML_PATH_UPDATE_EMAIL_ENABLED = 'sales_email/shipment_comment/enabled';
+
+    const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
+
+    const REPORT_DATE_TYPE_SHIPMENT_CREATED = 'shipment_created';
 
     /**
      * Identifier for order history item
@@ -85,10 +96,15 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      * Store address
      */
     const XML_PATH_STORE_ADDRESS1 = 'shipping/origin/street_line1';
+
     const XML_PATH_STORE_ADDRESS2 = 'shipping/origin/street_line2';
+
     const XML_PATH_STORE_CITY = 'shipping/origin/city';
+
     const XML_PATH_STORE_REGION_ID = 'shipping/origin/region_id';
+
     const XML_PATH_STORE_ZIP = 'shipping/origin/postcode';
+
     const XML_PATH_STORE_COUNTRY_ID = 'shipping/origin/country_id';
 
     /**
@@ -238,9 +254,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      */
     public function loadByIncrementId($incrementId)
     {
-        $ids = $this->getCollection()
-            ->addAttributeToFilter('increment_id', $incrementId)
-            ->getAllIds();
+        $ids = $this->getCollection()->addAttributeToFilter('increment_id', $incrementId)->getAllIds();
 
         if (!empty($ids)) {
             reset($ids);
@@ -248,7 +262,6 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         }
         return $this;
     }
-
 
     /**
      * Declare order for shipment
@@ -259,8 +272,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
         $this->_order = $order;
-        $this->setOrderId($order->getId())
-            ->setStoreId($order->getStoreId());
+        $this->setOrderId($order->getId())->setStoreId($order->getStoreId());
         return $this;
     }
 
@@ -362,7 +374,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         $items = array();
         foreach ($this->getItemsCollection() as $item) {
             if (!$item->isDeleted()) {
-                $items[] =  $item;
+                $items[] = $item;
             }
         }
         return $items;
@@ -388,15 +400,12 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      */
     public function addItem(\Magento\Sales\Model\Order\Shipment\Item $item)
     {
-        $item->setShipment($this)
-            ->setParentId($this->getId())
-            ->setStoreId($this->getStoreId());
+        $item->setShipment($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
         if (!$item->getId()) {
             $this->getItemsCollection()->addItem($item);
         }
         return $this;
     }
-
 
     /**
      * Retrieve tracks collection.
@@ -425,7 +434,7 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         $tracks = array();
         foreach ($this->getTracksCollection() as $track) {
             if (!$track->isDeleted()) {
-                $tracks[] =  $track;
+                $tracks[] = $track;
             }
         }
         return $tracks;
@@ -451,10 +460,15 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      */
     public function addTrack(\Magento\Sales\Model\Order\Shipment\Track $track)
     {
-        $track->setShipment($this)
-            ->setParentId($this->getId())
-            ->setOrderId($this->getOrderId())
-            ->setStoreId($this->getStoreId());
+        $track->setShipment(
+            $this
+        )->setParentId(
+            $this->getId()
+        )->setOrderId(
+            $this->getOrderId()
+        )->setStoreId(
+            $this->getStoreId()
+        );
         if (!$track->getId()) {
             $this->getTracksCollection()->addItem($track);
         }
@@ -479,15 +493,16 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      */
     public function addComment($comment, $notify = false, $visibleOnFront = false)
     {
-        if (!($comment instanceof \Magento\Sales\Model\Order\Shipment\Comment)) {
-            $comment = $this->_commentFactory->create()
-                ->setComment($comment)
-                ->setIsCustomerNotified($notify)
-                ->setIsVisibleOnFront($visibleOnFront);
+        if (!$comment instanceof \Magento\Sales\Model\Order\Shipment\Comment) {
+            $comment = $this->_commentFactory->create()->setComment(
+                $comment
+            )->setIsCustomerNotified(
+                $notify
+            )->setIsVisibleOnFront(
+                $visibleOnFront
+            );
         }
-        $comment->setShipment($this)
-            ->setParentId($this->getId())
-            ->setStoreId($this->getStoreId());
+        $comment->setShipment($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
         if (!$comment->getId()) {
             $this->getCommentsCollection()->addItem($comment);
         }
@@ -501,12 +516,12 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
      * @param bool $reload
      * @return \Magento\Sales\Model\Resource\Order\Shipment\Comment\Collection
      */
-    public function getCommentsCollection($reload=false)
+    public function getCommentsCollection($reload = false)
     {
         if (is_null($this->_comments) || $reload) {
-            $this->_comments = $this->_commentCollectionFactory->create()
-                ->setShipmentFilter($this->getId())
-                ->setCreatedAtOrder();
+            $this->_comments = $this->_commentCollectionFactory->create()->setShipmentFilter(
+                $this->getId()
+            )->setCreatedAtOrder();
 
             /**
              * When shipment created with adding comment,
@@ -558,22 +573,25 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         }
 
         if ($notifyCustomer) {
-            $this->_transportBuilder
-                ->setTemplateIdentifier($templateId)
-                ->setTemplateOptions(array(
-                    'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $storeId
-                ))
-                ->setTemplateVars(array(
-                    'order'        => $order,
-                    'shipment'     => $this,
-                    'comment'      => $comment,
-                    'billing'      => $order->getBillingAddress(),
+            $this->_transportBuilder->setTemplateIdentifier(
+                $templateId
+            )->setTemplateOptions(
+                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+            )->setTemplateVars(
+                array(
+                    'order' => $order,
+                    'shipment' => $this,
+                    'comment' => $comment,
+                    'billing' => $order->getBillingAddress(),
                     'payment_html' => $paymentBlockHtml,
-                    'store'        => $this->getStore()
-                ))
-                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
-                ->addTo($order->getCustomerEmail(), $customerName);
+                    'store' => $this->getStore()
+                )
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId)
+            )->addTo(
+                $order->getCustomerEmail(),
+                $customerName
+            );
             if ($copyTo && $copyMethod == 'bcc') {
                 // Add bcc to customer email
                 foreach ($copyTo as $email) {
@@ -581,31 +599,31 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
                 }
             }
             /** @var \Magento\Mail\TransportInterface $transport */
-            $transport =  $this->_transportBuilder->getTransport();
+            $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
         }
 
         // Email copies are sent as separated emails if their copy method is 'copy' or a customer should not be notified
         if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
             foreach ($copyTo as $email) {
-                $this->_transportBuilder
-                    ->setTemplateIdentifier($templateId)
-                    ->setTemplateOptions(array(
-                        'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                        'store' => $storeId
-                    ))
-                    ->setTemplateVars(array(
-                        'order'        => $order,
-                        'shipment'     => $this,
-                        'comment'      => $comment,
-                        'billing'      => $order->getBillingAddress(),
+                $this->_transportBuilder->setTemplateIdentifier(
+                    $templateId
+                )->setTemplateOptions(
+                    array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+                )->setTemplateVars(
+                    array(
+                        'order' => $order,
+                        'shipment' => $this,
+                        'comment' => $comment,
+                        'billing' => $order->getBillingAddress(),
                         'payment_html' => $paymentBlockHtml,
-                        'store'        => $this->getStore()
-                    ))
-                    ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId))
-                    ->addTo($email)
-                    ->getTransport()
-                    ->sendMessage();
+                        'store' => $this->getStore()
+                    )
+                )->setFrom(
+                    $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId)
+                )->addTo(
+                    $email
+                )->getTransport()->sendMessage();
             }
         }
 
@@ -648,21 +666,24 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         }
 
         if ($notifyCustomer) {
-            $this->_transportBuilder
-                ->setTemplateIdentifier($templateId)
-                ->setTemplateOptions(array(
-                    'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $storeId
-                ))
-                ->setTemplateVars(array(
-                    'order'    => $order,
+            $this->_transportBuilder->setTemplateIdentifier(
+                $templateId
+            )->setTemplateOptions(
+                array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+            )->setTemplateVars(
+                array(
+                    'order' => $order,
                     'shipment' => $this,
-                    'comment'  => $comment,
-                    'billing'  => $order->getBillingAddress(),
-                    'store'    => $this->getStore()
-                ))
-                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId))
-                ->addTo($order->getCustomerEmail(), $customerName);
+                    'comment' => $comment,
+                    'billing' => $order->getBillingAddress(),
+                    'store' => $this->getStore()
+                )
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId)
+            )->addTo(
+                $order->getCustomerEmail(),
+                $customerName
+            );
             if ($copyTo && $copyMethod == 'bcc') {
                 // Add bcc to customer email
                 foreach ($copyTo as $email) {
@@ -670,30 +691,30 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
                 }
             }
             /** @var \Magento\Mail\TransportInterface $transport */
-            $transport =  $this->_transportBuilder->getTransport();
+            $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
         }
 
         // Email copies are sent as separated emails if their copy method is 'copy' or a customer should not be notified
         if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
             foreach ($copyTo as $email) {
-                $this->_transportBuilder
-                    ->setTemplateIdentifier($templateId)
-                    ->setTemplateOptions(array(
-                        'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                        'store' => $storeId
-                    ))
-                    ->setTemplateVars(array(
-                        'order'    => $order,
+                $this->_transportBuilder->setTemplateIdentifier(
+                    $templateId
+                )->setTemplateOptions(
+                    array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => $storeId)
+                )->setTemplateVars(
+                    array(
+                        'order' => $order,
                         'shipment' => $this,
-                        'comment'  => $comment,
-                        'billing'  => $order->getBillingAddress(),
-                        'store'    => $this->getStore()
-                    ))
-                    ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId))
-                    ->addTo($email)
-                    ->getTransport()
-                    ->sendMessage();
+                        'comment' => $comment,
+                        'billing' => $order->getBillingAddress(),
+                        'store' => $this->getStore()
+                    )
+                )->setFrom(
+                    $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId)
+                )->addTo(
+                    $email
+                )->getTransport()->sendMessage();
             }
         }
 
@@ -756,13 +777,13 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
         }
 
         if (null !== $this->_tracks) {
-            foreach($this->_tracks as $track) {
+            foreach ($this->_tracks as $track) {
                 $track->save();
             }
         }
 
         if (null !== $this->_comments) {
-            foreach($this->_comments as $comment) {
+            foreach ($this->_comments as $comment) {
                 $comment->save();
             }
         }

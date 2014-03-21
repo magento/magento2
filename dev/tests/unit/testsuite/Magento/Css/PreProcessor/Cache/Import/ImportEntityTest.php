@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Cache\Import;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -64,27 +63,44 @@ class ImportEntityTest extends \PHPUnit_Framework_TestCase
         $filePath = 'someFile';
         $this->absoluteFilePath = 'some_absolute_path';
 
-        $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $this->rootDirectory->expects($this->once())
-            ->method('getRelativePath')
-            ->with($this->equalTo($this->absoluteFilePath))
-            ->will($this->returnValue($relativePath));
+        $this->rootDirectory = $this->getMock(
+            'Magento\Filesystem\Directory\ReadInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->rootDirectory->expects(
+            $this->once()
+        )->method(
+            'getRelativePath'
+        )->with(
+            $this->equalTo($this->absoluteFilePath)
+        )->will(
+            $this->returnValue($relativePath)
+        );
 
-        $this->rootDirectory->expects($this->atLeastOnce())
-            ->method('stat')
-            ->with($this->equalTo($relativePath))
-            ->will($this->returnValue(['mtime' => $originalMtime]));
+        $this->rootDirectory->expects(
+            $this->atLeastOnce()
+        )->method(
+            'stat'
+        )->with(
+            $this->equalTo($relativePath)
+        )->will(
+            $this->returnValue(array('mtime' => $originalMtime))
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $lessFile = $this->getMock('Magento\Less\PreProcessor\File\Less', [], [], '', false);
+        $lessFile = $this->getMock('Magento\Less\PreProcessor\File\Less', array(), array(), '', false);
         $lessFile->expects($this->any())->method('getFilePath')->will($this->returnValue($filePath));
         $lessFile->expects($this->any())->method('getSourcePath')->will($this->returnValue($this->absoluteFilePath));
         $lessFile->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->rootDirectory));
 
         /** @var \Magento\Css\PreProcessor\Cache\Import\ImportEntity importEntity */
         $this->importEntity = $this->objectManagerHelper->getObject(
-            'Magento\Css\PreProcessor\Cache\Import\ImportEntity', ['lessFile' => $lessFile]
+            'Magento\Css\PreProcessor\Cache\Import\ImportEntity',
+            array('lessFile' => $lessFile)
         );
     }
 

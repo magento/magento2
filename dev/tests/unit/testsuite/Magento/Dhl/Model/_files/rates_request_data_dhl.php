@@ -44,7 +44,7 @@ return array(
         'orig_country_id' => 'US',
         'country_id' => 'US',
         'region_id' => '12',
-        'city'=> 'Fremont',
+        'city' => 'Fremont',
         'postcode' => '94538',
         'dhl_id' => 'MAGEN_8501',
         'dhl_password' => 'QR2GO1U74X',

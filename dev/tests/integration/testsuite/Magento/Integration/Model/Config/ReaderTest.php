@@ -22,7 +22,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
-
 namespace Magento\Integration\Model\Config;
 
 use Magento\Integration\Model\Config\Reader as ConfigReader;
@@ -58,10 +57,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 
         $expectedResult = require __DIR__ . '/_files/integration.php';
-        $this->assertEquals(
-            $expectedResult,
-            $this->_configReader->read(),
-            'Error happened during config reading.'
-        );
+        $this->assertEquals($expectedResult, $this->_configReader->read(), 'Error happened during config reading.');
     }
 }

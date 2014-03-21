@@ -42,8 +42,13 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factoryMock = $this->getMock('Magento\DesignEditor\Model\Theme\ChangeFactory',
-            array('create'), array(), '', false);
+        $this->factoryMock = $this->getMock(
+            'Magento\DesignEditor\Model\Theme\ChangeFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $this->subjectMock = $this->getMock('Magento\Theme\Model\CopyService', array(), array(), '', false);
         $this->model = new \Magento\DesignEditor\Model\Plugin\ThemeCopyService($this->factoryMock);
     }
@@ -55,14 +60,10 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
         $targetThemeId = 2;
 
         $sourceThemeMock = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $sourceThemeMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($sourceThemeId));
+        $sourceThemeMock->expects($this->any())->method('getId')->will($this->returnValue($sourceThemeId));
 
         $targetThemeMock = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $targetThemeMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($targetThemeId));
+        $targetThemeMock->expects($this->any())->method('getId')->will($this->returnValue($targetThemeId));
 
         $sourceChangeMock = $this->getMock(
             'Magento\DesignEditor\Model\Theme\Change',
@@ -78,39 +79,20 @@ class ThemeCopyServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->factoryMock->expects($this->at(0))
-            ->method('create')
-            ->will($this->returnValue($sourceChangeMock));
-        $this->factoryMock->expects($this->at(1))
-            ->method('create')
-            ->will($this->returnValue($targetChangeMock));
+        $this->factoryMock->expects($this->at(0))->method('create')->will($this->returnValue($sourceChangeMock));
+        $this->factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($targetChangeMock));
 
-        $sourceChangeMock->expects($this->once())
-            ->method('loadByThemeId')
-            ->with($sourceThemeId);
-        $sourceChangeMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(10));
-        $sourceChangeMock->expects($this->any())
-            ->method('getChangeTime')
-            ->will($this->returnValue($sourceChangeTime));
+        $sourceChangeMock->expects($this->once())->method('loadByThemeId')->with($sourceThemeId);
+        $sourceChangeMock->expects($this->any())->method('getId')->will($this->returnValue(10));
+        $sourceChangeMock->expects($this->any())->method('getChangeTime')->will($this->returnValue($sourceChangeTime));
 
-        $targetChangeMock->expects($this->once())
-            ->method('loadByThemeId')
-            ->with($targetThemeId);
-        $targetChangeMock->expects($this->once())
-            ->method('setThemeId')
-            ->with($targetThemeId);
-        $targetChangeMock->expects($this->once())
-            ->method('setChangeTime')
-            ->with($sourceChangeTime);
-        $targetChangeMock->expects($this->once())
-            ->method('save');
+        $targetChangeMock->expects($this->once())->method('loadByThemeId')->with($targetThemeId);
+        $targetChangeMock->expects($this->once())->method('setThemeId')->with($targetThemeId);
+        $targetChangeMock->expects($this->once())->method('setChangeTime')->with($sourceChangeTime);
+        $targetChangeMock->expects($this->once())->method('save');
 
         $closureMock = function () {
-
         };
         $this->model->aroundCopy($this->subjectMock, $closureMock, $sourceThemeMock, $targetThemeMock);
     }
-
 }

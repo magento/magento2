@@ -44,10 +44,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factory = new \Magento\Profiler\Driver\Factory(
-            $this->_defaultDriverPrefix,
-            $this->_defaultDriverType
-        );
+        $this->_factory = new \Magento\Profiler\Driver\Factory($this->_defaultDriverPrefix, $this->_defaultDriverType);
     }
 
     public function testConstructor()
@@ -81,28 +78,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         $defaultDriverClass = $this->getMockClass(
-            'Magento\Profiler\DriverInterface', array(), array(), 'Magento_Profiler_Driver_Test_Default'
+            'Magento\Profiler\DriverInterface',
+            array(),
+            array(),
+            'Magento_Profiler_Driver_Test_Default'
         );
         $testDriverClass = $this->getMockClass(
-            'Magento\Profiler\DriverInterface', array(), array(), 'Magento_Profiler_Driver_Test_Test'
+            'Magento\Profiler\DriverInterface',
+            array(),
+            array(),
+            'Magento_Profiler_Driver_Test_Test'
         );
         return array(
-            'Prefix and concrete type' => array(
-                array(
-                    'type' => 'test'
-                ),
-                $testDriverClass
-            ),
-            'Prefix and default type' => array(
-                array(),
-                $defaultDriverClass
-            ),
-            'Concrete class' => array(
-                array(
-                    'type' => $testDriverClass
-                ),
-                $testDriverClass
-            )
+            'Prefix and concrete type' => array(array('type' => 'test'), $testDriverClass),
+            'Prefix and default type' => array(array(), $defaultDriverClass),
+            'Concrete class' => array(array('type' => $testDriverClass), $testDriverClass)
         );
     }
 
@@ -112,9 +102,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateUndefinedClass()
     {
-        $this->_factory->create(array(
-            'type' => 'baz'
-        ));
+        $this->_factory->create(array('type' => 'baz'));
     }
 
     /**
@@ -123,8 +111,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateInvalidClass()
     {
-        $this->_factory->create(array(
-            'type' => 'stdClass'
-        ));
+        $this->_factory->create(array('type' => 'stdClass'));
     }
 }

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
     <group id="default">
         <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer" method="cleanExpiredQuotes">
             <schedule>0 0 * * *</schedule>

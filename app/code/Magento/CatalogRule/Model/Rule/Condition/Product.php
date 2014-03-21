@@ -32,5 +32,4 @@ namespace Magento\CatalogRule\Model\Rule\Condition;
 
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
-
 }

@@ -40,10 +40,7 @@ $aclRulesDelete = array(
 /**
  * Remove unneeded ACL rules
  */
-$connection->delete(
-    $adminRuleTable,
-    $connection->quoteInto('resource_id IN (?)', $aclRulesDelete)
-);
+$connection->delete($adminRuleTable, $connection->quoteInto('resource_id IN (?)', $aclRulesDelete));
 
 $connection->update(
     $adminRuleTable,

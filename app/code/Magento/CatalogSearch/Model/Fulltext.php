@@ -52,10 +52,13 @@ use Magento\Data\Collection\Db;
  */
 class Fulltext extends AbstractModel
 {
-    const SEARCH_TYPE_LIKE              = 1;
-    const SEARCH_TYPE_FULLTEXT          = 2;
-    const SEARCH_TYPE_COMBINE           = 3;
-    const XML_PATH_CATALOG_SEARCH_TYPE  = 'catalog/search/search_type';
+    const SEARCH_TYPE_LIKE = 1;
+
+    const SEARCH_TYPE_FULLTEXT = 2;
+
+    const SEARCH_TYPE_COMBINE = 3;
+
+    const XML_PATH_CATALOG_SEARCH_TYPE = 'catalog/search/search_type';
 
     /**
      * Catalog search data

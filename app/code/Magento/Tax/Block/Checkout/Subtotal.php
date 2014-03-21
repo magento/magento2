@@ -59,14 +59,7 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct(
-            $context,
-            $catalogData,
-            $customerSession,
-            $checkoutSession,
-            $salesConfig,
-            $data
-        );
+        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $salesConfig, $data);
         $this->_isScopePrivate = true;
     }
 

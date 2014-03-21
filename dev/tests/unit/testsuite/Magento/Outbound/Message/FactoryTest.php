@@ -26,7 +26,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Outbound\Message;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -65,89 +64,133 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_mockEndpoint;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
-        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
-            ->setMethods(array('create'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->_mockObjectManager = $this->getMockBuilder(
+            'Magento\ObjectManager'
+        )->setMethods(
+            array('create')
+        )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->_mockFormatFactory = $this->getMockBuilder('Magento\Outbound\Formatter\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockFormatFactory = $this->getMockBuilder(
+            'Magento\Outbound\Formatter\Factory'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_mockAuthFactory = $this->getMockBuilder('Magento\Outbound\Authentication\Factory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockAuthFactory = $this->getMockBuilder(
+            'Magento\Outbound\Authentication\Factory'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_factory = new \Magento\Outbound\Message\Factory($this->_mockObjectManager,
-                                                               $this->_mockFormatFactory,
-                                                               $this->_mockAuthFactory);
+        $this->_factory = new \Magento\Outbound\Message\Factory(
+            $this->_mockObjectManager,
+            $this->_mockFormatFactory,
+            $this->_mockAuthFactory
+        );
 
-        $this->_mockFormatter = $this->getMockBuilder('Magento\Outbound\FormatterInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockFormatter = $this->getMockBuilder(
+            'Magento\Outbound\FormatterInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_mockEndpoint = $this->getMockBuilder('Magento\Outbound\EndpointInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_mockEndpoint = $this->getMockBuilder(
+            'Magento\Outbound\EndpointInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_mockEndpoint->expects($this->once())
-            ->method('getFormat')
-            ->will($this->returnValue('some_format'));
+        $this->_mockEndpoint->expects($this->once())->method('getFormat')->will($this->returnValue('some_format'));
 
-        $this->_mockFormatFactory->expects($this->once())
-            ->method('getFormatter')
-            ->with($this->equalTo('some_format'))
-            ->will($this->returnValue($this->_mockFormatter));
+        $this->_mockFormatFactory->expects(
+            $this->once()
+        )->method(
+            'getFormatter'
+        )->with(
+            $this->equalTo('some_format')
+        )->will(
+            $this->returnValue($this->_mockFormatter)
+        );
 
-        $this->_mockFormatter->expects($this->once())
-            ->method('getContentType')
-            ->will($this->returnValue(self::CONTENT_TYPE));
+        $this->_mockFormatter->expects(
+            $this->once()
+        )->method(
+            'getContentType'
+        )->will(
+            $this->returnValue(self::CONTENT_TYPE)
+        );
 
-        $this->_mockFormatter->expects($this->once())
-            ->method('format')
-            ->with($this->equalTo(self::$body))
-            ->will($this->returnValue(self::FORMATTED_BODY));
+        $this->_mockFormatter->expects(
+            $this->once()
+        )->method(
+            'format'
+        )->with(
+            $this->equalTo(self::$body)
+        )->will(
+            $this->returnValue(self::FORMATTED_BODY)
+        );
 
-        $this->_mockEndpoint->expects($this->once())
-            ->method('getAuthenticationType')
-            ->will($this->returnValue(self::AUTH_TYPE));
+        $this->_mockEndpoint->expects(
+            $this->once()
+        )->method(
+            'getAuthenticationType'
+        )->will(
+            $this->returnValue(self::AUTH_TYPE)
+        );
 
-        $mockAuth = $this->getMockBuilder('Magento\Outbound\AuthenticationInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockAuth = $this->getMockBuilder(
+            'Magento\Outbound\AuthenticationInterface'
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_mockAuthFactory->expects($this->once())
-            ->method('getAuthentication')
-            ->with($this->equalTo(self::AUTH_TYPE))
-            ->will($this->returnValue($mockAuth));
+        $this->_mockAuthFactory->expects(
+            $this->once()
+        )->method(
+            'getAuthentication'
+        )->with(
+            $this->equalTo(self::AUTH_TYPE)
+        )->will(
+            $this->returnValue($mockAuth)
+        );
 
-        $mockUser = $this->getMockBuilder('Magento\Outbound\UserInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockUser = $this->getMockBuilder('Magento\Outbound\UserInterface')->disableOriginalConstructor()->getMock();
 
-        $this->_mockEndpoint->expects($this->once())
-            ->method('getUser')
-            ->will($this->returnValue($mockUser));
+        $this->_mockEndpoint->expects($this->once())->method('getUser')->will($this->returnValue($mockUser));
 
-        $mockAuth->expects($this->once())
-            ->method('getSignatureHeaders')
-            ->with($this->equalTo(self::FORMATTED_BODY), $this->equalTo($mockUser))
-            ->will($this->returnValue(self::$signatureHeaders));
+        $mockAuth->expects(
+            $this->once()
+        )->method(
+            'getSignatureHeaders'
+        )->with(
+            $this->equalTo(self::FORMATTED_BODY),
+            $this->equalTo($mockUser)
+        )->will(
+            $this->returnValue(self::$signatureHeaders)
+        );
 
-        $this->_mockEndpoint->expects($this->once())
-            ->method('getEndpointUrl')
-            ->will($this->returnValue(self::ENDPOINT_URL));
+        $this->_mockEndpoint->expects(
+            $this->once()
+        )->method(
+            'getEndpointUrl'
+        )->will(
+            $this->returnValue(self::ENDPOINT_URL)
+        );
 
-        $this->_mockEndpoint->expects($this->once())
-            ->method('getTimeoutInSecs')
-            ->will($this->returnValue(self::TIMEOUT));
+        $this->_mockEndpoint->expects(
+            $this->once()
+        )->method(
+            'getTimeoutInSecs'
+        )->will(
+            $this->returnValue(self::TIMEOUT)
+        );
 
-        $this->_mockObjectManager->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Outbound\Message'), $this->anything())
-            ->will($this->returnCallback(array($this, 'verifyManagerCreate')));
+        $this->_mockObjectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('Magento\Outbound\Message'),
+            $this->anything()
+        )->will(
+            $this->returnCallback(array($this, 'verifyManagerCreate'))
+        );
     }
 
     public function testCreate()

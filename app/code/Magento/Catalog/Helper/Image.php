@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper;
 
 use Magento\App\Helper\AbstractHelper;
@@ -175,7 +174,7 @@ class Image extends AbstractHelper
      * @param string|null $imageFile
      * @return $this
      */
-    public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile=null)
+    public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile = null)
     {
         $this->_reset();
         $this->_setModel($this->_productImageFactory->create());
@@ -186,10 +185,14 @@ class Image extends AbstractHelper
             $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_image")
         );
         $this->setWatermarkImageOpacity(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity")
+            $this->_coreStoreConfig->getConfig(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity"
+            )
         );
         $this->setWatermarkPosition(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_position")
+            $this->_coreStoreConfig->getConfig(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position"
+            )
         );
         $this->setWatermarkSize(
             $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_size")
@@ -343,10 +346,15 @@ class Image extends AbstractHelper
      */
     public function watermark($fileName, $position, $size = null, $imageOpacity = null)
     {
-        $this->setWatermark($fileName)
-            ->setWatermarkPosition($position)
-            ->setWatermarkSize($size)
-            ->setWatermarkImageOpacity($imageOpacity);
+        $this->setWatermark(
+            $fileName
+        )->setWatermarkPosition(
+            $position
+        )->setWatermarkSize(
+            $size
+        )->setWatermarkImageOpacity(
+            $imageOpacity
+        );
         return $this;
     }
 
@@ -623,10 +631,7 @@ class Image extends AbstractHelper
     {
         $size = explode('x', strtolower($string));
         if (sizeof($size) == 2) {
-            return array(
-                'width' => ($size[0] > 0) ? $size[0] : null,
-                'heigth' => ($size[1] > 0) ? $size[1] : null,
-            );
+            return array('width' => $size[0] > 0 ? $size[0] : null, 'heigth' => $size[1] > 0 ? $size[1] : null);
         }
         return false;
     }
@@ -659,9 +664,6 @@ class Image extends AbstractHelper
      */
     public function getOriginalSizeArray()
     {
-        return array(
-            $this->getOriginalWidth(),
-            $this->getOriginalHeight()
-        );
+        return array($this->getOriginalWidth(), $this->getOriginalHeight());
     }
 }

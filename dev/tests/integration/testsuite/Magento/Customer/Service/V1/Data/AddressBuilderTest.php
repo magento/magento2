@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -51,7 +50,7 @@ class AddressBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $userDefinedAttributeCode = 'address_user_attribute';
         $attributeCodes = $this->_addressBuilder->getCustomAttributesCodes();
-        $expectedAttributes = [$userDefinedAttributeCode, 'prefix', 'middlename', 'suffix'];
+        $expectedAttributes = array($userDefinedAttributeCode, 'prefix', 'middlename', 'suffix');
         $this->assertEquals($expectedAttributes, $attributeCodes, 'Custom attribute codes list is invalid.');
     }
 }

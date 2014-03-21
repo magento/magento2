@@ -25,12 +25,11 @@
  */
 namespace Magento\Payment\Model\Checks;
 
-use \Magento\Sales\Model\Quote;
-use \Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Sales\Model\Quote;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 class CanUseInternal implements SpecificationInterface
 {
-
     /**
      * Check whether payment method is applicable to quote
      * Purposed to allow use in controllers some logic that was implemented in blocks only before

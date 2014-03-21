@@ -43,49 +43,52 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $address = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
-            ['getShippingAmount', 'getShippingDescription', 'addTotal', '__wakeup'],
-            [],
+            array('getShippingAmount', 'getShippingDescription', 'addTotal', '__wakeup'),
+            array(),
             '',
             false
         );
 
-        $address->expects($this->once())
-            ->method('getShippingAmount')
-            ->will($this->returnValue($shippingAmount));
+        $address->expects($this->once())->method('getShippingAmount')->will($this->returnValue($shippingAmount));
 
-        $address->expects($this->once())
-            ->method('getShippingDescription')
-            ->will($this->returnValue($shippingDescription));
+        $address->expects(
+            $this->once()
+        )->method(
+            'getShippingDescription'
+        )->will(
+            $this->returnValue($shippingDescription)
+        );
 
-        $address->expects($this->once())
-            ->method('addTotal')
-            ->with($this->equalTo($expectedTotal))
-            ->will($this->returnSelf());
+        $address->expects(
+            $this->once()
+        )->method(
+            'addTotal'
+        )->with(
+            $this->equalTo($expectedTotal)
+        )->will(
+            $this->returnSelf()
+        );
 
         $this->assertEquals($this->shippingModel, $this->shippingModel->fetch($address));
     }
 
     public function fetchDataProvider()
     {
-        return [
-            [
+        return array(
+            array(
                 'shipping_amount' => 1,
                 'shipping_description' => 'Shipping Method',
-                'expected' => [
-                    'code'  => 'shipping',
+                'expected' => array(
+                    'code' => 'shipping',
                     'title' => __('Shipping & Handling (%1)', 'Shipping Method'),
                     'value' => 1
-                ]
-            ],
-            [
+                )
+            ),
+            array(
                 'shipping_amount' => 1,
                 'shipping_description' => '',
-                'expected' => [
-                    'code'  => 'shipping',
-                    'title' => __('Shipping & Handling'),
-                    'value' => 1
-                ]
-            ],
-        ];
+                'expected' => array('code' => 'shipping', 'title' => __('Shipping & Handling'), 'value' => 1)
+            )
+        );
     }
 }

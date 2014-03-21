@@ -32,8 +32,7 @@ namespace Magento\Catalog\Model\Resource\Category\Attribute;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
     /**
      * Entity factory
@@ -72,14 +71,15 @@ class Collection
      */
     protected function _initSelect()
     {
-        $this->getSelect()->from(array('main_table' => $this->getResource()->getMainTable()))
-            ->where(
-                'main_table.entity_type_id=?',
-                $this->_eavEntityFactory->create()->setType(\Magento\Catalog\Model\Category::ENTITY)->getTypeId()
-            )->join(
-                array('additional_table' => $this->getTable('catalog_eav_attribute')),
-                'additional_table.attribute_id = main_table.attribute_id'
-            );
+        $this->getSelect()->from(
+            array('main_table' => $this->getResource()->getMainTable())
+        )->where(
+            'main_table.entity_type_id=?',
+            $this->_eavEntityFactory->create()->setType(\Magento\Catalog\Model\Category::ENTITY)->getTypeId()
+        )->join(
+            array('additional_table' => $this->getTable('catalog_eav_attribute')),
+            'additional_table.attribute_id = main_table.attribute_id'
+        );
         return $this;
     }
 

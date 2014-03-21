@@ -105,13 +105,7 @@ class Session extends \Magento\Core\Helper\Data
         $this->_checkoutSession = $checkoutSession;
         $this->_customerFactory = $customerFactory;
         $this->_sessionFactory = $sessionFactory;
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**
@@ -166,9 +160,9 @@ class Session extends \Magento\Core\Helper\Data
                 return $isRememberMeChecked;
             }
 
-            return $this->_persistentData->isEnabled()
-                && $this->_persistentData->isRememberMeEnabled()
-                && $this->_persistentData->isRememberMeCheckedDefault();
+            return $this->_persistentData->isEnabled() &&
+                $this->_persistentData->isRememberMeEnabled() &&
+                $this->_persistentData->isRememberMeCheckedDefault();
         }
 
         return (bool)$this->_isRememberMeChecked;

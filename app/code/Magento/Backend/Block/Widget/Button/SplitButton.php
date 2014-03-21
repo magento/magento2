@@ -72,11 +72,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             $classes[] = $this->getButtonClass();
         }
 
-        $attributes = array(
-            'id'        => $this->getId(),
-            'title'     => $title,
-            'class'     => join(' ', $classes),
-        );
+        $attributes = array('id' => $this->getId(), 'title' => $title, 'class' => join(' ', $classes));
 
         $html = $this->_getAttributesString($attributes);
 
@@ -106,11 +102,11 @@ class SplitButton extends \Magento\Backend\Block\Widget
             $classes[] = $disabled;
         }
         $attributes = array(
-            'id'        => $this->getId() . '-button',
-            'title'     => $title,
-            'class'     => join(' ', $classes),
-            'disabled'  => $disabled,
-            'style'     => $this->getStyle(),
+            'id' => $this->getId() . '-button',
+            'title' => $title,
+            'class' => join(' ', $classes),
+            'disabled' => $disabled,
+            'style' => $this->getStyle()
         );
 
         //TODO perhaps we need to skip data-mage-init when disabled="disabled"
@@ -146,11 +142,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             $classes[] = $disabled;
         }
 
-        $attributes = array(
-            'title'     => $title,
-            'class'     => join(' ', $classes),
-            'disabled'  => $disabled
-        );
+        $attributes = array('title' => $title, 'class' => join(' ', $classes), 'disabled' => $disabled);
         $this->_getDataAttributes(array('toggle' => 'dropdown'), $attributes);
 
         $html = $this->_getAttributesString($attributes);
@@ -169,7 +161,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
      */
     public function getOptionAttributesHtml($key, $option)
     {
-        $disabled = (isset($option['disabled']) && $option['disabled']) ? 'disabled' : '';
+        $disabled = isset($option['disabled']) && $option['disabled'] ? 'disabled' : '';
         if (isset($option['title'])) {
             $title = $option['title'];
         } else {
@@ -229,12 +221,12 @@ class SplitButton extends \Magento\Backend\Block\Widget
     protected function _prepareOptionAttributes($option, $title, $classes, $disabled)
     {
         $attributes = array(
-            'id'        => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
-            'title'     => $title,
-            'class'     => join(' ', $classes),
-            'onclick'   => isset($option['onclick']) ? $option['onclick'] : '',
-            'style'     => isset($option['style']) ? $option['style'] : '',
-            'disabled'  => $disabled,
+            'id' => isset($option['id']) ? $this->getId() . '-' . $option['id'] : '',
+            'title' => $title,
+            'class' => join(' ', $classes),
+            'onclick' => isset($option['onclick']) ? $option['onclick'] : '',
+            'style' => isset($option['style']) ? $option['style'] : '',
+            'disabled' => $disabled
         );
 
         if (isset($option['data_attribute'])) {

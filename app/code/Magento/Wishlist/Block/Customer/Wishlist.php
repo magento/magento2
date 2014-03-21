@@ -65,7 +65,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param \Magento\Data\Form\FormKey $formKey
@@ -86,7 +86,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
         \Magento\Data\Form\FormKey $formKey,
@@ -107,7 +107,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $customerSession,
+            $httpContext,
             $productFactory,
             $data,
             $priceBlockTypes
@@ -225,7 +225,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
             return '';
         }
 
-        $block  = $this->getChildBlock('item_options');
+        $block = $this->getChildBlock('item_options');
         if (!$block) {
             return '';
         }
@@ -267,10 +267,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     {
         return $this->getUrl(
             '*/*/allcart',
-            array(
-                'wishlist_id' => $this->getWishlistInstance()->getId(),
-                'form_key' => $this->_formKey->getFormKey(),
-            )
+            array('wishlist_id' => $this->getWishlistInstance()->getId(), 'form_key' => $this->_formKey->getFormKey())
         );
     }
 }

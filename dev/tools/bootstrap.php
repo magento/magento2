@@ -23,10 +23,12 @@
  */
 require_once __DIR__ . '/../../app/autoload.php';
 define('BP', __DIR__ . '/../..');
-\Magento\Autoload\IncludePath::addIncludePath(array(
-    BP . '/app/code',
-    BP . '/lib',
-));
+\Magento\Autoload\IncludePath::addIncludePath(
+    array(
+        BP . '/app/code',
+        BP . '/lib',
+    )
+);
 
 /**
  * @param string $className

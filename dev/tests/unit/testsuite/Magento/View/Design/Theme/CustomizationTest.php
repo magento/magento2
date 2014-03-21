@@ -54,10 +54,20 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileProvider = $this->getMock('Magento\View\Design\Theme\FileProviderInterface',
-            array(), array(), '', false);
-        $collectionFactory = $this->getMock('Magento\Core\Model\Resource\Theme\File\CollectionFactory',
-            array('create'), array(), '', false);
+        $this->fileProvider = $this->getMock(
+            'Magento\View\Design\Theme\FileProviderInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $collectionFactory = $this->getMock(
+            'Magento\Core\Model\Resource\Theme\File\CollectionFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->fileProvider));
         $this->customizationPath = $this->getMock(
             'Magento\View\Design\Theme\Customization\Path',
@@ -91,10 +101,15 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFiles()
     {
-        $this->fileProvider->expects($this->once())
-            ->method('getItems')
-            ->with($this->theme)
-            ->will($this->returnValue(array()));
+        $this->fileProvider->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->with(
+            $this->theme
+        )->will(
+            $this->returnValue(array())
+        );
         $this->assertEquals(array(), $this->model->getFiles());
     }
 
@@ -104,10 +119,16 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     public function testGetFilesByType()
     {
         $type = 'sample-type';
-        $this->fileProvider->expects($this->once())
-            ->method('getItems')
-            ->with($this->theme, array('file_type' => $type))
-            ->will($this->returnValue(array()));
+        $this->fileProvider->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->with(
+            $this->theme,
+            array('file_type' => $type)
+        )->will(
+            $this->returnValue(array())
+        );
         $this->assertEquals(array(), $this->model->getFilesByType($type));
     }
 
@@ -117,13 +138,8 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     public function testGenerationOfFileInfo()
     {
         $file = $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'getFileInfo'), array(), '', false);
-        $file->expects($this->once())
-            ->method('getFileInfo')
-            ->will($this->returnValue(array('sample-generation')));
-        $this->assertEquals(
-            array(array('sample-generation')),
-            $this->model->generateFileInfo(array($file))
-        );
+        $file->expects($this->once())->method('getFileInfo')->will($this->returnValue(array('sample-generation')));
+        $this->assertEquals(array(array('sample-generation')), $this->model->generateFileInfo(array($file)));
     }
 
     /**
@@ -131,10 +147,15 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomizationPath()
     {
-        $this->customizationPath->expects($this->once())
-            ->method('getCustomizationPath')
-            ->with($this->theme)
-            ->will($this->returnValue('path'));
+        $this->customizationPath->expects(
+            $this->once()
+        )->method(
+            'getCustomizationPath'
+        )->with(
+            $this->theme
+        )->will(
+            $this->returnValue('path')
+        );
         $this->assertEquals('path', $this->model->getCustomizationPath());
     }
 
@@ -146,16 +167,16 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetThemeFilesPath($type, $expectedMethod)
     {
-        $this->theme->setData(array(
-            'id'         => 123,
-            'type'       => $type,
-            'area'       => 'area51',
-            'theme_path' => 'theme_path'
-        ));
-        $this->customizationPath->expects($this->once())
-            ->method($expectedMethod)
-            ->with($this->theme)
-            ->will($this->returnValue('path'));
+        $this->theme->setData(array('id' => 123, 'type' => $type, 'area' => 'area51', 'theme_path' => 'theme_path'));
+        $this->customizationPath->expects(
+            $this->once()
+        )->method(
+            $expectedMethod
+        )->with(
+            $this->theme
+        )->will(
+            $this->returnValue('path')
+        );
         $this->assertEquals('path', $this->model->getThemeFilesPath());
     }
 
@@ -166,8 +187,8 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'physical' => array(\Magento\View\Design\ThemeInterface::TYPE_PHYSICAL, 'getThemeFilesPath'),
-            'virtual'  => array(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL, 'getCustomizationPath'),
-            'staging'  => array(\Magento\View\Design\ThemeInterface::TYPE_STAGING, 'getCustomizationPath'),
+            'virtual' => array(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL, 'getCustomizationPath'),
+            'staging' => array(\Magento\View\Design\ThemeInterface::TYPE_STAGING, 'getCustomizationPath')
         );
     }
 
@@ -176,10 +197,15 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomViewConfigPath()
     {
-        $this->customizationPath->expects($this->once())
-            ->method('getCustomViewConfigPath')
-            ->with($this->theme)
-            ->will($this->returnValue('path'));
+        $this->customizationPath->expects(
+            $this->once()
+        )->method(
+            'getCustomViewConfigPath'
+        )->with(
+            $this->theme
+        )->will(
+            $this->returnValue('path')
+        );
         $this->assertEquals('path', $this->model->getCustomViewConfigPath());
     }
 
@@ -193,18 +219,23 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         $type = 'sample-type';
         foreach ($filesContent as $fileContent) {
             $file = $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'save'), array(), '', false);
-            $file->expects($fileContent['isCalled'])
-                ->method('save')
-                ->will($this->returnSelf());
+            $file->expects($fileContent['isCalled'])->method('save')->will($this->returnSelf());
             $file->setData($fileContent['content']);
             $files[] = $file;
         }
-        $this->fileProvider->expects($this->once())
-            ->method('getItems')
-            ->with($this->theme, array('file_type' => $type))
-            ->will($this->returnValue($files));
+        $this->fileProvider->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->with(
+            $this->theme,
+            array('file_type' => $type)
+        )->will(
+            $this->returnValue($files)
+        );
         $this->assertInstanceOf(
-            'Magento\View\Design\Theme\CustomizationInterface', $this->model->reorder($type, $sequence)
+            'Magento\View\Design\Theme\CustomizationInterface',
+            $this->model->reorder($type, $sequence)
         );
     }
 
@@ -215,41 +246,43 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     public function customFileContent()
     {
-        return array(array(
-            'sequence'     => array(3, 2, 1),
-            'filesContent' => array(
-                array(
-                    'isCalled' => $this->once(),
-                    'content'  => array(
-                        'id'         => 1,
-                        'theme_id'   => 123,
-                        'file_path'  => 'css/custom_file1.css',
-                        'content'    => 'css content',
-                        'sort_order' => 1
-                    )
-                ),
-                array(
-                    'isCalled' => $this->never(),
-                    'content'  => array(
-                        'id'         => 2,
-                        'theme_id'   => 123,
-                        'file_path'  => 'css/custom_file2.css',
-                        'content'    => 'css content',
-                        'sort_order' => 1
-                    )
-                ),
-                array(
-                    'isCalled' => $this->once(),
-                    'content'  => array(
-                        'id'         => 3,
-                        'theme_id'   => 123,
-                        'file_path'  => 'css/custom_file3.css',
-                        'content'    => 'css content',
-                        'sort_order' => 5
+        return array(
+            array(
+                'sequence' => array(3, 2, 1),
+                'filesContent' => array(
+                    array(
+                        'isCalled' => $this->once(),
+                        'content' => array(
+                            'id' => 1,
+                            'theme_id' => 123,
+                            'file_path' => 'css/custom_file1.css',
+                            'content' => 'css content',
+                            'sort_order' => 1
+                        )
+                    ),
+                    array(
+                        'isCalled' => $this->never(),
+                        'content' => array(
+                            'id' => 2,
+                            'theme_id' => 123,
+                            'file_path' => 'css/custom_file2.css',
+                            'content' => 'css content',
+                            'sort_order' => 1
+                        )
+                    ),
+                    array(
+                        'isCalled' => $this->once(),
+                        'content' => array(
+                            'id' => 3,
+                            'theme_id' => 123,
+                            'file_path' => 'css/custom_file3.css',
+                            'content' => 'css content',
+                            'sort_order' => 5
+                        )
                     )
                 )
             )
-        ));
+        );
     }
 
     /**
@@ -259,17 +292,24 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     {
         $file = $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false);
         $file->expects($this->once())->method('delete')->will($this->returnSelf());
-        $file->setData(array(
-            'id'         => 1,
-            'theme_id'   => 123,
-            'file_path'  => 'css/custom_file1.css',
-            'content'    => 'css content',
-            'sort_order' => 1
-        ));
-        $this->fileProvider->expects($this->once())
-            ->method('getItems')
-            ->with($this->theme)
-            ->will($this->returnValue(array($file)));
+        $file->setData(
+            array(
+                'id' => 1,
+                'theme_id' => 123,
+                'file_path' => 'css/custom_file1.css',
+                'content' => 'css content',
+                'sort_order' => 1
+            )
+        );
+        $this->fileProvider->expects(
+            $this->once()
+        )->method(
+            'getItems'
+        )->with(
+            $this->theme
+        )->will(
+            $this->returnValue(array($file))
+        );
 
         $this->assertInstanceOf('Magento\View\Design\Theme\CustomizationInterface', $this->model->delete(array(1)));
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File\Source;
 
 use Magento\View\Layout\File\SourceInterface;
@@ -55,10 +54,8 @@ class Theme implements SourceInterface
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      */
-    public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory
-    ) {
+    public function __construct(Filesystem $filesystem, Factory $fileFactory)
+    {
         $this->themesDirectory = $filesystem->getDirectoryRead(Filesystem::THEMES_DIR);
         $this->fileFactory = $fileFactory;
     }
@@ -76,7 +73,10 @@ class Theme implements SourceInterface
         $themePath = $theme->getFullPath();
         $files = $this->themesDirectory->search("{$themePath}/{$namespace}_{$module}/layout/{$filePath}.xml");
         $result = array();
-        $pattern = "#/(?<moduleName>[^/]+)/layout/" . strtr(preg_quote($filePath), array('\*' => '[^/]+')) . "\.xml$#i";
+        $pattern = "#/(?<moduleName>[^/]+)/layout/" . strtr(
+            preg_quote($filePath),
+            array('\*' => '[^/]+')
+        ) . "\.xml$#i";
         foreach ($files as $file) {
             $filename = $this->themesDirectory->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {

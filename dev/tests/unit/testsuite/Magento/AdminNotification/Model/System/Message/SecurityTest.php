@@ -54,20 +54,31 @@ class SecurityTest extends \PHPUnit_Framework_TestCase
     {
         //Prepare objects for constructor
         $this->_cacheMock = $this->getMock('Magento\App\CacheInterface');
-        $this->_storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config',
-            array('getConfig'), array(), '', false);
-        $this->_curlFactoryMock = $this->getMock('Magento\HTTP\Adapter\CurlFactory',
-            array('create'), array(), '', false);
+        $this->_storeConfigMock = $this->getMock(
+            'Magento\Core\Model\Store\Config',
+            array('getConfig'),
+            array(),
+            '',
+            false
+        );
+        $this->_curlFactoryMock = $this->getMock(
+            'Magento\HTTP\Adapter\CurlFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
             'cache' => $this->_cacheMock,
             'storeConfig' => $this->_storeConfigMock,
-            'curlFactory' => $this->_curlFactoryMock,
+            'curlFactory' => $this->_curlFactoryMock
         );
         $this->_messageModel = $objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\System\Message\Security',
-            $arguments);
+            $arguments
+        );
     }
 
     /**

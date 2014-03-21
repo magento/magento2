@@ -46,7 +46,7 @@ class Info extends \Magento\Backend\Block\System\Config\Form\Field
      */
     public function render(\Magento\Data\Form\Element\AbstractElement $element)
     {
-        $columns = ($this->getRequest()->getParam('website') || $this->getRequest()->getParam('store')) ? 5 : 4;
-        return $this->_decorateRowHtml($element, "<td colspan='$columns'>" . $this->toHtml() . '</td>');
+        $columns = $this->getRequest()->getParam('website') || $this->getRequest()->getParam('store') ? 5 : 4;
+        return $this->_decorateRowHtml($element, "<td colspan='{$columns}'>" . $this->toHtml() . '</td>');
     }
 }

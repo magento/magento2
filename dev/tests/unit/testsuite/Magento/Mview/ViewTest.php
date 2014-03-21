@@ -58,15 +58,29 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockForAbstractClass(
-            'Magento\Mview\ConfigInterface', array(), '', false, false, true, array('getView')
+            'Magento\Mview\ConfigInterface',
+            array(),
+            '',
+            false,
+            false,
+            true,
+            array('getView')
         );
-        $this->actionFactoryMock = $this->getMock(
-            'Magento\Mview\ActionFactory', array('get'), array(), '', false
-        );
+        $this->actionFactoryMock = $this->getMock('Magento\Mview\ActionFactory', array('get'), array(), '', false);
         $this->stateMock = $this->getMock(
             'Magento\Core\Model\Mview\View\State',
-            array('getViewId', 'loadByView', 'getVersionId', 'setVersionId',
-                'getStatus', 'setStatus', 'getMode', 'setMode', 'save', '__wakeup'),
+            array(
+                'getViewId',
+                'loadByView',
+                'getVersionId',
+                'setVersionId',
+                'getStatus',
+                'setStatus',
+                'getMode',
+                'setMode',
+                'save',
+                '__wakeup'
+            ),
             array(),
             '',
             false
@@ -79,7 +93,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->subscriptionFactoryMock = $this->getMock(
-            'Magento\Mview\View\SubscriptionFactory', array('create'), array(), '', false
+            'Magento\Mview\View\SubscriptionFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $this->model = new View(
             $this->configMock,
@@ -93,10 +111,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $viewId = 'view_test';
-        $this->configMock->expects($this->once())
-            ->method('getView')
-            ->with($viewId)
-            ->will($this->returnValue($this->getViewData()));
+        $this->configMock->expects(
+            $this->once()
+        )->method(
+            'getView'
+        )->with(
+            $viewId
+        )->will(
+            $this->returnValue($this->getViewData())
+        );
         $this->assertInstanceOf('Magento\Mview\View', $this->model->load($viewId));
     }
 
@@ -107,55 +130,51 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testLoadWithException()
     {
         $viewId = 'view_id';
-        $this->configMock->expects($this->once())
-            ->method('getView')
-            ->with($viewId)
-            ->will($this->returnValue($this->getViewData()));
+        $this->configMock->expects(
+            $this->once()
+        )->method(
+            'getView'
+        )->with(
+            $viewId
+        )->will(
+            $this->returnValue($this->getViewData())
+        );
         $this->model->load($viewId);
     }
 
     public function testSubscribe()
     {
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue('disabled'));
-        $this->stateMock->expects($this->once())
-            ->method('setMode')
-            ->with('enabled')
-            ->will($this->returnSelf());
-        $this->changelogMock->expects($this->once())
-            ->method('create');
+        $this->stateMock->expects($this->once())->method('getMode')->will($this->returnValue('disabled'));
+        $this->stateMock->expects($this->once())->method('setMode')->with('enabled')->will($this->returnSelf());
+        $this->changelogMock->expects($this->once())->method('create');
         $subscriptionMock = $this->getMock('Magento\Mview\View\Subscription', array('create'), array(), '', false);
-        $subscriptionMock->expects($this->exactly(1))
-            ->method('create');
-        $this->subscriptionFactoryMock->expects($this->exactly(1))
-            ->method('create')
-            ->will($this->returnValue($subscriptionMock));
+        $subscriptionMock->expects($this->exactly(1))->method('create');
+        $this->subscriptionFactoryMock->expects(
+            $this->exactly(1)
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($subscriptionMock)
+        );
         $this->loadView();
         $this->model->subscribe();
     }
 
     public function testUnsubscribe()
     {
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue('enabled'));
-        $this->stateMock->expects($this->once())
-            ->method('setVersionId')
-            ->with(null)
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
-            ->method('setMode')
-            ->with('disabled')
-            ->will($this->returnSelf());
-        $this->changelogMock->expects($this->once())
-            ->method('drop');
+        $this->stateMock->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $this->stateMock->expects($this->once())->method('setVersionId')->with(null)->will($this->returnSelf());
+        $this->stateMock->expects($this->once())->method('setMode')->with('disabled')->will($this->returnSelf());
+        $this->changelogMock->expects($this->once())->method('drop');
         $subscriptionMock = $this->getMock('Magento\Mview\View\Subscription', array('remove'), array(), '', false);
-        $subscriptionMock->expects($this->exactly(1))
-            ->method('remove');
-        $this->subscriptionFactoryMock->expects($this->exactly(1))
-            ->method('create')
-            ->will($this->returnValue($subscriptionMock));
+        $subscriptionMock->expects($this->exactly(1))->method('remove');
+        $this->subscriptionFactoryMock->expects(
+            $this->exactly(1)
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($subscriptionMock)
+        );
         $this->loadView();
         $this->model->unsubscribe();
     }
@@ -165,45 +184,43 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = array(2, 3);
-        $this->stateMock->expects($this->any())
-            ->method('getViewId')
-            ->will($this->returnValue(1));
-        $this->stateMock->expects($this->once())
-            ->method('getVersionId')
-            ->will($this->returnValue($lastVersionId));
-        $this->stateMock->expects($this->once())
-            ->method('setVersionId')
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue('enabled'));
-        $this->stateMock->expects($this->exactly(2))
-            ->method('getStatus')
-            ->will($this->returnValue('idle'));
-        $this->stateMock->expects($this->exactly(2))
-            ->method('setStatus')
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->exactly(2))
-            ->method('save')
-            ->will($this->returnSelf());
+        $this->stateMock->expects($this->any())->method('getViewId')->will($this->returnValue(1));
+        $this->stateMock->expects($this->once())->method('getVersionId')->will($this->returnValue($lastVersionId));
+        $this->stateMock->expects($this->once())->method('setVersionId')->will($this->returnSelf());
+        $this->stateMock->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $this->stateMock->expects($this->exactly(2))->method('getStatus')->will($this->returnValue('idle'));
+        $this->stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
+        $this->stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
 
-        $this->changelogMock->expects($this->once())
-            ->method('getVersion')
-            ->will($this->returnValue($currentVersionId));
-        $this->changelogMock->expects($this->once())
-            ->method('getList')
-            ->with($lastVersionId, $currentVersionId)
-            ->will($this->returnValue($listId));
+        $this->changelogMock->expects(
+            $this->once()
+        )->method(
+            'getVersion'
+        )->will(
+            $this->returnValue($currentVersionId)
+        );
+        $this->changelogMock->expects(
+            $this->once()
+        )->method(
+            'getList'
+        )->with(
+            $lastVersionId,
+            $currentVersionId
+        )->will(
+            $this->returnValue($listId)
+        );
 
         $actionMock = $this->getMock('Magento\Mview\Action', array('execute'), array(), '', false);
-        $actionMock->expects($this->once())
-            ->method('execute')
-            ->with($listId)
-            ->will($this->returnSelf());
-        $this->actionFactoryMock->expects($this->once())
-            ->method('get')
-            ->with('Some\Class\Name')
-            ->will($this->returnValue($actionMock));
+        $actionMock->expects($this->once())->method('execute')->with($listId)->will($this->returnSelf());
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Some\Class\Name'
+        )->will(
+            $this->returnValue($actionMock)
+        );
 
         $this->loadView();
         $this->model->update();
@@ -218,46 +235,49 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = array(2, 3);
-        $this->stateMock->expects($this->any())
-            ->method('getViewId')
-            ->will($this->returnValue(1));
-        $this->stateMock->expects($this->once())
-            ->method('getVersionId')
-            ->will($this->returnValue($lastVersionId));
-        $this->stateMock->expects($this->never())
-            ->method('setVersionId');
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue('enabled'));
-        $this->stateMock->expects($this->exactly(2))
-            ->method('getStatus')
-            ->will($this->returnValue('idle'));
-        $this->stateMock->expects($this->exactly(2))
-            ->method('setStatus')
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->exactly(2))
-            ->method('save')
-            ->will($this->returnSelf());
+        $this->stateMock->expects($this->any())->method('getViewId')->will($this->returnValue(1));
+        $this->stateMock->expects($this->once())->method('getVersionId')->will($this->returnValue($lastVersionId));
+        $this->stateMock->expects($this->never())->method('setVersionId');
+        $this->stateMock->expects($this->once())->method('getMode')->will($this->returnValue('enabled'));
+        $this->stateMock->expects($this->exactly(2))->method('getStatus')->will($this->returnValue('idle'));
+        $this->stateMock->expects($this->exactly(2))->method('setStatus')->will($this->returnSelf());
+        $this->stateMock->expects($this->exactly(2))->method('save')->will($this->returnSelf());
 
-        $this->changelogMock->expects($this->once())
-            ->method('getVersion')
-            ->will($this->returnValue($currentVersionId));
-        $this->changelogMock->expects($this->once())
-            ->method('getList')
-            ->with($lastVersionId, $currentVersionId)
-            ->will($this->returnValue($listId));
+        $this->changelogMock->expects(
+            $this->once()
+        )->method(
+            'getVersion'
+        )->will(
+            $this->returnValue($currentVersionId)
+        );
+        $this->changelogMock->expects(
+            $this->once()
+        )->method(
+            'getList'
+        )->with(
+            $lastVersionId,
+            $currentVersionId
+        )->will(
+            $this->returnValue($listId)
+        );
 
         $actionMock = $this->getMock('Magento\Mview\Action', array('execute'), array(), '', false);
-        $actionMock->expects($this->once())
-            ->method('execute')
-            ->with($listId)
-            ->will($this->returnCallback(function () {
-                throw new \Exception('Test exception');
-            }));
-        $this->actionFactoryMock->expects($this->once())
-            ->method('get')
-            ->with('Some\Class\Name')
-            ->will($this->returnValue($actionMock));
+        $actionMock->expects($this->once())->method('execute')->with($listId)->will(
+            $this->returnCallback(
+                function () {
+                    throw new \Exception('Test exception');
+                }
+            )
+        );
+        $this->actionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Some\Class\Name'
+        )->will(
+            $this->returnValue($actionMock)
+        );
 
         $this->loadView();
         $this->model->update();
@@ -266,10 +286,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function loadView()
     {
         $viewId = 'view_test';
-        $this->configMock->expects($this->once())
-            ->method('getView')
-            ->with($viewId)
-            ->will($this->returnValue($this->getViewData()));
+        $this->configMock->expects(
+            $this->once()
+        )->method(
+            'getView'
+        )->with(
+            $viewId
+        )->will(
+            $this->returnValue($this->getViewData())
+        );
         $this->model->load($viewId);
     }
 
@@ -279,12 +304,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             'view_id' => 'view_test',
             'action_class' => 'Some\Class\Name',
             'group' => 'some_group',
-            'subscriptions' => array(
-                'some_entity' => array(
-                    'name' => 'some_entity',
-                    'column' => 'entity_id',
-                ),
-            ),
+            'subscriptions' => array('some_entity' => array('name' => 'some_entity', 'column' => 'entity_id'))
         );
     }
 }

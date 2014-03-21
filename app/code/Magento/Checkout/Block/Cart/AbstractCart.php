@@ -95,9 +95,11 @@ class AbstractCart extends \Magento\View\Element\Template
      */
     protected function _getRendererList()
     {
-        return $this->getRendererListName()
-            ? $this->getLayout()->getBlock($this->getRendererListName())
-            : $this->getChildBlock('renderer.list');
+        return $this->getRendererListName() ? $this->getLayout()->getBlock(
+            $this->getRendererListName()
+        ) : $this->getChildBlock(
+            'renderer.list'
+        );
     }
 
     /**

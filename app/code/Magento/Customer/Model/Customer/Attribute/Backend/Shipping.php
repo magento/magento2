@@ -63,11 +63,10 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                     $addressId = $address->getId();
                 }
             }
-            
+
             if ($addressId) {
                 $object->setDefaultShipping($addressId);
-                $this->getAttribute()->getEntity()
-                    ->saveAttribute($object, $this->getAttribute()->getAttributeCode());
+                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getAttributeCode());
             }
         }
     }

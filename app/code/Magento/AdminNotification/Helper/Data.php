@@ -34,7 +34,7 @@ namespace Magento\AdminNotification\Helper;
  */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-    const XML_PATH_POPUP_URL    = 'system/adminnotification/popup_url';
+    const XML_PATH_POPUP_URL = 'system/adminnotification/popup_url';
 
     /**
      * Widget Popup Notification Object URL

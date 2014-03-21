@@ -44,8 +44,10 @@ class Onepage
     /**
      * Checkout types: Checkout as Guest, Register, Logged In Customer
      */
-    const METHOD_GUEST    = 'guest';
+    const METHOD_GUEST = 'guest';
+
     const METHOD_REGISTER = 'register';
+
     const METHOD_CUSTOMER = 'customer';
 
     /**
@@ -277,8 +279,8 @@ class Onepage
         $checkout = $this->getCheckout();
         $customerSession = $this->getCustomerSession();
         if (is_array($checkout->getStepData())) {
-            foreach ($checkout->getStepData() as $step=>$data) {
-                if (!($step==='login' || $customerSession->isLoggedIn() && $step==='billing')) {
+            foreach ($checkout->getStepData() as $step => $data) {
+                if (!($step === 'login' || $customerSession->isLoggedIn() && $step === 'billing')) {
                     $checkout->setStepData($step, 'allow', false);
                 }
             }
@@ -291,9 +293,9 @@ class Onepage
         }
 
         /*
-        * want to load the correct customer information by assigning to address
-        * instead of just loading from sales/quote_address
-        */
+         * want to load the correct customer information by assigning to address
+         * instead of just loading from sales/quote_address
+         */
         $customer = $customerSession->getCustomerDataObject();
         if ($customer) {
             $quote->assignCustomer($customer);
@@ -356,10 +358,10 @@ class Onepage
         $addressForm = $this->_formFactory->create(
             \Magento\Customer\Service\V1\CustomerMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
             'customer_address_edit',
-            [],
+            array(),
             $this->_request->isAjax(),
             Form::IGNORE_INVISIBLE,
-            []
+            array()
         );
 
         if (!empty($customerAddressId)) {
@@ -370,9 +372,7 @@ class Onepage
             }
             if (isset($customerAddress)) {
                 if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
-                    return array('error' => 1,
-                        'message' => __('The customer address is not valid.')
-                    );
+                    return array('error' => 1, 'message' => __('The customer address is not valid.'));
                 }
 
                 $address->importCustomerAddressData($customerAddress)->setSaveInAddressBook(0);
@@ -393,7 +393,7 @@ class Onepage
             //unset billing address attributes which were not shown in form
             foreach ($addressForm->getAttributes() as $attribute) {
                 if (!isset($data[$attribute->getAttributeCode()])) {
-                    $address->setData($attribute->getAttributeCode(), NULL);
+                    $address->setData($attribute->getAttributeCode(), null);
                 }
             }
             $address->setCustomerAddressId(null);
@@ -419,7 +419,9 @@ class Onepage
                 return array(
                     'error' => 1,
                     // @codingStandardsIgnoreStart
-                    'message' => __('There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.')
+                    'message' => __(
+                        'There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.'
+                    )
                     // @codingStandardsIgnoreEnd
                 );
             }
@@ -447,17 +449,31 @@ class Onepage
 
                     // don't reset original shipping data, if it was not changed by customer
                     foreach ($shipping->getData() as $shippingKey => $shippingValue) {
-                        if (!is_null($shippingValue) && !is_null($billing->getData($shippingKey))
-                            && !isset($data[$shippingKey]) && !in_array($shippingKey, $requiredBillingAttributes)
+                        if (!is_null(
+                            $shippingValue
+                        ) && !is_null(
+                            $billing->getData($shippingKey)
+                        ) && !isset(
+                            $data[$shippingKey]
+                        ) && !in_array(
+                            $shippingKey,
+                            $requiredBillingAttributes
+                        )
                         ) {
                             $billing->unsetData($shippingKey);
                         }
                     }
-                    $shipping->addData($billing->getData())
-                        ->setSameAsBilling(1)
-                        ->setSaveInAddressBook(0)
-                        ->setShippingMethod($shippingMethod)
-                        ->setCollectShippingRates(true);
+                    $shipping->addData(
+                        $billing->getData()
+                    )->setSameAsBilling(
+                        1
+                    )->setSaveInAddressBook(
+                        0
+                    )->setShippingMethod(
+                        $shippingMethod
+                    )->setCollectShippingRates(
+                        true
+                    );
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
@@ -471,10 +487,19 @@ class Onepage
             $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
         }
 
-        $this->getCheckout()
-            ->setStepData('billing', 'allow', true)
-            ->setStepData('billing', 'complete', true)
-            ->setStepData('shipping', 'allow', true);
+        $this->getCheckout()->setStepData(
+            'billing',
+            'allow',
+            true
+        )->setStepData(
+            'billing',
+            'complete',
+            true
+        )->setStepData(
+            'shipping',
+            'allow',
+            true
+        );
 
         return array();
     }
@@ -501,7 +526,7 @@ class Onepage
             $customerData,
             $this->_request->isAjax(),
             Form::IGNORE_INVISIBLE,
-            []
+            array()
         );
 
         if ($isCustomerNew) {
@@ -511,10 +536,7 @@ class Onepage
 
         $customerErrors = $customerForm->validateData($customerData);
         if ($customerErrors !== true) {
-            return array(
-                'error'     => -1,
-                'message'   => implode(', ', $customerErrors)
-            );
+            return array('error' => -1, 'message' => implode(', ', $customerErrors));
         }
 
         if (!$isCustomerNew) {
@@ -528,10 +550,7 @@ class Onepage
             // We always have $customerRequest here, otherwise we would have been kicked off the function several
             // lines above
             if ($customerRequest->getParam('customer_password') != $customerRequest->getParam('confirm_password')) {
-                return array(
-                    'error'   => -1,
-                    'message' => __('Password and password confirmation are not equal.')
-                );
+                return array('error' => -1, 'message' => __('Password and password confirmation are not equal.'));
             }
         } else {
             // set NOT LOGGED IN group id explicitly,
@@ -576,13 +595,13 @@ class Onepage
         }
         $address = $this->getQuote()->getShippingAddress();
 
-        $addressForm  = $this->_formFactory->create(
+        $addressForm = $this->_formFactory->create(
             'customer_address',
             'customer_address_edit',
-            [],
+            array(),
             $this->_request->isAjax(),
             Form::IGNORE_INVISIBLE,
-            []
+            array()
         );
 
         if (!empty($customerAddressId)) {
@@ -594,21 +613,18 @@ class Onepage
             }
 
             if ($addressData->getCustomerId() != $this->getQuote()->getCustomerId()) {
-                return array('error' => 1,
-                    'message' => __('The customer address is not valid.')
-                );
+                return array('error' => 1, 'message' => __('The customer address is not valid.'));
             }
 
             $address->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
-            $addressErrors  = $addressForm->validateData($address->getData());
+            $addressErrors = $addressForm->validateData($address->getData());
             if ($addressErrors !== true) {
                 return array('error' => 1, 'message' => $addressErrors);
             }
-
         } else {
             // emulate request object
-            $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
-            $addressErrors  = $addressForm->validateData($addressData);
+            $addressData = $addressForm->extractData($addressForm->prepareRequest($data));
+            $addressErrors = $addressForm->validateData($addressData);
             if ($addressErrors !== true) {
                 return array('error' => 1, 'message' => $addressErrors);
             }
@@ -617,7 +633,7 @@ class Onepage
             foreach ($addressForm->getAttributes() as $attribute) {
                 $attributeCode = $attribute->getAttributeCode();
                 if (!isset($data[$attributeCode])) {
-                    $address->setData($attributeCode, NULL);
+                    $address->setData($attributeCode, null);
                 } else {
                     $address->setDataUsingMethod($attributeCode, $compactedData[$attributeCode]);
                 }
@@ -631,15 +647,13 @@ class Onepage
 
         $address->setCollectShippingRates(true);
 
-        if (($validateRes = $address->validate())!==true) {
+        if (($validateRes = $address->validate()) !== true) {
             return array('error' => 1, 'message' => $validateRes);
         }
 
         $this->getQuote()->collectTotals()->save();
 
-        $this->getCheckout()
-            ->setStepData('shipping', 'complete', true)
-            ->setStepData('shipping_method', 'allow', true);
+        $this->getCheckout()->setStepData('shipping', 'complete', true)->setStepData('shipping_method', 'allow', true);
 
         return array();
     }
@@ -659,12 +673,9 @@ class Onepage
         if (!$rate) {
             return array('error' => -1, 'message' => __('Invalid shipping method'));
         }
-        $this->getQuote()->getShippingAddress()
-            ->setShippingMethod($shippingMethod);
+        $this->getQuote()->getShippingAddress()->setShippingMethod($shippingMethod);
 
-        $this->getCheckout()
-            ->setStepData('shipping_method', 'complete', true)
-            ->setStepData('payment', 'allow', true);
+        $this->getCheckout()->setStepData('shipping_method', 'complete', true)->setStepData('payment', 'allow', true);
 
         return array();
     }
@@ -687,22 +698,20 @@ class Onepage
             $quote->getShippingAddress()->setCollectShippingRates(true);
         }
 
-        $data['checks'] = [
+        $data['checks'] = array(
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
-        ];
+        );
 
         $payment = $quote->getPayment();
         $payment->importData($data);
 
         $quote->save();
 
-        $this->getCheckout()
-            ->setStepData('payment', 'complete', true)
-            ->setStepData('review', 'allow', true);
+        $this->getCheckout()->setStepData('payment', 'complete', true)->setStepData('review', 'allow', true);
 
         return array();
     }
@@ -721,9 +730,7 @@ class Onepage
             throw new \Magento\Core\Exception(__('There are more than one shipping address.'));
         }
 
-        if ($quote->getCheckoutMethod() == self::METHOD_GUEST
-            && !$this->_helper->isAllowedGuestCheckout($quote)
-        ) {
+        if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
             throw new \Magento\Core\Exception(__('Sorry, guest checkout is not enabled.'));
         }
     }
@@ -736,10 +743,15 @@ class Onepage
     protected function _prepareGuestQuote()
     {
         $quote = $this->getQuote();
-        $quote->setCustomerId(null)
-            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
-            ->setCustomerIsGuest(true)
-            ->setCustomerGroupId(\Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID);
+        $quote->setCustomerId(
+            null
+        )->setCustomerEmail(
+            $quote->getBillingAddress()->getEmail()
+        )->setCustomerIsGuest(
+            true
+        )->setCustomerGroupId(
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+        );
         return $this;
     }
 
@@ -750,46 +762,50 @@ class Onepage
      */
     protected function _prepareNewCustomerQuote()
     {
-        $quote      = $this->getQuote();
-        $billing    = $quote->getBillingAddress();
-        $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
+        $quote = $this->getQuote();
+        $billing = $quote->getBillingAddress();
+        $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
         $customerData = $quote->getCustomerData();
         $customerBillingData = $billing->exportCustomerAddressData();
-        $customerBillingData = $this->_addressBuilder->populate($customerBillingData)
-            ->setDefaultBilling(true)
-            ->create();
+        $customerBillingData = $this->_addressBuilder->populate(
+            $customerBillingData
+        )->setDefaultBilling(
+            true
+        )->create();
 
         if ($shipping) {
             if (!$shipping->getSameAsBilling()) {
                 $customerShippingData = $shipping->exportCustomerAddressData();
-                $customerShippingData = $this->_addressBuilder->populate($customerShippingData)
-                    ->setDefaultShipping(true)->create();
+                $customerShippingData = $this->_addressBuilder->populate(
+                    $customerShippingData
+                )->setDefaultShipping(
+                    true
+                )->create();
                 $shipping->setCustomerAddressData($customerShippingData);
                 // Add shipping address to quote since customer Data Object does not hold address information
                 $quote->addCustomerAddressData($customerShippingData);
             } else {
                 $shipping->setCustomerAddressData($customerBillingData);
-                $customerBillingData = $this->_addressBuilder->populate($customerBillingData)->setDefaultShipping(true)
-                    ->create();
+                $customerBillingData = $this->_addressBuilder->populate(
+                    $customerBillingData
+                )->setDefaultShipping(
+                    true
+                )->create();
             }
         } else {
-            $customerBillingData = $this->_addressBuilder->populate($customerBillingData)->setDefaultShipping(true)
-                ->create();
+            $customerBillingData = $this->_addressBuilder->populate(
+                $customerBillingData
+            )->setDefaultShipping(
+                true
+            )->create();
         }
         $billing->setCustomerAddressData($customerBillingData);
 
-        $dataArray = $this->_objectCopyService->getDataFromFieldset(
-            'checkout_onepage_quote',
-            'to_customer',
-            $quote
-        );
-        $customerData = $this->_customerBuilder->mergeDataObjectWithArray(
-            $customerData,
-            $dataArray
-        );
-        $quote->setCustomerData($customerData)
-            ->setCustomerId(true); // TODO : Eventually need to remove this legacy hack
+        $dataArray = $this->_objectCopyService->getDataFromFieldset('checkout_onepage_quote', 'to_customer', $quote);
+        $customerData = $this->_customerBuilder->mergeDataObjectWithArray($customerData, $dataArray);
+        $quote->setCustomerData($customerData)->setCustomerId(true);
+        // TODO : Eventually need to remove this legacy hack
         // Add billing address to quote since customer Data Object does not hold address information
         $quote->addCustomerAddressData($customerBillingData);
     }
@@ -801,37 +817,38 @@ class Onepage
      */
     protected function _prepareCustomerQuote()
     {
-        $quote      = $this->getQuote();
-        $billing    = $quote->getBillingAddress();
-        $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
+        $quote = $this->getQuote();
+        $billing = $quote->getBillingAddress();
+        $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
         $customer = $this->_customerAccountService->getCustomer($this->getCustomerSession()->getCustomerId());
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             $billingAddress = $billing->exportCustomerAddressData();
             $billing->setCustomerAddressData($billingAddress);
         }
-        if ($shipping && !$shipping->getSameAsBilling() &&
-            (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())) {
+        if ($shipping && !$shipping->getSameAsBilling() && (!$shipping->getCustomerId() ||
+            $shipping->getSaveInAddressBook())
+        ) {
             $shippingAddress = $shipping->exportCustomerAddressData();
             $shipping->setCustomerAddressData($shippingAddress);
         }
 
         if (isset($billingAddress)) {
             if (!$customer->getDefaultBilling() || !$customer->getDefaultShipping()) {
-                $billingAddress = $this->_addressBuilder
-                    ->populate($billingAddress)
-                    ->setDefaultBilling(!$customer->getDefaultBilling())
-                    ->setDefaultShipping(!$customer->getDefaultShipping())
-                    ->create();
+                $billingAddress = $this->_addressBuilder->populate(
+                    $billingAddress
+                )->setDefaultBilling(
+                    !$customer->getDefaultBilling()
+                )->setDefaultShipping(
+                    !$customer->getDefaultShipping()
+                )->create();
             }
 
             $quote->addCustomerAddressData($billingAddress);
         }
 
         if ($shipping && isset($shippingAddress) && !$customer->getDefaultShipping()) {
-            $shippingAddress = $this->_addressBuilder->populate($shippingAddress)
-                ->setDefaultShipping(true)
-                ->create();
+            $shippingAddress = $this->_addressBuilder->populate($shippingAddress)->setDefaultShipping(true)->create();
             $quote->addCustomerAddressData($shippingAddress);
         }
     }
@@ -849,7 +866,10 @@ class Onepage
             $url = $this->_customerData->getEmailConfirmationUrl($customer->getEmail());
             $this->messageManager->addSuccess(
                 // @codingStandardsIgnoreStart
-                __('Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.', $url)
+                __(
+                    'Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.',
+                    $url
+                )
                 // @codingStandardsIgnoreEnd
             );
         } else {
@@ -881,7 +901,7 @@ class Onepage
         }
 
         /** @var \Magento\Sales\Model\Service\Quote $quoteService */
-        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
+        $quoteService = $this->_serviceQuoteFactory->create(array('quote' => $this->getQuote()));
         $quoteService->submitAllWithDataObject();
 
         if ($isNewCustomer) {
@@ -892,15 +912,17 @@ class Onepage
             }
         }
 
-        $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId())
-            ->setLastSuccessQuoteId($this->getQuote()->getId())
-            ->clearHelperData();
+        $this->_checkoutSession->setLastQuoteId(
+            $this->getQuote()->getId()
+        )->setLastSuccessQuoteId(
+            $this->getQuote()->getId()
+        )->clearHelperData();
 
         $order = $quoteService->getOrder();
         if ($order) {
             $this->_eventManager->dispatch(
                 'checkout_type_onepage_save_order_after',
-                ['order' => $order, 'quote' => $this->getQuote()]
+                array('order' => $order, 'quote' => $this->getQuote())
             );
 
             /**
@@ -919,12 +941,19 @@ class Onepage
             }
 
             // add order information to the session
-            $this->_checkoutSession->setLastOrderId($order->getId())
-                ->setRedirectUrl($redirectUrl)
-                ->setLastRealOrderId($order->getIncrementId());
+            $this->_checkoutSession->setLastOrderId(
+                $order->getId()
+            )->setRedirectUrl(
+                $redirectUrl
+            )->setLastRealOrderId(
+                $order->getIncrementId()
+            );
         }
 
-        $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $this->getQuote()]);
+        $this->_eventManager->dispatch(
+            'checkout_submit_all_after',
+            array('order' => $order, 'quote' => $this->getQuote())
+        );
 
         return $this;
     }
@@ -948,7 +977,7 @@ class Onepage
      */
     public function getLastOrderId()
     {
-        $lastId  = $this->getCheckout()->getLastOrderId();
+        $lastId = $this->getCheckout()->getLastOrderId();
         $orderId = false;
         if ($lastId) {
             $order = $this->_orderFactory->create();

@@ -64,23 +64,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->_cacheFrontendMock = $this->getMockForAbstractClass('Magento\Cache\FrontendInterface');
 
-        $this->_frontendPoolMock = $this->getMock(
-            'Magento\App\Cache\Frontend\Pool',
-            array(),
-            array(),
-            '',
-            false
+        $this->_frontendPoolMock = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
+        $this->_frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
+        $this->_frontendPoolMock->expects(
+            $this->any()
+        )->method(
+            'current'
+        )->will(
+            $this->returnValue($this->_cacheFrontendMock)
         );
-        $this->_frontendPoolMock
-            ->expects($this->any())
-            ->method('valid')
-            ->will($this->onConsecutiveCalls(true, false))
-        ;
-        $this->_frontendPoolMock
-            ->expects($this->any())
-            ->method('current')
-            ->will($this->returnValue($this->_cacheFrontendMock))
-        ;
 
         $this->_themeCustomization = $this->getMock(
             'Magento\View\Design\Theme\Customization',
@@ -96,33 +88,51 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $themeMock->expects($this->any())->method('getCustomization')
-            ->will($this->returnValue($this->_themeCustomization));
+        $themeMock->expects(
+            $this->any()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($this->_themeCustomization)
+        );
 
         $designMock = $this->getMock('Magento\View\DesignInterface');
-        $designMock
-            ->expects($this->any())
-            ->method('getDesignTheme')
-            ->will($this->returnValue($themeMock))
-        ;
+        $designMock->expects($this->any())->method('getDesignTheme')->will($this->returnValue($themeMock));
 
-        $this->_assetsMock = $this->getMock('Magento\View\Asset\GroupedCollection',
-            array(), array(), '', false, false);
-        $this->_configMock = $this->getMock('\Magento\App\ReinitableConfigInterface',
-            array(), array(), '', false, false);
+        $this->_assetsMock = $this->getMock(
+            'Magento\View\Asset\GroupedCollection',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_configMock = $this->getMock(
+            '\Magento\App\ReinitableConfigInterface',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
-        $this->_assetFactory = $this->getMock('Magento\View\Asset\PublicFileFactory',
-            array('create'), array(), '', false);
+        $this->_assetFactory = $this->getMock(
+            'Magento\View\Asset\PublicFileFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Core\Model\Observer',
             array(
                 'cacheFrontendPool' => $this->_frontendPoolMock,
-                'design'            => $designMock,
-                'assets'            => $this->_assetsMock,
-                'config'            => $this->_configMock,
-                'assetFileFactory'  => $this->_assetFactory
+                'design' => $designMock,
+                'assets' => $this->_assetsMock,
+                'config' => $this->_configMock,
+                'assetFileFactory' => $this->_assetFactory
             )
         );
     }
@@ -136,20 +146,18 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_configMock = null;
         $this->_model = null;
     }
-    
+
     public function testCleanCache()
     {
         $cacheBackendMock = $this->getMockForAbstractClass('Zend_Cache_Backend_Interface');
-        $cacheBackendMock
-            ->expects($this->once())
-            ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_OLD, array())
-        ;
-        $this->_cacheFrontendMock
-            ->expects($this->once())
-            ->method('getBackend')
-            ->will($this->returnValue($cacheBackendMock))
-        ;
+        $cacheBackendMock->expects($this->once())->method('clean')->with(\Zend_Cache::CLEANING_MODE_OLD, array());
+        $this->_cacheFrontendMock->expects(
+            $this->once()
+        )->method(
+            'getBackend'
+        )->will(
+            $this->returnValue($cacheBackendMock)
+        );
         $cronScheduleMock = $this->getMock('Magento\Cron\Model\Schedule', array(), array(), '', false);
         $this->_model->cleanCache($cronScheduleMock);
     }
@@ -165,22 +173,27 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->any())->method('getCustomizationService')->will($this->returnValue($fileService));
         $file->expects($this->atLeastOnce())->method('getFullPath')->will($this->returnValue('test.css'));
 
-        $this->_assetFactory->expects($this->any())
-            ->method('create')
-            ->with(array('file' => 'test.css', 'contentType' => 'css'))
-            ->will($this->returnValue($asset));
+        $this->_assetFactory->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->with(
+            array('file' => 'test.css', 'contentType' => 'css')
+        )->will(
+            $this->returnValue($asset)
+        );
 
         $this->_themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue(array($file)));
 
         $this->_assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
 
-        $observer = new \Magento\Event\Observer;
+        $observer = new \Magento\Event\Observer();
         $this->_model->applyThemeCustomization($observer);
     }
 
     public function testProcessReinitConfig()
     {
-        $observer = new \Magento\Event\Observer;
+        $observer = new \Magento\Event\Observer();
         $this->_configMock->expects($this->once())->method('reinit');
         $this->_model->processReinitConfig($observer);
     }

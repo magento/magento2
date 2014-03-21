@@ -68,27 +68,37 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Back'),
-            'onclick'   => 'setLocation(\'' . $this->getUrl('adminhtml/*/') . '\')',
-            'class' => 'back'
-        ));
+        $this->addChild(
+            'back_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*/') . '\')',
+                'class' => 'back'
+            )
+        );
 
-        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Save'),
-            'class' => 'save',
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '#design-edit-form'),
-                ),
-            ),
-        ));
+        $this->addChild(
+            'save_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Save'),
+                'class' => 'save',
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#design-edit-form'))
+                )
+            )
+        );
 
-        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Delete'),
-            'onclick'   => 'confirmSetLocation(\'' . __('Are you sure?') . '\', \'' . $this->getDeleteUrl() . '\')',
-            'class'  => 'delete'
-        ));
+        $this->addChild(
+            'delete_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Delete'),
+                'onclick' => 'confirmSetLocation(\'' . __('Are you sure?') . '\', \'' . $this->getDeleteUrl() . '\')',
+                'class' => 'delete'
+            )
+        );
         return parent::_prepareLayout();
     }
 
@@ -105,7 +115,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('adminhtml/*/delete', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/delete', array('_current' => true));
     }
 
     /**
@@ -113,7 +123,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('adminhtml/*/save', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/save', array('_current' => true));
     }
 
     /**
@@ -121,7 +131,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('adminhtml/*/validate', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/validate', array('_current' => true));
     }
 
     /**

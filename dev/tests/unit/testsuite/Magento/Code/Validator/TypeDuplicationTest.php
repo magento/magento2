@@ -21,11 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Validator;
 
-require_once ('_files/ClassesForTypeDuplication.php');
 
+require_once '_files/ClassesForTypeDuplication.php';
 class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -59,16 +58,17 @@ class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
         return array(
             'Duplicated interface injection' => array('\TypeDuplication\ValidClassWithTheSameInterfaceTypeArguments'),
             'Class with sub type arguments' => array('\TypeDuplication\ValidClassWithSubTypeArguments'),
-            'Class with SuppressWarnings' => array('\TypeDuplication\ValidClassWithSuppressWarnings'),
+            'Class with SuppressWarnings' => array('\TypeDuplication\ValidClassWithSuppressWarnings')
         );
     }
 
     public function testInvalidClass()
     {
-        $message = 'Argument type duplication in class TypeDuplication\InvalidClassWithDuplicatedTypes in '
-            . $this->_fixturePath . PHP_EOL . 'Multiple type injection [\TypeDuplication\ArgumentBaseClass]';
+        $message = 'Argument type duplication in class TypeDuplication\InvalidClassWithDuplicatedTypes in ' .
+            $this->_fixturePath .
+            PHP_EOL .
+            'Multiple type injection [\TypeDuplication\ArgumentBaseClass]';
         $this->setExpectedException('\Magento\Code\ValidationException', $message);
         $this->_validator->validate('\TypeDuplication\InvalidClassWithDuplicatedTypes');
     }
 }
-

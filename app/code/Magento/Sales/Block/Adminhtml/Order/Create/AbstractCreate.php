@@ -143,7 +143,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
      * @param bool $format
      * @return float
      */
-    public function convertPrice($value, $format=true)
+    public function convertPrice($value, $format = true)
     {
         return $this->getStore()->convertPrice($value, $format);
     }

@@ -46,9 +46,7 @@ class Options extends \Magento\Catalog\Block\Product\View\Options
     {
         $type = $this->getGroupOfOption($option->getType());
         $renderer = $this->getChildBlock($type);
-        $renderer->setSkipJsReloadPrice(1)
-            ->setProduct($this->getProduct())
-            ->setOption($option);
+        $renderer->setSkipJsReloadPrice(1)->setProduct($this->getProduct())->setOption($option);
 
         return $this->getChildHtml($type, false);
     }

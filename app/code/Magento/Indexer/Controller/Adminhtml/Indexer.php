@@ -55,8 +55,11 @@ class Indexer extends \Magento\Backend\App\Action
             try {
                 foreach ($indexerIds as $indexer_id) {
                     /** @var \Magento\Indexer\Model\IndexerInterface $model */
-                    $model = $this->_objectManager->create('Magento\Indexer\Model\IndexerInterface')
-                        ->load($indexer_id);
+                    $model = $this->_objectManager->create(
+                        'Magento\Indexer\Model\IndexerInterface'
+                    )->load(
+                        $indexer_id
+                    );
                     $model->setScheduled(false);
                 }
                 $this->messageManager->addSuccess(
@@ -88,8 +91,11 @@ class Indexer extends \Magento\Backend\App\Action
             try {
                 foreach ($indexerIds as $indexer_id) {
                     /** @var \Magento\Indexer\Model\IndexerInterface $model */
-                    $model = $this->_objectManager->create('Magento\Indexer\Model\IndexerInterface')
-                        ->load($indexer_id);
+                    $model = $this->_objectManager->create(
+                        'Magento\Indexer\Model\IndexerInterface'
+                    )->load(
+                        $indexer_id
+                    );
                     $model->setScheduled(true);
                 }
                 $this->messageManager->addSuccess(

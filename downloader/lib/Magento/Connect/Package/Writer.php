@@ -35,59 +35,59 @@ namespace Magento\Connect\Package;
 class Writer
 {
     /**
-    * Name of package configuration file
-    */
+     * Name of package configuration file
+     */
     const DEFAULT_NAME_PACKAGE_CONFIG = 'package.xml';
 
     /**
-    * Temporary dir for extract DEFAULT_NAME_PACKAGE.
-    */
+     * Temporary dir for extract DEFAULT_NAME_PACKAGE.
+     */
     const PATH_TO_TEMPORARY_DIRECTORY = 'var/package/tmp/';
 
     /**
-    * Files are used in package.
-    *
-    * @var array
-    */
+     * Files are used in package.
+     *
+     * @var array
+     */
     protected $_files = array();
 
     /**
-    * Archivator is used for extract DEFAULT_NAME_PACKAGE.
-    *
-    * @var \Magento\Archive
-    */
+     * Archivator is used for extract DEFAULT_NAME_PACKAGE.
+     *
+     * @var \Magento\Archive
+     */
     protected $_archivator = null;
 
     /**
-    * Name of package with extension. Extension should be only one.
-    * "package.tar.gz" is not ability, only "package.tgz".
-    *
-    * @var string
-    */
+     * Name of package with extension. Extension should be only one.
+     * "package.tar.gz" is not ability, only "package.tgz".
+     *
+     * @var string
+     */
     protected $_namePackage = 'package';
 
     /**
-    * Temporary directory where package is situated.
-    *
-    * @var string
-    */
+     * Temporary directory where package is situated.
+     *
+     * @var string
+     */
     protected $_temporaryPackageDir = '';
 
     /**
-    * Path to archive with package.
-    *
-    * @var mixed
-    */
+     * Path to archive with package.
+     *
+     * @var mixed
+     */
     protected $_pathToArchive = '';
 
     /**
-    * Constructor initializes $_file.
-    *
-    * @param array $files
-    * @param string $namePackage
-    * @return \Magento\Connect\Package\Reader
-    */
-    public function __construct($files, $namePackage='')
+     * Constructor initializes $_file.
+     *
+     * @param array $files
+     * @param string $namePackage
+     * @return \Magento\Connect\Package\Reader
+     */
+    public function __construct($files, $namePackage = '')
     {
         $this->_files = $files;
         $this->_namePackage = $namePackage;
@@ -95,10 +95,10 @@ class Writer
     }
 
     /**
-    * Retrieve archivator.
-    *
-    * @return \Magento\Archive
-    */
+     * Retrieve archivator.
+     *
+     * @return \Magento\Archive
+     */
     protected function _getArchivator()
     {
         if (is_null($this->_archivator)) {
@@ -108,18 +108,18 @@ class Writer
     }
 
     /**
-    * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
-    * to this dir.
-    *
-    * @return $this
-    */
+     * Create dir in PATH_TO_TEMPORARY_DIRECTORY and move all files
+     * to this dir.
+     *
+     * @return $this
+     */
     public function composePackage()
     {
-        @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);        
+        @mkdir(self::PATH_TO_TEMPORARY_DIRECTORY, 0777, true);
         $root = self::PATH_TO_TEMPORARY_DIRECTORY . basename($this->_namePackage);
         @mkdir($root, 0777, true);
         foreach ($this->_files as $file) {
-            
+
             if (is_dir($file) || is_file($file)) {
                 $fileName = basename($file);
                 $filePath = dirname($file);
@@ -148,30 +148,30 @@ class Writer
     }
 
     /**
-    * Archives package.
-    *
-    * @return $this
-    */
+     * Archives package.
+     *
+     * @return $this
+     */
     public function archivePackage()
     {
         $this->_pathToArchive = $this->_getArchivator()->pack(
             $this->_temporaryPackageDir,
-            $this->_namePackage.'.tgz',
-            true);
+            $this->_namePackage . '.tgz',
+            true
+        );
 
         //delete temporary dir
         \Magento\System\Dirs::rm(array("-r", $this->_temporaryPackageDir));
         return $this;
     }
-    
+
     /**
-    * Getter for pathToArchive
-    *
-    * @return string
-    */
+     * Getter for pathToArchive
+     *
+     * @return string
+     */
     public function getPathToArchive()
     {
         return $this->_pathToArchive;
     }
-
 }

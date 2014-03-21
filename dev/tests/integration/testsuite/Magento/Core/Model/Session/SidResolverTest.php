@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Session;
 
 class SidResolverTest extends \PHPUnit_Framework_TestCase
@@ -71,15 +70,17 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Core\Model\Session _model */
         $this->session = $objectManager->get('Magento\Core\Model\Session');
 
-        $this->coreStoreConfig = $this->getMockBuilder('Magento\Core\Model\Store\ConfigInterface')
-            ->setMethods(array('getConfig'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->coreStoreConfig = $this->getMockBuilder(
+            'Magento\Core\Model\Store\ConfigInterface'
+        )->setMethods(
+            array('getConfig')
+        )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Url')
-            ->setMethods(array('isOwnOriginUrl'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilder = $this->getMockBuilder(
+            'Magento\Url'
+        )->setMethods(
+            array('isOwnOriginUrl')
+        )->disableOriginalConstructor()->getMockForAbstractClass();
 
         $this->model = $objectManager->create(
             'Magento\Core\Model\Session\SidResolver',
@@ -107,14 +108,17 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSid($sid, $useFrontedSid, $isOwnOriginUrl, $testSid)
     {
-        $this->coreStoreConfig->expects($this->any())
-            ->method('getConfig')
-            ->with(SidResolver::XML_PATH_USE_FRONTEND_SID)
-            ->will($this->returnValue($useFrontedSid));
+        $this->coreStoreConfig->expects(
+            $this->any()
+        )->method(
+            'getConfig'
+        )->with(
+            SidResolver::XML_PATH_USE_FRONTEND_SID
+        )->will(
+            $this->returnValue($useFrontedSid)
+        );
 
-        $this->urlBuilder->expects($this->any())
-            ->method('isOwnOriginUrl')
-            ->will($this->returnValue($isOwnOriginUrl));
+        $this->urlBuilder->expects($this->any())->method('isOwnOriginUrl')->will($this->returnValue($isOwnOriginUrl));
 
         if ($testSid) {
             $_GET[$this->model->getSessionIdQueryParam($this->session)] = $testSid;
@@ -134,26 +138,20 @@ class SidResolverTest extends \PHPUnit_Framework_TestCase
             array(null, true, false, 'test-sid'),
             array(null, false, true, 'test-sid'),
             array('test-sid', true, true, 'test-sid'),
-            array(null, true, true, null),
+            array(null, true, true, null)
         );
     }
 
     public function testGetSessionIdQueryParam()
     {
-        $this->assertEquals(
-            SidResolver::SESSION_ID_QUERY_PARAM,
-            $this->model->getSessionIdQueryParam($this->session)
-        );
+        $this->assertEquals(SidResolver::SESSION_ID_QUERY_PARAM, $this->model->getSessionIdQueryParam($this->session));
     }
 
     public function testGetSessionIdQueryParamCustom()
     {
         $oldSessionName = $this->session->getName();
         $this->session->setName($this->customSessionName);
-        $this->assertEquals(
-            $this->customSessionQueryParam,
-            $this->model->getSessionIdQueryParam($this->session)
-        );
+        $this->assertEquals($this->customSessionQueryParam, $this->model->getSessionIdQueryParam($this->session));
         $this->session->setName($oldSessionName);
     }
 

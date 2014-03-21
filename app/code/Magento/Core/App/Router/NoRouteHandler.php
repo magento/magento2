@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\App\Router;
 
 class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
@@ -58,13 +57,11 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
             $noRoute = array();
         }
 
-        $moduleName     = isset($noRoute[0]) ? $noRoute[0] : 'core';
+        $moduleName = isset($noRoute[0]) ? $noRoute[0] : 'core';
         $controllerName = isset($noRoute[1]) ? $noRoute[1] : 'index';
-        $actionName     = isset($noRoute[2]) ? $noRoute[2] : 'index';
+        $actionName = isset($noRoute[2]) ? $noRoute[2] : 'index';
 
-        $request->setModuleName($moduleName)
-            ->setControllerName($controllerName)
-            ->setActionName($actionName);
+        $request->setModuleName($moduleName)->setControllerName($controllerName)->setActionName($actionName);
 
         return true;
     }

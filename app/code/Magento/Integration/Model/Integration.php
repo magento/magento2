@@ -50,27 +50,39 @@ class Integration extends \Magento\Core\Model\AbstractModel
      * Integration Status values
      */
     const STATUS_INACTIVE = 0;
+
     const STATUS_ACTIVE = 1;
+
     /**#@-*/
 
     /**#@+
      * Integration setup type
      */
     const TYPE_MANUAL = 0;
+
     const TYPE_CONFIG = 1;
+
     /**#@-*/
 
     /**#@+
      * Integration data key constants.
      */
     const ID = 'integration_id';
+
     const NAME = 'name';
+
     const EMAIL = 'email';
+
     const ENDPOINT = 'endpoint';
+
     const IDENTITY_LINK_URL = 'identity_link_url';
+
     const SETUP_TYPE = 'setup_type';
+
     const CONSUMER_ID = 'consumer_id';
+
     const STATUS = 'status';
+
     /**#@-*/
 
     /**

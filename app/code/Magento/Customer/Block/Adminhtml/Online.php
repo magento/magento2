@@ -63,5 +63,4 @@ class Online extends \Magento\Backend\Block\Template
     {
         return $this->getChildBlock('filterForm')->toHtml();
     }
-
 }

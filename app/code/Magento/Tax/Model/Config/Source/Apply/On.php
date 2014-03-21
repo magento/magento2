@@ -33,9 +33,8 @@ class On implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array('value'=>0, 'label'=>__('Custom price if available')),
-            array('value'=>1, 'label'=>__('Original price only')),
+            array('value' => 0, 'label' => __('Custom price if available')),
+            array('value' => 1, 'label' => __('Original price only'))
         );
     }
-
 }

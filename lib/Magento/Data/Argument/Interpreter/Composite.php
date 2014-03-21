@@ -53,9 +53,9 @@ class Composite implements InterpreterInterface
     public function __construct(array $interpreters, $discriminator)
     {
         foreach ($interpreters as $interpreterName => $interpreterInstance) {
-            if (!($interpreterInstance instanceof InterpreterInterface)) {
+            if (!$interpreterInstance instanceof InterpreterInterface) {
                 throw new \InvalidArgumentException(
-                    "Interpreter named '$interpreterName' is expected to be an argument interpreter instance."
+                    "Interpreter named '{$interpreterName}' is expected to be an argument interpreter instance."
                 );
             }
         }
@@ -70,9 +70,9 @@ class Composite implements InterpreterInterface
     public function evaluate(array $data)
     {
         if (!isset($data[$this->discriminator])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Value for key "%s" is missing in the argument data.', $this->discriminator
-            ));
+            throw new \InvalidArgumentException(
+                sprintf('Value for key "%s" is missing in the argument data.', $this->discriminator)
+            );
         }
         $interpreterName = $data[$this->discriminator];
         unset($data[$this->discriminator]);
@@ -91,7 +91,7 @@ class Composite implements InterpreterInterface
     public function addInterpreter($name, InterpreterInterface $instance)
     {
         if (isset($this->interpreters[$name])) {
-            throw new \InvalidArgumentException("Argument interpreter named '$name' has already been defined.");
+            throw new \InvalidArgumentException("Argument interpreter named '{$name}' has already been defined.");
         }
         $this->interpreters[$name] = $instance;
     }
@@ -106,7 +106,7 @@ class Composite implements InterpreterInterface
     protected function getInterpreter($name)
     {
         if (!isset($this->interpreters[$name])) {
-            throw new \InvalidArgumentException("Argument interpreter named '$name' has not been defined.");
+            throw new \InvalidArgumentException("Argument interpreter named '{$name}' has not been defined.");
         }
         return $this->interpreters[$name];
     }

@@ -105,11 +105,17 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressesHtmlSelect($item, $index)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('ship['.$index.']['.$item->getQuoteItemId().'][address]')
-            ->setId('ship_'.$index.'_'.$item->getQuoteItemId().'_address')
-            ->setValue($item->getCustomerAddressId())
-            ->setOptions($this->getAddressOptions());
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setName(
+            'ship[' . $index . '][' . $item->getQuoteItemId() . '][address]'
+        )->setId(
+            'ship_' . $index . '_' . $item->getQuoteItemId() . '_address'
+        )->setValue(
+            $item->getCustomerAddressId()
+        )->setOptions(
+            $this->getAddressOptions()
+        );
 
         return $select->getHtml();
     }
@@ -125,10 +131,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
         if (is_null($options)) {
             $options = array();
             foreach ($this->getCustomer()->getAddresses() as $address) {
-                $options[] = array(
-                    'value' => $address->getId(),
-                    'label' => $address->format('oneline')
-                );
+                $options[] = array('value' => $address->getId(), 'label' => $address->format('oneline'));
             }
             $this->setData('address_options', $options);
         }

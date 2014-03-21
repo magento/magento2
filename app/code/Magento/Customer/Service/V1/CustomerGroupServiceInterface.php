@@ -28,9 +28,11 @@ namespace Magento\Customer\Service\V1;
  */
 interface CustomerGroupServiceInterface
 {
-    const NOT_LOGGED_IN_ID          = 0;
-    const CUST_GROUP_ALL            = 32000;
-    const GROUP_CODE_MAX_LENGTH     = 32;
+    const NOT_LOGGED_IN_ID = 0;
+
+    const CUST_GROUP_ALL = 32000;
+
+    const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
      * Retrieve Customer Groups

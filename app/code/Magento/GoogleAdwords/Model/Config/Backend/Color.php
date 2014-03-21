@@ -34,8 +34,10 @@ class Color extends \Magento\GoogleAdwords\Model\Config\Backend\AbstractConversi
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $this->_validatorComposite->addRule($this->_validatorFactory->createColorValidator($this->getValue()),
-            'conversion_color');
+        $this->_validatorComposite->addRule(
+            $this->_validatorFactory->createColorValidator($this->getValue()),
+            'conversion_color'
+        );
         return $this->_validatorComposite;
     }
 

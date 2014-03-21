@@ -125,11 +125,11 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getDefaultSender()
     {
-        if(!$this->getItem()) {
+        if (!$this->getItem()) {
             return '';
         }
 
-        if($this->getItem()->getOrder()) {
+        if ($this->getItem()->getOrder()) {
             return $this->getItem()->getOrder()->getBillingAddress()->getName();
         }
 
@@ -143,11 +143,11 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getDefaultRecipient()
     {
-        if(!$this->getItem()) {
+        if (!$this->getItem()) {
             return '';
         }
 
-        if($this->getItem()->getOrder()) {
+        if ($this->getItem()->getOrder()) {
             if ($this->getItem()->getOrder()->getShippingAddress()) {
                 return $this->getItem()->getOrder()->getShippingAddress()->getName();
             } else if ($this->getItem()->getOrder()->getBillingAddress()) {
@@ -182,14 +182,15 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     protected function _initMessage()
     {
-        $this->_giftMessage[$this->getItem()->getGiftMessageId()] =
-            $this->_messageHelper->getGiftMessage($this->getItem()->getGiftMessageId());
+        $this->_giftMessage[$this->getItem()->getGiftMessageId()] = $this->_messageHelper->getGiftMessage(
+            $this->getItem()->getGiftMessageId()
+        );
 
         // init default values for giftmessage form
-        if(!$this->getMessage()->getSender()) {
+        if (!$this->getMessage()->getSender()) {
             $this->getMessage()->setSender($this->getDefaultSender());
         }
-        if(!$this->getMessage()->getRecipient()) {
+        if (!$this->getMessage()->getRecipient()) {
             $this->getMessage()->setRecipient($this->getDefaultRecipient());
         }
 
@@ -203,7 +204,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getMessage()
     {
-        if(!isset($this->_giftMessage[$this->getItem()->getGiftMessageId()])) {
+        if (!isset($this->_giftMessage[$this->getItem()->getGiftMessageId()])) {
             $this->_initMessage();
         }
 
@@ -217,11 +218,10 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('sales/order_view_giftmessage/save', array(
-            'entity'    => $this->getItem()->getId(),
-            'type'      => 'order_item',
-            'reload'    => true
-        ));
+        return $this->getUrl(
+            'sales/order_view_giftmessage/save',
+            array('entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true)
+        );
     }
 
     /**
@@ -242,7 +242,9 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function canDisplayGiftmessage()
     {
         return $this->_messageHelper->getIsMessagesAvailable(
-            'order_item', $this->getItem(), $this->getItem()->getOrder()->getStoreId()
+            'order_item',
+            $this->getItem(),
+            $this->getItem()->getOrder()->getStoreId()
         );
     }
 
@@ -273,5 +275,4 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             $this->_checkoutHelper->getPriceInclTax($item)
         );
     }
-
 }

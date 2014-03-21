@@ -23,8 +23,8 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root" after="header">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
+    <referenceBlock name="root">
         <block class="Magento\Backend\Block\Menu\Proxy" name="menu" as="menu" template="Magento_Backend::menu.phtml" />
     </referenceBlock>
 </layout>

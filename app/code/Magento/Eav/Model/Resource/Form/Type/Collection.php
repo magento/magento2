@@ -70,12 +70,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             $entity = $entity->getId();
         }
 
-        $this->getSelect()
-            ->join(
-                array('form_type_entity' => $this->getTable('eav_form_type_entity')),
-                'main_table.type_id = form_type_entity.type_id',
-                array())
-            ->where('form_type_entity.entity_type_id = ?', $entity);
+        $this->getSelect()->join(
+            array('form_type_entity' => $this->getTable('eav_form_type_entity')),
+            'main_table.type_id = form_type_entity.type_id',
+            array()
+        )->where(
+            'form_type_entity.entity_type_id = ?',
+            $entity
+        );
 
         return $this;
     }

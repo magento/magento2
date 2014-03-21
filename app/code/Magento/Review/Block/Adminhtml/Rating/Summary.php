@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Adminhtml\Rating;
 
 use Magento\Rating\Model\Resource\Rating\Collection as RatingCollection;
@@ -101,11 +100,10 @@ class Summary extends \Magento\Backend\Block\Template
     public function getRating()
     {
         if (!$this->getRatingCollection()) {
-            $ratingCollection = $this->_votesFactory->create()
-                ->setReviewFilter($this->getReviewId())
-                ->addRatingInfo()
-                ->load();
-            $this->setRatingCollection( ( $ratingCollection->getSize() ) ? $ratingCollection : false );
+            $ratingCollection = $this->_votesFactory->create()->setReviewFilter(
+                $this->getReviewId()
+            )->addRatingInfo()->load();
+            $this->setRatingCollection($ratingCollection->getSize() ? $ratingCollection : false);
         }
         return $this->getRatingCollection();
     }
@@ -118,8 +116,7 @@ class Summary extends \Magento\Backend\Block\Template
     public function getRatingSummary()
     {
         if (!$this->getRatingSummaryCache()) {
-            $this->setRatingSummaryCache($this->_ratingFactory->create()
-                ->getReviewSummary($this->getReviewId()));
+            $this->setRatingSummaryCache($this->_ratingFactory->create()->getReviewSummary($this->getReviewId()));
         }
 
         return $this->getRatingSummaryCache();

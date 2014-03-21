@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Block\Adminhtml\Process;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -62,10 +61,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->_updateButton('save', 'label', __('Save Process'));
         if ($this->_coreRegistry->registry('current_index_process')) {
-            $this->_addButton('reindex', array(
-                'label'     => __('Reindex Data'),
-                'onclick'   => "setLocation('{$this->getRunUrl()}')"
-            ));
+            $this->_addButton(
+                'reindex',
+                array('label' => __('Reindex Data'), 'onclick' => "setLocation('{$this->getRunUrl()}')")
+            );
         }
         $this->_removeButton('reset');
         $this->_removeButton('delete');
@@ -88,9 +87,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getRunUrl()
     {
-        return $this->getUrl('adminhtml/process/reindexProcess', array(
-            'process' => $this->_coreRegistry->registry('current_index_process')->getId()
-        ));
+        return $this->getUrl(
+            'adminhtml/process/reindexProcess',
+            array('process' => $this->_coreRegistry->registry('current_index_process')->getId())
+        );
     }
 
     /**

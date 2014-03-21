@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 use Magento\Filesystem\Directory\ReadInterface;
@@ -125,18 +124,19 @@ class Config implements \Magento\View\ConfigInterface
         $configFiles = $this->moduleReader->getConfigurationFiles($this->filename)->toArray();
 
         $themeConfigFile = $currentTheme->getCustomization()->getCustomViewConfigPath();
-        if (empty($themeConfigFile) ||
-            !$this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
+        if (empty($themeConfigFile) || !$this->rootDirectory->isExist(
+            $this->rootDirectory->getRelativePath($themeConfigFile)
+        )
         ) {
-            $themeConfigFile = $this->viewFileSystem->getFilename(
-                $this->filename, $params
-            );
+            $themeConfigFile = $this->viewFileSystem->getFilename($this->filename, $params);
         }
-        if ($themeConfigFile &&
-            $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
+        if ($themeConfigFile && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
         ) {
-            $configFiles[$this->rootDirectory->getRelativePath($themeConfigFile)] =
-                $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($themeConfigFile));
+            $configFiles[$this->rootDirectory->getRelativePath(
+                $themeConfigFile
+            )] = $this->rootDirectory->readFile(
+                $this->rootDirectory->getRelativePath($themeConfigFile)
+            );
         }
         $config = new \Magento\Config\View($configFiles);
 

@@ -37,11 +37,12 @@ class Notification extends \Magento\Backend\App\AbstractAction
         $this->_title->add(__('Notifications'));
 
         $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_AdminNotification::system_adminnotification')
-            ->_addBreadcrumb(
-                __('Messages Inbox'),
-                __('Messages Inbox')
-            );
+        $this->_setActiveMenu(
+            'Magento_AdminNotification::system_adminnotification'
+        )->_addBreadcrumb(
+            __('Messages Inbox'),
+            __('Messages Inbox')
+        );
         $this->_view->renderLayout();
     }
 
@@ -53,8 +54,11 @@ class Notification extends \Magento\Backend\App\AbstractAction
         $notificationId = (int)$this->getRequest()->getParam('id');
         if ($notificationId) {
             try {
-                $this->_objectManager->create('Magento\AdminNotification\Model\NotificationService')
-                    ->markAsRead($notificationId);
+                $this->_objectManager->create(
+                    'Magento\AdminNotification\Model\NotificationService'
+                )->markAsRead(
+                    $notificationId
+                );
                 $this->messageManager->addSuccess(__('The message has been marked as Read.'));
             } catch (\Magento\Core\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -84,8 +88,11 @@ class Notification extends \Magento\Backend\App\AbstractAction
         $notificationId = (int)$this->getRequest()->getPost('id');
         $responseData = array();
         try {
-            $this->_objectManager->create('Magento\AdminNotification\Model\NotificationService')
-                ->markAsRead($notificationId);
+            $this->_objectManager->create(
+                'Magento\AdminNotification\Model\NotificationService'
+            )->markAsRead(
+                $notificationId
+            );
             $responseData['success'] = true;
         } catch (\Exception $e) {
             $responseData['success'] = false;
@@ -106,14 +113,14 @@ class Notification extends \Magento\Backend\App\AbstractAction
         } else {
             try {
                 foreach ($ids as $id) {
-                    $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')
-                        ->load($id);
+                    $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
                     if ($model->getId()) {
-                        $model->setIsRead(1)
-                            ->save();
+                        $model->setIsRead(1)->save();
                     }
                 }
-                $this->messageManager->addSuccess(__('A total of %1 record(s) have been marked as Read.', count($ids)));
+                $this->messageManager->addSuccess(
+                    __('A total of %1 record(s) have been marked as Read.', count($ids))
+                );
             } catch (\Magento\Core\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -132,8 +139,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
     public function removeAction()
     {
         if ($id = $this->getRequest()->getParam('id')) {
-            $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')
-                ->load($id);
+            $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
 
             if (!$model->getId()) {
                 $this->_redirect('adminhtml/*/');
@@ -141,18 +147,12 @@ class Notification extends \Magento\Backend\App\AbstractAction
             }
 
             try {
-                $model->setIsRemove(1)
-                    ->save();
-                $this->messageManager->addSuccess(
-                    __('The message has been removed.')
-                );
+                $model->setIsRemove(1)->save();
+                $this->messageManager->addSuccess(__('The message has been removed.'));
             } catch (\Magento\Core\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
-                    $e,
-                    __("We couldn't remove the messages because of an error.")
-                );
+                $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
             }
 
             $this->_redirect('adminhtml/*/');
@@ -172,11 +172,9 @@ class Notification extends \Magento\Backend\App\AbstractAction
         } else {
             try {
                 foreach ($ids as $id) {
-                    $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')
-                        ->load($id);
+                    $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
                     if ($model->getId()) {
-                        $model->setIsRemove(1)
-                            ->save();
+                        $model->setIsRemove(1)->save();
                     }
                 }
                 $this->messageManager->addSuccess(__('Total of %1 record(s) have been removed.', count($ids)));

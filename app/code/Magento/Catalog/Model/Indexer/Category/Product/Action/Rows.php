@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
@@ -59,7 +58,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function getRootCategoryIds()
     {
-        $rootIds = [\Magento\Catalog\Model\Category::TREE_ROOT_ID];
+        $rootIds = array(\Magento\Catalog\Model\Category::TREE_ROOT_ID);
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $rootIds[] = $store->getRootCategoryId();
@@ -76,10 +75,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function removeEntries()
     {
         $removalCategoryIds = array_diff($this->limitationByCategories, $this->getRootCategoryIds());
-        $this->getWriteAdapter()->delete(
-            $this->getMainTable(),
-            ['category_id IN (?)' => $removalCategoryIds]
-        );
+        $this->getWriteAdapter()->delete($this->getMainTable(), array('category_id IN (?)' => $removalCategoryIds));
     }
 
     /**

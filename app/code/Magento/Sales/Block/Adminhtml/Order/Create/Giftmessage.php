@@ -76,12 +76,15 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
      * @param string $entityType
      * @return string
      */
-    public function getFormHtml(\Magento\Object $entity, $entityType='quote') {
-        return $this->getLayout()
-            ->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form')
-            ->setEntity($entity)
-            ->setEntityType($entityType)
-            ->toHtml();
+    public function getFormHtml(\Magento\Object $entity, $entityType = 'quote')
+    {
+        return $this->getLayout()->createBlock(
+            'Magento\Sales\Block\Adminhtml\Order\Create\Giftmessage\Form'
+        )->setEntity(
+            $entity
+        )->setEntityType(
+            $entityType
+        )->toHtml();
     }
 
     /**
@@ -97,15 +100,20 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
         $allItems = $this->getQuote()->getAllItems();
 
         foreach ($allItems as $item) {
-            if($this->_getGiftmessageSaveModel()->getIsAllowedQuoteItem($item)
-               && $this->_messageHelper->getIsMessagesAvailable('item',
-                        $item, $this->getStore())) {
+            if ($this->_getGiftmessageSaveModel()->getIsAllowedQuoteItem(
+                $item
+            ) && $this->_messageHelper->getIsMessagesAvailable(
+                'item',
+                $item,
+                $this->getStore()
+            )
+            ) {
                 // if item allowed
                 $items[] = $item;
             }
         }
 
-        if(sizeof($items)) {
+        if (sizeof($items)) {
             return $items;
         }
 

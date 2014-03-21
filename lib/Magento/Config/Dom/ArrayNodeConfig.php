@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Config\Dom;
 
 /**
@@ -54,7 +53,9 @@ class ArrayNodeConfig
      * @param array $numericArrays
      */
     public function __construct(
-        NodePathMatcher $nodePathMatcher, array $assocArrayAttributes, array $numericArrays = array()
+        NodePathMatcher $nodePathMatcher,
+        array $assocArrayAttributes,
+        array $numericArrays = array()
     ) {
         $this->nodePathMatcher = $nodePathMatcher;
         $this->assocArrays = $assocArrayAttributes;

@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Report\Invoiced\Collection;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order
-    extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
      * Period format
@@ -47,7 +46,7 @@ class Order
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
@@ -80,18 +79,21 @@ class Order
         if ('month' == $this->_period) {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateExtractSql('period', \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR);
+            $this->_periodFormat = $adapter->getDateExtractSql(
+                'period',
+                \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+            );
         } else {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals()) {
             $this->_selectedColumns = array(
-                'period'                => $this->_periodFormat,
-                'orders_count'          => 'SUM(orders_count)',
-                'orders_invoiced'       => 'SUM(orders_invoiced)',
-                'invoiced'              => 'SUM(invoiced)',
-                'invoiced_captured'     => 'SUM(invoiced_captured)',
+                'period' => $this->_periodFormat,
+                'orders_count' => 'SUM(orders_count)',
+                'orders_invoiced' => 'SUM(orders_invoiced)',
+                'invoiced' => 'SUM(invoiced)',
+                'invoiced_captured' => 'SUM(invoiced_captured)',
                 'invoiced_not_captured' => 'SUM(invoiced_not_captured)'
             );
         }

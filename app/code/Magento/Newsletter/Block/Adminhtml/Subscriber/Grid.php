@@ -65,8 +65,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     {
 
         if ($this->getRequest()->getParam('queue', false)) {
-            $this->getCollection()->useQueue($this->_queueFactory->create()
-                ->load($this->getRequest()->getParam('queue'))
+            $this->getCollection()->useQueue(
+                $this->_queueFactory->create()->load($this->getRequest()->getParam('queue'))
             );
         }
 

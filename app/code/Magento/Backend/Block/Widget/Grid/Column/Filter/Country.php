@@ -28,8 +28,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Country grid filter
  */
-class Country
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory

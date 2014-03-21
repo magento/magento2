@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model;
 
 class VoidTest extends \PHPUnit_Framework_TestCase
@@ -54,40 +53,43 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $payment = $order->getPayment();
 
         /** @var \Magento\Paypal\Model\Payflowpro $instance */
-        $instance = $this->getMock('Magento\Paypal\Model\Payflowpro', array('_postRequest'), array(
-            $eventManager,
-            $paymentData,
-            $coreStoreConfig,
-            $logAdapterFactory,
-            $logger,
-            $moduleList,
-            $localeDate,
-            $centinelService,
-            $storeManager,
-            $configFactory,
-            $mathRandom
-        ));
+        $instance = $this->getMock(
+            'Magento\Paypal\Model\Payflowpro',
+            array('_postRequest'),
+            array(
+                $eventManager,
+                $paymentData,
+                $coreStoreConfig,
+                $logAdapterFactory,
+                $logger,
+                $moduleList,
+                $localeDate,
+                $centinelService,
+                $storeManager,
+                $configFactory,
+                $mathRandom
+            )
+        );
 
-        $response = new \Magento\Object(array(
-            'result' => '0',
-            'pnref' => 'V19A3D27B61E',
-            'respmsg' => 'Approved',
-            'authcode' => '510PNI',
-            'hostcode' => 'A',
-            'request_id' => 'f930d3dc6824c1f7230c5529dc37ae5e',
-            'result_code' => '0'
-        ));
+        $response = new \Magento\Object(
+            array(
+                'result' => '0',
+                'pnref' => 'V19A3D27B61E',
+                'respmsg' => 'Approved',
+                'authcode' => '510PNI',
+                'hostcode' => 'A',
+                'request_id' => 'f930d3dc6824c1f7230c5529dc37ae5e',
+                'result_code' => '0'
+            )
+        );
 
-        $instance->expects($this->any())
-            ->method('_postRequest')
-            ->will($this->returnValue($response));
+        $instance->expects($this->any())->method('_postRequest')->will($this->returnValue($response));
 
         $payment->setMethodInstance($instance);
-        $payment->void(new \Magento\Object);
+        $payment->void(new \Magento\Object());
         $order->save();
 
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->loadByIncrementId('100000001');
         $this->assertFalse($order->canVoidPayment());
     }

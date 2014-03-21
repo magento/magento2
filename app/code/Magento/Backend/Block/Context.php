@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 /**
@@ -84,8 +83,24 @@ class Context extends \Magento\View\Element\Context
     ) {
         $this->_authorization = $authorization;
         parent::__construct(
-            $request, $layout, $eventManager, $urlBuilder, $translator, $cache, $design, $session, $sidResolver,
-            $storeConfig, $viewUrl, $viewConfig, $cacheState, $logger, $escaper, $filterManager, $localeDate, $data
+            $request,
+            $layout,
+            $eventManager,
+            $urlBuilder,
+            $translator,
+            $cache,
+            $design,
+            $session,
+            $sidResolver,
+            $storeConfig,
+            $viewUrl,
+            $viewConfig,
+            $cacheState,
+            $logger,
+            $escaper,
+            $filterManager,
+            $localeDate,
+            $data
         );
     }
 

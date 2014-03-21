@@ -30,18 +30,16 @@ namespace Magento\Tools\Migration\System\Configuration;
  */
 abstract class AbstractLogger
 {
-    CONST FILE_KEY_VALID = 'valid';
-    CONST FILE_KEY_INVALID = 'invalid';
+    const FILE_KEY_VALID = 'valid';
+
+    const FILE_KEY_INVALID = 'invalid';
 
     /**
      * List of logs
      *
      * @var array
      */
-    protected $_logs = array(
-        self::FILE_KEY_VALID => array(),
-        self::FILE_KEY_INVALID => array()
-    );
+    protected $_logs = array(self::FILE_KEY_VALID => array(), self::FILE_KEY_INVALID => array());
 
     /**
      * Add log data
@@ -75,7 +73,7 @@ abstract class AbstractLogger
             }
 
             $result[] = '------------------------------';
-            $result[] =  $type . ':';
+            $result[] = $type . ':';
             foreach ($data as $fileName) {
                 $result[] = $fileName;
             }
@@ -91,5 +89,5 @@ abstract class AbstractLogger
      *
      * @return void
      */
-    public abstract function report();
+    abstract public function report();
 }

@@ -95,12 +95,12 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return array
      */
-    public function getActiveMethods($store=null)
+    public function getActiveMethods($store = null)
     {
         $methods = array();
         $config = $this->_coreStoreConfig->getConfig('payment', $store);
         foreach ($config as $code => $methodConfig) {
-            if ($this->_coreStoreConfig->getConfigFlag('payment/'.$code.'/active', $store)) {
+            if ($this->_coreStoreConfig->getConfigFlag('payment/' . $code . '/active', $store)) {
                 if (array_key_exists('model', $methodConfig)) {
                     $methodModel = $this->_methodFactory->create($methodConfig['model']);
                     if ($methodModel && $methodModel->getConfigData('active', $store)) {
@@ -118,7 +118,7 @@ class Config
      * @param null|string|bool|int|Store $store
      * @return array
      */
-    public function getAllMethods($store=null)
+    public function getAllMethods($store = null)
     {
         $methods = array();
         $config = $this->_coreStoreConfig->getConfig('payment', $store);
@@ -202,7 +202,7 @@ class Config
     {
         $data = $this->_localeLists->getTranslationList('month');
         foreach ($data as $key => $value) {
-            $monthNum = ($key < 10) ? '0'.$key : $key;
+            $monthNum = $key < 10 ? '0' . $key : $key;
             $data[$key] = $monthNum . ' - ' . $value;
         }
         return $data;
@@ -218,7 +218,7 @@ class Config
         $years = array();
         $first = date("Y");
 
-        for ($index=0; $index <= 10; $index++) {
+        for ($index = 0; $index <= 10; $index++) {
             $year = $first + $index;
             $years[$year] = $year;
         }

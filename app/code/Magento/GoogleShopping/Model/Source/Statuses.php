@@ -41,9 +41,6 @@ class Statuses
      */
     public function getStatuses()
     {
-        return array(
-            '0' => __('Yes'),
-            '1' => __('No')
-        );
+        return array('0' => __('Yes'), '1' => __('No'));
     }
 }

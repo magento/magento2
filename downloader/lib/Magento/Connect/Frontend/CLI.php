@@ -34,7 +34,6 @@ namespace Magento\Connect\Frontend;
  */
 class CLI extends \Magento\Connect\Frontend
 {
-
     /**
      * Collected output
      *
@@ -53,7 +52,7 @@ class CLI extends \Magento\Connect\Frontend
     {
         parent::doError($command, $message);
         $this->writeln("Error: ");
-        $this->writeln("$command: $message");
+        $this->writeln("{$command}: {$message}");
     }
 
     /**
@@ -64,10 +63,10 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputConfigHelp($data)
     {
-        foreach($data['data'] as $k=>$v) {
-            if(is_scalar($v)) {
+        foreach ($data['data'] as $k => $v) {
+            if (is_scalar($v)) {
                 $this->writeln($v);
-            } elseif(is_array($v)) {
+            } elseif (is_array($v)) {
                 $this->writeln(implode(": ", $v));
             }
         }
@@ -80,7 +79,7 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputRemoteInfo($data)
     {
-        if(!is_array($data['releases'])) {
+        if (!is_array($data['releases'])) {
             return;
         }
         foreach ($data['releases'] as $r) {
@@ -96,7 +95,7 @@ class CLI extends \Magento\Connect\Frontend
     {
         $defaultMethod = "output";
         $methodMap = array(
-            'list-upgrades'=> 'outputUpgrades',
+            'list-upgrades' => 'outputUpgrades',
             'list-available' => 'outputChannelsPackages',
             'list-installed' => 'writeInstalledList',
             'package-dependencies' => 'outputPackageDeps',
@@ -110,9 +109,9 @@ class CLI extends \Magento\Connect\Frontend
             'upgrade' => 'outputInstallResult',
             'upgrade-all' => 'outputInstallResult',
             'uninstall' => 'outputDeleted',
-            'list-channels' => 'outputListChannels',
+            'list-channels' => 'outputListChannels'
         );
-        if(isset($methodMap[$type])) {
+        if (isset($methodMap[$type])) {
             return $methodMap[$type];
         }
         return $defaultMethod;
@@ -124,12 +123,12 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputDeleted($data)
     {
-        if(!count($data['data'])) {
+        if (!count($data['data'])) {
             return;
         }
         $this->writeln($data['title']);
-        foreach($data['data'] as $row) {
-            $this->writeln("$row[0]/$row[1]");
+        foreach ($data['data'] as $row) {
+            $this->writeln("{$row['0']}/{$row['1']}");
         }
     }
 
@@ -142,18 +141,17 @@ class CLI extends \Magento\Connect\Frontend
         $this->writeln($data['title']);
 
         $channels =& $data['data'][\Magento\Connect\Singleconfig::K_CHAN];
-        foreach($channels as $name => $v) {
-            $this->writeln("$name: {$v[\Magento\Connect\Singleconfig::K_URI]}");
+        foreach ($channels as $name => $v) {
+            $this->writeln("{$name}: {$v[\Magento\Connect\Singleconfig::K_URI]}");
         }
         $aliases =& $data['data'][\Magento\Connect\Singleconfig::K_CHAN_ALIAS];
-        if(count($aliases)) {
+        if (count($aliases)) {
             $this->writeln();
             $this->writeln($data['title_aliases']);
-            foreach($aliases as $k=>$v) {
-                $this->writeln("$k => $v");
+            foreach ($aliases as $k => $v) {
+                $this->writeln("{$k} => {$v}");
             }
         }
-
     }
 
     /**
@@ -163,12 +161,12 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputInstallResult($data)
     {
-        if(isset($data['title'])) {
-            $title = trim($data['title'])." ";
+        if (isset($data['title'])) {
+            $title = trim($data['title']) . " ";
         } else {
             $title = '';
         }
-        foreach($data['assoc'] as $row) {
+        foreach ($data['assoc'] as $row) {
             $this->printf("%s%s/%s %s\n", $title, $row['channel'], $row['name'], $row['version']);
         }
     }
@@ -181,7 +179,7 @@ class CLI extends \Magento\Connect\Frontend
     public function outputPackageContents($data)
     {
         $this->writeln($data['title']);
-        foreach($data['data'] as $file) {
+        foreach ($data['data'] as $file) {
             $this->writeln($file);
         }
     }
@@ -196,8 +194,14 @@ class CLI extends \Magento\Connect\Frontend
     {
         $title = $data['title'];
         $this->writeln($title);
-        foreach($data['data'] as $package) {
-            $this->printf("%-20s %-20s %-20s %-20s\n", $package['channel'], $package['name'], $package['min'], $package['max']);
+        foreach ($data['data'] as $package) {
+            $this->printf(
+                "%-20s %-20s %-20s %-20s\n",
+                $package['channel'],
+                $package['name'],
+                $package['min'],
+                $package['max']
+            );
         }
     }
 
@@ -211,8 +215,14 @@ class CLI extends \Magento\Connect\Frontend
     {
         $title = $data['title'];
         $this->writeln($title);
-        foreach($data['data'] as $package) {
-            $this->printf("%-20s %-20s %-20s %-20s\n", $package['channel'], $package['name'], $package['version'], $package['install_state']);
+        foreach ($data['data'] as $package) {
+            $this->printf(
+                "%-20s %-20s %-20s %-20s\n",
+                $package['channel'],
+                $package['name'],
+                $package['version'],
+                $package['install_state']
+            );
         }
     }
 
@@ -224,18 +234,18 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputChannelsPackages($data)
     {
-        foreach($data['data'] as $channelInfo) {
+        foreach ($data['data'] as $channelInfo) {
             $title =& $channelInfo['title'];
             $packages =& $channelInfo['packages'];
             $this->writeln($title);
-            foreach($packages as $name=>$package) {
+            foreach ($packages as $name => $package) {
                 $releases =& $package['releases'];
                 $tmp = array();
-                foreach($releases as $ver=>$state) {
-                    $tmp[] = "$ver $state";
+                foreach ($releases as $ver => $state) {
+                    $tmp[] = "{$ver} {$state}";
                 }
-                $tmp = implode(',',$tmp);
-                $this->writeln($name.": ".$tmp);
+                $tmp = implode(',', $tmp);
+                $this->writeln($name . ": " . $tmp);
             }
         }
     }
@@ -249,18 +259,18 @@ class CLI extends \Magento\Connect\Frontend
     public function output($data)
     {
         $capture = $this->isCapture();
-        if($capture) {
+        if ($capture) {
             $this->_output[] = $data;
             return;
         }
 
-        if(is_array($data)) {
-            foreach($data as $type=>$params) {
+        if (is_array($data)) {
+            foreach ($data as $type => $params) {
                 $method = $this->detectMethodByType($type);
-                if($method) {
-                    $this->$method($params);
+                if ($method) {
+                    $this->{$method}($params);
                 } else {
-                    $this->writeln(__METHOD__." handler not found for {$type}");
+                    $this->writeln(__METHOD__ . " handler not found for {$type}");
                 }
             }
         } else {
@@ -276,30 +286,29 @@ class CLI extends \Magento\Connect\Frontend
     public function outputPackage($package)
     {
         $fields = array(
-            'Name'=>'name',
-            'Version'=>'version',
-            'Stability'=>'stability',
+            'Name' => 'name',
+            'Version' => 'version',
+            'Stability' => 'stability',
             'Description' => 'description',
             'Date' => 'date',
-            'Authors' => 'authors',
+            'Authors' => 'authors'
         );
 
-        foreach($fields as $title => $fld) {
-            $method = "get".ucfirst($fld);
-            $data =  $package->$method();
-            if(empty($data)) {
+        foreach ($fields as $title => $fld) {
+            $method = "get" . ucfirst($fld);
+            $data = $package->{$method}();
+            if (empty($data)) {
                 continue;
             }
-            $this->write($title.": ");
-            if(is_array($data)) {
-                $this->write(print_r($data,true));
+            $this->write($title . ": ");
+            if (is_array($data)) {
+                $this->write(print_r($data, true));
             } else {
                 $this->write($data);
             }
             $this->writeln('');
         }
     }
-
 
     /**
      * Write channels list
@@ -312,8 +321,8 @@ class CLI extends \Magento\Connect\Frontend
         $this->writeln("===================");
         $out = $data['byName'];
         ksort($out);
-        foreach($out as $k=>$v)   {
-            $this->printf ("%-20s %-20s\n", $k, $v);
+        foreach ($out as $k => $v) {
+            $this->printf("%-20s %-20s\n", $k, $v);
         }
     }
 
@@ -325,19 +334,19 @@ class CLI extends \Magento\Connect\Frontend
     public function writeInstalledList($data)
     {
         $totalCount = 0;
-        foreach($data['data'] as $channel=>$packages) {
+        foreach ($data['data'] as $channel => $packages) {
             $title = sprintf($data['channel-title'], $channel);
             $c = count($packages);
             $totalCount += $c;
-            if(!$c) {
+            if (!$c) {
                 continue;
             }
             $this->writeln($title);
-            foreach($packages as $name=>$row) {
-                $this->printf("%-20s %-20s\n", $name, $row['version']." ".$row['stability']);
+            foreach ($packages as $name => $row) {
+                $this->printf("%-20s %-20s\n", $name, $row['version'] . " " . $row['stability']);
             }
         }
-        if($totalCount === 0) {
+        if ($totalCount === 0) {
             $this->writeln("No installed packages");
         }
     }
@@ -351,8 +360,8 @@ class CLI extends \Magento\Connect\Frontend
     {
         $this->writeln("Connect commands available:");
         $this->writeln("===========================");
-        foreach ($data as $k=>$v) {
-            $this->printf ("%-20s %-20s\n", $k, $v['summary']);
+        foreach ($data as $k => $v) {
+            $this->printf("%-20s %-20s\n", $k, $v['summary']);
         }
     }
 
@@ -363,9 +372,9 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputConfig($data)
     {
-        foreach($data['data'] as $name=>$row) {
+        foreach ($data['data'] as $name => $row) {
             $value = $row['value'] === '' ? "<not set>" : strval($row['value']);
-            $this->printf("%-30s %-20s %-20s\n",  $row['prompt'], $name, $value);
+            $this->printf("%-30s %-20s %-20s\n", $row['prompt'], $name, $value);
         }
     }
 
@@ -377,7 +386,7 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputConfigVariable($key, $value)
     {
-        if($value === '') {
+        if ($value === '') {
             $value = '<not set>';
         }
         $this->writeln("Config variable '{$key}': {$value}");
@@ -390,9 +399,8 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function writeln($data = '')
     {
-        $this->write($data."\n");
+        $this->write($data . "\n");
     }
-
 
     /**
      * Get output, clear if needed
@@ -403,7 +411,7 @@ class CLI extends \Magento\Connect\Frontend
     public function getOutput($clearPrevious = true)
     {
         $out = $this->_output;
-        if($clearPrevious) {
+        if ($clearPrevious) {
             $this->_output = array();
         }
         return $out;
@@ -416,7 +424,7 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function write($data)
     {
-        if($this->isSilent()) {
+        if ($this->isSilent()) {
             return;
         }
         echo $data;
@@ -440,8 +448,8 @@ class CLI extends \Magento\Connect\Frontend
     {
         $out = "";
         $key = fgetc(STDIN);
-        while ($key!="\n") {
-            $out.= $key;
+        while ($key != "\n") {
+            $out .= $key;
             $key = fread(STDIN, 1);
         }
         return $out;
@@ -454,13 +462,11 @@ class CLI extends \Magento\Connect\Frontend
      */
     public function outputUpgrades($data)
     {
-        foreach($data['data'] as $chan => $packages) {
-            $this->writeln("Updates for ".$chan.": ");
-            foreach($packages as $name => $data) {
-                $this->writeln("  $name: {$data['from']} => {$data['to']}");
+        foreach ($data['data'] as $chan => $packages) {
+            $this->writeln("Updates for " . $chan . ": ");
+            foreach ($packages as $name => $data) {
+                $this->writeln("  {$name}: {$data['from']} => {$data['to']}");
             }
         }
     }
-
 }
-

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Writer\Csv;
 
 class AbstractWriterTest extends \PHPUnit_Framework_TestCase
@@ -40,19 +39,27 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->csvMock = $this->getMock('Magento\File\Csv');
 
-        $this->writer = $this->getMockForAbstractClass('Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter', [
-            'writer' => $this->csvMock,
-        ]);
+        $this->writer = $this->getMockForAbstractClass(
+            'Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter',
+            array('writer' => $this->csvMock)
+        );
     }
 
     public function testWrite()
     {
-        $options = ['report_filename' => 'some_filename'];
+        $options = array('report_filename' => 'some_filename');
         $configMock = $this->getMock('Magento\Tools\Dependency\Report\Data\ConfigInterface');
-        $preparedData = ['foo', 'baz', 'bar'];
+        $preparedData = array('foo', 'baz', 'bar');
 
-        $this->writer->expects($this->once())->method('prepareData')->with($configMock)
-            ->will($this->returnValue($preparedData));
+        $this->writer->expects(
+            $this->once()
+        )->method(
+            'prepareData'
+        )->with(
+            $configMock
+        )->will(
+            $this->returnValue($preparedData)
+        );
         $this->csvMock->expects($this->once())->method('saveData')->with($options['report_filename'], $preparedData);
 
         $this->writer->write($options, $configMock);
@@ -76,9 +83,9 @@ class AbstractWriterTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongOptionReportFilename()
     {
-        return [
-            [['report_filename' => '']],
-            [['there_are_no_report_filename' => 'some_name']],
-        ];
+        return array(
+            array(array('report_filename' => '')),
+            array(array('there_are_no_report_filename' => 'some_name'))
+        );
     }
 }

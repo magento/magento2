@@ -75,7 +75,10 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      */
     public function getLinks()
     {
-        $this->_purchased = $this->_purchasedFactory->create()->load($this->getItem()->getOrder()->getId(), 'order_id');
+        $this->_purchased = $this->_purchasedFactory->create()->load(
+            $this->getItem()->getOrder()->getId(),
+            'order_id'
+        );
         $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter('order_item_id', $this->getItem()->getId());
         $this->_purchased->setPurchasedItems($purchasedLinks);
 
@@ -99,11 +102,14 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      */
     public function getPurchasedLinkUrl($item)
     {
-        return $this->getUrl('downloadable/download/link', array(
-            'id'        => $item->getLinkHash(),
-            '_scope'    => $this->getOrder()->getStore(),
-            '_secure'   => true,
-            '_nosid'    => true
-        ));
+        return $this->getUrl(
+            'downloadable/download/link',
+            array(
+                'id' => $item->getLinkHash(),
+                '_scope' => $this->getOrder()->getStore(),
+                '_secure' => true,
+                '_nosid' => true
+            )
+        );
     }
 }

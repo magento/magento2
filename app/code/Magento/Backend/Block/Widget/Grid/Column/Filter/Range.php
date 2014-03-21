@@ -40,17 +40,36 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getHtml()
     {
-        $html = '<div class="range"><div class="range-line">'
-            . '<input type="text" name="' . $this->_getHtmlName()
-            . '[from]" id="'.$this->_getHtmlId() . '_from" placeholder="'
-            . __('From') . '" value="' . $this->getEscapedValue('from')
-            . '" class="input-text no-changes" '
-            . $this->getUiId('filter', $this->_getHtmlName(), 'from') . '/></div>';
-        $html .= '<div class="range-line">'
-            . '<input type="text" name="' . $this->_getHtmlName() . '[to]" id="'
-            . $this->_getHtmlId() . '_to" placeholder="'
-            . __('To') . '" value="' . $this->getEscapedValue('to') . '" class="input-text no-changes" '
-            . $this->getUiId('filter', $this->_getHtmlName(), 'to') . '/></div></div>';
+        $html = '<div class="range"><div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[from]" id="' .
+            $this->_getHtmlId() .
+            '_from" placeholder="' .
+            __(
+                'From'
+            ) . '" value="' . $this->getEscapedValue(
+                'from'
+            ) . '" class="input-text no-changes" ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'from'
+            ) . '/></div>';
+        $html .= '<div class="range-line">' .
+            '<input type="text" name="' .
+            $this->_getHtmlName() .
+            '[to]" id="' .
+            $this->_getHtmlId() .
+            '_to" placeholder="' .
+            __(
+                'To'
+            ) . '" value="' . $this->getEscapedValue(
+                'to'
+            ) . '" class="input-text no-changes" ' . $this->getUiId(
+                'filter',
+                $this->_getHtmlName(),
+                'to'
+            ) . '/></div></div>';
         return $html;
     }
 
@@ -58,15 +77,13 @@ class Range extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      * @param string|null $index
      * @return mixed
      */
-    public function getValue($index=null)
+    public function getValue($index = null)
     {
         if ($index) {
             return $this->getData('value', $index);
         }
         $value = $this->getData('value');
-        if ((isset($value['from']) && strlen($value['from']) > 0)
-            || (isset($value['to']) && strlen($value['to']) > 0)
-        ) {
+        if (isset($value['from']) && strlen($value['from']) > 0 || isset($value['to']) && strlen($value['to']) > 0) {
             return $value;
         }
         return null;

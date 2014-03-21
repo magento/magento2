@@ -97,9 +97,12 @@ class SidResolver implements SidResolverInterface
     public function getSid(SessionManagerInterface $session)
     {
         $sidKey = null;
-        if ($this->coreStoreConfig->getConfig(self::XML_PATH_USE_FRONTEND_SID)
-            && $this->request->getQuery($this->getSessionIdQueryParam($session), false)
-            && $this->urlBuilder->isOwnOriginUrl()
+        if ($this->coreStoreConfig->getConfig(
+            self::XML_PATH_USE_FRONTEND_SID
+        ) && $this->request->getQuery(
+            $this->getSessionIdQueryParam($session),
+            false
+        ) && $this->urlBuilder->isOwnOriginUrl()
         ) {
             $sidKey = $this->request->getQuery($this->getSessionIdQueryParam($session));
         }

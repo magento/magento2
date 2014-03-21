@@ -165,24 +165,25 @@ class Type extends \Magento\Core\Model\AbstractModel
      */
     public function createFromSkeleton(\Magento\Eav\Model\Form\Type $skeleton)
     {
-        $fieldsetCollection = $this->_fieldsetFactory->create()
-            ->getCollection()
-            ->addTypeFilter($skeleton)
-            ->setSortOrder();
-        $elementCollection = $this->_elementFactory->create()
-            ->getCollection()
-            ->addTypeFilter($skeleton)
-            ->setSortOrder();
+        $fieldsetCollection = $this->_fieldsetFactory->create()->getCollection()->addTypeFilter(
+            $skeleton
+        )->setSortOrder();
+        $elementCollection = $this->_elementFactory->create()->getCollection()->addTypeFilter(
+            $skeleton
+        )->setSortOrder();
 
         // copy fieldsets
         $fieldsetMap = array();
         foreach ($fieldsetCollection as $skeletonFieldset) {
-            $this->_fieldsetFactory->create()
-                ->setTypeId($this->getId())
-                ->setCode($skeletonFieldset->getCode())
-                ->setLabels($skeletonFieldset->getLabels())
-                ->setSortOrder($skeletonFieldset->getSortOrder())
-                ->save();
+            $this->_fieldsetFactory->create()->setTypeId(
+                $this->getId()
+            )->setCode(
+                $skeletonFieldset->getCode()
+            )->setLabels(
+                $skeletonFieldset->getLabels()
+            )->setSortOrder(
+                $skeletonFieldset->getSortOrder()
+            )->save();
             $fieldsetMap[$skeletonFieldset->getId()] = $this->_fieldsetFactory->create()->getId();
         }
 
@@ -192,11 +193,15 @@ class Type extends \Magento\Core\Model\AbstractModel
             if ($skeletonElement->getFieldsetId()) {
                 $fieldsetId = $fieldsetMap[$skeletonElement->getFieldsetId()];
             }
-            $this->_elementFactory->create()
-                ->setTypeId($this->getId())
-                ->setFieldsetId($fieldsetId)
-                ->setAttributeId($skeletonElement->getAttributeId())
-                ->setSortOrder($skeletonElement->getSortOrder());
+            $this->_elementFactory->create()->setTypeId(
+                $this->getId()
+            )->setFieldsetId(
+                $fieldsetId
+            )->setAttributeId(
+                $skeletonElement->getAttributeId()
+            )->setSortOrder(
+                $skeletonElement->getSortOrder()
+            );
         }
 
         return $this;

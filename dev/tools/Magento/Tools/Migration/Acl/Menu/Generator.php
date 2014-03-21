@@ -84,7 +84,6 @@ class Generator
      */
     protected $_fileManager;
 
-
     /**
      * @param string $basePath
      * @param string $validNodeTypes
@@ -104,14 +103,8 @@ class Generator
         $this->_validNodeTypes = $validNodeTypes;
         $this->_aclXPathToId = $aclXPathToId;
         $this->_updateNodes = array(
-            'add' => array(
-                'required' => true,
-                'attribute' => 'resource',
-            ),
-            'update' => array(
-                'required' => false,
-                'attribute' => 'resource',
-            ),
+            'add' => array('required' => true, 'attribute' => 'resource'),
+            'update' => array('required' => false, 'attribute' => 'resource')
         );
 
         $this->_isPreviewMode = $preview;
@@ -134,7 +127,7 @@ class Generator
     {
         if (null === $this->_menuFiles) {
             $pattern = $this->getEtcDirPattern() . 'adminhtml/menu.xml';
-            $this->_menuFiles = (glob($pattern));
+            $this->_menuFiles = glob($pattern);
         }
         return $this->_menuFiles;
     }
@@ -218,9 +211,7 @@ class Generator
      */
     public function buildXPath($menuId)
     {
-        $parents = $this->_menuIdMaps[$menuId]['parents'] ?
-            $this->_menuIdMaps[$menuId]['parents'] :
-            array();
+        $parents = $this->_menuIdMaps[$menuId]['parents'] ? $this->_menuIdMaps[$menuId]['parents'] : array();
         $resource = $this->_menuIdMaps[$menuId]['resource'];
         if (!$resource) {
             $parts = array();
@@ -269,10 +260,7 @@ class Generator
      */
     public function mapMenuToAcl()
     {
-        $output = array(
-            'mapped' => array(),
-            'not_mapped' => array(),
-        );
+        $output = array('mapped' => array(), 'not_mapped' => array());
         $aclPrefix = 'config/acl/resources/admin/';
         foreach ($this->_idToXPath as $menuId => $menuXPath) {
             $key = $aclPrefix . $menuXPath;
@@ -338,8 +326,12 @@ class Generator
                 if ($resource) {
                     $aclXPath = $aclPrefix . $resource;
                     if (false == array_key_exists($aclXPath, $this->_aclXPathToId)) {
-                        $errors[] = 'File: ' . $file . ' :: Menu: ' . $menuId
-                            . '. There is no ACL resource with XPath ' . $aclXPath;
+                        $errors[] = 'File: ' .
+                            $file .
+                            ' :: Menu: ' .
+                            $menuId .
+                            '. There is no ACL resource with XPath ' .
+                            $aclXPath;
                         continue;
                     }
                     $aclId = $this->_aclXPathToId[$aclXPath];
@@ -361,8 +353,13 @@ class Generator
      */
     protected function _isNodeValidToUpdate(\DOMNode $node)
     {
-        if (false == in_array($node->nodeType, $this->_validNodeTypes) ||
-            false == array_key_exists($node->nodeName, $this->_updateNodes)
+        if (false == in_array(
+            $node->nodeType,
+            $this->_validNodeTypes
+        ) || false == array_key_exists(
+            $node->nodeName,
+            $this->_updateNodes
+        )
         ) {
             return false;
         }

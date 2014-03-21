@@ -85,12 +85,12 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $this->_init('log_customer', 'log_id');
 
-        $this->_visitorTable        = $this->getTable('log_visitor');
-        $this->_visitorInfoTable    = $this->getTable('log_visitor_info');
-        $this->_urlTable            = $this->getTable('log_url');
-        $this->_urlInfoTable        = $this->getTable('log_url_info');
-        $this->_customerTable       = $this->getTable('log_customer');
-        $this->_quoteTable          = $this->getTable('log_quote');
+        $this->_visitorTable = $this->getTable('log_visitor');
+        $this->_visitorInfoTable = $this->getTable('log_visitor_info');
+        $this->_urlTable = $this->getTable('log_url');
+        $this->_urlInfoTable = $this->getTable('log_url_info');
+        $this->_customerTable = $this->getTable('log_customer');
+        $this->_quoteTable = $this->getTable('log_quote');
     }
 
     /**
@@ -106,22 +106,24 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
         if ($field == 'customer_id') {
             // load additional data by last login
-            $table  = $this->getMainTable();
-            $select
-                ->joinInner(
-                    array('lvt' => $this->_visitorTable),
-                    "lvt.visitor_id = {$table}.visitor_id",
-                    array('last_visit_at'))
-                ->joinInner(
-                    array('lvit' => $this->_visitorInfoTable),
-                    'lvt.visitor_id = lvit.visitor_id',
-                    array('http_referer', 'remote_addr'))
-                ->joinInner(
-                    array('luit' => $this->_urlInfoTable),
-                    'luit.url_id = lvt.last_url_id',
-                    array('url'))
-                ->order("{$table}.login_at DESC")
-                ->limit(1);
+            $table = $this->getMainTable();
+            $select->joinInner(
+                array('lvt' => $this->_visitorTable),
+                "lvt.visitor_id = {$table}.visitor_id",
+                array('last_visit_at')
+            )->joinInner(
+                array('lvit' => $this->_visitorInfoTable),
+                'lvt.visitor_id = lvit.visitor_id',
+                array('http_referer', 'remote_addr')
+            )->joinInner(
+                array('luit' => $this->_urlInfoTable),
+                'luit.url_id = lvt.last_url_id',
+                array('url')
+            )->order(
+                "{$table}.login_at DESC"
+            )->limit(
+                1
+            );
         }
         return $select;
     }

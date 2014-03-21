@@ -42,10 +42,8 @@ class DispatcherAsync implements DispatcherAsyncInterface
      * @param FactoryInterface $eventFactory
      * @param QueueWriterInterface $eventQueue
      */
-    public function __construct(
-        FactoryInterface $eventFactory,
-        QueueWriterInterface $eventQueue
-    ) {
+    public function __construct(FactoryInterface $eventFactory, QueueWriterInterface $eventQueue)
+    {
         $this->_eventFactory = $eventFactory;
         $this->_eventQueue = $eventQueue;
     }

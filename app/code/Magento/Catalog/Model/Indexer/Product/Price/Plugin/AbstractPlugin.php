@@ -33,9 +33,8 @@ abstract class AbstractPlugin
     /**
      * @param \Magento\Indexer\Model\IndexerInterface $indexer
      */
-    public function __construct(
-        \Magento\Indexer\Model\IndexerInterface $indexer
-    ) {
+    public function __construct(\Magento\Indexer\Model\IndexerInterface $indexer)
+    {
         $this->indexer = $indexer;
     }
 

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -87,13 +86,20 @@ class TemplateSelector extends \Magento\View\Element\Template
         $labelPart = $this->_resourceHelper->addLikeEscape($labelPart, array('position' => 'any'));
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $collection */
         $collection = $this->_setColFactory->create();
-        $collection->setEntityTypeFilter($entityType->getId())
-            ->addFieldToFilter('attribute_set_name', array('like' => $labelPart))
-            ->addFieldToSelect('attribute_set_id', 'id')
-            ->addFieldToSelect('attribute_set_name', 'label')
-            ->setOrder(
-                'attribute_set_name',
-                \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
+        $collection->setEntityTypeFilter(
+            $entityType->getId()
+        )->addFieldToFilter(
+            'attribute_set_name',
+            array('like' => $labelPart)
+        )->addFieldToSelect(
+            'attribute_set_id',
+            'id'
+        )->addFieldToSelect(
+            'attribute_set_name',
+            'label'
+        )->setOrder(
+            'attribute_set_name',
+            \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection::SORT_ORDER_ASC
         );
         return $collection->getData();
     }

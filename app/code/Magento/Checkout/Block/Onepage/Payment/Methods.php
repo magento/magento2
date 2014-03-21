@@ -101,7 +101,7 @@ class Methods extends \Magento\Payment\Block\Form\Container
      */
     public function getPaymentMethodFormHtml(\Magento\Payment\Model\MethodInterface $method)
     {
-         return $this->getChildHtml('payment.method.' . $method->getCode());
+        return $this->getChildHtml('payment.method.' . $method->getCode());
     }
 
     /**

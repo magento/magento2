@@ -84,7 +84,11 @@ class ToolbarEntry extends \Magento\Backend\Block\Template
     public function formatNotificationDate($dateString)
     {
         if (date('Ymd') == date('Ymd', strtotime($dateString))) {
-            return $this->formatTime($dateString, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT, false);
+            return $this->formatTime(
+                $dateString,
+                \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                false
+            );
         }
         return $this->formatDate($dateString, \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
     }

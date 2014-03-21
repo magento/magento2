@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <catalog>
             <navigation>
@@ -67,14 +67,6 @@
                 <time_format>12h</time_format>
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
-            <layered_navigation>
-                <price_range_calculation>auto</price_range_calculation>
-                <price_range_step>100</price_range_step>
-                <price_range_max_intervals>10</price_range_max_intervals>
-                <one_price_interval>0</one_price_interval>
-                <interval_division_limit>9</interval_division_limit>
-                <display_product_count>1</display_product_count>
-            </layered_navigation>
         </catalog>
         <system>
             <media_storage_configuration>

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Helper;
 
 /**
@@ -112,9 +111,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getReviewStatuses()
     {
         return array(
-            \Magento\Review\Model\Review::STATUS_APPROVED     => __('Approved'),
-            \Magento\Review\Model\Review::STATUS_PENDING      => __('Pending'),
-            \Magento\Review\Model\Review::STATUS_NOT_APPROVED => __('Not Approved'),
+            \Magento\Review\Model\Review::STATUS_APPROVED => __('Approved'),
+            \Magento\Review\Model\Review::STATUS_PENDING => __('Pending'),
+            \Magento\Review\Model\Review::STATUS_NOT_APPROVED => __('Not Approved')
         );
     }
 

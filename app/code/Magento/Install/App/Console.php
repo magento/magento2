@@ -87,7 +87,7 @@ class Console implements \Magento\LauncherInterface
     ) {
         $this->rootDirectory = $filesystem->getDirectoryRead(\Magento\App\Filesystem::ROOT_DIR);
         $this->_loader = $loader;
-        $this->_state  = $state;
+        $this->_state = $state;
         $this->_installerFactory = $installerFactory;
         $this->_arguments = $this->_buildInitArguments($arguments);
         $this->_output = $output;
@@ -127,10 +127,13 @@ class Console implements \Magento\LauncherInterface
      */
     protected function _handleInstall(\Magento\Install\Model\Installer\Console $installer)
     {
-        if (isset($this->_arguments['config'])
-            && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($this->_arguments['config']))
+        if (isset(
+            $this->_arguments['config']
+        ) && $this->rootDirectory->isExist(
+            $this->rootDirectory->getRelativePath($this->_arguments['config'])
+        )
         ) {
-            $config = (array) include($this->_arguments['config']);
+            $config = (array)include $this->_arguments['config'];
             $this->_arguments = array_merge((array)$config, $this->_arguments);
         }
         $isUninstallMode = isset($this->_arguments['uninstall']);
@@ -174,8 +177,12 @@ class Console implements \Magento\LauncherInterface
             $this->_output->readableOutput($this->_output->alignArrayKeys($installer->getRequiredParams()));
             $this->_output->readableOutput(PHP_EOL . 'Optional parameters:');
             $this->_output->readableOutput($this->_output->alignArrayKeys($installer->getOptionalParams()));
-            $this->_output->readableOutput(PHP_EOL . 'Flag values are considered positive if set to 1, y, true or yes.'
-                . 'Any other value is considered as negative.' . PHP_EOL);
+            $this->_output->readableOutput(
+                PHP_EOL .
+                'Flag values are considered positive if set to 1, y, true or yes.' .
+                'Any other value is considered as negative.' .
+                PHP_EOL
+            );
         } else {
             $this->_handleInstall($installer);
         }

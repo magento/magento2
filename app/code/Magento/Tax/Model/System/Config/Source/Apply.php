@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\System\Config\Source;
 
 class Apply implements \Magento\Option\ArrayInterface
@@ -39,14 +38,8 @@ class Apply implements \Magento\Option\ArrayInterface
     public function __construct()
     {
         $this->_options = array(
-            array(
-                'value' => 0,
-                'label' => __('Before Discount')
-            ),
-            array(
-                'value' => 1,
-                'label' => __('After Discount')
-            ),
+            array('value' => 0, 'label' => __('Before Discount')),
+            array('value' => 1, 'label' => __('After Discount'))
         );
     }
 

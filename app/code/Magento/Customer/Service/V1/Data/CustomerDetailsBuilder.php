@@ -66,20 +66,20 @@ class CustomerDetailsBuilder extends AbstractObjectBuilder
      */
     protected function _setDataValues(array $data)
     {
-        $newData = [];
+        $newData = array();
         if (isset($data[CustomerDetails::KEY_CUSTOMER])) {
-            $newData[CustomerDetails::KEY_CUSTOMER] = $this->_customerBuilder
-                ->populateWithArray($data[CustomerDetails::KEY_CUSTOMER])
-                ->create();
+            $newData[CustomerDetails::KEY_CUSTOMER] = $this->_customerBuilder->populateWithArray(
+                $data[CustomerDetails::KEY_CUSTOMER]
+            )->create();
         }
 
         if (isset($data[CustomerDetails::KEY_ADDRESSES])) {
-            $newData[CustomerDetails::KEY_ADDRESSES] = [];
+            $newData[CustomerDetails::KEY_ADDRESSES] = array();
             $addresses = $data[CustomerDetails::KEY_ADDRESSES];
             foreach ($addresses as $address) {
-                $newData[CustomerDetails::KEY_ADDRESSES][] = $this->_addressBuilder
-                    ->populateWithArray($address)
-                    ->create();
+                $newData[CustomerDetails::KEY_ADDRESSES][] = $this->_addressBuilder->populateWithArray(
+                    $address
+                )->create();
             }
         }
 

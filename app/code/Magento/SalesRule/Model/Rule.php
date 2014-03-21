@@ -26,6 +26,7 @@
 namespace Magento\SalesRule\Model;
 
 use Magento\Sales\Model\Quote\Address;
+
 /**
  * Shopping Cart Rule data model
  *
@@ -89,17 +90,24 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * Coupon types
      */
     const COUPON_TYPE_NO_COUPON = 1;
-    const COUPON_TYPE_SPECIFIC  = 2;
-    const COUPON_TYPE_AUTO      = 3;
+
+    const COUPON_TYPE_SPECIFIC = 2;
+
+    const COUPON_TYPE_AUTO = 3;
 
     /**
      * Rule type actions
      */
     const TO_PERCENT_ACTION = 'to_percent';
+
     const BY_PERCENT_ACTION = 'by_percent';
-    const TO_FIXED_ACTION   = 'to_fixed';
-    const BY_FIXED_ACTION   = 'by_fixed';
+
+    const TO_FIXED_ACTION = 'to_fixed';
+
+    const BY_FIXED_ACTION = 'by_fixed';
+
     const CART_FIXED_ACTION = 'cart_fixed';
+
     const BUY_X_GET_Y_ACTION = 'buy_x_get_y';
 
     /**
@@ -264,16 +272,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _afterSave()
     {
         $couponCode = trim($this->getCouponCode());
-        if (strlen($couponCode)
-            && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC
-            && !$this->getUseAutoGeneration()
+        if (strlen(
+            $couponCode
+        ) && $this->getCouponType() == self::COUPON_TYPE_SPECIFIC && !$this->getUseAutoGeneration()
         ) {
-            $this->getPrimaryCoupon()
-                ->setCode($couponCode)
-                ->setUsageLimit($this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null)
-                ->setUsagePerCustomer($this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null)
-                ->setExpirationDate($this->getToDate())
-                ->save();
+            $this->getPrimaryCoupon()->setCode(
+                $couponCode
+            )->setUsageLimit(
+                $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
+            )->setUsagePerCustomer(
+                $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
+            )->setExpirationDate(
+                $this->getToDate()
+            )->save();
         } else {
             $this->getPrimaryCoupon()->delete();
         }
@@ -432,12 +443,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         if ($this->_couponTypes === null) {
             $this->_couponTypes = array(
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
-                \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC  => __('Specific Coupon'),
+                \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon')
             );
-            $transport = new \Magento\Object(array(
-                'coupon_types'                => $this->_couponTypes,
-                'is_coupon_type_auto_visible' => false
-            ));
+            $transport = new \Magento\Object(
+                array('coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false)
+            );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', array('transport' => $transport));
             $this->_couponTypes = $transport->getCouponTypes();
             if ($transport->getIsCouponTypeAutoVisible()) {
@@ -465,11 +475,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         }
         /** @var \Magento\SalesRule\Model\Coupon $coupon */
         $coupon = $this->_couponFactory->create();
-        $coupon->setRule($this)
-            ->setIsPrimary(false)
-            ->setUsageLimit($this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null)
-            ->setUsagePerCustomer($this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null)
-            ->setExpirationDate($this->getToDate());
+        $coupon->setRule(
+            $this
+        )->setIsPrimary(
+            false
+        )->setUsageLimit(
+            $this->getUsesPerCoupon() ? $this->getUsesPerCoupon() : null
+        )->setUsagePerCustomer(
+            $this->getUsesPerCustomer() ? $this->getUsesPerCustomer() : null
+        )->setExpirationDate(
+            $this->getToDate()
+        );
 
         $couponCode = self::getCouponCodeGenerator()->generateCode();
         $coupon->setCode($couponCode);
@@ -486,9 +502,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                         throw $e;
                     }
                     $coupon->setCode(
-                        $couponCode .
-                        self::getCouponCodeGenerator()->getDelimiter() .
-                        sprintf('%04u', rand(0, 9999))
+                        $couponCode . self::getCouponCodeGenerator()->getDelimiter() . sprintf('%04u', rand(0, 9999))
                     );
                     continue;
                 }
@@ -547,8 +561,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param Address $address
      * @return string
      */
-    private function _getAddressId($address) {
-        if($address instanceof Address) {
+    private function _getAddressId($address)
+    {
+        if ($address instanceof Address) {
             return $address->getId();
         }
         return $address;
@@ -571,7 +586,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @return string
      * @deprecated after 1.6.2.0
      */
-    public function toString($format='')
+    public function toString($format = '')
     {
         return '';
     }

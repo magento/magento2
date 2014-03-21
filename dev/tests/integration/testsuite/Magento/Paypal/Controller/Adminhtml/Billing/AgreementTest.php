@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Controller\Adminhtml\Billing;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -45,11 +44,19 @@ class AgreementTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/paypal/billing_agreement/grid');
         $response = $this->getResponse();
 
-        $this->assertSelectCount('button[type="button"][title="Reset Filter"]', 1, $response->getBody(),
-            "Response for billing agreement grid doesn't contain 'Reset Filter' button");
+        $this->assertSelectCount(
+            'button[type="button"][title="Reset Filter"]',
+            1,
+            $response->getBody(),
+            "Response for billing agreement grid doesn't contain 'Reset Filter' button"
+        );
 
-        $this->assertSelectCount('[id="billing_agreements"]', 1, $response->getBody(),
-            "Response for billing agreement grid doesn't contain grid");
+        $this->assertSelectCount(
+            '[id="billing_agreements"]',
+            1,
+            $response->getBody(),
+            "Response for billing agreement grid doesn't contain grid"
+        );
     }
 
     /**
@@ -59,16 +66,26 @@ class AgreementTest extends \Magento\Backend\Utility\Controller
     public function testCustomerInfoTabs()
     {
         /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
-        $billingAgreementCollection = Bootstrap::getObjectManager()
-            ->create('Magento\Paypal\Model\Resource\Billing\Agreement\Collection');
+        $billingAgreementCollection = Bootstrap::getObjectManager()->create(
+            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+        );
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);
 
-        $this->assertSelectCount('a[name="billing_agreement_info"]', 1, $this->getResponse()->getBody(),
-            "Response for billing agreement info doesn't contain billing agreement info tab");
+        $this->assertSelectCount(
+            'a[name="billing_agreement_info"]',
+            1,
+            $this->getResponse()->getBody(),
+            "Response for billing agreement info doesn't contain billing agreement info tab"
+        );
 
-        $this->assertSelectRegExp('a', '/customer\@example.com/', 1, $this->getResponse()->getBody(),
-            "Response for billing agreement info doesn't contain Customer info");
+        $this->assertSelectRegExp(
+            'a',
+            '/customer\@example.com/',
+            1,
+            $this->getResponse()->getBody(),
+            "Response for billing agreement info doesn't contain Customer info"
+        );
     }
 
     /**
@@ -78,9 +95,18 @@ class AgreementTest extends \Magento\Backend\Utility\Controller
     public function testCustomerGrid()
     {
         $this->dispatch('backend/paypal/billing_agreement/customergrid/id/1');
-        $this->assertSelectCount('td[class="col-reference_id"]', 1, $this->getResponse()->getBody(),
-            "Response for billing agreement orders doesn't contain billing agreement customers grid");
-        $this->assertSelectRegExp('td', '/REF-ID-TEST-678/', 1, $this->getResponse()->getBody(),
-            "Response for billing agreement info doesn't contain reference ID");
+        $this->assertSelectCount(
+            'td[class="col-reference_id"]',
+            1,
+            $this->getResponse()->getBody(),
+            "Response for billing agreement orders doesn't contain billing agreement customers grid"
+        );
+        $this->assertSelectRegExp(
+            'td',
+            '/REF-ID-TEST-678/',
+            1,
+            $this->getResponse()->getBody(),
+            "Response for billing agreement info doesn't contain reference ID"
+        );
     }
 }

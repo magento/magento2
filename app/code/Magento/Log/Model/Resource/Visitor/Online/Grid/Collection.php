@@ -74,5 +74,4 @@ class Collection extends \Magento\Log\Model\Resource\Visitor\Online\Collection
         $this->addCustomerData();
         return $this;
     }
-
 }

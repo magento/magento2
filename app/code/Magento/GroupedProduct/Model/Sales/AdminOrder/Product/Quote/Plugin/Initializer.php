@@ -30,7 +30,6 @@
  */
 namespace Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
-
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 class Initializer

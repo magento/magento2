@@ -38,9 +38,13 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_requestMock->expects($this->any())
-            ->method('getDistroBaseUrl')
-            ->will($this->returnValue('http://localhost/'));
+        $this->_requestMock->expects(
+            $this->any()
+        )->method(
+            'getDistroBaseUrl'
+        )->will(
+            $this->returnValue('http://localhost/')
+        );
         $this->_model = new \Magento\Core\Model\Config\Scope\Processor\Placeholder($this->_requestMock);
     }
 
@@ -50,12 +54,12 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
             'web' => array(
                 'unsecure' => array(
                     'base_url' => 'http://localhost/',
-                    'base_link_url' => '{{unsecure_base_url}}website/de',
+                    'base_link_url' => '{{unsecure_base_url}}website/de'
                 ),
                 'secure' => array(
                     'base_url' => 'https://localhost/',
-                    'base_link_url' => '{{secure_base_url}}website/de',
-                ),
+                    'base_link_url' => '{{secure_base_url}}website/de'
+                )
             ),
             'path' => 'value',
             'some_url' => '{{base_url}}some'

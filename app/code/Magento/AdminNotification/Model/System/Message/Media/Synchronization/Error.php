@@ -23,8 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message\Media\Synchronization;
 
-class Error
-    extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
+class Error extends \Magento\AdminNotification\Model\System\Message\Media\AbstractSynchronization
 {
     /**
      * Message identity
@@ -51,6 +50,8 @@ class Error
      */
     public function getText()
     {
-        return __('One or more media files failed to be synchronized during the media storages synchronization process. Refer to the log file for details.');
+        return __(
+            'One or more media files failed to be synchronized during the media storages synchronization process. Refer to the log file for details.'
+        );
     }
 }

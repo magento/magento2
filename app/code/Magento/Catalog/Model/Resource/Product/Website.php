@@ -67,17 +67,14 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function removeProducts($websiteIds, $productIds)
     {
-        if (!is_array($websiteIds)
-            || !is_array($productIds)
-            || count($websiteIds) == 0
-            || count($productIds) == 0) {
+        if (!is_array($websiteIds) || !is_array($productIds) || count($websiteIds) == 0 || count($productIds) == 0) {
             return $this;
         }
 
-        $adapter   = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
         $whereCond = array(
             $adapter->quoteInto('website_id IN(?)', $websiteIds),
-           $adapter->quoteInto('product_id IN(?)', $productIds)
+            $adapter->quoteInto('product_id IN(?)', $productIds)
         );
         $whereCond = join(' AND ', $whereCond);
 
@@ -103,10 +100,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function addProducts($websiteIds, $productIds)
     {
-        if (!is_array($websiteIds)
-            || !is_array($productIds)
-            || count($websiteIds) == 0
-            || count($productIds) == 0) {
+        if (!is_array($websiteIds) || !is_array($productIds) || count($websiteIds) == 0 || count($productIds) == 0) {
             return $this;
         }
 
@@ -120,10 +114,10 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
                     if (!$productId) {
                         continue;
                     }
-                    $this->_getWriteAdapter()->insert($this->getMainTable(), array(
-                        'product_id' => (int) $productId,
-                        'website_id' => (int) $websiteId
-                    ));
+                    $this->_getWriteAdapter()->insert(
+                        $this->getMainTable(),
+                        array('product_id' => (int)$productId, 'website_id' => (int)$websiteId)
+                    );
                 }
             }
             $this->_getWriteAdapter()->commit();
@@ -142,10 +136,14 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getWebsites($productIds)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), array('product_id', 'website_id'))
-            ->where('product_id IN (?)', $productIds);
-        $rowset  = $this->_getReadAdapter()->fetchAll($select);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            array('product_id', 'website_id')
+        )->where(
+            'product_id IN (?)',
+            $productIds
+        );
+        $rowset = $this->_getReadAdapter()->fetchAll($select);
 
         $result = array();
         foreach ($rowset as $row) {

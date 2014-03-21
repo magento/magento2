@@ -43,19 +43,19 @@ class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function render(\Magento\Object $row)
     {
         $str = '';
-        
+
         if ($row->getTemplateSenderName()) {
             $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
-        }        
-        
+        }
+
         if ($row->getTemplateSenderEmail()) {
             $str .= '[' . $row->getTemplateSenderEmail() . ']';
-        }        
-        
+        }
+
         if ($str == '') {
             $str .= '---';
         }
-            
+
         return $str;
     }
 }

@@ -35,10 +35,10 @@ class Tax extends AbstractTotal
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
-        $totalTax       = 0;
-        $baseTotalTax   = 0;
-        $totalHiddenTax      = 0;
-        $baseTotalHiddenTax  = 0;
+        $totalTax = 0;
+        $baseTotalTax = 0;
+        $totalHiddenTax = 0;
+        $baseTotalHiddenTax = 0;
 
         $order = $invoice->getOrder();
 
@@ -55,15 +55,15 @@ class Tax extends AbstractTotal
                 /**
                  * Resolve rounding problems
                  */
-                $tax            = $orderItem->getTaxAmount() - $orderItem->getTaxInvoiced();
-                $baseTax        = $orderItem->getBaseTaxAmount() - $orderItem->getBaseTaxInvoiced();
-                $hiddenTax      = $orderItem->getHiddenTaxAmount() - $orderItem->getHiddenTaxInvoiced();
-                $baseHiddenTax  = $orderItem->getBaseHiddenTaxAmount() - $orderItem->getBaseHiddenTaxInvoiced();
+                $tax = $orderItem->getTaxAmount() - $orderItem->getTaxInvoiced();
+                $baseTax = $orderItem->getBaseTaxAmount() - $orderItem->getBaseTaxInvoiced();
+                $hiddenTax = $orderItem->getHiddenTaxAmount() - $orderItem->getHiddenTaxInvoiced();
+                $baseHiddenTax = $orderItem->getBaseHiddenTaxAmount() - $orderItem->getBaseHiddenTaxInvoiced();
                 if (!$item->isLast()) {
-                    $availableQty  = $orderItemQty - $orderItem->getQtyInvoiced();
-                    $tax           = $invoice->roundPrice($tax / $availableQty * $item->getQty());
-                    $baseTax       = $invoice->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
-                    $hiddenTax     = $invoice->roundPrice($hiddenTax / $availableQty * $item->getQty());
+                    $availableQty = $orderItemQty - $orderItem->getQtyInvoiced();
+                    $tax = $invoice->roundPrice($tax / $availableQty * $item->getQty());
+                    $baseTax = $invoice->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
+                    $hiddenTax = $invoice->roundPrice($hiddenTax / $availableQty * $item->getQty());
                     $baseHiddenTax = $invoice->roundPrice($baseHiddenTax / $availableQty * $item->getQty(), 'base');
                 }
 
@@ -80,31 +80,35 @@ class Tax extends AbstractTotal
         }
 
         if ($this->_canIncludeShipping($invoice)) {
-            $totalTax           += $order->getShippingTaxAmount();
-            $baseTotalTax       += $order->getBaseShippingTaxAmount();
-            $totalHiddenTax     += $order->getShippingHiddenTaxAmount();
+            $totalTax += $order->getShippingTaxAmount();
+            $baseTotalTax += $order->getBaseShippingTaxAmount();
+            $totalHiddenTax += $order->getShippingHiddenTaxAmount();
             $baseTotalHiddenTax += $order->getBaseShippingHiddenTaxAmnt();
             $invoice->setShippingTaxAmount($order->getShippingTaxAmount());
             $invoice->setBaseShippingTaxAmount($order->getBaseShippingTaxAmount());
             $invoice->setShippingHiddenTaxAmount($order->getShippingHiddenTaxAmount());
             $invoice->setBaseShippingHiddenTaxAmnt($order->getBaseShippingHiddenTaxAmnt());
         }
-        $allowedTax     = $order->getTaxAmount() - $order->getTaxInvoiced();
-        $allowedBaseTax = $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced();;
-        $allowedHiddenTax     = $order->getHiddenTaxAmount() + $order->getShippingHiddenTaxAmount()
-            - $order->getHiddenTaxInvoiced() - $order->getShippingHiddenTaxInvoiced();
-        $allowedBaseHiddenTax = $order->getBaseHiddenTaxAmount() + $order->getBaseShippingHiddenTaxAmnt()
-            - $order->getBaseHiddenTaxInvoiced() - $order->getBaseShippingHiddenTaxInvoiced();
+        $allowedTax = $order->getTaxAmount() - $order->getTaxInvoiced();
+        $allowedBaseTax = $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced();
+        $allowedHiddenTax = $order->getHiddenTaxAmount() +
+            $order->getShippingHiddenTaxAmount() -
+            $order->getHiddenTaxInvoiced() -
+            $order->getShippingHiddenTaxInvoiced();
+        $allowedBaseHiddenTax = $order->getBaseHiddenTaxAmount() +
+            $order->getBaseShippingHiddenTaxAmnt() -
+            $order->getBaseHiddenTaxInvoiced() -
+            $order->getBaseShippingHiddenTaxInvoiced();
 
         if ($invoice->isLast()) {
-            $totalTax           = $allowedTax;
-            $baseTotalTax       = $allowedBaseTax;
-            $totalHiddenTax     = $allowedHiddenTax;
+            $totalTax = $allowedTax;
+            $baseTotalTax = $allowedBaseTax;
+            $totalHiddenTax = $allowedHiddenTax;
             $baseTotalHiddenTax = $allowedBaseHiddenTax;
         } else {
-            $totalTax           = min($allowedTax, $totalTax);
-            $baseTotalTax       = min($allowedBaseTax, $baseTotalTax);
-            $totalHiddenTax     = min($allowedHiddenTax, $totalHiddenTax);
+            $totalTax = min($allowedTax, $totalTax);
+            $baseTotalTax = min($allowedBaseTax, $baseTotalTax);
+            $totalHiddenTax = min($allowedHiddenTax, $totalHiddenTax);
             $baseTotalHiddenTax = min($allowedBaseHiddenTax, $baseTotalHiddenTax);
         }
 

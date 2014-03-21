@@ -74,9 +74,7 @@ class Website extends \Magento\Core\Model\AbstractModel
         try {
             $this->_getResource()->removeProducts($websiteIds, $productIds);
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(
-                __('Something went wrong removing products from the websites.')
-            );
+            throw new \Magento\Core\Exception(__('Something went wrong removing products from the websites.'));
         }
         return $this;
     }
@@ -94,9 +92,7 @@ class Website extends \Magento\Core\Model\AbstractModel
         try {
             $this->_getResource()->addProducts($websiteIds, $productIds);
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(
-                __('Something went wrong adding products to websites.')
-            );
+            throw new \Magento\Core\Exception(__('Something went wrong adding products to websites.'));
         }
         return $this;
     }

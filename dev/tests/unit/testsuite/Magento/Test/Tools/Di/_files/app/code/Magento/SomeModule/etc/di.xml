@@ -23,7 +23,7 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <preference for="Magento\Core\Model\Config\InvalidatorInterface" type="Magento\Core\Model\Config\Invalidator\Proxy" />
     <preference for="Magento\App\CacheInterface" type="Magento\App\Cache\Proxy" />
@@ -34,7 +34,7 @@
         <arguments>
             <argument name="proxy" xsi:type="object">\Magento\SomeModule\Model\Element\Proxy</argument>
             <argument name="array" xsi:type="array">
-                <item xsi:type="object">\Magento\SomeModule\Model\Nested\Element\Proxy</item>
+                <item name="proxy" xsi:type="object">\Magento\SomeModule\Model\Nested\Element\Proxy</item>
             </argument>
         </arguments>
     </type>

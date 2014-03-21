@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
 class InfoTest extends \Magento\Backend\Utility\Controller
@@ -36,16 +35,25 @@ class InfoTest extends \Magento\Backend\Utility\Controller
     public function testCustomerGridAction()
     {
         /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
-        $billingAgreementCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Paypal\Model\Resource\Billing\Agreement\Collection')
-            ->load();
+        $billingAgreementCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+        )->load();
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);
 
-        $this->assertSelectCount('a[name="billing_agreement_info"]', 1, $this->getResponse()->getBody(),
-           'Response for billing agreement info doesn\'t contain billing agreement info tab');
+        $this->assertSelectCount(
+            'a[name="billing_agreement_info"]',
+            1,
+            $this->getResponse()->getBody(),
+            'Response for billing agreement info doesn\'t contain billing agreement info tab'
+        );
 
-        $this->assertSelectRegExp('a', '/customer\@example.com/', 1, $this->getResponse()->getBody(),
-            'Response for billing agreement info doesn\'t contain Customer info');
+        $this->assertSelectRegExp(
+            'a',
+            '/customer\@example.com/',
+            1,
+            $this->getResponse()->getBody(),
+            'Response for billing agreement info doesn\'t contain Customer info'
+        );
     }
 }

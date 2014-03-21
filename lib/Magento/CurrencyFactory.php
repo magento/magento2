@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento;
 
 class CurrencyFactory
@@ -40,10 +39,8 @@ class CurrencyFactory
      * @param \Magento\ObjectManager $objectManager
      * @param string $instanceName
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager,
-        $instanceName = 'Magento\CurrencyInterface'
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManager, $instanceName = 'Magento\CurrencyInterface')
+    {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
     }

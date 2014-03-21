@@ -61,7 +61,7 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     protected function _getOptions()
     {
         $options = $this->_collectionFactory->load()->toOptionArray();
-        array_unshift($options, array('value'=>'', 'label'=>__('All countries')));
+        array_unshift($options, array('value' => '', 'label' => __('All countries')));
         return $options;
     }
 }

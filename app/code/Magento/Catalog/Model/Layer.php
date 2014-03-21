@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -52,28 +51,7 @@ class Layer extends \Magento\Object
      *
      * @var \Magento\Registry
      */
-    protected $_coreRegistry = null;
-
-    /**
-     * Customer session
-     *
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
-     * Catalog config
-     *
-     * @var \Magento\Catalog\Model\Config
-     */
-    protected $_catalogConfig;
-
-    /**
-     * Catalog product visibility
-     *
-     * @var \Magento\Catalog\Model\Product\Visibility
-     */
-    protected $_catalogProductVisibility;
+    protected $registry = null;
 
     /**
      * Store manager
@@ -111,29 +89,38 @@ class Layer extends \Magento\Object
     protected $_layerStateFactory;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
-     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
+     * @var \Magento\Catalog\Model\Layer\ItemCollectionProviderInterface
+     */
+    protected $collectionProvider;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer\Category\StateKey
+     */
+    protected $stateKeyGenerator;
+
+    /**
+     * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter
+     */
+    protected $collectionFilter;
+
+    /**
+     * @param Layer\ContextInterface $context
+     * @param Layer\StateFactory $layerStateFactory
+     * @param CategoryFactory $categoryFactory
+     * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param Resource\Product $catalogProduct
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Registry $coreRegistry
+     * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
+        \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Registry $coreRegistry,
+        \Magento\Registry $registry,
         array $data = array()
     ) {
         $this->_layerStateFactory = $layerStateFactory;
@@ -141,10 +128,10 @@ class Layer extends \Magento\Object
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
-        $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_catalogConfig = $catalogConfig;
-        $this->_customerSession = $customerSession;
-        $this->_coreRegistry = $coreRegistry;
+        $this->registry = $registry;
+        $this->collectionProvider = $context->getCollectionProvider();
+        $this->stateKeyGenerator = $context->getStateKey();
+        $this->collectionFilter = $context->getCollectionFilter();
         parent::__construct($data);
     }
 
@@ -155,28 +142,10 @@ class Layer extends \Magento\Object
      */
     public function getStateKey()
     {
-        if ($this->_stateKey === null) {
-            $this->_stateKey = 'STORE_' . $this->_storeManager->getStore()->getId()
-                . '_CAT_' . $this->getCurrentCategory()->getId()
-                . '_CUSTGROUP_' . $this->_customerSession->getCustomerGroupId();
+        if (!$this->_stateKey) {
+            $this->_stateKey = $this->stateKeyGenerator->toString($this->getCurrentCategory());
         }
-
         return $this->_stateKey;
-    }
-
-    /**
-     * Get default tags for current layer state
-     *
-     * @param   array $additionalTags
-     * @return  array
-     */
-    public function getStateTags(array $additionalTags = array())
-    {
-        $additionalTags = array_merge($additionalTags, array(
-            \Magento\Catalog\Model\Category::CACHE_TAG.$this->getCurrentCategory()->getId()
-        ));
-
-        return $additionalTags;
     }
 
     /**
@@ -189,7 +158,7 @@ class Layer extends \Magento\Object
         if (isset($this->_productCollections[$this->getCurrentCategory()->getId()])) {
             $collection = $this->_productCollections[$this->getCurrentCategory()->getId()];
         } else {
-            $collection = $this->getCurrentCategory()->getProductCollection();
+            $collection = $this->collectionProvider->getCollection($this->getCurrentCategory());
             $this->prepareProductCollection($collection);
             $this->_productCollections[$this->getCurrentCategory()->getId()] = $collection;
         }
@@ -205,15 +174,7 @@ class Layer extends \Magento\Object
      */
     public function prepareProductCollection($collection)
     {
-        $collection
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-            ->addMinimalPrice()
-            ->addFinalPrice()
-            ->addTaxPercents()
-            ->addUrlRewrite($this->getCurrentCategory()->getId())
-            ->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
-
-        return $this;
+        $this->collectionFilter->filter($collection, $this->getCurrentCategory());
     }
 
     /**
@@ -228,11 +189,10 @@ class Layer extends \Magento\Object
     {
         $stateSuffix = '';
         foreach ($this->getState()->getFilters() as $filterItem) {
-            $stateSuffix .= '_' . $filterItem->getFilter()->getRequestVar()
-                . '_' . $filterItem->getValueString();
+            $stateSuffix .= '_' . $filterItem->getFilter()->getRequestVar() . '_' . $filterItem->getValueString();
         }
         if (!empty($stateSuffix)) {
-            $this->_stateKey = $this->getStateKey().$stateSuffix;
+            $this->_stateKey = $this->getStateKey() . $stateSuffix;
         }
 
         return $this;
@@ -248,13 +208,12 @@ class Layer extends \Magento\Object
     {
         $category = $this->getData('current_category');
         if (is_null($category)) {
-            $category = $this->_coreRegistry->registry('current_category');
+            $category = $this->registry->registry('current_category');
             if ($category) {
                 $this->setData('current_category', $category);
             } else {
                 /** @var \Magento\Catalog\Model\Category $category */
-                $category = $this->_categoryFactory->create()
-                    ->load($this->getCurrentStore()->getRootCategoryId());
+                $category = $this->_categoryFactory->create()->load($this->getCurrentStore()->getRootCategoryId());
                 $this->setData('current_category', $category);
             }
         }
@@ -275,7 +234,9 @@ class Layer extends \Magento\Object
             $category = $this->_categoryFactory->create()->load($category);
         }
         if (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Core\Exception(__('The category must be an instance of \Magento\Catalog\Model\Category.'));
+            throw new \Magento\Core\Exception(
+                __('The category must be an instance of \Magento\Catalog\Model\Category.')
+            );
         }
         if (!$category->getId()) {
             throw new \Magento\Core\Exception(__('Please correct the category.'));
@@ -296,53 +257,6 @@ class Layer extends \Magento\Object
     public function getCurrentStore()
     {
         return $this->_storeManager->getStore();
-    }
-
-    /**
-     * Get collection of all filterable attributes for layer products set
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
-     */
-    public function getFilterableAttributes()
-    {
-        $setIds = $this->_getSetIds();
-        if (!$setIds) {
-            return array();
-        }
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $collection = $this->_attributeCollectionFactory->create();
-        $collection->setItemObjectClass('Magento\Catalog\Model\Resource\Eav\Attribute')
-            ->setAttributeSetFilter($setIds)
-            ->addStoreLabel($this->_storeManager->getStore()->getId())
-            ->setOrder('position', 'ASC');
-        $collection = $this->_prepareAttributeCollection($collection);
-        $collection->load();
-
-        return $collection;
-    }
-
-    /**
-     * Prepare attribute for use in layered navigation
-     *
-     * @param   \Magento\Eav\Model\Entity\Attribute $attribute
-     * @return  \Magento\Eav\Model\Entity\Attribute
-     */
-    protected function _prepareAttribute($attribute)
-    {
-        $this->_catalogProduct->getAttribute($attribute);
-        return $attribute;
-    }
-
-    /**
-     * Add filters to attribute collection
-     *
-     * @param   \Magento\Catalog\Model\Resource\Attribute\Collection $collection
-     * @return  \Magento\Catalog\Model\Resource\Attribute\Collection
-     */
-    protected function _prepareAttributeCollection($collection)
-    {
-        $collection->addIsFilterableFilter();
-        return $collection;
     }
 
     /**

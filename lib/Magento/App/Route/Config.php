@@ -90,7 +90,7 @@ class Config implements ConfigInterface
         if (isset($this->_routes[$scope])) {
             return $this->_routes[$scope];
         }
-        $cacheId = $scope . '::'  . $this->_cacheId;
+        $cacheId = $scope . '::' . $this->_cacheId;
         $cachedRoutes = unserialize($this->_cache->load($cacheId));
         if (is_array($cachedRoutes)) {
             $this->_routes[$scope] = $cachedRoutes;

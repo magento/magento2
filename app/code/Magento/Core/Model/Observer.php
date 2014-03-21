@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 /**
@@ -61,7 +60,7 @@ class Observer
     /**
      * @var \Magento\Core\Model\Theme\Registration
      */
-    protected  $_registration;
+    protected $_registration;
 
     /**
      * @var \Magento\Logger
@@ -142,10 +141,9 @@ class Observer
             try {
                 $service = $themeFile->getCustomizationService();
                 if ($service instanceof \Magento\View\Design\Theme\Customization\FileAssetInterface) {
-                    $asset = $this->_assetFileFactory->create(array(
-                        'file'        => $themeFile->getFullPath(),
-                        'contentType' => $service->getContentType()
-                    ));
+                    $asset = $this->_assetFileFactory->create(
+                        array('file' => $themeFile->getFullPath(), 'contentType' => $service->getContentType())
+                    );
                     $this->_pageAssets->add($themeFile->getData('file_path'), $asset);
                 }
             } catch (\InvalidArgumentException $e) {

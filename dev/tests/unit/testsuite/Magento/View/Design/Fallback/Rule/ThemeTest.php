@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design\Fallback\Rule;
 
 /**
@@ -71,7 +70,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             'package/current_theme/path/one',
             'package/current_theme/path/two',
             'package/parent_theme/path/one',
-            'package/parent_theme/path/two',
+            'package/parent_theme/path/two'
         );
         $this->assertEquals($expectedResult, $object->getPatternDirs(array('theme' => $theme)));
     }

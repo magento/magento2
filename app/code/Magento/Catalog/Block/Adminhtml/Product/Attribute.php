@@ -45,5 +45,4 @@ class Attribute extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Add New Attribute');
         parent::_construct();
     }
-
 }

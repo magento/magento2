@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 /**
@@ -43,11 +42,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $this->_product->load(1);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\ConfigurableProduct\Block\Product\View\Type\Configurable');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\ConfigurableProduct\Block\Product\View\Type\Configurable'
+        );
         $this->_block->setProduct($this->_product);
     }
 
@@ -77,7 +80,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetJsonConfig()
     {
-        $config = (array) json_decode($this->_block->getJsonConfig());
+        $config = (array)json_decode($this->_block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('attributes', $config);
         $this->assertArrayHasKey('template', $config);

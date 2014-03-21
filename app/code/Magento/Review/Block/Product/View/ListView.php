@@ -43,11 +43,12 @@ class ListView extends \Magento\Review\Block\Product\View
     /**
      * Get product id
      *
-     * @return int
+     * @return int|null
      */
     public function getProductId()
     {
-        return $this->_coreRegistry->registry('product')->getId();
+        $product = $this->_coreRegistry->registry('product');
+        return $product ? $product->getId() : null;
     }
 
     /**
@@ -74,9 +75,7 @@ class ListView extends \Magento\Review\Block\Product\View
      */
     protected function _beforeToHtml()
     {
-        $this->getReviewsCollection()
-            ->load()
-            ->addRateVotes();
+        $this->getReviewsCollection()->load()->addRateVotes();
         return parent::_beforeToHtml();
     }
 

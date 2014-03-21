@@ -28,21 +28,22 @@ use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 /**
  * Billing agreements resource collection
  */
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Mapping for fields
      *
      * @var array
      */
-    protected $_map = array('fields' => array(
-        'customer_email'       => 'ce.email',
-        'customer_firstname'   => 'firstname.value',
-        'customer_lastname'    => 'lastname.value',
-        'agreement_created_at' => 'main_table.created_at',
-        'agreement_updated_at' => 'main_table.updated_at',
-    ));
+    protected $_map = array(
+        'fields' => array(
+            'customer_email' => 'ce.email',
+            'customer_firstname' => 'firstname.value',
+            'customer_lastname' => 'lastname.value',
+            'agreement_created_at' => 'main_table.created_at',
+            'agreement_updated_at' => 'main_table.updated_at'
+        )
+    );
 
     /**
      * @var \Magento\Customer\Model\Resource\Customer
@@ -102,14 +103,18 @@ class Collection
             array('customer_email' => 'email')
         );
 
-        $adapter  = $this->getConnection();
+        $adapter = $this->getConnection();
         $firstNameMetadata = $this->_eavHelper->getAttributeMetadata(
             CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER,
             'firstname'
         );
-        $joinExpr = 'firstname.entity_id = main_table.customer_id AND '
-            . $adapter->quoteInto('firstname.entity_type_id = ?', $firstNameMetadata['entity_type_id']) . ' AND '
-            . $adapter->quoteInto('firstname.attribute_id = ?', $firstNameMetadata['attribute_id']);
+        $joinExpr = 'firstname.entity_id = main_table.customer_id AND ' . $adapter->quoteInto(
+            'firstname.entity_type_id = ?',
+            $firstNameMetadata['entity_type_id']
+        ) . ' AND ' . $adapter->quoteInto(
+            'firstname.attribute_id = ?',
+            $firstNameMetadata['attribute_id']
+        );
 
         $select->joinLeft(
             array('firstname' => $firstNameMetadata['attribute_table']),
@@ -121,9 +126,13 @@ class Collection
             CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER,
             'lastname'
         );
-        $joinExpr = 'lastname.entity_id = main_table.customer_id AND '
-            . $adapter->quoteInto('lastname.entity_type_id = ?', $lastNameMetadata['entity_type_id']) . ' AND '
-            . $adapter->quoteInto('lastname.attribute_id = ?', $lastNameMetadata['attribute_id']);
+        $joinExpr = 'lastname.entity_id = main_table.customer_id AND ' . $adapter->quoteInto(
+            'lastname.entity_type_id = ?',
+            $lastNameMetadata['entity_type_id']
+        ) . ' AND ' . $adapter->quoteInto(
+            'lastname.attribute_id = ?',
+            $lastNameMetadata['attribute_id']
+        );
 
         $select->joinLeft(
             array('lastname' => $lastNameMetadata['attribute_table']),

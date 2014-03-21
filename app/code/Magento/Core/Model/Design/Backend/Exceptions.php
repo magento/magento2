@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Design\Backend;
 
 class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized
@@ -68,7 +67,8 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      */
     protected function _beforeSave()
     {
-        $design = clone $this->_design; // For value validations
+        $design = clone $this->_design;
+        // For value validations
         $exceptions = $this->getValue();
         foreach ($exceptions as $rowKey => $row) {
             if ($rowKey === '__empty') {
@@ -133,7 +133,8 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
             return false;
         }
 
-        $possibleDelimiters = '/#~%'; // Limit delimiters to reduce possibility, that we miss string with regexp.
+        $possibleDelimiters = '/#~%';
+        // Limit delimiters to reduce possibility, that we miss string with regexp.
 
         // Starts with a delimiter
         if (strpos($possibleDelimiters, $search[0]) !== false) {

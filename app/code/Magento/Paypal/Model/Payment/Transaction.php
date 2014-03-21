@@ -137,9 +137,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
     public function loadByTxnId($txnId)
     {
         $this->_beforeLoadByTxnId($txnId);
-        $this->getResource()->loadObjectByTxnId(
-            $this, $txnId
-        );
+        $this->getResource()->loadObjectByTxnId($this, $txnId);
         $this->_afterLoadByTxnId();
         return $this;
     }
@@ -154,7 +152,6 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         $this->_eventManager->dispatch($this->_eventPrefix . '_load_by_txn_id_after', $this->_getEventData());
         return $this;
     }
-
 
     /**
      * Additional information setter
@@ -192,7 +189,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             $info = array();
         }
         if ($key) {
-            return (isset($info[$key]) ? $info[$key] : null);
+            return isset($info[$key]) ? $info[$key] : null;
         }
         return $info;
     }

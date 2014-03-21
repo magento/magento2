@@ -74,9 +74,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $this->_updateButton(
                 'save',
                 'onclick',
-                "deleteConfirm('"
-                . __('Are you sure you want to send a Shipment email to customer?')
-                . "', '" . $this->getEmailUrl() . "')"
+                "deleteConfirm('" . __(
+                    'Are you sure you want to send a Shipment email to customer?'
+                ) . "', '" . $this->getEmailUrl() . "')"
             );
         }
 
@@ -147,12 +147,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getPrintUrl()
     {
-        return $this->getUrl(
-            'sales/shipment/print',
-            array(
-                'shipment_id' => $this->getShipment()->getId()
-            )
-        );
+        return $this->getUrl('sales/shipment/print', array('shipment_id' => $this->getShipment()->getId()));
     }
 
     /**
@@ -169,7 +164,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     'setLocation(\'' . $this->getShipment()->getBackUrl() . '\')'
                 );
             }
-            return $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('sales/shipment/') . '\')');
+            return $this->_updateButton(
+                'back',
+                'onclick',
+                'setLocation(\'' . $this->getUrl('sales/shipment/') . '\')'
+            );
         }
         return $this;
     }

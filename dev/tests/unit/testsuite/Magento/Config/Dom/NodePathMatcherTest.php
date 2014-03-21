@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Config\Dom;
 
 class NodePathMatcherTest extends \PHPUnit_Framework_TestCase
@@ -52,12 +51,12 @@ class NodePathMatcherTest extends \PHPUnit_Framework_TestCase
     public function getNodeInfoDataProvider()
     {
         return array(
-            'no match'              => array('/root/node', '/root', false),
-            'partial match'         => array('/root/node', '/wrapper/root/node', false),
-            'exact match'           => array('/root/node', '/root/node', true),
-            'regexp match'          => array('/root/node/(sub-)+node', '/root/node/sub-node', true),
-            'match with namespace'  => array('/root/node', '/mage:root/node', true),
-            'match with predicate'  => array('/root/node', '/root/node[@name="test"]', true),
+            'no match' => array('/root/node', '/root', false),
+            'partial match' => array('/root/node', '/wrapper/root/node', false),
+            'exact match' => array('/root/node', '/root/node', true),
+            'regexp match' => array('/root/node/(sub-)+node', '/root/node/sub-node', true),
+            'match with namespace' => array('/root/node', '/mage:root/node', true),
+            'match with predicate' => array('/root/node', '/root/node[@name="test"]', true)
         );
     }
 }

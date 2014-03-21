@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Connect\Channel;
 
 use Magento\Connect\Validator;
@@ -39,44 +37,45 @@ class VO implements \Iterator
     /**
      * @var array
      */
-    protected $properties = array(
-        'name' => '',
-        'uri' => '',
-        'summary' => '',
-    );
+    protected $properties = array('name' => '', 'uri' => '', 'summary' => '');
 
     /**
      * @return void
      */
-    public function rewind() {
+    public function rewind()
+    {
         reset($this->properties);
     }
 
     /**
      * @return bool
      */
-    public function valid() {
+    public function valid()
+    {
         return current($this->properties) !== false;
     }
 
     /**
      * @return mixed
      */
-    public function key() {
+    public function key()
+    {
         return key($this->properties);
     }
 
     /**
      * @return mixed
      */
-    public function current() {
+    public function current()
+    {
         return current($this->properties);
     }
 
     /**
      * @return void
      */
-    public function next() {
+    public function next()
+    {
         next($this->properties);
     }
 
@@ -124,8 +123,8 @@ class VO implements \Iterator
      */
     public function fromArray(array $arr)
     {
-        foreach($arr as $k=>$v) {
-            $this->$k = $v;
+        foreach ($arr as $k => $v) {
+            $this->{$k} = $v;
         }
     }
 
@@ -133,13 +132,13 @@ class VO implements \Iterator
      * @return Validator
      */
     private function validator()
-    { 
-        if(is_null($this->_validator)) {
+    {
+        if (is_null($this->_validator)) {
             $this->_validator = new Validator();
         }
         return $this->_validator;
     }
-    
+
     /**
      * Stub for validation result
      *
@@ -148,10 +147,9 @@ class VO implements \Iterator
     public function validate()
     {
         $v = $this->validator();
-        if(!$v->validatePackageName($this->name)) {
+        if (!$v->validatePackageName($this->name)) {
             return false;
         }
         return true;
     }
-
 }

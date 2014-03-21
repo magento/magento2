@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 
 /**
@@ -59,7 +58,7 @@ class Collection extends \Magento\Data\Collection\Filesystem
         return array(
             'filename' => $filename,
             'basename' => basename($filename),
-            'mtime'    => $path->stat($path->getRelativePath($filename))['mtime']
+            'mtime' => $path->stat($path->getRelativePath($filename))['mtime']
         );
     }
 }

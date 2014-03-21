@@ -67,9 +67,7 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
      *
      * @var array
      */
-    protected $_ignoreDataTablesList = array(
-        'importexport/importdata'
-    );
+    protected $_ignoreDataTablesList = array('importexport/importdata');
 
     /**
      * Retrieve resource model
@@ -94,7 +92,7 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
      * @param bool $addDropIfExists
      * @return string
      */
-    public function getTableCreateScript($tableName, $addDropIfExists=false)
+    public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
         return $this->getResource()->getTableCreateScript($tableName, $addDropIfExists);
     }
@@ -134,11 +132,11 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
 
         $tables = $this->getTables();
         foreach ($tables as $tableName) {
-            $sql.= $this->getTableCreateScript($tableName, true);
-            $sql.= $this->getTableDataDump($tableName);
+            $sql .= $this->getTableCreateScript($tableName, true);
+            $sql .= $this->getTableDataDump($tableName);
         }
 
-        $sql.= $this->getFooter();
+        $sql .= $this->getFooter();
         return $sql;
     }
 
@@ -161,8 +159,9 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
         $ignoreDataTablesList = $this->getIgnoreDataTablesList();
 
         foreach ($tables as $table) {
-            $backup->write($this->getResource()->getTableHeader($table)
-                . $this->getResource()->getTableDropSql($table) . "\n");
+            $backup->write(
+                $this->getResource()->getTableHeader($table) . $this->getResource()->getTableDropSql($table) . "\n"
+            );
             $backup->write($this->getResource()->getTableCreateSql($table, false) . "\n");
 
             $tableStatus = $this->getResource()->getTableStatus($table);
@@ -183,8 +182,8 @@ class Db implements \Magento\Backup\Db\BackupDbInterface
                     $multiRowsLength = 1;
                 }
 
-                for ($i = 0; $i < $multiRowsLength; $i ++) {
-                    $backup->write($this->getResource()->getTableDataSql($table, $limit, $i*$limit));
+                for ($i = 0; $i < $multiRowsLength; $i++) {
+                    $backup->write($this->getResource()->getTableDataSql($table, $limit, $i * $limit));
                 }
 
                 $backup->write($this->getResource()->getTableDataAfterSql($table));

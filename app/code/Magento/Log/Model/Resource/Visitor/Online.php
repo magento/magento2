@@ -68,16 +68,16 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function prepare(\Magento\Log\Model\Visitor\Online $object)
     {
-        if (($object->getUpdateFrequency() + $object->getPrepareAt()) > time()) {
+        if ($object->getUpdateFrequency() + $object->getPrepareAt() > time()) {
             return $this;
         }
 
-        $readAdapter    = $this->_getReadAdapter();
-        $writeAdapter   = $this->_getWriteAdapter();
+        $readAdapter = $this->_getReadAdapter();
+        $writeAdapter = $this->_getWriteAdapter();
 
         $writeAdapter->beginTransaction();
 
-        try{
+        try {
             $writeAdapter->delete($this->getMainTable());
 
             $visitors = array();
@@ -87,18 +87,20 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
 
             $lastDate = $this->_date->gmtTimestamp() - $object->getOnlineInterval() * 60;
 
-            $select = $readAdapter->select()
-                ->from(
-                    $this->getTable('log_visitor'),
-                    array('visitor_id', 'first_visit_at', 'last_visit_at', 'last_url_id'))
-                ->where('last_visit_at >= ?', $readAdapter->formatDate($lastDate));
+            $select = $readAdapter->select()->from(
+                $this->getTable('log_visitor'),
+                array('visitor_id', 'first_visit_at', 'last_visit_at', 'last_url_id')
+            )->where(
+                'last_visit_at >= ?',
+                $readAdapter->formatDate($lastDate)
+            );
 
             $query = $readAdapter->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']] = $row;
                 $lastUrls[$row['last_url_id']] = $row['visitor_id'];
                 $visitors[$row['visitor_id']]['visitor_type'] = \Magento\Log\Model\Visitor::VISITOR_TYPE_VISITOR;
-                $visitors[$row['visitor_id']]['customer_id']  = null;
+                $visitors[$row['visitor_id']]['customer_id'] = null;
             }
 
             if (!$visitors) {
@@ -107,11 +109,13 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             // retrieve visitor remote addr
-            $select = $readAdapter->select()
-                ->from(
-                    $this->getTable('log_visitor_info'),
-                    array('visitor_id', 'remote_addr'))
-                ->where('visitor_id IN(?)', array_keys($visitors));
+            $select = $readAdapter->select()->from(
+                $this->getTable('log_visitor_info'),
+                array('visitor_id', 'remote_addr')
+            )->where(
+                'visitor_id IN(?)',
+                array_keys($visitors)
+            );
 
             $query = $readAdapter->query($select);
             while ($row = $query->fetch()) {
@@ -119,11 +123,13 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             // retrieve visitor last URLs
-            $select = $readAdapter->select()
-                ->from(
-                    $this->getTable('log_url_info'),
-                    array('url_id', 'url'))
-                ->where('url_id IN(?)', array_keys($lastUrls));
+            $select = $readAdapter->select()->from(
+                $this->getTable('log_url_info'),
+                array('url_id', 'url')
+            )->where(
+                'url_id IN(?)',
+                array_keys($lastUrls)
+            );
 
             $query = $readAdapter->query($select);
             while ($row = $query->fetch()) {
@@ -132,16 +138,18 @@ class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             // retrieve customers
-            $select = $readAdapter->select()
-                ->from(
-                    $this->getTable('log_customer'),
-                    array('visitor_id', 'customer_id'))
-                ->where('visitor_id IN(?)', array_keys($visitors));
+            $select = $readAdapter->select()->from(
+                $this->getTable('log_customer'),
+                array('visitor_id', 'customer_id')
+            )->where(
+                'visitor_id IN(?)',
+                array_keys($visitors)
+            );
 
             $query = $readAdapter->query($select);
             while ($row = $query->fetch()) {
                 $visitors[$row['visitor_id']]['visitor_type'] = \Magento\Log\Model\Visitor::VISITOR_TYPE_CUSTOMER;
-                $visitors[$row['visitor_id']]['customer_id']  = $row['customer_id'];
+                $visitors[$row['visitor_id']]['customer_id'] = $row['customer_id'];
             }
 
             foreach ($visitors as $visitorData) {

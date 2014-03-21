@@ -38,10 +38,14 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 class State extends \Magento\Object
 {
     const STEP_SELECT_ADDRESSES = 'multishipping_addresses';
-    const STEP_SHIPPING         = 'multishipping_shipping';
-    const STEP_BILLING          = 'multishipping_billing';
-    const STEP_OVERVIEW         = 'multishipping_overview';
-    const STEP_SUCCESS          = 'multishipping_success';
+
+    const STEP_SHIPPING = 'multishipping_shipping';
+
+    const STEP_BILLING = 'multishipping_billing';
+
+    const STEP_OVERVIEW = 'multishipping_overview';
+
+    const STEP_SUCCESS = 'multishipping_success';
 
     /**
      * Allow steps array
@@ -68,29 +72,17 @@ class State extends \Magento\Object
      * @param Session $checkoutSession
      * @param Multishipping $multishipping
      */
-    public function __construct(
-        Session $checkoutSession,
-        Multishipping $multishipping
-    ) {
+    public function __construct(Session $checkoutSession, Multishipping $multishipping)
+    {
         $this->_checkoutSession = $checkoutSession;
         $this->_multishipping = $multishipping;
         parent::__construct();
         $this->_steps = array(
-            self::STEP_SELECT_ADDRESSES => new \Magento\Object(array(
-                'label' => __('Select Addresses')
-            )),
-            self::STEP_SHIPPING => new \Magento\Object(array(
-                'label' => __('Shipping Information')
-            )),
-            self::STEP_BILLING => new \Magento\Object(array(
-                'label' => __('Billing Information')
-            )),
-            self::STEP_OVERVIEW => new \Magento\Object(array(
-                'label' => __('Place Order')
-            )),
-            self::STEP_SUCCESS => new \Magento\Object(array(
-                'label' => __('Order Success')
-            )),
+            self::STEP_SELECT_ADDRESSES => new \Magento\Object(array('label' => __('Select Addresses'))),
+            self::STEP_SHIPPING => new \Magento\Object(array('label' => __('Shipping Information'))),
+            self::STEP_BILLING => new \Magento\Object(array('label' => __('Billing Information'))),
+            self::STEP_OVERVIEW => new \Magento\Object(array('label' => __('Place Order'))),
+            self::STEP_SUCCESS => new \Magento\Object(array('label' => __('Order Success')))
         );
 
         foreach ($this->_steps as $step) {
@@ -141,14 +133,13 @@ class State extends \Magento\Object
     {
         if (isset($this->_steps[$step])) {
             $this->getCheckoutSession()->setCheckoutState($step);
-        }
-        else {
+        } else {
             $this->getCheckoutSession()->setCheckoutState(self::STEP_SELECT_ADDRESSES);
         }
 
         // Fix active step changing
-        if(!$this->_steps[$step]->getIsActive()) {
-            foreach($this->getSteps() as $stepObject) {
+        if (!$this->_steps[$step]->getIsActive()) {
+            foreach ($this->getSteps() as $stepObject) {
                 $stepObject->unsIsActive();
             }
             $this->_steps[$step]->setIsActive(true);
@@ -203,7 +194,6 @@ class State extends \Magento\Object
      */
     public function canSelectAddresses()
     {
-
     }
 
     /**
@@ -211,7 +201,6 @@ class State extends \Magento\Object
      */
     public function canInputShipping()
     {
-
     }
 
     /**
@@ -219,7 +208,6 @@ class State extends \Magento\Object
      */
     public function canSeeOverview()
     {
-
     }
 
     /**
@@ -227,7 +215,6 @@ class State extends \Magento\Object
      */
     public function canSuccess()
     {
-
     }
 
     /**

@@ -82,32 +82,30 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 
         if (is_object($fieldset) && $fieldset instanceof \Magento\Data\Form\Element\Fieldset) {
 
-            $fieldset->addField('price_rule_type', 'select', array(
-                'name'    => 'price_rule_type',
-                'options' => array(
-                    __('Any'),
-                    __('Specified')
-                ),
-                'label'   => __('Shopping Cart Price Rule'),
-            ));
+            $fieldset->addField(
+                'price_rule_type',
+                'select',
+                array(
+                    'name' => 'price_rule_type',
+                    'options' => array(__('Any'), __('Specified')),
+                    'label' => __('Shopping Cart Price Rule')
+                )
+            );
 
             $rulesList = $this->_reportRule->create()->getUniqRulesNamesList();
 
             $rulesListOptions = array();
 
             foreach ($rulesList as $key => $ruleName) {
-                $rulesListOptions[] = array(
-                    'label' => $ruleName,
-                    'value' => $key,
-                    'title' => $ruleName
-                );
+                $rulesListOptions[] = array('label' => $ruleName, 'value' => $key, 'title' => $ruleName);
             }
 
-            $fieldset->addField('rules_list', 'multiselect', array(
-                'name'      => 'rules_list',
-                'values'    => $rulesListOptions,
-                'display'   => 'none'
-            ), 'price_rule_type');
+            $fieldset->addField(
+                'rules_list',
+                'multiselect',
+                array('name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'),
+                'price_rule_type'
+            );
 
             $this->_renderDependentElement = true;
         }
@@ -133,12 +131,21 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              * without core logic changes, that's why the code below was moved inside method '_afterToHtml'.
              */
             /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
-            $formAfterBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence',
+            $formAfterBlock = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Form\Element\Dependence',
                 'adminhtml.block.widget.form.element.dependence'
             );
-            $formAfterBlock->addFieldMap($htmlIdPrefix . 'price_rule_type', 'price_rule_type')
-                ->addFieldMap($htmlIdPrefix . 'rules_list', 'rules_list')
-                ->addFieldDependence('rules_list', 'price_rule_type', '1');
+            $formAfterBlock->addFieldMap(
+                $htmlIdPrefix . 'price_rule_type',
+                'price_rule_type'
+            )->addFieldMap(
+                $htmlIdPrefix . 'rules_list',
+                'rules_list'
+            )->addFieldDependence(
+                'rules_list',
+                'price_rule_type',
+                '1'
+            );
             $html = $html . $formAfterBlock->toHtml();
         }
 

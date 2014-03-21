@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -41,8 +40,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Url');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Url'
+        );
     }
 
     /**
@@ -54,8 +54,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function _loadRewrite($idPath)
     {
         /** @var $rewrite \Magento\Core\Model\Url\Rewrite */
-        $rewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Url\Rewrite');
+        $rewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Url\Rewrite'
+        );
         $rewrite->loadByIdPath($idPath);
         return $rewrite;
     }
@@ -89,7 +90,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetShouldSaveRewritesHistory()
     {
-        $this->assertTrue($this->_model->getShouldSaveRewritesHistory()); /* default value */
+        $this->assertTrue($this->_model->getShouldSaveRewritesHistory());
+        /* default value */
         $this->_model->setShouldSaveRewritesHistory(false);
         $this->assertFalse($this->_model->getShouldSaveRewritesHistory());
     }
@@ -154,7 +156,8 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            'category-2-1.html', $this->_model->getUnusedPath(1, 'category-2.html', 'category/5', 'category-2')
+            'category-2-1.html',
+            $this->_model->getUnusedPath(1, 'category-2.html', 'category/5', 'category-2')
         );
     }
 
@@ -171,14 +174,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetProductRequestPath()
     {
         $product = new \Magento\Object();
-        $product->setName('test product')
-            ->setId(uniqid());
+        $product->setName('test product')->setId(uniqid());
 
         $category = new \Magento\Object();
-        $category->setName('test category')
-            ->setId(uniqid())
-            ->setLevel(2)
-            ->setUrlPath('test/category');
+        $category->setName('test category')->setId(uniqid())->setLevel(2)->setUrlPath('test/category');
 
         $this->assertEquals(
             'test/category/test-product.html',
@@ -197,15 +196,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function generatePathDataProvider()
     {
         $product = new \Magento\Object();
-        $product->setName('test product')
-            ->setId(111);
+        $product->setName('test product')->setId(111);
 
         $category = new \Magento\Object();
-        $category->setName('test category')
-            ->setId(999)
-            ->setLevel(2)
-            ->setUrlPath('test/category')
-            ->setParentId(3);
+        $category->setName('test category')->setId(999)->setLevel(2)->setUrlPath('test/category')->setParentId(3);
 
         return array(
             array('target', $product, null, null, 'catalog/product/view/id/111'),
@@ -213,7 +207,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             array('id', $product, null, null, 'product/111'),
             array('id', null, $category, null, 'category/999'),
             array('request', $product, $category, null, 'test/category/test-product.html'),
-            array('request', null, $category, null, 'category-1/test-category.html'),
+            array('request', null, $category, null, 'category-1/test-category.html')
         );
     }
 

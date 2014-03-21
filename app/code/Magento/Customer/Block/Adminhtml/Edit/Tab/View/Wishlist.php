@@ -87,11 +87,11 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create()
-            ->addCustomerIdFilter($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID))
-            ->addDaysInWishlist()
-            ->addStoreData()
-            ->setInStockFilter(true);
+        $collection = $this->_collectionFactory->create()->addCustomerIdFilter(
+            $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+        )->addDaysInWishlist()->addStoreData()->setInStockFilter(
+            true
+        );
 
         $this->setCollection($collection);
 
@@ -105,41 +105,41 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('product_id', [
-            'header'    => __('ID'),
-            'index'     => 'product_id',
-            'type'      => 'number',
-            'width'     => '100px'
-        ]);
+        $this->addColumn(
+            'product_id',
+            array('header' => __('ID'), 'index' => 'product_id', 'type' => 'number', 'width' => '100px')
+        );
 
-        $this->addColumn('product_name', [
-            'header'    => __('Product'),
-            'index'     => 'product_name',
-            'renderer'  => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
-        ]);
+        $this->addColumn(
+            'product_name',
+            array(
+                'header' => __('Product'),
+                'index' => 'product_name',
+                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item'
+            )
+        );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store', [
-                'header'    => __('Add Locale'),
-                'index'     => 'store_id',
-                'type'      => 'store',
-                'width'     => '160px',
-            ]);
+            $this->addColumn(
+                'store',
+                array('header' => __('Add Locale'), 'index' => 'store_id', 'type' => 'store', 'width' => '160px')
+            );
         }
 
-        $this->addColumn('added_at', [
-            'header'    => __('Add Date'),
-            'index'     => 'added_at',
-            'type'      => 'date',
-            'width'     => '140px',
-        ]);
+        $this->addColumn(
+            'added_at',
+            array('header' => __('Add Date'), 'index' => 'added_at', 'type' => 'date', 'width' => '140px')
+        );
 
-        $this->addColumn('days', [
-            'header'    => __('Days in Wish List'),
-            'index'     => 'days_in_wishlist',
-            'type'      => 'number',
-            'width'     => '140px',
-        ]);
+        $this->addColumn(
+            'days',
+            array(
+                'header' => __('Days in Wish List'),
+                'index' => 'days_in_wishlist',
+                'type' => 'number',
+                'width' => '140px'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -153,7 +153,7 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getHeadersVisibility()
     {
-        return ($this->getCollection()->getSize() >= 0);
+        return $this->getCollection()->getSize() >= 0;
     }
 
     /**
@@ -161,6 +161,6 @@ class Wishlist extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product/edit', ['id' => $row->getProductId()]);
+        return $this->getUrl('catalog/product/edit', array('id' => $row->getProductId()));
     }
 }

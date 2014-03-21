@@ -107,9 +107,11 @@ class Proxy extends \Magento\Mview\Config\Data
     protected function _getSubject()
     {
         if (!$this->subject) {
-            $this->subject = true === $this->isShared
-                ? $this->objectManager->get($this->instanceName)
-                : $this->objectManager->create($this->instanceName);
+            $this->subject = true === $this->isShared ? $this->objectManager->get(
+                $this->instanceName
+            ) : $this->objectManager->create(
+                $this->instanceName
+            );
         }
         return $this->subject;
     }

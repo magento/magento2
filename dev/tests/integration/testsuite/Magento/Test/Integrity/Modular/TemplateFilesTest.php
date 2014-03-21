@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
 
 /**
@@ -43,18 +42,23 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
              * @param string $area
              */
             function ($module, $template, $class, $area) {
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-                    ->setDefaultDesignTheme();
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\View\DesignInterface'
+                )->setDefaultDesignTheme();
                 // intentionally to make sure the module files will be requested
                 $params = array(
-                    'area'       => $area,
-                    'themeModel' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                        ->create('Magento\View\Design\ThemeInterface'),
-                    'module'     => $module
+                    'area' => $area,
+                    'themeModel' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                        'Magento\View\Design\ThemeInterface'
+                    ),
+                    'module' => $module
                 );
-                $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
-                    ->get('Magento\View\FileSystem')
-                    ->getFilename($template, $params);
+                $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
+                    'Magento\View\FileSystem'
+                )->getFilename(
+                    $template,
+                    $params
+                );
                 $this->assertFileExists($file, "Block class: {$class}");
             },
             $this->allTemplatesDataProvider()
@@ -69,8 +73,11 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
         $blockClass = '';
         try {
             /** @var $website \Magento\Core\Model\Website */
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->setWebsiteId(0);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\StoreManagerInterface'
+            )->getStore()->setWebsiteId(
+                0
+            );
 
             $templates = array();
             $skippedBlocks = $this->_getBlocksToSkip();
@@ -86,14 +93,22 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 $area = 'frontend';
                 if ($module == 'Magento_Install') {
                     $area = 'install';
-                } elseif ($module == 'Magento_Adminhtml' || strpos($blockClass, '\\Adminhtml\\')
-                    || strpos($blockClass, '\\Backend\\')
-                    || $class->isSubclassOf('Magento\Backend\Block\Template')
+                } elseif ($module == 'Magento_Adminhtml' || strpos(
+                    $blockClass,
+                    '\\Adminhtml\\'
+                ) || strpos(
+                    $blockClass,
+                    '\\Backend\\'
+                ) || $class->isSubclassOf(
+                    'Magento\Backend\Block\Template'
+                )
                 ) {
                     $area = 'adminhtml';
                 }
 
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Core\Model\App'
+                )->loadAreaPart(
                     $area,
                     \Magento\Core\Model\App\Area::PART_CONFIG
                 );
@@ -102,18 +117,32 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                     ->setCurrentScope($area);
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
                     ->setAreaCode($area);
-
+                $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\App\Http\Context');
+                $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+                $context->setValue(
+                    \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+                    \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+                    \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+                );
                 $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($blockClass);
                 $template = $block->getTemplate();
                 if ($template) {
-                    $templates[$module . ', ' . $template . ', ' . $blockClass . ', ' . $area] =
-                        array($module, $template, $blockClass, $area);
+                    $templates[$module . ', ' . $template . ', ' . $blockClass . ', ' . $area] = array(
+                        $module,
+                        $template,
+                        $blockClass,
+                        $area
+                    );
                 }
             }
             return $templates;
         } catch (\Exception $e) {
-            trigger_error("Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'."
-                . " Exception: {$e}", E_USER_ERROR);
+            trigger_error(
+                "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
+                " Exception: {$e}",
+                E_USER_ERROR
+            );
         }
     }
 

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Resource\Layout;
 
 abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
@@ -62,9 +61,9 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->_expectedConditions = array(
             'counter' => 0,
-            'data'    => array(
+            'data' => array(
                 0 => array($this->_tableAlias . '.updated_at', array('notnull' => true)),
-                1 => array($this->_tableAlias . '.updated_at', array('lt' => 'date')),
+                1 => array($this->_tableAlias . '.updated_at', array('lt' => 'date'))
             )
         );
     }
@@ -77,25 +76,21 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function _getResource(\Zend_Db_Select $select)
     {
-        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql',
-            array(), array(), '', false
-        );
-        $connection->expects($this->once())
-            ->method('select')
-            ->will($this->returnValue($select));
-        $connection->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+        $connection = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
-        $resource = $this->getMockForAbstractClass('Magento\Core\Model\Resource\Db\AbstractDb',
-            array(), '', false, true,
-            true, array('getReadConnection', 'getMainTable', 'getTable', '__wakeup'));
-        $resource->expects($this->any())
-            ->method('getReadConnection')
-            ->will($this->returnValue($connection));
-        $resource->expects($this->any())
-            ->method('getTable')
-            ->will($this->returnArgument(0));
+        $resource = $this->getMockForAbstractClass(
+            'Magento\Core\Model\Resource\Db\AbstractDb',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getReadConnection', 'getMainTable', 'getTable', '__wakeup')
+        );
+        $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
+        $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
 
         return $resource;
     }
@@ -110,23 +105,25 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     public function testAddUpdatedDaysBeforeFilter()
     {
         $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
-        $select->expects($this->any())
-            ->method('where')
-            ->with(self::TEST_WHERE_CONDITION);
+        $select->expects($this->any())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
 
         /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
         $connection = $collection->getResource()->getReadConnection();
-        $connection->expects($this->any())
-            ->method('prepareSqlCondition')
-            ->will($this->returnCallback(array($this, 'verifyPrepareSqlCondition')));
+        $connection->expects(
+            $this->any()
+        )->method(
+            'prepareSqlCondition'
+        )->will(
+            $this->returnCallback(array($this, 'verifyPrepareSqlCondition'))
+        );
 
         // expected date without time
         $datetime = new \DateTime();
         $storeInterval = new \DateInterval('P' . self::TEST_DAYS_BEFORE . 'D');
         $datetime->sub($storeInterval);
-        $dateTimeLib = new \Magento\Stdlib\DateTime;
+        $dateTimeLib = new \Magento\Stdlib\DateTime();
         $expectedDate = $dateTimeLib->formatDate($datetime->getTimestamp());
         $this->_expectedConditions['data'][1][1]['lt'] = $expectedDate;
 
@@ -149,8 +146,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data[0], $fieldName);
 
         $this->assertCount(1, $data[1]);
-        $key   = array_keys($data[1]);
-        $key   = reset($key);
+        $key = array_keys($data[1]);
+        $key = reset($key);
         $value = reset($data[1]);
 
         $this->assertArrayHasKey($key, $condition);

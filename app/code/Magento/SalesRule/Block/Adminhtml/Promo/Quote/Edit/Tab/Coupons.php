@@ -32,9 +32,7 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
  * @package     Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Coupons
-    extends \Magento\Backend\Block\Text\ListText
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry

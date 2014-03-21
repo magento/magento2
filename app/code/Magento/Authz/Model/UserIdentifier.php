@@ -32,9 +32,13 @@ class UserIdentifier
      * User types.
      */
     const USER_TYPE_GUEST = 'Guest';
+
     const USER_TYPE_CUSTOMER = 'Customer';
+
     const USER_TYPE_ADMIN = 'Admin';
+
     const USER_TYPE_INTEGRATION = 'Integration';
+
     /**#@-*/
 
     /**
@@ -98,7 +102,7 @@ class UserIdentifier
     protected function _setUserId($userId)
     {
         $userId = is_numeric($userId) ? (int)$userId : $userId;
-        if (!is_integer($userId) || ($userId < 0)) {
+        if (!is_integer($userId) || $userId < 0) {
             throw new \LogicException("Invalid user ID: '{$userId}'.");
         }
         $this->_userId = $userId;

@@ -62,7 +62,6 @@ class Model
      */
     protected function _construct()
     {
-
     }
 
     /**
@@ -76,12 +75,12 @@ class Model
     }
 
     /**
-    * Set value for key
-    *
-    * @param string $key
-    * @param mixed $value
-    * @return \Magento\Downloader\Model
-    */
+     * Set value for key
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return \Magento\Downloader\Model
+     */
     public function set($key, $value)
     {
         $this->_data[$key] = $value;
@@ -89,11 +88,11 @@ class Model
     }
 
     /**
-    * Get value by key
-    *
-    * @param string $key
-    * @return mixed
-    */
+     * Get value by key
+     *
+     * @param string $key
+     * @return mixed
+     */
     public function get($key)
     {
         return isset($this->_data[$key]) ? $this->_data[$key] : null;

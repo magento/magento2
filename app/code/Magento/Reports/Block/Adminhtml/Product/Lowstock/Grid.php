@@ -75,14 +75,20 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         }
 
         /** @var $collection \Magento\Reports\Model\Resource\Product\Lowstock\Collection  */
-        $collection = $this->_lowstocksFactory->create()
-            ->addAttributeToSelect('*')
-            ->setStoreId($storeId)
-            ->filterByIsQtyProductTypes()
-            ->joinInventoryItem('qty')
-            ->useManageStockFilter($storeId)
-            ->useNotifyStockQtyFilter($storeId)
-            ->setOrder('qty', \Magento\Data\Collection::SORT_ORDER_ASC);
+        $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
+            '*'
+        )->setStoreId(
+            $storeId
+        )->filterByIsQtyProductTypes()->joinInventoryItem(
+            'qty'
+        )->useManageStockFilter(
+            $storeId
+        )->useNotifyStockQtyFilter(
+            $storeId
+        )->setOrder(
+            'qty',
+            \Magento\Data\Collection::SORT_ORDER_ASC
+        );
 
         if ($storeId) {
             $collection->addStoreFilter($storeId);

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Block\Payment\View;
 
 /**
@@ -33,6 +32,7 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
      * @var \Magento\Catalog\Model\Product\Option
      */
     protected $_option;
+
     /**
      * @var \Magento\Catalog\Model\Product
      */
@@ -84,7 +84,7 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
         ) as $itemKey => $label) {
             $value = $this->_recurringPayment->getInfoValue($key, $itemKey);
             if ($value) {
-                $this->_addInfo(array('label' => $label, 'value' => $value,));
+                $this->_addInfo(array('label' => $label, 'value' => $value));
             }
         }
 
@@ -98,21 +98,30 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
             return;
         }
 
-        $options = $this->_option->getCollection()
-            ->addIdsToFilter(array_keys($request['options']))
-            ->addTitleToResult($this->_recurringPayment->getInfoValue($key, 'store_id'))
-            ->addValuesToResult();
+        $options = $this->_option->getCollection()->addIdsToFilter(
+            array_keys($request['options'])
+        )->addTitleToResult(
+            $this->_recurringPayment->getInfoValue($key, 'store_id')
+        )->addValuesToResult();
 
         foreach ($options as $option) {
             $quoteItemOption = $this->_quoteItemOptionFactory->create()->setId($option->getId());
 
-            $group = $option->groupFactory($option->getType())
-                ->setOption($option)
-                ->setRequest(new \Magento\Object($request))
-                ->setProduct($this->_product)
-                ->setUseQuotePath(true)
-                ->setQuoteItemOption($quoteItemOption)
-                ->validateUserValue($request['options']);
+            $group = $option->groupFactory(
+                $option->getType()
+            )->setOption(
+                $option
+            )->setRequest(
+                new \Magento\Object($request)
+            )->setProduct(
+                $this->_product
+            )->setUseQuotePath(
+                true
+            )->setQuoteItemOption(
+                $quoteItemOption
+            )->validateUserValue(
+                $request['options']
+            );
 
             $skipHtmlEscaping = false;
             if ('file' == $option->getType()) {
@@ -123,8 +132,11 @@ class Item extends \Magento\RecurringPayment\Block\Payment\View
                     'option_id' => $option->getId(),
                     'key' => $request['options'][$option->getId()]['secret_key']
                 );
-                $group->setCustomOptionDownloadUrl('sales/download/downloadProfileCustomOption')
-                    ->setCustomOptionUrlParams($downloadParams);
+                $group->setCustomOptionDownloadUrl(
+                    'sales/download/downloadProfileCustomOption'
+                )->setCustomOptionUrlParams(
+                    $downloadParams
+                );
             }
 
             $optionValue = $group->prepareForCart();

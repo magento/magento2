@@ -25,6 +25,7 @@
  */
 namespace Magento\Outbound\Formatter;
 
+
 require_once __DIR__ . '/JsonTest/Data.php';
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,8 +34,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formatter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Outbound\Formatter\Json');
+        $this->_formatter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Outbound\Formatter\Json'
+        );
     }
 
     /**
@@ -57,10 +59,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array(), "[]"),
-            array(
-                array('a' => array('b' => 'c', 'd' => 'e'), 'f' => 'g'),
-                '{"a":{"b":"c","d":"e"},"f":"g"}'
-            ),
+            array(array('a' => array('b' => 'c', 'd' => 'e'), 'f' => 'g'), '{"a":{"b":"c","d":"e"},"f":"g"}'),
             array(array(null), '[null]'),
             array(array(true), '[true]'),
             array(array(false), '[false]'),
@@ -69,10 +68,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
             array(array(1), '[1]'),
             array(array(2.4), '[2.4]'),
             array(array(2.0), '[2]'),
-            array(
-                array(new \Magento\Outbound\Formatter\JsonTest\Data('public', 'protected')),
-                '[{"dataA":"public"}]'
-            )
+            array(array(new \Magento\Outbound\Formatter\JsonTest\Data('public', 'protected')), '[{"dataA":"public"}]')
         );
     }
 }

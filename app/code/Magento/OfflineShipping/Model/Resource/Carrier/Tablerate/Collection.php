@@ -51,9 +51,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected function _construct()
     {
-        $this->_init('Magento\OfflineShipping\Model\Carrier\Tablerate', 'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate');
-        $this->_countryTable    = $this->getTable('directory_country');
-        $this->_regionTable     = $this->getTable('directory_country_region');
+        $this->_init(
+            'Magento\OfflineShipping\Model\Carrier\Tablerate',
+            'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate'
+        );
+        $this->_countryTable = $this->getTable('directory_country');
+        $this->_regionTable = $this->getTable('directory_country_region');
     }
 
     /**
@@ -65,15 +68,15 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         parent::_initSelect();
 
-        $this->_select
-            ->joinLeft(
-                array('country_table' => $this->_countryTable),
-                'country_table.country_id = main_table.dest_country_id',
-                array('dest_country' => 'iso3_code'))
-            ->joinLeft(
-                array('region_table' => $this->_regionTable),
-                'region_table.region_id = main_table.dest_region_id',
-                array('dest_region' => 'code'));
+        $this->_select->joinLeft(
+            array('country_table' => $this->_countryTable),
+            'country_table.country_id = main_table.dest_country_id',
+            array('dest_country' => 'iso3_code')
+        )->joinLeft(
+            array('region_table' => $this->_regionTable),
+            'region_table.region_id = main_table.dest_region_id',
+            array('dest_region' => 'code')
+        );
 
         $this->addOrder('dest_country', self::SORT_ORDER_ASC);
         $this->addOrder('dest_region', self::SORT_ORDER_ASC);

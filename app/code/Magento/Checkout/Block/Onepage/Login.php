@@ -53,11 +53,12 @@ class Login extends AbstractOnepage
      * @param \Magento\Checkout\Model\Session $resourceSession
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Message\ManagerInterface $messageManager
      * @param CustomerAccountService $customerAccountService
      * @param CustomerAddressService $customerAddressService
      * @param AddressConfig $addressConfig
+     * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\Checkout\Helper\Data $checkoutData
+     * @param \Magento\Message\ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
@@ -71,6 +72,7 @@ class Login extends AbstractOnepage
         CustomerAccountService $customerAccountService,
         CustomerAddressService $customerAddressService,
         AddressConfig $addressConfig,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Message\ManagerInterface $messageManager,
         array $data = array()
@@ -89,6 +91,7 @@ class Login extends AbstractOnepage
             $customerAccountService,
             $customerAddressService,
             $addressConfig,
+            $httpContext,
             $data
         );
         $this->_isScopePrivate = true;
@@ -100,7 +103,7 @@ class Login extends AbstractOnepage
     protected function _construct()
     {
         if (!$this->isCustomerLoggedIn()) {
-            $this->getCheckout()->setStepData('login', array('label'=>__('Checkout Method'), 'allow'=>true));
+            $this->getCheckout()->setStepData('login', array('label' => __('Checkout Method'), 'allow' => true));
         }
         parent::_construct();
     }
@@ -118,7 +121,7 @@ class Login extends AbstractOnepage
      */
     public function getPostAction()
     {
-        return $this->getUrl('customer/account/loginPost', array('_secure'=>true));
+        return $this->getUrl('customer/account/loginPost', array('_secure' => true));
     }
 
     /**

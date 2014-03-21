@@ -38,10 +38,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_factoryMock = $this->getMock('\Magento\Reports\Model\DateFactory', array('create'), array(), '', false);
-        $arguments = array(
-            'dateFactory' => $this->_factoryMock,
+        $this->_factoryMock = $this->getMock(
+            '\Magento\Reports\Model\DateFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
+        $arguments = array('dateFactory' => $this->_factoryMock);
         $this->_model = $helper->getObject('Magento\Reports\Model\Resource\Report\Collection', $arguments);
     }
 
@@ -53,10 +57,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $startDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
         $endDateMock = $this->getMock('Magento\Stdlib\DateTime\DateInterface', array(), array(), '', false);
-        $map = array(
-            array($startDate, null, null, $startDateMock),
-            array($endDate, null, null, $endDateMock),
-        );
+        $map = array(array($startDate, null, null, $startDateMock), array($endDate, null, null, $endDateMock));
         $this->_factoryMock->expects($this->exactly(2))->method('create')->will($this->returnValueMap($map));
         $startDateMock->expects($this->once())->method('compare')->with($endDateMock)->will($this->returnValue(true));
 

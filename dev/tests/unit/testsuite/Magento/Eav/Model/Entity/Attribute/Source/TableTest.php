@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -46,21 +45,29 @@ class TableTest extends \PHPUnit_Framework_TestCase
     {
         $abstractFrontendMock = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend',
-            array(), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
 
         $abstractAttributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('getFrontend', 'getAttributeCode', '__wakeup'), array(), '', false
+            array('getFrontend', 'getAttributeCode', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
-        $abstractAttributeMock->expects($this->any())
-            ->method('getFrontend')
-            ->will($this->returnValue($abstractFrontendMock));
+        $abstractAttributeMock->expects(
+            $this->any()
+        )->method(
+            'getFrontend'
+        )->will(
+            $this->returnValue($abstractFrontendMock)
+        );
 
-        $abstractAttributeMock->expects($this->any())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('code'));
+        $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
 
         $this->_model->setAttribute($abstractAttributeMock);
 

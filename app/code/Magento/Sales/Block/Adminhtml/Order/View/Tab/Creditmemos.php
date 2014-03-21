@@ -32,9 +32,8 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Creditmemos
-    extends \Magento\Backend\Block\Widget\Grid\Extended
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Creditmemos extends \Magento\Backend\Block\Widget\Grid\Extended implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Core registry
@@ -104,19 +103,31 @@ class Creditmemos
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create($this->_getCollectionClass())
-            ->addFieldToSelect('entity_id')
-            ->addFieldToSelect('created_at')
-            ->addFieldToSelect('increment_id')
-            ->addFieldToSelect('order_currency_code')
-            ->addFieldToSelect('store_currency_code')
-            ->addFieldToSelect('base_currency_code')
-            ->addFieldToSelect('state')
-            ->addFieldToSelect('grand_total')
-            ->addFieldToSelect('base_grand_total')
-            ->addFieldToSelect('billing_name')
-            ->setOrderFilter($this->getOrder())
-        ;
+        $collection = $this->_collectionFactory->create(
+            $this->_getCollectionClass()
+        )->addFieldToSelect(
+            'entity_id'
+        )->addFieldToSelect(
+            'created_at'
+        )->addFieldToSelect(
+            'increment_id'
+        )->addFieldToSelect(
+            'order_currency_code'
+        )->addFieldToSelect(
+            'store_currency_code'
+        )->addFieldToSelect(
+            'base_currency_code'
+        )->addFieldToSelect(
+            'state'
+        )->addFieldToSelect(
+            'grand_total'
+        )->addFieldToSelect(
+            'base_grand_total'
+        )->addFieldToSelect(
+            'billing_name'
+        )->setOrderFilter(
+            $this->getOrder()
+        );
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -128,45 +139,60 @@ class Creditmemos
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('increment_id', array(
-            'header' => __('Credit Memo'),
-            'index' => 'increment_id',
-            'header_css_class'  => 'col-memo',
-            'column_css_class'  => 'col-memo'
-        ));
+        $this->addColumn(
+            'increment_id',
+            array(
+                'header' => __('Credit Memo'),
+                'index' => 'increment_id',
+                'header_css_class' => 'col-memo',
+                'column_css_class' => 'col-memo'
+            )
+        );
 
-        $this->addColumn('billing_name', array(
-            'header' => __('Bill-to Name'),
-            'index' => 'billing_name',
-            'header_css_class'  => 'col-name',
-            'column_css_class'  => 'col-name'
-        ));
+        $this->addColumn(
+            'billing_name',
+            array(
+                'header' => __('Bill-to Name'),
+                'index' => 'billing_name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header' => __('Created'),
-            'index' => 'created_at',
-            'type' => 'datetime',
-            'header_css_class'  => 'col-period',
-            'column_css_class'  => 'col-period'
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Created'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
-        $this->addColumn('state', array(
-            'header'    => __('Status'),
-            'index'     => 'state',
-            'type'      => 'options',
-            'options'   => $this->_orderCreditmemo->getStates(),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'state',
+            array(
+                'header' => __('Status'),
+                'index' => 'state',
+                'type' => 'options',
+                'options' => $this->_orderCreditmemo->getStates(),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
-        $this->addColumn('base_grand_total', array(
-            'header'    => __('Refunded'),
-            'index'     => 'base_grand_total',
-            'type'      => 'currency',
-            'currency'  => 'base_currency_code',
-            'header_css_class'  => 'col-refunded',
-            'column_css_class'  => 'col-refunded'
-        ));
+        $this->addColumn(
+            'base_grand_total',
+            array(
+                'header' => __('Refunded'),
+                'index' => 'base_grand_total',
+                'type' => 'currency',
+                'currency' => 'base_currency_code',
+                'header_css_class' => 'col-refunded',
+                'column_css_class' => 'col-refunded'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -191,10 +217,8 @@ class Creditmemos
     {
         return $this->getUrl(
             '*/order_creditmemo/view',
-            array(
-                'creditmemo_id' => $row->getId(),
-                'order_id' => $row->getOrderId()
-             ));
+            array('creditmemo_id' => $row->getId(), 'order_id' => $row->getOrderId())
+        );
     }
 
     /**

@@ -94,8 +94,10 @@ class Success extends \Magento\View\Element\Template
     {
         $paymentIds = $this->_checkoutSession->getLastRecurringPaymentIds();
         if ($paymentIds && is_array($paymentIds)) {
-            $collection = $this->_recurringPaymentCollectionFactory->create()
-                ->addFieldToFilter('payment_id', array('in' => $paymentIds));
+            $collection = $this->_recurringPaymentCollectionFactory->create()->addFieldToFilter(
+                'payment_id',
+                array('in' => $paymentIds)
+            );
             $payments = array();
             foreach ($collection as $payment) {
                 $payments[] = $payment;

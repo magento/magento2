@@ -34,8 +34,7 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper\Sortby;
 
-class Available
-    extends \Magento\Data\Form\Element\Multiselect
+class Available extends \Magento\Data\Form\Element\Multiselect
 {
     /**
      * Returns js code that is used instead of default toggle code for "Use default config" checkbox
@@ -45,8 +44,8 @@ class Available
     public function getToggleCode()
     {
         $htmlId = 'use_config_' . $this->getHtmlId();
-        return "toggleValueElements(this, this.parentNode.parentNode);"
-            . "if (!this.checked) toggleValueElements($('$htmlId'), $('$htmlId').parentNode);";
+        return "toggleValueElements(this, this.parentNode.parentNode);" .
+            "if (!this.checked) toggleValueElements(\$('{$htmlId}'), \$('{$htmlId}').parentNode);";
     }
 
     /**
@@ -67,17 +66,19 @@ class Available
         $html = parent::getElementHtml();
         $htmlId = 'use_config_' . $this->getHtmlId();
         $html .= '<input id="' . $htmlId . '" name="use_config[]" value="' . $this->getId() . '"';
-        $html .= ($disabled ? ' checked="checked"' : '');
+        $html .= $disabled ? ' checked="checked"' : '';
 
         if ($this->getReadonly() || $elementDisabled) {
             $html .= ' disabled="disabled"';
         }
 
         $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
-        $html .= ' <label for="' . $htmlId . '" class="normal">'
-            . __('Use All Available Attributes') . '</label>';
-        $html .= '<script type="text/javascript">toggleValueElements($(\'' . $htmlId . '\'), $(\'' . $htmlId
-            .'\').parentNode);</script>';
+        $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use All Available Attributes') . '</label>';
+        $html .= '<script type="text/javascript">toggleValueElements($(\'' .
+            $htmlId .
+            '\'), $(\'' .
+            $htmlId .
+            '\').parentNode);</script>';
 
         return $html;
     }

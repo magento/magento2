@@ -35,14 +35,18 @@ namespace Magento\ImportExport\Model;
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
     const FILTER_ELEMENT_GROUP = 'export_filter';
-    const FILTER_ELEMENT_SKIP  = 'skip_attr';
+
+    const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
      * Filter fields types.
      */
     const FILTER_TYPE_SELECT = 'select';
-    const FILTER_TYPE_INPUT  = 'input';
-    const FILTER_TYPE_DATE   = 'date';
+
+    const FILTER_TYPE_INPUT = 'input';
+
+    const FILTER_TYPE_DATE = 'date';
+
     const FILTER_TYPE_NUMBER = 'number';
 
     /**
@@ -114,18 +118,17 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
-                    throw new \Magento\Core\Exception(
-                        __('Please enter a correct entity model')
-                    );
+                    throw new \Magento\Core\Exception(__('Please enter a correct entity model'));
                 }
-                if (!($this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\Entity\AbstractEntity)
-                    && !($this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\AbstractEntity)
+                if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\Entity\AbstractEntity &&
+                    !$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\AbstractEntity
                 ) {
                     throw new \Magento\Core\Exception(
-                        __('Entity adapter object must be an instance of %1 or %2',
-                                'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
-                                'Magento\ImportExport\Model\Export\AbstractEntity'
-                            )
+                        __(
+                            'Entity adapter object must be an instance of %1 or %2',
+                            'Magento\ImportExport\Model\Export\Entity\AbstractEntity',
+                            'Magento\ImportExport\Model\Export\AbstractEntity'
+                        )
                     );
                 }
 
@@ -159,15 +162,14 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     $this->_writer = $this->_exportAdapterFac->create($fileFormats[$this->getFileFormat()]['model']);
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
-                    throw new \Magento\Core\Exception(
-                        __('Please enter a correct entity model')
-                    );
+                    throw new \Magento\Core\Exception(__('Please enter a correct entity model'));
                 }
-                if (! $this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
+                if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {
                     throw new \Magento\Core\Exception(
-                        __('Adapter object must be an instance of %1',
-                                'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
-                            )
+                        __(
+                            'Adapter object must be an instance of %1',
+                            'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter'
+                        )
                     );
                 }
             } else {
@@ -187,26 +189,17 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     {
         if (isset($this->_data[self::FILTER_ELEMENT_GROUP])) {
             $this->addLogComment(__('Begin export of %1', $this->getEntity()));
-            $result = $this->_getEntityAdapter()
-                ->setWriter($this->_getWriter())
-                ->export();
+            $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
             $countRows = substr_count(trim($result), "\n");
             if (!$countRows) {
-                throw new \Magento\Core\Exception(
-                    __('There is no data for export')
-                );
+                throw new \Magento\Core\Exception(__('There is no data for export'));
             }
             if ($result) {
-                $this->addLogComment(array(
-                    __('Exported %1 rows.', $countRows),
-                    __('Export has been done.')
-                ));
+                $this->addLogComment(array(__('Exported %1 rows.', $countRows), __('Export has been done.')));
             }
             return $result;
         } else {
-            throw new \Magento\Core\Exception(
-                __('Please provide filter data.')
-            );
+            throw new \Magento\Core\Exception(__('Please provide filter data.'));
         }
     }
 
@@ -237,15 +230,13 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             return self::FILTER_TYPE_DATE;
         } elseif ('decimal' == $attribute->getBackendType() || 'int' == $attribute->getBackendType()) {
             return self::FILTER_TYPE_NUMBER;
-        } elseif ($attribute->isStatic()
-                  || 'varchar' == $attribute->getBackendType()
-                  || 'text' == $attribute->getBackendType()
+        } elseif ($attribute->isStatic() ||
+            'varchar' == $attribute->getBackendType() ||
+            'text' == $attribute->getBackendType()
         ) {
             return self::FILTER_TYPE_INPUT;
         } else {
-            throw new \Magento\Core\Exception(
-                __('Cannot determine attribute filter type')
-            );
+            throw new \Magento\Core\Exception(__('Cannot determine attribute filter type'));
         }
     }
 
@@ -312,6 +303,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         if (!$fileName) {
             $fileName = $this->getEntity();
         }
-        return $fileName . '_' . date('Ymd_His') .  '.' . $this->_getWriter()->getFileExtension();
+        return $fileName . '_' . date('Ymd_His') . '.' . $this->_getWriter()->getFileExtension();
     }
 }

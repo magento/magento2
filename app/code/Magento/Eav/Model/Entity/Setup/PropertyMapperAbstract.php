@@ -38,7 +38,7 @@ abstract class PropertyMapperAbstract implements PropertyMapperInterface
     protected function _getValue($array, $key, $default = null)
     {
         if (isset($array[$key]) && is_bool($array[$key])) {
-            $array[$key] = (int) $array[$key];
+            $array[$key] = (int)$array[$key];
         }
         return isset($array[$key]) ? $array[$key] : $default;
     }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Product\CopyConstructor;
 
 class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructorInterface
@@ -37,21 +36,21 @@ class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructor
     {
         $duplicate->unsStockItem();
         $stockData = array(
-            'use_config_min_qty'          => 1,
-            'use_config_min_sale_qty'     => 1,
-            'use_config_max_sale_qty'     => 1,
-            'use_config_backorders'       => 1,
+            'use_config_min_qty' => 1,
+            'use_config_min_sale_qty' => 1,
+            'use_config_max_sale_qty' => 1,
+            'use_config_backorders' => 1,
             'use_config_notify_stock_qty' => 1
         );
         /** @var \Magento\CatalogInventory\Model\Stock\Item $currentStockItem */
         if ($currentStockItem = $product->getStockItem()) {
             $stockData += array(
-                'use_config_enable_qty_inc'         => $currentStockItem->getData('use_config_enable_qty_inc'),
-                'enable_qty_increments'             => $currentStockItem->getData('enable_qty_increments'),
-                'use_config_qty_increments'         => $currentStockItem->getData('use_config_qty_increments'),
-                'qty_increments'                    => $currentStockItem->getData('qty_increments'),
+                'use_config_enable_qty_inc' => $currentStockItem->getData('use_config_enable_qty_inc'),
+                'enable_qty_increments' => $currentStockItem->getData('enable_qty_increments'),
+                'use_config_qty_increments' => $currentStockItem->getData('use_config_qty_increments'),
+                'qty_increments' => $currentStockItem->getData('qty_increments')
             );
         }
         $duplicate->setStockData($stockData);
     }
-} 
+}

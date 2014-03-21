@@ -35,7 +35,7 @@ class Assign extends \Magento\Backend\Block\Widget\Form\Container
     protected function _construct()
     {
         $this->_controller = 'adminhtml_order_status';
-        $this->_mode       = 'assign';
+        $this->_mode = 'assign';
         $this->_blockGroup = 'Magento_Sales';
         parent::_construct();
         $this->_updateButton('save', 'label', __('Save Status Assignment'));

@@ -28,9 +28,13 @@ namespace Magento\Authorizenet\Model\Authorizenet;
 class Cards
 {
     const CARDS_NAMESPACE = 'authorize_cards';
+
     const CARD_ID_KEY = 'id';
+
     const CARD_PROCESSED_AMOUNT_KEY = 'processed_amount';
+
     const CARD_CAPTURED_AMOUNT_KEY = 'captured_amount';
+
     const CARD_REFUNDED_AMOUNT_KEY = 'refunded_amount';
 
     /**

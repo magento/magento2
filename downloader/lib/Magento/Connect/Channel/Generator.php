@@ -30,7 +30,7 @@ class Generator extends \Magento\Xml\Generator
     /**
      * @var string
      */
-    protected $_file      = 'channel.xml';
+    protected $_file = 'channel.xml';
 
     /**
      * @var \Magento\Xml\Generator|null
@@ -40,7 +40,7 @@ class Generator extends \Magento\Xml\Generator
     /**
      * @param string $file
      */
-    public function __construct($file='')
+    public function __construct($file = '')
     {
         if ($file) {
             $this->_file = $file;
@@ -73,9 +73,7 @@ class Generator extends \Magento\Xml\Generator
      */
     public function save($content)
     {
-        $xmlContent = $this->getGenerator()
-        ->arrayToXml($content)
-        ->save($this->getFile());
+        $xmlContent = $this->getGenerator()->arrayToXml($content)->save($this->getFile());
         return $this;
     }
 }

@@ -60,10 +60,9 @@ class Link extends AbstractElement
      */
     public function getElementHtml()
     {
-        $html = $this->getBeforeElementHtml()
-            . '<a id="' . $this->getHtmlId() . '" ' . $this->serialize($this->getHtmlAttributes())
-            . $this->_getUiId() . '>' . $this->getEscapedValue() . "</a>\n"
-            . $this->getAfterElementHtml();
+        $html = $this->getBeforeElementHtml() . '<a id="' . $this->getHtmlId() . '" ' . $this->serialize(
+            $this->getHtmlAttributes()
+        ) . $this->_getUiId() . '>' . $this->getEscapedValue() . "</a>\n" . $this->getAfterElementHtml();
         return $html;
     }
 
@@ -74,10 +73,36 @@ class Link extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array('charset', 'coords', 'href', 'hreflang', 'rel', 'rev', 'name',
-            'shape', 'target', 'accesskey', 'class', 'dir', 'lang', 'style',
-            'tabindex', 'title', 'xml:lang', 'onblur', 'onclick', 'ondblclick',
-            'onfocus', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
-            'onmouseup', 'onkeydown', 'onkeypress', 'onkeyup');
+        return array(
+            'charset',
+            'coords',
+            'href',
+            'hreflang',
+            'rel',
+            'rev',
+            'name',
+            'shape',
+            'target',
+            'accesskey',
+            'class',
+            'dir',
+            'lang',
+            'style',
+            'tabindex',
+            'title',
+            'xml:lang',
+            'onblur',
+            'onclick',
+            'ondblclick',
+            'onfocus',
+            'onmousedown',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'onkeydown',
+            'onkeypress',
+            'onkeyup'
+        );
     }
 }

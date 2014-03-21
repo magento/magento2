@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Model\Resource\Product;
 
 class Link extends \Magento\Catalog\Model\Resource\Product\Link
@@ -40,14 +39,15 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
     {
         $adapter = $this->_getWriteAdapter();
         // check for change relations
-        $bind    = array(
-            'product_id'    => (int)$product->getId(),
-            'link_type_id'  => self::LINK_TYPE_GROUPED
+        $bind = array('product_id' => (int)$product->getId(), 'link_type_id' => self::LINK_TYPE_GROUPED);
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array('linked_product_id')
+        )->where(
+            'product_id = :product_id'
+        )->where(
+            'link_type_id = :link_type_id'
         );
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('linked_product_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
         $old = $adapter->fetchCol($select, $bind);
         $new = array_keys($data);
 
@@ -76,16 +76,17 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
      */
     public function getChildrenIds($parentId, $typeId)
     {
-        $adapter     = $this->_getReadAdapter();
+        $adapter = $this->_getReadAdapter();
         $childrenIds = array();
-        $bind        = array(
-            ':product_id'    => (int)$parentId,
-            ':link_type_id'  => (int)$typeId
+        $bind = array(':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId);
+        $select = $adapter->select()->from(
+            array('l' => $this->getMainTable()),
+            array('linked_product_id')
+        )->where(
+            'product_id = :product_id'
+        )->where(
+            'link_type_id = :link_type_id'
         );
-        $select = $adapter->select()
-            ->from(array('l' => $this->getMainTable()), array('linked_product_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
 
         $select->join(
             array('e' => $this->getTable('catalog_product_entity')),
@@ -101,4 +102,4 @@ class Link extends \Magento\Catalog\Model\Resource\Product\Link
 
         return $childrenIds;
     }
-} 
+}

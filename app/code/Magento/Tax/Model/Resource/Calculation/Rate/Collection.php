@@ -111,7 +111,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $storeId = (int)$this->_storeManager->getStore($store)->getId();
         $this->_select->joinLeft(
             array('title_table' => $this->getTable('tax_calculation_rate_title')),
-            $this->getConnection()->quoteInto('main_table.tax_calculation_rate_id = title_table.tax_calculation_rate_id AND title_table.store_id = ?', $storeId),
+            $this->getConnection()->quoteInto(
+                'main_table.tax_calculation_rate_id = title_table.tax_calculation_rate_id AND title_table.store_id = ?',
+                $storeId
+            ),
             array('title' => 'value')
         );
 
@@ -125,13 +128,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function joinStoreTitles()
     {
-        $storeCollection =  $this->_storeManager->getStores(true);
+        $storeCollection = $this->_storeManager->getStores(true);
         foreach ($storeCollection as $store) {
-            $tableAlias    = sprintf('title_table_%s', $store->getId());
-            $joinCondition = implode(' AND ', array(
-                "main_table.tax_calculation_rate_id = {$tableAlias}.tax_calculation_rate_id",
-                $this->getConnection()->quoteInto($tableAlias . '.store_id = ?', $store->getId())
-            ));
+            $tableAlias = sprintf('title_table_%s', $store->getId());
+            $joinCondition = implode(
+                ' AND ',
+                array(
+                    "main_table.tax_calculation_rate_id = {$tableAlias}.tax_calculation_rate_id",
+                    $this->getConnection()->quoteInto($tableAlias . '.store_id = ?', $store->getId())
+                )
+            );
             $this->_select->joinLeft(
                 array($tableAlias => $this->getTable('tax_calculation_rate_title')),
                 $joinCondition,
@@ -189,4 +195,3 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         return $this->_toOptionHashOptimized('tax_calculation_rate_id', 'code');
     }
 }
-

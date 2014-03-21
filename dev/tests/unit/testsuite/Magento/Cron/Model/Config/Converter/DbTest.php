@@ -55,21 +55,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertConfigParams()
     {
-        $fullJob = array(
-            'schedule' => array(
-                'config_path' => 'config/path',
-                'cron_expr'   => '* * * * *'
-            )
-        );
-        $nullJob = array(
-            'schedule' => array(
-                'config_path' => null,
-                'cron_expr' => null
-            )
-        );
-        $notFullJob = array(
-            'schedule' => ''
-        );
+        $fullJob = array('schedule' => array('config_path' => 'config/path', 'cron_expr' => '* * * * *'));
+        $nullJob = array('schedule' => array('config_path' => null, 'cron_expr' => null));
+        $notFullJob = array('schedule' => '');
         $source = array(
             'crontab' => array(
                 'jobs' => array(
@@ -84,7 +72,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             'job_name_1' => array('config_path' => 'config/path', 'schedule' => '* * * * *'),
             'job_name_2' => array('config_path' => null, 'schedule' => null),
             'job_name_3' => array('schedule' => ''),
-            'job_name_4' => array(''),
+            'job_name_4' => array('')
         );
 
         $result = $this->_converter->convert($source);
@@ -105,18 +93,10 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertRunConfig()
     {
-        $runFullJob = array(
-            'run' => array('model' => 'Model1::method1')
-        );
-        $runNoMethodJob = array(
-            'run' => array('model' => 'Model2')
-        );
-        $runEmptyMethodJob = array(
-            'run' => array('model' => 'Model3::')
-        );
-        $runNoModelJob = array(
-            'run' => array('model' => '::method1')
-        );
+        $runFullJob = array('run' => array('model' => 'Model1::method1'));
+        $runNoMethodJob = array('run' => array('model' => 'Model2'));
+        $runEmptyMethodJob = array('run' => array('model' => 'Model3::'));
+        $runNoModelJob = array('run' => array('model' => '::method1'));
 
         $source = array(
             'crontab' => array(
@@ -124,7 +104,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
                     'job_name_1' => $runFullJob,
                     'job_name_2' => $runNoMethodJob,
                     'job_name_3' => $runEmptyMethodJob,
-                    'job_name_4' => $runNoModelJob,
+                    'job_name_4' => $runNoModelJob
                 )
             )
         );

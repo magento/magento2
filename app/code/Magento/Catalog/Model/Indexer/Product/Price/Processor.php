@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
 class Processor
@@ -41,9 +40,8 @@ class Processor
     /**
      * @param \Magento\Indexer\Model\IndexerInterface $indexer
      */
-    public function __construct(
-       \Magento\Indexer\Model\IndexerInterface $indexer
-    ) {
+    public function __construct(\Magento\Indexer\Model\IndexerInterface $indexer)
+    {
         $this->_indexer = $indexer;
     }
 

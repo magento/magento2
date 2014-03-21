@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Block\Adminhtml;
 
 /**
@@ -96,18 +95,26 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         if (!params.form_key) {
                             params.form_key = FORM_KEY;
                         }
-                        new Ajax.Updater("rating_detail", "'.$this->getUrl('catalog/*/ratingItems').'", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
+                        new Ajax.Updater("rating_detail", "' .
+            $this->getUrl(
+                'catalog/*/ratingItems'
+            ) .
+            '", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
 
                     reqSuccess :function(o) {
                         var response = Ext.util.JSON.decode(o.responseText);
                         if( response.error ) {
                             alert(response.message);
-                        } else if( response.id ){
+                        } elseif( response.id ){
                             $("product_id").value = response.id;
 
-                            $("product_name").innerHTML = \'<a href="' . $this->getUrl('catalog/product/edit') . 'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
-                        } else if( response.message ) {
+                            $("product_name").innerHTML = \'<a href="' .
+            $this->getUrl(
+                'catalog/product/edit'
+            ) .
+            'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
+                        } elseif ( response.message ) {
                             alert(response.message);
                         }
                     }

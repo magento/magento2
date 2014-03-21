@@ -210,9 +210,10 @@ class TransportBuilder
     {
         $this->prepareMessage();
 
-        $result = $this->objectManager->create('Magento\Mail\TransportInterface', array(
-            'message' => clone $this->message
-        ));
+        $result = $this->objectManager->create(
+            'Magento\Mail\TransportInterface',
+            array('message' => clone $this->message)
+        );
 
         $this->reset();
 
@@ -240,9 +241,13 @@ class TransportBuilder
      */
     protected function getTemplate()
     {
-        return $this->templateFactory->get($this->templateIdentifier)
-            ->setVars($this->templateVars)
-            ->setOptions($this->templateOptions);
+        return $this->templateFactory->get(
+            $this->templateIdentifier
+        )->setVars(
+            $this->templateVars
+        )->setOptions(
+            $this->templateOptions
+        );
     }
 
     /**
@@ -255,14 +260,17 @@ class TransportBuilder
         $template = $this->getTemplate();
         $types = array(
             \Magento\App\TemplateTypesInterface::TYPE_TEXT => \Magento\Mail\MessageInterface::TYPE_TEXT,
-            \Magento\App\TemplateTypesInterface::TYPE_HTML => \Magento\Mail\MessageInterface::TYPE_HTML,
+            \Magento\App\TemplateTypesInterface::TYPE_HTML => \Magento\Mail\MessageInterface::TYPE_HTML
         );
 
         $body = $template->processTemplate();
-        $this->message
-            ->setMessageType($types[$template->getType()])
-            ->setBody($body)
-            ->setSubject($template->getSubject());
+        $this->message->setMessageType(
+            $types[$template->getType()]
+        )->setBody(
+            $body
+        )->setSubject(
+            $template->getSubject()
+        );
 
         return $this;
     }

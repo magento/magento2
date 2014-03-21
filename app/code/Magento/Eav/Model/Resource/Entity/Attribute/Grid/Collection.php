@@ -34,8 +34,7 @@ use Magento\Core\Model\Resource\Db\Collection\AbstractCollection;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
 {
     /**
      * @var \Magento\Registry

@@ -43,7 +43,6 @@ class Address extends \Magento\App\Action\Action
      */
     protected $_formKeyValidator;
 
-
     /**
      * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
      */
@@ -192,9 +191,9 @@ class Address extends \Magento\App\Action\Action
         $customerId = $this->_getSession()->getCustomerId();
         try {
             $address = $this->_extractAddress();
-            $this->_addressService->saveAddresses($customerId, [$address]);
+            $this->_addressService->saveAddresses($customerId, array($address));
             $this->messageManager->addSuccess(__('The address has been saved.'));
-            $url = $this->_buildUrl('*/*/index', array('_secure'=>true));
+            $url = $this->_buildUrl('*/*/index', array('_secure' => true));
             $this->getResponse()->setRedirect($this->_redirect->success($url));
             return;
         } catch (InputException $e) {
@@ -219,7 +218,7 @@ class Address extends \Magento\App\Action\Action
     protected function _extractAddress()
     {
         $addressId = $this->getRequest()->getParam('id');
-        $existingAddressData = [];
+        $existingAddressData = array();
         if ($addressId) {
             $existingAddress = $this->_addressService->getAddress($addressId);
             if ($existingAddress->getId()) {
@@ -230,23 +229,19 @@ class Address extends \Magento\App\Action\Action
         }
 
         /** @var \Magento\Customer\Model\Metadata\Form $addressForm */
-        $addressForm = $this->_formFactory->create(
-            'customer_address',
-            'customer_address_edit',
-            $existingAddressData
-        );
+        $addressForm = $this->_formFactory->create('customer_address', 'customer_address_edit', $existingAddressData);
         $addressData = $addressForm->extractData($this->getRequest());
         $attributeValues = $addressForm->compactData($addressData);
-        $region = [
-            'region_id' => $attributeValues['region_id'],
-            'region' => $attributeValues['region'],
-        ];
+        $region = array('region_id' => $attributeValues['region_id'], 'region' => $attributeValues['region']);
         unset($attributeValues['region'], $attributeValues['region_id']);
         $attributeValues['region'] = $region;
-        return $this->_addressBuilder->populateWithArray(array_merge($existingAddressData, $attributeValues))
-            ->setDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setDefaultShipping($this->getRequest()->getParam('default_shipping', false))
-            ->create();
+        return $this->_addressBuilder->populateWithArray(
+            array_merge($existingAddressData, $attributeValues)
+        )->setDefaultBilling(
+            $this->getRequest()->getParam('default_billing', false)
+        )->setDefaultShipping(
+            $this->getRequest()->getParam('default_shipping', false)
+        )->create();
     }
 
     /**

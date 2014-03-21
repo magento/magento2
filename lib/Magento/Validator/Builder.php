@@ -139,7 +139,7 @@ class Builder
                 $callbacks = array($configuration['callback']);
             }
             foreach ($callbacks as $callback) {
-                if (!($callback instanceof \Magento\Validator\Constraint\Option\Callback)) {
+                if (!$callback instanceof \Magento\Validator\Constraint\Option\Callback) {
                     throw new \InvalidArgumentException(
                         'Callback must be instance of \Magento\Validator\Constraint\Option\Callback'
                     );
@@ -214,8 +214,10 @@ class Builder
      * @param \Magento\Validator\Constraint\Option\Callback $callback
      * @return array
      */
-    protected function _addConstraintCallback(array $constraint, \Magento\Validator\Constraint\Option\Callback $callback)
-    {
+    protected function _addConstraintCallback(
+        array $constraint,
+        \Magento\Validator\Constraint\Option\Callback $callback
+    ) {
         if (!array_key_exists('callback', $constraint['options'])) {
             $constraint['options']['callback'] = array();
         }
@@ -289,16 +291,18 @@ class Builder
     {
         $validator = $this->_oneValidatorFactory->create(
             $data['class'],
-            isset($data['options']['arguments'])
-                ? $this->_applyArgumentsCallback($data['options']['arguments'])
-                : array()
+            isset(
+                $data['options']['arguments']
+            ) ? $this->_applyArgumentsCallback(
+                $data['options']['arguments']
+            ) : array()
         );
 
         // Check validator type
         if (!$validator instanceof \Magento\Validator\ValidatorInterface) {
-            throw new \InvalidArgumentException(sprintf(
-                'Constraint class "%s" must implement \Magento\Validator\ValidatorInterface', $data['class']
-            ));
+            throw new \InvalidArgumentException(
+                sprintf('Constraint class "%s" must implement \Magento\Validator\ValidatorInterface', $data['class'])
+            );
         }
 
         return $validator;

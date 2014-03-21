@@ -25,8 +25,8 @@
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml;
 
-abstract class AbstractTab
-    extends \Magento\Backend\Block\Widget\Form implements \Magento\Backend\Block\Widget\Tab\TabInterface
+abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * @var \Magento\GoogleOptimizer\Helper\Data
@@ -105,7 +105,7 @@ abstract class AbstractTab
      *
      * @return \Magento\Catalog\Model\AbstractModel
      */
-    protected abstract function _getEntity();
+    abstract protected function _getEntity();
 
     /**
      * Can show tab in tabs

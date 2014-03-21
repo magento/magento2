@@ -28,6 +28,7 @@
  * Product attribute source input types
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
+
 class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
 {
     /**
@@ -48,10 +49,8 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      * @param \Magento\Event\ManagerInterface $eventManager
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Event\ManagerInterface $eventManager, \Magento\Registry $coreRegistry)
+    {
         $this->_eventManager = $eventManager;
         $this->_coreRegistry = $coreRegistry;
     }
@@ -64,19 +63,13 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
     public function toOptionArray()
     {
         $inputTypes = array(
-            array(
-                'value' => 'price',
-                'label' => __('Price')
-            ),
-            array(
-                'value' => 'media_image',
-                'label' => __('Media Image')
-            )
+            array('value' => 'price', 'label' => __('Price')),
+            array('value' => 'media_image', 'label' => __('Media Image'))
         );
 
         $response = new \Magento\Object();
         $response->setTypes(array());
-        $this->_eventManager->dispatch('adminhtml_product_attribute_types', array('response'=>$response));
+        $this->_eventManager->dispatch('adminhtml_product_attribute_types', array('response' => $response));
         $_disabledTypes = array();
         $_hiddenFields = array();
         foreach ($response->getTypes() as $type) {

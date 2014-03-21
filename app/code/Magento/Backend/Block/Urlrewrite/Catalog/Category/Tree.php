@@ -143,9 +143,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     {
         $collection = $this->_getData('category_collection');
         if (is_null($collection)) {
-            $collection = $this->_categoryFactory->create()->getCollection()
-                ->addAttributeToSelect(array('name', 'is_active'))
-                ->setLoadProductCount(true);
+            $collection = $this->_categoryFactory->create()->getCollection()->addAttributeToSelect(
+                array('name', 'is_active')
+            )->setLoadProductCount(
+                true
+            );
             $this->setData('category_collection', $collection);
         }
 
@@ -161,13 +163,13 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected function _getNodesArray($node)
     {
         $result = array(
-            'id'             => (int)$node->getId(),
-            'parent_id'      => (int)$node->getParentId(),
+            'id' => (int)$node->getId(),
+            'parent_id' => (int)$node->getParentId(),
             'children_count' => (int)$node->getChildrenCount(),
-            'is_active'      => (bool)$node->getIsActive(),
-            'name'           => $node->getName(),
-            'level'          => (int)$node->getLevel(),
-            'product_count'  => (int)$node->getProductCount()
+            'is_active' => (bool)$node->getIsActive(),
+            'name' => $node->getName(),
+            'level' => (int)$node->getLevel(),
+            'product_count' => (int)$node->getProductCount()
         );
 
         if (is_array($this->_allowedCategoryIds) && !in_array($result['id'], $this->_allowedCategoryIds)) {
@@ -180,8 +182,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                 $result['children'][] = $this->_getNodesArray($childNode);
             }
         }
-        $result['cls']      = ($result['is_active'] ? '' : 'no-') . 'active-category';
-        $result['expanded'] = (!empty($result['children']));
+        $result['cls'] = ($result['is_active'] ? '' : 'no-') . 'active-category';
+        $result['expanded'] = !empty($result['children']);
 
         return $result;
     }

@@ -51,9 +51,7 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
      */
     protected function _construct()
     {
-        $this->addLink(__('Home'),
-            __('Home'), $this->getUrl('*')
-        );
+        $this->addLink(__('Home'), __('Home'), $this->getUrl('*'));
     }
 
     /**
@@ -62,16 +60,12 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
      * @param string|null $url
      * @return $this
      */
-    public function addLink($label, $title=null, $url=null)
+    public function addLink($label, $title = null, $url = null)
     {
         if (empty($title)) {
             $title = $label;
         }
-        $this->_links[] = array(
-            'label' => $label,
-            'title' => $title,
-            'url'   => $url
-        );
+        $this->_links[] = array('label' => $label, 'title' => $title, 'url' => $url);
         return $this;
     }
 

@@ -24,8 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
 /**
@@ -43,15 +41,22 @@ class EditTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product', array('getAttributes', '__wakeup'), array(), '', false
+            'Magento\Catalog\Model\Product',
+            array('getAttributes', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $product->expects($this->any())->method('getAttributes')->will($this->returnValue(array()));
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Registry')->register('current_product', $product);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Catalog\Block\Adminhtml\Product\Edit'
+        );
     }
 
     public function testGetTypeSwitcherData()

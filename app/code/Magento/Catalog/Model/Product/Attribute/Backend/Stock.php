@@ -71,10 +71,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $item->loadByProduct($object);
         $object->setData(
             $this->getAttribute()->getAttributeCode(),
-            array(
-                'is_in_stock' => $item->getIsInStock(),
-                'qty' => $item->getQty(),
-            )
+            array('is_in_stock' => $item->getIsInStock(), 'qty' => $item->getQty())
         );
         return parent::afterLoad($object);
     }
@@ -110,9 +107,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if (!empty($value['qty']) && !preg_match('/^-?\d*(\.|,)?\d{0,4}$/i', $value['qty'])) {
-            throw new \Magento\Core\Exception(
-                __('Please enter a valid number in this field.')
-            );
+            throw new \Magento\Core\Exception(__('Please enter a valid number in this field.'));
         }
         return true;
     }

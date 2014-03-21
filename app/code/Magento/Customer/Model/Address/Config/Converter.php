@@ -43,8 +43,11 @@ class Converter implements \Magento\Config\ConverterInterface
             $formatCode = $formatConfig->attributes->getNamedItem('code')->nodeValue;
             $output[$formatCode] = array();
             for ($attributeIndex = 0; $attributeIndex < $formatConfig->attributes->length; $attributeIndex++) {
-                $output[$formatCode][$formatConfig->attributes->item($attributeIndex)->nodeName] =
-                    $formatConfig->attributes->item($attributeIndex)->nodeValue;
+                $output[$formatCode][$formatConfig->attributes->item(
+                    $attributeIndex
+                )->nodeName] = $formatConfig->attributes->item(
+                    $attributeIndex
+                )->nodeValue;
             }
         }
         return $output;

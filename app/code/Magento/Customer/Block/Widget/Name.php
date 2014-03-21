@@ -213,9 +213,10 @@ class Name extends AbstractWidget
      */
     protected function _getAttribute($attributeCode)
     {
-        if ($this->getForceUseCustomerAttributes()
-            || $this->getObject() instanceof \Magento\Customer\Model\Customer
-            || $this->getObject() instanceof Customer) {
+        if ($this->getForceUseCustomerAttributes() ||
+            $this->getObject() instanceof \Magento\Customer\Model\Customer ||
+            $this->getObject() instanceof Customer
+        ) {
             return parent::_getAttribute($attributeCode);
         }
 

@@ -44,9 +44,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     protected function _joinFields()
     {
         parent::_joinFields();
-        $this->addAttributeToSelect('price')
-            ->addCartsCount()
-            ->addOrdersCount();
+        $this->addAttributeToSelect('price')->addCartsCount()->addOrdersCount();
 
         return $this;
     }

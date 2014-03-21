@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\Customer\Service\V1\Data\Address;
@@ -32,24 +31,40 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 {
     /** Sample values for testing */
     const ID = 14;
+
     const IS_SHIPPING = true;
+
     const IS_BILLING = false;
+
     const COMPANY = 'Company Name';
+
     const FAX = '(555) 555-5555';
+
     const MIDDLENAME = 'Mid';
+
     const PREFIX = 'Mr.';
+
     const SUFFIX = 'Esq.';
+
     const VAT_ID = 'S45';
+
     const FIRSTNAME = 'Jane';
+
     const LASTNAME = 'Doe';
+
     const STREET_LINE_0 = '7700 W Parmer Ln';
+
     const CITY = 'Austin';
+
     const COUNTRY_CODE = 'US';
+
     const POSTCODE = '78620';
+
     const TELEPHONE = '5125125125';
+
     const REGION = 'Texas';
 
-    protected $_expectedValues = [
+    protected $_expectedValues = array(
         'id' => 14,
         'default_shipping' => true,
         'default_billing' => false,
@@ -61,16 +76,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         'vat_id' => 'S45',
         'firstname' => 'Jane',
         'lastname' => 'Doe',
-        'street' => ['7700 W Parmer Ln'],
+        'street' => array('7700 W Parmer Ln'),
         'city' => 'Austin',
         'country_id' => 'US',
         'postcode' => '78620',
         'telephone' => '5125125125',
-        'region' => [
-            'region_id' => 0,
-            'region' => 'Texas',
-        ],
-    ];
+        'region' => array('region_id' => 0, 'region' => 'Texas')
+    );
 
     /**
      * @var \Magento\Customer\Service\V1\Data\AddressBuilder
@@ -85,16 +97,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $regionBuilder = $objectManagerHelper->getObject('Magento\Customer\Service\V1\Data\RegionBuilder');
         /** @var \Magento\Customer\Service\V1\CustomerMetadataService $customerMetadataService */
-        $this->_customerMetadataService = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerMetadataService')
-            ->setMethods(['getCustomAddressAttributeMetadata'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_customerMetadataService->expects($this->any())
-            ->method('getCustomAddressAttributeMetadata')
-            ->will($this->returnValue([
-                new \Magento\Object(['attribute_code' => 'warehouse_zip']),
-                new \Magento\Object(['attribute_code' => 'warehouse_alternate'])
-            ]));
+        $this->_customerMetadataService = $this->getMockBuilder(
+            'Magento\Customer\Service\V1\CustomerMetadataService'
+        )->setMethods(
+            array('getCustomAddressAttributeMetadata')
+        )->disableOriginalConstructor()->getMock();
+        $this->_customerMetadataService->expects(
+            $this->any()
+        )->method(
+            'getCustomAddressAttributeMetadata'
+        )->will(
+            $this->returnValue(
+                array(
+                    new \Magento\Object(array('attribute_code' => 'warehouse_zip')),
+                    new \Magento\Object(array('attribute_code' => 'warehouse_alternate'))
+                )
+            )
+        );
         $this->_addressBuilder = new AddressBuilder($regionBuilder, $this->_customerMetadataService);
     }
 
@@ -107,19 +126,22 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testCopyAndModify()
     {
         /** @var \Magento\Customer\Service\V1\Data\Address $origAddress */
-        $origAddress = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_mockReturnValue($origAddress, array(
-            'getFirstname' => $this->_expectedValues['firstname'],
-            'getLastname' => $this->_expectedValues['lastname'],
-            'getStreet' => $this->_expectedValues['street'],
-            'getCity' => $this->_expectedValues['city'],
-            'getCountryId' => $this->_expectedValues['country_id'],
-            'getRegion' => (new RegionBuilder())->setRegionId(0)->setRegion('Texas')->create(),
-            'getPostcode' => $this->_expectedValues['postcode'],
-            'getTelephone' => $this->_expectedValues['telephone'],
-        ));
+        $origAddress = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\Data\Address'
+        )->disableOriginalConstructor()->getMock();
+        $this->_mockReturnValue(
+            $origAddress,
+            array(
+                'getFirstname' => $this->_expectedValues['firstname'],
+                'getLastname' => $this->_expectedValues['lastname'],
+                'getStreet' => $this->_expectedValues['street'],
+                'getCity' => $this->_expectedValues['city'],
+                'getCountryId' => $this->_expectedValues['country_id'],
+                'getRegion' => (new RegionBuilder())->setRegionId(0)->setRegion('Texas')->create(),
+                'getPostcode' => $this->_expectedValues['postcode'],
+                'getTelephone' => $this->_expectedValues['telephone']
+            )
+        );
 
         $this->_assertMinimumRequiredFields($origAddress);
     }
@@ -169,9 +191,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     private function _mockReturnValue($mock, $valueMap)
     {
         foreach ($valueMap as $method => $value) {
-            $mock->expects($this->any())
-                ->method($method)
-                ->will($this->returnValue($value));
+            $mock->expects($this->any())->method($method)->will($this->returnValue($value));
         }
     }
 
@@ -186,8 +206,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $addressBuilder->setCity($this->_expectedValues['city']);
         $addressBuilder->setCountryId($this->_expectedValues['country_id']);
         $addressBuilder->setRegion(
-            (new RegionBuilder())->setRegionId($this->_expectedValues['region']['region_id'])->setRegion(
-                $this->_expectedValues['region']['region'])->create()
+            (new RegionBuilder())->setRegionId(
+                $this->_expectedValues['region']['region_id']
+            )->setRegion(
+                $this->_expectedValues['region']['region']
+            )->create()
         );
         $addressBuilder->setPostcode($this->_expectedValues['postcode']);
         $addressBuilder->setTelephone($this->_expectedValues['telephone']);
@@ -222,7 +245,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_expectedValues['city'], $address->getCity());
         $this->assertEquals($this->_expectedValues['country_id'], $address->getCountryId());
         $this->assertEquals(
-            (new RegionBuilder())->setRegionId($this->_expectedValues['region']['region_id'])->setRegion(
+            (new RegionBuilder())->setRegionId(
+                $this->_expectedValues['region']['region_id']
+            )->setRegion(
                 $this->_expectedValues['region']['region']
             )->create(),
             $address->getRegion()
@@ -233,42 +258,39 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomAttribute()
     {
-        $this->_addressBuilder->populateWithArray([]);
-        $address = $this->_addressBuilder->setCustomAttribute('warehouse_zip', '78777')
-            ->setCustomAttribute('warehouse_alternate', '90051')
-            ->create();
+        $this->_addressBuilder->populateWithArray(array());
+        $address = $this->_addressBuilder->setCustomAttribute(
+            'warehouse_zip',
+            '78777'
+        )->setCustomAttribute(
+            'warehouse_alternate',
+            '90051'
+        )->create();
         $this->assertEquals('78777', $address->getCustomAttribute('warehouse_zip'));
         $this->assertEquals('90051', $address->getCustomAttribute('warehouse_alternate'));
 
-        $attributes = [
-            Address::CUSTOM_ATTRIBUTES_KEY => [
-                'warehouse_zip' => '78777',
-                'warehouse_alternate' => '90051'
-            ],
-        ];
+        $attributes = array(
+            Address::CUSTOM_ATTRIBUTES_KEY => array('warehouse_zip' => '78777', 'warehouse_alternate' => '90051')
+        );
         $this->assertEquals($attributes[Customer::CUSTOM_ATTRIBUTES_KEY], $address->getCustomAttributes());
         $this->assertEquals($attributes, $address->__toArray());
     }
 
     public function testSetCustomAttributes()
     {
-        $addressData = [
+        $addressData = array(
             'email' => 'test@example.com',
             'firstname' => 'John',
             'lastname' => 'Doe',
             'unknown_key' => 'Golden Necklace',
             'warehouse_zip' => '78777',
             'warehouse_alternate' => '90051'
-        ];
-        $expectedData = [
-            Address::CUSTOM_ATTRIBUTES_KEY => [
-                'warehouse_zip' => '78777',
-                'warehouse_alternate' => '90051'
-            ]
-        ];
-        $this->_addressBuilder->populateWithArray([]);
-        $address = $this->_addressBuilder->setCustomAttributes($addressData)
-            ->create();
+        );
+        $expectedData = array(
+            Address::CUSTOM_ATTRIBUTES_KEY => array('warehouse_zip' => '78777', 'warehouse_alternate' => '90051')
+        );
+        $this->_addressBuilder->populateWithArray(array());
+        $address = $this->_addressBuilder->setCustomAttributes($addressData)->create();
 
         $this->assertEquals('78777', $address->getCustomAttribute('warehouse_zip'));
         $this->assertEquals('90051', $address->getCustomAttribute('warehouse_alternate'));

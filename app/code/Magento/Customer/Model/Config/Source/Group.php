@@ -60,9 +60,9 @@ class Group implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $groups = $this->_groupService->getGroups(FALSE);
+            $groups = $this->_groupService->getGroups(false);
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
-            array_unshift($this->_options, array('value'=> '', 'label'=> __('-- Please Select --')));
+            array_unshift($this->_options, array('value' => '', 'label' => __('-- Please Select --')));
         }
         return $this->_options;
     }

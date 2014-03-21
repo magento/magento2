@@ -39,15 +39,20 @@ class Ccsave extends \Magento\Payment\Block\Info\Cc
             return $this->_paymentSpecificInformation;
         }
         $info = $this->getInfo();
-        $transport = new \Magento\Object(array((string)__('Name on the Card') => $info->getCcOwner(),));
+        $transport = new \Magento\Object(array((string)__('Name on the Card') => $info->getCcOwner()));
         $transport = parent::_prepareSpecificInformation($transport);
         if (!$this->getIsSecureMode()) {
-            $transport->addData(array(
-                (string)__('Expiration Date') => $this->_formatCardDate(
-                    $info->getCcExpYear(), $this->getCcExpMonth()
-                ),
-                (string)__('Credit Card Number') => $info->getCcNumber(),
-            ));
+            $transport->addData(
+                array(
+                    (string)__(
+                        'Expiration Date'
+                    ) => $this->_formatCardDate(
+                        $info->getCcExpYear(),
+                        $this->getCcExpMonth()
+                    ),
+                    (string)__('Credit Card Number') => $info->getCcNumber()
+                )
+            );
         }
         return $transport;
     }

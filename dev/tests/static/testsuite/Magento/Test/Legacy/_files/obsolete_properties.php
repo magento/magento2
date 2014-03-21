@@ -83,10 +83,10 @@ return array(
     array('_parentBlock', 'Magento\Core\Block\AbstractBlock'),
     array('_persistentCustomerGroupId'),
     array('_queriesHooked', 'Magento\Core\Model\Resource\Setup'),
-    ['_quoteImporter', 'Magento\Paypal\Model\Express\Checkout'],
+    array('_quoteImporter', 'Magento\Paypal\Model\Express\Checkout'),
     array('_ratingOptionTable', 'Magento\Rating\Model\Resource\Rating\Option\Collection'),
     array('_readerFactory', 'Magento\App\ObjectManager\ConfigLoader'),
-    ['_recurringPaymentProfiles', '\Magento\Paypal\Model\Api\AbstractApi'],
+    array('_recurringPaymentProfiles', '\Magento\Paypal\Model\Api\AbstractApi'),
     array('_resourceConfig', 'Magento\Core\Model\Resource\Setup'),
     array('_saveTemplateFlag', 'Magento\Newsletter\Model\Queue'),
     array('_searchTextFields'),
@@ -94,10 +94,16 @@ return array(
     array('_skipFieldsByModel'),
     array('_ship_id'),
     array('_shipTable', 'Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection'),
-    array('_showTemplateHints', 'Magento\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints'),
-    array('_showTemplateHintsBlocks', 'Magento\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints'),
+    array(
+        '_showTemplateHints',
+        'Magento\View\Element\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints'
+    ),
+    array(
+        '_showTemplateHintsBlocks',
+        'Magento\View\Element\Template',
+        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints'
+    ),
     array('_sortedChildren'),
     array('_sortInstructions'),
     array('_storeFilter', 'Magento\Catalog\Model\Product\Type\AbstractType'),
@@ -209,7 +215,7 @@ return array(
     array('dir', 'Magento\Core\Model\Theme\Image\Path'),
     array('_dir', 'Magento\Install\App\Action\Plugin\Dir'),
     array('_dirs', 'Magento\View\Block\Template\Context'),
-    array('_coreDir', 'Magento\Sales\Model\Order\Pdf\AbstractItems' ,'_rootDirectory'),
+    array('_coreDir', 'Magento\Sales\Model\Order\Pdf\AbstractItems', '_rootDirectory'),
     array('_dir', 'Magento\AdvancedCheckout\Model\Import', '_filesystem'),
     array('_dir', 'Magento\Backup\Helper\Data'),
     array('_dir', 'Magento\Backup\Model\Observer', '_filesystem'),
@@ -290,4 +296,10 @@ return array(
     array('fileIteratorFactory', 'Magento\Core\Model\Theme\Collection'),
     array('_allowDuplication', 'Magento\View\Publisher'),
     array('_modulesReader', 'Magento\View\Publisher'),
+    array('_directoryUrl', 'Magento\Directory\Block\Currency'),
+    array('_pageVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
+    array('_orderVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
+    array('_directionVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
+    array('_modeVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar'),
+    array('_limitVarName', 'Magento\Catalog\Block\Product\ProductList\Toolbar')
 );

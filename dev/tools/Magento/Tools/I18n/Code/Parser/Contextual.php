@@ -88,13 +88,15 @@ class Contextual extends AbstractParser
             $phrase = $this->_phrases[$phraseKey];
             $phrase->addContextValue($contextValue);
         } else {
-            $this->_phrases[$phraseKey] = $this->_factory->createPhrase(array(
-                'phrase' => $phraseData['phrase'],
-                'translation' => $phraseData['phrase'],
-                'context_type' => $contextType,
-                'context_value' => array($contextValue),
-                'quote' => $phraseData['quote']
-            ));
+            $this->_phrases[$phraseKey] = $this->_factory->createPhrase(
+                array(
+                    'phrase' => $phraseData['phrase'],
+                    'translation' => $phraseData['phrase'],
+                    'context_type' => $contextType,
+                    'context_value' => array($contextValue),
+                    'quote' => $phraseData['quote']
+                )
+            );
         }
     }
 }

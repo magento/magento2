@@ -37,7 +37,7 @@ $connection->addColumn(
         'type' => \Magento\DB\Ddl\Table::TYPE_TEXT,
         'length' => 255,
         'nullable' => false,
-        'comment' => 'API Secret used for authentication.',
+        'comment' => 'API Secret used for authentication.'
     )
 );
 

@@ -23,11 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-abstract class AbstractComposite
-    extends \Magento\Backend\Model\Config\Structure\AbstractElement
+abstract class AbstractComposite extends \Magento\Backend\Model\Config\Structure\AbstractElement
 {
     /**
      * Child elements iterator
@@ -40,10 +38,8 @@ abstract class AbstractComposite
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param Iterator $childrenIterator
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        Iterator $childrenIterator
-    ) {
+    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager, Iterator $childrenIterator)
+    {
         parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
     }
@@ -58,9 +54,12 @@ abstract class AbstractComposite
     public function setData(array $data, $scope)
     {
         parent::setData($data, $scope);
-        $children = array_key_exists('children', $this->_data) && is_array($this->_data['children']) ?
-            $this->_data['children'] :
-            array();
+        $children = array_key_exists(
+            'children',
+            $this->_data
+        ) && is_array(
+            $this->_data['children']
+        ) ? $this->_data['children'] : array();
         $this->_childrenIterator->setElements($children, $scope);
     }
 
@@ -73,7 +72,7 @@ abstract class AbstractComposite
     {
         foreach ($this->getChildren() as $child) {
             return (bool)$child;
-        };
+        }
         return false;
     }
 
@@ -100,4 +99,3 @@ abstract class AbstractComposite
         return false;
     }
 }
-

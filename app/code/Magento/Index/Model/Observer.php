@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Index\Model;
 
 use Magento\Event\Observer as EventObserver;
@@ -32,15 +31,14 @@ class Observer
 {
     /**
      * @var \Magento\Index\Model\Indexer
-     *
+     */
     protected $_indexer;
 
     /**
      * @param \Magento\Index\Model\Indexer $indexer
      */
-    public function __construct(
-        \Magento\Index\Model\Indexer $indexer
-    ) {
+    public function __construct(\Magento\Index\Model\Indexer $indexer)
+    {
         $this->_indexer = $indexer;
     }
 

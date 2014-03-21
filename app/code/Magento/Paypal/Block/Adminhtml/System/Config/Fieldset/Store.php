@@ -29,9 +29,7 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
  * Renderer for service JavaScript code that disables corresponding paypal methods on page load
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store
-    extends \Magento\Backend\Block\Template
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Store extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Path to template file
@@ -80,11 +78,11 @@ class Store
     {
         // Assoc array that contains info about paypal methods (their IDs and corresponding Config Paths)
         $methods = array(
-            'express'   => 'payment/paypal_express/active',
-            'wps'       => 'payment/paypal_standard/active',
-            'wpp'       => 'payment/paypal_direct/active',
-            'wpppe'     => 'payment/payflow_direct/active',
-            'payflowpro'  => 'payment/payflowpro/active',
+            'express' => 'payment/paypal_express/active',
+            'wps' => 'payment/paypal_standard/active',
+            'wpp' => 'payment/paypal_direct/active',
+            'wpppe' => 'payment/payflow_direct/active',
+            'payflowpro' => 'payment/payflowpro/active',
             'expresspe' => 'payment/payflow_express/active'
         );
         // Retrieve a code of the current website

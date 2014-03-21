@@ -34,6 +34,7 @@ class Option extends \Magento\Service\Data\AbstractObject
      * Constants used as keys into $_data
      */
     const LABEL = 'label';
+
     const VALUE = 'value';
 
     /**

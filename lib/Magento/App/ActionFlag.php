@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\App;
 
 class ActionFlag
@@ -75,9 +74,9 @@ class ActionFlag
             $action = $this->_request->getActionName();
         }
         if ('' === $flag) {
-            return isset($this->_flags[$this->_getControllerKey()])
-                ? $this->_flags[$this->_getControllerKey()]
-                : array();
+            return isset(
+                $this->_flags[$this->_getControllerKey()]
+            ) ? $this->_flags[$this->_getControllerKey()] : array();
         } elseif (isset($this->_flags[$this->_getControllerKey()][$action][$flag])) {
             return $this->_flags[$this->_getControllerKey()][$action][$flag];
         } else {
@@ -94,4 +93,4 @@ class ActionFlag
     {
         return $this->_request->getRequestedRouteName() . '_' . $this->_request->getRequestedControllerName();
     }
-} 
+}

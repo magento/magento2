@@ -46,20 +46,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $objectManagerMock = $this->getMockBuilder('Magento\App\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManagerMock = $this->getMockBuilder(
+            'Magento\App\ObjectManager'
+        )->disableOriginalConstructor()->getMock();
         $fileSystemMock = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $classReflection = $this->getMock(
             'Magento\Webapi\Model\Config\ClassReflector',
-            ['reflectClassMethods'],
-            [],
+            array('reflectClassMethods'),
+            array(),
             '',
             false
         );
         $classReflection->expects($this->any())->method('reflectClassMethods')->will($this->returnValue(array()));
-        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', [], [], '', false);
-        $this->_configMock = $this->getMock('Magento\Webapi\Model\Config', [], [], '', false);
+        $this->_helperMock = $this->getMock('Magento\Webapi\Helper\Data', array(), array(), '', false);
+        $this->_configMock = $this->getMock('Magento\Webapi\Model\Config', array(), array(), '', false);
         $servicesConfig = array(
             'ModuleFooV1' => array(
                 'class' => 'Magento\Module\Service\FooV1Interface',
@@ -89,16 +89,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_configMock->expects($this->once())->method('getServices')->will($this->returnValue($servicesConfig));
-        $this->_helperMock->expects($this->any())
-            ->method('getServiceName')
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array('Magento\Module\Service\FooV1Interface', true, 'moduleFooV1'),
-                        array('Magento\Module\Service\BarV1Interface', true, 'moduleBarV1')
-                    )
+        $this->_helperMock->expects(
+            $this->any()
+        )->method(
+            'getServiceName'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('Magento\Module\Service\FooV1Interface', true, 'moduleFooV1'),
+                    array('Magento\Module\Service\BarV1Interface', true, 'moduleBarV1')
                 )
-            );
+            )
+        );
         $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
             $objectManagerMock,
             $fileSystemMock,

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
 /**
@@ -41,16 +40,19 @@ class MainTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\View\DesignInterface')
-            ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-            ->setDefaultDesignTheme();
+        $objectManager->get(
+            'Magento\View\DesignInterface'
+        )->setArea(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        )->setDefaultDesignTheme();
         $rule = $objectManager->create('Magento\CatalogRule\Model\Rule');
         $objectManager->get('Magento\Registry')->register('current_promo_catalog_rule', $rule);
 
         $block = $objectManager->create('Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main');
         $block->setLayout($objectManager->create('Magento\Core\Model\Layout'));
         $prepareFormMethod = new \ReflectionMethod(
-            'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main', '_prepareForm'
+            'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Main',
+            '_prepareForm'
         );
         $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);

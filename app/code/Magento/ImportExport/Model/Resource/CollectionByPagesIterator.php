@@ -51,8 +51,7 @@ class CollectionByPagesIterator
             $paginatedCollection = clone $collection;
             $paginatedCollection->clear();
 
-            $paginatedCollection->setPageSize($pageSize)
-                ->setCurPage($pageNumber);
+            $paginatedCollection->setPageSize($pageSize)->setCurPage($pageNumber);
 
             if ($paginatedCollection->count() > 0) {
                 foreach ($paginatedCollection as $item) {

@@ -38,10 +38,8 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
      * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        $modulePrefix = 'Magento_CatalogSearch'
-    ) {
+    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'Magento_CatalogSearch')
+    {
         parent::__construct($resource, $modulePrefix);
     }
 
@@ -69,20 +67,9 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
      */
     public function prepareTerms($str, $maxWordLength = 0)
     {
-        $boolWords = array(
-            '+' => '+',
-            '-' => '-',
-            '|' => '|',
-            '<' => '<',
-            '>' => '>',
-            '~' => '~',
-            '*' => '*',
-        );
-        $brackets = array(
-            '('       => '(',
-            ')'       => ')'
-        );
-        $words = array(0=>"");
+        $boolWords = array('+' => '+', '-' => '-', '|' => '|', '<' => '<', '>' => '>', '~' => '~', '*' => '*');
+        $brackets = array('(' => '(', ')' => ')');
+        $words = array(0 => "");
         $terms = array();
         preg_match_all('/([\(\)]|[\"\'][^"\']*[\"\']|[^\s\"\(\)]*)/uis', $str, $matches);
         $isOpenBracket = 0;
@@ -94,7 +81,7 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
                 $isBracket = in_array($word, $brackets);
                 if (!$isBool && !$isBracket) {
                     $terms[$word] = $word;
-                    $word = '"'.$word.'"';
+                    $word = '"' . $word . '"';
                     $words[] = $word;
                 } else if ($isBracket) {
                     if ($word == '(') {

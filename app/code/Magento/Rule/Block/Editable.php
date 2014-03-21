@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Rule\Block;
 
 use Magento\Data\Form\Element\Renderer\RendererInterface;
@@ -49,26 +48,42 @@ class Editable extends AbstractBlock implements RendererInterface
         }
 
         if ($element->getShowAsText()) {
-            $html = ' <input type="hidden" class="hidden" id="' . $element->getHtmlId()
-                . '" name="' . $element->getName() . '" value="' . $element->getValue() . '"/> '
-                . htmlspecialchars($valueName) . '&nbsp;';
+            $html = ' <input type="hidden" class="hidden" id="' .
+                $element->getHtmlId() .
+                '" name="' .
+                $element->getName() .
+                '" value="' .
+                $element->getValue() .
+                '"/> ' .
+                htmlspecialchars(
+                    $valueName
+                ) . '&nbsp;';
         } else {
-            $html = ' <span class="rule-param"'
-                . ($element->getParamId() ? ' id="' . $element->getParamId() . '"' : '') . '>'
-                . '<a href="javascript:void(0)" class="label">';
+            $html = ' <span class="rule-param"' .
+                ($element->getParamId() ? ' id="' .
+                $element->getParamId() .
+                '"' : '') .
+                '>' .
+                '<a href="javascript:void(0)" class="label">';
 
             if ($this->_translator->isAllowed()) {
                 $html .= $this->escapeHtml($valueName);
             } else {
-                $html .= $this->escapeHtml($this->filterManager->truncate($valueName, array('length' => 33, 'etc' => '...')));
+                $html .= $this->escapeHtml(
+                    $this->filterManager->truncate($valueName, array('length' => 33, 'etc' => '...'))
+                );
             }
 
             $html .= '</a><span class="element"> ' . $element->getElementHtml();
 
             if ($element->getExplicitApply()) {
-                $html .= ' <a href="javascript:void(0)" class="rule-param-apply"><img src="'
-                    . $this->getViewFileUrl('images/rule_component_apply.gif') . '" class="v-middle" alt="'
-                    . __('Apply') . '" title="' . __('Apply') . '" /></a> ';
+                $html .= ' <a href="javascript:void(0)" class="rule-param-apply"><img src="' . $this->getViewFileUrl(
+                    'images/rule_component_apply.gif'
+                ) . '" class="v-middle" alt="' . __(
+                    'Apply'
+                ) . '" title="' . __(
+                    'Apply'
+                ) . '" /></a> ';
             }
 
             $html .= '</span></span>&nbsp;';

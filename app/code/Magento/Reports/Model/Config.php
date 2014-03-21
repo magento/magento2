@@ -80,9 +80,7 @@ class Config extends \Magento\Object
      */
     public function getLanguage()
     {
-        return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml'
-        );
+        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml');
     }
 
     /**
@@ -92,8 +90,6 @@ class Config extends \Magento\Object
      */
     public function getDashboard()
     {
-        return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml'
-        );
+        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml');
     }
 }

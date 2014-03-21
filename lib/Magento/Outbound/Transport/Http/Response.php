@@ -42,7 +42,6 @@ class Response
         $this->_response = \Zend_Http_Response::fromString($string);
     }
 
-
     /**
      * Describes whether response code indicates success
      *

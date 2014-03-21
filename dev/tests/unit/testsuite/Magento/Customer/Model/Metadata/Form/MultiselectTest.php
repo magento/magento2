@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\ElementFactory;
@@ -62,13 +61,12 @@ class MultiselectTest extends AbstractFormTestCase
     public function testExtractValue($value, $expected)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject | Multiselect $multiselect */
-        $multiselect = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form\Multiselect')
-            ->disableOriginalConstructor()
-            ->setMethods(['_getRequestValue'])
-            ->getMock();
-        $multiselect->expects($this->once())
-            ->method('_getRequestValue')
-            ->will($this->returnValue($value));
+        $multiselect = $this->getMockBuilder(
+            'Magento\Customer\Model\Metadata\Form\Multiselect'
+        )->disableOriginalConstructor()->setMethods(
+            array('_getRequestValue')
+        )->getMock();
+        $multiselect->expects($this->once())->method('_getRequestValue')->will($this->returnValue($value));
 
         $request = $this->getMockBuilder('Magento\App\RequestInterface')->getMock();
         $actual = $multiselect->extractValue($request);
@@ -82,12 +80,12 @@ class MultiselectTest extends AbstractFormTestCase
      */
     public function extractValueDataProvider()
     {
-        return [
-            'false' => [false, false],
-            'int' => [15, [15]],
-            'string' => ['some string', ['some string']],
-            'array' => [[1, 2, 3], [1, 2, 3]]
-        ];
+        return array(
+            'false' => array(false, false),
+            'int' => array(15, array(15)),
+            'string' => array('some string', array('some string')),
+            'array' => array(array(1, 2, 3), array(1, 2, 3))
+        );
     }
 
     /**
@@ -113,12 +111,12 @@ class MultiselectTest extends AbstractFormTestCase
      */
     public function compactValueDataProvider()
     {
-        return [
-            'false' => [false, false],
-            'int' => [15, 15],
-            'string' => ['some string', 'some string'],
-            'array' => [[1, 2, 3], '1,2,3']
-        ];
+        return array(
+            'false' => array(false, false),
+            'int' => array(15, 15),
+            'string' => array('some string', 'some string'),
+            'array' => array(array(1, 2, 3), '1,2,3')
+        );
     }
 
     /**
@@ -156,14 +154,14 @@ class MultiselectTest extends AbstractFormTestCase
      */
     public function outputValueTextDataProvider()
     {
-        return [
-            'empty' => ['', ''],
-            'null' => [null, ''],
-            'number' => [14, 'fourteen'],
-            'string' => ['some key', 'some string'],
-            'array' => [[14, 'some key'], 'fourteen, some string'],
-            'unknown' => [[14, 'some key', 'unknown'], 'fourteen, some string, '],
-        ];
+        return array(
+            'empty' => array('', ''),
+            'null' => array(null, ''),
+            'number' => array(14, 'fourteen'),
+            'string' => array('some key', 'some string'),
+            'array' => array(array(14, 'some key'), 'fourteen, some string'),
+            'unknown' => array(array(14, 'some key', 'unknown'), 'fourteen, some string, ')
+        );
     }
 
     /**
@@ -187,14 +185,14 @@ class MultiselectTest extends AbstractFormTestCase
      */
     public function outputValueJsonDataProvider()
     {
-        return [
-            'empty' => ['', ['']],
-            'null' => [null, ['']],
-            'number' => [14, ['14']],
-            'string' => ['some key', ['some key']],
-            'array' => [[14, 'some key'], ['14', 'some key']],
-            'unknown' => [[14, 'some key', 'unknown'], ['14', 'some key', 'unknown']],
-        ];
+        return array(
+            'empty' => array('', array('')),
+            'null' => array(null, array('')),
+            'number' => array(14, array('14')),
+            'string' => array('some key', array('some key')),
+            'array' => array(array(14, 'some key'), array('14', 'some key')),
+            'unknown' => array(array(14, 'some key', 'unknown'), array('14', 'some key', 'unknown'))
+        );
     }
 
     /**
@@ -206,13 +204,18 @@ class MultiselectTest extends AbstractFormTestCase
      */
     protected function runOutputValueTest($value, $expected, $format)
     {
-        $this->attributeMetadataMock
-            ->expects($this->any())
-            ->method('getOptions')
-            ->will($this->returnValue([
-                (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
-                (new OptionBuilder())->setValue('some key')->setLabel('some string')->create(),
-            ]));
+        $this->attributeMetadataMock->expects(
+            $this->any()
+        )->method(
+            'getOptions'
+        )->will(
+            $this->returnValue(
+                array(
+                    (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
+                    (new OptionBuilder())->setValue('some key')->setLabel('some string')->create()
+                )
+            )
+        );
         $multiselect = $this->getClass($value);
         $actual = $multiselect->outputValue($format);
         $this->assertEquals($expected, $actual);

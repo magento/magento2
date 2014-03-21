@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog;
 
 class WidgetTest extends \PHPUnit_Framework_TestCase
@@ -34,8 +33,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $type = 'Magento\Catalog\Block\Product\Widget\NewWidget';
 
         /** @var $model \Magento\Widget\Model\Widget\Instance */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
         $config = $model->setType($type)->getWidgetConfigAsArray();
         $templates = $config['parameters']['template']['values'];
         $this->assertArrayHasKey('default', $templates);

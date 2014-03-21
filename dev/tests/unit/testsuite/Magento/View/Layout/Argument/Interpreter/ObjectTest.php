@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\Argument\Interpreter;
 
 class ObjectTest extends \PHPUnit_Framework_TestCase
@@ -52,10 +51,15 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function testEvaluate()
     {
         $input = array('value' => self::EXPECTED_CLASS);
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with(self::EXPECTED_CLASS)
-            ->will($this->returnValue($this));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            self::EXPECTED_CLASS
+        )->will(
+            $this->returnValue($this)
+        );
 
         $actual = $this->_model->evaluate($input);
         $this->assertSame($this, $actual);
@@ -68,11 +72,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($expectedException, $expectedExceptionMessage);
         $self = $this;
-        $this->_objectManager->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback(function ($className) use ($self) {
-                return $self->getMock($className);
-            }));
+        $this->_objectManager->expects($this->any())->method('create')->will(
+            $this->returnCallback(
+                function ($className) use ($self) {
+                    return $self->getMock($className);
+                }
+            )
+        );
 
         $this->_model->evaluate($input);
     }
@@ -80,16 +86,12 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function evaluateWrongClassDataProvider()
     {
         return array(
-            'no class' => array(
-                array(),
-                '\InvalidArgumentException',
-                'Object class name is missing',
-            ),
+            'no class' => array(array(), '\InvalidArgumentException', 'Object class name is missing'),
             'unexpected class' => array(
                 array('value' => 'Magento\ObjectManager'),
                 '\UnexpectedValueException',
-                'Instance of ' . self::EXPECTED_CLASS . ' is expected',
-            ),
+                'Instance of ' . self::EXPECTED_CLASS . ' is expected'
+            )
         );
     }
 }

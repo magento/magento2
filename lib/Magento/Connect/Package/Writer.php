@@ -86,7 +86,7 @@ class Writer
      * @param array $files
      * @param string $namePackage
      */
-    public function __construct($files, $namePackage='')
+    public function __construct($files, $namePackage = '')
     {
         $this->_files = $files;
         $this->_namePackage = $namePackage;
@@ -187,8 +187,9 @@ class Writer
     {
         $this->_pathToArchive = $this->_getArchivator()->pack(
             $this->_temporaryPackageDir,
-            $this->_namePackage.'.tgz',
-            true);
+            $this->_namePackage . '.tgz',
+            true
+        );
 
         //delete temporary dir
         \Magento\System\Dirs::rm(array("-r", $this->_temporaryPackageDir));
@@ -204,5 +205,4 @@ class Writer
     {
         return $this->_pathToArchive;
     }
-
 }

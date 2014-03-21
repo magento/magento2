@@ -39,10 +39,8 @@ class Agreement extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -213,8 +211,8 @@ class Agreement extends \Magento\Backend\App\Action
     {
         switch ($this->getRequest()->getActionName()) {
             case 'index':
-            case 'grid' :
-            case 'view' :
+            case 'grid':
+            case 'view':
                 return $this->_authorization->isAllowed('Magento_Paypal::billing_agreement_actions_view');
             case 'cancel':
             case 'delete':

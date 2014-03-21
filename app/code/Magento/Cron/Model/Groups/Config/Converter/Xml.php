@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cron\Model\Groups\Config\Converter;
 
 /**
@@ -53,7 +52,7 @@ class Xml implements \Magento\Config\ConverterInterface
                 throw new \InvalidArgumentException('Attribute "id" does not exist');
             }
             foreach ($group->childNodes as $child) {
-                if (!($child instanceof \DOMElement)) {
+                if (!$child instanceof \DOMElement) {
                     continue;
                 }
                 /** @var $group \DOMElement */

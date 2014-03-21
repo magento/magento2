@@ -23,8 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Filter;
 
 class Object extends \Zend_Filter
@@ -52,7 +50,7 @@ class Object extends \Zend_Filter
      * @param string $column
      * @return null|\Zend_Filter
      */
-    public function addFilter(\Zend_Filter_Interface $filter, $column='')
+    public function addFilter(\Zend_Filter_Interface $filter, $column = '')
     {
         if ('' === $column) {
             parent::addFilter($filter);

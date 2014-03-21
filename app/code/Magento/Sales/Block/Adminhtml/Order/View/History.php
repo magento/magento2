@@ -72,13 +72,12 @@ class History extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $onclick = "submitAndReloadArea($('order_history_block').parentNode, '".$this->getSubmitUrl()."')";
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'label'   => __('Submit Comment'),
-                'class'   => 'save',
-                'onclick' => $onclick
-            ));
+        $onclick = "submitAndReloadArea($('order_history_block').parentNode, '" . $this->getSubmitUrl() . "')";
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array('label' => __('Submit Comment'), 'class' => 'save', 'onclick' => $onclick)
+        );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();
     }
@@ -122,8 +121,7 @@ class History extends \Magento\Backend\Block\Template
      */
     public function canAddComment()
     {
-        return $this->_authorization->isAllowed('Magento_Sales::comment') &&
-               $this->getOrder()->canComment();
+        return $this->_authorization->isAllowed('Magento_Sales::comment') && $this->getOrder()->canComment();
     }
 
     /**
@@ -133,7 +131,7 @@ class History extends \Magento\Backend\Block\Template
      */
     public function getSubmitUrl()
     {
-        return $this->getUrl('sales/*/addComment', array('order_id'=>$this->getOrder()->getId()));
+        return $this->getUrl('sales/*/addComment', array('order_id' => $this->getOrder()->getId()));
     }
 
     /**

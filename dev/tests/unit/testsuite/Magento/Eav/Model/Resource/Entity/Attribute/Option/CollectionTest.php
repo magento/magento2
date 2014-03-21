@@ -77,60 +77,85 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock(
-            'Magento\Core\Model\EntityFactory', array(), array(), '', false
-        );
-        $this->loggerMock = $this->getMock(
-            'Magento\Logger', array(), array(), '', false
-        );
+        $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
         $this->fetchStrategyMock = $this->getMock(
-            'Magento\Data\Collection\Db\FetchStrategyInterface', array(), array(), '', false
+            'Magento\Data\Collection\Db\FetchStrategyInterface',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->eventManagerMock = $this->getMock(
-            'Magento\Event\ManagerInterface', array(), array(), '', false
-        );
+        $this->eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $this->coreResourceMock = $this->getMock(
-            'Magento\App\Resource', array('getConnection', 'getTableName'), array(), '', false
+            'Magento\App\Resource',
+            array('getConnection', 'getTableName'),
+            array(),
+            '',
+            false
         );
         $this->storeManagerMock = $this->getMock(
-            'Magento\Core\Model\StoreManagerInterface', array(), array(), '', false
+            'Magento\Core\Model\StoreManagerInterface',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->connectionMock = $this->getMock(
-            'Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false
-        );
+        $this->connectionMock = $this->getMock('Magento\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Core\Model\Resource\Db\AbstractDb', array(), '', false, true, true,
+            'Magento\Core\Model\Resource\Db\AbstractDb',
+            array(),
+            '',
+            false,
+            true,
+            true,
             array('__wakeup', 'getReadConnection', 'getMainTable', 'getTable')
         );
-        $this->selectMock = $this->getMock(
-            'Zend_Db_Select', array(), array(), '', false
+        $this->selectMock = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+
+        $this->coreResourceMock->expects(
+            $this->any()
+        )->method(
+            'getConnection'
+        )->will(
+            $this->returnValue($this->connectionMock)
+        );
+        $this->coreResourceMock->expects(
+            $this->any()
+        )->method(
+            'getTableName'
+        )->with(
+            'eav_attribute_option_value'
+        )->will(
+            $this->returnValue(null)
         );
 
-        $this->coreResourceMock->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
-        $this->coreResourceMock->expects($this->any())
-            ->method('getTableName')
-            ->with('eav_attribute_option_value')
-            ->will($this->returnValue(null));
+        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
-        $this->connectionMock->expects($this->any())
-            ->method('select')
-            ->will($this->returnValue($this->selectMock));
-        $this->connectionMock->expects($this->any())
-            ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
-
-        $this->resourceMock->expects($this->any())
-            ->method('getReadConnection')
-            ->will($this->returnValue($this->connectionMock));
-        $this->resourceMock->expects($this->any())
-            ->method('getMainTable')
-            ->will($this->returnValue('eav_attribute_option'));
-        $this->resourceMock->expects($this->any())
-            ->method('getTable')
-            ->with('eav_attribute_option')
-            ->will($this->returnValue('eav_attribute_option'));
+        $this->resourceMock->expects(
+            $this->any()
+        )->method(
+            'getReadConnection'
+        )->will(
+            $this->returnValue($this->connectionMock)
+        );
+        $this->resourceMock->expects(
+            $this->any()
+        )->method(
+            'getMainTable'
+        )->will(
+            $this->returnValue('eav_attribute_option')
+        );
+        $this->resourceMock->expects(
+            $this->any()
+        )->method(
+            'getTable'
+        )->with(
+            'eav_attribute_option'
+        )->will(
+            $this->returnValue('eav_attribute_option')
+        );
 
         $this->model = new \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection(
             $this->entityFactoryMock,
@@ -146,17 +171,29 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetIdFilter()
     {
-        $this->connectionMock->expects($this->once())
-            ->method('prepareSqlCondition')
-            ->with('main_table.option_id', ['in' => 1])
-            ->will($this->returnValue('main_table.option_id IN (1)'));
+        $this->connectionMock->expects(
+            $this->once()
+        )->method(
+            'prepareSqlCondition'
+        )->with(
+            'main_table.option_id',
+            array('in' => 1)
+        )->will(
+            $this->returnValue('main_table.option_id IN (1)')
+        );
 
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->with('main_table.option_id IN (1)', null, 'TYPE_CONDITION')
-            ->will($this->returnSelf());
+        $this->selectMock->expects(
+            $this->once()
+        )->method(
+            'where'
+        )->with(
+            'main_table.option_id IN (1)',
+            null,
+            'TYPE_CONDITION'
+        )->will(
+            $this->returnSelf()
+        );
 
         $this->assertEquals($this->model, $this->model->setIdFilter(1));
-
     }
 }

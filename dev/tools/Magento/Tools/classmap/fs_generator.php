@@ -40,9 +40,9 @@ if (!$path) {
 
 
 $basePath = realpath(__DIR__ . '/../../../') . '/';
-$directory  = new RecursiveDirectoryIterator($path);
-$iterator   = new RecursiveIteratorIterator($directory);
-$regex      = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+$directory = new RecursiveDirectoryIterator($path);
+$iterator = new RecursiveIteratorIterator($directory);
+$regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
 
 
 $map = array();
@@ -55,8 +55,8 @@ foreach ($regex as $file) {
     $code = file_get_contents($file[0]);
     $tokens = token_get_all($code);
 
-    $count    = count($tokens);
-    $i        = 0;
+    $count = count($tokens);
+    $i = 0;
     while ($i < $count) {
         $token = $tokens[$i];
 

@@ -39,17 +39,19 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     /**
      * Constants to be used for DB
      */
-    const DB_MAX_PACKET_SIZE        = 1048576; // Maximal packet length by default in MySQL
-    const DB_MAX_PACKET_COEFFICIENT = 0.85; // The coefficient of useful data from maximum packet length
+    const DB_MAX_PACKET_SIZE = 1048576;
+
+    // Maximal packet length by default in MySQL
+    const DB_MAX_PACKET_COEFFICIENT = 0.85;
+
+    // The coefficient of useful data from maximum packet length
 
     /**
      * @param \Magento\App\Resource $resource
      * @param string $modulePrefix
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        $modulePrefix = 'importexport'
-    ) {
+    public function __construct(\Magento\App\Resource $resource, $modulePrefix = 'importexport')
+    {
         parent::__construct($resource, $modulePrefix);
     }
 

@@ -50,8 +50,6 @@ class DefaultType extends \Magento\Object
      */
     protected $_product;
 
-
-
     /**
      * TODO: Fill in description
      *
@@ -150,7 +148,10 @@ class DefaultType extends \Magento\Object
      */
     public function getConfigurationItemOption()
     {
-        if ($this->_getData('configuration_item_option') instanceof \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface) {
+        if ($this->_getData(
+            'configuration_item_option'
+        ) instanceof \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+        ) {
             return $this->_getData('configuration_item_option');
         }
 
@@ -170,7 +171,10 @@ class DefaultType extends \Magento\Object
      */
     public function getConfigurationItem()
     {
-        if ($this->_getData('configuration_item') instanceof \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface) {
+        if ($this->_getData(
+            'configuration_item'
+        ) instanceof \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
+        ) {
             return $this->_getData('configuration_item');
         }
 
@@ -344,11 +348,7 @@ class DefaultType extends \Magento\Object
     {
         $option = $this->getOption();
 
-        return $this->_getChargableOptionPrice(
-            $option->getPrice(),
-            $option->getPriceType() == 'percent',
-            $basePrice
-        );
+        return $this->_getChargableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -373,14 +373,19 @@ class DefaultType extends \Magento\Object
         if (!isset($this->_productOptions[$this->getProduct()->getId()])) {
             foreach ($this->getProduct()->getOptions() as $_option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
-                $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = array('option_id' => $_option->getId());
+                $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = array(
+                    'option_id' => $_option->getId()
+                );
                 if ($_option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
                     $optionValues = array();
                     foreach ($_option->getValues() as $_value) {
                         /* @var $value \Magento\Catalog\Model\Product\Option\Value */
                         $optionValues[$_value->getTitle()] = $_value->getId();
                     }
-                    $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()]['values'] = $optionValues;
+                    $this->_productOptions[$this
+                        ->getProduct()
+                        ->getId()][$_option
+                        ->getTitle()]['values'] = $optionValues;
                 } else {
                     $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()]['values'] = array();
                 }
@@ -402,11 +407,10 @@ class DefaultType extends \Magento\Object
      */
     protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
     {
-        if($isPercent) {
-            return ($basePrice * $price / 100);
+        if ($isPercent) {
+            return $basePrice * $price / 100;
         } else {
             return $price;
         }
     }
-
 }

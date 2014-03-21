@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer;
 
 /**
@@ -49,7 +48,7 @@ class Factory
      * @var array
      */
     protected $_specificRenderer = array(
-        self::BACKGROUND_IMAGE => 'Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage',
+        self::BACKGROUND_IMAGE => 'Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\BackgroundImage'
     );
 
     /**
@@ -68,9 +67,10 @@ class Factory
      */
     public function get($attribute)
     {
-        $renderer = array_key_exists($attribute, $this->_specificRenderer)
-            ? $this->_specificRenderer[$attribute]
-            : 'Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer';
+        $renderer = array_key_exists(
+            $attribute,
+            $this->_specificRenderer
+        ) ? $this->_specificRenderer[$attribute] : 'Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Renderer\DefaultRenderer';
 
         return $this->_objectManager->create($renderer);
     }

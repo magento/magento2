@@ -31,5 +31,4 @@ class Data extends \Magento\Config\Data\Scoped
      * @var string[]
      */
     protected $_scopePriorityScheme = array('global', 'design');
-
 }

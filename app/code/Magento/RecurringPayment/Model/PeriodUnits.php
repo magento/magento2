@@ -26,9 +26,13 @@ namespace Magento\RecurringPayment\Model;
 class PeriodUnits implements \Magento\Option\ArrayInterface
 {
     const DAY = 'day';
+
     const WEEK = 'week';
+
     const SEMI_MONTH = 'semi_month';
+
     const MONTH = 'month';
+
     const YEAR = 'year';
 
     /**
@@ -36,12 +40,12 @@ class PeriodUnits implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [
+        return array(
             self::DAY => __('Day'),
             self::WEEK => __('Week'),
             self::SEMI_MONTH => __('Two Weeks'),
             self::MONTH => __('Month'),
-            self::YEAR => __('Year'),
-        ];
+            self::YEAR => __('Year')
+        );
     }
 }

@@ -30,7 +30,6 @@
  */
 namespace Magento\Validator\Test;
 
-class StringLength extends \Zend_Validate_StringLength
-    implements \Magento\Validator\ValidatorInterface
+class StringLength extends \Zend_Validate_StringLength implements \Magento\Validator\ValidatorInterface
 {
 }

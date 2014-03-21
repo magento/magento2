@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor;
 
 use Magento\View\Asset\PreProcessor\PreProcessorInterface;
@@ -35,7 +34,7 @@ class UrlResolver implements PreProcessorInterface
     /**
      * Temporary directory prefix
      */
-    const TMP_RESOLVER_DIR   = 'resolver';
+    const TMP_RESOLVER_DIR = 'resolver';
 
     /**
      * Root directory
@@ -135,8 +134,11 @@ class UrlResolver implements PreProcessorInterface
             $this->logger->logException($e);
         }
 
-        $tmpFilePath = Composite::TMP_VIEW_DIR . '/' . self::TMP_RESOLVER_DIR . '/'
-            . $publisherFile->buildUniquePath();
+        $tmpFilePath = Composite::TMP_VIEW_DIR .
+            '/' .
+            self::TMP_RESOLVER_DIR .
+            '/' .
+            $publisherFile->buildUniquePath();
         $targetDirectory->writeFile($tmpFilePath, $content);
 
         $processedFile = $this->fileFactory->create(

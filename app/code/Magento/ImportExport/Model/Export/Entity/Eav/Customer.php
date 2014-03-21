@@ -34,8 +34,7 @@ namespace Magento\ImportExport\Model\Export\Entity\Eav;
  *
  * @method \Magento\Customer\Model\Resource\Attribute\Collection getAttributeCollection() getAttributeCollection()
  */
-class Customer
-    extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
+class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
     /**#@+
      * Permanent column names.
@@ -43,21 +42,26 @@ class Customer
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL   = 'email';
+    const COLUMN_EMAIL = 'email';
+
     const COLUMN_WEBSITE = '_website';
-    const COLUMN_STORE   = '_store';
+
+    const COLUMN_STORE = '_store';
+
     /**#@-*/
 
     /**#@+
      * Attribute collection name
      */
     const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\Resource\Attribute\Collection';
+
     /**#@-*/
 
     /**#@+
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
+
     /**#@-*/
 
     /**
@@ -66,8 +70,8 @@ class Customer
      * @var array
      */
     protected $_attributeOverrides = array(
-        'created_at'                  => array('backend_type' => 'datetime'),
-        'reward_update_notification'  => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
+        'created_at' => array('backend_type' => 'datetime'),
+        'reward_update_notification' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'),
         'reward_warning_notification' => array('source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean')
     );
 
@@ -120,15 +124,20 @@ class Customer
         array $data = array()
     ) {
         parent::__construct(
-            $coreStoreConfig, $storeManager, $collectionFactory, $resourceColFactory, $localeDate, $eavConfig, $data
+            $coreStoreConfig,
+            $storeManager,
+            $collectionFactory,
+            $resourceColFactory,
+            $localeDate,
+            $eavConfig,
+            $data
         );
 
-        $this->_customerCollection = isset($data['customer_collection']) ? $data['customer_collection']
-            : $customerColFactory->create();
+        $this->_customerCollection = isset(
+            $data['customer_collection']
+        ) ? $data['customer_collection'] : $customerColFactory->create();
 
-        $this->_initAttributeValues()
-            ->_initStores()
-            ->_initWebsites(true);
+        $this->_initAttributeValues()->_initStores()->_initWebsites(true);
     }
 
     /**
@@ -177,10 +186,9 @@ class Customer
     {
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
-        $row[self::COLUMN_STORE]   = $this->_storeIdToCode[$item->getStoreId()];
+        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
 
-        $this->getWriter()
-            ->writeRow($row);
+        $this->getWriter()->writeRow($row);
     }
 
     /**
@@ -197,7 +205,7 @@ class Customer
                 $data = $this->_attributeOverrides[$attribute->getAttributeCode()];
 
                 if (isset($data['options_method']) && method_exists($this, $data['options_method'])) {
-                    $data['filter_options'] = $this->$data['options_method']();
+                    $data['filter_options'] = $this->{$data['options_method']}();
                 }
                 $attribute->addData($data);
             }

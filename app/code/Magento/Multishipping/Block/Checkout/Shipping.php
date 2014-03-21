@@ -153,7 +153,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getCarrierName($carrierCode)
     {
-        if ($name = $this->_storeConfig->getConfig('carriers/'.$carrierCode.'/title')) {
+        if ($name = $this->_storeConfig->getConfig('carriers/' . $carrierCode . '/title')) {
             return $name;
         }
         return $carrierCode;
@@ -165,7 +165,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getAddressEditUrl($address)
     {
-        return $this->getUrl('*/checkout_address/editShipping', array('id'=>$address->getCustomerAddressId()));
+        return $this->getUrl('*/checkout_address/editShipping', array('id' => $address->getCustomerAddressId()));
     }
 
     /**
@@ -200,7 +200,10 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShippingPrice($address, $price, $flag)
     {
-        return $address->getQuote()->getStore()->convertPrice($this->_taxHelper->getShippingPrice($price, $flag, $address), true);
+        return $address->getQuote()->getStore()->convertPrice(
+            $this->_taxHelper->getShippingPrice($price, $flag, $address),
+            true
+        );
     }
 
     /**

@@ -68,9 +68,9 @@ class Dom implements \Magento\Config\ConverterInterface
             $resourceData['title'] = $titleNode->nodeValue;
         }
         $sortOrderNode = $resourceAttributes->getNamedItem('sortOrder');
-        $resourceData['sortOrder'] = (!is_null($sortOrderNode)) ? (int)$sortOrderNode->nodeValue : 0;
+        $resourceData['sortOrder'] = !is_null($sortOrderNode) ? (int)$sortOrderNode->nodeValue : 0;
         $disabledNode = $resourceAttributes->getNamedItem('disabled');
-        $resourceData['disabled'] =  (!is_null($disabledNode) && $disabledNode->nodeValue == 'true') ? true : false;
+        $resourceData['disabled'] = !is_null($disabledNode) && $disabledNode->nodeValue == 'true' ? true : false;
         // convert child resource nodes if needed
         $resourceData['children'] = array();
         /** @var $childNode \DOMNode */
@@ -82,4 +82,3 @@ class Dom implements \Magento\Config\ConverterInterface
         return $resourceData;
     }
 }
-

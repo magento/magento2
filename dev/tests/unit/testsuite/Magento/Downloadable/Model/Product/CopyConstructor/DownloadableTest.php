@@ -70,26 +70,26 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->_encoderMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->_encoderMock);
 
-        $this->_productMock   = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            array(), array(), '', false
-        );
+        $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
 
         $this->_duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('setDownloadableData', '__wakeup'), array(), '', false
+            array('setDownloadableData', '__wakeup'),
+            array(),
+            '',
+            false
         );
 
-        $this->_linkMock = $this->getMock('\Magento\Downloadable\Model\Link',
-            array(), array(), '', false
-        );
+        $this->_linkMock = $this->getMock('\Magento\Downloadable\Model\Link', array(), array(), '', false);
 
-        $this->_sampleMock = $this->getMock('\Magento\Downloadable\Model\Sample',
-            array(), array(), '', false
-        );
+        $this->_sampleMock = $this->getMock('\Magento\Downloadable\Model\Sample', array(), array(), '', false);
 
-        $this->_productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type',
-            array(), array(), '', false
+        $this->_productTypeMock = $this->getMock(
+            '\Magento\Downloadable\Model\Product\Type',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_encoderMock->expects($this->any())->method('jsonEncode')->will($this->returnArgument(0));
@@ -108,39 +108,62 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     {
         $expectedData = include __DIR__ . '/_files/expected_data.php';
 
-        $this->_productMock->expects($this->once())
-            ->method('getTypeId')
-            ->will($this->returnValue(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE));
+        $this->_productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeId'
+        )->will(
+            $this->returnValue(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
+        );
 
-        $this->_productMock->expects($this->once())
-            ->method('getTypeInstance')->will($this->returnValue($this->_productTypeMock));
+        $this->_productMock->expects(
+            $this->once()
+        )->method(
+            'getTypeInstance'
+        )->will(
+            $this->returnValue($this->_productTypeMock)
+        );
 
-        $this->_productTypeMock->expects($this->once())->method('getLinks')
-            ->with($this->_productMock)->will($this->returnValue(array($this->_linkMock)));
+        $this->_productTypeMock->expects(
+            $this->once()
+        )->method(
+            'getLinks'
+        )->with(
+            $this->_productMock
+        )->will(
+            $this->returnValue(array($this->_linkMock))
+        );
 
-        $this->_productTypeMock->expects($this->once())->method('getSamples')
-            ->with($this->_productMock)->will($this->returnValue(array($this->_sampleMock)));
+        $this->_productTypeMock->expects(
+            $this->once()
+        )->method(
+            'getSamples'
+        )->with(
+            $this->_productMock
+        )->will(
+            $this->returnValue(array($this->_sampleMock))
+        );
 
         $linkData = array(
-            'title'               => 'title',
-            'is_shareable'        => 'is_shareable',
-            'sample_type'         => 'sample_type',
-            'sample_url'          => 'sample_url',
-            'sample_file'         => 'sample_file',
-            'link_file'           => 'link_file',
-            'link_type'           => 'link_type',
-            'link_url'            => 'link_url',
-            'sort_order'          => 'sort_order',
-            'price'               => 'price',
-            'number_of_downloads' => 'number_of_downloads',
+            'title' => 'title',
+            'is_shareable' => 'is_shareable',
+            'sample_type' => 'sample_type',
+            'sample_url' => 'sample_url',
+            'sample_file' => 'sample_file',
+            'link_file' => 'link_file',
+            'link_type' => 'link_type',
+            'link_url' => 'link_url',
+            'sort_order' => 'sort_order',
+            'price' => 'price',
+            'number_of_downloads' => 'number_of_downloads'
         );
 
         $sampleData = array(
-            'title'       => 'title',
+            'title' => 'title',
             'sample_type' => 'sample_type',
             'sample_file' => 'sample_file',
-            'sample_url'  => 'sample_url',
-            'sort_order'  => 'sort_order',
+            'sample_url' => 'sample_url',
+            'sort_order' => 'sort_order'
         );
 
         $this->_linkMock->expects($this->once())->method('getData')->will($this->returnValue($linkData));

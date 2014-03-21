@@ -121,9 +121,14 @@ class Cron
         $expire = time() - $helper->getConfig('timeout', $store) * 60;
         $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
         foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
-            if ($this->_mediaDirectory->isFile($filePath)
-                && pathinfo($filePath, PATHINFO_EXTENSION) == 'png'
-                && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
+            if ($this->_mediaDirectory->isFile(
+                $filePath
+            ) && pathinfo(
+                $filePath,
+                PATHINFO_EXTENSION
+            ) == 'png' && $this->_mediaDirectory->stat(
+                $filePath
+            )['mtime'] < $expire
             ) {
                 $this->_mediaDirectory->delete($filePath);
             }
@@ -139,6 +144,4 @@ class Cron
     {
         return $this->_resLogFactory->create();
     }
-
 }
-

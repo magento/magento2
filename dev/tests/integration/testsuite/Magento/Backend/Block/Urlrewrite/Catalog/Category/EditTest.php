@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Urlrewrite\Catalog\Category;
 
 /**
@@ -51,7 +50,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         /** @var $block \Magento\Backend\Block\Urlrewrite\Catalog\Category\Edit */
         $block = $layout->createBlock(
-            'Magento\Backend\Block\Urlrewrite\Catalog\Category\Edit', '', array('data' => $blockAttributes)
+            'Magento\Backend\Block\Urlrewrite\Catalog\Category\Edit',
+            '',
+            array('data' => $blockAttributes)
         );
 
         $this->_checkSelector($block, $expected);
@@ -76,8 +77,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $selectorBlock = $layout->getChildBlock($blockName, 'selector');
 
         if ($expected['selector']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Selector', $selectorBlock,
-                'Child block with entity selector is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Selector',
+                $selectorBlock,
+                'Child block with entity selector is invalid'
+            );
         } else {
             $this->assertFalse($selectorBlock, 'Child block with entity selector should not present in block');
         }
@@ -98,17 +102,29 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $categoryBlock = $layout->getChildBlock($blockName, 'category_link');
 
         if ($expected['category_link']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Link', $categoryBlock,
-                'Child block with category link is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Link',
+                $categoryBlock,
+                'Child block with category link is invalid'
+            );
 
-            $this->assertEquals('Category:', $categoryBlock->getLabel(),
-                'Child block with category has invalid item label');
+            $this->assertEquals(
+                'Category:',
+                $categoryBlock->getLabel(),
+                'Child block with category has invalid item label'
+            );
 
-            $this->assertEquals($expected['category_link']['name'], $categoryBlock->getItemName(),
-                'Child block with category has invalid item name');
+            $this->assertEquals(
+                $expected['category_link']['name'],
+                $categoryBlock->getItemName(),
+                'Child block with category has invalid item name'
+            );
 
-            $this->assertRegExp('/http:\/\/localhost\/index.php\/.*\/category/', $categoryBlock->getItemUrl(),
-                'Child block with category contains invalid URL');
+            $this->assertRegExp(
+                '/http:\/\/localhost\/index.php\/.*\/category/',
+                $categoryBlock->getItemUrl(),
+                'Child block with category contains invalid URL'
+            );
         } else {
             $this->assertFalse($categoryBlock, 'Child block with category link should not present in block');
         }
@@ -126,39 +142,75 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         if ($expected['back_button']) {
             if ($block->getCategory()->getId()) {
-                $this->assertSelectCount('button.back[onclick~="\/category"]', 1, $buttonsHtml,
-                    'Back button is not present in category URL rewrite edit block');
+                $this->assertSelectCount(
+                    'button.back[onclick~="\/category"]',
+                    1,
+                    $buttonsHtml,
+                    'Back button is not present in category URL rewrite edit block'
+                );
             } else {
-                $this->assertSelectCount('button.back', 1, $buttonsHtml,
-                    'Back button is not present in category URL rewrite edit block');
+                $this->assertSelectCount(
+                    'button.back',
+                    1,
+                    $buttonsHtml,
+                    'Back button is not present in category URL rewrite edit block'
+                );
             }
         } else {
-            $this->assertSelectCount('button.back', 0, $buttonsHtml,
-                'Back button should not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button.back',
+                0,
+                $buttonsHtml,
+                'Back button should not present in category URL rewrite edit block'
+            );
         }
 
         if ($expected['save_button']) {
-            $this->assertSelectCount('button.save', 1, $buttonsHtml,
-                'Save button is not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button.save',
+                1,
+                $buttonsHtml,
+                'Save button is not present in category URL rewrite edit block'
+            );
         } else {
-            $this->assertSelectCount('button.save', 0, $buttonsHtml,
-                'Save button should not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button.save',
+                0,
+                $buttonsHtml,
+                'Save button should not present in category URL rewrite edit block'
+            );
         }
 
         if ($expected['reset_button']) {
-            $this->assertSelectCount('button[title="Reset"]', 1, $buttonsHtml,
-                'Reset button is not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button[title="Reset"]',
+                1,
+                $buttonsHtml,
+                'Reset button is not present in category URL rewrite edit block'
+            );
         } else {
-            $this->assertSelectCount('button[title="Reset"]', 0, $buttonsHtml,
-                'Reset button should not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button[title="Reset"]',
+                0,
+                $buttonsHtml,
+                'Reset button should not present in category URL rewrite edit block'
+            );
         }
 
         if ($expected['delete_button']) {
-            $this->assertSelectCount('button.delete', 1, $buttonsHtml,
-                'Delete button is not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button.delete',
+                1,
+                $buttonsHtml,
+                'Delete button is not present in category URL rewrite edit block'
+            );
         } else {
-            $this->assertSelectCount('button.delete', 0, $buttonsHtml,
-                'Delete button should not present in category URL rewrite edit block');
+            $this->assertSelectCount(
+                'button.delete',
+                0,
+                $buttonsHtml,
+                'Delete button should not present in category URL rewrite edit block'
+            );
         }
     }
 
@@ -177,14 +229,23 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $formBlock = $layout->getChildBlock($blockName, 'form');
 
         if ($expected['form']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form', $formBlock,
-                'Child block with form is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form',
+                $formBlock,
+                'Child block with form is invalid'
+            );
 
-            $this->assertSame($expected['form']['category'], $formBlock->getCategory(),
-                'Form block should have same category attribute');
+            $this->assertSame(
+                $expected['form']['category'],
+                $formBlock->getCategory(),
+                'Form block should have same category attribute'
+            );
 
-            $this->assertSame($expected['form']['url_rewrite'], $formBlock->getUrlRewrite(),
-                'Form block should have same URL rewrite attribute');
+            $this->assertSame(
+                $expected['form']['url_rewrite'],
+                $formBlock->getUrlRewrite(),
+                'Form block should have same URL rewrite attribute'
+            );
         } else {
             $this->assertFalse($formBlock, 'Child block with form should not present in block');
         }
@@ -205,8 +266,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $categoriesTreeBlock = $layout->getChildBlock($blockName, 'categories_tree');
 
         if ($expected['categories_tree']) {
-            $this->assertInstanceOf('Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree', $categoriesTreeBlock,
-                'Child block with categories tree is invalid');
+            $this->assertInstanceOf(
+                'Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree',
+                $categoriesTreeBlock,
+                'Child block with categories tree is invalid'
+            );
         } else {
             $this->assertFalse($categoriesTreeBlock, 'Child block with category_tree should not present in block');
         }
@@ -220,8 +284,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
     public function prepareLayoutDataProvider()
     {
         /** @var $urlRewrite \Magento\Core\Model\Url\Rewrite */
-        $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Url\Rewrite');
+        $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Url\Rewrite'
+        );
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category',
@@ -236,31 +301,21 @@ class EditTest extends \PHPUnit_Framework_TestCase
         return array(
             // Creating URL rewrite when category selected
             array(
-                array(
-                    'category' => $category,
-                    'url_rewrite' => $urlRewrite
-                ),
+                array('category' => $category, 'url_rewrite' => $urlRewrite),
                 array(
                     'selector' => false,
-                    'category_link' => array(
-                        'name' => $category->getName()
-                    ),
+                    'category_link' => array('name' => $category->getName()),
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => false,
                     'delete_button' => false,
-                    'form' => array(
-                        'category' => $category,
-                        'url_rewrite' => $urlRewrite
-                    ),
+                    'form' => array('category' => $category, 'url_rewrite' => $urlRewrite),
                     'categories_tree' => false
                 )
             ),
             // Creating URL rewrite when category not selected
             array(
-                array(
-                    'url_rewrite' => $urlRewrite
-                ),
+                array('url_rewrite' => $urlRewrite),
                 array(
                     'selector' => true,
                     'category_link' => false,
@@ -274,23 +329,15 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ),
             // Editing URL rewrite with category
             array(
-                array(
-                    'url_rewrite' => $existingUrlRewrite,
-                    'category' => $category
-                ),
+                array('url_rewrite' => $existingUrlRewrite, 'category' => $category),
                 array(
                     'selector' => false,
-                    'category_link' => array(
-                        'name' => $category->getName()
-                    ),
+                    'category_link' => array('name' => $category->getName()),
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => true,
                     'delete_button' => true,
-                    'form' => array(
-                        'category' => $category,
-                        'url_rewrite' => $existingUrlRewrite
-                    ),
+                    'form' => array('category' => $category, 'url_rewrite' => $existingUrlRewrite),
                     'categories_tree' => false
                 )
             )

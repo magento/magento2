@@ -36,11 +36,7 @@ class CryptTest extends \PHPUnit_Framework_TestCase
 
     private static $_cipherInfo;
 
-    protected $_supportedCiphers = array(
-        MCRYPT_BLOWFISH,
-        MCRYPT_RIJNDAEL_128,
-        MCRYPT_RIJNDAEL_256,
-    );
+    protected $_supportedCiphers = array(MCRYPT_BLOWFISH, MCRYPT_RIJNDAEL_128, MCRYPT_RIJNDAEL_256);
 
     protected $_supportedModes = array(
         MCRYPT_MODE_ECB,
@@ -63,24 +59,24 @@ class CryptTest extends \PHPUnit_Framework_TestCase
     {
         $filename = __DIR__ . '/Crypt/_files/_cipher_info.php';
         /* Generate allowed sizes for encryption key and init vector
-        $data = array();
-        foreach ($this->_supportedCiphers as $cipher) {
-            if (!array_key_exists($cipher, $data)) {
-                $data[$cipher] = array();
-            }
-            foreach ($this->_supportedModes as $mode) {
-                $cipherHandle = mcrypt_module_open($cipher, '', $mode, '');
-                $data[$cipher][$mode] = array(
-                    'key_size' => mcrypt_enc_get_key_size($cipherHandle),
-                    'iv_size'  => mcrypt_enc_get_iv_size($cipherHandle),
-                );
-                mcrypt_module_close($cipherHandle);
-            }
-        }
-        file_put_contents($filename, '<?php return ' . var_export($data, true) . ";\n", LOCK_EX);
-        */
+           $data = array();
+           foreach ($this->_supportedCiphers as $cipher) {
+           if (!array_key_exists($cipher, $data)) {
+           $data[$cipher] = array();
+           }
+           foreach ($this->_supportedModes as $mode) {
+           $cipherHandle = mcrypt_module_open($cipher, '', $mode, '');
+           $data[$cipher][$mode] = array(
+           'key_size' => mcrypt_enc_get_key_size($cipherHandle),
+           'iv_size'  => mcrypt_enc_get_iv_size($cipherHandle),
+           );
+           mcrypt_module_close($cipherHandle);
+           }
+           }
+           file_put_contents($filename, '<?php return ' . var_export($data, true) . ";\n", LOCK_EX);
+           */
         if (!self::$_cipherInfo) {
-            self::$_cipherInfo = include($filename);
+            self::$_cipherInfo = include $filename;
         }
     }
 
@@ -127,9 +123,9 @@ class CryptTest extends \PHPUnit_Framework_TestCase
         $result = array();
         foreach ($this->_supportedCiphers as $cipher) {
             foreach ($this->_supportedModes as $mode) {
-                $tooLongKey         = str_repeat('-', ($this->_getKeySize($cipher, $mode) + 1));
-                $tooShortInitVector = str_repeat('-', ($this->_getInitVectorSize($cipher, $mode) - 1));
-                $tooLongInitVector  = str_repeat('-', ($this->_getInitVectorSize($cipher, $mode) + 1));
+                $tooLongKey = str_repeat('-', $this->_getKeySize($cipher, $mode) + 1);
+                $tooShortInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) - 1);
+                $tooLongInitVector = str_repeat('-', $this->_getInitVectorSize($cipher, $mode) + 1);
                 $result[] = array($tooLongKey, $cipher, $mode, false);
                 $result[] = array($this->_key, $cipher, $mode, $tooShortInitVector);
                 $result[] = array($this->_key, $cipher, $mode, $tooLongInitVector);
@@ -161,27 +157,27 @@ class CryptTest extends \PHPUnit_Framework_TestCase
     {
         $fixturesFilename = __DIR__ . '/Crypt/_files/_crypt_fixtures.php';
         /* Generate fixtures
-        $fixtures = array();
-        foreach (array('', 'Hello world!!!') as $inputString) {
-            foreach ($this->_supportedCiphers as $cipher) {
-                foreach ($this->_supportedModes as $mode) {
-                    $randomKey = $this->_getRandomString($this->_getKeySize($cipher, $mode));
-                    $randomInitVector = $this->_getRandomString($this->_getInitVectorSize($cipher, $mode));
-                    $crypt = new \Magento\Encryption\Crypt($randomKey, $cipher, $mode, $randomInitVector);
-                    $fixtures[] = array(
-                        $randomKey, // Encryption key
-                        $cipher,
-                        $mode,
-                        $randomInitVector, // Init vector
-                        $inputString, // String to encrypt
-                        base64_encode($crypt->encrypt($inputString)) // Store result of encryption as base64
-                    );
-                }
-            }
-        }
-        file_put_contents($fixturesFilename, '<?php return ' . var_export($fixtures, true) . ";\n", LOCK_EX);
-        */
-        $result = include($fixturesFilename);
+           $fixtures = array();
+           foreach (array('', 'Hello world!!!') as $inputString) {
+           foreach ($this->_supportedCiphers as $cipher) {
+           foreach ($this->_supportedModes as $mode) {
+           $randomKey = $this->_getRandomString($this->_getKeySize($cipher, $mode));
+           $randomInitVector = $this->_getRandomString($this->_getInitVectorSize($cipher, $mode));
+           $crypt = new \Magento\Encryption\Crypt($randomKey, $cipher, $mode, $randomInitVector);
+           $fixtures[] = array(
+           $randomKey, // Encryption key
+           $cipher,
+           $mode,
+           $randomInitVector, // Init vector
+           $inputString, // String to encrypt
+           base64_encode($crypt->encrypt($inputString)) // Store result of encryption as base64
+           );
+           }
+           }
+           }
+           file_put_contents($fixturesFilename, '<?php return ' . var_export($fixtures, true) . ";\n", LOCK_EX);
+           */
+        $result = include $fixturesFilename;
         /* Restore encoded string back to binary */
         foreach ($result as &$cryptParams) {
             $cryptParams[5] = base64_decode($cryptParams[5]);

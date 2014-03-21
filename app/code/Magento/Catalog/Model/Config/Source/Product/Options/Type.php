@@ -50,9 +50,7 @@ class Type implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $groups = array(
-            array('value' => '', 'label' => __('-- Please select --'))
-        );
+        $groups = array(array('value' => '', 'label' => __('-- Please select --')));
 
         foreach ($this->_productOptionConfig->getAll() as $option) {
             $types = array();
@@ -60,16 +58,10 @@ class Type implements \Magento\Option\ArrayInterface
                 if ($type['disabled']) {
                     continue;
                 }
-                $types[] = array(
-                    'label' => __($type['label']),
-                    'value' => $type['name']
-                );
+                $types[] = array('label' => __($type['label']), 'value' => $type['name']);
             }
             if (count($types)) {
-                $groups[] = array(
-                    'label' => __($option['label']),
-                    'value' => $types
-                );
+                $groups[] = array('label' => __($option['label']), 'value' => $types);
             }
         }
 

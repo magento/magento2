@@ -36,14 +36,14 @@ namespace Magento\Backup\Model;
 class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterface
 {
     /* internal constants */
-    const COMPRESS_RATE     = 9;
+    const COMPRESS_RATE = 9;
 
     /**
      * Type of backup file
      *
      * @var string
      */
-    private $_type  = 'db';
+    private $_type = 'db';
 
     /**
      * Gz file pointer
@@ -148,7 +148,6 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
         return $this;
     }
 
-
     /**
      * Load backup file info
      *
@@ -160,15 +159,20 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     {
         $backupData = $this->_helper->extractDataFromFilename($fileName);
 
-        $this->addData(array(
-            'id'   => $filePath . '/' . $fileName,
-            'time' => (int)$backupData->getTime(),
-            'path' => $filePath,
-            'extension' => $this->_helper->getExtensionByType($backupData->getType()),
-            'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
-            'name' => $backupData->getName(),
-            'date_object' => new \Magento\Stdlib\DateTime\Date((int)$backupData->getTime(), $this->_localeResolver->getLocaleCode())
-        ));
+        $this->addData(
+            array(
+                'id' => $filePath . '/' . $fileName,
+                'time' => (int)$backupData->getTime(),
+                'path' => $filePath,
+                'extension' => $this->_helper->getExtensionByType($backupData->getType()),
+                'display_name' => $this->_helper->nameToDisplayName($backupData->getName()),
+                'name' => $backupData->getName(),
+                'date_object' => new \Magento\Stdlib\DateTime\Date(
+                    (int)$backupData->getTime(),
+                    $this->_localeResolver->getLocaleCode()
+                )
+            )
+        );
 
         $this->setType($backupData->getType());
         return $this;
@@ -311,8 +315,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
                 $mode,
                 \Magento\App\Filesystem::WRAPPER_CONTENT_ZLIB
             );
-        }
-        catch (\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Filesystem\FilesystemException $e) {
             throw new \Magento\Backup\Exception\NotEnoughPermissions(
                 __('Sorry, but we cannot read from or write to backup file "%1".', $this->getFileName())
             );
@@ -367,10 +370,10 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     {
         try {
             $this->_getStream()->write($string);
-        }
-        catch (\Magento\Filesystem\FilesystemException $e) {
-            throw new \Magento\Backup\Exception(__('Something went wrong writing to the backup file "%1".',
-                $this->getFileName()));
+        } catch (\Magento\Filesystem\FilesystemException $e) {
+            throw new \Magento\Backup\Exception(
+                __('Something went wrong writing to the backup file "%1".', $this->getFileName())
+            );
         }
 
         return $this;
@@ -397,7 +400,7 @@ class Backup extends \Magento\Object implements \Magento\Backup\Db\BackupInterfa
     public function output()
     {
         if (!$this->exists()) {
-            return ;
+            return;
         }
 
         /** @var \Magento\Filesystem\Directory\ReadInterface $directory */

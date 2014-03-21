@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Block;
 
 class PageTest extends \PHPUnit_Framework_TestCase
@@ -31,10 +30,17 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * @var \Magento\Cms\Model\Page
+     */
+    protected $page;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject('Magento\Cms\Block\Page');
+        $this->page = $objectManager->getObject('Magento\Cms\Model\Page');
+        $this->page->setId(1);
     }
 
     protected function tearDown()
@@ -45,7 +51,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $id = 1;
-        $this->block->setPageId($id);
+        $this->block->setPage($this->page);
         $this->assertEquals(
             array(\Magento\Cms\Model\Page::CACHE_TAG . '_' . $id),
             $this->block->getIdentities()

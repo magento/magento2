@@ -174,9 +174,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         }
 
         if (!$this->isLoaded()) {
-            $this->addOrder('CASE WHEN main_table.store_id = 0 THEN 0 ELSE 1 END', \Magento\DB\Select::SQL_ASC)
-                ->addOrder('main_table.sort_order', \Magento\DB\Select::SQL_ASC)
-                ->addOrder('main_table.name', \Magento\DB\Select::SQL_ASC);
+            $this->addOrder(
+                'CASE WHEN main_table.store_id = 0 THEN 0 ELSE 1 END',
+                \Magento\DB\Select::SQL_ASC
+            )->addOrder(
+                'main_table.sort_order',
+                \Magento\DB\Select::SQL_ASC
+            )->addOrder(
+                'main_table.name',
+                \Magento\DB\Select::SQL_ASC
+            );
         }
         return parent::load($printQuery, $logQuery);
     }

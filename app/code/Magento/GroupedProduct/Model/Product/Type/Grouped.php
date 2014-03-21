@@ -39,7 +39,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @var string
      */
-    protected $_keyAssociatedProducts   = '_cache_instance_associated_products';
+    protected $_keyAssociatedProducts = '_cache_instance_associated_products';
 
     /**
      * Cache key for Associated Product Ids
@@ -158,10 +158,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getRelationInfo()
     {
         $info = new \Magento\Object();
-        $info->setTable('catalog_product_link')
-            ->setParentFieldName('product_id')
-            ->setChildFieldName('linked_product_id')
-            ->setWhere('link_type_id=' . \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED);
+        $info->setTable(
+            'catalog_product_link'
+        )->setParentFieldName(
+            'product_id'
+        )->setChildFieldName(
+            'linked_product_id'
+        )->setWhere(
+            'link_type_id=' . \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+        );
         return $info;
     }
 
@@ -179,11 +184,10 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        return $this->productLinks
-            ->getChildrenIds(
-                $parentId,
-                \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
-            );
+        return $this->productLinks->getChildrenIds(
+            $parentId,
+            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+        );
     }
 
     /**
@@ -194,11 +198,10 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getParentIdsByChild($childId)
     {
-        return $this->productLinks
-            ->getParentIdsByChild(
-                $childId,
-                \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
-            );
+        return $this->productLinks->getParentIdsByChild(
+            $childId,
+            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+        );
     }
 
     /**
@@ -214,12 +217,16 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             $this->setSaleableStatus($product);
 
-            $collection = $this->getAssociatedProductCollection($product)
-                ->addAttributeToSelect('*')
-                ->addFilterByRequiredOptions()
-                ->setPositionOrder()
-                ->addStoreFilter($this->getStoreFilter($product))
-                ->addAttributeToFilter('status', array('in' => $this->getStatusFilters($product)));
+            $collection = $this->getAssociatedProductCollection(
+                $product
+            )->addAttributeToSelect(
+                '*'
+            )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
+                $this->getStoreFilter($product)
+            )->addAttributeToFilter(
+                'status',
+                array('in' => $this->getStatusFilters($product))
+            );
 
             foreach ($collection as $item) {
                 $associatedProducts[] = $item;
@@ -309,10 +316,13 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         /** @var \Magento\Catalog\Model\Product\Link  $links */
         $links = $product->getLinkInstance();
         $links->setLinkTypeId(\Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED);
-        $collection = $links->getProductCollection()
-            ->setFlag('require_stock_items', true)
-            ->setFlag('product_children', true)
-            ->setIsStrongMode();
+        $collection = $links->getProductCollection()->setFlag(
+            'require_stock_items',
+            true
+        )->setFlag(
+            'product_children',
+            true
+        )->setIsStrongMode();
         $collection->setProduct($product);
         return $collection;
     }
@@ -349,7 +359,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         $productsInfo = $buyRequest->getSuperGroup();
         $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
 
-        if (!$isStrictProcessMode || (!empty($productsInfo) && is_array($productsInfo))) {
+        if (!$isStrictProcessMode || !empty($productsInfo) && is_array($productsInfo)) {
             $products = array();
             $associatedProductsInfo = array();
             $associatedProducts = $this->getAssociatedProducts($product);
@@ -360,8 +370,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $qty = $productsInfo[$subProductId];
                         if (!empty($qty) && is_numeric($qty)) {
 
-                            $_result = $subProduct->getTypeInstance()
-                                ->_prepareProduct($buyRequest, $subProduct, $processMode);
+                            $_result = $subProduct->getTypeInstance()->_prepareProduct(
+                                $buyRequest,
+                                $subProduct,
+                                $processMode
+                            );
                             if (is_string($_result) && !is_array($_result)) {
                                 return $_result;
                             }
@@ -373,13 +386,16 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                             if ($isStrictProcessMode) {
                                 $_result[0]->setCartQty($qty);
                                 $_result[0]->addCustomOption('product_type', self::TYPE_CODE, $product);
-                                $_result[0]->addCustomOption('info_buyRequest',
-                                    serialize(array(
-                                        'super_product_config' => array(
-                                            'product_type'  => self::TYPE_CODE,
-                                            'product_id'    => $product->getId()
+                                $_result[0]->addCustomOption(
+                                    'info_buyRequest',
+                                    serialize(
+                                        array(
+                                            'super_product_config' => array(
+                                                'product_type' => self::TYPE_CODE,
+                                                'product_id' => $product->getId()
+                                            )
                                         )
-                                    ))
+                                    )
                                 );
                                 $products[] = $_result[0];
                             } else {
@@ -429,7 +445,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function processBuyRequest($product, $buyRequest)
     {
         $superGroup = $buyRequest->getSuperGroup();
-        $superGroup = (is_array($superGroup)) ? array_filter($superGroup, 'intval') : array();
+        $superGroup = is_array($superGroup) ? array_filter($superGroup, 'intval') : array();
 
         $options = array('super_group' => $superGroup);
 

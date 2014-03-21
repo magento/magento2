@@ -36,9 +36,11 @@ use Magento\Core\Model\Store;
  */
 class Category extends AbstractHelper
 {
-    const XML_PATH_CATEGORY_URL_SUFFIX          = 'catalog/seo/category_url_suffix';
-    const XML_PATH_USE_CATEGORY_CANONICAL_TAG   = 'catalog/seo/category_canonical_tag';
-    const XML_PATH_CATEGORY_ROOT_ID             = 'catalog/category/root_id';
+    const XML_PATH_CATEGORY_URL_SUFFIX = 'catalog/seo/category_url_suffix';
+
+    const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
+
+    const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
 
     /**
      * Store categories cache
@@ -111,10 +113,10 @@ class Category extends AbstractHelper
      * @param bool $toLoad
      * @return \Magento\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
      */
-    public function getStoreCategories($sorted=false, $asCollection=false, $toLoad=true)
+    public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {
-        $parent     = $this->_storeManager->getStore()->getRootCategoryId();
-        $cacheKey   = sprintf('%d-%d-%d-%d', $parent, $sorted, $asCollection, $toLoad);
+        $parent = $this->_storeManager->getStore()->getRootCategoryId();
+        $cacheKey = sprintf('%d-%d-%d-%d', $parent, $sorted, $asCollection, $toLoad);
         if (isset($this->_storeCategories[$cacheKey])) {
             return $this->_storeCategories[$cacheKey];
         }
@@ -131,7 +133,7 @@ class Category extends AbstractHelper
             return array();
         }
 
-        $recursionLevel  = max(0, (int) $this->_storeManager->getStore()->getConfig('catalog/navigation/max_depth'));
+        $recursionLevel = max(0, (int)$this->_storeManager->getStore()->getConfig('catalog/navigation/max_depth'));
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
 
         $this->_storeCategories[$cacheKey] = $storeCategories;
@@ -149,9 +151,7 @@ class Category extends AbstractHelper
         if ($category instanceof ModelCategory) {
             return $category->getUrl();
         }
-        return $this->_categoryFactory->create()
-            ->setData($category->getData())
-            ->getUrl();
+        return $this->_categoryFactory->create()->setData($category->getData())->getUrl();
     }
 
     /**
@@ -194,7 +194,8 @@ class Category extends AbstractHelper
 
         if (!isset($this->_categoryUrlSuffix[$storeId])) {
             $this->_categoryUrlSuffix[$storeId] = $this->_coreStoreConfig->getConfig(
-                self::XML_PATH_CATEGORY_URL_SUFFIX, $storeId
+                self::XML_PATH_CATEGORY_URL_SUFFIX,
+                $storeId
             );
         }
         return $this->_categoryUrlSuffix[$storeId];
@@ -215,12 +216,11 @@ class Category extends AbstractHelper
         }
 
         if ($slash) {
-            $regexp     = '#('.preg_quote($this->getCategoryUrlSuffix($storeId), '#').')/$#i';
-            $replace    = '/';
-        }
-        else {
-            $regexp     = '#('.preg_quote($this->getCategoryUrlSuffix($storeId), '#').')$#i';
-            $replace    = '';
+            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')/$#i';
+            $replace = '/';
+        } else {
+            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')$#i';
+            $replace = '';
         }
 
         return preg_replace($regexp, $replace, $urlPath);

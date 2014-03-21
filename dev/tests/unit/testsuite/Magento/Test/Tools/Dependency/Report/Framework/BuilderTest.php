@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Framework;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -55,13 +54,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongOptionConfigFiles()
     {
-        return [
-            [
-                ['parse' => ['files_for_parse' => [1, 2], 'config_files' => []], 'write' => [1, 2]],
-            ],
-            [
-                ['parse' => ['files_for_parse' => [1, 2]], 'write' => [1, 2]],
-            ],
-        ];
+        return array(
+            array(
+                array(
+                    'parse' => array('files_for_parse' => array(1, 2), 'config_files' => array()),
+                    'write' => array(1, 2)
+                )
+            ),
+            array(array('parse' => array('files_for_parse' => array(1, 2)), 'write' => array(1, 2)))
+        );
     }
 }

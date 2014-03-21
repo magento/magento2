@@ -25,8 +25,7 @@
  */
 namespace Magento\Tax\Model\Resource\Rule\Grid\Options;
 
-class CustomerTaxClass
-    implements \Magento\Option\ArrayInterface
+class CustomerTaxClass implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
@@ -48,7 +47,8 @@ class CustomerTaxClass
      */
     public function toOptionArray()
     {
-        return $this->_collectionFactory->create()->setClassTypeFilter(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-            ->toOptionHash();
+        return $this->_collectionFactory->create()->setClassTypeFilter(
+            \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+        )->toOptionHash();
     }
 }

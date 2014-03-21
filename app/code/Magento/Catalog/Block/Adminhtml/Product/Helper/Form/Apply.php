@@ -51,9 +51,9 @@ class Apply extends \Magento\Data\Form\Element\Multiselect
         }
 
         $html = '<select onchange="toggleApplyVisibility(this)"' . $elementAttributeHtml . '>'
-              . '<option value="0">' . $this->getModeLabels('all'). '</option>'
-              . '<option value="1" ' . ($this->getValue()==null ? '' : 'selected') . '>' . $this->getModeLabels('custom'). '</option>'
-              . '</select><br /><br />';
+            . '<option value="0">' . $this->getModeLabels('all'). '</option>'
+            . '<option value="1" ' . ($this->getValue()==null ? '' : 'selected') . '>'
+            . $this->getModeLabels('custom'). '</option>' . '</select><br /><br />';
 
         $html .= parent::getElementHtml();
         return $html;
@@ -72,5 +72,4 @@ class Apply extends \Magento\Data\Form\Element\Multiselect
         $this->setData('disabled', $useDisabled);
         return $this;
     }
-
 }

@@ -47,13 +47,13 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->customerSession = $objectManager->get('Magento\Customer\Model\Session');
-        $this->block = $objectManager
-            ->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Account\Dashboard\Newsletter',
-                '',
-                ['customerSession' => $this->customerSession]
-            );
+        $this->block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Account\Dashboard\Newsletter',
+            '',
+            array('customerSession' => $this->customerSession)
+        );
     }
 
     /**

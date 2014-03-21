@@ -39,8 +39,8 @@ class Mysql4 extends \Magento\Install\Model\Installer\Db\AbstractDb
      */
     public function getVersion()
     {
-        $version  = $this->_getConnection()->fetchOne('SELECT VERSION()');
-        $version    = $version ? $version : 'undefined';
+        $version = $this->_getConnection()->fetchOne('SELECT VERSION()');
+        $version = $version ? $version : 'undefined';
         $match = array();
         if (preg_match("#^([0-9\.]+)#", $version, $match)) {
             $version = $match[0];
@@ -55,7 +55,7 @@ class Mysql4 extends \Magento\Install\Model\Installer\Db\AbstractDb
      */
     public function supportEngine()
     {
-        $variables  = $this->_getConnection()->fetchPairs('SHOW ENGINES');
+        $variables = $this->_getConnection()->fetchPairs('SHOW ENGINES');
         return isset($variables['InnoDB']) && ($variables['InnoDB'] == 'DEFAULT' || $variables['InnoDB'] == 'YES');
     }
 

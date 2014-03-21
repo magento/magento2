@@ -26,8 +26,7 @@ namespace Magento\Dhl\Model\Source\Method;
 /**
  * Source model for DHL shipping methods for documentation
  */
-class Freenondoc
-    extends \Magento\Dhl\Model\Source\Method\AbstractMethod
+class Freenondoc extends \Magento\Dhl\Model\Source\Method\AbstractMethod
 {
     /**
      * Carrier Product Type Indicator

@@ -135,8 +135,10 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($this->getAttribute()->getIsGlobal() == \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE) {
-            $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default');
+            $baseCurrency = $this->_config->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                'default'
+            );
 
             $storeIds = $object->getStoreIds();
             if (is_array($storeIds)) {
@@ -173,9 +175,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
-            throw new \Magento\Core\Exception(
-                __('Please enter a number 0 or greater in this field.')
-            );
+            throw new \Magento\Core\Exception(__('Please enter a number 0 or greater in this field.'));
         }
 
         return true;

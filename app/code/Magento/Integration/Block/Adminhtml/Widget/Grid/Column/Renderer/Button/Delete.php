@@ -38,7 +38,10 @@ class Delete extends Button
      */
     protected function _getOnclickAttribute(Object $row)
     {
-        return sprintf("this.setAttribute('data-url', '%s')", $this->getUrl('*/*/delete', ['id' => $row->getId()]));
+        return sprintf(
+            "this.setAttribute('data-url', '%s')",
+            $this->getUrl('*/*/delete', array('id' => $row->getId()))
+        );
     }
 
     /**

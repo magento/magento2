@@ -93,9 +93,13 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         }
         /** @var CustomerGroupModel $group */
         foreach ($collection as $group) {
-            $this->_customerGroupBuilder->setId($group->getId())
-                ->setCode($group->getCode())
-                ->setTaxClassId($group->getTaxClassId());
+            $this->_customerGroupBuilder->setId(
+                $group->getId()
+            )->setCode(
+                $group->getCode()
+            )->setTaxClassId(
+                $group->getTaxClassId()
+            );
             $groups[] = $this->_customerGroupBuilder->create();
         }
         return $groups;
@@ -125,9 +129,13 @@ class CustomerGroupService implements CustomerGroupServiceInterface
 
         /** @var CustomerGroupModel $group */
         foreach ($collection as $group) {
-            $this->_customerGroupBuilder->setId($group->getId())
-                ->setCode($group->getCode())
-                ->setTaxClassId($group->getTaxClassId());
+            $this->_customerGroupBuilder->setId(
+                $group->getId()
+            )->setCode(
+                $group->getCode()
+            )->setTaxClassId(
+                $group->getTaxClassId()
+            );
             $groups[] = $this->_customerGroupBuilder->create();
         }
         $this->_searchResultsBuilder->setItems($groups);
@@ -168,7 +176,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     {
         $field = $this->translateField($filter->getField());
         $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-        $collection->addFieldToFilter($field, [$condition => $filter->getValue()]);
+        $collection->addFieldToFilter($field, array($condition => $filter->getValue()));
     }
 
     /**
@@ -184,12 +192,12 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         if (strcasecmp($group->getGroupType(), 'OR')) {
             throw new InputException('The only nested groups currently supported for filters are of type OR.');
         }
-        $fields = [];
-        $conditions = [];
+        $fields = array();
+        $conditions = array();
         foreach ($group->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $fields[] = $this->translateField($filter->getField());
-            $conditions[] = [$condition => $filter->getValue()];
+            $conditions[] = array($condition => $filter->getValue());
         }
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
@@ -225,9 +233,13 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         if (is_null($customerGroup->getId())) {
             throw new NoSuchEntityException('groupId', $groupId);
         }
-        $this->_customerGroupBuilder->setId($customerGroup->getId())
-            ->setCode($customerGroup->getCode())
-            ->setTaxClassId($customerGroup->getTaxClassId());
+        $this->_customerGroupBuilder->setId(
+            $customerGroup->getId()
+        )->setCode(
+            $customerGroup->getCode()
+        )->setTaxClassId(
+            $customerGroup->getTaxClassId()
+        );
         return $this->_customerGroupBuilder->create();
     }
 

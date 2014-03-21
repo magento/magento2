@@ -39,9 +39,8 @@ class LinkTypeProvider
     /**
      * @param array $linkTypes
      */
-    public function __construct(
-        array $linkTypes = array()
-    ) {
+    public function __construct(array $linkTypes = array())
+    {
         $this->_linkTypes = $linkTypes;
     }
 

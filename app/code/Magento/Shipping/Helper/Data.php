@@ -100,7 +100,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected function _getTrackingUrl($key, $model, $method = 'getId')
     {
-        $urlPart = "{$key}:{$model->$method()}:{$model->getProtectCode()}";
+        $urlPart = "{$key}:{$model->{$method}()}:{$model->getProtectCode()}";
         $param = array('hash' => $this->_coreData->urlEncode($urlPart));
 
         $storeModel = $this->_storeManager->getStore($model->getStoreId());

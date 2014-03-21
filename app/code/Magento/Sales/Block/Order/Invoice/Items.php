@@ -112,8 +112,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $html = '';
         $comments = $this->getChildBlock('invoice_comments');
         if ($comments) {
-            $comments->setEntity($invoice)
-                ->setTitle(__('About Your Invoice'));
+            $comments->setEntity($invoice)->setTitle(__('About Your Invoice'));
             $html = $comments->toHtml();
         }
         return $html;

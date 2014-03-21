@@ -48,10 +48,8 @@ class Form extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = array()
-    ) {
+    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = array())
+    {
         parent::__construct($context, $data);
     }
 
@@ -177,7 +175,7 @@ class Form extends \Magento\Backend\Block\Widget
      * @param array $exclude attributes that should be skipped
      * @return void
      */
-    protected function _setFieldset($attributes, $fieldset, $exclude=array())
+    protected function _setFieldset($attributes, $fieldset, $exclude = array())
     {
         $this->_addElementTypes($fieldset);
         foreach ($attributes as $attribute) {
@@ -185,28 +183,32 @@ class Form extends \Magento\Backend\Block\Widget
             if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }
-            if ( ($inputType = $attribute->getFrontend()->getInputType())
-                 && !in_array($attribute->getAttributeCode(), $exclude)
-                 && (('media_image' != $inputType) || ($attribute->getAttributeCode() == 'image'))
-                 ) {
+            if (($inputType = $attribute->getFrontend()->getInputType()) && !in_array(
+                $attribute->getAttributeCode(),
+                $exclude
+            ) && ('media_image' != $inputType || $attribute->getAttributeCode() == 'image')
+            ) {
 
-                $fieldType      = $inputType;
-                $rendererClass  = $attribute->getFrontend()->getInputRendererClass();
+                $fieldType = $inputType;
+                $rendererClass = $attribute->getFrontend()->getInputRendererClass();
                 if (!empty($rendererClass)) {
-                    $fieldType  = $inputType . '_' . $attribute->getAttributeCode();
+                    $fieldType = $inputType . '_' . $attribute->getAttributeCode();
                     $fieldset->addType($fieldType, $rendererClass);
                 }
 
-                $element = $fieldset->addField($attribute->getAttributeCode(), $fieldType,
+                $element = $fieldset->addField(
+                    $attribute->getAttributeCode(),
+                    $fieldType,
                     array(
-                        'name'      => $attribute->getAttributeCode(),
-                        'label'     => $attribute->getFrontend()->getLabel(),
-                        'class'     => $attribute->getFrontend()->getClass(),
-                        'required'  => $attribute->getIsRequired(),
-                        'note'      => $attribute->getNote(),
+                        'name' => $attribute->getAttributeCode(),
+                        'label' => $attribute->getFrontend()->getLabel(),
+                        'class' => $attribute->getFrontend()->getClass(),
+                        'required' => $attribute->getIsRequired(),
+                        'note' => $attribute->getNote()
                     )
-                )
-                ->setEntityAttribute($attribute);
+                )->setEntityAttribute(
+                    $attribute
+                );
 
                 $element->setAfterElementHtml($this->_getAdditionalElementHtml($element));
 
@@ -223,8 +225,9 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected function _isAttributeVisible(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
-        return !(!$attribute || ($attribute->hasIsVisible() && !$attribute->getIsVisible()));
+        return !(!$attribute || $attribute->hasIsVisible() && !$attribute->getIsVisible());
     }
+
     /**
      * Apply configuration specific for different element type
      *

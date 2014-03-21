@@ -172,7 +172,11 @@ class Advanced extends AbstractModel
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         parent::__construct(
-            $context, $registry, $this->_engine->getResource(), $this->_engine->getResourceCollection(), $data
+            $context,
+            $registry,
+            $this->_engine->getResource(),
+            $this->_engine->getResourceCollection(),
+            $data
         );
     }
 
@@ -187,7 +191,8 @@ class Advanced extends AbstractModel
         $attributes = $this->getData('attributes');
         if (is_null($attributes)) {
             $product = $this->_productFactory->create();
-            $attributes = $this->_attributeCollectionFactory->create()
+            $attributes = $this->_attributeCollectionFactory
+                ->create()
                 ->addHasOptionsFilter()
                 ->addDisplayInAdvancedSearchFilter()
                 ->addStoreLabel($this->_storeManager->getStore()->getId())
@@ -210,9 +215,9 @@ class Advanced extends AbstractModel
      */
     public function addFilters($values)
     {
-        $attributes     = $this->getAttributes();
-        $hasConditions  = false;
-        $allConditions  = array();
+        $attributes = $this->getAttributes();
+        $hasConditions = false;
+        $allConditions = array();
 
         foreach ($attributes as $attribute) {
             /* @var $attribute Attribute */
@@ -231,7 +236,11 @@ class Advanced extends AbstractModel
                         $rate = 1;
                     }
                     if ($this->_getResource()->addRatedPriceFilter(
-                        $this->getProductCollection(), $attribute, $value, $rate)
+                        $this->getProductCollection(),
+                        $attribute,
+                        $value,
+                        $rate
+                    )
                     ) {
                         $hasConditions = true;
                         $this->_addSearchCriteria($attribute, $value);
@@ -240,13 +249,21 @@ class Advanced extends AbstractModel
             } else if ($attribute->isIndexable()) {
                 if (!is_string($value) || strlen($value) != 0) {
                     if ($this->_getResource()->addIndexableAttributeModifiedFilter(
-                        $this->getProductCollection(), $attribute, $value)) {
+                        $this->getProductCollection(),
+                        $attribute,
+                        $value
+                    )
+                    ) {
                         $hasConditions = true;
                         $this->_addSearchCriteria($attribute, $value);
                     }
                 }
             } else {
-                $condition = $this->_getResource()->prepareCondition($attribute, $value, $this->getProductCollection());
+                $condition = $this->_getResource()->prepareCondition(
+                    $attribute,
+                    $value,
+                    $this->getProductCollection()
+                );
                 if ($condition === false) {
                     continue;
                 }
@@ -254,7 +271,7 @@ class Advanced extends AbstractModel
                 $this->_addSearchCriteria($attribute, $value);
 
                 $table = $attribute->getBackend()->getTable();
-                if ($attribute->getBackendType() == 'static'){
+                if ($attribute->getBackendType() == 'static') {
                     $attributeId = $attribute->getAttributeCode();
                 } else {
                     $attributeId = $attribute->getId();
@@ -296,14 +313,17 @@ class Advanced extends AbstractModel
 
                     if (strlen($value['from']) > 0 && strlen($value['to']) > 0) {
                         // -
-                        $value = sprintf('%s - %s',
-                            ($currencyModel ? $from : $value['from']), ($currencyModel ? $to : $value['to']));
+                        $value = sprintf(
+                            '%s - %s',
+                            $currencyModel ? $from : $value['from'],
+                            $currencyModel ? $to : $value['to']
+                        );
                     } elseif (strlen($value['from']) > 0) {
                         // and more
-                        $value = __('%1 and greater', ($currencyModel ? $from : $value['from']));
+                        $value = __('%1 and greater', $currencyModel ? $from : $value['from']);
                     } elseif (strlen($value['to']) > 0) {
                         // to
-                        $value = __('up to %1', ($currencyModel ? $to : $value['to']));
+                        $value = __('up to %1', $currencyModel ? $to : $value['to']);
                     }
                 } else {
                     return $this;
@@ -311,10 +331,10 @@ class Advanced extends AbstractModel
             }
         }
 
-        if (($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect')
-            && is_array($value)
+        if (($attribute->getFrontendInput() == 'select' ||
+            $attribute->getFrontendInput() == 'multiselect') && is_array($value)
         ) {
-            foreach ($value as $key => $val){
+            foreach ($value as $key => $val) {
                 $value[$key] = $attribute->getSource()->getOptionText($val);
 
                 if (is_array($value[$key])) {
@@ -324,9 +344,10 @@ class Advanced extends AbstractModel
             $value = implode(', ', $value);
         } else if ($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect') {
             $value = $attribute->getSource()->getOptionText($value);
-            if (is_array($value))
+            if (is_array($value)) {
                 $value = $value['label'];
-        } else if ($attribute->getFrontendInput() == 'boolean') {
+            }
+        } elseif ($attribute->getFrontendInput() == 'boolean') {
             $value = $value == 1
                 ? __('Yes')
                 : __('No');
@@ -373,12 +394,13 @@ class Advanced extends AbstractModel
      */
     public function prepareProductCollection($collection)
     {
-        $collection->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-            ->setStore($this->_storeManager->getStore())
-            ->addMinimalPrice()
-            ->addTaxPercents()
-            ->addStoreFilter()
-            ->setVisibility($this->_catalogProductVisibility->getVisibleInSearchIds());
+        $collection->addAttributeToSelect(
+            $this->_catalogConfig->getProductAttributes()
+        )->setStore(
+            $this->_storeManager->getStore()
+        )->addMinimalPrice()->addTaxPercents()->addStoreFilter()->setVisibility(
+            $this->_catalogProductVisibility->getVisibleInSearchIds()
+        );
 
         return $this;
     }

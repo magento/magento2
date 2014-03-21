@@ -54,17 +54,16 @@ namespace Magento\User\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class User
-    extends \Magento\Core\Model\AbstractModel
-    implements \Magento\Backend\Model\Auth\Credential\StorageInterface
+class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend\Model\Auth\Credential\StorageInterface
 {
     /**
      * Configuration paths for email templates and identities
      */
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE    = 'admin/emails/forgot_email_template';
-    const XML_PATH_FORGOT_EMAIL_IDENTITY    = 'admin/emails/forgot_email_identity';
+    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
-    const XML_PATH_RESET_PASSWORD_TEMPLATE  = 'admin/emails/reset_password_template';
+    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
+
+    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
     /**
      * Minimum length of admin password
@@ -199,16 +198,19 @@ class User
     public function __sleep()
     {
         $properties = parent::__sleep();
-        return array_diff($properties, array(
-            '_eventManager',
-            '_userData',
-            '_config',
-            '_validatorObject',
-            '_roleFactory',
-            '_encryptor',
-            '_transportBuilder',
-            '_storeManager'
-        ));
+        return array_diff(
+            $properties,
+            array(
+                '_eventManager',
+                '_userData',
+                '_config',
+                '_validatorObject',
+                '_roleFactory',
+                '_encryptor',
+                '_transportBuilder',
+                '_storeManager'
+            )
+        );
     }
 
     /**
@@ -218,15 +220,15 @@ class User
     {
         parent::__wakeup();
         $objectManager = \Magento\App\ObjectManager::getInstance();
-        $this->_eventManager    = $objectManager->get('Magento\Event\ManagerInterface');
-        $this->_userData        = $objectManager->get('Magento\User\Helper\Data');
+        $this->_eventManager = $objectManager->get('Magento\Event\ManagerInterface');
+        $this->_userData = $objectManager->get('Magento\User\Helper\Data');
         $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_coreRegistry    = $objectManager->get('Magento\Registry');
+        $this->_coreRegistry = $objectManager->get('Magento\Registry');
         $this->_validatorObject = $objectManager->get('Magento\Validator\ObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
         $this->_encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
-        $this->_transportBuilder =  $objectManager->get('Magento\Mail\Template\TransportBuilder');
-        $this->_storeManager =  $objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        $this->_transportBuilder = $objectManager->get('Magento\Mail\Template\TransportBuilder');
+        $this->_storeManager = $objectManager->get('Magento\Core\Model\StoreManagerInterface');
     }
 
     /**
@@ -238,17 +240,17 @@ class User
     {
         $data = array(
             'firstname' => $this->getFirstname(),
-            'lastname'  => $this->getLastname(),
-            'email'     => $this->getEmail(),
-            'modified'  => $this->dateTime->now(),
-            'extra'     => serialize($this->getExtra())
+            'lastname' => $this->getLastname(),
+            'email' => $this->getEmail(),
+            'modified' => $this->dateTime->now(),
+            'extra' => serialize($this->getExtra())
         );
 
         if ($this->getId() > 0) {
             $data['user_id'] = $this->getId();
         }
 
-        if ( $this->getUsername() ) {
+        if ($this->getUsername()) {
             $data['username'] = $this->getUsername();
         }
 
@@ -272,7 +274,7 @@ class User
      */
     protected function _willSavePassword()
     {
-        return ($this->isObjectNew() || ($this->hasData('password') && $this->dataHasChangedFor('password')));
+        return $this->isObjectNew() || $this->hasData('password') && $this->dataHasChangedFor('password');
     }
 
     /**
@@ -283,32 +285,29 @@ class User
     protected function _getValidationRulesBeforeSave()
     {
         $userNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $userNameNotEmpty->setMessage(
-            __('User Name is a required field.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
-        );
+        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $firstNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $firstNameNotEmpty->setMessage(
-            __('First Name is a required field.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
-        );
+        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $lastNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $lastNameNotEmpty->setMessage(
-            __('Last Name is a required field.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
-        );
+        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $emailValidity = new \Zend_Validate_EmailAddress();
-        $emailValidity->setMessage(
-            __('Please enter a valid email.'),
-            \Zend_Validate_EmailAddress::INVALID
-        );
+        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
 
         /** @var $validator \Magento\Validator\Object */
         $validator = $this->_validatorObject->create();
-        $validator->addRule($userNameNotEmpty, 'username')
-            ->addRule($firstNameNotEmpty, 'firstname')
-            ->addRule($lastNameNotEmpty, 'lastname')
-            ->addRule($emailValidity, 'email');
+        $validator->addRule(
+            $userNameNotEmpty,
+            'username'
+        )->addRule(
+            $firstNameNotEmpty,
+            'firstname'
+        )->addRule(
+            $lastNameNotEmpty,
+            'lastname'
+        )->addRule(
+            $emailValidity,
+            'email'
+        );
 
         if ($this->_willSavePassword()) {
             $this->_addPasswordValidation($validator);
@@ -325,10 +324,7 @@ class User
     protected function _addPasswordValidation(\Magento\Validator\Object $validator)
     {
         $passwordNotEmpty = new \Zend_Validate_NotEmpty();
-        $passwordNotEmpty->setMessage(
-            __('Password is required field.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
-        );
+        $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $minPassLength = self::MIN_PASSWORD_LENGTH;
         $passwordLength = new \Zend_Validate_StringLength(array('min' => $minPassLength, 'encoding' => 'UTF-8'));
         $passwordLength->setMessage(
@@ -340,11 +336,16 @@ class User
             __('Your password must include both numeric and alphabetic characters.'),
             \Zend_Validate_Regex::NOT_MATCH
         );
-        $validator
-            ->addRule($passwordNotEmpty, 'password')
-            ->addRule($passwordLength, 'password')
-            ->addRule($passwordChars, 'password')
-        ;
+        $validator->addRule(
+            $passwordNotEmpty,
+            'password'
+        )->addRule(
+            $passwordLength,
+            'password'
+        )->addRule(
+            $passwordChars,
+            'password'
+        );
         if ($this->hasPasswordConfirmation()) {
             $passwordConfirmation = new \Zend_Validate_Identical($this->getPasswordConfirmation());
             $passwordConfirmation->setMessage(
@@ -427,7 +428,7 @@ class User
     public function roleUserExists()
     {
         $result = $this->_getResource()->roleUserExists($this);
-        return (is_array($result) && count($result) > 0) ? true : false;
+        return is_array($result) && count($result) > 0 ? true : false;
     }
 
     /**
@@ -439,16 +440,18 @@ class User
     {
         // Set all required params and send emails
         /** @var \Magento\Mail\TransportInterface $transport */
-        $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE))
-            ->setTemplateOptions(array(
-                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => 0
-            ))
-            ->setTemplateVars(array('user' => $this, 'store' => $this->_storeManager->getStore(0)))
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
-            ->getTransport();
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE)
+        )->setTemplateOptions(
+            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 0)
+        )->setTemplateVars(
+            array('user' => $this, 'store' => $this->_storeManager->getStore(0))
+        )->setFrom(
+            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        )->getTransport();
 
         $transport->sendMessage();
         return $this;
@@ -463,16 +466,18 @@ class User
     {
         // Set all required params and send emails
         /** @var \Magento\Mail\TransportInterface $transport */
-        $transport = $this->_transportBuilder
-            ->setTemplateIdentifier($this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE))
-            ->setTemplateOptions(array(
-                'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                'store' => 0
-            ))
-            ->setTemplateVars(array('user' => $this, 'store' => $this->_storeManager->getStore(0)))
-            ->setFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY))
-            ->addTo($this->getEmail(), $this->getName())
-            ->getTransport();
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE)
+        )->setTemplateOptions(
+            array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND, 'store' => 0)
+        )->setTemplateVars(
+            array('user' => $this, 'store' => $this->_storeManager->getStore(0))
+        )->setFrom(
+            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        )->getTransport();
 
         $transport->sendMessage();
     }
@@ -524,36 +529,27 @@ class User
         $result = false;
 
         try {
-            $this->_eventManager->dispatch('admin_user_authenticate_before', array(
-                'username' => $username,
-                'user'     => $this
-            ));
+            $this->_eventManager->dispatch(
+                'admin_user_authenticate_before',
+                array('username' => $username, 'user' => $this)
+            );
             $this->loadByUsername($username);
-            $sensitive = ($config) ? $username == $this->getUsername() : true;
+            $sensitive = $config ? $username == $this->getUsername() : true;
 
-            if ($sensitive
-                && $this->getId()
-                && $this->_encryptor->validateHash($password, $this->getPassword())
-            ) {
+            if ($sensitive && $this->getId() && $this->_encryptor->validateHash($password, $this->getPassword())) {
                 if ($this->getIsActive() != '1') {
-                    throw new \Magento\Backend\Model\Auth\Exception(
-                        __('This account is inactive.')
-                    );
+                    throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
                 }
                 if (!$this->hasAssigned2Role($this->getId())) {
-                    throw new \Magento\Backend\Model\Auth\Exception(
-                        __('Access denied.')
-                    );
+                    throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
                 }
                 $result = true;
             }
 
-            $this->_eventManager->dispatch('admin_user_authenticate_after', array(
-                'username' => $username,
-                'password' => $password,
-                'user'     => $this,
-                'result'   => $result,
-            ));
+            $this->_eventManager->dispatch(
+                'admin_user_authenticate_after',
+                array('username' => $username, 'password' => $password, 'user' => $this, 'result' => $result)
+            );
         } catch (\Magento\Core\Exception $e) {
             $this->unsetData();
             throw $e;

@@ -52,7 +52,8 @@ class Memory
      * @param callable|string $activationPolicy
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Magento\TestFramework\MemoryLimit $memoryLimit,
+    public function __construct(
+        \Magento\TestFramework\MemoryLimit $memoryLimit,
         $activationPolicy = self::POLICY_SHUTDOWN
     ) {
         if (!is_callable($activationPolicy)) {

@@ -56,8 +56,10 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
         $backendProperty = new \ReflectionProperty('Magento\Cache\Backend\Decorator\AbstractDecorator', '_backend');
         $backendProperty->setAccessible(true);
 
-        $optionsProperty =
-            new \ReflectionProperty('Magento\Cache\Backend\Decorator\AbstractDecorator', '_decoratorOptions');
+        $optionsProperty = new \ReflectionProperty(
+            'Magento\Cache\Backend\Decorator\AbstractDecorator',
+            '_decoratorOptions'
+        );
         $optionsProperty->setAccessible(true);
 
         $this->assertSame($backendProperty->getValue($decorator), $this->_mockBackend);
@@ -73,10 +75,7 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException($options)
     {
-        $this->getMockForAbstractClass(
-            'Magento\Cache\Backend\Decorator\AbstractDecorator',
-            array($options)
-        );
+        $this->getMockForAbstractClass('Magento\Cache\Backend\Decorator\AbstractDecorator', array($options));
     }
 
     public function constructorExceptionDataProvider()
@@ -105,10 +104,27 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
     public function allMethodsDataProvider()
     {
         $return = array();
-        $allMethods = array('setDirectives', 'load', 'test', 'save', 'remove', 'clean', 'getIds', 'getTags',
-            'getIdsMatchingTags', 'getIdsNotMatchingTags', 'getIdsMatchingAnyTags', 'getFillingPercentage',
-            'getMetadatas', 'touch', 'getCapabilities', 'setOption', 'getLifetime', 'isAutomaticCleaningAvailable',
-            'getTmpDir');
+        $allMethods = array(
+            'setDirectives',
+            'load',
+            'test',
+            'save',
+            'remove',
+            'clean',
+            'getIds',
+            'getTags',
+            'getIdsMatchingTags',
+            'getIdsNotMatchingTags',
+            'getIdsMatchingAnyTags',
+            'getFillingPercentage',
+            'getMetadatas',
+            'touch',
+            'getCapabilities',
+            'setOption',
+            'getLifetime',
+            'isAutomaticCleaningAvailable',
+            'getTmpDir'
+        );
         foreach ($allMethods as $method) {
             $return[$method] = array($method);
         }

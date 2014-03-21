@@ -59,12 +59,12 @@ class Addresses extends GenericMetadata
      * @var \Magento\Customer\Helper\Data
      */
     protected $_customerHelper;
-    
+
     /**
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryHelper;
-    
+
     /** @var \Magento\Customer\Helper\Address */
     protected $_addressHelper;
 
@@ -124,7 +124,7 @@ class Addresses extends GenericMetadata
         CustomerBuilder $customerBuilder,
         AttributeMetadataBuilder $attributeMetadataBuilder,
         \Magento\Directory\Helper\Data $directoryHelper,
-        array $data = []
+        array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
         $this->_addressHelper = $addressHelper;
@@ -155,29 +155,41 @@ class Addresses extends GenericMetadata
      */
     protected function _prepareLayout()
     {
-        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'  => __('Delete Address'),
-                'name'   => 'delete_address',
+        $this->addChild(
+            'delete_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Delete Address'),
+                'name' => 'delete_address',
                 'element_name' => 'delete_address',
                 'disabled' => $this->isReadonly(),
-                'class'  => 'delete' . ($this->isReadonly() ? ' disabled' : '')
-            ));
-        $this->addChild('add_address_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'  => __('Add New Address'),
-                'id'     => 'add_address_button',
-                'name'   => 'add_address_button',
+                'class' => 'delete' . ($this->isReadonly() ? ' disabled' : '')
+            )
+        );
+        $this->addChild(
+            'add_address_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Add New Address'),
+                'id' => 'add_address_button',
+                'name' => 'add_address_button',
                 'element_name' => 'add_address_button',
                 'disabled' => $this->isReadonly(),
-                'class'  => 'add'  . ($this->isReadonly() ? ' disabled' : '')
-            ));
-        $this->addChild('cancel_button', 'Magento\Backend\Block\Widget\Button', array(
-                'label'  => __('Cancel'),
-                'id'     => 'cancel_add_address'.$this->getTemplatePrefix(),
-                'name'   => 'cancel_address',
+                'class' => 'add' . ($this->isReadonly() ? ' disabled' : '')
+            )
+        );
+        $this->addChild(
+            'cancel_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Cancel'),
+                'id' => 'cancel_add_address' . $this->getTemplatePrefix(),
+                'name' => 'cancel_address',
                 'element_name' => 'cancel_address',
-                'class'  => 'cancel delete-address'  . ($this->isReadonly() ? ' disabled' : ''),
+                'class' => 'cancel delete-address' . ($this->isReadonly() ? ' disabled' : ''),
                 'disabled' => $this->isReadonly()
-            ));
+            )
+        );
         return parent::_prepareLayout();
     }
 
@@ -225,17 +237,13 @@ class Addresses extends GenericMetadata
 
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset('address_fieldset', array(
-                'legend'    => __("Edit Customer's Address"))
-        );
+        $fieldset = $form->addFieldset('address_fieldset', array('legend' => __("Edit Customer's Address")));
 
         $account = $customerData['account'];
-        $this->_addressBuilder->populateWithArray([]);
+        $this->_addressBuilder->populateWithArray(array());
         if (!empty($account) && isset($account['store_id'])) {
             $this->_addressBuilder->setCountryId(
-                $this->_coreData->getDefaultCountry(
-                    $this->_storeManager->getStore($account['store_id'])
-                )
+                $this->_coreData->getDefaultCountry($this->_storeManager->getStore($account['store_id']))
             );
         } else {
             $this->_addressBuilder->setCountryId($this->_coreData->getDefaultCountry());
@@ -250,17 +258,22 @@ class Addresses extends GenericMetadata
 
         $attributes = $addressForm->getAttributes();
         if (isset($attributes['street'])) {
-            if ($attributes['street']->getMultilineCount() <= 0 ) {
-                $attributes['street'] = $this->_attributeMetadataBuilder->populate($attributes['street'])
-                    ->setMultilineCount(self::DEFAULT_STREET_LINES_COUNT)
-                    ->create();
+            if ($attributes['street']->getMultilineCount() <= 0) {
+                $attributes['street'] = $this->_attributeMetadataBuilder->populate(
+                    $attributes['street']
+                )->setMultilineCount(
+                    self::DEFAULT_STREET_LINES_COUNT
+                )->create();
             }
         }
         foreach ($attributes as $key => $attribute) {
-            $attributes[$key] = $this->_attributeMetadataBuilder->populate($attribute)
-                ->setFrontendLabel(__($attribute->getFrontendLabel()))
-                ->setVisible(false)
-                ->create();
+            $attributes[$key] = $this->_attributeMetadataBuilder->populate(
+                $attribute
+            )->setFrontendLabel(
+                __($attribute->getFrontendLabel())
+            )->setVisible(
+                false
+            )->create();
         }
         $this->_setFieldset($attributes, $fieldset);
 
@@ -291,9 +304,7 @@ class Addresses extends GenericMetadata
 
         $customerStoreId = null;
         if (!empty($account) && isset($account['id']) && isset($account['website_id'])) {
-            $customerStoreId = $this->_storeManager->getWebsite($account['website_id'])
-                ->getDefaultStore()
-                ->getId();
+            $customerStoreId = $this->_storeManager->getWebsite($account['website_id'])->getDefaultStore()->getId();
         }
 
         $prefixElement = $form->getElement('prefix');
@@ -301,11 +312,7 @@ class Addresses extends GenericMetadata
             $prefixOptions = $this->_customerHelper->getNamePrefixOptions($customerStoreId);
             if (!empty($prefixOptions)) {
                 $fieldset->removeField($prefixElement->getId());
-                $prefixField = $fieldset->addField($prefixElement->getId(),
-                    'select',
-                    $prefixElement->getData(),
-                    '^'
-                );
+                $prefixField = $fieldset->addField($prefixElement->getId(), 'select', $prefixElement->getData(), '^');
                 $prefixField->setValues($prefixOptions);
             }
         }
@@ -315,7 +322,8 @@ class Addresses extends GenericMetadata
             $suffixOptions = $this->_customerHelper->getNameSuffixOptions($customerStoreId);
             if (!empty($suffixOptions)) {
                 $fieldset->removeField($suffixElement->getId());
-                $suffixField = $fieldset->addField($suffixElement->getId(),
+                $suffixField = $fieldset->addField(
+                    $suffixElement->getId(),
                     'select',
                     $suffixElement->getData(),
                     $form->getElement('lastname')->getId()
@@ -325,10 +333,9 @@ class Addresses extends GenericMetadata
         }
 
         $this->assign('customer', $this->_customerBuilder->populateWithArray($account)->create());
-        $addressCollection = [];
+        $addressCollection = array();
         foreach ($customerData['address'] as $key => $addressData) {
-            $addressCollection[$key] = $this->_addressBuilder->populateWithArray($addressData)
-                ->create();
+            $addressCollection[$key] = $this->_addressBuilder->populateWithArray($addressData)->create();
         }
         $this->assign('addressCollection', $addressCollection);
         $form->setValues(AddressConverter::toFlatArray($address));
@@ -361,9 +368,9 @@ class Addresses extends GenericMetadata
     protected function _getAdditionalElementTypes()
     {
         return array(
-            'file'      => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
-            'image'     => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
-            'boolean'   => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean',
+            'file' => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
+            'image' => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
+            'boolean' => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean'
         );
     }
 
@@ -415,10 +422,11 @@ class Addresses extends GenericMetadata
         $websites = $this->_systemStore->getWebsiteValuesForForm(false, true);
         $result = array();
         foreach ($websites as $website) {
-            $result[$website['value']] = $this->_storeManager->getWebsite($website['value'])
-                ->getConfig(
-                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
-                );
+            $result[$website['value']] = $this->_storeManager->getWebsite(
+                $website['value']
+            )->getConfig(
+                \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+            );
         }
 
         return $result;
@@ -474,7 +482,10 @@ class Addresses extends GenericMetadata
      */
     public function format(Address $address, $type)
     {
-        return $this->_addressHelper->getFormatTypeRenderer($type)
-            ->renderArray(AddressConverter::toFlatArray($address));
+        return $this->_addressHelper->getFormatTypeRenderer(
+            $type
+        )->renderArray(
+            AddressConverter::toFlatArray($address)
+        );
     }
 }

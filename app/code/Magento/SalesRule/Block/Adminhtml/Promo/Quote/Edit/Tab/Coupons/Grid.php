@@ -89,9 +89,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         /**
          * @var \Magento\SalesRule\Model\Resource\Coupon\Collection $collection
          */
-        $collection = $this->_salesRuleCoupon->create()
-            ->addRuleToFilter($priceRule)
-            ->addGeneratedCouponsFilter();
+        $collection = $this->_salesRuleCoupon->create()->addRuleToFilter($priceRule)->addGeneratedCouponsFilter();
 
         $this->setCollection($collection);
 
@@ -105,40 +103,36 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('code', array(
-            'header' => __('Coupon Code'),
-            'index'  => 'code'
-        ));
+        $this->addColumn('code', array('header' => __('Coupon Code'), 'index' => 'code'));
 
-        $this->addColumn('created_at', array(
-            'header' => __('Created'),
-            'index'  => 'created_at',
-            'type'   => 'datetime',
-            'align'  => 'center',
-            'width'  => '160'
-        ));
-
-        $this->addColumn('used', array(
-            'header'   => __('Uses'),
-            'index'    => 'times_used',
-            'width'    => '100',
-            'type'     => 'options',
-            'options'  => array(
-                __('No'),
-                __('Yes')
-            ),
-            'renderer' => 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used',
-            'filter_condition_callback' => array(
-                $this->_salesRuleCoupon->create(), 'addIsUsedFilterCallback'
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Created'),
+                'index' => 'created_at',
+                'type' => 'datetime',
+                'align' => 'center',
+                'width' => '160'
             )
-        ));
+        );
 
-        $this->addColumn('times_used', array(
-            'header' => __('Times Used'),
-            'index'  => 'times_used',
-            'width'  => '50',
-            'type'   => 'number',
-        ));
+        $this->addColumn(
+            'used',
+            array(
+                'header' => __('Uses'),
+                'index' => 'times_used',
+                'width' => '100',
+                'type' => 'options',
+                'options' => array(__('No'), __('Yes')),
+                'renderer' => 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Column\Renderer\Used',
+                'filter_condition_callback' => array($this->_salesRuleCoupon->create(), 'addIsUsedFilterCallback')
+            )
+        );
+
+        $this->addColumn(
+            'times_used',
+            array('header' => __('Times Used'), 'index' => 'times_used', 'width' => '50', 'type' => 'number')
+        );
 
         $this->addExportType('*/*/exportCouponsCsv', __('CSV'));
         $this->addExportType('*/*/exportCouponsXml', __('Excel XML'));
@@ -157,12 +151,15 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getMassactionBlock()->setUseAjax(true);
         $this->getMassactionBlock()->setHideFormElement(true);
 
-        $this->getMassactionBlock()->addItem('delete', array(
-             'label'=> __('Delete'),
-             'url'  => $this->getUrl('sales_rule/*/couponsMassDelete', array('_current' => true)),
-             'confirm' => __('Are you sure you want to delete the selected coupon(s)?'),
-             'complete' => 'refreshCouponCodesGrid'
-        ));
+        $this->getMassactionBlock()->addItem(
+            'delete',
+            array(
+                'label' => __('Delete'),
+                'url' => $this->getUrl('sales_rule/*/couponsMassDelete', array('_current' => true)),
+                'confirm' => __('Are you sure you want to delete the selected coupon(s)?'),
+                'complete' => 'refreshCouponCodesGrid'
+            )
+        );
 
         return $this;
     }
@@ -174,6 +171,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('sales_rule/*/couponsGrid', array('_current'=> true));
+        return $this->getUrl('sales_rule/*/couponsGrid', array('_current' => true));
     }
 }

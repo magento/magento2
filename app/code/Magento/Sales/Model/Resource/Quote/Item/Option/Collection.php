@@ -41,14 +41,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @var array
      */
-    protected $_optionsByItem        = array();
+    protected $_optionsByItem = array();
 
     /**
      * Array of option ids grouped by product id
      *
      * @var array
      */
-    protected $_optionsByProduct     = array();
+    protected $_optionsByProduct = array();
 
     /**
      * Define resource model for collection
@@ -70,9 +70,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         parent::_afterLoad();
 
         foreach ($this as $option) {
-            $optionId   = $option->getId();
-            $itemId     = $option->getItemId();
-            $productId  = $option->getProductId();
+            $optionId = $option->getId();
+            $itemId = $option->getItemId();
+            $productId = $option->getProductId();
             if (isset($this->_optionsByItem[$itemId])) {
                 $this->_optionsByItem[$itemId][] = $optionId;
             } else {
@@ -119,7 +119,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     public function getProductIds()
     {
         $this->load();
-        
+
         return array_keys($this->_optionsByProduct);
     }
 

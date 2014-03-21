@@ -113,20 +113,25 @@ abstract class AbstractModel extends \Magento\Object
         }
 
         if (!$this->_logInstance) {
-            $dirName  = date('Y/m/d/');
-            $fileName = join('_', array(
-                str_replace(':', '-', $this->getRunAt()),
-                $this->getScheduledOperationId(),
-                $this->getOperationType(),
-                $this->getEntity()
-            ));
-            $path = 'import_export/'. $dirName;
+            $dirName = date('Y/m/d/');
+            $fileName = join(
+                '_',
+                array(
+                    str_replace(':', '-', $this->getRunAt()),
+                    $this->getScheduledOperationId(),
+                    $this->getOperationType(),
+                    $this->getEntity()
+                )
+            );
+            $path = 'import_export/' . $dirName;
             $this->_varDirectory->create($path);
 
             $fileName = $path . $fileName . '.log';
-            $this->_logInstance = $this->_adapterFactory
-                ->create(array('fileName' => $this->_varDirectory->getAbsolutePath($fileName)))
-                ->setFilterDataKeys($this->_debugReplacePrivateDataKeys);
+            $this->_logInstance = $this->_adapterFactory->create(
+                array('fileName' => $this->_varDirectory->getAbsolutePath($fileName))
+            )->setFilterDataKeys(
+                $this->_debugReplacePrivateDataKeys
+            );
         }
         $this->_logInstance->log($debugData);
         return $this;

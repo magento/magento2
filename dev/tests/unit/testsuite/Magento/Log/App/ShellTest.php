@@ -56,10 +56,15 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function testProcessRequest()
     {
         $shellMock = $this->getMock('Magento\Log\App\Shell', array('run'), array(), '', false);
-        $this->_shellFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(array('entryPoint' => 'shell.php'))
-            ->will($this->returnValue($shellMock));
+        $this->_shellFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            array('entryPoint' => 'shell.php')
+        )->will(
+            $this->returnValue($shellMock)
+        );
         $shellMock->expects($this->once())->method('run');
         $this->assertEquals($this->_responseMock, $this->_model->launch());
     }

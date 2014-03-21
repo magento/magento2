@@ -41,15 +41,9 @@ class Method implements \Magento\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $options    = array(
-            array(
-                'value' => 'bcc',
-                'label' => __('Bcc')
-            ),
-            array(
-                'value' => 'copy',
-                'label' => __('Separate Email')
-            ),
+        $options = array(
+            array('value' => 'bcc', 'label' => __('Bcc')),
+            array('value' => 'copy', 'label' => __('Separate Email'))
         );
         return $options;
     }

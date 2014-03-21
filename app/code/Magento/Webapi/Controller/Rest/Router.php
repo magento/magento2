@@ -62,7 +62,10 @@ class Router
                 return $route;
             }
         }
-        throw new \Magento\Webapi\Exception(__('Request does not match any route.'), 0,
-            \Magento\Webapi\Exception::HTTP_NOT_FOUND);
+        throw new \Magento\Webapi\Exception(
+            __('Request does not match any route.'),
+            0,
+            \Magento\Webapi\Exception::HTTP_NOT_FOUND
+        );
     }
 }

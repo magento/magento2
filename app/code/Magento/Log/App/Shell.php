@@ -52,16 +52,12 @@ class Shell implements LauncherInterface
      * @param \Magento\Log\Model\ShellFactory $shellFactory
      * @param Response $response
      */
-    public function __construct(
-        $entryFileName,
-        \Magento\Log\Model\ShellFactory $shellFactory,
-        Response $response
-    ) {
+    public function __construct($entryFileName, \Magento\Log\Model\ShellFactory $shellFactory, Response $response)
+    {
         $this->_entryFileName = $entryFileName;
         $this->_shellFactory = $shellFactory;
         $this->_response = $response;
     }
-
 
     /**
      * Run application

@@ -49,16 +49,21 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function getSelectUnnecessaryData()
     {
-        return $this->getWriteAdapter()->select()
-            ->from($this->getMainTable(), [])
-            ->joinLeft(
-                ['t' => $this->getMainTmpTable()],
-                $this->getMainTable() . '.category_id = t.category_id AND '
-                . $this->getMainTable() . '.store_id = t.store_id AND '
-                . $this->getMainTable() . '.product_id = t.product_id',
-                []
-            )
-            ->where('t.category_id IS NULL');
+        return $this->getWriteAdapter()->select()->from(
+            $this->getMainTable(),
+            array()
+        )->joinLeft(
+            array('t' => $this->getMainTmpTable()),
+            $this->getMainTable() .
+            '.category_id = t.category_id AND ' .
+            $this->getMainTable() .
+            '.store_id = t.store_id AND ' .
+            $this->getMainTable() .
+            '.product_id = t.product_id',
+            array()
+        )->where(
+            't.category_id IS NULL'
+        );
     }
 
     /**
@@ -69,9 +74,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function removeUnnecessaryData()
     {
         $this->getWriteAdapter()->query(
-            $this->getWriteAdapter()->deleteFromSelect(
-                $this->getSelectUnnecessaryData(), $this->getMainTable()
-            )
+            $this->getWriteAdapter()->deleteFromSelect($this->getSelectUnnecessaryData(), $this->getMainTable())
         );
     }
 
@@ -82,8 +85,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function publishData()
     {
-        $select = $this->getWriteAdapter()->select()
-            ->from($this->getMainTmpTable());
+        $select = $this->getWriteAdapter()->select()->from($this->getMainTmpTable());
 
         $queries = $this->prepareSelectsByRange($select, 'category_id');
 
@@ -92,7 +94,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
                 $this->getWriteAdapter()->insertFromSelect(
                     $query,
                     $this->getMainTable(),
-                    ['category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'],
+                    array('category_id', 'product_id', 'position', 'is_parent', 'store_id', 'visibility'),
                     \Magento\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -106,8 +108,6 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function clearTmpData()
     {
-        $this->getWriteAdapter()->delete(
-            $this->getMainTmpTable()
-        );
+        $this->getWriteAdapter()->delete($this->getMainTmpTable());
     }
 }

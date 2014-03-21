@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 /**
@@ -67,10 +66,8 @@ class FilterManager
      * @param \Magento\ObjectManager $objectManger
      * @param FilterManager\Config $config
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManger,
-        FilterManager\Config $config
-    ) {
+    public function __construct(\Magento\ObjectManager $objectManger, FilterManager\Config $config)
+    {
         $this->objectManager = $objectManger;
         $this->config = $config;
     }
@@ -87,8 +84,9 @@ class FilterManager
     {
         $filter = $this->createFilterInstance($filterAlias, $arguments);
         if (!$filter instanceof \Zend_Filter_Interface) {
-            throw new \UnexpectedValueException('Filter object must implement Zend_Filter_Interface interface, '
-                . get_class($filter) . ' was given.');
+            throw new \UnexpectedValueException(
+                'Filter object must implement Zend_Filter_Interface interface, ' . get_class($filter) . ' was given.'
+            );
         }
         return $filter;
     }
@@ -125,8 +123,9 @@ class FilterManager
                 $factory = $this->objectManager->create($class);
                 if (!$factory instanceof FactoryInterface) {
                     throw new \UnexpectedValueException(
-                        'Filter factory must implement FilterFactoryInterface interface, '
-                            . get_class($factory) . ' was given.'
+                        'Filter factory must implement FilterFactoryInterface interface, ' . get_class(
+                            $factory
+                        ) . ' was given.'
                     );
                 }
                 $this->factoryInstances[] = $factory;

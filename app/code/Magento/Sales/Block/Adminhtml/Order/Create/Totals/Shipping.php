@@ -30,8 +30,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-class Shipping
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
+class Shipping extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
     /**
      * Template
@@ -117,7 +116,10 @@ class Shipping
      */
     public function getIncludeTaxLabel()
     {
-        return __('Shipping Incl. Tax (%1)', $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription()));
+        return __(
+            'Shipping Incl. Tax (%1)',
+            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+        );
     }
 
     /**
@@ -127,6 +129,9 @@ class Shipping
      */
     public function getExcludeTaxLabel()
     {
-        return __('Shipping Excl. Tax (%1)', $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription()));
+        return __(
+            'Shipping Excl. Tax (%1)',
+            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+        );
     }
 }

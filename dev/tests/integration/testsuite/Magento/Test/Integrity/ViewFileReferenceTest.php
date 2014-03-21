@@ -43,31 +43,29 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\View\Design\Fallback\Rule\RuleInterface
      */
-    static protected $_fallbackRule;
+    protected static $_fallbackRule;
 
     /**
      * @var \Magento\View\Design\FileResolution\Strategy\Fallback
      */
-    static protected $_fallback;
+    protected static $_fallback;
 
     /**
      * @var array
      */
-    static protected $_checkThemeLocales = array();
+    protected static $_checkThemeLocales = array();
 
     /**
      * @var \Magento\Core\Model\Theme\Collection
      */
-    static protected $_themeCollection;
+    protected static $_themeCollection;
 
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->configure(array(
-            'preferences' => array(
-                'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'
-            )
-        ));
+        $objectManager->configure(
+            array('preferences' => array('Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'))
+        );
 
         /** @var $fallbackFactory \Magento\View\Design\Fallback\Factory */
         $fallbackFactory = $objectManager->get('Magento\View\Design\Fallback\Factory');
@@ -83,7 +81,8 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         self::$_checkThemeLocales = array();
         foreach (self::$_themeCollection as $theme) {
             $themeLocales = self::_getThemeLocales($theme);
-            $themeLocales[] = null; // Default non-localized file will need to be checked as well
+            $themeLocales[] = null;
+            // Default non-localized file will need to be checked as well
             self::$_checkThemeLocales[$theme->getFullPath()] = $themeLocales;
         }
     }
@@ -94,11 +93,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      * @param \Magento\View\Design\ThemeInterface $theme
      * @return array
      */
-    static protected function _getThemeLocales(\Magento\View\Design\ThemeInterface $theme)
+    protected static function _getThemeLocales(\Magento\View\Design\ThemeInterface $theme)
     {
         $result = array();
         $patternDir = self::_getLocalePatternDir($theme);
-        $localeModel = new \Zend_Locale;
+        $localeModel = new \Zend_Locale();
         foreach (array_keys($localeModel->getLocaleList()) as $locale) {
             $dir = str_replace('<locale_placeholder>', $locale, $patternDir);
             if (is_dir($dir)) {
@@ -115,14 +114,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      * @return string
      * @throws \Exception
      */
-    static protected function _getLocalePatternDir(\Magento\View\Design\ThemeInterface $theme)
+    protected static function _getLocalePatternDir(\Magento\View\Design\ThemeInterface $theme)
     {
         $localePlaceholder = '<locale_placeholder>';
-        $params = array(
-            'area' => $theme->getArea(),
-            'theme' => $theme,
-            'locale' => $localePlaceholder,
-        );
+        $params = array('area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder);
         $patternDirs = self::$_fallbackRule->getPatternDirs($params);
         $themePath = '/' . $theme->getFullPath() . '/';
         foreach ($patternDirs as $patternDir) {
@@ -148,7 +143,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 
         $wrongResolutions = array();
         foreach (self::$_themeCollection as $theme) {
-            if ($area && ($theme->getArea() != $area)) {
+            if ($area && $theme->getArea() != $area) {
                 continue;
             }
 
@@ -199,13 +194,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         foreach (self::_getFilesToProcess() as $file) {
-            $file = (string) $file;
+            $file = (string)$file;
 
             $modulePattern = '[A-Z][a-z]+_[A-Z][a-z]+';
             $filePattern = '[[:alnum:]_/-]+\\.[[:alnum:]_./-]+';
-            $pattern = '#' . $modulePattern
-                . preg_quote(\Magento\View\Service::SCOPE_SEPARATOR)
-                . $filePattern . '#S';
+            $pattern = '#' . $modulePattern . preg_quote(\Magento\View\Service::SCOPE_SEPARATOR) . $filePattern . '#S';
             if (!preg_match_all($pattern, file_get_contents($file), $matches)) {
                 continue;
             }
@@ -216,11 +209,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
                 $dataSetKey = $modularCall . ' @ ' . ($area ?: 'any area');
 
                 if (!isset($result[$dataSetKey])) {
-                    $result[$dataSetKey] = array(
-                        'modularCall' => $modularCall,
-                        'usages' => array(),
-                        'area' => $area
-                    );
+                    $result[$dataSetKey] = array('modularCall' => $modularCall, 'usages' => array(), 'area' => $area);
                 }
                 $result[$dataSetKey]['usages'][$file] = $file;
             }
@@ -252,7 +241,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    static protected function _getRootDir()
+    protected static function _getRootDir()
     {
         return realpath(__DIR__ . '/../../../../../../../');
     }
@@ -268,10 +257,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getArea($file)
     {
         $file = str_replace('\\', '/', $file);
-        $areaPatterns = array(
-            '#app/code/[^/]+/[^/]+/view/([^/]+)/#S',
-            '#app/design/([^/]+)/#S',
-        );
+        $areaPatterns = array('#app/code/[^/]+/[^/]+/view/([^/]+)/#S', '#app/design/([^/]+)/#S');
         foreach ($areaPatterns as $pattern) {
             if (preg_match($pattern, $file, $matches)) {
                 return $matches[1];

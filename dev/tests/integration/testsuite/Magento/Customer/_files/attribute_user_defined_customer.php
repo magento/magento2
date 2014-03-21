@@ -30,12 +30,20 @@ if (!defined('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME')) {
 /** @var Magento\Customer\Model\Attribute $model */
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 
-$model->setName(FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME)
-    ->setEntityTypeId(1)
-    ->setIsUserDefined(1)
-    ->setAttributeSetId(1)
-    ->setAttributeGroupId(1)
-    ->setFrontendInput('text')
-    ->setFrontendLabel(FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL);
+$model->setName(
+    FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME
+)->setEntityTypeId(
+    1
+)->setIsUserDefined(
+    1
+)->setAttributeSetId(
+    1
+)->setAttributeGroupId(
+    1
+)->setFrontendInput(
+    'text'
+)->setFrontendLabel(
+    FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL
+);
 
 $model->save();

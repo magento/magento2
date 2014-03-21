@@ -202,7 +202,7 @@ class Register extends \Magento\Directory\Block\Data
     {
         if ($this->getFormData()->getCustomerData()) {
             $request = $form->prepareRequest($this->getFormData()->getData());
-            $data    = $form->extractData($request, $scope, false);
+            $data = $form->extractData($request, $scope, false);
             $form->restoreData($data);
         }
 

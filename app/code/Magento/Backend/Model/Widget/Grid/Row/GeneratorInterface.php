@@ -32,5 +32,4 @@ interface GeneratorInterface
      * @return string
      */
     public function getUrl($item);
-
 }

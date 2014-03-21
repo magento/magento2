@@ -34,13 +34,12 @@
  */
 namespace Magento\Customer\Model\Resource\Address\Attribute;
 
-class Collection
-    extends \Magento\Customer\Model\Resource\Attribute\Collection
+class Collection extends \Magento\Customer\Model\Resource\Attribute\Collection
 {
     /**
      * Default attribute entity type code
      *
      * @var string
      */
-    protected $_entityTypeCode   = 'customer_address';
+    protected $_entityTypeCode = 'customer_address';
 }

@@ -28,8 +28,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 /**
  * Color-picker form element renderer
  */
-class ColorPicker
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
+class ColorPicker extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
 {
     /**
      * Set of templates to render

@@ -39,14 +39,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Comment\Collection\
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_invoice_comment_collection';
+    protected $_eventPrefix = 'sales_order_invoice_comment_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_invoice_comment_collection';
+    protected $_eventObject = 'order_invoice_comment_collection';
 
     /**
      * Model initialization
@@ -56,7 +56,10 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Comment\Collection\
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Sales\Model\Order\Invoice\Comment', 'Magento\Sales\Model\Resource\Order\Invoice\Comment');
+        $this->_init(
+            'Magento\Sales\Model\Order\Invoice\Comment',
+            'Magento\Sales\Model\Resource\Order\Invoice\Comment'
+        );
     }
 
     /**

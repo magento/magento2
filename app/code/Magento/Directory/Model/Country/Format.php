@@ -43,7 +43,6 @@ namespace Magento\Directory\Model\Country;
  */
 class Format extends \Magento\Core\Model\AbstractModel
 {
-
     /**
      * @return void
      */
@@ -51,5 +50,4 @@ class Format extends \Magento\Core\Model\AbstractModel
     {
         $this->_init('Magento\Directory\Model\Resource\Country\Format');
     }
-
 }

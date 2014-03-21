@@ -120,19 +120,17 @@ class Storage
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Core\Exception(__('We cannot upload the file.') );
+            throw new \Magento\Core\Exception(__('We cannot upload the file.'));
         }
 
-        $this->_createThumbnail(
-            $targetPath . '/' . $uploader->getUploadedFileName()
-        );
+        $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
 
         $result['cookie'] = array(
-            'name'     => $this->_helper->getSession()->getName(),
-            'value'    => $this->_helper->getSession()->getSessionId(),
+            'name' => $this->_helper->getSession()->getName(),
+            'value' => $this->_helper->getSession()->getSessionId(),
             'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
-            'path'     => $this->_helper->getSession()->getCookiePath(),
-            'domain'   => $this->_helper->getSession()->getCookieDomain()
+            'path' => $this->_helper->getSession()->getCookiePath(),
+            'domain' => $this->_helper->getSession()->getCookieDomain()
         );
 
         return $result;
@@ -146,14 +144,16 @@ class Storage
      */
     public function _createThumbnail($source)
     {
-        if (self::TYPE_IMAGE != $this->_helper->getStorageType() || !$this->mediaWriteDirectory->isFile($source)
-            || !$this->mediaWriteDirectory->isReadable($source)
+        if (self::TYPE_IMAGE != $this->_helper->getStorageType() || !$this->mediaWriteDirectory->isFile(
+            $source
+        ) || !$this->mediaWriteDirectory->isReadable(
+            $source
+        )
         ) {
             return false;
         }
         $thumbnailDir = $this->_helper->getThumbnailDirectory($source);
-        $thumbnailPath =
-            $thumbnailDir . '/' . pathinfo($source, PATHINFO_BASENAME);
+        $thumbnailPath = $thumbnailDir . '/' . pathinfo($source, PATHINFO_BASENAME);
         try {
             $this->mediaWriteDirectory->isExist($thumbnailDir);
             $image = $this->_imageFactory->create();
@@ -183,9 +183,7 @@ class Storage
     public function createFolder($name, $path)
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            throw new \Magento\Core\Exception(
-                __('Use only standard alphanumeric, dashes and underscores.')
-            );
+            throw new \Magento\Core\Exception(__('Use only standard alphanumeric, dashes and underscores.'));
         }
         if (!$this->mediaWriteDirectory->isWritable($path)) {
             $path = $this->_helper->getStorageRoot();
@@ -200,10 +198,10 @@ class Storage
         $this->mediaWriteDirectory->create($newPath);
 
         $result = array(
-            'name'       => $name,
+            'name' => $name,
             'short_name' => $this->_helper->getShortFilename($name),
-            'path'       => str_replace($this->_helper->getStorageRoot(), '', $newPath),
-            'id'         => $this->_helper->convertPathToId($newPath)
+            'path' => str_replace($this->_helper->getStorageRoot(), '', $newPath),
+            'id' => $this->_helper->convertPathToId($newPath)
         );
 
         return $result;
@@ -223,9 +221,7 @@ class Storage
         $filePath = $this->mediaWriteDirectory->getRelativePath($path . '/' . $file);
         $thumbnailPath = $this->_helper->getThumbnailDirectory($filePath) . '/' . $file;
 
-        if (0 === strpos($filePath, $path)
-            && 0 === strpos($filePath, $this->_helper->getStorageRoot())
-        ) {
+        if (0 === strpos($filePath, $path) && 0 === strpos($filePath, $this->_helper->getStorageRoot())) {
             $this->mediaWriteDirectory->delete($filePath);
             $this->mediaWriteDirectory->delete($thumbnailPath);
         }
@@ -270,10 +266,7 @@ class Storage
                 continue;
             }
             $fileName = pathinfo($path, PATHINFO_BASENAME);
-            $file = array(
-                'text' => $fileName,
-                'id'   => $this->_helper->urlEncode($fileName)
-            );
+            $file = array('text' => $fileName, 'id' => $this->_helper->urlEncode($fileName));
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
@@ -300,9 +293,9 @@ class Storage
         $resultArray = array();
         foreach ($directories as $path) {
             $resultArray[] = array(
-                'text'  => $this->_helper->getShortFilename(pathinfo($path, PATHINFO_BASENAME), 20),
-                'id'    => $this->_helper->convertPathToId($path),
-                'cls'   => 'folder'
+                'text' => $this->_helper->getShortFilename(pathinfo($path, PATHINFO_BASENAME), 20),
+                'id' => $this->_helper->convertPathToId($path),
+                'cls' => 'folder'
             );
         }
         return $resultArray;

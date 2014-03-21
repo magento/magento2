@@ -99,8 +99,8 @@ class AddressBuilder extends AbstractObjectBuilder
         if (array_key_exists(Address::KEY_REGION, $data)) {
             if (!is_array($data[Address::KEY_REGION])) {
                 // Region data has been submitted as individual keys of Address object. Let's extract it.
-                $regionData = [];
-                foreach ([Region::KEY_REGION, Region::KEY_REGION_CODE, Region::KEY_REGION_ID] as $attrCode) {
+                $regionData = array();
+                foreach (array(Region::KEY_REGION, Region::KEY_REGION_CODE, Region::KEY_REGION_ID) as $attrCode) {
                     if (isset($data[$attrCode])) {
                         $regionData[$attrCode] = $data[$attrCode];
                     }
@@ -118,7 +118,7 @@ class AddressBuilder extends AbstractObjectBuilder
      */
     public function getCustomAttributesCodes()
     {
-        $attributeCodes = [];
+        $attributeCodes = array();
         foreach ($this->_metadataService->getCustomAddressAttributeMetadata() as $attribute) {
             $attributeCodes[] = $attribute->getAttributeCode();
         }

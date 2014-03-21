@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Layout\File;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -46,19 +45,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $theme = $this->getMockForAbstractClass('Magento\View\Design\ThemeInterface');
         $file = new \Magento\View\Layout\File(__FILE__, 'Fixture_Module', $theme);
-        $this->_objectManager
-            ->expects($this->once())
-            ->method('create')
-            ->with(
-                'Magento\View\Layout\File',
-                $this->identicalTo(array(
-                    'filename' => __FILE__,
-                    'module' => 'Fixture_Module',
-                    'theme' => $theme,
-                ))
-            )
-            ->will($this->returnValue($file))
-        ;
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\View\Layout\File',
+            $this->identicalTo(array('filename' => __FILE__, 'module' => 'Fixture_Module', 'theme' => $theme))
+        )->will(
+            $this->returnValue($file)
+        );
         $this->assertSame($file, $this->_model->create(__FILE__, 'Fixture_Module', $theme));
     }
 }

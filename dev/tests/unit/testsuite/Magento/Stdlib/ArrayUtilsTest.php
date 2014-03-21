@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib;
 
 /**
@@ -51,7 +50,6 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
         foreach ($input as $value) {
             $iterator++;
             $this->assertEquals($iterator, $value);
-
         }
     }
 
@@ -61,9 +59,7 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function ksortMultibyteDataProvider()
     {
-        return array(
-            array(array('б' => 2, 'в' => 3, 'а' => 1), 'ru_RU'),
-        );
+        return array(array(array('б' => 2, 'в' => 3, 'а' => 1), 'ru_RU'));
     }
 
     /**
@@ -71,15 +67,11 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecorateArray()
     {
-        $original = array(
-            array('value' => 1),
-            array('value' => 2),
-            array('value' => 3),
-        );
+        $original = array(array('value' => 1), array('value' => 2), array('value' => 3));
         $decorated = array(
             array('value' => 1, 'is_first' => true, 'is_odd' => true),
             array('value' => 2, 'is_even' => true),
-            array('value' => 3, 'is_last' => true, 'is_odd' => true),
+            array('value' => 3, 'is_last' => true, 'is_odd' => true)
         );
 
         // arrays
@@ -89,12 +81,12 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
         $sample = array(
             new \Magento\Object($original[0]),
             new \Magento\Object($original[1]),
-            new \Magento\Object($original[2]),
+            new \Magento\Object($original[2])
         );
         $decoratedVo = array(
             new \Magento\Object($decorated[0]),
             new \Magento\Object($decorated[1]),
-            new \Magento\Object($decorated[2]),
+            new \Magento\Object($decorated[2])
         );
         foreach ($decoratedVo as $obj) {
             $obj->setDataChanges(true); // hack for assertion

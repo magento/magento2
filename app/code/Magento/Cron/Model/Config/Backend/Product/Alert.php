@@ -43,7 +43,7 @@ class Alert extends \Magento\Core\Model\Config\Value
     /**
      * Cron model path
      */
-    const CRON_MODEL_PATH  = 'crontab/default/jobs/catalog_product_alert/run/model';
+    const CRON_MODEL_PATH = 'crontab/default/jobs/catalog_product_alert/run/model';
 
     /**
      * @var \Magento\Core\Model\Config\ValueFactory
@@ -94,24 +94,30 @@ class Alert extends \Magento\Core\Model\Config\Value
         $cronExprArray = array(
             intval($time[1]), //Minute
             intval($time[0]), //Hour
-            ($frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY) ? '1' : '*', //Day of the Month
+            $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY ? '1' : '*', //Day of the Month
             '*', //Month of the Year
-            ($frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY) ? '1' : '*', //Day of the Week
+            $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY ? '1' : '*' //Day of the Week
         );
 
         $cronExprString = join(' ', $cronExprArray);
 
         try {
-            $this->_configValueFactory->create()
-                ->load(self::CRON_STRING_PATH, 'path')
-                ->setValue($cronExprString)
-                ->setPath(self::CRON_STRING_PATH)
-                ->save();
-            $this->_configValueFactory->create()
-                ->load(self::CRON_MODEL_PATH, 'path')
-                ->setValue($this->_runModelPath)
-                ->setPath(self::CRON_MODEL_PATH)
-                ->save();
+            $this->_configValueFactory->create()->load(
+                self::CRON_STRING_PATH,
+                'path'
+            )->setValue(
+                $cronExprString
+            )->setPath(
+                self::CRON_STRING_PATH
+            )->save();
+            $this->_configValueFactory->create()->load(
+                self::CRON_MODEL_PATH,
+                'path'
+            )->setValue(
+                $this->_runModelPath
+            )->setPath(
+                self::CRON_MODEL_PATH
+            )->save();
         } catch (\Exception $e) {
             throw new \Exception(__('We can\'t save the cron expression.'));
         }

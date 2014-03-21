@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter;
 
 /**
@@ -74,7 +73,7 @@ class Truncate implements \Zend_Filter_Interface
         $this->string = $string;
         $this->length = $length;
         $this->etc = $etc;
-        $this->remainder = &$remainder;
+        $this->remainder =& $remainder;
         $this->breakWords = $breakWords;
     }
 
@@ -101,9 +100,7 @@ class Truncate implements \Zend_Filter_Interface
             $preparedString = $string;
             $preparedLength = $length;
             if (!$this->breakWords) {
-                $preparedString = preg_replace(
-                    '/\s+?(\S+)?$/u', '', $this->string->substr($string, 0, $length + 1)
-                );
+                $preparedString = preg_replace('/\s+?(\S+)?$/u', '', $this->string->substr($string, 0, $length + 1));
                 $preparedLength = $this->string->strlen($preparedString);
             }
             $this->remainder = $this->string->substr($string, $preparedLength, $originalLength);

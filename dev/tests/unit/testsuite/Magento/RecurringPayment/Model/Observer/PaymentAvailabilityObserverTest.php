@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Model\Observer;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -44,37 +43,36 @@ class PaymentAvailabilityObserverTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->paymentAvailabilityObserver = $this->objectManagerHelper->getObject(
             'Magento\RecurringPayment\Model\Observer\PaymentAvailabilityObserver',
-            [
-                'quoteFilter' => $this->filterMock
-            ]
+            array('quoteFilter' => $this->filterMock)
         );
     }
 
     public function testObserve()
     {
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()->getMock();
 
-        $event = new \Magento\Event([
-            'quote' => $quote,
-            'method_instance' => $this->getMockBuilder('Magento\Payment\Model\Method\AbstractMethod')
-                    ->disableOriginalConstructor()
-                    ->getMock(),
-            'result' => new \StdClass()
-        ]);
-        $this->filterMock->expects($this->once())
-            ->method('hasRecurringItems')
-            ->with($quote)
-            ->will($this->returnValue(true));
+        $event = new \Magento\Event(
+            array(
+                'quote' => $quote,
+                'method_instance' => $this->getMockBuilder(
+                    'Magento\Payment\Model\Method\AbstractMethod'
+                )->disableOriginalConstructor()->getMock(),
+                'result' => new \StdClass()
+            )
+        );
+        $this->filterMock->expects(
+            $this->once()
+        )->method(
+            'hasRecurringItems'
+        )->with(
+            $quote
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $observer = $this->getMockBuilder('Magento\Event\Observer')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->getMockBuilder('Magento\Event\Observer')->disableOriginalConstructor()->getMock();
 
-        $observer->expects($this->any())
-            ->method('getEvent')
-            ->will($this->returnValue($event));
+        $observer->expects($this->any())->method('getEvent')->will($this->returnValue($event));
 
         $this->paymentAvailabilityObserver->observe($observer);
         $this->assertFalse($event->getResult()->isAvailable);

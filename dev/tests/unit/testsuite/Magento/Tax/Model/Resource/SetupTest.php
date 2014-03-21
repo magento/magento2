@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Resource;
 
 class SetupTest extends \PHPUnit_Framework_TestCase
@@ -40,21 +39,24 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->typeConfigMock = $this->getMock('Magento\Catalog\Model\ProductTypes\ConfigInterface');
-        $this->taxSetup = $helper->getObject('Magento\Tax\Model\Resource\Setup', array(
-                'productTypeConfig' => $this->typeConfigMock
-            )
+        $this->taxSetup = $helper->getObject(
+            'Magento\Tax\Model\Resource\Setup',
+            array('productTypeConfig' => $this->typeConfigMock)
         );
     }
 
     public function testGetTaxableItems()
     {
         $refundable = array('simple', 'simple2');
-        $this->typeConfigMock
-            ->expects($this->once())
-            ->method('filter')
-            ->with('taxable')
-            ->will($this->returnValue($refundable));
+        $this->typeConfigMock->expects(
+            $this->once()
+        )->method(
+            'filter'
+        )->with(
+            'taxable'
+        )->will(
+            $this->returnValue($refundable)
+        );
         $this->assertEquals($refundable, $this->taxSetup->getTaxableItems());
     }
 }
-

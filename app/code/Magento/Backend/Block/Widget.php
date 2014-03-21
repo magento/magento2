@@ -86,7 +86,7 @@ class Widget extends \Magento\Backend\Block\Template
      * @param string|null $link
      * @return void
      */
-    protected function _addBreadcrumb($label, $title=null, $link=null)
+    protected function _addBreadcrumb($label, $title = null, $link = null)
     {
         $this->getLayout()->getBlock('breadcrumbs')->addLink($label, $title, $link);
     }
@@ -103,16 +103,13 @@ class Widget extends \Magento\Backend\Block\Template
      */
     public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = array())
     {
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'label'     => $label,
-                'onclick'   => $onclick,
-                'class'     => $class,
-                'type'      => 'button',
-                'id'        => $buttonId,
-            ))
-            ->setDataAttribute($dataAttr)
-            ->toHtml();
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array('label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId)
+        )->setDataAttribute(
+            $dataAttr
+        )->toHtml();
     }
 
     /**
@@ -120,10 +117,12 @@ class Widget extends \Magento\Backend\Block\Template
      */
     public function getGlobalIcon()
     {
-        return '<img src="' . $this->getViewFileUrl('images/fam_link.gif')
-            . '" alt="' . __('Global Attribute')
-            . '" title="' . __('This attribute shares the same value in all stores.')
-            . '" class="attribute-global"/>';
+        return '<img src="' . $this->getViewFileUrl(
+            'images/fam_link.gif'
+        ) . '" alt="' . __(
+            'Global Attribute'
+        ) . '" title="' . __(
+            'This attribute shares the same value in all stores.'
+        ) . '" class="attribute-global"/>';
     }
 }
-

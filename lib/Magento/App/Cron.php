@@ -25,8 +25,8 @@
  */
 namespace Magento\App;
 
-use \Magento\App\ObjectManager\ConfigLoader,
-    \Magento\Event\ManagerInterface;
+use Magento\App\ObjectManager\ConfigLoader;
+use Magento\Event\ManagerInterface;
 
 class Cron implements \Magento\LauncherInterface
 {

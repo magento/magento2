@@ -67,8 +67,9 @@ class Observer extends \Magento\Object
     public function salesEventConvertQuoteAddressToOrder($observer)
     {
         if ($observer->getEvent()->getAddress()->getGiftMessageId()) {
-            $observer->getEvent()->getOrder()
-                ->setGiftMessageId($observer->getEvent()->getAddress()->getGiftMessageId());
+            $observer->getEvent()->getOrder()->setGiftMessageId(
+                $observer->getEvent()->getAddress()->getGiftMessageId()
+            );
         }
         return $this;
     }
@@ -81,8 +82,7 @@ class Observer extends \Magento\Object
      */
     public function salesEventConvertQuoteToOrder($observer)
     {
-        $observer->getEvent()->getOrder()
-            ->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
+        $observer->getEvent()->getOrder()->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
         return $this;
     }
 
@@ -98,7 +98,7 @@ class Observer extends \Magento\Object
         $quote = $observer->getEvent()->getQuote();
         /* @var $quote \Magento\Sales\Model\Quote */
         if (is_array($giftMessages)) {
-            foreach ($giftMessages as $entityId=>$message) {
+            foreach ($giftMessages as $entityId => $message) {
 
                 $giftMessage = $this->_messageFactory->create();
 
@@ -124,30 +124,28 @@ class Observer extends \Magento\Object
                     $giftMessage->load($entity->getGiftMessageId());
                 }
 
-                if (trim($message['message'])=='') {
+                if (trim($message['message']) == '') {
                     if ($giftMessage->getId()) {
-                        try{
+                        try {
                             $giftMessage->delete();
-                            $entity->setGiftMessageId(0)
-                                ->save();
-                        }
-                        catch (\Exception $e) {
+                            $entity->setGiftMessageId(0)->save();
+                        } catch (\Exception $e) {
                         }
                     }
                     continue;
                 }
 
                 try {
-                    $giftMessage->setSender($message['from'])
-                        ->setRecipient($message['to'])
-                        ->setMessage($message['message'])
-                        ->save();
+                    $giftMessage->setSender(
+                        $message['from']
+                    )->setRecipient(
+                        $message['to']
+                    )->setMessage(
+                        $message['message']
+                    )->save();
 
-                    $entity->setGiftMessageId($giftMessage->getId())
-                        ->save();
-
-                }
-                catch (\Exception $e) {
+                    $entity->setGiftMessageId($giftMessage->getId())->save();
+                } catch (\Exception $e) {
                 }
             }
         }
@@ -173,9 +171,7 @@ class Observer extends \Magento\Object
         }
         $giftMessageId = $order->getGiftMessageId();
         if ($giftMessageId) {
-            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)
-                ->setId(null)
-                ->save();
+            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();
             $observer->getEvent()->getQuote()->setGiftMessageId($giftMessage->getId());
         }
 
@@ -210,9 +206,7 @@ class Observer extends \Magento\Object
         /** @var $quoteItem \Magento\Sales\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getQuoteItem();
         if ($giftMessageId = $orderItem->getGiftMessageId()) {
-            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)
-                ->setId(null)
-                ->save();
+            $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();
             $quoteItem->setGiftMessageId($giftMessage->getId());
         }
         return $this;

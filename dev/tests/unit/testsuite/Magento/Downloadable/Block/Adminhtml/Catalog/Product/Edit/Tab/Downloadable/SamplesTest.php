@@ -24,11 +24,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-class SamplesTest
-    extends \PHPUnit_Framework_TestCase
+class SamplesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links
@@ -40,9 +38,7 @@ class SamplesTest
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(
             'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples',
-            array(
-                'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
-            )
+            array('urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false))
         );
     }
 

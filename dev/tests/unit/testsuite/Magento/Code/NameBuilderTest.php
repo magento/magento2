@@ -51,32 +51,12 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
     public function buildClassNameDataProvider()
     {
         return array(
+            array(array('Checkout', 'Controller', 'Index'), 'Checkout\Controller\Index'),
+            array(array('checkout', 'controller', 'index'), 'Checkout\Controller\Index'),
             array(
-                array(
-                    'Checkout',
-                    'Controller',
-                    'Index'
-                ),
-                'Checkout\Controller\Index'
-            ),
-            array(
-                array(
-                    'checkout',
-                    'controller',
-                    'index'
-                ),
-                'Checkout\Controller\Index'
-            ),
-            array(
-                array(
-                    'Magento_Backend',
-                    'Block',
-                    'urlrewrite',
-                    'edit',
-                    'form',
-                ),
+                array('Magento_Backend', 'Block', 'urlrewrite', 'edit', 'form'),
                 'Magento\Backend\Block\Urlrewrite\Edit\Form'
-            ),
+            )
         );
     }
 }

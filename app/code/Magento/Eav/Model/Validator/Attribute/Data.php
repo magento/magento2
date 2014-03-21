@@ -174,9 +174,10 @@ class Data extends \Magento\Validator\AbstractValidator
 
         if ($this->_attributes) {
             $attributes = $this->_attributes;
-        } elseif ($entity instanceof \Magento\Core\Model\AbstractModel
-                  && $entity->getResource() instanceof \Magento\Eav\Model\Entity\AbstractEntity
-        ) { // $entity is EAV-model
+        } elseif ($entity instanceof \Magento\Core\Model\AbstractModel &&
+            $entity->getResource() instanceof \Magento\Eav\Model\Entity\AbstractEntity
+        ) {
+            // $entity is EAV-model
             $attributes = $entity->getEntityType()->getAttributeCollection()->getItems();
         }
 

@@ -25,8 +25,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order;
 
-class Statuses
-    extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
      * Dummy element
@@ -85,7 +84,7 @@ class Statuses
         $statuses = $this->_orderStatusCollection->create()->load()->toOptionHash();
 
         foreach ($statuses as $id => $status) {
-            $html.= $this->_getFieldHtml($element, $id, $status);
+            $html .= $this->_getFieldHtml($element, $id, $status);
         }
         return $html;
     }
@@ -111,8 +110,9 @@ class Statuses
     protected function _getFieldRenderer()
     {
         if (empty($this->_fieldRenderer)) {
-            $this->_fieldRenderer = $this->getLayout()
-                ->getBlockSingleton('Magento\Backend\Block\System\Config\Form\Field');
+            $this->_fieldRenderer = $this->getLayout()->getBlockSingleton(
+                'Magento\Backend\Block\System\Config\Form\Field'
+            );
         }
         return $this->_fieldRenderer;
     }
@@ -128,22 +128,28 @@ class Statuses
     protected function _getFieldHtml($fieldset, $id, $status)
     {
         $configData = $this->getConfigData();
-        $path = 'sales/order_statuses/status_'.$id; //TODO: move as property of form
+        $path = 'sales/order_statuses/status_' . $id;
+        //TODO: move as property of form
         $data = isset($configData[$path]) ? $configData[$path] : array();
 
         $e = $this->_getDummyElement();
 
-        $field = $fieldset->addField($id, 'text',
+        $field = $fieldset->addField(
+            $id,
+            'text',
             array(
-                'name'          => 'groups[order_statuses][fields][status_'.$id.'][value]',
-                'label'         => $status,
-                'value'         => isset($data['value']) ? $data['value'] : $status,
+                'name' => 'groups[order_statuses][fields][status_' . $id . '][value]',
+                'label' => $status,
+                'value' => isset($data['value']) ? $data['value'] : $status,
                 'default_value' => isset($data['default_value']) ? $data['default_value'] : '',
-                'old_value'     => isset($data['old_value']) ? $data['old_value'] : '',
-                'inherit'       => isset($data['inherit']) ? $data['inherit'] : '',
+                'old_value' => isset($data['old_value']) ? $data['old_value'] : '',
+                'inherit' => isset($data['inherit']) ? $data['inherit'] : '',
                 'can_use_default_value' => $this->getForm()->canUseDefaultValue($e),
-                'can_use_website_value' => $this->getForm()->canUseWebsiteValue($e),
-            ))->setRenderer($this->_getFieldRenderer());
+                'can_use_website_value' => $this->getForm()->canUseWebsiteValue($e)
+            )
+        )->setRenderer(
+            $this->_getFieldRenderer()
+        );
 
         return $field->toHtml();
     }

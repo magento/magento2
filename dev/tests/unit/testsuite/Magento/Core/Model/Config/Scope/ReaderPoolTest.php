@@ -48,13 +48,25 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_defaultReaderMock = $this->getMock(
-            'Magento\Core\Model\Config\Scope\Reader\DefaultReader', array(), array(), '', false
+            'Magento\Core\Model\Config\Scope\Reader\DefaultReader',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_websiteReaderMock = $this->getMock(
-            'Magento\Core\Model\Config\Scope\Reader\Website', array(), array(), '', false
+            'Magento\Core\Model\Config\Scope\Reader\Website',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_storeReaderMock = $this->getMock(
-            'Magento\Core\Model\Config\Scope\Reader\Store', array(), array(), '', false
+            'Magento\Core\Model\Config\Scope\Reader\Store',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_model = new \Magento\Core\Model\Config\Scope\ReaderPool(
@@ -81,26 +93,11 @@ class ReaderPoolTest extends \PHPUnit_Framework_TestCase
     public function getReaderDataProvider()
     {
         return array(
-            array(
-                'scope' => 'default',
-                'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\DefaultReader'
-            ),
-            array(
-                'scope' => 'website',
-                'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Website'
-            ),
-            array(
-                'scope' => 'websites',
-                'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Website'
-            ),
-            array(
-                'scope' => 'store',
-                'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Store'
-            ),
-            array(
-                'scope' => 'stores',
-                'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Store'
-            )
+            array('scope' => 'default', 'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\DefaultReader'),
+            array('scope' => 'website', 'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Website'),
+            array('scope' => 'websites', 'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Website'),
+            array('scope' => 'store', 'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Store'),
+            array('scope' => 'stores', 'expectedResult' => 'Magento\Core\Model\Config\Scope\Reader\Store')
         );
     }
 }

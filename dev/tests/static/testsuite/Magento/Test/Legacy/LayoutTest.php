@@ -38,11 +38,24 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_obsoleteNodes = array(
-        'PRODUCT_TYPE_simple', 'PRODUCT_TYPE_configurable', 'PRODUCT_TYPE_grouped', 'PRODUCT_TYPE_bundle',
-        'PRODUCT_TYPE_virtual', 'PRODUCT_TYPE_downloadable', 'PRODUCT_TYPE_giftcard',
-        'catalog_category_default', 'catalog_category_layered', 'catalog_category_layered_nochildren',
-        'customer_logged_in', 'customer_logged_out', 'customer_logged_in_psc_handle', 'customer_logged_out_psc_handle',
-        'cms_page', 'sku_failed_products_handle', 'catalog_product_send', 'reference'
+        'PRODUCT_TYPE_simple',
+        'PRODUCT_TYPE_configurable',
+        'PRODUCT_TYPE_grouped',
+        'PRODUCT_TYPE_bundle',
+        'PRODUCT_TYPE_virtual',
+        'PRODUCT_TYPE_downloadable',
+        'PRODUCT_TYPE_giftcard',
+        'catalog_category_default',
+        'catalog_category_layered',
+        'catalog_category_layered_nochildren',
+        'customer_logged_in',
+        'customer_logged_out',
+        'customer_logged_in_psc_handle',
+        'customer_logged_out_psc_handle',
+        'cms_page',
+        'sku_failed_products_handle',
+        'catalog_product_send',
+        'reference'
     );
 
     /**
@@ -66,10 +79,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'adminhtml.permissions.role.index',
             'adminhtml.permissions.role.grid'
         ),
-        'adminhtml_user_role_rolegrid' => array(
-            'adminhtml.permission.role.grid',
-            'adminhtml.permissions.role.grid'
-        ),
+        'adminhtml_user_role_rolegrid' => array('adminhtml.permission.role.grid', 'adminhtml.permissions.role.grid'),
         'adminhtml_user_role_editrole' => array(
             'adminhtml.permissions.editroles',
             'adminhtml.permissions.tab.rolesedit',
@@ -83,10 +93,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'adminhtml.permission.role.grid.user',
             'adminhtml.permissions.role.grid.user'
         ),
-        'adminhtml_user_index' => array(
-            'adminhtml.permission.user.index',
-            'adminhtml.permissions.user.index'
-        ),
+        'adminhtml_user_index' => array('adminhtml.permission.user.index', 'adminhtml.permissions.user.index'),
         'adminhtml_user_rolegrid' => array(
             'adminhtml.permissions.user.rolegrid',
             'adminhtml.permission.user.rolegrid'
@@ -110,20 +117,26 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteReferences($layoutXml);
                 $this->_testObsoleteAttributes($layoutXml);
 
-                $selectorHeadBlock = '(name()="block" or name()="referenceBlock") and '
-                    . '(@name="head" or @name="convert_root_head" or @name="vde_head")';
-                $this->assertSame(array(),
+                $selectorHeadBlock = '(name()="block" or name()="referenceBlock") and ' .
+                    '(@name="head" or @name="convert_root_head" or @name="vde_head")';
+                $this->assertSame(
+                    array(),
                     $layoutXml->xpath(
-                        '//block[@class="Magento\Theme\Block\Html\Head\Css" '
-                            . 'or @class="Magento\Theme\Block\Html\Head\Link" '
-                            . 'or @class="Magento\Theme\Block\Html\Head\Script"]'
-                            . '/parent::*[not(' . $selectorHeadBlock . ')]'
+                        '//block[@class="Magento\Theme\Block\Html\Head\Css" ' .
+                        'or @class="Magento\Theme\Block\Html\Head\Link" ' .
+                        'or @class="Magento\Theme\Block\Html\Head\Script"]' .
+                        '/parent::*[not(' .
+                        $selectorHeadBlock .
+                        ')]'
                     ),
-                    'Blocks \Magento\Theme\Block\Html\Head\{Css,Link,Script} are allowed within the "head" block only. '
-                        . 'Verify integrity of the nodes nesting.'
+                    'Blocks \Magento\Theme\Block\Html\Head\{Css,Link,Script} '.
+                    'are allowed within the "head" block only. ' .
+                    'Verify integrity of the nodes nesting.'
                 );
-                $this->assertSame(array(),
-                    $layoutXml->xpath('/layout//*[@output="toHtml"]'), 'output="toHtml" is obsolete. Use output="1"'
+                $this->assertSame(
+                    array(),
+                    $layoutXml->xpath('/layout//*[@output="toHtml"]'),
+                    'output="toHtml" is obsolete. Use output="1"'
                 );
                 foreach ($layoutXml as $handle) {
                     $this->assertNotContains(
@@ -137,14 +150,21 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                     $this->assertContains('::', $action->getAttribute('helper'));
                 }
 
-                if (false !== strpos($layoutFile, 'app/code/Magento/Sales/view/adminhtml/layout/sales_order')
-                    || false !== strpos($layoutFile, 'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order')
+                if (false !== strpos(
+                    $layoutFile,
+                    'app/code/Magento/Sales/view/adminhtml/layout/sales_order'
+                ) || false !== strpos(
+                    $layoutFile,
+                    'app/code/Magento/Shipping/view/adminhtml/layout/adminhtml_order'
+                )
                 ) {
-                    $this->markTestIncomplete("The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n"
-                            . 'there is no solution to get rid of it right now.'
+                    $this->markTestIncomplete(
+                        "The file {$layoutFile} has to use \\Magento\\Core\\Block\\Text\\List, \n" .
+                        'there is no solution to get rid of it right now.'
                     );
                 }
-                $this->assertSame(array(),
+                $this->assertSame(
+                    array(),
                     $layoutXml->xpath('/layout//block[@class="Magento\View\Element\Text\ListText"]'),
                     'The class \Magento\View\Element\Text\ListTest is not supposed to be used in layout anymore.'
                 );
@@ -211,9 +231,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 $methodFilter = '@method!="' . implode('" and @method!="', $this->getAllowedActionNodeMethods()) . '"';
                 foreach ($layoutXml->xpath('//action[' . $methodFilter . ']') as $node) {
                     $attributes = $node->attributes();
-                    $this->fail(sprintf(
-                        'Call of method "%s" via layout instruction <action> is not allowed.', $attributes['method']
-                    ));
+                    $this->fail(
+                        sprintf(
+                            'Call of method "%s" via layout instruction <action> is not allowed.',
+                            $attributes['method']
+                        )
+                    );
                 }
             },
             \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
@@ -348,7 +371,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             'setWrapperClass',
             'unsetChild',
             'unsetChildren',
-            'updateButton',
+            'updateButton'
         );
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 class HelperTest extends \PHPUnit_Framework_TestCase
@@ -85,31 +84,54 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Core\Model\StoreManagerInterface');
 
         $this->stockFilterMock = $this->getMock(
-            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter', array(), array(), '', false
+            'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->productLinksMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks',
-            array(), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
 
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product',
-            array('setData', 'addData', 'getId', 'setWebsiteIds', 'isLockedAttribute',
-                'lockAttribute', 'unlockAttribute', 'getOptionsReadOnly',
-                'setProductOptions', 'setCanSaveCustomOptions', '__sleep', '__wakeup'),
-            array(), '', false);
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array(
+                'setData',
+                'addData',
+                'getId',
+                'setWebsiteIds',
+                'isLockedAttribute',
+                'lockAttribute',
+                'unlockAttribute',
+                'getOptionsReadOnly',
+                'setProductOptions',
+                'setCanSaveCustomOptions',
+                '__sleep',
+                '__wakeup'
+            ),
+            array(),
+            '',
+            false
+        );
 
-        $this->websiteMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($this->websiteId));
+        $this->websiteMock->expects($this->once())->method('getId')->will($this->returnValue($this->websiteId));
 
-        $this->storeMock->expects($this->once())
-            ->method('getWebsite')
-            ->will($this->returnValue($this->websiteMock));
+        $this->storeMock->expects($this->once())->method('getWebsite')->will($this->returnValue($this->websiteMock));
 
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->with(true)
-            ->will($this->returnValue($this->storeMock));
+        $this->storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStore'
+        )->with(
+            true
+        )->will(
+            $this->returnValue($this->storeMock)
+        );
 
         $this->helper = new Helper(
             $this->requestMock,
@@ -133,85 +155,91 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $useDefaults = array('attributeCode1', 'attributeCode2');
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getPost')
-            ->with('product')
-            ->will($this->returnValue($productData));
+        $this->requestMock->expects(
+            $this->at(0)
+        )->method(
+            'getPost'
+        )->with(
+            'product'
+        )->will(
+            $this->returnValue($productData)
+        );
 
-        $this->requestMock->expects($this->at(1))
-            ->method('getPost')
-            ->with('use_default')
-            ->will($this->returnValue($useDefaults));
+        $this->requestMock->expects(
+            $this->at(1)
+        )->method(
+            'getPost'
+        )->with(
+            'use_default'
+        )->will(
+            $this->returnValue($useDefaults)
+        );
 
-        $this->requestMock->expects($this->at(2))
-            ->method('getPost')
-            ->with('affect_product_custom_options')
-            ->will($this->returnValue(true));
+        $this->requestMock->expects(
+            $this->at(2)
+        )->method(
+            'getPost'
+        )->with(
+            'affect_product_custom_options'
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $this->stockFilterMock->expects($this->once())
-            ->method('filter')
-            ->with(array('stock_data'))
-            ->will($this->returnValue(array('stock_data')));
+        $this->stockFilterMock->expects(
+            $this->once()
+        )->method(
+            'filter'
+        )->with(
+            array('stock_data')
+        )->will(
+            $this->returnValue(array('stock_data'))
+        );
 
-        $this->storeManagerMock->expects($this->once())
-            ->method('hasSingleStore')
-            ->will($this->returnValue(true));
+        $this->storeManagerMock->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
 
-        $this->productLinksMock->expects($this->once())
-            ->method('initializeLinks')
-            ->with($this->productMock)
-            ->will($this->returnValue($this->productMock));
+        $this->productLinksMock->expects(
+            $this->once()
+        )->method(
+            'initializeLinks'
+        )->with(
+            $this->productMock
+        )->will(
+            $this->returnValue($this->productMock)
+        );
 
-        $this->productMock->expects($this->once())
-            ->method('isLockedAttribute')
-            ->with('media')
-            ->will($this->returnValue(true));
+        $this->productMock->expects(
+            $this->once()
+        )->method(
+            'isLockedAttribute'
+        )->with(
+            'media'
+        )->will(
+            $this->returnValue(true)
+        );
 
-        $this->productMock->expects($this->once())
-            ->method('unlockAttribute')
-            ->with('media');
+        $this->productMock->expects($this->once())->method('unlockAttribute')->with('media');
 
-        $this->productMock->expects($this->once())
-            ->method('lockAttribute')
-            ->with('media');
+        $this->productMock->expects($this->once())->method('lockAttribute')->with('media');
 
         $productData['category_ids'] = array();
         $productData['website_ids'] = array();
-        $this->productMock->expects($this->once())
-            ->method('addData')
-            ->with($productData);
+        $this->productMock->expects($this->once())->method('addData')->with($productData);
 
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(true));
+        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(true));
 
-        $this->productMock->expects($this->once())
-            ->method('setWebsiteIds')
-            ->with(array($this->websiteId));
+        $this->productMock->expects($this->once())->method('setWebsiteIds')->with(array($this->websiteId));
 
-        $this->productMock->expects($this->at(6))
-            ->method('setData')
-            ->with('save_rewrites_history', true);
+        $this->productMock->expects($this->at(6))->method('setData')->with('save_rewrites_history', true);
 
-        $this->productMock->expects($this->at(7))
-            ->method('setData')
-            ->with('attributeCode1', false);
+        $this->productMock->expects($this->at(7))->method('setData')->with('attributeCode1', false);
 
-        $this->productMock->expects($this->at(8))
-            ->method('setData')
-            ->with('attributeCode2', false);
+        $this->productMock->expects($this->at(8))->method('setData')->with('attributeCode2', false);
 
-        $this->productMock->expects($this->any())
-            ->method('getOptionsReadOnly')
-            ->will($this->returnValue(false));
+        $this->productMock->expects($this->any())->method('getOptionsReadOnly')->will($this->returnValue(false));
 
-        $this->productMock->expects($this->once())
-            ->method('setProductOptions')
-            ->with($productData['options']);
+        $this->productMock->expects($this->once())->method('setProductOptions')->with($productData['options']);
 
-        $this->productMock->expects($this->once())
-            ->method('setCanSaveCustomOptions')
-            ->with(true);
+        $this->productMock->expects($this->once())->method('setCanSaveCustomOptions')->with(true);
 
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
     }

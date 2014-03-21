@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\Config\Mapper;
 
 use Magento\Config\Converter\Dom\Flat as FlatConverter;
@@ -58,12 +57,7 @@ class ArgumentParser
     protected function getConverter()
     {
         if (!$this->converter) {
-            $arrayNodeConfig = new ArrayNodeConfig(
-                new NodePathMatcher(),
-                array(
-                    'argument(/item)+' => 'name',
-                )
-            );
+            $arrayNodeConfig = new ArrayNodeConfig(new NodePathMatcher(), array('argument(/item)+' => 'name'));
             $this->converter = new FlatConverter($arrayNodeConfig);
         }
         return $this->converter;

@@ -23,12 +23,13 @@
  */
 namespace Magento\RecurringPayment\Model\Observer;
 
-use \Magento\Sales\Model\Quote;
+use Magento\Sales\Model\Quote;
 
 class PaymentAvailabilityObserver
 {
     /** @var  \Magento\RecurringPayment\Model\Quote\Filter */
     protected $quoteFilter;
+
     /** @var  \Magento\RecurringPayment\Model\Method\RecurringPaymentSpecification */
     protected $specification;
 
@@ -56,9 +57,11 @@ class PaymentAvailabilityObserver
         $paymentMethod = $observer->getEvent()->getMethodInstance();
         $result = $observer->getEvent()->getResult();
 
-        if ($quote
-            && $this->quoteFilter->hasRecurringItems($quote)
-            && !$this->specification->isSatisfiedBy($paymentMethod->getCode())
+        if ($quote && $this->quoteFilter->hasRecurringItems(
+            $quote
+        ) && !$this->specification->isSatisfiedBy(
+            $paymentMethod->getCode()
+        )
         ) {
             $result->isAvailable = false;
         }

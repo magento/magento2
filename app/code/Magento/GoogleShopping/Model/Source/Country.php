@@ -44,7 +44,7 @@ class Country implements \Magento\Option\ArrayInterface
     /**
      * @param \Magento\GoogleShopping\Model\Config $config
      */
-    function __construct(\Magento\GoogleShopping\Model\Config $config)
+    public function __construct(\Magento\GoogleShopping\Model\Config $config)
     {
         $this->_config = $config;
     }

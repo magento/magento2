@@ -37,12 +37,13 @@ class SuccessValidator
             return false;
         }
 
-        if (!$checkoutSession->getLastQuoteId()
-            || (!$checkoutSession->getLastOrderId() && count($checkoutSession->getLastRecurringPaymentIds()) == 0)
+        if (!$checkoutSession->getLastQuoteId() || !$checkoutSession->getLastOrderId() && count(
+            $checkoutSession->getLastRecurringPaymentIds()
+        ) == 0
         ) {
             return false;
         }
 
         return true;
     }
-} 
+}

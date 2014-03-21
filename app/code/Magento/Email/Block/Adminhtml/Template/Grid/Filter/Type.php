@@ -42,7 +42,7 @@ class Type extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     protected static $_types = array(
         null => null,
         \Magento\App\TemplateTypesInterface::TYPE_HTML => 'HTML',
-        \Magento\App\TemplateTypesInterface::TYPE_TEXT => 'Text',
+        \Magento\App\TemplateTypesInterface::TYPE_TEXT => 'Text'
     );
 
     /**

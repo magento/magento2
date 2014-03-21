@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Oauth;
 
 class Oauth implements OauthInterface
@@ -84,12 +83,7 @@ class Oauth implements OauthInterface
         $this->_tokenProvider->validateConsumer($consumer);
         $this->_nonceGenerator->validateNonce($consumer, $params['oauth_nonce'], $params['oauth_timestamp']);
 
-        $this->_validateSignature(
-            $params,
-            $consumer->getSecret(),
-            $httpMethod,
-            $requestUrl
-        );
+        $this->_validateSignature($params, $consumer->getSecret(), $httpMethod, $requestUrl);
 
         return $this->_tokenProvider->createRequestToken($consumer);
     }
@@ -111,16 +105,13 @@ class Oauth implements OauthInterface
 
         $this->_validateProtocolParams($params, $required);
         $consumer = $this->_tokenProvider->getConsumerByKey($params['oauth_consumer_key']);
-        $tokenSecret = $this->_tokenProvider
-            ->validateRequestToken($params['oauth_token'], $consumer, $params['oauth_verifier']);
-
-        $this->_validateSignature(
-            $params,
-            $consumer->getSecret(),
-            $httpMethod,
-            $requestUrl,
-            $tokenSecret
+        $tokenSecret = $this->_tokenProvider->validateRequestToken(
+            $params['oauth_token'],
+            $consumer,
+            $params['oauth_verifier']
         );
+
+        $this->_validateSignature($params, $consumer->getSecret(), $httpMethod, $requestUrl, $tokenSecret);
 
         return $this->_tokenProvider->getAccessToken($consumer);
     }
@@ -143,13 +134,7 @@ class Oauth implements OauthInterface
         $consumer = $this->_tokenProvider->getConsumerByKey($params['oauth_consumer_key']);
         $tokenSecret = $this->_tokenProvider->validateAccessTokenRequest($params['oauth_token'], $consumer);
 
-        $this->_validateSignature(
-            $params,
-            $consumer->getSecret(),
-            $httpMethod,
-            $requestUrl,
-            $tokenSecret
-        );
+        $this->_validateSignature($params, $consumer->getSecret(), $httpMethod, $requestUrl, $tokenSecret);
 
         return $consumer->getId();
     }
@@ -166,20 +151,18 @@ class Oauth implements OauthInterface
      * {@inheritdoc}
      */
     public function buildAuthorizationHeader(
-        $params, $requestUrl, $signatureMethod = self::SIGNATURE_SHA1, $httpMethod = 'POST'
+        $params,
+        $requestUrl,
+        $signatureMethod = self::SIGNATURE_SHA1,
+        $httpMethod = 'POST'
     ) {
-        $required = array(
-            "oauth_consumer_key",
-            "oauth_consumer_secret",
-            "oauth_token",
-            "oauth_token_secret"
-        );
+        $required = array("oauth_consumer_key", "oauth_consumer_secret", "oauth_token", "oauth_token_secret");
         $this->_checkRequiredParams($params, $required);
         $consumer = $this->_tokenProvider->getConsumerByKey($params['oauth_consumer_key']);
         $headerParameters = array(
             'oauth_nonce' => $this->_nonceGenerator->generateNonce($consumer),
             'oauth_timestamp' => $this->_nonceGenerator->generateTimestamp(),
-            'oauth_version' => '1.0',
+            'oauth_version' => '1.0'
         );
         $headerParameters = array_merge($headerParameters, $params);
         $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
@@ -275,8 +258,11 @@ class Oauth implements OauthInterface
         }
         $this->_checkRequiredParams($protocolParams, $requiredParams);
 
-        if (isset($protocolParams['oauth_token']) &&
-            !$this->_tokenProvider->validateOauthToken($protocolParams['oauth_token'])
+        if (isset(
+            $protocolParams['oauth_token']
+        ) && !$this->_tokenProvider->validateOauthToken(
+            $protocolParams['oauth_token']
+        )
         ) {
             throw new Exception(__('Token is not the correct length'), self::ERR_TOKEN_REJECTED);
         }
@@ -291,7 +277,9 @@ class Oauth implements OauthInterface
 
         $consumer = $this->_tokenProvider->getConsumerByKey($protocolParams['oauth_consumer_key']);
         $this->_nonceGenerator->validateNonce(
-            $consumer, $protocolParams['oauth_nonce'], $protocolParams['oauth_timestamp']
+            $consumer,
+            $protocolParams['oauth_nonce'],
+            $protocolParams['oauth_timestamp']
         );
     }
 

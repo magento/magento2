@@ -33,17 +33,17 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
     /**
      * Button code
      */
-    const BM_BUTTON_CODE    = 'TOKEN';
+    const BM_BUTTON_CODE = 'TOKEN';
 
     /**
      * Button type
      */
-    const BM_BUTTON_TYPE    = 'PAYMENT';
+    const BM_BUTTON_TYPE = 'PAYMENT';
 
     /**
      * Paypal API method name for button creation
      */
-    const BM_BUTTON_METHOD  = 'BMCreateButton';
+    const BM_BUTTON_METHOD = 'BMCreateButton';
 
     /**
      * Payment method code
@@ -67,21 +67,21 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      *
      * @var bool
      */
-    protected $_canUseInternal          = false;
+    protected $_canUseInternal = false;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_canSaveCc               = false;
+    protected $_canSaveCc = false;
 
     /**
      * Availability option
      *
      * @var bool
      */
-    protected $_isInitializeNeeded      = true;
+    protected $_isInitializeNeeded = true;
 
     /**
      * @var \Magento\Paypal\Model\Hostedpro\RequestFactory
@@ -230,9 +230,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     protected function _buildFormUrlRequest(\Magento\Payment\Model\Info $payment)
     {
-        $request = $this->_buildBasicRequest()
-            ->setOrder($payment->getOrder())
-            ->setPaymentMethod($this);
+        $request = $this->_buildBasicRequest()->setOrder($payment->getOrder())->setPaymentMethod($this);
 
         return $request;
     }
@@ -261,11 +259,13 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      */
     protected function _buildBasicRequest()
     {
-        $request = $this->_hostedproRequestFactory->create()->setData(array(
-            'METHOD'     => self::BM_BUTTON_METHOD,
-            'BUTTONCODE' => self::BM_BUTTON_CODE,
-            'BUTTONTYPE' => self::BM_BUTTON_TYPE
-        ));
+        $request = $this->_hostedproRequestFactory->create()->setData(
+            array(
+                'METHOD' => self::BM_BUTTON_METHOD,
+                'BUTTONCODE' => self::BM_BUTTON_CODE,
+                'BUTTONTYPE' => self::BM_BUTTON_TYPE
+            )
+        );
         return $request;
     }
 
@@ -313,9 +313,9 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
     protected function _getUrl($path, $storeId, $secure = null)
     {
         $store = $this->_storeManager->getStore($storeId);
-        return $this->_urlBuilder->getUrl($path, array(
-            "_store"   => $store,
-            "_secure"  => is_null($secure) ? $store->isCurrentlySecure() : $secure
-        ));
+        return $this->_urlBuilder->getUrl(
+            $path,
+            array("_store" => $store, "_secure" => is_null($secure) ? $store->isCurrentlySecure() : $secure)
+        );
     }
 }

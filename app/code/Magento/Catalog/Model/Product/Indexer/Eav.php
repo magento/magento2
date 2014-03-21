@@ -51,11 +51,9 @@ class Eav extends \Magento\Index\Model\Indexer\AbstractIndexer
         \Magento\Catalog\Model\Product::ENTITY => array(
             \Magento\Index\Model\Event::TYPE_SAVE,
             \Magento\Index\Model\Event::TYPE_DELETE,
-            \Magento\Index\Model\Event::TYPE_MASS_ACTION,
+            \Magento\Index\Model\Event::TYPE_MASS_ACTION
         ),
-        \Magento\Catalog\Model\Resource\Eav\Attribute::ENTITY => array(
-            \Magento\Index\Model\Event::TYPE_SAVE,
-        ),
+        \Magento\Catalog\Model\Resource\Eav\Attribute::ENTITY => array(\Magento\Index\Model\Event::TYPE_SAVE)
     );
 
     /**
@@ -157,8 +155,7 @@ class Eav extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected function _attributeIsIndexable($attribute)
     {
         if (!$attribute instanceof \Magento\Catalog\Model\Resource\Eav\Attribute) {
-            $attribute = $this->_eavConfig
-                ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
+            $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
         }
 
         return $attribute->isIndexable();
@@ -173,7 +170,7 @@ class Eav extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected function _registerCatalogProductSaveEvent(\Magento\Index\Model\Event $event)
     {
         /* @var $product \Magento\Catalog\Model\Product */
-        $product    = $event->getDataObject();
+        $product = $event->getDataObject();
         $attributes = $product->getAttributes();
         $reindexEav = $product->getForceReindexRequired();
         foreach ($attributes as $attribute) {
@@ -200,9 +197,9 @@ class Eav extends \Magento\Index\Model\Indexer\AbstractIndexer
     protected function _registerCatalogProductDeleteEvent(\Magento\Index\Model\Event $event)
     {
         /* @var $product \Magento\Catalog\Model\Product */
-        $product    = $event->getDataObject();
+        $product = $event->getDataObject();
 
-        $parentIds  = $this->_getResource()->getRelationsByChild($product->getId());
+        $parentIds = $this->_getResource()->getRelationsByChild($product->getId());
         if ($parentIds) {
             $event->addNewData('reindex_eav_parent_ids', $parentIds);
         }
@@ -257,12 +254,20 @@ class Eav extends \Magento\Index\Model\Indexer\AbstractIndexer
         /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
         $attribute = $event->getDataObject();
         if ($attribute->isIndexable()) {
-            $before = $attribute->getOrigData('is_filterable')
-                || $attribute->getOrigData('is_filterable_in_search')
-                || $attribute->getOrigData('is_visible_in_advanced_search');
-            $after  = $attribute->getData('is_filterable')
-                || $attribute->getData('is_filterable_in_search')
-                || $attribute->getData('is_visible_in_advanced_search');
+            $before = $attribute->getOrigData(
+                'is_filterable'
+            ) || $attribute->getOrigData(
+                'is_filterable_in_search'
+            ) || $attribute->getOrigData(
+                'is_visible_in_advanced_search'
+            );
+            $after = $attribute->getData(
+                'is_filterable'
+            ) || $attribute->getData(
+                'is_filterable_in_search'
+            ) || $attribute->getData(
+                'is_visible_in_advanced_search'
+            );
 
             if (!$before && $after || $before && !$after) {
                 $event->addNewData('reindex_attribute', 1);

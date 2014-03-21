@@ -51,11 +51,9 @@ return array(
     array('Mage_Admin_Model_Resource_Rules', 'Magento\User\Model\Resource\Rules'),
     array('Mage_Admin_Model_Resource_Role_Collection', 'Magento\User\Model\Resource\Role\Collection'),
     array('Mage_Admin_Model_Resource_Roles_Collection', 'Magento\User\Model\Resource\Roles\Collection'),
-    array('Mage_Admin_Model_Resource_Roles_User_Collection',
-        'Magento\User\Model\Resource\Roles\User\Collection'),
+    array('Mage_Admin_Model_Resource_Roles_User_Collection', 'Magento\User\Model\Resource\Roles\User\Collection'),
     array('Mage_Admin_Model_Resource_Rules_Collection', 'Magento\User\Model\Resource\Rules\Collection'),
-    array('Mage_Admin_Model_Resource_Permissions_Collection',
-        'Magento\User\Model\Resource\Permissions\Collection'),
+    array('Mage_Admin_Model_Resource_Permissions_Collection', 'Magento\User\Model\Resource\Permissions\Collection'),
     array('Mage_Adminhtml_Block_Abstract', 'Magento\Backend\Block\AbstractBlock'),
     array('Mage_Adminhtml_Block_Backup_Grid'),
     array('Mage_Adminhtml_Block_Cache_Grid'),
@@ -100,8 +98,7 @@ return array(
     array('Mage_Adminhtml_Permissions_UserController'),
     array('Mage_Adminhtml_Permissions_RoleController'),
     array('Mage_Adminhtml_Block_Report_Grid', 'Magento\Reports\Block\Adminhtml\Grid'),
-    array('Mage_Adminhtml_Block_Report_Customer_Accounts',
-        'Magento\Reports\Block\Adminhtml\Customer\Accounts'),
+    array('Mage_Adminhtml_Block_Report_Customer_Accounts', 'Magento\Reports\Block\Adminhtml\Customer\Accounts'),
     array('Mage_Adminhtml_Block_Report_Customer_Accounts_Grid'),
     array('Mage_Adminhtml_Block_Report_Customer_Totals', 'Magento\Reports\Block\Adminhtml\Customer\Totals'),
     array('Mage_Adminhtml_Block_Report_Customer_Totals_Grid'),
@@ -119,8 +116,14 @@ return array(
     array('Mage_Adminhtml_Block_Sales'),
     array('Magento\GoogleCheckout'), // removed module
     array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Form', 'Magento\Shipping\Block\Adminhtml\Create\Form'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Items', 'Magento\Shipping\Block\Adminhtml\Create\Items'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Comments', 'Magento\Shipping\Block\Adminhtml\View\Comments'),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Items',
+        'Magento\Shipping\Block\Adminhtml\Create\Items'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\View\Comments',
+        'Magento\Shipping\Block\Adminhtml\View\Comments'
+    ),
     array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Form', 'Magento\Shipping\Block\Adminhtml\View\Form'),
     array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Items', 'Magento\Shipping\Block\Adminhtml\View\Items'),
     array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create', 'Magento\Shipping\Block\Adminhtml\Create'),
@@ -135,91 +138,100 @@ return array(
     array('Mage_Adminhtml_Block_System_Config_Edit', 'Magento\Backend\Block\System\Config\Edit'),
     array('Mage_Adminhtml_Block_System_Config_Form', 'Magento\Backend\Block\System\Config\Form'),
     array('Mage_Adminhtml_Block_System_Config_Tabs', 'Magento\Backend\Block\System\Config\Tabs'),
-    array('Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
+    array(
+        'Mage_Adminhtml_Block_System_Config_System_Storage_Media_Synchronize',
         'Magento\Backend\Block\System\Config\System\Storage\Media\Synchronize'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Modules_DisableOutput',
         'Magento\Backend\Block\System\Config\Form\Fieldset\Modules\DisableOutput'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Regexceptions',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Regexceptions',
         'Magento\Backend\Block\System\Config\Form\Field\Regexceptions'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Notification',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Notification',
         'Magento\Backend\Block\System\Config\Form\Field\Notification'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Heading',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Heading',
         'Magento\Backend\Block\System\Config\Form\Field\Heading'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Datetime',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Datetime',
         'Magento\Backend\Block\System\Config\Form\Field\Datetime'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Array_Abstract',
         'Magento\Backend\Block\System\Config\Form\Field\Array\AbstractArray'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Fieldset',
-        'Magento\Backend\Block\System\Config\Form\Fieldset'
-    ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field',
-        'Magento\Backend\Block\System\Config\Form\Field'
-    ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Import',
+    array('Mage_Adminhtml_Block_System_Config_Form_Fieldset', 'Magento\Backend\Block\System\Config\Form\Fieldset'),
+    array('Mage_Adminhtml_Block_System_Config_Form_Field', 'Magento\Backend\Block\System\Config\Form\Field'),
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Import',
         'Magento\Backend\Block\System\Config\Form\Field\Import'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Image',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Image',
         'Magento\Backend\Block\System\Config\Form\Field\Image'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Export',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Export',
         'Magento\Backend\Block\System\Config\Form\Field\Export'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Select_Allowspecific',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Select_Allowspecific',
         'Magento\Backend\Block\System\Config\Form\Field\Select\Allowspecific'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_File',
-        'Magento\Backend\Block\System\Config\Form\Field\File'
-    ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatproduct',
+    array('Mage_Adminhtml_Block_System_Config_Form_Field_File', 'Magento\Backend\Block\System\Config\Form\Field\File'),
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatproduct',
         'Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatcatalog',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Field_Select_Flatcatalog',
         'Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatcatalog'
     ),
-    array('Mage_Adminhtml_Block_System_Config_Form_Fieldset_Order_Statuses',
+    array(
+        'Mage_Adminhtml_Block_System_Config_Form_Fieldset_Order_Statuses',
         'Magento\Sales\Block\Adminhtml\System\Config\Form\Fieldset\Order\Statuses'
     ),
     array('Mage_Adminhtml_Block_System_Config_Dwstree', 'Magento\Backend\Block\System\Config\Dwstree'),
     array('Mage_Adminhtml_Block_System_Config_Switcher', 'Magento\Backend\Block\System\Config\Switcher'),
     array('Mage_Adminhtml_Block_System_Design_Grid'),
-    array('Magento\Adminhtml\Block\System\Email\Template',
-        'Magento\Email\Block\Adminhtml\Template'
-    ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Edit',
-        'Magento\Email\Block\Adminhtml\Template\Edit'
-    ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Edit\Form',
+    array('Magento\Adminhtml\Block\System\Email\Template', 'Magento\Email\Block\Adminhtml\Template'),
+    array('Magento\Adminhtml\Block\System\Email\Template\Edit', 'Magento\Email\Block\Adminhtml\Template\Edit'),
+    array(
+        'Magento\Adminhtml\Block\System\Email\Template\Edit\Form',
         'Magento\Email\Block\Adminhtml\Template\Edit\Form'
     ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Preview',
-        'Magento\Email\Block\Adminhtml\Template\Preview'
-    ),
+    array('Magento\Adminhtml\Block\System\Email\Template\Preview', 'Magento\Email\Block\Adminhtml\Template\Preview'),
     array('Mage_Adminhtml_Block_System_Email_Template_Grid'),
-    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Action',
+    array(
+        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Action',
         'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action'
     ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Sender',
+    array(
+        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Sender',
         'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Sender'
     ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Type',
+    array(
+        'Magento\Adminhtml\Block\System\Email\Template\Grid\Renderer\Type',
         'Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type'
     ),
-    array('Magento\Adminhtml\Block\System\Email\Template\Grid\Filter\Type',
+    array(
+        'Magento\Adminhtml\Block\System\Email\Template\Grid\Filter\Type',
         'Magento\Email\Block\Adminhtml\Template\Grid\Filter\Type'
     ),
     array('Mage_Adminhtml_Block_System_Variable_Grid'),
     array('Mage_Adminhtml_Block_Store_Switcher', 'Magento\Backend\Block\Store\Switcher'),
-    array('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset',
+    array(
+        'Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset',
         'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset'
     ),
-    array('Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element',
+    array(
+        'Mage_Adminhtml_Block_Store_Switcher_Form_Renderer_Fieldset_Element',
         'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
     ),
     array('Mage_Adminhtml_Block_Tag_Tag_Edit'),
@@ -228,383 +240,376 @@ return array(
     array('Mage_Adminhtml_Block_Tax_Rule_Grid'),
     array('Mage_Adminhtml_Block_Tree'),
     array('Mage_Adminhtml_Block_Urlrewrite_Grid'),
-    array('Magento\Adminhtml\Controller\System\Email\Template',
-        'Magento\Email\Controller\Adminhtml\Template'
-    ),
+    array('Magento\Adminhtml\Controller\System\Email\Template', 'Magento\Email\Controller\Adminhtml\Template'),
     array('Mage_Adminhtml_Helper_Rss'),
     array('Mage_Adminhtml_Model_Config', 'Magento\Backend\Model\Config\Structure'),
     array('Mage_Adminhtml_Model_Config_Data', 'Magento\Backend\Model\Config'),
     array('Magento\Adminhtml\Model\Email\Template', 'Magento\Email\Model\Adminhtml\Template'),
     array('Mage_Adminhtml_Model_Extension'),
     array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Allowedmethods'),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Password_Link_Expirationperiod',
         'Magento\Backend\Model\Config\Backend\Admin\Password\Link\Expirationperiod'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Custom',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Custom',
         'Magento\Backend\Model\Config\Backend\Admin\Custom'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Custompath',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Custompath',
         'Magento\Backend\Model\Config\Backend\Admin\Custompath'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Observer',
         'Magento\Backend\Model\Config\Backend\Admin\Observer'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Robots',
         'Magento\Backend\Model\Config\Backend\Admin\Robots'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustom',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustom',
         'Magento\Backend\Model\Config\Backend\Admin\Usecustom'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustompath',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usecustompath',
         'Magento\Backend\Model\Config\Backend\Admin\Custompath'
     ),
-    array('Magento\Backend\Model\Config\Backend\Admin\Usecustompath',
+    array(
+        'Magento\Backend\Model\Config\Backend\Admin\Usecustompath',
         'Magento\Backend\Model\Config\Backend\Admin\Custompath'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Admin_Usesecretkey',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Admin_Usesecretkey',
         'Magento\Backend\Model\Config\Backend\Admin\Usesecretkey'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Catalog_Inventory_Managestock',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Catalog_Inventory_Managestock',
         'Magento\CatalogInventory\Model\Config\Backend\Managestock'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Catalog_Search_Type',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Catalog_Search_Type',
         'Magento\CatalogSearch\Model\Config\Backend\Search\Type'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Currency_Abstract',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Currency_Abstract',
         'Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Currency_Allow',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Currency_Allow',
         'Magento\Backend\Model\Config\Backend\Currency\Allow'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Currency_Base',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Currency_Base',
         'Magento\Backend\Model\Config\Backend\Currency\Base'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Currency_Cron',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Currency_Cron',
         'Magento\Backend\Model\Config\Backend\Currency\Cron'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Currency_Default',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Currency_Default',
         'Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Customer_Address_Street',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Customer_Address_Street',
         'Magento\Customer\Model\Config\Backend\Address\Street'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Customer_Password_Link_Expirationperiod',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Customer_Password_Link_Expirationperiod',
         'Magento\Customer\Model\Config\Backend\Password\Link\Expirationperiod'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Customer_Show_Address',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Customer_Show_Address',
         'Magento\Customer\Model\Config\Backend\Show\Address'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Customer_Show_Customer',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Customer_Show_Customer',
         'Magento\Customer\Model\Config\Backend\Show\Customer'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Design_Exception',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Design_Exception',
         'Magento\Backend\Model\Config\Backend\Design\Exception'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Email_Address',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Email_Address',
         'Magento\Backend\Model\Config\Backend\Email\Address'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Email_Logo',
-        'Magento\Backend\Model\Config\Backend\Email\Logo'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Email_Sender',
+    array('Mage_Adminhtml_Model_System_Config_Backend_Email_Logo', 'Magento\Backend\Model\Config\Backend\Email\Logo'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Email_Sender',
         'Magento\Backend\Model\Config\Backend\Email\Sender'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Image_Adapter',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Image_Adapter',
         'Magento\Backend\Model\Config\Backend\Image\Adapter'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Image_Favicon',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Image_Favicon',
         'Magento\Backend\Model\Config\Backend\Image\Favicon'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Image_Pdf',
-        'Magento\Backend\Model\Config\Backend\Image\Pdf'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Locale_Timezone',
+    array('Mage_Adminhtml_Model_System_Config_Backend_Image_Pdf', 'Magento\Backend\Model\Config\Backend\Image\Pdf'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Locale_Timezone',
         'Magento\Backend\Model\Config\Backend\Locale\Timezone'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Log_Cron',
-        'Magento\Backend\Model\Config\Backend\Log\Cron'
-    ),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Log_Cron', 'Magento\Backend\Model\Config\Backend\Log\Cron'),
     array('Mage_Adminhtml_Model_System_Config_Backend_Price_Scope'),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Product_Alert_Cron',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Product_Alert_Cron',
         'Magento\Cron\Model\Config\Backend\Product\Alert'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Seo_Product',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Seo_Product',
         'Magento\Catalog\Model\Config\Backend\Seo\Product'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Serialized_Array',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Serialized_Array',
         'Magento\Backend\Model\Config\Backend\Serialized\Array'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Shipping_Tablerate',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Shipping_Tablerate',
         'Magento\OfflineShipping\Model\Config\Backend\Tablerate'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron',
-        'Magento\Cron\Model\Config\Backend\Sitemap'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
+    array('Mage_Adminhtml_Model_System_Config_Backend_Sitemap_Cron', 'Magento\Cron\Model\Config\Backend\Sitemap'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Backend_Storage_Media_Database',
         'Magento\Backend\Model\Config\Backend\Storage\Media\Database'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Baseurl',
-        'Magento\Backend\Model\Config\Backend\Baseurl'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Cache',
-        'Magento\Backend\Model\Config\Backend\Cache'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Category',
-        'Magento\Catalog\Model\Config\Backend\Category'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Cookie',
-        'Magento\Backend\Model\Config\Backend\Cookie'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Datashare',
-        'Magento\Backend\Model\Config\Backend\Datashare'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Encrypted',
-        'Magento\Backend\Model\Config\Backend\Encrypted'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_File',
-        'Magento\Backend\Model\Config\Backend\File'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Filename',
-        'Magento\Backend\Model\Config\Backend\Filename'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Image',
-        'Magento\Backend\Model\Config\Backend\Image'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Locale',
-        'Magento\Backend\Model\Config\Backend\Locale'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Secure',
-        'Magento\Backend\Model\Config\Backend\Secure'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Serialized',
-        'Magento\Backend\Model\Config\Backend\Serialized'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Sitemap',
-        'Magento\Sitemap\Model\Config\Backend\Priority'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Store',
-        'Magento\Backend\Model\Config\Backend\Store'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Backend_Translate',
-        'Magento\Backend\Model\Config\Backend\Translate'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Clone_Media_Image',
+    array('Mage_Adminhtml_Model_System_Config_Backend_Baseurl', 'Magento\Backend\Model\Config\Backend\Baseurl'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Cache', 'Magento\Backend\Model\Config\Backend\Cache'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Category', 'Magento\Catalog\Model\Config\Backend\Category'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Cookie', 'Magento\Backend\Model\Config\Backend\Cookie'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Datashare', 'Magento\Backend\Model\Config\Backend\Datashare'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Encrypted', 'Magento\Backend\Model\Config\Backend\Encrypted'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_File', 'Magento\Backend\Model\Config\Backend\File'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Filename', 'Magento\Backend\Model\Config\Backend\Filename'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Image', 'Magento\Backend\Model\Config\Backend\Image'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Locale', 'Magento\Backend\Model\Config\Backend\Locale'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Secure', 'Magento\Backend\Model\Config\Backend\Secure'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Serialized', 'Magento\Backend\Model\Config\Backend\Serialized'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Sitemap', 'Magento\Sitemap\Model\Config\Backend\Priority'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Store', 'Magento\Backend\Model\Config\Backend\Store'),
+    array('Mage_Adminhtml_Model_System_Config_Backend_Translate', 'Magento\Backend\Model\Config\Backend\Translate'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Clone_Media_Image',
         'Magento\Catalog\Model\Config\CatalogClone\Media\Image'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Admin_Page',
-        'Magento\Backend\Model\Config\Source\Admin\Page'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_Search_Type',
+    array('Mage_Adminhtml_Model_System_Config_Source_Admin_Page', 'Magento\Backend\Model\Config\Source\Admin\Page'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_Search_Type',
         'Magento\CatalogSearch\Model\Config\Source\Search\Type'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_GridPerPage',
         'Magento\Catalog\Model\Config\Source\GridPerPage'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_ListMode',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_ListMode',
         'Magento\Catalog\Model\Config\Source\ListMode'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_ListPerPage',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_ListPerPage',
         'Magento\Catalog\Model\Config\Source\ListPerPage'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_ListSort',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_ListSort',
         'Magento\Catalog\Model\Config\Source\ListSort'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Catalog_TimeFormat',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Catalog_TimeFormat',
         'Magento\Catalog\Model\Config\Source\TimeFormat'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Cms_Wysiwyg_Enabled',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Cms_Wysiwyg_Enabled',
         'Magento\Cms\Model\Config\Source\Wysiwyg\Enabled'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Cms_Page',
-        'Magento\Cms\Model\Config\Source\Page'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Country_Full',
+    array('Mage_Adminhtml_Model_System_Config_Source_Cms_Page', 'Magento\Cms\Model\Config\Source\Page'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Country_Full',
         'Magento\Directory\Model\Config\Source\Country\Full'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Cron_Frequency',
-        'Magento\Cron\Model\Config\Source\Frequency'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Currency_Service',
+    array('Mage_Adminhtml_Model_System_Config_Source_Cron_Frequency', 'Magento\Cron\Model\Config\Source\Frequency'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Currency_Service',
         'Magento\Backend\Model\Config\Source\Currency'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Customer_Address_Type',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Customer_Address_Type',
         'Magento\Customer\Model\Config\Source\Address\Type'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Customer_Group_Multiselect',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Customer_Group_Multiselect',
         'Magento\Customer\Model\Config\Source\Group\Multiselect'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Customer_Group',
-        'Magento\Customer\Model\Config\Source\Group'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Date_Short',
-        'Magento\Backend\Model\Config\Source\Date\Short'
-    ),
+    array('Mage_Adminhtml_Model_System_Config_Source_Customer_Group', 'Magento\Customer\Model\Config\Source\Group'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Date_Short', 'Magento\Backend\Model\Config\Source\Date\Short'),
     array('Mage_Adminhtml_Model_System_Config_Source_Design_Package'),
-    array('Mage_Adminhtml_Model_System_Config_Source_Design_Robots',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Design_Robots',
         'Magento\Backend\Model\Config\Source\Design\Robots'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Dev_Dbautoup',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Dev_Dbautoup',
         'Magento\Backend\Model\Config\Source\Dev\Dbautoup'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Email_Identity',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Email_Identity',
         'Magento\Backend\Model\Config\Source\Email\Identity'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Email_Method',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Email_Method',
         'Magento\Backend\Model\Config\Source\Email\Method'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Email_Smtpauth',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Email_Smtpauth',
         'Magento\Backend\Model\Config\Source\Email\Smtpauth'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Email_Template',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Email_Template',
         'Magento\Backend\Model\Config\Source\Email\Template'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Image_Adapter',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Image_Adapter',
         'Magento\Backend\Model\Config\Source\Image\Adapter'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale_Country',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Locale_Country',
         'Magento\Backend\Model\Config\Source\Locale\Country'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale_Currency_All',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Locale_Currency_All',
         'Magento\Backend\Model\Config\Source\Locale\Currency\All'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale_Currency',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Locale_Currency',
         'Magento\Backend\Model\Config\Source\Locale\Currency'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale_Timezone',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Locale_Timezone',
         'Magento\Backend\Model\Config\Source\Locale\Timezone'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale_Weekdays',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Locale_Weekdays',
         'Magento\Backend\Model\Config\Source\Locale\Weekdays'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Notification_Frequency',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Notification_Frequency',
         'Magento\AdminNotification\Model\Config\Source\Frequency'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Order_Status_New',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Order_Status_New',
         'Magento\Sales\Model\Config\Source\Order\Status\NewStatus'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Order_Status_Newprocessing',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Order_Status_Newprocessing',
         'Magento\Sales\Model\Config\Source\Order\Status\Newprocessing'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Order_Status_Processing',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Order_Status_Processing',
         'Magento\Sales\Model\Config\Source\Order\Status\Processing'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Order_Status',
-        'Magento\Sales\Model\Config\Source\Order\Status'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Payment_Allmethods',
+    array('Mage_Adminhtml_Model_System_Config_Source_Order_Status', 'Magento\Sales\Model\Config\Source\Order\Status'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Payment_Allmethods',
         'Magento\Payment\Model\Config\Source\Allmethods'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Payment_Allowedmethods',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Payment_Allowedmethods',
         'Magento\Payment\Model\Config\Source\Allowedmethods'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Payment_Allspecificcountries',
         'Magento\Payment\Model\Config\Source\Allspecificcountries'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Payment_Cctype',
-        'Magento\Payment\Model\Config\Source\Cctype'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Price_Scope',
-        'Magento\Catalog\Model\Config\Source\Price\Scope'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Price_Step',
-        'Magento\Catalog\Model\Config\Source\Price\Step'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Product_Options_Price',
+    array('Mage_Adminhtml_Model_System_Config_Source_Payment_Cctype', 'Magento\Payment\Model\Config\Source\Cctype'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Price_Scope', 'Magento\Catalog\Model\Config\Source\Price\Scope'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Price_Step', 'Magento\Catalog\Model\Config\Source\Price\Step'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Product_Options_Price',
         'Magento\Catalog\Model\Config\Source\Product\Options\Price'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Product_Options_Type',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Product_Options_Type',
         'Magento\Catalog\Model\Config\Source\Product\Options\Type'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Product_Thumbnail',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Product_Thumbnail',
         'Magento\Catalog\Model\Config\Source\Product\Thumbnail'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Reports_Scope',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Reports_Scope',
         'Magento\Backend\Model\Config\Source\Reports\Scope'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Allmethods',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Shipping_Allmethods',
         'Magento\Shipping\Model\Config\Source\Allmethods'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Allspecificcountries',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Shipping_Allspecificcountries',
         'Magento\Shipping\Model\Config\Source\Allspecificcountries'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Flatrate',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Shipping_Flatrate',
         'Magento\OfflineShipping\Model\Config\Source\Flatrate'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Tablerate',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Shipping_Tablerate',
         'Magento\OfflineShipping\Model\Config\Source\Tablerate'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Shipping_Taxclass',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Shipping_Taxclass',
         'Magento\Tax\Model\Config\Source\TaxClass\Product'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
         'Magento\Backend\Model\Config\Source\Storage\Media\Database'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Storage',
         'Magento\Backend\Model\Config\Source\Storage\Media\Storage'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On',
-        'Magento\Tax\Model\Config\Source\Apply\On'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon',
-        'Magento\Tax\Model\Config\Source\Basedon'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Catalog',
-        'Magento\Tax\Model\Config\Source\Catalog'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Watermark_Position',
+    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Apply_On', 'Magento\Tax\Model\Config\Source\Apply\On'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Basedon', 'Magento\Tax\Model\Config\Source\Basedon'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Tax_Catalog', 'Magento\Tax\Model\Config\Source\Catalog'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Watermark_Position',
         'Magento\Catalog\Model\Config\Source\Watermark\Position'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Web_Protocol',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Web_Protocol',
         'Magento\Backend\Model\Config\Source\Web\Protocol'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Web_Redirect',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Web_Redirect',
         'Magento\Backend\Model\Config\Source\Web\Redirect'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Allregion',
-        'Magento\Directory\Model\Config\Source\Allregion'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Category',
-        'Magento\Catalog\Model\Config\Source\Category'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Checktype',
-        'Magento\Backend\Model\Config\Source\Checktype'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Country',
-        'Magento\Directory\Model\Config\Source\Country'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Currency',
-        'Magento\Backend\Model\Config\Source\Currency'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Enabledisable',
+    array('Mage_Adminhtml_Model_System_Config_Source_Allregion', 'Magento\Directory\Model\Config\Source\Allregion'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Category', 'Magento\Catalog\Model\Config\Source\Category'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Checktype', 'Magento\Backend\Model\Config\Source\Checktype'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Country', 'Magento\Directory\Model\Config\Source\Country'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Currency', 'Magento\Backend\Model\Config\Source\Currency'),
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Enabledisable',
         'Magento\Backend\Model\Config\Source\Enabledisable'
     ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Frequency',
-        'Magento\Sitemap\Model\Config\Source\Frequency'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Locale',
-        'Magento\Backend\Model\Config\Source\Locale'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Nooptreq',
-        'Magento\Backend\Model\Config\Source\Nooptreq'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Store',
-        'Magento\Backend\Model\Config\Source\Store'
-    ),
-    array('Mage_Adminhtml_Model_System_Config_Source_Website',
-        'Magento\Backend\Model\Config\Source\Website'
-    ),
+    array('Mage_Adminhtml_Model_System_Config_Source_Frequency', 'Magento\Sitemap\Model\Config\Source\Frequency'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Locale', 'Magento\Backend\Model\Config\Source\Locale'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Nooptreq', 'Magento\Backend\Model\Config\Source\Nooptreq'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Store', 'Magento\Backend\Model\Config\Source\Store'),
+    array('Mage_Adminhtml_Model_System_Config_Source_Website', 'Magento\Backend\Model\Config\Source\Website'),
     array('Mage_Adminhtml_Model_System_Config_Source_Yesno', 'Magento\Backend\Model\Config\Source\Yesno'),
-    array('Mage_Adminhtml_Model_System_Config_Source_Yesnocustom',
-        'Magento\Backend\Model\Config\Source\Yesnocustom'
-    ),
+    array('Mage_Adminhtml_Model_System_Config_Source_Yesnocustom', 'Magento\Backend\Model\Config\Source\Yesnocustom'),
     array('Mage_Adminhtml_Model_System_Store', 'Magento\Core\Model\System\Store'),
     array('Mage_Adminhtml_Model_Url', 'Magento\Backend\Model\UrlInterface'),
     array('Mage_Adminhtml_Rss_CatalogController'),
     array('Mage_Adminhtml_Rss_OrderController'),
     array('Mage_Adminhtml_SystemController', 'Magento\Backend\Controller\Adminhtml\System'),
     array('Mage_Adminhtml_System_ConfigController', 'Magento\Backend\Controller\Adminhtml\System\Config'),
-    array('Magento\Backend\Model\Config\Source\Currency\Service',
-        'Magento\Directory\Model\Currency\Import\Source\Service'),
+    array(
+        'Magento\Backend\Model\Config\Source\Currency\Service',
+        'Magento\Directory\Model\Currency\Import\Source\Service'
+    ),
     array('Mage_Backend_Model_Menu_Config_Menu'),
     array('Mage_Backend_Model_Menu_Director_Dom'),
     array('Mage_Backend_Model_Menu_Factory', 'Mage_Backend_Model_MenuFactory'),
@@ -689,6 +694,49 @@ return array(
         'Magento\Catalog\Block\Product\View\Type\Configurable',
         'Magento\ConfigurableProduct\Block\Product\View\Type\Configurable'
     ),
+    array(
+        'Magento\Catalog\Block\Layer\Filter\AbstractFilter', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array('Magento\Catalog\Block\Layer\Filter\Attribute', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
+    array('Magento\Catalog\Block\Layer\Filter\Category', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
+    array('Magento\Catalog\Block\Layer\Filter\Decimal', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
+    array('Magento\Catalog\Block\Layer\Filter\Price', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
+    array('Magento\Catalog\Block\Layer\State', 'Magento\LayeredNavigation\Block\Navigation\State'),
+    array('Magento\Catalog\Block\Layer\View', 'Magento\LayeredNavigation\Block\Navigation'),
+    array('Magento\CatalogSearch\Block\Layer', 'Magento\LayeredNavigation\Block\Navigation'),
+    array(
+        'Magento\CatalogSearch\Block\Layer\Filter\Attribute',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array('Magento\CatalogSearch\Model\Layer', 'Magento\Catalog\Model\Layer'),
+    array('Magento\CatalogSearch\Model\Layer\Filter\Attribute'),
+    array('Magento\Search\Block\Catalog\Layer\View', 'Magento\LayeredNavigation\Block\Navigation'),
+    array(
+        'Magento\Search\Block\Catalog\Layer\Filter\Attribute',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array(
+        'Magento\Search\Block\Catalog\Layer\Filter\Category',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array(
+        'Magento\Search\Block\Catalog\Layer\Filter\Decimal', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array(
+        'Magento\Search\Block\Catalog\Layer\Filter\Price', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array(
+        'Magento\Search\Block\Catalogsearch\Layer\Filter\Attribute',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+    ),
+    array('Magento\Search\Block\Catalogsearch\Layer', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
+    array('Magento\Search\Model\Catalog\Layer', 'Magento\Catalog\Model\Layer\Category'),
+    array('Magento\Search\Model\Catalog\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'),
+    array('Magento\Search\Model\Catalog\Layer\Filter\Category', 'Magento\Catalog\Model\Layer\Filter\Category'),
+    array('Magento\Search\Model\Catalog\Layer\Filter\Decimal', 'Magento\Catalog\Model\Layer\Filter\Decimal'),
+    array('Magento\Search\Model\Catalog\Layer\Filter\Price', 'Magento\Catalog\Model\Layer\Filter\Price'),
+    array('Magento\Search\Model\Search\Layer\Filter\Attribute', 'Magento\Catalog\Model\Layer\Filter\Attribute'),
+    array('Magento\Search\Model\Search\Layer', 'Magento\Catalog\Model\Layer'),
     array(
         'Magento\Catalog\Model\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable'
@@ -776,8 +824,10 @@ return array(
     array('Mage_Customer_Block_Account_Navigation'),
     array('Mage_Customer_Model_Convert_Adapter_Customer'),
     array('Mage_Customer_Model_Convert_Parser_Customer'),
-    array('Mage_Customer_Model_Resource_Address_Attribute_Backend_Street',
-        'Mage_Eav_Model_Entity_Attribute_Backend_Default'),
+    array(
+        'Mage_Customer_Model_Resource_Address_Attribute_Backend_Street',
+        'Mage_Eav_Model_Entity_Attribute_Backend_Default'
+    ),
     array('Mage_DesignEditor_Block_Page_Html_Head_Vde'),
     array('Mage_DesignEditor_Block_Page_Html_Head'),
     array('Mage_Directory_Model_Resource_Currency_Collection'),
@@ -809,26 +859,40 @@ return array(
     array('Mage_Reports_Model_Resource_Coupons_Collection'),
     array('Mage_Reports_Model_Resource_Invoiced_Collection'),
     array('Mage_Reports_Model_Resource_Product_Ordered_Collection'),
-    array('Mage_Reports_Model_Resource_Product_Viewed_Collection',
-        'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection'),
+    array(
+        'Mage_Reports_Model_Resource_Product_Viewed_Collection',
+        'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection'
+    ),
     array('Mage_Reports_Model_Resource_Refunded_Collection'),
     array('Mage_Reports_Model_Resource_Shipping_Collection'),
     array('Mage_Reports_Model_Report'),
     array('Mage_Reports_Model_Test'),
     array('Mage_Rss_Model_Observer'),
     array('Mage_Rss_Model_Session', 'Magento_Backend_Model_Auth and \Magento\Backend\Model\Auth\Session'),
-    array('Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Tracking',
-        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Tracking',
-        'Magento\Shipping\Block\Adminhtml\Order\Tracking'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging',
-        '\Magento\Shipping\Block\Adminhtml\Order\Packaging'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging\Grid',
-        '\Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\Tracking\Info',
-        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'),
-    array('Magento\Sales\Block\Adminhtml\Order\Shipment\View\Tracking',
-        'Magento\Shipping\Block\Adminhtml\Order\Tracking\View'),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Tracking',
+        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\Create\Tracking',
+        'Magento\Shipping\Block\Adminhtml\Order\Tracking'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging',
+        '\Magento\Shipping\Block\Adminhtml\Order\Packaging'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\Packaging\Grid',
+        '\Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\Tracking\Info',
+        '\Magento\Shipping\Block\Adminhtml\Order\Tracking'
+    ),
+    array(
+        'Magento\Sales\Block\Adminhtml\Order\Shipment\View\Tracking',
+        'Magento\Shipping\Block\Adminhtml\Order\Tracking\View'
+    ),
     array('Mage_Sales_Block_Order_Details'),
     array('Mage_Sales_Block_Order_Tax'),
     array('Mage_Sales_Block_Guest_Links'),
@@ -954,12 +1018,18 @@ return array(
     array('Mage_Adminhtml_Block_Notification_Inbox'),
     array('Mage_Adminhtml_Block_Notification_Grid', 'Magento\AdminNotification\Block\Notification\Grid'),
     array('Mage_Adminhtml_Block_Notification_Baseurl'),
-    array('Mage_Adminhtml_Block_Notification_Grid_Renderer_Severity',
-        'Magento\AdminNotification\Block\Grid\Renderer\Severity'),
-    array('Mage_Adminhtml_Block_Notification_Grid_Renderer_Notice',
-        'Magento\AdminNotification\Block\Grid\Renderer\Notice'),
-    array('Mage_Adminhtml_Block_Notification_Grid_Renderer_Actions',
-        'Magento\AdminNotification\Block\Grid\Renderer\Actions'),
+    array(
+        'Mage_Adminhtml_Block_Notification_Grid_Renderer_Severity',
+        'Magento\AdminNotification\Block\Grid\Renderer\Severity'
+    ),
+    array(
+        'Mage_Adminhtml_Block_Notification_Grid_Renderer_Notice',
+        'Magento\AdminNotification\Block\Grid\Renderer\Notice'
+    ),
+    array(
+        'Mage_Adminhtml_Block_Notification_Grid_Renderer_Actions',
+        'Magento\AdminNotification\Block\Grid\Renderer\Actions'
+    ),
     array('Mage_Adminhtml_Block_Cache_Notifications'),
     array('Mage_AdminNotification_Block_Grid'),
     array('Mage_Core_Model_Design_Package'),
@@ -971,8 +1041,8 @@ return array(
     array('Mage_DB_Exception'),
     array(
         'Magento\Catalog\Block\Product\View\Media',
-        'Decomposed into \Magento\Catalog\Block\Product\View\Gallery'
-        . ' and \Magento\Catalog\Block\Product\View\BaseImage classes'
+        'Decomposed into \Magento\Catalog\Block\Product\View\Gallery' .
+        ' and \Magento\Catalog\Block\Product\View\BaseImage classes'
     ),
     array('Magento\Wishlist\Block\Links', 'Magento\Wishlist\Block\Link'),
     array('Magento\Wishlist\Block\Render\Item\Price'),
@@ -1173,15 +1243,19 @@ return array(
     array('Magento\Sales\Model\CarrierFactory', 'Magento\Shipping\Model\CarrierFactory'),
     array('Magento\Sales\Model\Order\Pdf\Shipment\Packaging', 'Magento\Shipping\Model\Order\Pdf\Packaging'),
     array(
-        'Magento\Sales\Model\Observer\Backend\RecurringPayment\FormRenderer', 'Magento\RecurringPayment\Model\Observer'
+        'Magento\Sales\Model\Observer\Backend\RecurringPayment\FormRenderer',
+        'Magento\RecurringPayment\Model\Observer'
     ),
-    array('Magento\Sales\Model\Quote\Address\Total\Nominal\AbstractRecurring',
+    array(
+        'Magento\Sales\Model\Quote\Address\Total\Nominal\AbstractRecurring',
         'Magento\RecurringPayment\Model\Quote\Total\AbstractRecurring'
     ),
-    array('Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Initial',
+    array(
+        'Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Initial',
         'Magento\RecurringPayment\Model\Quote\Total\Initial'
     ),
-    array('Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Trial',
+    array(
+        'Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Trial',
         'Magento\RecurringPayment\Model\Quote\Total\Trial'
     ),
     array('Magento\Sales\Model\ResourceFactory'),
@@ -1191,14 +1265,18 @@ return array(
     array('Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'),
     array(
         'Magento\Eav\Model\Entity\Attribute\Backend\Array',
-        'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend'),
-    array('Magento\Sales\Model\Resource\Helper\HelperInterface', 'Magento\Sales\Model\Resource\HelperInterface'
+        'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend'
     ),
+    array('Magento\Sales\Model\Resource\Helper\HelperInterface', 'Magento\Sales\Model\Resource\HelperInterface'),
     array('Magento\Reports\Model\Resource\Helper\HelperInterface', 'Magento\Reports\Model\Resource\HelperInterface'),
-    array('Magento\Payment\Block\Catalog\Product\View\Profile',
-        'Magento\RecurringPayment\Block\Catalog\Product\View\Payment'),
-    array('Magento\Payment\Model\Recurring\Profile\MethodInterface',
-        'Magento\RecurringPayment\Model\ManagerInterface'),
+    array(
+        'Magento\Payment\Block\Catalog\Product\View\Profile',
+        'Magento\RecurringPayment\Block\Catalog\Product\View\Payment'
+    ),
+    array(
+        'Magento\Payment\Model\Recurring\Profile\MethodInterface',
+        'Magento\RecurringPayment\Model\ManagerInterface'
+    ),
     array('Magento\Poll\Block\ActivePoll'),
     array('Magento\Poll\Controller\Vote'),
     array('Magento\Poll\Helper\Data'),
@@ -1295,16 +1373,13 @@ return array(
         'Magento\Core\Model\Design\FileResolution\Strategy\Fallback',
         'Magento\View\Design\FileResolution\Strategy\Fallback'
     ),
-    array(
-        'Magento\Core\Model\Design\FileResolution\StrategyPool',
-        'Magento\View\Design\FileResolution\StrategyPool'
-    ),
-    array('Magento\Core\Model\Layout\File','Magento\View\Layout\File'),
-    array('Magento\Core\Model\Layout\File\Factory','Magento\View\Layout\File\Factory'),
-    array('Magento\Core\Model\Layout\File\FileList\Factory','Magento\View\Layout\File\FileList\Factory'),
-    array('Magento\Core\Model\Layout\File\ListFile','Magento\View\Layout\File\FileList'),
-    array('Magento\Core\Model\Layout\File\Source\Aggregated','Magento\View\Layout\File\Source\Aggregated'),
-    array('Magento\Core\Model\Layout\File\Source\Base','Magento\View\Layout\File\Source\Base'),
+    array('Magento\Core\Model\Design\FileResolution\StrategyPool', 'Magento\View\Design\FileResolution\StrategyPool'),
+    array('Magento\Core\Model\Layout\File', 'Magento\View\Layout\File'),
+    array('Magento\Core\Model\Layout\File\Factory', 'Magento\View\Layout\File\Factory'),
+    array('Magento\Core\Model\Layout\File\FileList\Factory', 'Magento\View\Layout\File\FileList\Factory'),
+    array('Magento\Core\Model\Layout\File\ListFile', 'Magento\View\Layout\File\FileList'),
+    array('Magento\Core\Model\Layout\File\Source\Aggregated', 'Magento\View\Layout\File\Source\Aggregated'),
+    array('Magento\Core\Model\Layout\File\Source\Base', 'Magento\View\Layout\File\Source\Base'),
     array(
         'Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency',
         'Magento\View\Layout\File\Source\Decorator\ModuleDependency'
@@ -1331,7 +1406,8 @@ return array(
     ),
     array(
         'Magento\Adminhtml\Block\Promo\Catalog\Edit\Js',
-        'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'),
+        'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'
+    ),
     array(
         'Magento\Adminhtml\Block\Promo\Catalog\Edit\Tab\Actions',
         'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab\Actions'
@@ -1348,15 +1424,8 @@ return array(
         'Magento\Adminhtml\Block\Promo\Catalog\Edit\Tabs',
         'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'
     ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Catalog\Edit',
-        'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Catalog',
-        'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog'
-    ),
-
+    array('Magento\Adminhtml\Block\Promo\Catalog\Edit', 'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit'),
+    array('Magento\Adminhtml\Block\Promo\Catalog', 'Magento\CatalogRule\Block\Adminhtml\Promo\Catalog'),
     array(
         'Magento\Adminhtml\Block\Promo\Widget\Chooser\Daterange',
         'Magento\CatalogRule\Block\Adminhtml\Widget\Chooser\Daterange'
@@ -1365,14 +1434,8 @@ return array(
         'Magento\Adminhtml\Block\Promo\Widget\Chooser\Sku',
         'Magento\CatalogRule\Block\Adminhtml\Widget\Chooser\Sku'
     ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Widget\Chooser',
-        'Magento\CatalogRule\Block\Adminhtml\Widget\Chooser'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Quote\Edit\Form',
-        'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Form'
-    ),
+    array('Magento\Adminhtml\Block\Promo\Widget\Chooser', 'Magento\CatalogRule\Block\Adminhtml\Widget\Chooser'),
+    array('Magento\Adminhtml\Block\Promo\Quote\Edit\Form', 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Form'),
     array(
         'Magento\Adminhtml\Block\Promo\Quote\Edit\Tab\Actions',
         'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Actions'
@@ -1409,110 +1472,38 @@ return array(
         'Magento\Adminhtml\Block\Promo\Quote\Edit\Tab\Main',
         'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main'
     ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Quote\Edit\Tabs',
-        'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tabs'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Quote\Edit',
-        'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Promo\Quote',
-        'Magento\SalesRule\Block\Adminhtml\Promo\Quote'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Promo\Catalog',
-        'Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Promo\Quote',
-        'Magento\SalesRule\Controller\Adminhtml\Promo\Quote'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Promo\Widget',
-        'Magento\CatalogRule\Controller\Adminhtml\Promo\Widget'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Promo',
-        'Magento\CatalogRule\Controller\Adminhtml\Promo'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\System\Account',
-        'Magento\Backend\Controller\Adminhtml\System\Account',
-    ),
-    array(
-        'Magento\Adminhtml\Controller\System\Backup',
-        'Magento\Backend\Controller\Adminhtml\System\Backup',
-    ),
+    array('Magento\Adminhtml\Block\Promo\Quote\Edit\Tabs', 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tabs'),
+    array('Magento\Adminhtml\Block\Promo\Quote\Edit', 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit'),
+    array('Magento\Adminhtml\Block\Promo\Quote', 'Magento\SalesRule\Block\Adminhtml\Promo\Quote'),
+    array('Magento\Adminhtml\Controller\Promo\Catalog', 'Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog'),
+    array('Magento\Adminhtml\Controller\Promo\Quote', 'Magento\SalesRule\Controller\Adminhtml\Promo\Quote'),
+    array('Magento\Adminhtml\Controller\Promo\Widget', 'Magento\CatalogRule\Controller\Adminhtml\Promo\Widget'),
+    array('Magento\Adminhtml\Controller\Promo', 'Magento\CatalogRule\Controller\Adminhtml\Promo'),
+    array('Magento\Adminhtml\Controller\System\Account', 'Magento\Backend\Controller\Adminhtml\System\Account'),
+    array('Magento\Adminhtml\Controller\System\Backup', 'Magento\Backend\Controller\Adminhtml\System\Backup'),
     array(
         'Magento\Adminhtml\Controller\System\Config\System\Storage',
-        'Magento\Backend\Controller\Adminhtml\System\Config\System\Storage',
+        'Magento\Backend\Controller\Adminhtml\System\Config\System\Storage'
     ),
-    array(
-        'Magento\Adminhtml\Controller\System\Design',
-        'Magento\Backend\Controller\Adminhtml\System\Design',
-    ),
-    array(
-        'Magento\Adminhtml\Controller\System\Store',
-        'Magento\Backend\Controller\Adminhtml\System\Store',
-    ),
-    array(
-        'Magento\Adminhtml\Controller\System\Variable',
-        'Magento\Backend\Controller\Adminhtml\System\Variable',
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Account\Edit\Form',
-        'Magento\Backend\Block\System\Account\Edit\Form'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Account\Edit',
-        'Magento\Backend\Block\System\Account\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Cache\Edit',
-        'Magento\Backend\Block\System\Cache\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Cache\Form',
-        'Magento\Backend\Block\System\Cache\Form'
-    ),
+    array('Magento\Adminhtml\Controller\System\Design', 'Magento\Backend\Controller\Adminhtml\System\Design'),
+    array('Magento\Adminhtml\Controller\System\Store', 'Magento\Backend\Controller\Adminhtml\System\Store'),
+    array('Magento\Adminhtml\Controller\System\Variable', 'Magento\Backend\Controller\Adminhtml\System\Variable'),
+    array('Magento\Adminhtml\Block\System\Account\Edit\Form', 'Magento\Backend\Block\System\Account\Edit\Form'),
+    array('Magento\Adminhtml\Block\System\Account\Edit', 'Magento\Backend\Block\System\Account\Edit'),
+    array('Magento\Adminhtml\Block\System\Cache\Edit', 'Magento\Backend\Block\System\Cache\Edit'),
+    array('Magento\Adminhtml\Block\System\Cache\Form', 'Magento\Backend\Block\System\Cache\Form'),
     array(
         'Magento\Adminhtml\Block\System\Design\Edit\Tab\General',
         'Magento\Backend\Block\System\Design\Edit\Tab\General'
     ),
-    array(
-        'Magento\Adminhtml\Block\System\Design\Edit\Tabs',
-        'Magento\Backend\Block\System\Design\Edit\Tabs'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Design\Edit',
-        'Magento\Backend\Block\System\Design\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Design',
-        'Magento\Backend\Block\System\Design'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Shipping\Ups',
-        'Magento\Backend\Block\System\Shipping\Ups'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Delete\Form',
-        'Magento\Backend\Block\System\Store\Delete\Form'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Delete\Group',
-        'Magento\Backend\Block\System\Store\Delete\Group'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Delete\Website',
-        'Magento\Backend\Block\System\Store\Delete\Website'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Delete',
-        'Magento\Backend\Block\System\Store\Delete'
-    ),
+    array('Magento\Adminhtml\Block\System\Design\Edit\Tabs', 'Magento\Backend\Block\System\Design\Edit\Tabs'),
+    array('Magento\Adminhtml\Block\System\Design\Edit', 'Magento\Backend\Block\System\Design\Edit'),
+    array('Magento\Adminhtml\Block\System\Design', 'Magento\Backend\Block\System\Design'),
+    array('Magento\Adminhtml\Block\System\Shipping\Ups', 'Magento\Backend\Block\System\Shipping\Ups'),
+    array('Magento\Adminhtml\Block\System\Store\Delete\Form', 'Magento\Backend\Block\System\Store\Delete\Form'),
+    array('Magento\Adminhtml\Block\System\Store\Delete\Group', 'Magento\Backend\Block\System\Store\Delete\Group'),
+    array('Magento\Adminhtml\Block\System\Store\Delete\Website', 'Magento\Backend\Block\System\Store\Delete\Website'),
+    array('Magento\Adminhtml\Block\System\Store\Delete', 'Magento\Backend\Block\System\Store\Delete'),
     array(
         'Magento\Adminhtml\Block\System\Store\Edit\AbstractForm',
         'Magento\Backend\Block\System\Store\Edit\AbstractForm'
@@ -1529,10 +1520,7 @@ return array(
         'Magento\Adminhtml\Block\System\Store\Edit\Form\Website',
         'Magento\Backend\Block\System\Store\Edit\Form\Website'
     ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Edit',
-        'Magento\Backend\Block\System\Store\Edit'
-    ),
+    array('Magento\Adminhtml\Block\System\Store\Edit', 'Magento\Backend\Block\System\Store\Edit'),
     array(
         'Magento\Adminhtml\Block\System\Store\Grid\Render\Group',
         'Magento\Backend\Block\System\Store\Grid\Render\Group'
@@ -1545,42 +1533,18 @@ return array(
         'Magento\Adminhtml\Block\System\Store\Grid\Render\Website',
         'Magento\Backend\Block\System\Store\Grid\Render\Website'
     ),
-    array(
-        'Magento\Adminhtml\Block\System\Store\Store',
-        'Magento\Backend\Block\System\Store\Store'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Variable\Edit\Form',
-        'Magento\Backend\Block\System\Variable\Edit\Form'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Variable\Edit',
-        'Magento\Backend\Block\System\Variable\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\System\Variable',
-        'Magento\Backend\Block\System\Variable'
-    ),
+    array('Magento\Adminhtml\Block\System\Store\Store', 'Magento\Backend\Block\System\Store\Store'),
+    array('Magento\Adminhtml\Block\System\Variable\Edit\Form', 'Magento\Backend\Block\System\Variable\Edit\Form'),
+    array('Magento\Adminhtml\Block\System\Variable\Edit', 'Magento\Backend\Block\System\Variable\Edit'),
+    array('Magento\Adminhtml\Block\System\Variable', 'Magento\Backend\Block\System\Variable'),
     array(
         'Magento\Adminhtml\Block\Checkout\Agreement\Edit\Form',
         'Magento\Checkout\Block\Adminhtml\Agreement\Edit\Form'
     ),
-    array(
-        'Magento\Adminhtml\Block\Checkout\Agreement\Edit',
-        'Magento\Checkout\Block\Adminhtml\Agreement\Edit'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Checkout\Agreement\Grid',
-        'Magento\Checkout\Block\Adminhtml\Agreement\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Checkout\Agreement',
-        'Magento\Checkout\Block\Adminhtml\Agreement'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Checkout\Agreement',
-        'Magento\Checkout\Controller\Adminhtml\Agreement'
-    ),
+    array('Magento\Adminhtml\Block\Checkout\Agreement\Edit', 'Magento\Checkout\Block\Adminhtml\Agreement\Edit'),
+    array('Magento\Adminhtml\Block\Checkout\Agreement\Grid', 'Magento\Checkout\Block\Adminhtml\Agreement\Grid'),
+    array('Magento\Adminhtml\Block\Checkout\Agreement', 'Magento\Checkout\Block\Adminhtml\Agreement'),
+    array('Magento\Adminhtml\Controller\Checkout\Agreement', 'Magento\Checkout\Controller\Adminhtml\Agreement'),
     array('Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\View\PublicFilesManagerInterface'),
     array('Magento\Core\Model\View\DeployedFilesManager', 'Magento\View\DeployedFilesManager'),
     array('Magento\Core\Model\View\Publisher', 'Magento\View\Publisher'),
@@ -1644,34 +1608,13 @@ return array(
     array('Magento\App\Helper\HelperFactory'),
     array('Magento\Core\Helper\AbstractHelper', 'Magento\App\Helper\AbstractHelper'),
     array('Magento\Core\Helper\Context', 'Magento\App\Helper\Context'),
-    array(
-        'Magento\Adminhtml\Controller\Report\AbstractReport',
-        'Magento\Reports\Controller\Adminhtml\AbstractReport'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Customer',
-        'Magento\Reports\Controller\Adminhtml\Customer'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Product',
-        'Magento\Reports\Controller\Adminhtml\Product'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Review',
-        'Magento\Reports\Controller\Adminhtml\Review'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Sales',
-        'Magento\Reports\Controller\Adminhtml\Sales'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Shopcart',
-        'Magento\Reports\Controller\Adminhtml\Shopcart'
-    ),
-    array(
-        'Magento\Adminhtml\Controller\Report\Statistics',
-        'Magento\Reports\Controller\Adminhtml\Statistics'
-    ),
+    array('Magento\Adminhtml\Controller\Report\AbstractReport', 'Magento\Reports\Controller\Adminhtml\AbstractReport'),
+    array('Magento\Adminhtml\Controller\Report\Customer', 'Magento\Reports\Controller\Adminhtml\Customer'),
+    array('Magento\Adminhtml\Controller\Report\Product', 'Magento\Reports\Controller\Adminhtml\Product'),
+    array('Magento\Adminhtml\Controller\Report\Review', 'Magento\Reports\Controller\Adminhtml\Review'),
+    array('Magento\Adminhtml\Controller\Report\Sales', 'Magento\Reports\Controller\Adminhtml\Sales'),
+    array('Magento\Adminhtml\Controller\Report\Shopcart', 'Magento\Reports\Controller\Adminhtml\Shopcart'),
+    array('Magento\Adminhtml\Controller\Report\Statistics', 'Magento\Reports\Controller\Adminhtml\Statistics'),
     array(
         'Magento\Adminhtml\Block\Report\Config\Form\Field\MtdStart',
         'Magento\Reports\Block\Adminhtml\Config\Form\Field\MtdStart'
@@ -1680,14 +1623,8 @@ return array(
         'Magento\Adminhtml\Block\Report\Config\Form\Field\YtdStart',
         'Magento\Reports\Block\Adminhtml\Config\Form\Field\YtdStart'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Filter\Form',
-        'Magento\Reports\Block\Adminhtml\Filter\Form'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Grid\AbstractGrid',
-        'Magento\Reports\Block\Adminhtml\Grid\AbstractGrid'
-    ),
+    array('Magento\Adminhtml\Block\Report\Filter\Form', 'Magento\Reports\Block\Adminhtml\Filter\Form'),
+    array('Magento\Adminhtml\Block\Report\Grid\AbstractGrid', 'Magento\Reports\Block\Adminhtml\Grid\AbstractGrid'),
     array(
         'Magento\Adminhtml\Block\Report\Grid\Column\Renderer\Blanknumber',
         'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Blanknumber'
@@ -1704,10 +1641,7 @@ return array(
         'Magento\Adminhtml\Block\Report\Grid\Column\Renderer\Product',
         'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Product'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Grid\Shopcart',
-        'Magento\Reports\Block\Adminhtml\Grid\Shopcart'
-    ),
+    array('Magento\Adminhtml\Block\Report\Grid\Shopcart', 'Magento\Reports\Block\Adminhtml\Grid\Shopcart'),
     array(
         'Magento\Adminhtml\Block\Report\Product\Downloads\Grid',
         'Magento\Reports\Block\Adminhtml\Product\Downloads\Grid'
@@ -1716,150 +1650,60 @@ return array(
         'Magento\Adminhtml\Block\Report\Product\Downloads\Renderer\Purchases',
         'Magento\Reports\Block\Adminhtml\Product\Downloads\Renderer\Purchases'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product\Downloads',
-        'Magento\Reports\Block\Adminhtml\Product\Downloads'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product\Grid',
-        'Magento\Reports\Block\Adminhtml\Product\Grid'
-    ),
+    array('Magento\Adminhtml\Block\Report\Product\Downloads', 'Magento\Reports\Block\Adminhtml\Product\Downloads'),
+    array('Magento\Adminhtml\Block\Report\Product\Grid', 'Magento\Reports\Block\Adminhtml\Product\Grid'),
     array(
         'Magento\Adminhtml\Block\Report\Product\Lowstock\Grid',
         'Magento\Reports\Block\Adminhtml\Product\Lowstock\Grid'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product\Lowstock',
-        'Magento\Reports\Block\Adminhtml\Product\Lowstock'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product\Viewed\Grid',
-        'Magento\Reports\Block\Adminhtml\Product\Viewed\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product\Viewed',
-        'Magento\Reports\Block\Adminhtml\Product\Viewed'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Product',
-        'Magento\Reports\Block\Adminhtml\Product'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Review\Customer',
-        'Magento\Reports\Block\Adminhtml\Review\Customer'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Review\Detail\Grid',
-        'Magento\Reports\Block\Adminhtml\Review\Detail\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Review\Detail',
-        'Magento\Reports\Block\Adminhtml\Review\Detail'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Review\Product',
-        'Magento\Reports\Block\Adminhtml\Review\Product'
-    ),
+    array('Magento\Adminhtml\Block\Report\Product\Lowstock', 'Magento\Reports\Block\Adminhtml\Product\Lowstock'),
+    array('Magento\Adminhtml\Block\Report\Product\Viewed\Grid', 'Magento\Reports\Block\Adminhtml\Product\Viewed\Grid'),
+    array('Magento\Adminhtml\Block\Report\Product\Viewed', 'Magento\Reports\Block\Adminhtml\Product\Viewed'),
+    array('Magento\Adminhtml\Block\Report\Product', 'Magento\Reports\Block\Adminhtml\Product'),
+    array('Magento\Adminhtml\Block\Report\Review\Customer', 'Magento\Reports\Block\Adminhtml\Review\Customer'),
+    array('Magento\Adminhtml\Block\Report\Review\Detail\Grid', 'Magento\Reports\Block\Adminhtml\Review\Detail\Grid'),
+    array('Magento\Adminhtml\Block\Report\Review\Detail', 'Magento\Reports\Block\Adminhtml\Review\Detail'),
+    array('Magento\Adminhtml\Block\Report\Review\Product', 'Magento\Reports\Block\Adminhtml\Review\Product'),
     array(
         'Magento\Adminhtml\Block\Report\Sales\Bestsellers\Grid',
         'Magento\Reports\Block\Adminhtml\Sales\Bestsellers\Grid'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Bestsellers',
-        'Magento\Reports\Block\Adminhtml\Sales\Bestsellers'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Coupons\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Coupons',
-        'Magento\Reports\Block\Adminhtml\Sales\Coupons'
-    ),
+    array('Magento\Adminhtml\Block\Report\Sales\Bestsellers', 'Magento\Reports\Block\Adminhtml\Sales\Bestsellers'),
+    array('Magento\Adminhtml\Block\Report\Sales\Coupons\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Coupons', 'Magento\Reports\Block\Adminhtml\Sales\Coupons'),
     array(
         'Magento\Adminhtml\Block\Report\Sales\Grid\Column\Renderer\Date',
         'Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Invoiced\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Invoiced',
-        'Magento\Reports\Block\Adminhtml\Sales\Invoiced'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Refunded\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Refunded',
-        'Magento\Reports\Block\Adminhtml\Sales\Refunded'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Sales\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Sales\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Sales',
-        'Magento\Reports\Block\Adminhtml\Sales\Sales'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Shipping\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Shipping',
-        'Magento\Reports\Block\Adminhtml\Sales\Shipping'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Tax\Grid',
-        'Magento\Reports\Block\Adminhtml\Sales\Tax\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Sales\Tax',
-        'Magento\Reports\Block\Adminhtml\Sales\Tax'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Search',
-        'Magento\Reports\Block\Adminhtml\Search'
-    ),
+    array('Magento\Adminhtml\Block\Report\Sales\Invoiced\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Invoiced\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Invoiced', 'Magento\Reports\Block\Adminhtml\Sales\Invoiced'),
+    array('Magento\Adminhtml\Block\Report\Sales\Refunded\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Refunded\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Refunded', 'Magento\Reports\Block\Adminhtml\Sales\Refunded'),
+    array('Magento\Adminhtml\Block\Report\Sales\Sales\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Sales\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Sales', 'Magento\Reports\Block\Adminhtml\Sales\Sales'),
+    array('Magento\Adminhtml\Block\Report\Sales\Shipping\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Shipping', 'Magento\Reports\Block\Adminhtml\Sales\Shipping'),
+    array('Magento\Adminhtml\Block\Report\Sales\Tax\Grid', 'Magento\Reports\Block\Adminhtml\Sales\Tax\Grid'),
+    array('Magento\Adminhtml\Block\Report\Sales\Tax', 'Magento\Reports\Block\Adminhtml\Sales\Tax'),
+    array('Magento\Adminhtml\Block\Report\Search', 'Magento\Reports\Block\Adminhtml\Search'),
     array(
         'Magento\Adminhtml\Block\Report\Shopcart\Abandoned\Grid',
         'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Shopcart\Abandoned',
-        'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned'
-    ),
+    array('Magento\Adminhtml\Block\Report\Shopcart\Abandoned', 'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned'),
     array(
         'Magento\Adminhtml\Block\Report\Shopcart\Customer\Grid',
         'Magento\Reports\Block\Adminhtml\Shopcart\Customer\Grid'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Shopcart\Customer',
-        'Magento\Reports\Block\Adminhtml\Shopcart\Customer'
-    ),
+    array('Magento\Adminhtml\Block\Report\Shopcart\Customer', 'Magento\Reports\Block\Adminhtml\Shopcart\Customer'),
     array(
         'Magento\Adminhtml\Block\Report\Shopcart\Product\Grid',
         'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
     ),
-    array(
-        'Magento\Adminhtml\Block\Report\Shopcart\Product',
-        'Magento\Reports\Block\Adminhtml\Shopcart\Product'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Wishlist\Grid',
-        'Magento\Reports\Block\Adminhtml\Wishlist\Grid'
-    ),
-    array(
-        'Magento\Adminhtml\Block\Report\Wishlist',
-        'Magento\Reports\Block\Adminhtml\Wishlist'
-    ),
-    array(
-        'Magento\App\Dir\Verification',
-        'Magento\App\Filesystem\DirectoryList\Verification'
-    ),
+    array('Magento\Adminhtml\Block\Report\Shopcart\Product', 'Magento\Reports\Block\Adminhtml\Shopcart\Product'),
+    array('Magento\Adminhtml\Block\Report\Wishlist\Grid', 'Magento\Reports\Block\Adminhtml\Wishlist\Grid'),
+    array('Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'),
+    array('Magento\App\Dir\Verification', 'Magento\App\Filesystem\DirectoryList\Verification'),
     array('Magento\Backend\Helper\Addresses'),
     array('Magento\Core\Model\Cookie', 'Magento\Stdlib\Cookie'),
     array('Magento\Core\Model\Logger', 'Magento\Logger'),
@@ -1956,10 +1800,7 @@ return array(
         'Magento\Catalog\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection',
         'Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection'
     ),
-    array(
-        'Magento\Catalog\Model\Product\Type\Grouped',
-        'Magento\GroupedProduct\Model\Product\Type\Grouped'
-    ),
+    array('Magento\Catalog\Model\Product\Type\Grouped', 'Magento\GroupedProduct\Model\Product\Type\Grouped'),
     array(
         'Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Grouped',
         'Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped'
@@ -1968,21 +1809,16 @@ return array(
         'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Recurring',
         'Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price\Recurring'
     ),
-    array(
-        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs\Grouped',
-    ),
+    array('Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs\Grouped'),
     array(
         'Magento\Catalog\Block\Product\Grouped\AssociatedProducts',
-        'Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts',
+        'Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts'
     ),
     array(
         'Magento\Catalog\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts',
         'Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts'
     ),
-    array(
-        'Magento\Catalog\Block\Product\View\Type\Grouped',
-        'Magento\GroupedProduct\Block\Product\View\Type\Grouped'
-    ),
+    array('Magento\Catalog\Block\Product\View\Type\Grouped', 'Magento\GroupedProduct\Block\Product\View\Type\Grouped'),
     array(
         'Magento\Sales\Block\Adminhtml\Customer\Edit\Tab\Recurring\Payment',
         'Magento\RecurringPayment\Block\Adminhtml\Customer\Edit\Tab\RecurringPayment'
@@ -1991,10 +1827,7 @@ return array(
         'Magento\Sales\Block\Adminhtml\Items\Column\Name\Grouped',
         'Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name\Grouped'
     ),
-    array(
-        'Magento\Sales\Block\Adminhtml\Recurring\Profile',
-        'Magento\RecurringPayment\Block\Adminhtml\Payment'
-    ),
+    array('Magento\Sales\Block\Adminhtml\Recurring\Profile', 'Magento\RecurringPayment\Block\Adminhtml\Payment'),
     array(
         'Magento\Sales\Block\Adminhtml\Recurring\Profile\Edit\Form',
         'Magento\RecurringPayment\Block\Adminhtml\Payment\Edit\Form'
@@ -2039,34 +1872,13 @@ return array(
         'Magento\Sales\Block\Recurring\Profile\Related\Orders\Grid',
         'Magento\RecurringPayment\Block\Payment\Related\Orders\Grid'
     ),
-    array(
-        'Magento\Sales\Block\Recurring\Profiles',
-        'Magento\RecurringPayment\Block\Profiles'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\Grid',
-        'Magento\RecurringPayment\Block\Payment\Grid'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\View',
-        'Magento\RecurringPayment\Block\Payment\View'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\View\Address',
-        'Magento\RecurringPayment\Block\Payment\View\Address'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\View\Data',
-        'Magento\RecurringPayment\Block\Payment\View\Data'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\View\Fees',
-        'Magento\RecurringPayment\Block\Payment\View\Fees'
-    ),
-    array(
-        'Magento\Sales\Block\Recurring\Profile\View\Item',
-        'Magento\RecurringPayment\Block\Payment\View\Item'
-    ),
+    array('Magento\Sales\Block\Recurring\Profiles', 'Magento\RecurringPayment\Block\Profiles'),
+    array('Magento\Sales\Block\Recurring\Profile\Grid', 'Magento\RecurringPayment\Block\Payment\Grid'),
+    array('Magento\Sales\Block\Recurring\Profile\View', 'Magento\RecurringPayment\Block\Payment\View'),
+    array('Magento\Sales\Block\Recurring\Profile\View\Address', 'Magento\RecurringPayment\Block\Payment\View\Address'),
+    array('Magento\Sales\Block\Recurring\Profile\View\Data', 'Magento\RecurringPayment\Block\Payment\View\Data'),
+    array('Magento\Sales\Block\Recurring\Profile\View\Fees', 'Magento\RecurringPayment\Block\Payment\View\Fees'),
+    array('Magento\Sales\Block\Recurring\Profile\View\Item', 'Magento\RecurringPayment\Block\Payment\View\Item'),
     array(
         'Magento\Sales\Block\Recurring\Profile\View\Reference',
         'Magento\RecurringPayment\Block\Payment\View\Reference'
@@ -2083,15 +1895,18 @@ return array(
         'Magento\ImportExport\Model\Import\Entity\Product\Type\Grouped',
         'Magento\GroupedProduct\Model\Import\Entity\Product\Type\Grouped'
     ),
-    ['CollFactory', 'CollectionFactory'], // no need to shorten anymore
-    ['Magento\Shipping\Model\Rate\Result\AbstractResult', 'Magento\Sales\Model\Quote\Address\RateResult\AbstractResult'],
-    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Sales\Model\Quote\Address\RateResult\Error'],
-    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Sales\Model\Quote\Address\RateResult\Method'],
-    [
+    array('CollFactory', 'CollectionFactory'), // no need to shorten anymore
+    array(
+        'Magento\Shipping\Model\Rate\Result\AbstractResult',
+        'Magento\Sales\Model\Quote\Address\RateResult\AbstractResult'
+    ),
+    array('Magento\Shipping\Model\Rate\Result\Error', 'Magento\Sales\Model\Quote\Address\RateResult\Error'),
+    array('Magento\Shipping\Model\Rate\Result\Method', 'Magento\Sales\Model\Quote\Address\RateResult\Method'),
+    array(
         'Magento\Shipping\Model\Rate\AbstractRate',
         'Magento\Sales\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
-    ],
-    ['Magento\Shipping\Model\Rate\Request', 'Magento\Sales\Model\Quote\Address\RateRequest'],
+    ),
+    array('Magento\Shipping\Model\Rate\Request', 'Magento\Sales\Model\Quote\Address\RateRequest'),
     array('Magento\PageCache\Block\Adminhtml\Cache\Additional'),
     array('Magento\PageCache\Model\Control\ControlInterface'),
     array('Magento\PageCache\Model\Control\Zend'),
@@ -2108,8 +1923,8 @@ return array(
         'Magento\Sales\Model\Resource\Recurring\Profile\Collection',
         'Magento\RecurringPayment\Model\Resource\Payment\Collection'
     ),
-    ['Magento\Payment\Model\Recurring\Profile', 'Magento\RecurringPayment\Model\RecurringPayment'],
-    ['Magento\Validator\Composite\VarienObject', 'Magento\Validator\Object'],
+    array('Magento\Payment\Model\Recurring\Profile', 'Magento\RecurringPayment\Model\RecurringPayment'),
+    array('Magento\Validator\Composite\VarienObject', 'Magento\Validator\Object'),
     array('Magento\GoogleShopping\Helper\Price', 'Magento\Catalog\Model\Product\CatalogPrice'),
     array('Magento\Core\Model\Layout\Argument\Handler\ArrayHandler', 'Magento\Data\Argument\Interpreter\ArrayType'),
     array('Magento\Core\Model\Layout\Argument\Handler\String', 'Magento\Data\Argument\Interpreter\String'),
@@ -2118,12 +1933,18 @@ return array(
     array('Magento\Core\Model\Layout\Argument\Handler\Object', 'Magento\View\Layout\Argument\Interpreter\Object'),
     array('Magento\Core\Model\Layout\Argument\Handler\Options', 'Magento\View\Layout\Argument\Interpreter\Options'),
     array('Magento\Core\Model\Layout\Argument\Handler\Url', 'Magento\View\Layout\Argument\Interpreter\Url'),
-    array('Magento\Core\Model\Layout\Argument\Handler\Helper', 'Magento\View\Layout\Argument\Interpreter\HelperMethod'),
+    array(
+        'Magento\Core\Model\Layout\Argument\Handler\Helper',
+        'Magento\View\Layout\Argument\Interpreter\HelperMethod'
+    ),
     array(
         'Magento\Core\Model\Layout\Argument\AbstractHandler',
         'Magento\View\Layout\Argument\Interpreter\Decorator\Updater'
     ),
-    array('Magento\Core\Model\Layout\Argument\Processor', 'Magento\View\Layout\Argument\Interpreter\Decorator\Updater'),
+    array(
+        'Magento\Core\Model\Layout\Argument\Processor',
+        'Magento\View\Layout\Argument\Interpreter\Decorator\Updater'
+    ),
     array('Magento\Core\Model\Layout\Argument\Updater', 'Magento\View\Layout\Argument\Interpreter\Decorator\Updater'),
     array('Magento\Core\Model\Layout\Argument\UpdaterInterface', 'Magento\View\Layout\Argument\UpdaterInterface'),
     array('Magento\View\Layout\Argument\HandlerInterface', 'Magento\Data\Argument\InterpreterInterface'),
@@ -2157,93 +1978,130 @@ return array(
         'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'
     ),
     array('Magento\Catalog\Model\Resource\Product\Collection\AssociatedProductUpdater'),
-    ['Magento\Sales\Controller\Adminhtml\Recurring\Profile', 'Magento\RecurringPayment\Controller\Adminhtml\Payment'],
-    ['Magento\Sales\Controller\Recurring\Profile', 'Magento\RecurringPayment\Controller\Payment'],
-    ['Magento\Core\Model\Image\Adapter\Config', 'Magento\Image\Adapter\Config'],
-    ['Magento\Core\Model\AbstractShell', 'Magento\App\AbstractShell'],
-    ['Magento\Core\Model\Calculator', 'Magento\Math\Calculator'],
-    ['Magento\Core\Model\Log\Adapter', 'Magento\Logger\Adapter'],
-    ['Magento\Core\Model\Input\Filter', 'Magento\Filter\Input'],
-    ['Magento\Core\Model\Input\Filter\MaliciousCode', 'Magento\Filter\Input\MaliciousCode'],
-    ['Magento\Core\Model\Option\ArrayInterface', 'Magento\Option\ArrayInterface'],
-    ['Magento\Core\Model\Option\ArrayPool', 'Magento\Option\ArrayPool'],
-    ['Magento\Core\Helper\String', 'Magento\Code\NameBuilder'],
-    ['Magento\Core\Model\Context', 'Magento\Model\Context'],
-    ['Magento\Core\Model\Registry', 'Magento\Registry'],
-    ['Magento\Code\Plugin\InvocationChain'],
-    ['RecurringProfile', 'RecurringPayment'], // recurring profile was renamed to recurring payment
-    ['Recurring\Profile', 'Recurring\Payment'], // recurring profile was renamed to recurring payment
-    ['Magento\Catalog\Helper\Product\Flat'],
-    ['Magento\Catalog\Helper\Flat\AbstractFlat'],
-    ['Magento\Core\App\Action\Plugin\Session', 'Magento\Core\Block\RequireCookie'],
-    [
+    array(
+        'Magento\Sales\Controller\Adminhtml\Recurring\Profile',
+        'Magento\RecurringPayment\Controller\Adminhtml\Payment'
+    ),
+    array('Magento\Sales\Controller\Recurring\Profile', 'Magento\RecurringPayment\Controller\Payment'),
+    array('Magento\Core\Model\Image\Adapter\Config', 'Magento\Image\Adapter\Config'),
+    array('Magento\Core\Model\AbstractShell', 'Magento\App\AbstractShell'),
+    array('Magento\Core\Model\Calculator', 'Magento\Math\Calculator'),
+    array('Magento\Core\Model\Log\Adapter', 'Magento\Logger\Adapter'),
+    array('Magento\Core\Model\Input\Filter', 'Magento\Filter\Input'),
+    array('Magento\Core\Model\Input\Filter\MaliciousCode', 'Magento\Filter\Input\MaliciousCode'),
+    array('Magento\Core\Model\Option\ArrayInterface', 'Magento\Option\ArrayInterface'),
+    array('Magento\Core\Model\Option\ArrayPool', 'Magento\Option\ArrayPool'),
+    array('Magento\Core\Helper\String', 'Magento\Code\NameBuilder'),
+    array('Magento\Core\Model\Context', 'Magento\Model\Context'),
+    array('Magento\Core\Model\Registry', 'Magento\Registry'),
+    array('Magento\Code\Plugin\InvocationChain'),
+    array('RecurringProfile', 'RecurringPayment'), // recurring profile was renamed to recurring payment
+    array('Recurring\Profile', 'Recurring\Payment'), // recurring profile was renamed to recurring payment
+    array('Magento\Catalog\Helper\Product\Flat'),
+    array('Magento\Catalog\Helper\Flat\AbstractFlat'),
+    array('Magento\Core\App\Action\Plugin\Session', 'Magento\Core\Block\RequireCookie'),
+    array(
         'Magento\Core\Model\LocaleInterface',
-        'Magento\Locale\ResolverInterface, Magento\Locale\CurrencyInterface,'
-        . 'Magento\Locale\FormatInterface, Magento\Stdlib\DateTime\TimezoneInterface'
-    ],
-    [
+        'Magento\Locale\ResolverInterface, Magento\Locale\CurrencyInterface,' .
+        'Magento\Locale\FormatInterface, Magento\Stdlib\DateTime\TimezoneInterface'
+    ),
+    array(
         'Magento\Core\Model\Locale',
-        'Magento\Locale\Resolver, Magento\Locale\Currency, Magento\Locale\Format, '
-        . 'Magento\Stdlib\DateTime\Timezone, Magento\Locale\Lists'
-    ],
-    ['Magento\Core\Model\Locale\Hierarchy\Config\Converter', 'Magento\Locale\Hierarchy\Config\Converter'],
-    ['Magento\Core\Model\Locale\Hierarchy\Config\FileResolver', 'Magento\Locale\Hierarchy\Config\FileResolver'],
-    ['Magento\Core\Model\Locale\Hierarchy\Config\Reader', 'Magento\Locale\Hierarchy\Config\Reader'],
-    ['Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator', 'Magento\Locale\Hierarchy\Config\SchemaLocator'],
-    ['Magento\Core\Model\Locale\Config', 'Magento\Locale\Config'],
-    ['Magento\Core\Model\Locale\Validator', 'Magento\Locale\Validator'],
-    ['Magento\Core\Model\Date', 'Magento\Stdlib\DateTime\DateTime'],
-    ['Magento\Shipping\Model\Config\Source\Flatrate', 'Magento\OfflineShipping\Model\Config\Source\Flatrate'],
-    ['Magento\Shipping\Model\Carrier\Flatrate', 'Magento\OfflineShipping\Model\Carrier\Flatrate'],
-    ['Magento\Usa\Block\Adminhtml\Dhl\Unitofmeasure', 'Magento\Dhl\Block\Adminhtml\Unitofmeasure'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International', 'Magento\Dhl\Model\Carrier'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\AbstractMethod', 'Magento\Dhl\Model\Source\Method\AbstractMethod'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Doc', 'Magento\Dhl\Model\Source\Method\Doc'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freedoc', 'Magento\Dhl\Model\Source\Method\Freedoc'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freenondoc', 'Magento\Dhl\Model\Source\Method\Freenondoc'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Generic', 'Magento\Dhl\Model\Source\Method\Generic'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Nondoc', 'Magento\Dhl\Model\Source\Method\Nondoc'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Size', 'Magento\Dhl\Model\Source\Method\Size'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Unitofmeasure', 'Magento\Dhl\Model\Source\Method\Unitofmeasure'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl', 'Magento\Dhl\Model\AbstractDhl'],
-    ['Magento\Usa\Model\Shipping\Carrier\Dhl'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex', 'Magento\Fedex\Model\Carrier'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Droppff', 'Magento\Fedex\Model\Source\Droppff'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Freemethod', 'Magento\Fedex\Model\Source\Freemethod'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Generic', 'Magento\Fedex\Model\Source\Generic'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Method', 'Magento\Fedex\Model\Source\Method'],
-    ['Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Packaging', 'Magento\Fedex\Model\Source\Packaging'],
-    ['Magento\Rma\Model\CarrierFactory'],
-    ['Magento\Usa\Helper\Data'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Mode'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Container', 'Magento\Ups\Model\Config\Source\Container'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\DestType', 'Magento\Ups\Model\Config\Source\DestType'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Freemethod', 'Magento\Ups\Model\Config\Source\Freemethod'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Generic', 'Magento\Ups\Model\Config\Source\Generic'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Method', 'Magento\Ups\Model\Config\Source\Method'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\OriginShipment', 'Magento\Ups\Model\Config\Source\OriginShipment'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Pickup', 'Magento\Ups\Model\Config\Source\Pickup'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Type', 'Magento\Ups\Model\Config\Source\Type'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups\Source\Unitofmeasure', 'Magento\Ups\Model\Config\Source\Unitofmeasure'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Container', 'Magento\Usps\Model\Source\Container'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Freemethod', 'Magento\Usps\Model\Source\Freemethod'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Generic', 'Magento\Usps\Model\Source\Generic'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Machinable', 'Magento\Usps\Model\Source\Machinable'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Method', 'Magento\Usps\Model\Source\Method'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size', 'Magento\Usps\Model\Source\Size'],
-    ['Magento\Usa\Model\Shipping\Carrier\Usps', 'Magento\Usps\Model\Carrier'],
-    ['Magento\Usa\Model\Shipping\Carrier\Ups', 'Magento\Ups\Model\Carrier'],
-    ['Magento\Usa\Model\Simplexml\Element', 'Magento\Shipping\Model\Simplexml\Element'],
-    ['Magento\Usa\Model\Shipping\Carrier\AbstractCarrier', 'Magento\Shipping\Model\Carrier\AbstractCarrierOnline'],
-    [
+        'Magento\Locale\Resolver, Magento\Locale\Currency, Magento\Locale\Format, ' .
+        'Magento\Stdlib\DateTime\Timezone, Magento\Locale\Lists'
+    ),
+    array('Magento\Core\Model\Locale\Hierarchy\Config\Converter', 'Magento\Locale\Hierarchy\Config\Converter'),
+    array('Magento\Core\Model\Locale\Hierarchy\Config\FileResolver', 'Magento\Locale\Hierarchy\Config\FileResolver'),
+    array('Magento\Core\Model\Locale\Hierarchy\Config\Reader', 'Magento\Locale\Hierarchy\Config\Reader'),
+    array('Magento\Core\Model\Locale\Hierarchy\Config\SchemaLocator', 'Magento\Locale\Hierarchy\Config\SchemaLocator'),
+    array('Magento\Core\Model\Locale\Config', 'Magento\Locale\Config'),
+    array('Magento\Core\Model\Locale\Validator', 'Magento\Locale\Validator'),
+    array('Magento\Core\Model\Date', 'Magento\Stdlib\DateTime\DateTime'),
+    array('Magento\Shipping\Model\Config\Source\Flatrate', 'Magento\OfflineShipping\Model\Config\Source\Flatrate'),
+    array('Magento\Shipping\Model\Carrier\Flatrate', 'Magento\OfflineShipping\Model\Carrier\Flatrate'),
+    array('Magento\Usa\Block\Adminhtml\Dhl\Unitofmeasure', 'Magento\Dhl\Block\Adminhtml\Unitofmeasure'),
+    array('Magento\Usa\Model\Shipping\Carrier\Dhl\International', 'Magento\Dhl\Model\Carrier'),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\AbstractMethod',
+        'Magento\Dhl\Model\Source\Method\AbstractMethod'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Doc',
+        'Magento\Dhl\Model\Source\Method\Doc'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freedoc',
+        'Magento\Dhl\Model\Source\Method\Freedoc'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Freenondoc',
+        'Magento\Dhl\Model\Source\Method\Freenondoc'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Generic',
+        'Magento\Dhl\Model\Source\Method\Generic'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Nondoc',
+        'Magento\Dhl\Model\Source\Method\Nondoc'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Size',
+        'Magento\Dhl\Model\Source\Method\Size'
+    ),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Dhl\International\Source\Method\Unitofmeasure',
+        'Magento\Dhl\Model\Source\Method\Unitofmeasure'
+    ),
+    array('Magento\Usa\Model\Shipping\Carrier\Dhl\AbstractDhl', 'Magento\Dhl\Model\AbstractDhl'),
+    array('Magento\Usa\Model\Shipping\Carrier\Dhl'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex', 'Magento\Fedex\Model\Carrier'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Droppff', 'Magento\Fedex\Model\Source\Droppff'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Freemethod', 'Magento\Fedex\Model\Source\Freemethod'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Generic', 'Magento\Fedex\Model\Source\Generic'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Method', 'Magento\Fedex\Model\Source\Method'),
+    array('Magento\Usa\Model\Shipping\Carrier\Fedex\Source\Packaging', 'Magento\Fedex\Model\Source\Packaging'),
+    array('Magento\Rma\Model\CarrierFactory'),
+    array('Magento\Usa\Helper\Data'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Mode'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Container', 'Magento\Ups\Model\Config\Source\Container'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\DestType', 'Magento\Ups\Model\Config\Source\DestType'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Freemethod', 'Magento\Ups\Model\Config\Source\Freemethod'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Generic', 'Magento\Ups\Model\Config\Source\Generic'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Method', 'Magento\Ups\Model\Config\Source\Method'),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Ups\Source\OriginShipment',
+        'Magento\Ups\Model\Config\Source\OriginShipment'
+    ),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Pickup', 'Magento\Ups\Model\Config\Source\Pickup'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups\Source\Type', 'Magento\Ups\Model\Config\Source\Type'),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\Ups\Source\Unitofmeasure',
+        'Magento\Ups\Model\Config\Source\Unitofmeasure'
+    ),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Container', 'Magento\Usps\Model\Source\Container'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Freemethod', 'Magento\Usps\Model\Source\Freemethod'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Generic', 'Magento\Usps\Model\Source\Generic'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Machinable', 'Magento\Usps\Model\Source\Machinable'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Method', 'Magento\Usps\Model\Source\Method'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps\Source\Size', 'Magento\Usps\Model\Source\Size'),
+    array('Magento\Usa\Model\Shipping\Carrier\Usps', 'Magento\Usps\Model\Carrier'),
+    array('Magento\Usa\Model\Shipping\Carrier\Ups', 'Magento\Ups\Model\Carrier'),
+    array('Magento\Usa\Model\Simplexml\Element', 'Magento\Shipping\Model\Simplexml\Element'),
+    array(
+        'Magento\Usa\Model\Shipping\Carrier\AbstractCarrier',
+        'Magento\Shipping\Model\Carrier\AbstractCarrierOnline'
+    ),
+    array(
         'Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Mode',
         'Magento\Shipping\Model\Config\Source\Online\Mode'
-    ],
-    [
+    ),
+    array(
         'Magento\Usa\Model\Shipping\Carrier\AbstractCarrier\Source\Requesttype',
         'Magento\Shipping\Model\Config\Source\Online\Requesttype'
-    ],
-    ['Magento\Catalog\Helper\Product\Url', 'Magento\Filter\Translit'],
+    ),
+    array('Magento\Catalog\Helper\Product\Url', 'Magento\Filter\Translit'),
     array('Magento\Catalog\Model\Product\Indexer\Price'),
     array('Magento\Catalog\Model\Resource\Product\Indexer\Price'),
+    array('Magento\Indexer\Model\Processor\CacheInvalidate', 'Magento\Indexer\Model\Processor\InvalidateCache')
 );

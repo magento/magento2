@@ -30,11 +30,17 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 {
     /** Constants used by the various unit tests */
     const POST_ACTION_URL = 'http://localhost/index.php/customer/account/createpost';
+
     const LOGIN_URL = 'http://localhost/index.php/customer/account/login';
+
     const COUNTRY_ID = 'US';
+
     const FORM_DATA = 'form_data';
+
     const REGION_ATTRIBUTE_VALUE = 'California';
+
     const REGION_ID_ATTRIBUTE_CODE = 'region_id';
+
     const REGION_ID_ATTRIBUTE_VALUE = '12';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\Data */
@@ -61,8 +67,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $this->_moduleManager = $this->getMock('Magento\Module\Manager', array(), array(), '', false);
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->_customerHelper = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
-        $this->_customerSession =
-            $this->getMock('Magento\Customer\Model\Session', array('getCustomerFormData'), array(), '', false);
+        $this->_customerSession = $this->getMock(
+            'Magento\Customer\Model\Session',
+            array('getCustomerFormData'),
+            array(),
+            '',
+            false
+        );
 
         $context = $this->getMock('Magento\View\Element\Template\Context', array(), array(), '', false);
         $context->expects($this->any())->method('getStoreConfig')->will($this->returnValue($this->_storeConfig));
@@ -105,8 +116,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPostActionUrl()
     {
-        $this->_customerHelper
-            ->expects($this->once())->method('getRegisterPostUrl')->will($this->returnValue(self::POST_ACTION_URL));
+        $this->_customerHelper->expects(
+            $this->once()
+        )->method(
+            'getRegisterPostUrl'
+        )->will(
+            $this->returnValue(self::POST_ACTION_URL)
+        );
         $this->assertEquals(self::POST_ACTION_URL, $this->_block->getPostActionUrl());
     }
 
@@ -115,8 +131,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBackUrlNullData()
     {
-        $this->_customerHelper
-            ->expects($this->once())->method('getLoginUrl')->will($this->returnValue(self::LOGIN_URL));
+        $this->_customerHelper->expects(
+            $this->once()
+        )->method(
+            'getLoginUrl'
+        )->will(
+            $this->returnValue(self::LOGIN_URL)
+        );
         $this->assertEquals(self::LOGIN_URL, $this->_block->getBackUrl());
     }
 
@@ -138,6 +159,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $this->_block->setData(self::FORM_DATA, $data);
         $this->assertSame($data, $this->_block->getFormData());
     }
+
     /**
      * Form data has not been set on the block and there is no customer data in the customer session. So
      * we expect an empty \Magento\Object.
@@ -145,8 +167,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     public function testGetFormDataNullFormData()
     {
         $data = new \Magento\Object();
-        $this->_customerSession
-            ->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
+        $this->_customerSession->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
     }
@@ -161,8 +182,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data->setFirstname('John');
         $data->setCustomerData(1);
         $customerFormData = array('firstname' => 'John');
-        $this->_customerSession
-            ->expects($this->once())->method('getCustomerFormData')->will($this->returnValue($customerFormData));
+        $this->_customerSession->expects(
+            $this->once()
+        )->method(
+            'getCustomerFormData'
+        )->will(
+            $this->returnValue($customerFormData)
+        );
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
     }
@@ -178,8 +204,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
         $customerFormData = array(self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE);
-        $this->_customerSession
-            ->expects($this->once())->method('getCustomerFormData')->will($this->returnValue($customerFormData));
+        $this->_customerSession->expects(
+            $this->once()
+        )->method(
+            'getCustomerFormData'
+        )->will(
+            $this->returnValue($customerFormData)
+        );
         $formData = $this->_block->getFormData();
         $this->assertEquals($data, $formData);
         $this->assertTrue(isset($formData[self::REGION_ID_ATTRIBUTE_CODE]));
@@ -204,8 +235,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryIdParentNullData()
     {
-        $this->_coreData
-            ->expects($this->once())->method('getDefaultCountry')->will($this->returnValue(self::COUNTRY_ID));
+        $this->_coreData->expects(
+            $this->once()
+        )->method(
+            'getDefaultCountry'
+        )->will(
+            $this->returnValue(self::COUNTRY_ID)
+        );
         $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
     }
 
@@ -262,9 +298,15 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNewsletterEnabled($isNewsletterEnabled, $expectedValue)
     {
-        $this->_moduleManager
-            ->expects($this->once())
-            ->method('isOutputEnabled')->with('Magento_Newsletter')->will($this->returnValue($isNewsletterEnabled));
+        $this->_moduleManager->expects(
+            $this->once()
+        )->method(
+            'isOutputEnabled'
+        )->with(
+            'Magento_Newsletter'
+        )->will(
+            $this->returnValue($isNewsletterEnabled)
+        );
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
     }
 
@@ -273,10 +315,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function isNewsletterEnabledProvider()
     {
-        return array(
-            array(true, true),
-            array(false, false)
-        );
+        return array(array(true, true), array(false, false));
     }
 
     /**
@@ -290,15 +329,36 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
         $customerFormData = array(self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE);
-        $this->_customerSession
-            ->expects($this->once())->method('getCustomerFormData')->will($this->returnValue($customerFormData));
+        $this->_customerSession->expects(
+            $this->once()
+        )->method(
+            'getCustomerFormData'
+        )->will(
+            $this->returnValue($customerFormData)
+        );
         $form = $this->getMock('Magento\Customer\Model\Metadata\Form', array(), array(), '', false);
         $request = $this->getMockForAbstractClass('Magento\App\RequestInterface', array(), '', false);
         $formData = $this->_block->getFormData();
-        $form->expects($this->once())
-            ->method('prepareRequest')->with($formData->getData())->will($this->returnValue($request));
-        $form->expects($this->once())
-            ->method('extractData')->with($request, null, false)->will($this->returnValue($customerFormData));
+        $form->expects(
+            $this->once()
+        )->method(
+            'prepareRequest'
+        )->with(
+            $formData->getData()
+        )->will(
+            $this->returnValue($request)
+        );
+        $form->expects(
+            $this->once()
+        )->method(
+            'extractData'
+        )->with(
+            $request,
+            null,
+            false
+        )->will(
+            $this->returnValue($customerFormData)
+        );
         $form->expects($this->once())->method('restoreData')->will($this->returnValue($customerFormData));
         $block = $this->_block->restoreSessionData($form, null, false);
         $this->assertSame($this->_block, $block);

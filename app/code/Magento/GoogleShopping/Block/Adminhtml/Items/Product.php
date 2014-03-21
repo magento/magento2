@@ -106,10 +106,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _beforeToHtml()
     {
         $this->setId($this->getId() . '_' . $this->getIndex());
-        $this->getChildBlock('reset_filter_button')
-            ->setData('onclick', $this->getJsObjectName() . '.resetFilter()');
-        $this->getChildBlock('search_button')
-            ->setData('onclick', $this->getJsObjectName() . '.doFilter()');
+        $this->getChildBlock('reset_filter_button')->setData('onclick', $this->getJsObjectName() . '.resetFilter()');
+        $this->getChildBlock('search_button')->setData('onclick', $this->getJsObjectName() . '.doFilter()');
         return parent::_beforeToHtml();
     }
 
@@ -120,12 +118,17 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_productFactory->create()->getCollection()
-            ->setStore($this->_getStore())
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('attribute_set_id');
+        $collection = $this->_productFactory->create()->getCollection()->setStore(
+            $this->_getStore()
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'sku'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'attribute_set_id'
+        );
 
         $store = $this->_getStore();
         if ($store->getId()) {
@@ -148,55 +151,53 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'width'     => '60px',
-            'index'     => 'entity_id'
-        ));
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'index'     => 'name',
-            'column_css_class'=> 'name'
-        ));
+        $this->addColumn(
+            'id',
+            array('header' => __('ID'), 'sortable' => true, 'width' => '60px', 'index' => 'entity_id')
+        );
+        $this->addColumn('name', array('header' => __('Product'), 'index' => 'name', 'column_css_class' => 'name'));
 
-        $sets = $this->_eavCollectionFactory->create()
-            ->setEntityTypeFilter($this->_productFactory->create()->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
+        $sets = $this->_eavCollectionFactory->create()->setEntityTypeFilter(
+            $this->_productFactory->create()->getResource()->getTypeId()
+        )->load()->toOptionHash();
 
-        $this->addColumn('type',
+        $this->addColumn(
+            'type',
             array(
-                'header'=> __('Type'),
+                'header' => __('Type'),
                 'width' => '60px',
                 'index' => 'type_id',
-                'type'  => 'options',
-                'options' => $this->_productType->getOptionArray(),
-        ));
+                'type' => 'options',
+                'options' => $this->_productType->getOptionArray()
+            )
+        );
 
-        $this->addColumn('set_name',
+        $this->addColumn(
+            'set_name',
             array(
-                'header'=> __('Attribute Set'),
+                'header' => __('Attribute Set'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
-                'type'  => 'options',
-                'options' => $sets,
-        ));
+                'type' => 'options',
+                'options' => $sets
+            )
+        );
 
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'width'     => '80px',
-            'index'     => 'sku',
-            'column_css_class'=> 'sku'
-        ));
-        $this->addColumn('price', array(
-            'header'    => __('Price'),
-            'align'     => 'center',
-            'type'      => 'currency',
-            'currency_code' => $this->_getStore()->getDefaultCurrencyCode(),
-            'rate'      => $this->_getStore()->getBaseCurrency()->getRate($this->_getStore()->getDefaultCurrencyCode()),
-            'index'     => 'price'
-        ));
+        $this->addColumn(
+            'sku',
+            array('header' => __('SKU'), 'width' => '80px', 'index' => 'sku', 'column_css_class' => 'sku')
+        );
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'align' => 'center',
+                'type' => 'currency',
+                'currency_code' => $this->_getStore()->getDefaultCurrencyCode(),
+                'rate' => $this->_getStore()->getBaseCurrency()->getRate($this->_getStore()->getDefaultCurrencyCode()),
+                'index' => 'price'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -211,10 +212,13 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
 
-        $this->getMassactionBlock()->addItem('add', array(
-             'label'    => __('Add to Google Content'),
-             'url'      => $this->getUrl('adminhtml/*/massAdd', array('_current'=>true)),
-        ));
+        $this->getMassactionBlock()->addItem(
+            'add',
+            array(
+                'label' => __('Add to Google Content'),
+                'url' => $this->getUrl('adminhtml/*/massAdd', array('_current' => true))
+            )
+        );
         return $this;
     }
 
@@ -225,7 +229,10 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('adminhtml/googleshopping_selection/grid', array('index' => $this->getIndex(),'_current'=>true));
+        return $this->getUrl(
+            'adminhtml/googleshopping_selection/grid',
+            array('index' => $this->getIndex(), '_current' => true)
+        );
     }
 
     /**

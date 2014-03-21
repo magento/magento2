@@ -32,8 +32,7 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
  * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Sortby
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Core store config
@@ -48,10 +47,8 @@ class Sortby
      * @param \Magento\Logger $logger
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Core\Model\Store\Config $coreStoreConfig)
+    {
         $this->_coreStoreConfig = $coreStoreConfig;
         parent::__construct($logger);
     }
@@ -77,9 +74,9 @@ class Sortby
         if ($this->getAttribute()->getIsRequired()) {
             $attributeValue = $object->getData($attributeCode);
             if ($this->getAttribute()->isValueEmpty($attributeValue)) {
-                if (is_array($attributeValue) && count($attributeValue)>0) {
+                if (is_array($attributeValue) && count($attributeValue) > 0) {
                 } else {
-                    if(!$isUseConfig) {
+                    if (!$isUseConfig) {
                         return false;
                     }
                 }
@@ -98,8 +95,14 @@ class Sortby
                 if (!is_array($available)) {
                     $available = explode(',', $available);
                 }
-                $data = (!in_array('default_sort_by', $postDataConfig))? $object->getData($attributeCode):
-                       $this->_coreStoreConfig->getConfig("catalog/frontend/default_sort_by");
+                $data = !in_array(
+                    'default_sort_by',
+                    $postDataConfig
+                ) ? $object->getData(
+                    $attributeCode
+                ) : $this->_coreStoreConfig->getConfig(
+                    "catalog/frontend/default_sort_by"
+                );
                 if (!in_array($data, $available)) {
                     throw new \Magento\Core\Exception(
                         __('Default Product Listing Sort by does not exist in Available Product Listing Sort By.')

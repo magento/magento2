@@ -42,5 +42,4 @@ class Child extends \Magento\Test\Di\Aggregate\AggregateParent
         $this->secondScalar = $secondScalar;
         $this->secondOptionalScalar = $secondOptionalScalar;
     }
-
 }

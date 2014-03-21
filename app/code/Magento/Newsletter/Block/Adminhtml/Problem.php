@@ -36,7 +36,6 @@ use Magento\Newsletter\Model\Resource\Problem\Collection;
  */
 class Problem extends \Magento\Backend\Block\Template
 {
-
     /**
      * @var string
      */
@@ -68,8 +67,7 @@ class Problem extends \Magento\Backend\Block\Template
     {
         parent::_construct();
 
-        $collection = $this->_problemCollection->addSubscriberInfo()
-            ->addQueueInfo();
+        $collection = $this->_problemCollection->addSubscriberInfo()->addQueueInfo();
     }
 
     /**
@@ -79,24 +77,24 @@ class Problem extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->setChild('deleteButton',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'del.button')
-                ->setData(
-                    array(
-                        'label' => __('Delete Selected Problems'),
-                        'onclick' => 'problemController.deleteSelected();'
-                    )
-                )
+        $this->setChild(
+            'deleteButton',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button',
+                'del.button'
+            )->setData(
+                array('label' => __('Delete Selected Problems'), 'onclick' => 'problemController.deleteSelected();')
+            )
         );
 
-        $this->setChild('unsubscribeButton',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button', 'unsubscribe.button')
-                ->setData(
-                    array(
-                        'label' => __('Unsubscribe Selected'),
-                        'onclick' => 'problemController.unsubscribe();'
-                    )
-                )
+        $this->setChild(
+            'unsubscribeButton',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button',
+                'unsubscribe.button'
+            )->setData(
+                array('label' => __('Unsubscribe Selected'), 'onclick' => 'problemController.unsubscribe();')
+            )
         );
         return parent::_prepareLayout();
     }

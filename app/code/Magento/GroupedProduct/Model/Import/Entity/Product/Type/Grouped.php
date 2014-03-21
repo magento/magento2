@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Model\Import\Entity\Product\Type;
 
 use Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType;
@@ -35,9 +34,7 @@ class Grouped extends AbstractType
      *
      * @var array
      */
-    protected $_specialAttributes = array(
-        '_associated_sku', '_associated_default_qty', '_associated_position'
-    );
+    protected $_specialAttributes = array('_associated_sku', '_associated_default_qty', '_associated_position');
 
     /**
      * Import model behavior
@@ -108,21 +105,22 @@ class Grouped extends AbstractType
     public function saveData()
     {
         $groupedLinkId = \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED;
-        $connection    = $this->_resource->getConnection('write');
-        $resource      = $this->_productLinkFactory->create();
-        $mainTable     = $resource->getMainTable();
+        $connection = $this->_resource->getConnection('write');
+        $resource = $this->_productLinkFactory->create();
+        $mainTable = $resource->getMainTable();
         $relationTable = $resource->getTable('catalog_product_relation');
-        $newSku        = $this->_entityModel->getNewSku();
-        $oldSku        = $this->_entityModel->getOldSku();
-        $attributes    = array();
+        $newSku = $this->_entityModel->getNewSku();
+        $oldSku = $this->_entityModel->getOldSku();
+        $attributes = array();
 
         // pre-load attributes parameters
-        $select = $connection->select()
-            ->from($resource->getTable('catalog_product_link_attribute'), array(
-                'id'   => 'product_link_attribute_id',
-                'code' => 'product_link_attribute_code',
-                'type' => 'data_type'
-            ))->where('link_type_id = ?', $groupedLinkId);
+        $select = $connection->select()->from(
+            $resource->getTable('catalog_product_link_attribute'),
+            array('id' => 'product_link_attribute_id', 'code' => 'product_link_attribute_code', 'type' => 'data_type')
+        )->where(
+            'link_type_id = ?',
+            $groupedLinkId
+        );
         foreach ($connection->fetchAll($select) as $row) {
             $attributes[$row['code']] = array(
                 'id' => $row['id'],
@@ -130,17 +128,16 @@ class Grouped extends AbstractType
             );
         }
         while ($bunch = $this->_entityModel->getNextBunch()) {
-            $linksData     = array(
-                'product_ids'      => array(),
-                'links'            => array(),
+            $linksData = array(
+                'product_ids' => array(),
+                'links' => array(),
                 'attr_product_ids' => array(),
-                'position'         => array(),
-                'qty'              => array(),
-                'relation'         => array()
+                'position' => array(),
+                'qty' => array(),
+                'relation' => array()
             );
             foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)
-                    || empty($rowData['_associated_sku'])
+                if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($rowData['_associated_sku'])
                 ) {
                     continue;
                 }
@@ -188,7 +185,8 @@ class Grouped extends AbstractType
             }
             // save links and relations
             if ($linksData['product_ids'] &&
-                $this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+                $this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
+            ) {
                 $connection->delete(
                     $mainTable,
                     $connection->quoteInto(
@@ -203,9 +201,9 @@ class Grouped extends AbstractType
                 foreach ($linksData['links'] as $productId => $linkedData) {
                     foreach ($linkedData as $linkedId => $linkType) {
                         $mainData[] = array(
-                            'product_id'        => $productId,
+                            'product_id' => $productId,
                             'linked_product_id' => $linkedId,
-                            'link_type_id'      => $linkType
+                            'link_type_id' => $linkType
                         );
                     }
                 }
@@ -214,11 +212,11 @@ class Grouped extends AbstractType
             }
             // save positions and default quantity
             if ($linksData['attr_product_ids']) {
-                $savedData = $connection->fetchPairs($connection->select()
-                    ->from($mainTable, array(
-                        new \Zend_Db_Expr('CONCAT_WS(" ", product_id, linked_product_id)'), 'link_id'
-                    ))
-                    ->where(
+                $savedData = $connection->fetchPairs(
+                    $connection->select()->from(
+                        $mainTable,
+                        array(new \Zend_Db_Expr('CONCAT_WS(" ", product_id, linked_product_id)'), 'link_id')
+                    )->where(
                         'product_id IN (?) AND link_type_id = ' . $groupedLinkId,
                         array_keys($linksData['attr_product_ids'])
                     )

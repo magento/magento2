@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 /**
@@ -32,25 +31,42 @@ namespace Magento\Customer\Service\V1\Data;
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     const CONFIRMATION = 'a4fg7h893e39d';
+
     const CREATED_AT = '2013-11-05';
+
     const STORE_NAME = 'Store Name';
+
     const DOB = '1970-01-01';
+
     const GENDER = 'Male';
+
     const GROUP_ID = 1;
+
     const MIDDLENAME = 'A';
+
     const PREFIX = 'Mr.';
+
     const STORE_ID = 1;
+
     const SUFFIX = 'Esq.';
+
     const TAXVAT = '12';
+
     const WEBSITE_ID = 1;
 
     /** Sample values for testing */
     const ID = 1;
+
     const FIRSTNAME = 'Jane';
+
     const LASTNAME = 'Doe';
+
     const NAME = 'J';
+
     const EMAIL = 'janedoe@example.com';
+
     const ATTRIBUTE_CODE = 'attribute_code';
+
     const ATTRIBUTE_VALUE = 'attribute_value';
 
     /** @var  \Magento\TestFramework\Helper\ObjectManager */
@@ -63,22 +79,28 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $customerMetadataService = $this->getMockForAbstractClass(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
+            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface',
+            array(),
+            '',
+            false
         );
-        $customerMetadataService
-            ->expects($this->any())
-            ->method('getCustomCustomerAttributeMetadata')
-            ->will($this->returnValue([]));
-        $this->_customerBuilder = $this->_objectManager->getObject('Magento\Customer\Service\V1\Data\CustomerBuilder',
-            ['metadataService' => $customerMetadataService]
+        $customerMetadataService->expects(
+            $this->any()
+        )->method(
+            'getCustomCustomerAttributeMetadata'
+        )->will(
+            $this->returnValue(array())
+        );
+        $this->_customerBuilder = $this->_objectManager->getObject(
+            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            array('metadataService' => $customerMetadataService)
         );
     }
 
     public function testSetters()
     {
         $customerData = $this->_createCustomerData();
-        $customer = $this->_customerBuilder->populateWithArray($customerData)
-            ->create();
+        $customer = $this->_customerBuilder->populateWithArray($customerData)->create();
         $this->assertEquals(self::ID, $customer->getId());
         $this->assertEquals(self::FIRSTNAME, $customer->getFirstname());
         $this->assertEquals(self::LASTNAME, $customer->getLastname());
@@ -100,12 +122,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributes()
     {
         $customerData = $this->_createCustomerData();
-        $customer = $this->_customerBuilder->populateWithArray($customerData)
-            ->create();
+        $customer = $this->_customerBuilder->populateWithArray($customerData)->create();
 
         $actualAttributes = \Magento\Convert\ConvertArray::toFlatArray($customer->__toArray());
         $this->assertEquals(
-            [
+            array(
                 'id' => self::ID,
                 'confirmation' => self::CONFIRMATION,
                 'created_at' => self::CREATED_AT,
@@ -122,21 +143,15 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'suffix' => self::SUFFIX,
                 'taxvat' => self::TAXVAT,
                 'website_id' => self::WEBSITE_ID
-            ],
+            ),
             $actualAttributes
         );
     }
 
     public function testGetCustomAttributes()
     {
-        $customAttributes = [
-            'custom_attribute1' => 'value1',
-            'custom_attribute2' => 'value2'
-        ];
-        $customerData = [
-            'attribute1' => 'value1',
-            Customer::CUSTOM_ATTRIBUTES_KEY => $customAttributes
-        ];
+        $customAttributes = array('custom_attribute1' => 'value1', 'custom_attribute2' => 'value2');
+        $customerData = array('attribute1' => 'value1', Customer::CUSTOM_ATTRIBUTES_KEY => $customAttributes);
         $customerDataObject = $this->_customerBuilder->populateWithArray($customerData)->create();
         $this->assertEquals(
             $customAttributes,
@@ -147,13 +162,15 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateFromPrototypeVsArray()
     {
-        $customerFromArray = $this->_customerBuilder->populateWithArray([
-            Customer::FIRSTNAME => self::FIRSTNAME,
-            Customer::LASTNAME  => self::LASTNAME,
-            Customer::EMAIL     => self::EMAIL,
-            Customer::ID        => self::ID,
-            'entity_id'         => self::ID,
-        ])->create();
+        $customerFromArray = $this->_customerBuilder->populateWithArray(
+            array(
+                Customer::FIRSTNAME => self::FIRSTNAME,
+                Customer::LASTNAME => self::LASTNAME,
+                Customer::EMAIL => self::EMAIL,
+                Customer::ID => self::ID,
+                'entity_id' => self::ID
+            )
+        )->create();
         $customerFromPrototype = $this->_customerBuilder->populate($customerFromArray)->create();
 
         $this->assertEquals($customerFromArray->__toArray(), $customerFromPrototype->__toArray());
@@ -161,12 +178,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateFromCustomerIdInArray()
     {
-        $customer = $this->_customerBuilder->populateWithArray([
-            Customer::FIRSTNAME => self::FIRSTNAME,
-            Customer::LASTNAME  => self::LASTNAME,
-            Customer::EMAIL     => self::EMAIL,
-            Customer::ID        => self::ID,
-        ])->create();
+        $customer = $this->_customerBuilder->populateWithArray(
+            array(
+                Customer::FIRSTNAME => self::FIRSTNAME,
+                Customer::LASTNAME => self::LASTNAME,
+                Customer::EMAIL => self::EMAIL,
+                Customer::ID => self::ID
+            )
+        )->create();
 
         $this->assertEquals(self::FIRSTNAME, $customer->getFirstname());
         $this->assertEquals(self::LASTNAME, $customer->getLastname());
@@ -181,7 +200,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     private function _createCustomerData()
     {
-        return [
+        return array(
             self::ATTRIBUTE_CODE => self::ATTRIBUTE_VALUE,
             'id' => self::ID,
             'firstname' => self::FIRSTNAME,
@@ -199,6 +218,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             'suffix' => self::SUFFIX,
             'taxvat' => self::TAXVAT,
             'website_id' => self::WEBSITE_ID
-        ];
+        );
     }
 }

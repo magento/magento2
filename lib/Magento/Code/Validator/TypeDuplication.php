@@ -23,8 +23,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Validator;
+
 use Magento\Code\ValidatorInterface;
 use Magento\Code\ValidationException;
 
@@ -34,6 +34,7 @@ class TypeDuplication implements ValidatorInterface
      * Name of the suppress warnings annotation.
      */
     const SUPPRESS_ANNOTATION = 'SuppressWarnings';
+
     const TYPE_DUPLICATIONS = 'Magento.TypeDuplication';
 
     /**
@@ -79,14 +80,22 @@ class TypeDuplication implements ValidatorInterface
         if (!empty($errors)) {
             if (false == $this->_ignoreWarning($class)) {
                 $classPath = str_replace('\\', '/', $class->getFileName());
-                throw new ValidationException('Argument type duplication in class ' . $class->getName()
-                    . ' in ' . $classPath . PHP_EOL . implode(PHP_EOL, $errors)
+                throw new ValidationException(
+                    'Argument type duplication in class ' .
+                    $class->getName() .
+                    ' in ' .
+                    $classPath .
+                    PHP_EOL .
+                    implode(
+                        PHP_EOL,
+                        $errors
+                    )
                 );
             }
         }
         return true;
-
     }
+
     /**
      * Get arguments with object types
      *

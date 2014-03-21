@@ -25,9 +25,9 @@
  */
 namespace Magento\App\EntryPoint;
 
-use Magento\App\State,
-    Magento\App\EntryPointInterface,
-    Magento\ObjectManager;
+use Magento\App\State;
+use Magento\App\EntryPointInterface;
+use Magento\ObjectManager;
 
 class EntryPoint implements EntryPointInterface
 {
@@ -54,14 +54,12 @@ class EntryPoint implements EntryPointInterface
      * @param ObjectManager $objectManager
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function __construct(
-        $rootDir,
-        array $parameters = array(),
-        ObjectManager $objectManager = null
-    ) {
+    public function __construct($rootDir, array $parameters = array(), ObjectManager $objectManager = null)
+    {
         $this->_rootDir = $rootDir;
         $this->_parameters = $parameters;
         $this->_locator = $objectManager;
+        $this->_parameters[State::PARAM_MODE] = State::MODE_DEVELOPER;
     }
 
     /**
@@ -84,8 +82,9 @@ class EntryPoint implements EntryPointInterface
             \Magento\Profiler::stop('magento');
             $response->sendResponse();
         } catch (\Exception $exception) {
-            if (isset($this->_parameters[state::PARAM_MODE])
-                && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
+            if (isset(
+                $this->_parameters[state::PARAM_MODE]
+            ) && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
             ) {
                 echo $exception->getMessage() . "\n\n";
                 echo $exception->getTraceAsString();

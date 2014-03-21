@@ -21,20 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ObjectManager\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetArgumentsEmpty()
     {
-        $config = new Config;
+        $config = new Config();
         $this->assertSame(array(), $config->getArguments('An invalid type'));
     }
 
     public function testExtendMergeConfiguration()
     {
-        $this->_assertFooTypeArguments(new Config);
+        $this->_assertFooTypeArguments(new Config());
     }
 
     /**

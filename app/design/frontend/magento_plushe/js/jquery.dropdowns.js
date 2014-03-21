@@ -87,6 +87,8 @@
                 parent = $(options.parent) || elem.parent(),
                 menu = $(options.menu, parent) || $('.dropdown-menu', parent);
 
+            elem.off('click.toggleDropdown');
+            menu.off('click.preventMenuClosing');
             elem.on('click.toggleDropdown', function() {
                 if(options.autoclose === true) {
                     self.reset({elems: actionElem.not(elem)});

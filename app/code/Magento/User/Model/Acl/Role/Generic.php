@@ -30,5 +30,4 @@ namespace Magento\User\Model\Acl\Role;
  */
 class Generic extends \Zend_Acl_Role
 {
-
 }

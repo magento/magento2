@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
@@ -188,11 +187,18 @@ class Value extends \Magento\Core\Model\AbstractModel
     public function saveValues()
     {
         foreach ($this->getValues() as $value) {
-            $this->setData($value)
-                ->setData('option_id', $this->getOption()->getId())
-                ->setData('store_id', $this->getOption()->getStoreId());
+            $this->setData(
+                $value
+            )->setData(
+                'option_id',
+                $this->getOption()->getId()
+            )->setData(
+                'store_id',
+                $this->getOption()->getStoreId()
+            );
 
-            if ($this->getData('option_type_id') == '-1') {//change to 0
+            if ($this->getData('option_type_id') == '-1') {
+                //change to 0
                 $this->unsetData('option_type_id');
             } else {
                 $this->setId($this->getData('option_type_id'));
@@ -206,7 +212,8 @@ class Value extends \Magento\Core\Model\AbstractModel
             } else {
                 $this->save();
             }
-        }//eof foreach()
+        }
+        //eof foreach()
         return $this;
     }
 
@@ -217,11 +224,11 @@ class Value extends \Magento\Core\Model\AbstractModel
      * @param bool $flag
      * @return float|int
      */
-    public function getPrice($flag=false)
+    public function getPrice($flag = false)
     {
         if ($flag && $this->getPriceType() == 'percent') {
             $basePrice = $this->getOption()->getProduct()->getFinalPrice();
-            $price = $basePrice*($this->_getData('price')/100);
+            $price = $basePrice * ($this->_getData('price') / 100);
             return $price;
         }
         return $this->_getData('price');
@@ -235,9 +242,12 @@ class Value extends \Magento\Core\Model\AbstractModel
      */
     public function getValuesCollection(Option $option)
     {
-        $collection = $this->_valueCollectionFactory->create()
-            ->addFieldToFilter('option_id', $option->getId())
-            ->getValues($option->getStoreId());
+        $collection = $this->_valueCollectionFactory->create()->addFieldToFilter(
+            'option_id',
+            $option->getId()
+        )->getValues(
+            $option->getStoreId()
+        );
 
         return $collection;
     }
@@ -250,9 +260,13 @@ class Value extends \Magento\Core\Model\AbstractModel
      */
     public function getValuesByOption($optionIds, $option_id, $store_id)
     {
-        $collection = $this->_valueCollectionFactory->create()
-            ->addFieldToFilter('option_id', $option_id)
-            ->getValuesByOption($optionIds, $store_id);
+        $collection = $this->_valueCollectionFactory->create()->addFieldToFilter(
+            'option_id',
+            $option_id
+        )->getValuesByOption(
+            $optionIds,
+            $store_id
+        );
 
         return $collection;
     }

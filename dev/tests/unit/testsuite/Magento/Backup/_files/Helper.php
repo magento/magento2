@@ -38,7 +38,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_READABLE  = 2;
+    const INFO_READABLE = 2;
 
     /**
      * Constant can be used in getInfo() function as second parameter.
@@ -46,7 +46,7 @@ class Helper
      *
      * @const int
      */
-    const INFO_SIZE      = 4;
+    const INFO_SIZE = 4;
 
     /**
      * Mock Get information (readable, writable, size) about $path

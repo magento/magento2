@@ -46,14 +46,18 @@ abstract class AbstractEntity
      * XML paths to parameters
      */
     const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
-    const XML_PATH_PAGE_SIZE  = 'import/format_v2/page_size';
+
+    const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
+
     /**#@-*/
 
     /**#@+
      * Database constants
      */
     const DB_MAX_VARCHAR_LENGTH = 256;
-    const DB_MAX_TEXT_LENGTH    = 65536;
+
+    const DB_MAX_TEXT_LENGTH = 65536;
+
     /**#@-*/
 
     /**
@@ -215,7 +219,7 @@ abstract class AbstractEntity
     protected $_availableBehaviors = array(
         \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
+        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM
     );
 
     /**
@@ -265,18 +269,25 @@ abstract class AbstractEntity
         array $data = array()
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_dataSourceModel     = isset($data['data_source_model']) ? $data['data_source_model']
-            : $importFactory->create()->getDataSourceModel();
-        $this->_connection          = isset($data['connection']) ? $data['connection']
-            : $resource->getConnection('write');
-        $this->_jsonHelper          =  $coreData;
-        $this->string        =  $string;
-        $this->_pageSize            = isset($data['page_size']) ? $data['page_size']
-            : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(static::XML_PATH_PAGE_SIZE) : 0);
-        $this->_maxDataSize         = isset($data['max_data_size']) ? $data['max_data_size']
-            : $resourceHelper->getMaxDataSize();
-        $this->_bunchSize           = isset($data['bunch_size']) ? $data['bunch_size']
-            : (static::XML_PATH_BUNCH_SIZE ? (int)$this->_coreStoreConfig->getConfig(static::XML_PATH_BUNCH_SIZE) : 0);
+        $this->_dataSourceModel = isset(
+            $data['data_source_model']
+        ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
+        $this->_connection = isset($data['connection']) ? $data['connection'] : $resource->getConnection('write');
+        $this->_jsonHelper = $coreData;
+        $this->string = $string;
+        $this->_pageSize = isset(
+            $data['page_size']
+        ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_coreStoreConfig->getConfig(
+            static::XML_PATH_PAGE_SIZE
+        ) : 0);
+        $this->_maxDataSize = isset(
+            $data['max_data_size']
+        ) ? $data['max_data_size'] : $resourceHelper->getMaxDataSize();
+        $this->_bunchSize = isset(
+            $data['bunch_size']
+        ) ? $data['bunch_size'] : (static::XML_PATH_BUNCH_SIZE ? (int)$this->_coreStoreConfig->getConfig(
+            static::XML_PATH_BUNCH_SIZE
+        ) : 0);
     }
 
     /**
@@ -323,27 +334,23 @@ abstract class AbstractEntity
      */
     protected function _saveValidatedBunches()
     {
-        $source            = $this->getSource();
+        $source = $this->getSource();
         $processedDataSize = 0;
-        $bunchRows         = array();
-        $startNewBunch     = false;
-        $nextRowBackup     = array();
+        $bunchRows = array();
+        $startNewBunch = false;
+        $nextRowBackup = array();
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
 
         while ($source->valid() || $bunchRows) {
             if ($startNewBunch || !$source->valid()) {
-                $this->_dataSourceModel->saveBunch(
-                    $this->getEntityTypeCode(),
-                    $this->getBehavior(),
-                    $bunchRows
-                );
+                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
-                $bunchRows         = $nextRowBackup;
+                $bunchRows = $nextRowBackup;
                 $processedDataSize = strlen(serialize($bunchRows));
-                $startNewBunch     = false;
-                $nextRowBackup     = array();
+                $startNewBunch = false;
+                $nextRowBackup = array();
             }
             if ($source->valid()) {
                 // errors limit check
@@ -356,9 +363,9 @@ abstract class AbstractEntity
                     $rowData = $this->_prepareRowForDb($rowData);
                     $rowSize = strlen($this->_jsonHelper->jsonEncode($rowData));
 
-                    $isBunchSizeExceeded = ($this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize);
+                    $isBunchSizeExceeded = $this->_bunchSize > 0 && count($bunchRows) >= $this->_bunchSize;
 
-                    if (($processedDataSize + $rowSize) >= $this->_maxDataSize || $isBunchSizeExceeded) {
+                    if ($processedDataSize + $rowSize >= $this->_maxDataSize || $isBunchSizeExceeded) {
                         $startNewBunch = true;
                         $nextRowBackup = array($source->key() => $rowData);
                     } else {
@@ -384,7 +391,8 @@ abstract class AbstractEntity
     public function addRowError($errorCode, $errorRowNum, $columnName = null)
     {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = array($errorRowNum + 1, $columnName); // one added for human readability
+        $this->_errors[$errorCode][] = array($errorRowNum + 1, $columnName);
+        // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
         $this->_errorsCount++;
 
@@ -413,8 +421,12 @@ abstract class AbstractEntity
      */
     public function getBehavior(array $rowData = null)
     {
-        if (isset($this->_parameters['behavior'])
-            && in_array($this->_parameters['behavior'], $this->_availableBehaviors)
+        if (isset(
+            $this->_parameters['behavior']
+        ) && in_array(
+            $this->_parameters['behavior'],
+            $this->_availableBehaviors
+        )
         ) {
             $behavior = $this->_parameters['behavior'];
             if ($rowData !== null && $behavior == \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM) {
@@ -583,7 +595,7 @@ abstract class AbstractEntity
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
-                $valid = ((float)$value == $value) && is_numeric($value);
+                $valid = (double)$value == $value && is_numeric($value);
                 break;
             case 'select':
             case 'multiselect':
@@ -591,7 +603,7 @@ abstract class AbstractEntity
                 break;
             case 'int':
                 $value = trim($rowData[$attributeCode]);
-                $valid = ((int)$value == $value) && is_numeric($value);
+                $valid = (int)$value == $value && is_numeric($value);
                 break;
             case 'datetime':
                 $value = trim($rowData[$attributeCode]);
@@ -607,9 +619,7 @@ abstract class AbstractEntity
         }
 
         if (!$valid) {
-            $this->addRowError(__("Please correct the value for '%s'."),
-                $rowNumber, $attributeCode
-            );
+            $this->addRowError(__("Please correct the value for '%s'."), $rowNumber, $attributeCode);
         } elseif (!empty($attributeParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attributeCode][$rowData[$attributeCode]])) {
                 $this->addRowError(__("Duplicate Unique Attribute for '%s'"), $rowNumber, $attributeCode);
@@ -617,7 +627,7 @@ abstract class AbstractEntity
             }
             $this->_uniqueAttributes[$attributeCode][$rowData[$attributeCode]] = true;
         }
-        return (bool) $valid;
+        return (bool)$valid;
     }
 
     /**
@@ -706,9 +716,9 @@ abstract class AbstractEntity
             }
 
             // check attribute columns names validity
-            $columnNumber       = 0;
+            $columnNumber = 0;
             $emptyHeaderColumns = array();
-            $invalidColumns     = array();
+            $invalidColumns = array();
             foreach ($this->getSource()->getColNames() as $columnName) {
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {

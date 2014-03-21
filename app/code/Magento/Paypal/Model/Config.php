@@ -34,7 +34,7 @@ class Config
     /**
      * PayPal Standard
      */
-    const METHOD_WPS         = 'paypal_standard';
+    const METHOD_WPS = 'paypal_standard';
 
     /**
      * PayPal Website Payments Pro - Express Checkout
@@ -44,51 +44,62 @@ class Config
     /**
      * PayPal Website Payments Pro - Direct Payments
      */
-    const METHOD_WPP_DIRECT  = 'paypal_direct';
+    const METHOD_WPP_DIRECT = 'paypal_direct';
 
     /**
      * Direct Payments (Payflow Edition)
      */
-    const METHOD_WPP_PE_DIRECT  = 'payflow_direct';
+    const METHOD_WPP_PE_DIRECT = 'payflow_direct';
 
     /**
      * Express Checkout (Payflow Edition)
      */
-    const METHOD_WPP_PE_EXPRESS  = 'payflow_express';
+    const METHOD_WPP_PE_EXPRESS = 'payflow_express';
 
     /**
      * Payflow Pro Gateway
      */
-    const METHOD_PAYFLOWPRO         = 'payflowpro';
+    const METHOD_PAYFLOWPRO = 'payflowpro';
 
-    const METHOD_PAYFLOWLINK        = 'payflow_link';
-    const METHOD_PAYFLOWADVANCED    = 'payflow_advanced';
+    const METHOD_PAYFLOWLINK = 'payflow_link';
 
-    const METHOD_HOSTEDPRO          = 'hosted_pro';
+    const METHOD_PAYFLOWADVANCED = 'payflow_advanced';
 
-    const METHOD_BILLING_AGREEMENT  = 'paypal_billing_agreement';
+    const METHOD_HOSTEDPRO = 'hosted_pro';
+
+    const METHOD_BILLING_AGREEMENT = 'paypal_billing_agreement';
 
     /**#@+
      * Buttons and images
      */
     const EC_FLAVOR_DYNAMIC = 'dynamic';
-    const EC_FLAVOR_STATIC  = 'static';
-    const EC_BUTTON_TYPE_SHORTCUT = 'ecshortcut';
-    const EC_BUTTON_TYPE_MARK     = 'ecmark';
-    const PAYMENT_MARK_37x23   = '37x23';
-    const PAYMENT_MARK_50x34   = '50x34';
-    const PAYMENT_MARK_60x38   = '60x38';
-    const PAYMENT_MARK_180x113 = '180x113';
-    /**#@-*/
 
+    const EC_FLAVOR_STATIC = 'static';
+
+    const EC_BUTTON_TYPE_SHORTCUT = 'ecshortcut';
+
+    const EC_BUTTON_TYPE_MARK = 'ecmark';
+
+    const PAYMENT_MARK_37X23 = '37x23';
+
+    const PAYMENT_MARK_50X34 = '50x34';
+
+    const PAYMENT_MARK_60X38 = '60x38';
+
+    const PAYMENT_MARK_180X113 = '180x113';
+
+    /**#@-*/
     const DEFAULT_LOGO_TYPE = 'wePrefer_150x60';
 
     /**#@+
      * Payment actions
      */
-    const PAYMENT_ACTION_SALE  = 'Sale';
+    const PAYMENT_ACTION_SALE = 'Sale';
+
     const PAYMENT_ACTION_ORDER = 'Order';
-    const PAYMENT_ACTION_AUTH  = 'Authorization';
+
+    const PAYMENT_ACTION_AUTH = 'Authorization';
+
     /**#@-*/
 
     /**#@+
@@ -97,53 +108,71 @@ class Config
      * @deprecated since 1.6.2.0
      */
     const AUTHORIZATION_AMOUNT_ZERO = 0;
+
     const AUTHORIZATION_AMOUNT_ONE = 1;
+
     const AUTHORIZATION_AMOUNT_FULL = 2;
+
     /**#@-*/
 
     /**#@+
      * Require Billing Address
      */
     const REQUIRE_BILLING_ADDRESS_NO = 0;
+
     const REQUIRE_BILLING_ADDRESS_ALL = 1;
+
     const REQUIRE_BILLING_ADDRESS_VIRTUAL = 2;
+
     /**#@-*/
 
     /**#@+
      * Fraud management actions
      */
     const FRAUD_ACTION_ACCEPT = 'Acept';
-    const FRAUD_ACTION_DENY   = 'Deny';
+
+    const FRAUD_ACTION_DENY = 'Deny';
+
     /**#@-*/
 
     /**#@+
      * Refund types
      */
     const REFUND_TYPE_FULL = 'Full';
+
     const REFUND_TYPE_PARTIAL = 'Partial';
+
     /**#@-*/
 
     /**#@+
      * Express Checkout flows
      */
     const EC_SOLUTION_TYPE_SOLE = 'Sole';
+
     const EC_SOLUTION_TYPE_MARK = 'Mark';
+
     /**#@-*/
 
     /**#@+
      * Payment data transfer methods (Standard)
      */
-    const WPS_TRANSPORT_IPN      = 'ipn';
-    const WPS_TRANSPORT_PDT      = 'pdt';
-    const WPS_TRANSPORT_IPN_PDT  = 'ipn_n_pdt';
+    const WPS_TRANSPORT_IPN = 'ipn';
+
+    const WPS_TRANSPORT_PDT = 'pdt';
+
+    const WPS_TRANSPORT_IPN_PDT = 'ipn_n_pdt';
+
     /**#@-*/
 
     /**#@+
      * Billing Agreement Signup type
      */
-    const EC_BA_SIGNUP_AUTO     = 'auto';
-    const EC_BA_SIGNUP_ASK      = 'ask';
-    const EC_BA_SIGNUP_NEVER    = 'never';
+    const EC_BA_SIGNUP_AUTO = 'auto';
+
+    const EC_BA_SIGNUP_ASK = 'ask';
+
+    const EC_BA_SIGNUP_NEVER = 'never';
+
     /**#@-*/
 
     /**
@@ -173,11 +202,11 @@ class Config
      * @var array
      */
     protected $_buildNotationPPMap = array(
-        'paypal_standard'  => 'WPS',
-        'paypal_express'   => 'EC',
-        'paypal_direct'    => 'DP',
+        'paypal_standard' => 'WPS',
+        'paypal_express' => 'EC',
+        'paypal_direct' => 'DP',
         'payflow_express' => 'EC',
-        'payflow_direct'  => 'DP',
+        'payflow_direct' => 'DP'
     );
 
     /**
@@ -186,11 +215,11 @@ class Config
      * @var array
      */
     protected $_ecStyleConfigMap = array(
-        'page_style'    => 'page_style',
+        'page_style' => 'page_style',
         'paypal_hdrimg' => 'hdrimg',
         'paypal_hdrbordercolor' => 'hdrbordercolor',
-        'paypal_hdrbackcolor'   => 'hdrbackcolor',
-        'paypal_payflowcolor'   => 'payflowcolor',
+        'paypal_hdrbackcolor' => 'hdrbackcolor',
+        'paypal_payflowcolor' => 'payflowcolor'
     );
 
     /**
@@ -198,8 +227,28 @@ class Config
      *
      * @var string[]
      */
-    protected $_supportedCurrencyCodes = array('AUD', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'ILS', 'JPY', 'MXN',
-        'NOK', 'NZD', 'PLN', 'GBP', 'SGD', 'SEK', 'CHF', 'USD', 'TWD', 'THB');
+    protected $_supportedCurrencyCodes = array(
+        'AUD',
+        'CAD',
+        'CZK',
+        'DKK',
+        'EUR',
+        'HKD',
+        'HUF',
+        'ILS',
+        'JPY',
+        'MXN',
+        'NOK',
+        'NZD',
+        'PLN',
+        'GBP',
+        'SGD',
+        'SEK',
+        'CHF',
+        'USD',
+        'TWD',
+        'THB'
+    );
 
     /**
      * Merchant country supported by PayPal
@@ -207,9 +256,73 @@ class Config
      * @var string[]
      */
     protected $_supportedCountryCodes = array(
-        'AE','AR','AT','AU','BE','BG','BR','CA','CH','CL','CR','CY','CZ','DE','DK','DO','EC','EE','ES','FI','FR','GB',
-        'GF','GI','GP','GR','HK','HU','ID','IE','IL','IN','IS','IT','JM','JP','KR','LI','LT','LU','LV','MQ','MT','MX',
-        'MY','NL','NO','NZ','PH','PL','PT','RE','RO','SE','SG','SI','SK','SM','TH','TR','TW','US','UY','VE','VN','ZA');
+        'AE',
+        'AR',
+        'AT',
+        'AU',
+        'BE',
+        'BG',
+        'BR',
+        'CA',
+        'CH',
+        'CL',
+        'CR',
+        'CY',
+        'CZ',
+        'DE',
+        'DK',
+        'DO',
+        'EC',
+        'EE',
+        'ES',
+        'FI',
+        'FR',
+        'GB',
+        'GF',
+        'GI',
+        'GP',
+        'GR',
+        'HK',
+        'HU',
+        'ID',
+        'IE',
+        'IL',
+        'IN',
+        'IS',
+        'IT',
+        'JM',
+        'JP',
+        'KR',
+        'LI',
+        'LT',
+        'LU',
+        'LV',
+        'MQ',
+        'MT',
+        'MX',
+        'MY',
+        'NL',
+        'NO',
+        'NZ',
+        'PH',
+        'PL',
+        'PT',
+        'RE',
+        'RO',
+        'SE',
+        'SG',
+        'SI',
+        'SK',
+        'SM',
+        'TH',
+        'TR',
+        'TW',
+        'US',
+        'UY',
+        'VE',
+        'VN',
+        'ZA'
+    );
 
     /**
      * Buyer country supported by PayPal
@@ -217,22 +330,249 @@ class Config
      * @var string[]
      */
     protected $_supportedBuyerCountryCodes = array(
-        'AF ', 'AX ', 'AL ', 'DZ ', 'AS ', 'AD ', 'AO ', 'AI ', 'AQ ', 'AG ', 'AR ', 'AM ', 'AW ', 'AU ', 'AT ', 'AZ ',
-        'BS ', 'BH ', 'BD ', 'BB ', 'BY ', 'BE ', 'BZ ', 'BJ ', 'BM ', 'BT ', 'BO ', 'BA ', 'BW ', 'BV ', 'BR ', 'IO ',
-        'BN ', 'BG ', 'BF ', 'BI ', 'KH ', 'CM ', 'CA ', 'CV ', 'KY ', 'CF ', 'TD ', 'CL ', 'CN ', 'CX ', 'CC ', 'CO ',
-        'KM ', 'CG ', 'CD ', 'CK ', 'CR ', 'CI ', 'HR ', 'CU ', 'CY ', 'CZ ', 'DK ', 'DJ ', 'DM ', 'DO ', 'EC ', 'EG ',
-        'SV ', 'GQ ', 'ER ', 'EE ', 'ET ', 'FK ', 'FO ', 'FJ ', 'FI ', 'FR ', 'GF ', 'PF ', 'TF ', 'GA ', 'GM ', 'GE ',
-        'DE ', 'GH ', 'GI ', 'GR ', 'GL ', 'GD ', 'GP ', 'GU ', 'GT ', 'GG ', 'GN ', 'GW ', 'GY ', 'HT ', 'HM ', 'VA ',
-        'HN ', 'HK ', 'HU ', 'IS ', 'IN ', 'ID ', 'IR ', 'IQ ', 'IE ', 'IM ', 'IL ', 'IT ', 'JM ', 'JP ', 'JE ', 'JO ',
-        'KZ ', 'KE ', 'KI ', 'KP ', 'KR ', 'KW ', 'KG ', 'LA ', 'LV ', 'LB ', 'LS ', 'LR ', 'LY ', 'LI ', 'LT ', 'LU ',
-        'MO ', 'MK ', 'MG ', 'MW ', 'MY ', 'MV ', 'ML ', 'MT ', 'MH ', 'MQ ', 'MR ', 'MU ', 'YT ', 'MX ', 'FM ', 'MD ',
-        'MC ', 'MN ', 'MS ', 'MA ', 'MZ ', 'MM ', 'NA ', 'NR ', 'NP ', 'NL ', 'AN ', 'NC ', 'NZ ', 'NI ', 'NE ', 'NG ',
-        'NU ', 'NF ', 'MP ', 'NO ', 'OM ', 'PK ', 'PW ', 'PS ', 'PA ', 'PG ', 'PY ', 'PE ', 'PH ', 'PN ', 'PL ', 'PT ',
-        'PR ', 'QA ', 'RE ', 'RO ', 'RU ', 'RW ', 'SH ', 'KN ', 'LC ', 'PM ', 'VC ', 'WS ', 'SM ', 'ST ', 'SA ', 'SN ',
-        'CS ', 'SC ', 'SL ', 'SG ', 'SK ', 'SI ', 'SB ', 'SO ', 'ZA ', 'GS ', 'ES ', 'LK ', 'SD ', 'SR ', 'SJ ', 'SZ ',
-        'SE ', 'CH ', 'SY ', 'TW ', 'TJ ', 'TZ ', 'TH ', 'TL ', 'TG ', 'TK ', 'TO ', 'TT ', 'TN ', 'TR ', 'TM ', 'TC ',
-        'TV ', 'UG ', 'UA ', 'AE ', 'GB ', 'US ', 'UM ', 'UY ', 'UZ ', 'VU ', 'VE ', 'VN ', 'VG ', 'VI ', 'WF ', 'EH ',
-        'YE ', 'ZM ', 'ZW'
+        'AF ',
+        'AX ',
+        'AL ',
+        'DZ ',
+        'AS ',
+        'AD ',
+        'AO ',
+        'AI ',
+        'AQ ',
+        'AG ',
+        'AR ',
+        'AM ',
+        'AW ',
+        'AU ',
+        'AT ',
+        'AZ ',
+        'BS ',
+        'BH ',
+        'BD ',
+        'BB ',
+        'BY ',
+        'BE ',
+        'BZ ',
+        'BJ ',
+        'BM ',
+        'BT ',
+        'BO ',
+        'BA ',
+        'BW ',
+        'BV ',
+        'BR ',
+        'IO ',
+        'BN ',
+        'BG ',
+        'BF ',
+        'BI ',
+        'KH ',
+        'CM ',
+        'CA ',
+        'CV ',
+        'KY ',
+        'CF ',
+        'TD ',
+        'CL ',
+        'CN ',
+        'CX ',
+        'CC ',
+        'CO ',
+        'KM ',
+        'CG ',
+        'CD ',
+        'CK ',
+        'CR ',
+        'CI ',
+        'HR ',
+        'CU ',
+        'CY ',
+        'CZ ',
+        'DK ',
+        'DJ ',
+        'DM ',
+        'DO ',
+        'EC ',
+        'EG ',
+        'SV ',
+        'GQ ',
+        'ER ',
+        'EE ',
+        'ET ',
+        'FK ',
+        'FO ',
+        'FJ ',
+        'FI ',
+        'FR ',
+        'GF ',
+        'PF ',
+        'TF ',
+        'GA ',
+        'GM ',
+        'GE ',
+        'DE ',
+        'GH ',
+        'GI ',
+        'GR ',
+        'GL ',
+        'GD ',
+        'GP ',
+        'GU ',
+        'GT ',
+        'GG ',
+        'GN ',
+        'GW ',
+        'GY ',
+        'HT ',
+        'HM ',
+        'VA ',
+        'HN ',
+        'HK ',
+        'HU ',
+        'IS ',
+        'IN ',
+        'ID ',
+        'IR ',
+        'IQ ',
+        'IE ',
+        'IM ',
+        'IL ',
+        'IT ',
+        'JM ',
+        'JP ',
+        'JE ',
+        'JO ',
+        'KZ ',
+        'KE ',
+        'KI ',
+        'KP ',
+        'KR ',
+        'KW ',
+        'KG ',
+        'LA ',
+        'LV ',
+        'LB ',
+        'LS ',
+        'LR ',
+        'LY ',
+        'LI ',
+        'LT ',
+        'LU ',
+        'MO ',
+        'MK ',
+        'MG ',
+        'MW ',
+        'MY ',
+        'MV ',
+        'ML ',
+        'MT ',
+        'MH ',
+        'MQ ',
+        'MR ',
+        'MU ',
+        'YT ',
+        'MX ',
+        'FM ',
+        'MD ',
+        'MC ',
+        'MN ',
+        'MS ',
+        'MA ',
+        'MZ ',
+        'MM ',
+        'NA ',
+        'NR ',
+        'NP ',
+        'NL ',
+        'AN ',
+        'NC ',
+        'NZ ',
+        'NI ',
+        'NE ',
+        'NG ',
+        'NU ',
+        'NF ',
+        'MP ',
+        'NO ',
+        'OM ',
+        'PK ',
+        'PW ',
+        'PS ',
+        'PA ',
+        'PG ',
+        'PY ',
+        'PE ',
+        'PH ',
+        'PN ',
+        'PL ',
+        'PT ',
+        'PR ',
+        'QA ',
+        'RE ',
+        'RO ',
+        'RU ',
+        'RW ',
+        'SH ',
+        'KN ',
+        'LC ',
+        'PM ',
+        'VC ',
+        'WS ',
+        'SM ',
+        'ST ',
+        'SA ',
+        'SN ',
+        'CS ',
+        'SC ',
+        'SL ',
+        'SG ',
+        'SK ',
+        'SI ',
+        'SB ',
+        'SO ',
+        'ZA ',
+        'GS ',
+        'ES ',
+        'LK ',
+        'SD ',
+        'SR ',
+        'SJ ',
+        'SZ ',
+        'SE ',
+        'CH ',
+        'SY ',
+        'TW ',
+        'TJ ',
+        'TZ ',
+        'TH ',
+        'TL ',
+        'TG ',
+        'TK ',
+        'TO ',
+        'TT ',
+        'TN ',
+        'TR ',
+        'TM ',
+        'TC ',
+        'TV ',
+        'UG ',
+        'UA ',
+        'AE ',
+        'GB ',
+        'US ',
+        'UM ',
+        'UY ',
+        'UZ ',
+        'VU ',
+        'VE ',
+        'VN ',
+        'VG ',
+        'VI ',
+        'WF ',
+        'EH ',
+        'YE ',
+        'ZM ',
+        'ZW'
     );
 
     /**
@@ -241,8 +581,21 @@ class Config
      * @var string[]
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
      */
-    protected $_supportedImageLocales = array('de_DE', 'en_AU', 'en_GB', 'en_US', 'es_ES', 'es_XC', 'fr_FR',
-        'fr_XC', 'it_IT', 'ja_JP', 'nl_NL', 'pl_PL', 'zh_CN', 'zh_XC',
+    protected $_supportedImageLocales = array(
+        'de_DE',
+        'en_AU',
+        'en_GB',
+        'en_US',
+        'es_ES',
+        'es_XC',
+        'fr_FR',
+        'fr_XC',
+        'it_IT',
+        'ja_JP',
+        'nl_NL',
+        'pl_PL',
+        'zh_CN',
+        'zh_XC'
     );
 
     /**
@@ -351,8 +704,12 @@ class Config
      */
     public function isMethodActive($method)
     {
-        return $this->isMethodSupportedForCountry($method)
-            && $this->_coreStoreConfig->getConfigFlag("payment/{$method}/active", $this->_storeId);
+        return $this->isMethodSupportedForCountry(
+            $method
+        ) && $this->_coreStoreConfig->getConfigFlag(
+            "payment/{$method}/active",
+            $this->_storeId
+        );
     }
 
     /**
@@ -381,8 +738,7 @@ class Config
                     break;
                 }
                 // check for direct payments dependence
-                if ($this->isMethodActive(self::METHOD_WPP_DIRECT)
-                    || $this->isMethodActive(self::METHOD_WPP_PE_DIRECT)
+                if ($this->isMethodActive(self::METHOD_WPP_DIRECT) || $this->isMethodActive(self::METHOD_WPP_PE_DIRECT)
                 ) {
                     $result = false;
                 }
@@ -397,13 +753,20 @@ class Config
                 break;
             case self::METHOD_WPP_PE_EXPRESS:
                 // check for direct payments dependence
-                if ($this->isMethodActive(self::METHOD_WPP_PE_DIRECT)
-                    || $this->isMethodActive(self::METHOD_PAYFLOWLINK)
-                    || $this->isMethodActive(self::METHOD_PAYFLOWADVANCED)
+                if ($this->isMethodActive(
+                    self::METHOD_WPP_PE_DIRECT
+                ) || $this->isMethodActive(
+                    self::METHOD_PAYFLOWLINK
+                ) || $this->isMethodActive(
+                    self::METHOD_PAYFLOWADVANCED
+                )
                 ) {
                     $result = true;
-                } elseif (!$this->isMethodActive(self::METHOD_WPP_PE_DIRECT)
-                    && !$this->isMethodActive(self::METHOD_PAYFLOWPRO)
+                } elseif (!$this->isMethodActive(
+                    self::METHOD_WPP_PE_DIRECT
+                ) && !$this->isMethodActive(
+                    self::METHOD_PAYFLOWPRO
+                )
                 ) {
                     $result = false;
                 }
@@ -434,8 +797,8 @@ class Config
         if ($path !== null) {
             $value = $this->_coreStoreConfig->getConfig($path, $this->_storeId);
             $value = $this->_prepareValue($underscored, $value);
-            $this->$key = $value;
-            $this->$underscored = $value;
+            $this->{$key} = $value;
+            $this->{$underscored} = $value;
             return $value;
         }
         return null;
@@ -451,10 +814,11 @@ class Config
     protected function _prepareValue($key, $value)
     {
         // Always set payment action as "Sale" for Unilateral payments in EC
-        if ($key == 'payment_action'
-            && $value != self::PAYMENT_ACTION_SALE
-            && $this->_methodCode == self::METHOD_WPP_EXPRESS
-            && $this->shouldUseUnilateralPayments()) {
+        if ($key == 'payment_action' &&
+            $value != self::PAYMENT_ACTION_SALE &&
+            $this->_methodCode == self::METHOD_WPP_EXPRESS &&
+            $this->shouldUseUnilateralPayments()
+        ) {
             return self::PAYMENT_ACTION_SALE;
         }
         return $value;
@@ -487,7 +851,10 @@ class Config
      */
     public function getMerchantCountry()
     {
-        $countryCode = $this->_coreStoreConfig->getConfig($this->_mapGeneralFieldset('merchant_country'), $this->_storeId);
+        $countryCode = $this->_coreStoreConfig->getConfig(
+            $this->_mapGeneralFieldset('merchant_country'),
+            $this->_storeId
+        );
         if (!$countryCode) {
             $countryCode = $this->_coreData->getDefaultCountry($this->_storeId);
         }
@@ -522,11 +889,7 @@ class Config
     public function getCountryMethods($countryCode = null)
     {
         $countryMethods = array(
-            'other' => array(
-                self::METHOD_WPS,
-                self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
-            ),
+            'other' => array(self::METHOD_WPS, self::METHOD_WPP_EXPRESS, self::METHOD_BILLING_AGREEMENT),
             'US' => array(
                 self::METHOD_PAYFLOWADVANCED,
                 self::METHOD_WPP_DIRECT,
@@ -535,7 +898,7 @@ class Config
                 self::METHOD_PAYFLOWLINK,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT,
-                self::METHOD_WPP_PE_EXPRESS,
+                self::METHOD_WPP_PE_EXPRESS
             ),
             'CA' => array(
                 self::METHOD_WPP_DIRECT,
@@ -543,7 +906,7 @@ class Config
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_PAYFLOWLINK,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'GB' => array(
                 self::METHOD_WPP_DIRECT,
@@ -552,51 +915,51 @@ class Config
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT,
-                self::METHOD_WPP_PE_EXPRESS,
+                self::METHOD_WPP_PE_EXPRESS
             ),
             'AU' => array(
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'NZ' => array(
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'JP' => array(
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'FR' => array(
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'IT' => array(
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'ES' => array(
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
+                self::METHOD_BILLING_AGREEMENT
             ),
             'HK' => array(
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT,
-            ),
+                self::METHOD_BILLING_AGREEMENT
+            )
         );
         if ($countryCode === null) {
             return $countryMethods;
@@ -612,10 +975,7 @@ class Config
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return $this->getPaypalUrl(array(
-            'cmd'   => '_express-checkout',
-            'token' => $token,
-        ));
+        return $this->getPaypalUrl(array('cmd' => '_express-checkout', 'token' => $token));
     }
 
     /**
@@ -626,11 +986,7 @@ class Config
      */
     public function getExpressCheckoutEditUrl($token)
     {
-        return $this->getPaypalUrl(array(
-            'cmd'        => '_express-checkout',
-            'useraction' => 'continue',
-            'token'      => $token,
-        ));
+        return $this->getPaypalUrl(array('cmd' => '_express-checkout', 'useraction' => 'continue', 'token' => $token));
     }
 
     /**
@@ -642,10 +998,7 @@ class Config
      */
     public function getExpressCheckoutCompleteUrl($token)
     {
-        return $this->getPaypalUrl(array(
-            'cmd'   => '_complete-express-checkout',
-            'token' => $token,
-        ));
+        return $this->getPaypalUrl(array('cmd' => '_complete-express-checkout', 'token' => $token));
     }
 
     /**
@@ -656,10 +1009,7 @@ class Config
      */
     public function getStartBillingAgreementUrl($token)
     {
-        return $this->getPaypalUrl(array(
-            'cmd'   => '_customer-billing-agreement',
-            'token' => $token,
-        ));
+        return $this->getPaypalUrl(array('cmd' => '_customer-billing-agreement', 'token' => $token));
     }
 
     /**
@@ -670,7 +1020,8 @@ class Config
      */
     public function getPaypalUrl(array $params = array())
     {
-        return sprintf('https://www.%spaypal.com/cgi-bin/webscr%s',
+        return sprintf(
+            'https://www.%spaypal.com/cgi-bin/webscr%s',
             $this->sandboxFlag ? 'sandbox.' : '',
             $params ? '?' . http_build_query($params) : ''
         );
@@ -704,8 +1055,10 @@ class Config
         if ($this->buttonType === self::EC_BUTTON_TYPE_MARK) {
             return $this->getPaymentMarkImageUrl($localeCode);
         }
-        return sprintf('https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif',
-            $this->_getSupportedLocaleCode($localeCode));
+        return sprintf(
+            'https://www.paypal.com/%s/i/btn/btn_xpressCheckout.gif',
+            $this->_getSupportedLocaleCode($localeCode)
+        );
     }
 
     /**
@@ -729,16 +1082,19 @@ class Config
             $staticSize = $this->paymentMarkSize;
         }
         switch ($staticSize) {
-            case self::PAYMENT_MARK_37x23:
-            case self::PAYMENT_MARK_50x34:
-            case self::PAYMENT_MARK_60x38:
-            case self::PAYMENT_MARK_180x113:
+            case self::PAYMENT_MARK_37X23:
+            case self::PAYMENT_MARK_50X34:
+            case self::PAYMENT_MARK_60X38:
+            case self::PAYMENT_MARK_180X113:
                 break;
             default:
-                $staticSize = self::PAYMENT_MARK_37x23;
+                $staticSize = self::PAYMENT_MARK_37X23;
         }
-        return sprintf('https://www.paypal.com/%s/i/logo/PayPal_mark_%s.gif',
-            $this->_getSupportedLocaleCode($localeCode), $staticSize);
+        return sprintf(
+            'https://www.paypal.com/%s/i/logo/PayPal_mark_%s.gif',
+            $this->_getSupportedLocaleCode($localeCode),
+            $staticSize
+        );
     }
 
     /**
@@ -752,7 +1108,7 @@ class Config
     {
         $countryCode = 'US';
         if (null !== $locale) {
-            $shouldEmulate = (null !== $this->_storeId) && $this->_storeManager->getStore()->getId() != $this->_storeId;
+            $shouldEmulate = null !== $this->_storeId && $this->_storeManager->getStore()->getId() != $this->_storeId;
             if ($shouldEmulate) {
                 $locale->emulate($this->_storeId);
             }
@@ -761,7 +1117,8 @@ class Config
                 $locale->revert();
             }
         }
-        return sprintf('https://www.paypal.com/%s/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside',
+        return sprintf(
+            'https://www.paypal.com/%s/cgi-bin/webscr?cmd=xpt/Marketing/popup/OLCWhatIsPayPal-outside',
             strtolower($countryCode)
         );
     }
@@ -776,9 +1133,11 @@ class Config
      */
     public function getSolutionImageUrl($localeCode, $isVertical = false, $isEcheck = false)
     {
-        return sprintf('https://www.paypal.com/%s/i/bnr/%s_solution_PP%s.gif',
+        return sprintf(
+            'https://www.paypal.com/%s/i/bnr/%s_solution_PP%s.gif',
             $this->_getSupportedLocaleCode($localeCode),
-            $isVertical ? 'vertical' : 'horizontal', $isEcheck ? 'eCheck' : ''
+            $isVertical ? 'vertical' : 'horizontal',
+            $isEcheck ? 'eCheck' : ''
         );
     }
 
@@ -794,7 +1153,7 @@ class Config
 
         $imageType = 'logo';
         $domain = 'paypal.com';
-        list (,$country) = explode('_', $locale);
+        list(, $country) = explode('_', $locale);
         $countryPrefix = $country . '/';
 
         switch ($locale) {
@@ -818,7 +1177,7 @@ class Config
                 $domain = 'paypalobjects.com';
                 break;
             default:
-                $imageName='PayPal_mark_60x38';
+                $imageName = 'PayPal_mark_60x38';
                 $countryPrefix = '';
                 break;
         }
@@ -833,14 +1192,14 @@ class Config
     public function getAdditionalOptionsLogoTypes()
     {
         return array(
-            'wePrefer_150x60'       => __('We prefer PayPal (150 X 60)'),
-            'wePrefer_150x40'       => __('We prefer PayPal (150 X 40)'),
-            'nowAccepting_150x60'   => __('Now accepting PayPal (150 X 60)'),
-            'nowAccepting_150x40'   => __('Now accepting PayPal (150 X 40)'),
-            'paymentsBy_150x60'     => __('Payments by PayPal (150 X 60)'),
-            'paymentsBy_150x40'     => __('Payments by PayPal (150 X 40)'),
-            'shopNowUsing_150x60'   => __('Shop now using (150 X 60)'),
-            'shopNowUsing_150x40'   => __('Shop now using (150 X 40)'),
+            'wePrefer_150x60' => __('We prefer PayPal (150 X 60)'),
+            'wePrefer_150x40' => __('We prefer PayPal (150 X 40)'),
+            'nowAccepting_150x60' => __('Now accepting PayPal (150 X 60)'),
+            'nowAccepting_150x40' => __('Now accepting PayPal (150 X 40)'),
+            'paymentsBy_150x60' => __('Payments by PayPal (150 X 60)'),
+            'paymentsBy_150x40' => __('Payments by PayPal (150 X 40)'),
+            'shopNowUsing_150x60' => __('Shop now using (150 X 60)'),
+            'shopNowUsing_150x40' => __('Shop now using (150 X 40)')
         );
     }
 
@@ -894,10 +1253,7 @@ class Config
      */
     public function getExpressCheckoutButtonFlavors()
     {
-        return array(
-            self::EC_FLAVOR_DYNAMIC => __('Dynamic'),
-            self::EC_FLAVOR_STATIC  => __('Static'),
-        );
+        return array(self::EC_FLAVOR_DYNAMIC => __('Dynamic'), self::EC_FLAVOR_STATIC => __('Static'));
     }
 
     /**
@@ -909,7 +1265,7 @@ class Config
     {
         return array(
             self::EC_BUTTON_TYPE_SHORTCUT => __('Shortcut'),
-            self::EC_BUTTON_TYPE_MARK     => __('Acceptance Mark Image'),
+            self::EC_BUTTON_TYPE_MARK => __('Acceptance Mark Image')
         );
     }
 
@@ -938,9 +1294,9 @@ class Config
     public function getRequireBillingAddressOptions()
     {
         return array(
-            self::REQUIRE_BILLING_ADDRESS_ALL       => __('Yes'),
-            self::REQUIRE_BILLING_ADDRESS_NO        => __('No'),
-            self::REQUIRE_BILLING_ADDRESS_VIRTUAL   => __('For Virtual Quotes Only'),
+            self::REQUIRE_BILLING_ADDRESS_ALL => __('Yes'),
+            self::REQUIRE_BILLING_ADDRESS_NO => __('No'),
+            self::REQUIRE_BILLING_ADDRESS_VIRTUAL => __('For Virtual Quotes Only')
         );
     }
 
@@ -981,10 +1337,7 @@ class Config
      */
     public function getExpressCheckoutSolutionTypes()
     {
-        return array(
-            self::EC_SOLUTION_TYPE_SOLE => __('Yes'),
-            self::EC_SOLUTION_TYPE_MARK => __('No'),
-        );
+        return array(self::EC_SOLUTION_TYPE_SOLE => __('Yes'), self::EC_SOLUTION_TYPE_MARK => __('No'));
     }
 
     /**
@@ -995,8 +1348,8 @@ class Config
     public function getExpressCheckoutBASignupOptions()
     {
         return array(
-            self::EC_BA_SIGNUP_AUTO  => __('Auto'),
-            self::EC_BA_SIGNUP_ASK   => __('Ask Customer'),
+            self::EC_BA_SIGNUP_AUTO => __('Auto'),
+            self::EC_BA_SIGNUP_ASK => __('Ask Customer'),
             self::EC_BA_SIGNUP_NEVER => __('Never')
         );
     }
@@ -1009,7 +1362,7 @@ class Config
      */
     public function shouldAskToCreateBillingAgreement()
     {
-        return ($this->allow_ba_signup === self::EC_BA_SIGNUP_ASK) && !$this->shouldUseUnilateralPayments();
+        return $this->allow_ba_signup === self::EC_BA_SIGNUP_ASK && !$this->shouldUseUnilateralPayments();
     }
 
     /**
@@ -1040,10 +1393,10 @@ class Config
     public function getWpsPaymentDeliveryMethods()
     {
         return array(
-            self::WPS_TRANSPORT_IPN      => __('IPN (Instant Payment Notification) Only'),
+            self::WPS_TRANSPORT_IPN => __('IPN (Instant Payment Notification) Only')
             // not supported yet:
-//            self::WPS_TRANSPORT_PDT      => __('PDT (Payment Data Transfer) Only'),
-//            self::WPS_TRANSPORT_IPN_PDT  => __('Both IPN and PDT'),
+            //            self::WPS_TRANSPORT_PDT      => __('PDT (Payment Data Transfer) Only'),
+            //            self::WPS_TRANSPORT_IPN_PDT  => __('Both IPN and PDT'),
         );
     }
 
@@ -1054,7 +1407,9 @@ class Config
      */
     public function getWppCcTypesAsOptionArray()
     {
-        return $this->_cctypeFactory->create()->setAllowedTypes(array('AE', 'VI', 'MC', 'SM', 'SO', 'DI'))->toOptionArray();
+        return $this->_cctypeFactory->create()->setAllowedTypes(
+            array('AE', 'VI', 'MC', 'SM', 'SO', 'DI')
+        )->toOptionArray();
     }
 
     /**
@@ -1064,8 +1419,9 @@ class Config
      */
     public function getWppPeCcTypesAsOptionArray()
     {
-        return $this->_cctypeFactory->create()
-            ->setAllowedTypes(array('VI', 'MC', 'SM', 'SO', 'OT', 'AE'))->toOptionArray();
+        return $this->_cctypeFactory->create()->setAllowedTypes(
+            array('VI', 'MC', 'SM', 'SO', 'OT', 'AE')
+        )->toOptionArray();
     }
 
     /**
@@ -1130,8 +1486,8 @@ class Config
     public function exportExpressCheckoutStyleSettings(\Magento\Object $to)
     {
         foreach ($this->_ecStyleConfigMap as $key => $exportKey) {
-            if ($this->$key) {
-                $to->setData($exportKey, $this->$key);
+            if ($this->{$key}) {
+                $to->setData($exportKey, $this->{$key});
             }
         }
     }
@@ -1149,9 +1505,9 @@ class Config
     protected function _getDynamicImageUrl($type, $localeCode, $orderTotal, $pal)
     {
         $params = array(
-            'cmd'        => '_dynamic-image',
+            'cmd' => '_dynamic-image',
             'buttontype' => $type,
-            'locale'     => $this->_getSupportedLocaleCode($localeCode),
+            'locale' => $this->_getSupportedLocaleCode($localeCode)
         );
         if ($orderTotal) {
             $params['ordertotal'] = sprintf('%.2F', $orderTotal);
@@ -1159,8 +1515,10 @@ class Config
                 $params['pal'] = $pal;
             }
         }
-        return sprintf('https://fpdbs%s.paypal.com/dynamicimageweb?%s',
-            $this->sandboxFlag ? '.sandbox' : '', http_build_query($params)
+        return sprintf(
+            'https://fpdbs%s.paypal.com/dynamicimageweb?%s',
+            $this->sandboxFlag ? '.sandbox' : '',
+            http_build_query($params)
         );
     }
 
@@ -1243,10 +1601,26 @@ class Config
             // GB == UK
             case 'GB':
                 return 'UK';
-            // Australia, Austria, Belgium, Canada, China, France, Germany, Hong Kong, Italy
-            case 'AU': case 'AT': case 'BE': case 'CA': case 'CN': case 'FR': case 'DE': case 'HK': case 'IT':
-            // Japan, Mexico, Netherlands, Poland, Singapore, Spain, Switzerland, United Kingdom, United States
-            case 'JP': case 'MX': case 'NL': case 'PL': case 'SG': case 'ES': case 'CH': case 'UK': case 'US':
+                // Australia, Austria, Belgium, Canada, China, France, Germany, Hong Kong, Italy
+            case 'AU':
+            case 'AT':
+            case 'BE':
+            case 'CA':
+            case 'CN':
+            case 'FR':
+            case 'DE':
+            case 'HK':
+            case 'IT':
+                // Japan, Mexico, Netherlands, Poland, Singapore, Spain, Switzerland, United Kingdom, United States
+            case 'JP':
+            case 'MX':
+            case 'NL':
+            case 'PL':
+            case 'SG':
+            case 'ES':
+            case 'CH':
+            case 'UK':
+            case 'US':
                 return $code;
         }
     }
@@ -1259,8 +1633,7 @@ class Config
      */
     protected function _mapStandardFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'line_items_summary':
             case 'sandbox_flag':
                 return 'payment/' . self::METHOD_WPS . "/{$fieldName}";
@@ -1277,8 +1650,7 @@ class Config
      */
     protected function _mapExpressFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'transfer_shipping_options':
             case 'solution_type':
             case 'visible_on_cart':
@@ -1302,8 +1674,7 @@ class Config
      */
     protected function _mapDirectFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'useccv':
             case 'centinel':
             case 'centinel_is_mode_strict':
@@ -1322,8 +1693,7 @@ class Config
      */
     protected function _mapWppFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'api_authentication':
             case 'api_username':
             case 'api_password':
@@ -1349,20 +1719,19 @@ class Config
     protected function _mapWpukFieldset($fieldName)
     {
         $pathPrefix = 'paypal/wpuk';
-        if ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS
-            && $this->isMethodAvailable(self::METHOD_PAYFLOWLINK)
-        ) {
+        if ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(self::METHOD_PAYFLOWLINK)) {
             $pathPrefix = 'payment/payflow_link';
-        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS
-            && $this->isMethodAvailable(self::METHOD_PAYFLOWADVANCED)
+        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(
+            self::METHOD_PAYFLOWADVANCED
+        )
         ) {
             $pathPrefix = 'payment/payflow_advanced';
-        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS
-            && !$this->isMethodAvailable(self::METHOD_WPP_PE_DIRECT)
+        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && !$this->isMethodAvailable(
+            self::METHOD_WPP_PE_DIRECT
+        )
         ) {
             $pathPrefix = 'payment/payflowpro';
-        } elseif ($this->_methodCode == self::METHOD_PAYFLOWADVANCED
-            || $this->_methodCode == self::METHOD_PAYFLOWLINK
+        } elseif ($this->_methodCode == self::METHOD_PAYFLOWADVANCED || $this->_methodCode == self::METHOD_PAYFLOWLINK
         ) {
             $pathPrefix = 'payment/' . $this->_methodCode;
         }
@@ -1410,8 +1779,7 @@ class Config
      */
     protected function _mapGeneralFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'business_account':
             case 'merchant_country':
                 return "paypal/general/{$fieldName}";
@@ -1431,8 +1799,7 @@ class Config
         if (!$this->_methodCode) {
             return null;
         }
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'active':
             case 'title':
             case 'payment_action':
@@ -1456,10 +1823,7 @@ class Config
      */
     public function getApiAuthenticationMethods()
     {
-        return array(
-            '0' => __('API Signature'),
-            '1' => __('API Certificate')
-        );
+        return array('0' => __('API Signature'), '1' => __('API Certificate'));
     }
 
     /**

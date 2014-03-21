@@ -58,12 +58,17 @@ class Layout
             $files[] = $fileFactory->create($filename, 'Magento_Core');
         }
         $fileSource = $this->_testCase->getMockForAbstractClass('Magento\View\Layout\File\SourceInterface');
-        $fileSource->expects(\PHPUnit_Framework_TestCase::any())
-            ->method('getFiles')
-            ->will(\PHPUnit_Framework_TestCase::returnValue($files));
+        $fileSource->expects(
+            \PHPUnit_Framework_TestCase::any()
+        )->method(
+            'getFiles'
+        )->will(
+            \PHPUnit_Framework_TestCase::returnValue($files)
+        );
         $cache = $this->_testCase->getMockForAbstractClass('Magento\Cache\FrontendInterface');
         return $objectManager->create(
-            'Magento\View\Layout\ProcessorInterface', array('fileSource' => $fileSource, 'cache' => $cache)
+            'Magento\View\Layout\ProcessorInterface',
+            array('fileSource' => $fileSource, 'cache' => $cache)
         );
     }
 
@@ -79,9 +84,13 @@ class Layout
         $layout = $this->_testCase->getMock('Magento\Core\Model\Layout', array('getUpdate'), $args);
         $layoutUpdate = $this->getLayoutUpdateFromFixture($layoutUpdatesFile);
         $layoutUpdate->asSimplexml();
-        $layout->expects(\PHPUnit_Framework_TestCase::any())
-            ->method('getUpdate')
-            ->will(\PHPUnit_Framework_TestCase::returnValue($layoutUpdate));
+        $layout->expects(
+            \PHPUnit_Framework_TestCase::any()
+        )->method(
+            'getUpdate'
+        )->will(
+            \PHPUnit_Framework_TestCase::returnValue($layoutUpdate)
+        );
         return $layout;
     }
 
@@ -94,21 +103,21 @@ class Layout
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         return array(
-            'processorFactory'   => $objectManager->get('Magento\View\Layout\ProcessorFactory'),
-            'themeFactory'       => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
-            'logger'             => $objectManager->get('Magento\Logger'),
-            'eventManager'       => $objectManager->get('Magento\Event\ManagerInterface'),
-            'coreData'           => $objectManager->get('Magento\Core\Helper\Data'),
-            'design'             => $objectManager->get('Magento\View\DesignInterface'),
-            'blockFactory'       => $objectManager->create('Magento\View\Element\BlockFactory', array()),
-            'structure'          => $objectManager->create('Magento\Data\Structure', array()),
-            'argumentParser'     => $objectManager->get('Magento\View\Layout\Argument\Parser'),
-            'argumentInterpreter'=> $objectManager->get('layoutArgumentInterpreter'),
+            'processorFactory' => $objectManager->get('Magento\View\Layout\ProcessorFactory'),
+            'themeFactory' => $objectManager->get('Magento\Core\Model\Resource\Theme\CollectionFactory'),
+            'logger' => $objectManager->get('Magento\Logger'),
+            'eventManager' => $objectManager->get('Magento\Event\ManagerInterface'),
+            'coreData' => $objectManager->get('Magento\Core\Helper\Data'),
+            'design' => $objectManager->get('Magento\View\DesignInterface'),
+            'blockFactory' => $objectManager->create('Magento\View\Element\BlockFactory', array()),
+            'structure' => $objectManager->create('Magento\Data\Structure', array()),
+            'argumentParser' => $objectManager->get('Magento\View\Layout\Argument\Parser'),
+            'argumentInterpreter' => $objectManager->get('layoutArgumentInterpreter'),
             'scheduledStructure' => $objectManager->create('Magento\Core\Model\Layout\ScheduledStructure', array()),
-            'coreStoreConfig'    => $objectManager->create('Magento\Core\Model\Store\Config'),
-            'appState'           => $objectManager->get('Magento\App\State'),
-            'messageManager'     => $objectManager->get('Magento\Message\ManagerInterface'),
-            'objectManager'      => $objectManager
+            'coreStoreConfig' => $objectManager->create('Magento\Core\Model\Store\Config'),
+            'appState' => $objectManager->get('Magento\App\State'),
+            'messageManager' => $objectManager->get('Magento\Message\ManagerInterface'),
+            'objectManager' => $objectManager
         );
     }
 }

@@ -25,8 +25,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product;
 
-class Collection
-    extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
      * Link table name
@@ -53,7 +52,8 @@ class Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->getSelect()->join(array('link_table' => $this->_linkTable),
+        $this->getSelect()->join(
+            array('link_table' => $this->_linkTable),
             'link_table.product_id = e.entity_id',
             array('parent_id')
         );
@@ -69,7 +69,7 @@ class Collection
      */
     public function setProductFilter($product)
     {
-        $this->getSelect()->where('link_table.parent_id = ?', (int) $product->getId());
+        $this->getSelect()->where('link_table.parent_id = ?', (int)$product->getId());
         return $this;
     }
 

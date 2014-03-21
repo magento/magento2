@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="checkout_cart_multishipping" label="Catalog Quick Search Form Suggestions"/>
     <type id="checkout_cart_multishipping_address_editaddress" label="Multishipping Checkout One Address Edit Form"/>
     <type id="checkout_cart_multishipping_address_editbilling" label="Multishipping Checkout Billing Address Edit Form"/>

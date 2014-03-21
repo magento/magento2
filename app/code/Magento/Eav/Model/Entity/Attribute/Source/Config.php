@@ -64,10 +64,7 @@ class Config extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 throw new \Magento\Eav\Exception(__('No options found.'));
             }
             foreach ($this->_optionsData as $option) {
-                $this->_options[] = array(
-                    'value' => $option['value'],
-                    'label' => __($option['label'])
-                );
+                $this->_options[] = array('value' => $option['value'], 'label' => __($option['label']));
             }
         }
 

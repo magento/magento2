@@ -49,7 +49,11 @@ class LogTest extends \PHPUnit_Framework_TestCase
     {
         $this->logResourceMock = $this->getMock('Magento\Log\Model\Resource\Log', array(), array(), '', false);
         $this->compareItemMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Compare\Item', array(), array(), '', false
+            'Magento\Catalog\Model\Product\Compare\Item',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->subjectMock = $this->getMock('Magento\Log\Model\Resource\Log', array(), array(), '', false);
         $this->model = new \Magento\Catalog\Model\Plugin\Log($this->compareItemMock);
@@ -60,10 +64,11 @@ class LogTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterClean()
     {
-        $this->compareItemMock->expects($this->once())
-            ->method('clean');
+        $this->compareItemMock->expects($this->once())->method('clean');
 
-        $this->assertEquals($this->logResourceMock,
-            $this->model->afterClean($this->subjectMock, $this->logResourceMock));
+        $this->assertEquals(
+            $this->logResourceMock,
+            $this->model->afterClean($this->subjectMock, $this->logResourceMock)
+        );
     }
 }

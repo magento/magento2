@@ -53,7 +53,7 @@ class CustomerBuilder extends \Magento\Service\Data\EAV\AbstractObjectBuilder
      */
     public function getCustomAttributesCodes()
     {
-        $attributeCodes = [];
+        $attributeCodes = array();
         foreach ($this->_metadataService->getCustomCustomerAttributeMetadata() as $attribute) {
             $attributeCodes[] = $attribute->getAttributeCode();
         }

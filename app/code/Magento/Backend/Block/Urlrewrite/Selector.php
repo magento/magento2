@@ -58,7 +58,7 @@ class Selector extends \Magento\View\Element\Template
             'category' => __('For category'),
             'product' => __('For product'),
             'cms_page' => __('For CMS page'),
-            'id' => __('Custom'),
+            'id' => __('Custom')
         );
     }
 

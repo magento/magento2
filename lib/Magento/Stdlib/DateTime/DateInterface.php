@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib\DateTime;
 
 interface DateInterface
@@ -1118,14 +1117,12 @@ interface DateInterface
      */
     public function compareSecond($second, $locale = null);
 
-
     /**
      * Returns the precision for fractional seconds
      *
      * @return integer
      */
     public function getFractionalPrecision();
-
 
     /**
      * Sets a new precision for fractional seconds
@@ -1153,7 +1150,6 @@ interface DateInterface
      */
     public function setMilliSecond($milli = null, $precision = null);
 
-
     /**
      * Adds milliseconds to the date object
      *
@@ -1162,7 +1158,6 @@ interface DateInterface
      * @return $this Provides fluid interface
      */
     public function addMilliSecond($milli = null, $precision = null);
-
 
     /**
      * Subtracts a millisecond

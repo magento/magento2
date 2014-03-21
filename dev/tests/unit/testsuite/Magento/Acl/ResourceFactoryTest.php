@@ -46,23 +46,37 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_objectManager = $this->getMockForAbstractClass('Magento\ObjectManager', array(), '', true, true, true,
-            array('create'));
+        $this->_objectManager = $this->getMockForAbstractClass(
+            'Magento\ObjectManager',
+            array(),
+            '',
+            true,
+            true,
+            true,
+            array('create')
+        );
 
         $this->_expectedObject = $this->getMock('Magento\Acl\Resource', array(), array(), '', false);
 
-        $this->_model = $helper->getObject('Magento\Acl\ResourceFactory', array(
-            'objectManager' => $this->_objectManager,
-        ));
+        $this->_model = $helper->getObject(
+            'Magento\Acl\ResourceFactory',
+            array('objectManager' => $this->_objectManager)
+        );
     }
 
     public function testCreateResource()
     {
         $arguments = array('5', '6');
-        $this->_objectManager->expects($this->once())
-            ->method('create')
-            ->with('Magento\Acl\Resource', $arguments)
-            ->will($this->returnValue($this->_expectedObject));
+        $this->_objectManager->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Acl\Resource',
+            $arguments
+        )->will(
+            $this->returnValue($this->_expectedObject)
+        );
         $this->assertEquals($this->_expectedObject, $this->_model->createResource($arguments));
     }
 }

@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 class DeployedFilesManagerTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +37,11 @@ class DeployedFilesManagerTest extends \PHPUnit_Framework_TestCase
     public function testBuildDeployedFilePath($area, $themePath, $file, $module, $expected)
     {
         $actual = \Magento\View\DeployedFilesManager::buildDeployedFilePath(
-            $area, $themePath, $file, $module, $expected
+            $area,
+            $themePath,
+            $file,
+            $module,
+            $expected
         );
         $this->assertEquals($expected, $actual);
     }
@@ -50,7 +53,7 @@ class DeployedFilesManagerTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'no module' => array('a', 't', 'f', null, 'a/t/f'),
-            'with module' => array('a', 't', 'f', 'm', 'a/t/m/f'),
+            'with module' => array('a', 't', 'f', 'm', 'a/t/m/f')
         );
     }
 }

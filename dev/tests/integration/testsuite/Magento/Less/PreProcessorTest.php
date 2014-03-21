@@ -32,12 +32,14 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => __DIR__ . '/_files/lib'),
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::PUB_LIB_DIR => array('path' => __DIR__ . '/_files/lib'),
+                    \Magento\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/_files/design')
+                )
             )
-        ));
+        );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->objectManager->get('Magento\App\State')->setAreaCode('frontend');
     }
@@ -59,11 +61,10 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $viewService = $this->objectManager->get('Magento\View\Service');
         $viewService->updateDesignParams($designParams);
         /** @var $file \Magento\View\Publisher\CssFile */
-        $cssFile = $this->objectManager->create('Magento\View\Publisher\CssFile', [
-            'filePath'         => 'source/source.css',
-            'allowDuplication' => true,
-            'viewParams'       => $designParams
-        ]);
+        $cssFile = $this->objectManager->create(
+            'Magento\View\Publisher\CssFile',
+            array('filePath' => 'source/source.css', 'allowDuplication' => true, 'viewParams' => $designParams)
+        );
         $cssTargetFile = $lessPreProcessor->process($cssFile, $targetDirectory);
         /** @var $viewFilesystem \Magento\View\FileSystem */
         $viewFilesystem = $this->objectManager->get('Magento\View\FileSystem');
@@ -87,7 +88,7 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         /** @var $preProcessor \Magento\Less\PreProcessor */
         $preProcessor = $this->objectManager->create('Magento\Less\PreProcessor');
         $fileList = $preProcessor->processLessInstructions('circular_dependency/import1.less', $designParams);
-        $files = [];
+        $files = array();
         /** @var $lessFile \Magento\Less\PreProcessor\File\Less */
         foreach ($fileList as $lessFile) {
             $this->assertFileExists($lessFile->getPublicationPath());

@@ -54,13 +54,15 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     public function addWishlistCount()
     {
         $wishlistItemTable = $this->getTable('wishlist_item');
-        $this->getSelect()
-            ->join(
-                array('wi' => $wishlistItemTable),
-                'wi.product_id = e.entity_id',
-                array('wishlists' => new \Zend_Db_Expr('COUNT(wi.wishlist_item_id)')))
-            ->where('wi.product_id = e.entity_id')
-            ->group('wi.product_id');
+        $this->getSelect()->join(
+            array('wi' => $wishlistItemTable),
+            'wi.product_id = e.entity_id',
+            array('wishlists' => new \Zend_Db_Expr('COUNT(wi.wishlist_item_id)'))
+        )->where(
+            'wi.product_id = e.entity_id'
+        )->group(
+            'wi.product_id'
+        );
 
         $this->getEntity()->setStore(0);
         return $this;
@@ -75,14 +77,12 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
     {
         $this->getSelect()->reset();
 
-        $this->getSelect()
-            ->from(
-                array('wishlist' => $this->getTable('wishlist')),
-                array(
-                    'wishlist_cnt' => new \Zend_Db_Expr('COUNT(wishlist.wishlist_id)'),
-                    'wishlist.customer_id'
-                ))
-            ->group('wishlist.customer_id');
+        $this->getSelect()->from(
+            array('wishlist' => $this->getTable('wishlist')),
+            array('wishlist_cnt' => new \Zend_Db_Expr('COUNT(wishlist.wishlist_id)'), 'wishlist.customer_id')
+        )->group(
+            'wishlist.customer_id'
+        );
         return $this;
     }
 
@@ -122,4 +122,3 @@ class Collection extends \Magento\Wishlist\Model\Resource\Item\Collection
         return $this;
     }
 }
-

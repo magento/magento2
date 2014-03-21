@@ -384,5 +384,5 @@ return array(
     'widget/widget_instance_page_layout' => 'widget_instance_page_layout',
     'wishlist/item' => 'wishlist_item',
     'wishlist/item_option' => 'wishlist_item_option',
-    'wishlist/wishlist' => 'wishlist',
+    'wishlist/wishlist' => 'wishlist'
 );

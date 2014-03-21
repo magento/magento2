@@ -140,7 +140,6 @@ class Config
         return $state;
     }
 
-
     /**
      * Retrieve all statuses
      *
@@ -166,7 +165,6 @@ class Config
         return $states;
     }
 
-
     /**
      * Retrieve statuses available for state
      * Get all possible statuses, or for specified state, or specified states array
@@ -190,9 +188,7 @@ class Config
         foreach ($state as $_state) {
             $stateNode = $this->_getState($_state);
             if ($stateNode) {
-                $collection = $this->_orderStatusCollectionFactory->create()
-                    ->addStateFilter($_state)
-                    ->orderByLabel();
+                $collection = $this->_orderStatusCollectionFactory->create()->addStateFilter($_state)->orderByLabel();
                 foreach ($collection as $item) {
                     $status = $item->getData('status');
                     if ($addLabels) {
@@ -236,11 +232,11 @@ class Config
     {
         $visibility = (bool)$visibility;
         if ($this->_states == null) {
-            foreach($this->_getCollection() as $item) {
+            foreach ($this->_getCollection() as $item) {
                 $visible = (bool)$item->getData('visible_on_front');
                 $this->_states[$visible][] = $item->getData('state');
             }
         }
-        return  $this->_states[$visibility];
+        return $this->_states[$visibility];
     }
 }

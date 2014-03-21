@@ -39,7 +39,7 @@ class Item extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_creditmemo_item_resource';
+    protected $_eventPrefix = 'sales_order_creditmemo_item_resource';
 
     /**
      * Model initialization

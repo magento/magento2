@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Model;
 
 class QueueTest extends \PHPUnit_Framework_TestCase
@@ -47,29 +46,26 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $filter = $objectManager->get('Magento\Newsletter\Model\Template\Filter');
 
         $transport = $this->getMock('\Magento\Mail\TransportInterface');
-        $transport->expects($this->exactly(2))
-            ->method('sendMessage')
-            ->will($this->returnSelf());
+        $transport->expects($this->exactly(2))->method('sendMessage')->will($this->returnSelf());
 
-        $builder = $this->getMock('\Magento\Newsletter\Model\Queue\TransportBuilder',
+        $builder = $this->getMock(
+            '\Magento\Newsletter\Model\Queue\TransportBuilder',
             array('getTransport', 'setFrom', 'addTo'),
-            array(), '', false);
-        $builder->expects($this->exactly(2))
-            ->method('getTransport')
-            ->will($this->returnValue($transport));
-        $builder->expects($this->exactly(2))
-            ->method('setFrom')
-            ->will($this->returnSelf());
-        $builder->expects($this->exactly(2))
-            ->method('addTo')
-            ->will($this->returnSelf());
+            array(),
+            '',
+            false
+        );
+        $builder->expects($this->exactly(2))->method('getTransport')->will($this->returnValue($transport));
+        $builder->expects($this->exactly(2))->method('setFrom')->will($this->returnSelf());
+        $builder->expects($this->exactly(2))->method('addTo')->will($this->returnSelf());
 
         /** @var $queue \Magento\Newsletter\Model\Queue */
-        $queue = $objectManager->create('Magento\Newsletter\Model\Queue', array(
-            'filter' => $filter,
-            'transportBuilder' => $builder,
-        ));
-        $queue->load('Subject', 'newsletter_subject'); // fixture
+        $queue = $objectManager->create(
+            'Magento\Newsletter\Model\Queue',
+            array('filter' => $filter, 'transportBuilder' => $builder)
+        );
+        $queue->load('Subject', 'newsletter_subject');
+        // fixture
         $queue->sendPerSubscriber();
     }
 
@@ -82,32 +78,32 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $errorMsg = md5(microtime());
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $objectManager->get('Magento\Core\Model\App')->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $transport = $this->getMock('\Magento\Mail\TransportInterface');
-        $transport->expects($this->any())
-            ->method('sendMessage')
-            ->will($this->throwException(new \Magento\Mail\Exception($errorMsg, 99)));
+        $transport->expects(
+            $this->any()
+        )->method(
+            'sendMessage'
+        )->will(
+            $this->throwException(new \Magento\Mail\Exception($errorMsg, 99))
+        );
 
-        $builder = $this->getMock('\Magento\Newsletter\Model\Queue\TransportBuilder',
+        $builder = $this->getMock(
+            '\Magento\Newsletter\Model\Queue\TransportBuilder',
             array('getTransport', 'setFrom', 'addTo'),
-            array(), '', false);
-        $builder->expects($this->any())
-            ->method('getTransport')
-            ->will($this->returnValue($transport));
-        $builder->expects($this->any())
-            ->method('setFrom')
-            ->will($this->returnSelf());
-        $builder->expects($this->any())
-            ->method('addTo')
-            ->will($this->returnSelf());
+            array(),
+            '',
+            false
+        );
+        $builder->expects($this->any())->method('getTransport')->will($this->returnValue($transport));
+        $builder->expects($this->any())->method('setFrom')->will($this->returnSelf());
+        $builder->expects($this->any())->method('addTo')->will($this->returnSelf());
 
         /** @var $queue \Magento\Newsletter\Model\Queue */
-        $queue = $objectManager->create('Magento\Newsletter\Model\Queue', array(
-            'transportBuilder' => $builder,
-        ));
-        $queue->load('Subject', 'newsletter_subject'); // fixture
+        $queue = $objectManager->create('Magento\Newsletter\Model\Queue', array('transportBuilder' => $builder));
+        $queue->load('Subject', 'newsletter_subject');
+        // fixture
 
         $problem = $objectManager->create('Magento\Newsletter\Model\Problem');
         $problem->load($queue->getId(), 'queue_id');

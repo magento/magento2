@@ -41,9 +41,9 @@ class Loader
      * @param string|false $protocol  'curl'/'socket' or false for auto-detect
      * @return \Magento\HTTP\IClient|\Magento\Connect\Loader\Ftp
      */
-    public static function getInstance($protocol='')
+    public static function getInstance($protocol = '')
     {
-        if ($protocol  == 'ftp') {
+        if ($protocol == 'ftp') {
             return new \Magento\Connect\Loader\Ftp();
         } else {
             return \Magento\HTTP\Client::getInstance();

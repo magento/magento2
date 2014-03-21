@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor\Cache\Plugin;
 
 use Magento\Filesystem;
@@ -47,10 +46,8 @@ class Less
      * @param CacheManager $cacheManager
      * @param \Magento\Logger $logger
      */
-    public function __construct(
-        CacheManager $cacheManager,
-        \Magento\Logger $logger
-    ) {
+    public function __construct(CacheManager $cacheManager, \Magento\Logger $logger)
+    {
         $this->cacheManager = $cacheManager;
         $this->logger = $logger;
     }

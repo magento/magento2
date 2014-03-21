@@ -52,7 +52,6 @@ class Message implements MessageInterface
      */
     protected $_endpointUrl;
 
-
     /**
      * @param string $endpointUrl
      * @param array $headers

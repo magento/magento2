@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Filter\FilterManager;
 
 /**
@@ -34,10 +33,7 @@ class Config implements ConfigInterface
     /**
      * @var string[]
      */
-    protected $factories = array(
-        'Magento\Filter\Factory',
-        'Magento\Filter\ZendFactory'
-    );
+    protected $factories = array('Magento\Filter\Factory', 'Magento\Filter\ZendFactory');
 
     /**
      * @param string[] $factories

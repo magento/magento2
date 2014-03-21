@@ -51,11 +51,8 @@ class Shell extends \Magento\App\AbstractShell
      * @param string $entryPoint
      * @param Indexer $indexer
      */
-    public function __construct(
-        \Magento\App\Filesystem $filesystem,
-        $entryPoint,
-        Indexer $indexer
-    ) {
+    public function __construct(\Magento\App\Filesystem $filesystem, $entryPoint, Indexer $indexer)
+    {
         $this->_indexer = $indexer;
         parent::__construct($filesystem, $entryPoint);
     }
@@ -109,9 +106,9 @@ class Shell extends \Magento\App\AbstractShell
     protected function _runShowStatusOrMode()
     {
         if ($this->getArg('status')) {
-            $processes  = $this->_parseIndexerString($this->getArg('status'));
+            $processes = $this->_parseIndexerString($this->getArg('status'));
         } else {
-            $processes  = $this->_parseIndexerString($this->getArg('mode'));
+            $processes = $this->_parseIndexerString($this->getArg('mode'));
         }
         foreach ($processes as $process) {
             /* @var $process \Magento\Index\Model\Process */
@@ -143,7 +140,7 @@ class Shell extends \Magento\App\AbstractShell
                         break;
                 }
             }
-            echo sprintf('%-30s ', $process->getIndexer()->getName() . ':') . $status ."\n";
+            echo sprintf('%-30s ', $process->getIndexer()->getName() . ':') . $status . "\n";
         }
         return $this;
     }
@@ -156,11 +153,11 @@ class Shell extends \Magento\App\AbstractShell
     protected function _runSetMode()
     {
         if ($this->getArg('mode-realtime')) {
-            $mode       = \Magento\Index\Model\Process::MODE_REAL_TIME;
-            $processes  = $this->_parseIndexerString($this->getArg('mode-realtime'));
+            $mode = \Magento\Index\Model\Process::MODE_REAL_TIME;
+            $processes = $this->_parseIndexerString($this->getArg('mode-realtime'));
         } else {
-            $mode       = \Magento\Index\Model\Process::MODE_MANUAL;
-            $processes  = $this->_parseIndexerString($this->getArg('mode-manual'));
+            $mode = \Magento\Index\Model\Process::MODE_MANUAL;
+            $processes = $this->_parseIndexerString($this->getArg('mode-manual'));
         }
         foreach ($processes as $process) {
             /* @var $process \Magento\Index\Model\Process */

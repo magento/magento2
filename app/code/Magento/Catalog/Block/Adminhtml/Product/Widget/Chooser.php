@@ -111,17 +111,24 @@ class Chooser extends Extended
     public function prepareElementHtml(AbstractElement $element)
     {
         $uniqId = $this->mathRandom->getUniqueHash($element->getId());
-        $sourceUrl = $this->getUrl('catalog/product_widget/chooser', array(
-            'uniq_id' => $uniqId,
-            'use_massaction' => false,
-        ));
+        $sourceUrl = $this->getUrl(
+            'catalog/product_widget/chooser',
+            array('uniq_id' => $uniqId, 'use_massaction' => false)
+        );
 
-        $chooser = $this->getLayout()->createBlock('Magento\Widget\Block\Adminhtml\Widget\Chooser')
-            ->setElement($element)
-            ->setConfig($this->getConfig())
-            ->setFieldsetId($this->getFieldsetId())
-            ->setSourceUrl($sourceUrl)
-            ->setUniqId($uniqId);
+        $chooser = $this->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+        )->setElement(
+            $element
+        )->setConfig(
+            $this->getConfig()
+        )->setFieldsetId(
+            $this->getFieldsetId()
+        )->setSourceUrl(
+            $sourceUrl
+        )->setUniqId(
+            $uniqId
+        );
 
         if ($element->getValue()) {
             $value = explode('/', $element->getValue());
@@ -140,7 +147,9 @@ class Chooser extends Extended
             }
             if ($productId) {
                 $label .= $this->_resourceProduct->getAttributeRawValue(
-                    $productId, 'name', $this->_storeManager->getStore()
+                    $productId,
+                    'name',
+                    $this->_storeManager->getStore()
                 );
             }
             $chooser->setLabel($label);
@@ -186,9 +195,15 @@ class Chooser extends Extended
                     if (grid.categoryName) {
                         optionLabel = grid.categoryName + " / " + optionLabel;
                     }
-                    '.$chooserJsObject.'.setElementValue(optionValue);
-                    '.$chooserJsObject.'.setElementLabel(optionLabel);
-                    '.$chooserJsObject.'.close();
+                    ' .
+                $chooserJsObject .
+                '.setElementValue(optionValue);
+                    ' .
+                $chooserJsObject .
+                '.setElementLabel(optionLabel);
+                    ' .
+                $chooserJsObject .
+                '.close();
                 }
             ';
         }
@@ -224,9 +239,9 @@ class Chooser extends Extended
         if ($column->getId() == 'in_products') {
             $selected = $this->getSelectedProducts();
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in'=>$selected));
+                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $selected));
             } else {
-                $this->getCollection()->addFieldToFilter('entity_id', array('nin'=>$selected));
+                $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $selected));
             }
         } else {
             parent::_addColumnFilterToCollection($column);
@@ -242,9 +257,7 @@ class Chooser extends Extended
     protected function _prepareCollection()
     {
         /* @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
-        $collection = $this->_collectionFactory->create()
-            ->setStoreId(0)
-            ->addAttributeToSelect('name');
+        $collection = $this->_collectionFactory->create()->setStoreId(0)->addAttributeToSelect('name');
 
         if ($categoryId = $this->getCategoryId()) {
             $category = $this->_categoryFactory->create()->load($categoryId);
@@ -275,40 +288,52 @@ class Chooser extends Extended
     protected function _prepareColumns()
     {
         if ($this->getUseMassaction()) {
-            $this->addColumn('in_products', array(
-                'header_css_class' => 'a-center',
-                'type'      => 'checkbox',
-                'name'      => 'in_products',
-                'inline_css' => 'checkbox entities',
-                'field_name' => 'in_products',
-                'values'    => $this->getSelectedProducts(),
-                'align'     => 'center',
-                'index'     => 'entity_id',
-                'use_index' => true,
-            ));
+            $this->addColumn(
+                'in_products',
+                array(
+                    'header_css_class' => 'a-center',
+                    'type' => 'checkbox',
+                    'name' => 'in_products',
+                    'inline_css' => 'checkbox entities',
+                    'field_name' => 'in_products',
+                    'values' => $this->getSelectedProducts(),
+                    'align' => 'center',
+                    'index' => 'entity_id',
+                    'use_index' => true
+                )
+            );
         }
 
-        $this->addColumn('entity_id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'index'     => 'entity_id',
-            'header_css_class'  => 'col-id',
-            'column_css_class'  => 'col-id'
-        ));
-        $this->addColumn('chooser_sku', array(
-            'header'    => __('SKU'),
-            'name'      => 'chooser_sku',
-            'index'     => 'sku',
-            'header_css_class'  => 'col-sku',
-            'column_css_class'  => 'col-sku'
-        ));
-        $this->addColumn('chooser_name', array(
-            'header'    => __('Product'),
-            'name'      => 'chooser_name',
-            'index'     => 'name',
-            'header_css_class'  => 'col-product',
-            'column_css_class'  => 'col-product'
-        ));
+        $this->addColumn(
+            'entity_id',
+            array(
+                'header' => __('ID'),
+                'sortable' => true,
+                'index' => 'entity_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
+        $this->addColumn(
+            'chooser_sku',
+            array(
+                'header' => __('SKU'),
+                'name' => 'chooser_sku',
+                'index' => 'sku',
+                'header_css_class' => 'col-sku',
+                'column_css_class' => 'col-sku'
+            )
+        );
+        $this->addColumn(
+            'chooser_name',
+            array(
+                'header' => __('Product'),
+                'name' => 'chooser_name',
+                'index' => 'name',
+                'header_css_class' => 'col-product',
+                'column_css_class' => 'col-product'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -320,13 +345,16 @@ class Chooser extends Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('catalog/product_widget/chooser', array(
-            'products_grid' => true,
-            '_current' => true,
-            'uniq_id' => $this->getId(),
-            'use_massaction' => $this->getUseMassaction(),
-            'product_type_id' => $this->getProductTypeId()
-        ));
+        return $this->getUrl(
+            'catalog/product_widget/chooser',
+            array(
+                'products_grid' => true,
+                '_current' => true,
+                'uniq_id' => $this->getId(),
+                'use_massaction' => $this->getUseMassaction(),
+                'product_type_id' => $this->getProductTypeId()
+            )
+        );
     }
 
     /**

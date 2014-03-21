@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Model\Translate;
 
 class InlineVdeTest extends \PHPUnit_Framework_TestCase
@@ -47,8 +46,11 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_blank');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\DesignInterface'
+        )->setDesignTheme(
+            'magento_blank'
+        );
     }
 
     protected function setUp()
@@ -99,11 +101,7 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
      */
     public function textTranslationMode()
     {
-        return array(
-            array('text'),
-            array('script'),
-            array('alt')
-        );
+        return array(array('text'), array('script'), array('alt'));
     }
 
     /**
@@ -127,7 +125,7 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
     public function processResponseBodyTextDataProvider()
     {
         return array(
-            'plain text'  => array('text with no translations and tags', 'text with no translations and tags')
+            'plain text' => array('text with no translations and tags', 'text with no translations and tags')
         );
     }
 
@@ -143,8 +141,8 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
         // remove script preventing DomDocument load
         $actualText = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $actualText);
 
-        $actual = new \DOMDocument;
-        $actual->preserveWhiteSpace = FALSE;
+        $actual = new \DOMDocument();
+        $actual->preserveWhiteSpace = false;
         $actual->loadHTML($actualText);
 
         $xpath = new \DOMXPath($actual);
@@ -168,8 +166,6 @@ class InlineVdeTest extends \PHPUnit_Framework_TestCase
     {
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
 
-        return array(
-            'html string' => array($originalText)
-        );
+        return array('html string' => array($originalText));
     }
 }

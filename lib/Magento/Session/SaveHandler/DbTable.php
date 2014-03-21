@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session\SaveHandler;
 
 /**
@@ -51,7 +50,7 @@ class DbTable extends \SessionHandler
     public function __construct(\Magento\App\Resource $resource)
     {
         $this->_sessionTable = $resource->getTableName('core_session');
-        $this->_write        = $resource->getConnection('core_write');
+        $this->_write = $resource->getConnection('core_write');
         $this->checkConnection();
     }
 
@@ -102,9 +101,12 @@ class DbTable extends \SessionHandler
     public function read($sessionId)
     {
         // need to use write connection to get the most fresh DB sessions
-        $select = $this->_write->select()
-            ->from($this->_sessionTable, array('session_data'))
-            ->where('session_id = :session_id');
+        $select = $this->_write->select()->from(
+            $this->_sessionTable,
+            array('session_data')
+        )->where(
+            'session_id = :session_id'
+        );
         $bind = array('session_id' => $sessionId);
         $data = $this->_write->fetchOne($select, $bind);
 
@@ -127,17 +129,12 @@ class DbTable extends \SessionHandler
     {
         // need to use write connection to get the most fresh DB sessions
         $bindValues = array('session_id' => $sessionId);
-        $select = $this->_write->select()
-            ->from($this->_sessionTable)
-            ->where('session_id = :session_id');
+        $select = $this->_write->select()->from($this->_sessionTable)->where('session_id = :session_id');
         $exists = $this->_write->fetchOne($select, $bindValues);
 
         // encode session serialized data to prevent insertion of incorrect symbols
         $sessionData = base64_encode($sessionData);
-        $bind = array(
-            'session_expires' => time(),
-            'session_data'    => $sessionData,
-        );
+        $bind = array('session_expires' => time(), 'session_data' => $sessionData);
 
         if ($exists) {
             $this->_write->update($this->_sessionTable, $bind, array('session_id=?' => $sessionId));

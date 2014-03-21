@@ -56,8 +56,10 @@ class SiteVerification extends \Magento\View\Element\AbstractBlock
      */
     protected function _toHtml()
     {
-        return ($content = $this->_config->getConfigData('verify_meta_tag'))
-            ? '<meta name="google-site-verification" content="' . $this->escapeHtml($content) . '"/>'
-            : '';
+        return ($content = $this->_config->getConfigData(
+            'verify_meta_tag'
+        )) ? '<meta name="google-site-verification" content="' . $this->escapeHtml(
+            $content
+        ) . '"/>' : '';
     }
 }

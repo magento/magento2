@@ -32,8 +32,7 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
  * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * {@inheritdoc}
@@ -43,8 +42,13 @@ class Store
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;
         }
-        return '<a title="' . __('Edit Store View') . '"
-            href="' . $this->getUrl('adminhtml/*/editStore', array('store_id' => $row->getStoreId())) . '">'
-            . $this->escapeHtml($row->getData($this->getColumn()->getIndex())) . '</a>';
+        return '<a title="' . __(
+            'Edit Store View'
+        ) . '"
+            href="' .
+        $this->getUrl('adminhtml/*/editStore', array('store_id' => $row->getStoreId())) .
+        '">' .
+        $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
+        '</a>';
     }
 }

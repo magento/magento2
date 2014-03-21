@@ -388,9 +388,9 @@ abstract class AbstractApi extends \Magento\Object
         $result = \Magento\Object\Mapper::accumulateByMap(array($this, 'getDataUsingMethod'), $request, $map);
         foreach ($privateRequestMap as $key) {
             if (isset($this->_exportToRequestFilters[$key]) && isset($result[$key])) {
-                $callback   = $this->_exportToRequestFilters[$key];
+                $callback = $this->_exportToRequestFilters[$key];
                 $privateKey = $result[$key];
-                $publicKey  = $map[$this->_globalMap[$key]];
+                $publicKey = $map[$this->_globalMap[$key]];
                 $result[$key] = call_user_func(array($this, $callback), $privateKey, $publicKey);
             }
         }
@@ -437,7 +437,8 @@ abstract class AbstractApi extends \Magento\Object
         // always add cart totals, even if line items are not requested
         if ($this->_lineItemTotalExportMap) {
             foreach ($this->_cart->getAmounts() as $key => $total) {
-                if (isset($this->_lineItemTotalExportMap[$key])) { // !empty($total)
+                if (isset($this->_lineItemTotalExportMap[$key])) {
+                    // !empty($total)
                     $privateKey = $this->_lineItemTotalExportMap[$key];
                     $request[$privateKey] = $this->_filterAmount($total);
                 }
@@ -455,7 +456,7 @@ abstract class AbstractApi extends \Magento\Object
                 $result = true;
                 $value = $item->getDataUsingMethod($publicKey);
                 if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback   = $this->_lineItemExportItemsFilters[$publicKey];
+                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
                     $value = call_user_func(array($this, $callback), $value);
                 }
                 if (is_float($value)) {
@@ -517,7 +518,7 @@ abstract class AbstractApi extends \Magento\Object
      */
     protected function _filterBool($value)
     {
-        return ($value) ? 'true' : 'false';
+        return $value ? 'true' : 'false';
     }
 
     /**
@@ -543,7 +544,7 @@ abstract class AbstractApi extends \Magento\Object
         if ($this->hasData($key)) {
             return $this->getData($key);
         }
-        return $this->_config->$key ? $this->_config->$key : $default;
+        return $this->_config->{$key} ? $this->_config->{$key} : $default;
     }
 
     /**
@@ -574,18 +575,19 @@ abstract class AbstractApi extends \Magento\Object
      */
     protected function _importStreetFromAddress(\Magento\Object $address, array &$to)
     {
-        $keys = func_get_args(); array_shift($keys); array_shift($keys);
+        $keys = func_get_args();
+        array_shift($keys);
+        array_shift($keys);
         $street = $address->getStreet();
         if (!$keys || !$street || !is_array($street)) {
             return;
         }
 
-        $street = $this->_customerAddress
-            ->convertStreetLines($address->getStreet(), count($keys));
+        $street = $this->_customerAddress->convertStreetLines($address->getStreet(), count($keys));
 
         $i = 0;
         foreach ($keys as $key) {
-            $to[$key] = isset($street[$i]) ? $street[$i]: '';
+            $to[$key] = isset($street[$i]) ? $street[$i] : '';
             $i++;
         }
     }
@@ -624,7 +626,11 @@ abstract class AbstractApi extends \Magento\Object
         if ($this->getDebugFlag()) {
             $this->_logAdapterFactory->create(
                 array('fileName' => 'payment_' . $this->_config->getMethodCode() . '.log')
-            )->setFilterDataKeys($this->_debugReplacePrivateDataKeys)->log($debugData);
+            )->setFilterDataKeys(
+                $this->_debugReplacePrivateDataKeys
+            )->log(
+                $debugData
+            );
         }
     }
 

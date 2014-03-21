@@ -39,14 +39,14 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
      *
      * @var \Magento\Sales\Model\Order
      */
-    protected $_salesOrder   = null;
+    protected $_salesOrder = null;
 
     /**
      * Order field for setOrderFilter
      *
      * @var string
      */
-    protected $_orderField   = 'parent_id';
+    protected $_orderField = 'parent_id';
 
     /**
      * Set sales order model as parent collection object
@@ -58,11 +58,10 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
     {
         $this->_salesOrder = $order;
         if ($this->_eventPrefix && $this->_eventObject) {
-            $this->_eventManager->dispatch($this->_eventPrefix . '_set_sales_order', array(
-                'collection' => $this,
-                $this->_eventObject => $this,
-                'order' => $order
-            ));
+            $this->_eventManager->dispatch(
+                $this->_eventPrefix . '_set_sales_order',
+                array('collection' => $this, $this->_eventObject => $this, 'order' => $order)
+            );
         }
 
         return $this;

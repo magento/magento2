@@ -49,12 +49,9 @@ class ModuleList implements \Magento\Module\ModuleListInterface
      * @param CacheInterface $cache
      * @param string $cacheId
      */
-    public function __construct(
-        Filesystem $reader,
-        CacheInterface $cache,
-        $cacheId = 'modules_declaration_cache'
-    ) {
-        $data = $cache->load($this->_scope . '::' .  $cacheId);
+    public function __construct(Filesystem $reader, CacheInterface $cache, $cacheId = 'modules_declaration_cache')
+    {
+        $data = $cache->load($this->_scope . '::' . $cacheId);
         if (!$data) {
             $data = $reader->read($this->_scope);
             $cache->save(serialize($data), $this->_scope . '::' . $cacheId);

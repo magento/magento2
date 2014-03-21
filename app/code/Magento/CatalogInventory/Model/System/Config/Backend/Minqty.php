@@ -44,7 +44,7 @@ class Minqty extends \Magento\Core\Model\Config\Value
     {
         parent::_beforeSave();
         $minQty = (int)$this->getValue() >= 0 ? (int)$this->getValue() : (int)$this->getOldValue();
-        $this->setValue((string) $minQty);
+        $this->setValue((string)$minQty);
         return $this;
     }
 }

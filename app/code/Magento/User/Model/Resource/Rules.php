@@ -97,9 +97,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
             $adapter->beginTransaction();
             $roleId = $rule->getRoleId();
 
-            $condition = array(
-                'role_id = ?' => (int) $roleId,
-            );
+            $condition = array('role_id = ?' => (int)$roleId);
 
             $adapter->delete($this->getMainTable(), $condition);
 
@@ -107,9 +105,9 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
             if ($postedResources) {
                 $row = array(
                     'resource_id' => $this->_rootResource->getId(),
-                    'privileges'  => '', // not used yet
-                    'role_id'     => $roleId,
-                    'permission'  => 'allow'
+                    'privileges' => '', // not used yet
+                    'role_id' => $roleId,
+                    'permission' => 'allow'
                 );
 
                 // If all was selected save it only and nothing else.
@@ -135,7 +133,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
         } catch (\Magento\Core\Exception $e) {
             $adapter->rollBack();
             throw $e;
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $adapter->rollBack();
             $this->_logger->logException($e);
         }

@@ -228,8 +228,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         }
 
         if (!$quote->hasItems()) {
-            $quote->getShippingAddress()->setCollectShippingRates(false)
-                ->removeAllShippingRates();
+            $quote->getShippingAddress()->setCollectShippingRates(false)->removeAllShippingRates();
         }
 
         return $this;
@@ -246,9 +245,11 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
         if (is_null($orderItem->getParentItem())) {
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($orderItem->getProductId());
+            $product = $this->_productFactory->create()->setStoreId(
+                $this->_storeManager->getStore()->getId()
+            )->load(
+                $orderItem->getProductId()
+            );
             if (!$product->getId()) {
                 return $this;
             }
@@ -279,15 +280,19 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         if ($productInfo instanceof Product) {
             $product = $productInfo;
         } elseif (is_int($productInfo) || is_string($productInfo)) {
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($productInfo);
+            $product = $this->_productFactory->create()->setStoreId(
+                $this->_storeManager->getStore()->getId()
+            )->load(
+                $productInfo
+            );
         }
         $currentWebsiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if (!$product
-            || !$product->getId()
-            || !is_array($product->getWebsiteIds())
-            || !in_array($currentWebsiteId, $product->getWebsiteIds())
+        if (!$product || !$product->getId() || !is_array(
+            $product->getWebsiteIds()
+        ) || !in_array(
+            $currentWebsiteId,
+            $product->getWebsiteIds()
+        )
         ) {
             throw new \Magento\Core\Exception(__('We can\'t find the product.'));
         }
@@ -335,10 +340,9 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         if ($product->getStockItem()) {
             $minimumQty = $product->getStockItem()->getMinSaleQty();
             //If product was not found in cart and there is set minimal qty for it
-            if ($minimumQty
-                && $minimumQty > 0
-                && $request->getQty() < $minimumQty
-                && !$this->getQuote()->hasProductId($productId)
+            if ($minimumQty && $minimumQty > 0 && $request->getQty() < $minimumQty && !$this->getQuote()->hasProductId(
+                $productId
+            )
             ) {
                 $request->setQty($minimumQty);
             }
@@ -355,12 +359,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
              * String we can get if prepare process has error
              */
             if (is_string($result)) {
-                $redirectUrl = ($product->hasOptionsValidationFail())
-                    ? $product->getUrlModel()->getUrl(
-                        $product,
-                        array('_query' => array('startcustomization' => 1))
-                    )
-                    : $product->getProductUrl();
+                $redirectUrl = $product->hasOptionsValidationFail() ? $product->getUrlModel()->getUrl(
+                    $product,
+                    array('_query' => array('startcustomization' => 1))
+                ) : $product->getProductUrl();
                 $this->_checkoutSession->setRedirectUrl($redirectUrl);
                 if ($this->_checkoutSession->getUseNotice() === null) {
                     $this->_checkoutSession->setUseNotice(true);
@@ -371,10 +373,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             throw new \Magento\Core\Exception(__('The product does not exist.'));
         }
 
-        $this->_eventManager->dispatch('checkout_cart_product_add_after', array(
-            'quote_item' => $result,
-            'product' => $product,
-        ));
+        $this->_eventManager->dispatch(
+            'checkout_cart_product_add_after',
+            array('quote_item' => $result, 'product' => $product)
+        );
         $this->_checkoutSession->setLastAddedProductId($productId);
         return $this;
     }
@@ -388,11 +390,11 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     public function addProductsByIds($productIds)
     {
         $allAvailable = true;
-        $allAdded     = true;
+        $allAdded = true;
 
         if (!empty($productIds)) {
             foreach ($productIds as $productId) {
-                $productId = (int) $productId;
+                $productId = (int)$productId;
                 if (!$productId) {
                     continue;
                 }
@@ -434,7 +436,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             if (!isset($itemInfo['qty'])) {
                 continue;
             }
-            $qty = (float) $itemInfo['qty'];
+            $qty = (double)$itemInfo['qty'];
             if ($qty <= 0) {
                 continue;
             }
@@ -471,7 +473,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      */
     public function updateItems($data)
     {
-        $this->_eventManager->dispatch('checkout_cart_update_items_before', array('cart'=>$this, 'info'=>$data));
+        $this->_eventManager->dispatch('checkout_cart_update_items_before', array('cart' => $this, 'info' => $data));
 
         $qtyRecalculatedFlag = false;
         foreach ($data as $itemId => $itemInfo) {
@@ -480,12 +482,12 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
                 continue;
             }
 
-            if (!empty($itemInfo['remove']) || (isset($itemInfo['qty']) && $itemInfo['qty']=='0')) {
+            if (!empty($itemInfo['remove']) || isset($itemInfo['qty']) && $itemInfo['qty'] == '0') {
                 $this->removeItem($itemId);
                 continue;
             }
 
-            $qty = isset($itemInfo['qty']) ? (float) $itemInfo['qty'] : false;
+            $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
                 $item->setQty($qty);
 
@@ -495,7 +497,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
                     throw new \Magento\Core\Exception($item->getMessage());
                 }
 
-                if (isset($itemInfo['before_suggest_qty']) && ($itemInfo['before_suggest_qty'] != $qty)) {
+                if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
                     $qtyRecalculatedFlag = true;
                     $this->messageManager->addNotice(
                         __('Quantity was recalculated from %1 to %2', $itemInfo['before_suggest_qty'], $qty),
@@ -534,7 +536,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      */
     public function save()
     {
-        $this->_eventManager->dispatch('checkout_cart_save_before', array('cart'=>$this));
+        $this->_eventManager->dispatch('checkout_cart_save_before', array('cart' => $this));
 
         $this->getQuote()->getBillingAddress();
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
@@ -544,7 +546,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
         /**
          * Cart save usually called after changes with cart items.
          */
-        $this->_eventManager->dispatch('checkout_cart_save_after', array('cart'=>$this));
+        $this->_eventManager->dispatch('checkout_cart_save_after', array('cart' => $this));
         return $this;
     }
 
@@ -576,7 +578,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
     {
         if (null === $this->_productIds) {
             $this->_productIds = array();
-            if ($this->getSummaryQty()>0) {
+            if ($this->getSummaryQty() > 0) {
                 foreach ($this->getQuote()->getAllItems() as $item) {
                     $this->_productIds[] = $item->getProductId();
                 }
@@ -620,7 +622,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      */
     public function getItemsCount()
     {
-        return $this->getQuote()->getItemsCount()*1;
+        return $this->getQuote()->getItemsCount() * 1;
     }
 
     /**
@@ -630,7 +632,7 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
      */
     public function getItemsQty()
     {
-        return $this->getQuote()->getItemsQty()*1;
+        return $this->getQuote()->getItemsQty() * 1;
     }
 
     /**
@@ -660,9 +662,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             if ($product->getStockItem()) {
                 $minimumQty = $product->getStockItem()->getMinSaleQty();
                 // If product was not found in cart and there is set minimal qty for it
-                if ($minimumQty && ($minimumQty > 0)
-                    && ($request->getQty() < $minimumQty)
-                    && !$this->getQuote()->hasProductId($productId)
+                if ($minimumQty &&
+                    $minimumQty > 0 &&
+                    $request->getQty() < $minimumQty &&
+                    !$this->getQuote()->hasProductId($productId)
                 ) {
                     $request->setQty($minimumQty);
                 }
@@ -684,10 +687,10 @@ class Cart extends \Magento\Object implements \Magento\Checkout\Model\Cart\CartI
             throw new \Magento\Core\Exception($result);
         }
 
-        $this->_eventManager->dispatch('checkout_cart_product_update_after', array(
-            'quote_item' => $result,
-            'product' => $product
-        ));
+        $this->_eventManager->dispatch(
+            'checkout_cart_product_update_after',
+            array('quote_item' => $result, 'product' => $product)
+        );
         $this->_checkoutSession->setLastAddedProductId($productId);
         return $result;
     }

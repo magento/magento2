@@ -44,28 +44,41 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $renderer = $this->getMock('Magento\View\Element\RendererList', array(), array(), '', false);
 
-        $renderer->expects($this->once())->method('getRenderer')
-            ->with($expectedType, AbstractCart::DEFAULT_TYPE)->will($this->returnValue('rendererObject'));
+        $renderer->expects(
+            $this->once()
+        )->method(
+            'getRenderer'
+        )->with(
+            $expectedType,
+            AbstractCart::DEFAULT_TYPE
+        )->will(
+            $this->returnValue('rendererObject')
+        );
 
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
+        $layout = $this->getMock('Magento\Core\Model\Layout', array('getChildName', 'getBlock'), array(), '', false);
 
-        $layout->expects($this->once())
-            ->method('getChildName')
-            ->will($this->returnValue('renderer.list'));
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
 
-        $layout->expects($this->once())
-            ->method('getBlock')
-            ->with('renderer.list')
-            ->will($this->returnValue($renderer));
+        $layout->expects(
+            $this->once()
+        )->method(
+            'getBlock'
+        )->with(
+            'renderer.list'
+        )->will(
+            $this->returnValue($renderer)
+        );
 
         /** @var $block \Magento\Sales\Block\Items\AbstractItems */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\AbstractCart', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                    'layout' => $layout,
-                ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\AbstractCart',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $this->assertSame('rendererObject', $block->getItemRenderer($type));
     }
@@ -75,7 +88,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function getItemRendererDataProvider()
     {
-        return [[null, AbstractCart::DEFAULT_TYPE], ['some-type', 'some-type']];
+        return array(array(null, AbstractCart::DEFAULT_TYPE), array('some-type', 'some-type'));
     }
 
     /**
@@ -84,19 +97,19 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
-        $layout->expects($this->once())
-            ->method('getChildName')
-            ->will($this->returnValue(null));
+        $layout = $this->getMock('Magento\Core\Model\Layout', array('getChildName', 'getBlock'), array(), '', false);
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 
         /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\AbstractCart', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                    'layout' => $layout,
-                ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\AbstractCart',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $block->getItemRenderer('some-type');
     }

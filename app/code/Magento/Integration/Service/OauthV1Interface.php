@@ -23,7 +23,7 @@
  */
 namespace Magento\Integration\Service;
 
-use \Magento\Integration\Model\Oauth\Token as Token;
+use Magento\Integration\Model\Oauth\Token;
 
 /**
  * Integration oAuth Service Interface

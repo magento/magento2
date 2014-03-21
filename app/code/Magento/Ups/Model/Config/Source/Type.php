@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Ups\Model\Config\Source;
 
 use Magento\Data\OptionSourceInterface;
@@ -38,7 +37,7 @@ class Type implements OptionSourceInterface
     {
         return array(
             array('value' => 'UPS', 'label' => __('United Parcel Service')),
-            array('value' => 'UPS_XML', 'label' => __('United Parcel Service XML')),
+            array('value' => 'UPS_XML', 'label' => __('United Parcel Service XML'))
         );
     }
 }

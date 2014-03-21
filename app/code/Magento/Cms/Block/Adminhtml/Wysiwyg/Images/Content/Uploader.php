@@ -69,15 +69,13 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
             $labels[] = '.' . $ext;
             $files[] = '*.' . $ext;
         }
-        $this->getConfig()
-            ->setUrl($this->_urlBuilder->addSessionParam()->getUrl('cms/*/upload', array('type' => $type)))
-            ->setFileField('image')
-            ->setFilters(array(
-                'images' => array(
-                    'label' => __('Images (%1)', implode(', ', $labels)),
-                    'files' => $files
-                )
-            ));
+        $this->getConfig()->setUrl(
+            $this->_urlBuilder->addSessionParam()->getUrl('cms/*/upload', array('type' => $type))
+        )->setFileField(
+            'image'
+        )->setFilters(
+            array('images' => array('label' => __('Images (%1)', implode(', ', $labels)), 'files' => $files))
+        );
     }
 
     /**

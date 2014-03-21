@@ -34,49 +34,74 @@
  */
 namespace Magento\DB\Ddl;
 
-use \Magento\DB\Adapter\AdapterInterface;
+use Magento\DB\Adapter\AdapterInterface;
 
 class Table
 {
     /**
      * Types of columns
      */
-    const TYPE_BOOLEAN          = 'boolean';
-    const TYPE_SMALLINT         = 'smallint';
-    const TYPE_INTEGER          = 'integer';
-    const TYPE_BIGINT           = 'bigint';
-    const TYPE_FLOAT            = 'float';
-    const TYPE_NUMERIC          = 'numeric';
-    const TYPE_DECIMAL          = 'decimal';
-    const TYPE_DATE             = 'date';
-    const TYPE_TIMESTAMP        = 'timestamp'; // Capable to support date-time from 1970 + auto-triggers in some RDBMS
-    const TYPE_DATETIME         = 'datetime'; // Capable to support long date-time before 1970
-    const TYPE_TEXT             = 'text';
-    const TYPE_BLOB             = 'blob'; // Used for back compatibility, when query param can't use statement options
-    const TYPE_VARBINARY        = 'varbinary'; // A real blob, stored as binary inside DB
+    const TYPE_BOOLEAN = 'boolean';
+
+    const TYPE_SMALLINT = 'smallint';
+
+    const TYPE_INTEGER = 'integer';
+
+    const TYPE_BIGINT = 'bigint';
+
+    const TYPE_FLOAT = 'float';
+
+    const TYPE_NUMERIC = 'numeric';
+
+    const TYPE_DECIMAL = 'decimal';
+
+    const TYPE_DATE = 'date';
+
+    const TYPE_TIMESTAMP = 'timestamp';
+
+    // Capable to support date-time from 1970 + auto-triggers in some RDBMS
+    const TYPE_DATETIME = 'datetime';
+
+    // Capable to support long date-time before 1970
+    const TYPE_TEXT = 'text';
+
+    const TYPE_BLOB = 'blob';
+
+    // Used for back compatibility, when query param can't use statement options
+    const TYPE_VARBINARY = 'varbinary';
+
+    // A real blob, stored as binary inside DB
 
     /**
      * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.
      */
-    const DEFAULT_TEXT_SIZE     = 1024;
-    const MAX_TEXT_SIZE         = 2147483648;
-    const MAX_VARBINARY_SIZE    = 2147483648;
+    const DEFAULT_TEXT_SIZE = 1024;
+
+    const MAX_TEXT_SIZE = 2147483648;
+
+    const MAX_VARBINARY_SIZE = 2147483648;
 
     /**
      * Default values for timestampses - fill with current timestamp on inserting record, on changing and both cases
      */
     const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
-    const TIMESTAMP_INIT        = 'TIMESTAMP_INIT';
-    const TIMESTAMP_UPDATE      = 'TIMESTAMP_UPDATE';
+
+    const TIMESTAMP_INIT = 'TIMESTAMP_INIT';
+
+    const TIMESTAMP_UPDATE = 'TIMESTAMP_UPDATE';
 
     /**
      * Actions used for foreign keys
      */
-    const ACTION_CASCADE        = 'CASCADE';
-    const ACTION_SET_NULL       = 'SET NULL';
-    const ACTION_NO_ACTION      = 'NO ACTION';
-    const ACTION_RESTRICT       = 'RESTRICT';
-    const ACTION_SET_DEFAULT    = 'SET DEFAULT';
+    const ACTION_CASCADE = 'CASCADE';
+
+    const ACTION_SET_NULL = 'SET NULL';
+
+    const ACTION_NO_ACTION = 'NO ACTION';
+
+    const ACTION_RESTRICT = 'RESTRICT';
+
+    const ACTION_SET_DEFAULT = 'SET DEFAULT';
 
     /**
      * Name of table
@@ -122,7 +147,7 @@ class Table
      *
      * @var array
      */
-    protected $_columns         = array();
+    protected $_columns = array();
 
     /**
      * Index descriptions for a table
@@ -145,7 +170,7 @@ class Table
      *
      * @var array
      */
-    protected $_indexes         = array();
+    protected $_indexes = array();
 
     /**
      * Foreign key descriptions for a table
@@ -166,19 +191,14 @@ class Table
      *
      * @var array
      */
-    protected $_foreignKeys     = array();
+    protected $_foreignKeys = array();
 
     /**
      * Additional table options
      *
      * @var array
      */
-    protected $_options         = array(
-        'type'          => 'INNODB',
-        'charset'       => 'utf8',
-        'collate'       => 'utf8_general_ci',
-
-    );
+    protected $_options = array('type' => 'INNODB', 'charset' => 'utf8', 'collate' => 'utf8_general_ci');
 
     /**
      * Set table name
@@ -276,16 +296,16 @@ class Table
      */
     public function addColumn($name, $type, $size = null, $options = array(), $comment = null)
     {
-        $position           = count($this->_columns);
-        $default            = false;
-        $nullable           = true;
-        $length             = null;
-        $scale              = null;
-        $precision          = null;
-        $unsigned           = false;
-        $primary            = false;
-        $primaryPosition    = 0;
-        $identity           = false;
+        $position = count($this->_columns);
+        $default = false;
+        $nullable = true;
+        $length = null;
+        $scale = null;
+        $precision = null;
+        $unsigned = false;
+        $primary = false;
+        $primaryPosition = 0;
+        $identity = false;
 
         // Prepare different properties
         switch ($type) {
@@ -309,19 +329,19 @@ class Table
 
             case self::TYPE_DECIMAL:
             case self::TYPE_NUMERIC:
-                $match      = array();
-                $scale      = 10;
-                $precision  = 0;
+                $match = array();
+                $scale = 10;
+                $precision = 0;
                 // parse size value
                 if (is_array($size)) {
                     if (count($size) == 2) {
-                        $size       = array_values($size);
-                        $precision  = $size[0];
-                        $scale      = $size[1];
+                        $size = array_values($size);
+                        $precision = $size[0];
+                        $scale = $size[1];
                     }
-                } else if (preg_match('#^(\d+),(\d+)$#', $size, $match)) {
-                    $precision  = $match[1];
-                    $scale      = $match[2];
+                } elseif (preg_match('#^(\d+),(\d+)$#', $size, $match)) {
+                    $precision = $match[1];
+                    $scale = $match[2];
                 }
                 // check options
                 if (isset($options['precision'])) {
@@ -363,7 +383,7 @@ class Table
                 $primaryPosition = 0;
                 foreach ($this->_columns as $v) {
                     if ($v['PRIMARY']) {
-                        $primaryPosition ++;
+                        $primaryPosition++;
                     }
                 }
             }
@@ -378,20 +398,20 @@ class Table
 
         $upperName = strtoupper($name);
         $this->_columns[$upperName] = array(
-            'COLUMN_NAME'       => $name,
-            'COLUMN_TYPE'       => $type,
-            'COLUMN_POSITION'   => $position,
-            'DATA_TYPE'         => $type,
-            'DEFAULT'           => $default,
-            'NULLABLE'          => $nullable,
-            'LENGTH'            => $length,
-            'SCALE'             => $scale,
-            'PRECISION'         => $precision,
-            'UNSIGNED'          => $unsigned,
-            'PRIMARY'           => $primary,
-            'PRIMARY_POSITION'  => $primaryPosition,
-            'IDENTITY'          => $identity,
-            'COMMENT'           => $comment
+            'COLUMN_NAME' => $name,
+            'COLUMN_TYPE' => $type,
+            'COLUMN_POSITION' => $position,
+            'DATA_TYPE' => $type,
+            'DEFAULT' => $default,
+            'NULLABLE' => $nullable,
+            'LENGTH' => $length,
+            'SCALE' => $scale,
+            'PRECISION' => $precision,
+            'UNSIGNED' => $unsigned,
+            'PRIMARY' => $primary,
+            'PRIMARY_POSITION' => $primaryPosition,
+            'IDENTITY' => $identity,
+            'COMMENT' => $comment
         );
 
         return $this;
@@ -439,12 +459,12 @@ class Table
         }
 
         $this->_foreignKeys[$upperName] = array(
-            'FK_NAME'           => $fkName,
-            'COLUMN_NAME'       => $column,
-            'REF_TABLE_NAME'    => $refTable,
-            'REF_COLUMN_NAME'   => $refColumn,
-            'ON_DELETE'         => $onDelete,
-            'ON_UPDATE'         => $onUpdate
+            'FK_NAME' => $fkName,
+            'COLUMN_NAME' => $column,
+            'REF_TABLE_NAME' => $refTable,
+            'REF_COLUMN_NAME' => $refColumn,
+            'ON_DELETE' => $onDelete,
+            'ON_UPDATE' => $onUpdate
         );
 
         return $this;
@@ -461,16 +481,16 @@ class Table
      */
     public function addIndex($indexName, $fields, $options = array())
     {
-        $idxType    = AdapterInterface::INDEX_TYPE_INDEX;
-        $position   = 0;
-        $columns    = array();
+        $idxType = AdapterInterface::INDEX_TYPE_INDEX;
+        $position = 0;
+        $columns = array();
         if (!is_array($fields)) {
             $fields = array($fields);
         }
 
         foreach ($fields as $columnData) {
             $columnSize = null;
-            $columnPos  = $position;
+            $columnPos = $position;
             if (is_string($columnData)) {
                 $columnName = $columnData;
             } else if (is_array($columnData)) {
@@ -489,13 +509,15 @@ class Table
                 continue;
             }
 
-            $columns[strtoupper($columnName)] = array(
-                'NAME'      => $columnName,
-                'SIZE'      => $columnSize,
-                'POSITION'  => $columnPos
+            $columns[strtoupper(
+                $columnName
+            )] = array(
+                'NAME' => $columnName,
+                'SIZE' => $columnSize,
+                'POSITION' => $columnPos
             );
 
-            $position ++;
+            $position++;
         }
 
         if (empty($columns)) {
@@ -506,10 +528,12 @@ class Table
             $idxType = $options['type'];
         }
 
-        $this->_indexes[strtoupper($indexName)] = array(
-            'INDEX_NAME'    => $indexName,
-            'COLUMNS'       => $this->_normalizeIndexColumnPosition($columns),
-            'TYPE'          => $idxType
+        $this->_indexes[strtoupper(
+            $indexName
+        )] = array(
+            'INDEX_NAME' => $indexName,
+            'COLUMNS' => $this->_normalizeIndexColumnPosition($columns),
+            'TYPE' => $idxType
         );
 
         return $this;
@@ -640,7 +664,7 @@ class Table
         $position = 0;
         foreach (array_keys($columns) as $columnId) {
             $columns[$columnId]['POSITION'] = $position;
-            $position ++;
+            $position++;
         }
         return $columns;
     }
@@ -657,7 +681,7 @@ class Table
         $position = 0;
         foreach (array_keys($columns) as $columnId) {
             $columns[$columnId]['COLUMN_POSITION'] = $position;
-            $position ++;
+            $position++;
         }
         return $columns;
     }

@@ -176,27 +176,34 @@ class Validator
             case self::FIELD_WHITE_BORDER:
                 $validators = array(
                     array('class' => 'Zend_Validate_Int', 'options' => array()),
-                    array('class' => 'Zend_Validate_Between', 'options' => array(
-                        'min' => 0, 'max' => 1, 'inclusive' => true
-                )));
+                    array(
+                        'class' => 'Zend_Validate_Between',
+                        'options' => array('min' => 0, 'max' => 1, 'inclusive' => true)
+                    )
+                );
                 break;
             case self::FIELD_IMAGE_WIDTH:
             case self::FIELD_IMAGE_HEIGHT:
                 $validators = array(
                     array('class' => 'Zend_Validate_Regex', 'options' => array('pattern' => '/[0-9]*/')),
-                    array('class' => 'Zend_Validate_Between', 'options' => array(
-                        'min' => 0, 'max' => self::MAX_SIZE_VALUE, 'inclusive' => true
-                )));
+                    array(
+                        'class' => 'Zend_Validate_Between',
+                        'options' => array('min' => 0, 'max' => self::MAX_SIZE_VALUE, 'inclusive' => true)
+                    )
+                );
                 break;
             case self::FIELD_IMAGE_RATIO:
                 $validators = array(
-                    array('class' => 'Zend_Validate_InArray', 'options' => array('haystack' => array('0', '1'))));
+                    array('class' => 'Zend_Validate_InArray', 'options' => array('haystack' => array('0', '1')))
+                );
                 break;
             case self::FIELD_IMAGE_TYPE:
                 $validators = array(
-                    array('class' => 'Zend_Validate_InArray', 'options' => array('haystack' => array(
-                        'image', 'small_image', 'thumbnail'
-                ))));
+                    array(
+                        'class' => 'Zend_Validate_InArray',
+                        'options' => array('haystack' => array('image', 'small_image', 'thumbnail'))
+                    )
+                );
                 break;
         }
         $this->_instantiateValidators($validators);

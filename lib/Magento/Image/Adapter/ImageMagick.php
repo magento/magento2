@@ -23,8 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Image\Adapter;
 
 class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
@@ -38,6 +36,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * Error messages
      */
     const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
+
     const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
 
     /**
@@ -46,18 +45,9 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      * @var array
      */
     protected $_options = array(
-        'resolution' => array(
-            'x' => 72,
-            'y' => 72
-        ),
-        'small_image' => array(
-            'width'  => 300,
-            'height' => 300
-        ),
-        'sharpen' => array(
-            'radius'    => 4,
-            'deviation' => 1
-        )
+        'resolution' => array('x' => 72, 'y' => 72),
+        'small_image' => array('width' => 300, 'height' => 300),
+        'sharpen' => array('radius' => 4, 'deviation' => 1)
     );
 
     /**
@@ -73,7 +63,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
                 $color = "rgb(" . join(',', $color) . ")";
             }
 
-            $pixel = new \ImagickPixel;
+            $pixel = new \ImagickPixel();
             if (is_numeric($color)) {
                 $pixel->setColorValue($color, 1);
             } else {
@@ -189,8 +179,8 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
             self::BLUR_FACTOR
         );
 
-        if ($this->_imageHandler->getImageWidth() < $this->_options['small_image']['width']
-            || $this->_imageHandler->getImageHeight() < $this->_options['small_image']['height']
+        if ($this->_imageHandler->getImageWidth() < $this->_options['small_image']['width'] ||
+            $this->_imageHandler->getImageHeight() < $this->_options['small_image']['height']
         ) {
             $this->_imageHandler->sharpenImage(
                 $this->_options['sharpen']['radius'],
@@ -224,7 +214,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
         $this->_checkCanProcess();
         // compatibility with GD2 adapter
         $angle = 360 - $angle;
-        $pixel = new \ImagickPixel;
+        $pixel = new \ImagickPixel();
         $pixel->setColor("rgb(" . $this->imageBackgroundColor . ")");
 
         $this->_imageHandler->rotateImage($pixel, $angle);
@@ -242,14 +232,12 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      */
     public function crop($top = 0, $left = 0, $right = 0, $bottom = 0)
     {
-        if ($left == 0 && $top == 0 && $right == 0 && $bottom == 0
-            || !$this->_canProcess()
-        ) {
+        if ($left == 0 && $top == 0 && $right == 0 && $bottom == 0 || !$this->_canProcess()) {
             return false;
         }
 
-        $newWidth  = $this->_imageSrcWidth  - $left - $right;
-        $newHeight = $this->_imageSrcHeight - $top  - $bottom;
+        $newWidth = $this->_imageSrcWidth - $left - $right;
+        $newHeight = $this->_imageSrcHeight - $top - $bottom;
 
         $this->_imageHandler->cropImage($newWidth, $newHeight, $left, $top);
         $this->refreshImageDimensions();
@@ -277,7 +265,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
 
-        $opacity = (float)number_format($opacity / 100, 1);
+        $opacity = (double)number_format($opacity / 100, 1);
         $watermark = new \Imagick($imagePath);
 
         if ($this->getWatermarkWidth() &&
@@ -306,14 +294,14 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
                 $watermark->sampleImage($this->_imageSrcWidth, $this->_imageSrcHeight);
                 break;
             case self::POSITION_CENTER:
-                $positionX = ($this->_imageSrcWidth  - $watermark->getImageWidth())/2;
-                $positionY = ($this->_imageSrcHeight - $watermark->getImageHeight())/2;
+                $positionX = ($this->_imageSrcWidth - $watermark->getImageWidth()) / 2;
+                $positionY = ($this->_imageSrcHeight - $watermark->getImageHeight()) / 2;
                 break;
             case self::POSITION_TOP_RIGHT:
                 $positionX = $this->_imageSrcWidth - $watermark->getImageWidth();
                 break;
             case self::POSITION_BOTTOM_RIGHT:
-                $positionX = $this->_imageSrcWidth  - $watermark->getImageWidth();
+                $positionX = $this->_imageSrcWidth - $watermark->getImageWidth();
                 $positionY = $this->_imageSrcHeight - $watermark->getImageHeight();
                 break;
             case self::POSITION_BOTTOM_LEFT:
@@ -330,26 +318,16 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
             if ($tile) {
                 $offsetX = $positionX;
                 $offsetY = $positionY;
-                while($offsetY <= ($this->_imageSrcHeight + $watermark->getImageHeight())) {
-                    while($offsetX <= ($this->_imageSrcWidth + $watermark->getImageWidth())) {
-                        $this->_imageHandler->compositeImage(
-                            $watermark,
-                            \Imagick::COMPOSITE_OVER,
-                            $offsetX,
-                            $offsetY
-                        );
+                while ($offsetY <= $this->_imageSrcHeight + $watermark->getImageHeight()) {
+                    while ($offsetX <= $this->_imageSrcWidth + $watermark->getImageWidth()) {
+                        $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $offsetX, $offsetY);
                         $offsetX += $watermark->getImageWidth();
                     }
                     $offsetX = $positionX;
                     $offsetY += $watermark->getImageHeight();
                 }
             } else {
-                $this->_imageHandler->compositeImage(
-                    $watermark,
-                    \Imagick::COMPOSITE_OVER,
-                    $positionX,
-                    $positionY
-                );
+                $this->_imageHandler->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $positionX, $positionY);
             }
         } catch (\ImagickException $e) {
             throw new \Exception('Unable to create watermark.', $e->getCode(), $e);
@@ -381,7 +359,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
      */
     public function refreshImageDimensions()
     {
-        $this->_imageSrcWidth  = $this->_imageHandler->getImageWidth();
+        $this->_imageSrcWidth = $this->_imageHandler->getImageWidth();
         $this->_imageSrcHeight = $this->_imageHandler->getImageHeight();
         $this->_imageHandler->setImagePage($this->_imageSrcWidth, $this->_imageSrcHeight, 0, 0);
     }
@@ -425,7 +403,7 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
             'red' => $color['r'],
             'green' => $color['g'],
             'blue' => $color['b'],
-            'alpha' => (1 - $color['a']) * 127,
+            'alpha' => (1 - $color['a']) * 127
         );
         return $rgbaColor;
     }
@@ -456,7 +434,8 @@ class ImageMagick extends \Magento\Image\Adapter\AbstractAdapter
         $image = $this->_getImagickObject();
         $draw = $this->_getImagickDrawObject();
         $color = $this->_getImagickPixelObject('#000000');
-        $background = $this->_getImagickPixelObject('#ffffff00'); // Transparent
+        $background = $this->_getImagickPixelObject('#ffffff00');
+        // Transparent
 
         if (!empty($font)) {
             if (method_exists($image, 'setFont')) {

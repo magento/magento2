@@ -25,8 +25,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <global>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../app/code/Magento/Core/etc/config.xsd">
+    <default>
         <areas>
             <test_area1>
                 <areaNode>value</areaNode>
@@ -36,5 +36,5 @@
             <test_area3>
             </test_area3>
         </areas>
-    </global>
+    </default>
 </config>

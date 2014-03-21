@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Autoload;
 
 class IncludePathTest extends \PHPUnit_Framework_TestCase
@@ -61,7 +60,7 @@ class IncludePathTest extends \PHPUnit_Framework_TestCase
         return array(
             array('TestClass', realpath(__DIR__ . '/_files/TestClass.php')),
             array('\Ns\TestClass', realpath(__DIR__ . '/_files/Ns/TestClass.php')),
-            array('Non_Existing_Class', false),
+            array('Non_Existing_Class', false)
         );
     }
 
@@ -84,20 +83,18 @@ class IncludePathTest extends \PHPUnit_Framework_TestCase
     {
         $pathSeparator = PATH_SEPARATOR;
         return array(
-            'prepend string' => array(
-                'fixture_path', true, "fixture_path{$pathSeparator}%include_path%"
-            ),
+            'prepend string' => array('fixture_path', true, "fixture_path{$pathSeparator}%include_path%"),
             'prepend array' => array(
-                array('fixture_path_one', 'fixture_path_two'), true,
+                array('fixture_path_one', 'fixture_path_two'),
+                true,
                 "fixture_path_one{$pathSeparator}fixture_path_two{$pathSeparator}%include_path%"
             ),
-            'append string'  => array(
-                'fixture_path', false, "%include_path%{$pathSeparator}fixture_path"
-            ),
+            'append string' => array('fixture_path', false, "%include_path%{$pathSeparator}fixture_path"),
             'append array' => array(
-                array('fixture_path_one', 'fixture_path_two'), false,
+                array('fixture_path_one', 'fixture_path_two'),
+                false,
                 "%include_path%{$pathSeparator}fixture_path_one{$pathSeparator}fixture_path_two"
-            ),
+            )
         );
     }
 

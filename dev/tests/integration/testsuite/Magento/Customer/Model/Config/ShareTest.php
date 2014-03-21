@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Config;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -34,12 +33,11 @@ class ShareTest extends \PHPUnit_Framework_TestCase
     public function testGetSharedWebsiteIds()
     {
         /** @var Share $share */
-        $share = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Config\Share');
+        $share = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Share');
 
         $websiteIds = $share->getSharedWebsiteIds(42);
 
-        $this->assertEquals([42], $websiteIds);
+        $this->assertEquals(array(42), $websiteIds);
     }
 
     /**
@@ -49,12 +47,10 @@ class ShareTest extends \PHPUnit_Framework_TestCase
     public function testGetSharedWebsiteIdsMultipleSites()
     {
         /** @var Share $share */
-        $share = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Config\Share');
-        $expectedIds = [1];
+        $share = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Share');
+        $expectedIds = array(1);
         /** @var \Magento\Core\Model\Website $website */
-        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Website');
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Website');
         $expectedIds[] = $website->load('secondwebsite')->getId();
         $expectedIds[] = $website->load('thirdwebsite')->getId();
 

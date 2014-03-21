@@ -40,6 +40,29 @@
         </div>
     </noscript>
 <?php endif; ?>
+<?php if ($this->displayNoLocalStorageNotice()): ?>
+    <div class="notice global site local_storage" style="display: none;">
+        <div class="content">
+            <p>
+                <strong><?php echo __('Local Storage seems to be disabled in your browser.'); ?></strong><br />
+                <?php echo __('Enable Local Storage in your browser to get the best experience on our website!'); ?>
+            </p>
+        </div>
+    </div>
+    <script type="text/javascript">
+        // <![CDATA[
+        (function($) {
+            var test = 'test';
+            try {
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+            } catch(e) {
+                $(".notice.global.site.local_storage").show();
+            }
+        })(jQuery);
+        // ]]>
+    </script>
+<?php endif; ?>
 <?php if ($this->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">

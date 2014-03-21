@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\PreProcessor;
 
 /**
@@ -54,7 +53,7 @@ class InstructionFactory
      * @return \Magento\Less\PreProcessorInterface
      * @throws \InvalidArgumentException
      */
-    public function create($className, array $data = [])
+    public function create($className, array $data = array())
     {
         $preProcessor = $this->objectManager->create($className, $data);
         if (!$preProcessor instanceof \Magento\Less\PreProcessorInterface) {

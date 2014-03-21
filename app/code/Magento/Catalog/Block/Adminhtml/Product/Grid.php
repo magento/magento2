@@ -32,6 +32,7 @@
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
+
 use Magento\Core\Model\Store;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -121,7 +122,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('product_filter');
-
     }
 
     /**
@@ -129,7 +129,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getStore()
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
         return $this->_storeManager->getStore($storeId);
     }
 
@@ -139,12 +139,17 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $store = $this->_getStore();
-        $collection = $this->_productFactory->create()->getCollection()
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('attribute_set_id')
-            ->addAttributeToSelect('type_id')
-            ->setStore($store);
+        $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
+            'sku'
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'attribute_set_id'
+        )->addAttributeToSelect(
+            'type_id'
+        )->setStore(
+            $store
+        );
 
         if ($this->_catalogData->isModuleEnabled('Magento_CatalogInventory')) {
             $collection->joinField(
@@ -191,14 +196,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'inner',
                 $store->getId()
             );
-            $collection->joinAttribute(
-                'price',
-                'catalog_product/price',
-                'entity_id',
-                null,
-                'left',
-                $store->getId()
-            );
+            $collection->joinAttribute('price', 'catalog_product/price', 'entity_id', null, 'left', $store->getId());
         } else {
             $collection->addAttributeToSelect('price');
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
@@ -241,22 +239,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'entity_id',
             array(
-                'header'=> __('ID'),
+                'header' => __('ID'),
                 'width' => '50px',
-                'type'  => 'number',
+                'type' => 'number',
                 'index' => 'entity_id',
-                'header_css_class'  => 'col-id',
-                'column_css_class'  => 'col-id'
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
             )
         );
         $this->addColumn(
             'name',
             array(
-                'header'=> __('Name'),
+                'header' => __('Name'),
                 'index' => 'name',
                 'class' => 'xxx',
-                'header_css_class'  => 'col-name',
-                'column_css_class'  => 'col-name'
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
             )
         );
 
@@ -265,10 +263,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'custom_name',
                 array(
-                    'header'=> __('Name in %1', $store->getName()),
+                    'header' => __('Name in %1', $store->getName()),
                     'index' => 'custom_name',
-                    'header_css_class'  => 'col-name',
-                    'column_css_class'  => 'col-name'
+                    'header_css_class' => 'col-name',
+                    'column_css_class' => 'col-name'
                 )
             );
         }
@@ -276,42 +274,41 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'type',
             array(
-                'header'=> __('Type'),
+                'header' => __('Type'),
                 'width' => '60px',
                 'index' => 'type_id',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_type->getOptionArray(),
-                'header_css_class'  => 'col-type',
-                'column_css_class'  => 'col-type'
+                'header_css_class' => 'col-type',
+                'column_css_class' => 'col-type'
             )
         );
 
-        $sets = $this->_setsFactory->create()
-            ->setEntityTypeFilter($this->_productFactory->create()->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
+        $sets = $this->_setsFactory->create()->setEntityTypeFilter(
+            $this->_productFactory->create()->getResource()->getTypeId()
+        )->load()->toOptionHash();
 
         $this->addColumn(
             'set_name',
             array(
-                'header'=> __('Attribute Set'),
+                'header' => __('Attribute Set'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $sets,
-                'header_css_class'  => 'col-attr-name',
-                'column_css_class'  => 'col-attr-name'
+                'header_css_class' => 'col-attr-name',
+                'column_css_class' => 'col-attr-name'
             )
         );
 
         $this->addColumn(
             'sku',
             array(
-                'header'=> __('SKU'),
+                'header' => __('SKU'),
                 'width' => '80px',
                 'index' => 'sku',
-                'header_css_class'  => 'col-sku',
-                'column_css_class'  => 'col-sku'
+                'header_css_class' => 'col-sku',
+                'column_css_class' => 'col-sku'
             )
         );
 
@@ -319,12 +316,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'price',
             array(
-                'header'=> __('Price'),
-                'type'  => 'price',
+                'header' => __('Price'),
+                'type' => 'price',
                 'currency_code' => $store->getBaseCurrency()->getCode(),
                 'index' => 'price',
-                'header_css_class'  => 'col-price',
-                'column_css_class'  => 'col-price'
+                'header_css_class' => 'col-price',
+                'column_css_class' => 'col-price'
             )
         );
 
@@ -332,12 +329,12 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'qty',
                 array(
-                    'header'=> __('Quantity'),
+                    'header' => __('Quantity'),
                     'width' => '100px',
-                    'type'  => 'number',
+                    'type' => 'number',
                     'index' => 'qty',
-                    'header_css_class'  => 'col-qty',
-                    'column_css_class'  => 'col-qty'
+                    'header_css_class' => 'col-qty',
+                    'column_css_class' => 'col-qty'
                 )
             );
         }
@@ -345,26 +342,26 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'visibility',
             array(
-                'header'=> __('Visibility'),
+                'header' => __('Visibility'),
                 'width' => '70px',
                 'index' => 'visibility',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_visibility->getOptionArray(),
-                'header_css_class'  => 'col-visibility',
-                'column_css_class'  => 'col-visibility'
+                'header_css_class' => 'col-visibility',
+                'column_css_class' => 'col-visibility'
             )
         );
 
         $this->addColumn(
             'status',
             array(
-                'header'=> __('Status'),
+                'header' => __('Status'),
                 'width' => '70px',
                 'index' => 'status',
-                'type'  => 'options',
+                'type' => 'options',
                 'options' => $this->_status->getOptionArray(),
-                'header_css_class'  => 'col-status',
-                'column_css_class'  => 'col-status'
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
             )
         );
 
@@ -372,14 +369,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             $this->addColumn(
                 'websites',
                 array(
-                    'header'=> __('Websites'),
+                    'header' => __('Websites'),
                     'width' => '100px',
-                    'sortable'  => false,
-                    'index'     => 'websites',
-                    'type'      => 'options',
-                    'options'   => $this->_websiteFactory->create()->getCollection()->toOptionHash(),
-                    'header_css_class'  => 'col-websites',
-                    'column_css_class'  => 'col-websites'
+                    'sortable' => false,
+                    'index' => 'websites',
+                    'type' => 'options',
+                    'options' => $this->_websiteFactory->create()->getCollection()->toOptionHash(),
+                    'header_css_class' => 'col-websites',
+                    'column_css_class' => 'col-websites'
                 )
             );
         }
@@ -387,25 +384,25 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'edit',
             array(
-                'header'    => __('Edit'),
-                'width'     => '50px',
-                'type'      => 'action',
-                'getter'     => 'getId',
-                'actions'   => array(
+                'header' => __('Edit'),
+                'width' => '50px',
+                'type' => 'action',
+                'getter' => 'getId',
+                'actions' => array(
                     array(
                         'caption' => __('Edit'),
-                        'url'     => array(
-                            'base'=>'*/*/edit',
-                            'params'=>array('store'=>$this->getRequest()->getParam('store'))
+                        'url' => array(
+                            'base' => '*/*/edit',
+                            'params' => array('store' => $this->getRequest()->getParam('store'))
                         ),
-                        'field'   => 'id'
+                        'field' => 'id'
                     )
                 ),
-                'filter'    => false,
-                'sortable'  => false,
-                'index'     => 'stores',
-                'header_css_class'  => 'col-action',
-                'column_css_class'  => 'col-action'
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'stores',
+                'header_css_class' => 'col-action',
+                'column_css_class' => 'col-action'
             )
         );
 
@@ -425,34 +422,43 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getMassactionBlock()->setTemplate('Magento_Catalog::product/grid/massaction_extended.phtml');
         $this->getMassactionBlock()->setFormFieldName('product');
 
-        $this->getMassactionBlock()->addItem('delete', array(
-             'label'=> __('Delete'),
-             'url'  => $this->getUrl('catalog/*/massDelete'),
-             'confirm' => __('Are you sure?')
-        ));
+        $this->getMassactionBlock()->addItem(
+            'delete',
+            array(
+                'label' => __('Delete'),
+                'url' => $this->getUrl('catalog/*/massDelete'),
+                'confirm' => __('Are you sure?')
+            )
+        );
 
         $statuses = $this->_status->getOptionArray();
 
-        array_unshift($statuses, array('label'=>'', 'value'=>''));
-        $this->getMassactionBlock()->addItem('status', array(
-             'label'=> __('Change status'),
-             'url'  => $this->getUrl('catalog/*/massStatus', array('_current'=>true)),
-             'additional' => array(
+        array_unshift($statuses, array('label' => '', 'value' => ''));
+        $this->getMassactionBlock()->addItem(
+            'status',
+            array(
+                'label' => __('Change status'),
+                'url' => $this->getUrl('catalog/*/massStatus', array('_current' => true)),
+                'additional' => array(
                     'visibility' => array(
-                         'name' => 'status',
-                         'type' => 'select',
-                         'class' => 'required-entry',
-                         'label' => __('Status'),
-                         'values' => $statuses
-                     )
-             )
-        ));
+                        'name' => 'status',
+                        'type' => 'select',
+                        'class' => 'required-entry',
+                        'label' => __('Status'),
+                        'values' => $statuses
+                    )
+                )
+            )
+        );
 
         if ($this->_authorization->isAllowed('Magento_Catalog::update_attributes')) {
-            $this->getMassactionBlock()->addItem('attributes', array(
-                'label' => __('Update Attributes'),
-                'url'   => $this->getUrl('catalog/product_action_attribute/edit', array('_current'=>true))
-            ));
+            $this->getMassactionBlock()->addItem(
+                'attributes',
+                array(
+                    'label' => __('Update Attributes'),
+                    'url' => $this->getUrl('catalog/product_action_attribute/edit', array('_current' => true))
+                )
+            );
         }
 
         $this->_eventManager->dispatch('adminhtml_catalog_product_grid_prepare_massaction', array('block' => $this));
@@ -464,7 +470,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('catalog/*/grid', array('_current'=>true));
+        return $this->getUrl('catalog/*/grid', array('_current' => true));
     }
 
     /**
@@ -475,10 +481,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         return $this->getUrl(
             'catalog/*/edit',
-            array(
-                'store'=>$this->getRequest()->getParam('store'),
-                'id'=>$row->getId()
-            )
+            array('store' => $this->getRequest()->getParam('store'), 'id' => $row->getId())
         );
     }
 }

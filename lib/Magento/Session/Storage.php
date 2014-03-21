@@ -25,7 +25,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Session;
 
 class Storage extends \Magento\Object implements StorageInterface
@@ -58,7 +57,7 @@ class Storage extends \Magento\Object implements StorageInterface
         if (isset($data[$namespace])) {
             $this->setData($data[$namespace]);
         }
-        $_SESSION[$namespace] = &$this->_data;
+        $_SESSION[$namespace] =& $this->_data;
     }
 
     /**

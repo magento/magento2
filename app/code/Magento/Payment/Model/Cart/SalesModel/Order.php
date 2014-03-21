@@ -26,7 +26,6 @@ namespace Magento\Payment\Model\Cart\SalesModel;
 /**
  * Wrapper for \Magento\Sales\Model\Order sales model
  */
-
 class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
 {
     /**
@@ -52,13 +51,15 @@ class Order implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
         $resultItems = array();
 
         foreach ($this->_salesModel->getAllItems() as $item) {
-            $resultItems[] = new \Magento\Object(array(
-                'parent_item'   => $item->getParentItem(),
-                'name'          => $item->getName(),
-                'qty'           => (int)$item->getQtyOrdered(),
-                'price'         => (float)$item->getBasePrice(),
-                'original_item' => $item
-            ));
+            $resultItems[] = new \Magento\Object(
+                array(
+                    'parent_item' => $item->getParentItem(),
+                    'name' => $item->getName(),
+                    'qty' => (int)$item->getQtyOrdered(),
+                    'price' => (double)$item->getBasePrice(),
+                    'original_item' => $item
+                )
+            );
         }
 
         return $resultItems;

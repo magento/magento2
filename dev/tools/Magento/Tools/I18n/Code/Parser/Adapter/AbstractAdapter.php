@@ -82,8 +82,9 @@ abstract class AbstractAdapter implements AdapterInterface
     protected function _addPhrase($phrase, $line = '')
     {
         if (!$phrase) {
-            throw new \InvalidArgumentException(sprintf('Phrase cannot be empty. File: "%s" Line: "%s"',
-                $this->_file, $line));
+            throw new \InvalidArgumentException(
+                sprintf('Phrase cannot be empty. File: "%s" Line: "%s"', $this->_file, $line)
+            );
         }
         if (!isset($this->_phrases[$phrase])) {
             $quote = '';
@@ -120,7 +121,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _isFirstAndLastCharIsQuote($phrase)
     {
-        return ($phrase[0] == Phrase::QUOTE_DOUBLE || $phrase[0] == Phrase::QUOTE_SINGLE)
-            && $phrase[0] == $phrase[strlen($phrase) - 1];
+        return ($phrase[0] == Phrase::QUOTE_DOUBLE ||
+            $phrase[0] == Phrase::QUOTE_SINGLE) && $phrase[0] == $phrase[strlen(
+                $phrase
+            ) - 1];
     }
 }

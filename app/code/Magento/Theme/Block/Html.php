@@ -21,8 +21,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block;
+
 use Magento\View\Element\Template;
 
 /**
@@ -61,7 +61,6 @@ class Html extends \Magento\View\Element\Template
         $this->_localeResolver = $localeResolver;
     }
 
-
     /**
      * Add block data
      * @return void
@@ -71,9 +70,9 @@ class Html extends \Magento\View\Element\Template
         parent::_construct();
 
         $this->_urls = array(
-            'base'      => $this->_storeManager->getStore()->getBaseUrl('web'),
-            'baseSecure'=> $this->_storeManager->getStore()->getBaseUrl('web', true),
-            'current'   => $this->_request->getRequestUri()
+            'base' => $this->_storeManager->getStore()->getBaseUrl('web'),
+            'baseSecure' => $this->_storeManager->getStore()->getBaseUrl('web', true),
+            'current' => $this->_request->getRequestUri()
         );
 
         $this->addBodyClass($this->_request->getFullActionName('-'));

@@ -23,8 +23,8 @@
  */
 namespace Magento\Test\Di;
 
-require_once __DIR__ . '/DiInterface.php';
 
+require_once __DIR__ . '/DiInterface.php';
 class DiParent implements \Magento\Test\Di\DiInterface
 {
     /**

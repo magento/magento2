@@ -37,37 +37,37 @@ class Config implements ConfigInterface
     /**
      * Configuration path for session save method
      */
-    const PARAM_SESSION_SAVE_METHOD     = 'session_save';
+    const PARAM_SESSION_SAVE_METHOD = 'session_save';
 
     /**
      * Configuration path for session save path
      */
-    const PARAM_SESSION_SAVE_PATH       = 'session_save_path';
+    const PARAM_SESSION_SAVE_PATH = 'session_save_path';
 
     /**
      * Configuration path for session cache limiter
      */
-    const PARAM_SESSION_CACHE_LIMITER   = 'session_cache_limiter';
+    const PARAM_SESSION_CACHE_LIMITER = 'session_cache_limiter';
 
     /**
      * Configuration path for cookie domain
      */
-    const XML_PATH_COOKIE_DOMAIN    = 'web/cookie/cookie_domain';
+    const XML_PATH_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
 
     /**
      * Configuration path for cookie lifetime
      */
-    const XML_PATH_COOKIE_LIFETIME  = 'web/cookie/cookie_lifetime';
+    const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
 
     /**
      * Configuration path for cookie http only param
      */
-    const XML_PATH_COOKIE_HTTPONLY  = 'web/cookie/cookie_httponly';
+    const XML_PATH_COOKIE_HTTPONLY = 'web/cookie/cookie_httponly';
 
     /**
      * Configuration path for cookie path
      */
-    const XML_PATH_COOKIE_PATH      = 'web/cookie/cookie_path';
+    const XML_PATH_COOKIE_PATH = 'web/cookie/cookie_path';
 
     /**
      * Cookie default lifetime
@@ -192,10 +192,9 @@ class Config implements ConfigInterface
     public function setOptions($options)
     {
         if (!is_array($options) && !$options instanceof \Traversable) {
-            throw new \InvalidArgumentException(sprintf(
-                'Parameter provided to %s must be an array or Traversable',
-                __METHOD__
-            ));
+            throw new \InvalidArgumentException(
+                sprintf('Parameter provided to %s must be an array or Traversable', __METHOD__)
+            );
         }
 
         foreach ($options as $option => $value) {
@@ -291,7 +290,7 @@ class Config implements ConfigInterface
      */
     public function setName($name)
     {
-        $name = (string) $name;
+        $name = (string)$name;
         if (empty($name)) {
             throw new \InvalidArgumentException('Invalid session name; cannot be empty');
         }
@@ -306,7 +305,7 @@ class Config implements ConfigInterface
      */
     public function getName()
     {
-        return (string) $this->getOption('session.name');
+        return (string)$this->getOption('session.name');
     }
 
     /**
@@ -328,7 +327,7 @@ class Config implements ConfigInterface
      */
     public function getSavePath()
     {
-        return (string) $this->getOption('session.save_path');
+        return (string)$this->getOption('session.save_path');
     }
 
     /**
@@ -344,12 +343,10 @@ class Config implements ConfigInterface
             throw new \InvalidArgumentException('Invalid cookie_lifetime; must be numeric');
         }
         if ($cookieLifetime < 0) {
-            throw new \InvalidArgumentException(
-                'Invalid cookie_lifetime; must be a positive integer or zero'
-            );
+            throw new \InvalidArgumentException('Invalid cookie_lifetime; must be a positive integer or zero');
         }
 
-        $cookieLifetime = (int) $cookieLifetime;
+        $cookieLifetime = (int)$cookieLifetime;
         $this->setOption('session.cookie_lifetime', $cookieLifetime);
         return $this;
     }
@@ -361,7 +358,7 @@ class Config implements ConfigInterface
      */
     public function getCookieLifetime()
     {
-        return (int) $this->getOption('session.cookie_lifetime');
+        return (int)$this->getOption('session.cookie_lifetime');
     }
 
     /**
@@ -373,7 +370,7 @@ class Config implements ConfigInterface
      */
     public function setCookiePath($cookiePath)
     {
-        $cookiePath = (string) $cookiePath;
+        $cookiePath = (string)$cookiePath;
 
         $test = parse_url($cookiePath, PHP_URL_PATH);
         if ($test != $cookiePath || '/' != $test[0]) {
@@ -398,7 +395,7 @@ class Config implements ConfigInterface
             }
             $this->setCookiePath($path);
         }
-        return (string) $this->getOption('session.cookie_path');
+        return (string)$this->getOption('session.cookie_path');
     }
 
     /**
@@ -417,9 +414,7 @@ class Config implements ConfigInterface
         $validator = new \Zend\Validator\Hostname(\Zend\Validator\Hostname::ALLOW_ALL);
 
         if (!empty($cookieDomain) && !$validator->isValid($cookieDomain)) {
-            throw new \InvalidArgumentException(
-                'Invalid cookie domain: ' . join('; ', $validator->getMessages())
-            );
+            throw new \InvalidArgumentException('Invalid cookie domain: ' . join('; ', $validator->getMessages()));
         }
 
         $this->setOption('session.cookie_domain', $cookieDomain);
@@ -433,7 +428,7 @@ class Config implements ConfigInterface
      */
     public function getCookieDomain()
     {
-        return (string) $this->getOption('session.cookie_domain');
+        return (string)$this->getOption('session.cookie_domain');
     }
 
     /**
@@ -444,7 +439,7 @@ class Config implements ConfigInterface
      */
     public function setCookieSecure($cookieSecure)
     {
-        $this->setOption('session.cookie_secure', (bool) $cookieSecure);
+        $this->setOption('session.cookie_secure', (bool)$cookieSecure);
         return $this;
     }
 
@@ -455,7 +450,7 @@ class Config implements ConfigInterface
      */
     public function getCookieSecure()
     {
-        return (bool) $this->getOption('session.cookie_secure');
+        return (bool)$this->getOption('session.cookie_secure');
     }
 
     /**
@@ -466,7 +461,7 @@ class Config implements ConfigInterface
      */
     public function setCookieHttpOnly($cookieHttpOnly)
     {
-        $this->setOption('session.cookie_httponly', (bool) $cookieHttpOnly);
+        $this->setOption('session.cookie_httponly', (bool)$cookieHttpOnly);
         return $this;
     }
 
@@ -477,7 +472,7 @@ class Config implements ConfigInterface
      */
     public function getCookieHttpOnly()
     {
-        return (bool) $this->getOption('session.cookie_httponly');
+        return (bool)$this->getOption('session.cookie_httponly');
     }
 
     /**
@@ -488,7 +483,7 @@ class Config implements ConfigInterface
      */
     public function setUseCookies($useCookies)
     {
-        $this->setOption('session.use_cookies', (bool) $useCookies);
+        $this->setOption('session.use_cookies', (bool)$useCookies);
         return $this;
     }
 
@@ -499,7 +494,7 @@ class Config implements ConfigInterface
      */
     public function getUseCookies()
     {
-        return (bool) $this->getOption('session.use_cookies');
+        return (bool)$this->getOption('session.use_cookies');
     }
 
     /**
@@ -530,7 +525,7 @@ class Config implements ConfigInterface
     {
         $value = ini_get($option);
         if (in_array($option, $this->booleanOptions)) {
-            $value = (bool) $value;
+            $value = (bool)$value;
         }
 
         return $value;
@@ -575,19 +570,15 @@ class Config implements ConfigInterface
     {
         $prefix = substr($method, 0, 3);
         $option = substr($method, 3);
-        $key    = strtolower(preg_replace('#(?<=[a-z])([A-Z])#', '_\1', $option));
+        $key = strtolower(preg_replace('#(?<=[a-z])([A-Z])#', '_\1', $option));
 
         if ($prefix === 'set') {
-            $value  = array_shift($args);
+            $value = array_shift($args);
             return $this->setOption($key, $value);
         } elseif ($prefix === 'get') {
             return $this->getOption($key);
         } else {
-            throw new \BadMethodCallException(sprintf(
-                'Method "%s" does not exist in %s',
-                $method,
-                get_class($this)
-            ));
+            throw new \BadMethodCallException(sprintf('Method "%s" does not exist in %s', $method, get_class($this)));
         }
     }
 }

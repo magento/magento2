@@ -65,13 +65,27 @@ class Options extends \Magento\App\Helper\AbstractHelper
     public function downloadFileOption($response, $filePath, $info)
     {
         try {
-            $response->setHttpResponseCode(200)
-                ->setHeader('Pragma', 'public', true)
-                ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
-                ->setHeader('Content-type', $info['type'], true)
-                ->setHeader('Content-Length', $info['size'])
-                ->setHeader('Content-Disposition', 'inline' . '; filename='.$info['title'])
-                ->clearBody();
+            $response->setHttpResponseCode(
+                200
+            )->setHeader(
+                'Pragma',
+                'public',
+                true
+            )->setHeader(
+                'Cache-Control',
+                'must-revalidate, post-check=0, pre-check=0',
+                true
+            )->setHeader(
+                'Content-type',
+                $info['type'],
+                true
+            )->setHeader(
+                'Content-Length',
+                $info['size']
+            )->setHeader(
+                'Content-Disposition',
+                'inline' . '; filename=' . $info['title']
+            )->clearBody();
             $response->sendHeaders();
 
             echo $this->directory->readFile($this->directory->getRelativePath($filePath));

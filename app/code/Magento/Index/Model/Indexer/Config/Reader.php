@@ -32,10 +32,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/indexer' => 'name',
-        '/config/indexer/depends' => 'name',
-    );
+    protected $_idAttributes = array('/config/indexer' => 'name', '/config/indexer/depends' => 'name');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver
@@ -68,5 +65,4 @@ class Reader extends \Magento\Config\Reader\Filesystem
             $defaultScope
         );
     }
-
 }

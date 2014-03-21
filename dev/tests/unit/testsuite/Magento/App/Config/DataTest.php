@@ -44,9 +44,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_metaDataProcessor->expects($this->any())
-            ->method('process')
-            ->will($this->returnArgument(0));
+        $this->_metaDataProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
         $this->_model = new \Magento\App\Config\Data($this->_metaDataProcessor, array());
     }
 
@@ -64,27 +62,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function setValueDataProvider()
     {
         return array(
-            'simple value' => array(
-                'some/config/value',
-                'test'
-            ),
-            'complex value' => array(
-                'some/config/value',
-                array('level1' => array('level2' => 'test'))
-            ),
+            'simple value' => array('some/config/value', 'test'),
+            'complex value' => array('some/config/value', array('level1' => array('level2' => 'test')))
         );
     }
 
     public function testGetData()
     {
-        $model = new \Magento\App\Config\Data(
-            $this->_metaDataProcessor,
-            array(
-                'test' => array(
-                    'path' => 'value',
-                )
-            )
-        );
+        $model = new \Magento\App\Config\Data($this->_metaDataProcessor, array('test' => array('path' => 'value')));
         $this->assertEquals('value', $model->getValue('test/path'));
     }
 }

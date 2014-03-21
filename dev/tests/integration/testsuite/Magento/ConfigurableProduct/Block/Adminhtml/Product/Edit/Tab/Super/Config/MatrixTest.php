@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
 /**
@@ -37,22 +36,40 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Registry')
-            ->register('current_product', \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product')->load(1));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\View\Element\Text', 'head');
+        $objectManager->get(
+            'Magento\Registry'
+        )->register(
+            'current_product',
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Catalog\Model\Product'
+            )->load(
+                1
+            )
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\View\Element\Text',
+            'head'
+        );
         /** @var $usedAttribute \Magento\Catalog\Model\Entity\Attribute */
-        $usedAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Entity\Attribute')->loadByCode(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')->
-                    getEntityType('catalog_product')->getId(),
-                'test_configurable'
-            );
+        $usedAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Entity\Attribute'
+        )->loadByCode(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Eav\Model\Config'
+            )->getEntityType(
+                'catalog_product'
+            )->getId(),
+            'test_configurable'
+        );
         $attributeOptions = $usedAttribute->getSource()->getAllOptions(false);
         /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix */
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock(preg_replace('/Test$/', '', __CLASS__));
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            preg_replace('/Test$/', '', __CLASS__)
+        );
 
         $variations = $block->getVariations();
         foreach ($variations as &$variation) {
@@ -64,7 +81,7 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 array($usedAttribute->getId() => $attributeOptions[0]),
-                array($usedAttribute->getId() => $attributeOptions[1]),
+                array($usedAttribute->getId() => $attributeOptions[1])
             ),
             $variations
         );

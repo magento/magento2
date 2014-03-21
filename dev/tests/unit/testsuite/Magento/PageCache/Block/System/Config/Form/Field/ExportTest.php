@@ -26,7 +26,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Block\System\Config\Form\Field;
 
 class ExportTest extends \PHPUnit_Framework_TestCase
@@ -47,17 +46,30 @@ class ExportTest extends \PHPUnit_Framework_TestCase
     public function testGetElementHtml()
     {
         $expected = 'some test data';
-        $elementMock = $this->getMock('\Magento\Data\Form\Element\AbstractElement', array(), array(), '', false, false);
+        $elementMock = $this->getMock(
+            '\Magento\Data\Form\Element\AbstractElement',
+            array(),
+            array(),
+            '',
+            false,
+            false
+        );
 
         $form = $this->getMock('Magento\Data\Form', array('getLayout'), array(), '', false, false);
         $layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false, false);
 
         $buttonMock = $this->getMock('Magento\Backend\Block\Widget\Button', array(), array(), '', false, false);
         $urlBuilderMock = $this->getMock('Magento\Backend\Model\Url', array('getUrl'), array(), '', false, false);
-        $urlBuilderMock->expects($this->once())
-            ->method('getUrl')
-            ->with('*/PageCache/exportVarnishConfig', array('website' => 1))
-            ->will($this->returnValue('/PageCache/exportVarnishConfig/'));
+        $urlBuilderMock->expects(
+            $this->once()
+        )->method(
+            'getUrl'
+        )->with(
+            '*/PageCache/exportVarnishConfig',
+            array('website' => 1)
+        )->will(
+            $this->returnValue('/PageCache/exportVarnishConfig/')
+        );
         $this->_model->setUrlBuilder($urlBuilderMock);
 
         $requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false, false);

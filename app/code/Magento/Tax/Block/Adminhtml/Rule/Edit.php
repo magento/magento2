@@ -27,7 +27,6 @@
 /**
  * Adminhtml tax rule Edit Container
  */
-
 namespace Magento\Tax\Block\Adminhtml\Rule;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
@@ -69,15 +68,17 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_updateButton('save', 'label', __('Save Rule'));
         $this->_updateButton('delete', 'label', __('Delete Rule'));
 
-        $this->_addButton('save_and_continue', array(
-            'label'     => __('Save and Continue Edit'),
-            'class' => 'save',
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
-                ),
+        $this->_addButton(
+            'save_and_continue',
+            array(
+                'label' => __('Save and Continue Edit'),
+                'class' => 'save',
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'))
+                )
             ),
-        ), 10);
+            10
+        );
     }
 
     /**

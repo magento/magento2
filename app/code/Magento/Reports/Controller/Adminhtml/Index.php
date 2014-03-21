@@ -77,9 +77,12 @@ class Index extends \Magento\Backend\App\Action
 
         $this->_eventManager->dispatch('on_view_report', array('report' => 'search'));
 
-        $this->_initAction()
-            ->_setActiveMenu('Magento_Reports::report_search')
-            ->_addBreadcrumb(__('Search Terms'), __('Search Terms'));
+        $this->_initAction()->_setActiveMenu(
+            'Magento_Reports::report_search'
+        )->_addBreadcrumb(
+            __('Search Terms'),
+            __('Search Terms')
+        );
         $this->_view->renderLayout();
     }
 

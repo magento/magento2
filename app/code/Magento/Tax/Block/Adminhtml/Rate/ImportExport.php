@@ -23,8 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
 class ImportExport extends \Magento\Backend\Block\Widget
@@ -38,10 +36,8 @@ class ImportExport extends \Magento\Backend\Block\Widget
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = array()
-    ) {
+    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = array())
+    {
         parent::__construct($context, $data);
         $this->setUseContainer(true);
     }

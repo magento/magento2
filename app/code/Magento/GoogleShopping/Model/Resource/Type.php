@@ -52,10 +52,15 @@ class Type extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function loadByAttributeSetIdAndTargetCountry($model, $attributeSetId, $targetCountry)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable())
-            ->where('attribute_set_id=?', $attributeSetId)
-            ->where('target_country=?', $targetCountry);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable()
+        )->where(
+            'attribute_set_id=?',
+            $attributeSetId
+        )->where(
+            'target_country=?',
+            $targetCountry
+        );
 
         $data = $this->_getReadAdapter()->fetchRow($select);
         $data = is_array($data) ? $data : array();

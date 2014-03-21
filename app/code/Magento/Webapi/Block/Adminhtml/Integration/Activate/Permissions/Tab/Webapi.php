@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -35,8 +34,8 @@ use Magento\Webapi\Helper\Data as WebapiHelper;
  * TODO: Fix warnings suppression
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /** @var string[] */
     protected $_selectedResources;
@@ -106,8 +105,9 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     public function canShowTab()
     {
         $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
-        return isset($integrationData[Info::DATA_SETUP_TYPE])
-            && ($integrationData[Info::DATA_SETUP_TYPE] == IntegrationModel::TYPE_CONFIG);
+        return isset(
+            $integrationData[Info::DATA_SETUP_TYPE]
+        ) && $integrationData[Info::DATA_SETUP_TYPE] == IntegrationModel::TYPE_CONFIG;
     }
 
     /**
@@ -168,8 +168,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $selectedResources = $this->_selectedResources;
         if ($this->isEverythingAllowed()) {
-             $resources = $this->_resourceProvider->getAclResources();
-             $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
+            $resources = $this->_resourceProvider->getAclResources();
+            $selectedResources = $this->_getAllResourceIds($resources[1]['children']);
         }
         return $this->_coreHelper->jsonEncode($selectedResources);
     }
@@ -181,7 +181,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function isTreeEmpty()
     {
-        return $this->_selectedResources === [];
+        return $this->_selectedResources === array();
     }
 
     /**

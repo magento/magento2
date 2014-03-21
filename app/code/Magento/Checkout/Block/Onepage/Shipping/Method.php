@@ -40,10 +40,10 @@ class Method extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     protected function _construct()
     {
-        $this->getCheckout()->setStepData('shipping_method', array(
-            'label'     => __('Shipping Method'),
-            'is_show'   => $this->isShow()
-        ));
+        $this->getCheckout()->setStepData(
+            'shipping_method',
+            array('label' => __('Shipping Method'), 'is_show' => $this->isShow())
+        );
         parent::_construct();
     }
 

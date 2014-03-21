@@ -34,7 +34,6 @@ namespace Magento;
  */
 class Object implements \ArrayAccess
 {
-
     /**
      * Object attributes
      *
@@ -328,7 +327,7 @@ class Object implements \ArrayAccess
     public function setDataUsingMethod($key, $args = array())
     {
         $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        $this->$method($args);
+        $this->{$method}($args);
         return $this;
     }
 
@@ -342,7 +341,7 @@ class Object implements \ArrayAccess
     public function getDataUsingMethod($key, $args = null)
     {
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-        return $this->$method($args);
+        return $this->{$method}($args);
     }
 
     /**
@@ -424,7 +423,7 @@ class Object implements \ArrayAccess
         $data = $this->toArray($keys);
         foreach ($data as $fieldName => $fieldValue) {
             if ($addCdata === true) {
-                $fieldValue = "<![CDATA[$fieldValue]]>";
+                $fieldValue = "<![CDATA[{$fieldValue}]]>";
             } else {
                 $fieldValue = str_replace(
                     array('&', '"', "'", '<', '>'),
@@ -452,8 +451,12 @@ class Object implements \ArrayAccess
      * @param bool $addCdata flag that require wrap all values in CDATA
      * @return string
      */
-    public function convertToXml(array $arrAttributes = array(), $rootName = 'item', $addOpenTag = false, $addCdata = true)
-    {
+    public function convertToXml(
+        array $arrAttributes = array(),
+        $rootName = 'item',
+        $addOpenTag = false,
+        $addCdata = true
+    ) {
         return $this->toXml($arrAttributes, $rootName, $addOpenTag, $addCdata);
     }
 
@@ -513,18 +516,18 @@ class Object implements \ArrayAccess
     public function __call($method, $args)
     {
         switch (substr($method, 0, 3)) {
-            case 'get' :
-                $key    = $this->_underscore(substr($method, 3));
-                $index  = isset($args[0]) ? $args[0] : null;
+            case 'get':
+                $key = $this->_underscore(substr($method, 3));
+                $index = isset($args[0]) ? $args[0] : null;
                 return $this->getData($key, $index);
-            case 'set' :
-                $key    = $this->_underscore(substr($method, 3));
-                $value  = isset($args[0]) ? $args[0] : null;
+            case 'set':
+                $key = $this->_underscore(substr($method, 3));
+                $value = isset($args[0]) ? $args[0] : null;
                 return $this->setData($key, $value);
-            case 'uns' :
+            case 'uns':
                 $key = $this->_underscore(substr($method, 3));
                 return $this->unsetData($key);
-            case 'has' :
+            case 'has':
                 $key = $this->_underscore(substr($method, 3));
                 return isset($this->_data[$key]);
         }
@@ -668,7 +671,7 @@ class Object implements \ArrayAccess
             $data = $this->getData();
         }
         $debug = array();
-        foreach ($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             if (is_scalar($value)) {
                 $debug[$key] = $value;
             } elseif (is_array($value)) {

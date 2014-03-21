@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <tab id="general" translate="label" sortOrder="100">
             <label>General</label>
@@ -128,7 +128,7 @@
                     <backend_model>Magento\Core\Model\Design\Backend\Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
-                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>User-Agent Exceptions</label>
                     <frontend_model>Magento\Backend\Block\System\Config\Form\Field\Regexceptions</frontend_model>
                     <backend_model>Magento\Core\Model\Design\Backend\Exceptions</backend_model>

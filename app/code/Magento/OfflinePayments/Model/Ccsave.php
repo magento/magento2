@@ -28,12 +28,12 @@ class Ccsave extends \Magento\Payment\Model\Method\Cc
     /**
      * @var string
      */
-    protected $_code        = 'ccsave';
+    protected $_code = 'ccsave';
 
     /**
      * @var bool
      */
-    protected $_canSaveCc   = true;
+    protected $_canSaveCc = true;
 
     /**
      * @var string

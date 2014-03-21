@@ -191,11 +191,19 @@ class MassOperations
                 } catch (\Zend_Db_Statement_Exception $e) {
                     $message = $e->getMessage();
                     if ($e->getCode() == self::ERROR_CODE_SQL_UNIQUE_INDEX) {
-                        $message = __("The Google Content item for product '%1' (in '%2' store) already exists.", $product->getName(), $this->_storeManager->getStore($product->getStoreId())->getName());
+                        $message = __(
+                            "The Google Content item for product '%1' (in '%2' store) already exists.",
+                            $product->getName(),
+                            $this->_storeManager->getStore($product->getStoreId())->getName()
+                        );
                     }
                     $errors[] = $message;
                 } catch (CoreException $e) {
-                    $errors[] = __('The product "%1" cannot be added to Google Content. %2', $product->getName(), $e->getMessage());
+                    $errors[] = __(
+                        'The product "%1" cannot be added to Google Content. %2',
+                        $product->getName(),
+                        $e->getMessage()
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                     $errors[] = __('The product "%1" hasn\'t been added to Google Content.', $product->getName());
@@ -214,10 +222,7 @@ class MassOperations
         }
 
         if (count($errors)) {
-            $this->_getNotifier()->addMajor(
-                __('Errors happened while adding products to Google Shopping.'),
-                $errors
-            );
+            $this->_getNotifier()->addMajor(__('Errors happened while adding products to Google Shopping.'), $errors);
         }
 
         if ($this->_flag->isExpired()) {
@@ -265,19 +270,27 @@ class MassOperations
                         $totalDeleted++;
                     } else {
                         $this->_addGeneralError();
-                        $errors[] = $this->_gleShoppingData
-                            ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                        $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                            $e->getMessage(),
+                            $item->getProduct()
+                        );
                         $totalFailed++;
                     }
                 } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
                     throw $e;
                 } catch (\Zend_Gdata_App_Exception $e) {
                     $this->_addGeneralError();
-                    $errors[] = $this->_gleShoppingData
-                        ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                    $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                        $e->getMessage(),
+                        $item->getProduct()
+                    );
                     $totalFailed++;
                 } catch (CoreException $e) {
-                    $errors[] = __('The item "%1" cannot be updated at Google Content. %2', $item->getProduct()->getName(), $e->getMessage());
+                    $errors[] = __(
+                        'The item "%1" cannot be updated at Google Content. %2',
+                        $item->getProduct()->getName(),
+                        $e->getMessage()
+                    );
                     $totalFailed++;
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
@@ -291,7 +304,11 @@ class MassOperations
 
         $this->_getNotifier()->addNotice(
             __('Product synchronization with Google Shopping completed'),
-            __('A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.', $totalDeleted, $totalUpdated)
+            __(
+                'A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.',
+                $totalDeleted,
+                $totalUpdated
+            )
         );
         if ($totalFailed > 0 || count($errors)) {
             array_unshift($errors, __("We cannot update %1 items.", $totalFailed));
@@ -332,8 +349,10 @@ class MassOperations
                     throw $e;
                 } catch (\Zend_Gdata_App_Exception $e) {
                     $this->_addGeneralError();
-                    $errors[] = $this->_gleShoppingData
-                        ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                    $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                        $e->getMessage(),
+                        $item->getProduct()
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                     $errors[] = __('The item "%1" hasn\'t been deleted.', $item->getProduct()->getName());
@@ -350,10 +369,7 @@ class MassOperations
             );
         }
         if (count($errors)) {
-            $this->_getNotifier()->addMajor(
-                __('Errors happened while deleting items from Google Shopping'),
-                $errors
-            );
+            $this->_getNotifier()->addMajor(__('Errors happened while deleting items from Google Shopping'), $errors);
         }
 
         return $this;
@@ -396,10 +412,7 @@ class MassOperations
     protected function _addGeneralError()
     {
         if (!$this->_hasError) {
-            $this->_getNotifier()->addMajor(
-                __('Google Shopping Error'),
-                $this->_gleShoppingCategory->getMessage()
-            );
+            $this->_getNotifier()->addMajor(__('Google Shopping Error'), $this->_gleShoppingCategory->getMessage());
             $this->_hasError = true;
         }
     }

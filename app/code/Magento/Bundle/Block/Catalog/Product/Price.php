@@ -89,7 +89,7 @@ class Price extends \Magento\Catalog\Block\Product\Price
         $_request->setProductClassId($this->getProduct()->getTaxClassId());
         $currentTax = $this->_taxCalc->getRate($_request);
 
-        return (floatval($defaultTax) > 0 || floatval($currentTax) > 0);
+        return floatval($defaultTax) > 0 || floatval($currentTax) > 0;
     }
 
     /**
@@ -102,7 +102,8 @@ class Price extends \Magento\Catalog\Block\Product\Price
     {
         $product = $this->getProduct();
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC &&
-            $product->getPriceModel()->getIsPricesCalculatedByIndex() !== false) {
+            $product->getPriceModel()->getIsPricesCalculatedByIndex() !== false
+        ) {
             return false;
         }
         return $this->_taxData->displayBothPrices();
@@ -116,8 +117,9 @@ class Price extends \Magento\Catalog\Block\Product\Price
     protected function _toHtml()
     {
         $product = $this->getProduct();
-        if ($this->getMAPTemplate() && $this->_catalogData->canApplyMsrp($product)
-                && $product->getPriceType() != \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
+        if ($this->getMAPTemplate() && $this->_catalogData->canApplyMsrp(
+            $product
+        ) && $product->getPriceType() != \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
         ) {
             $hiddenPriceHtml = parent::_toHtml();
             if ($this->_catalogData->isShowPriceOnGesture($product)) {
@@ -125,16 +127,21 @@ class Price extends \Magento\Catalog\Block\Product\Price
             }
             $realPriceHtml = parent::_toHtml();
             $this->unsWithoutPrice();
-            $addToCartUrl  = $this->getLayout()->getBlock('product.info.bundle')->getAddToCartUrl($product);
+            $addToCartUrl = $this->getLayout()->getBlock('product.info.bundle')->getAddToCartUrl($product);
             $product->setAddToCartUrl($addToCartUrl);
-            $html = $this->getLayout()
-                ->createBlock('Magento\Catalog\Block\Product\Price')
-                ->setTemplate($this->getMAPTemplate())
-                ->setRealPriceHtml($hiddenPriceHtml)
-                ->setPriceElementIdPrefix('bundle-price-')
-                ->setIdSuffix($this->getIdSuffix())
-                ->setProduct($product)
-                ->toHtml();
+            $html = $this->getLayout()->createBlock(
+                'Magento\Catalog\Block\Product\Price'
+            )->setTemplate(
+                $this->getMAPTemplate()
+            )->setRealPriceHtml(
+                $hiddenPriceHtml
+            )->setPriceElementIdPrefix(
+                'bundle-price-'
+            )->setIdSuffix(
+                $this->getIdSuffix()
+            )->setProduct(
+                $product
+            )->toHtml();
 
             return $realPriceHtml . $html;
         }

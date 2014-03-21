@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Multishipping\Model\Checkout\Type;
 
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
@@ -142,12 +141,13 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             return $this;
         }
 
-        if ($this->getCheckoutSession()->getCheckoutState() === \Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN) {
+        if ($this->getCheckoutSession()->getCheckoutState() === \Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN
+        ) {
             $this->getCheckoutSession()->setCheckoutState(true);
             /**
              * Remove all addresses
              */
-            $addresses  = $quote->getAllAddresses();
+            $addresses = $quote->getAllAddresses();
             foreach ($addresses as $address) {
                 $quote->removeAddress($address->getId());
             }
@@ -196,7 +196,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             return $this->_quoteShippingAddressesItems;
         }
         $items = array();
-        $addresses  = $this->getQuote()->getAllAddresses();
+        $addresses = $this->getQuote()->getAllAddresses();
         foreach ($addresses as $address) {
             foreach ($address->getAllItems() as $item) {
                 if ($item->getParentItemId()) {
@@ -207,15 +207,13 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                     continue;
                 }
                 if ($item->getQty() > 1) {
-                    for ($i = 0, $n = $item->getQty(); $i < $n; $i++) {
+                    for ($i = 0,$n = $item->getQty(); $i < $n; $i++) {
                         if ($i == 0) {
                             $addressItem = $item;
                         } else {
                             $addressItem = clone $item;
                         }
-                        $addressItem->setQty(1)
-                            ->setCustomerAddressId($address->getCustomerAddressId())
-                            ->save();
+                        $addressItem->setQty(1)->setCustomerAddressId($address->getCustomerAddressId())->save();
                         $items[] = $addressItem;
                     }
                 } else {
@@ -242,8 +240,8 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
         if ($address) {
             $item = $address->getValidItemById($itemId);
             if ($item) {
-                if ($item->getQty()>1 && !$item->getProduct()->getIsVirtual()) {
-                    $item->setQty($item->getQty()-1);
+                if ($item->getQty() > 1 && !$item->getProduct()->getIsVirtual()) {
+                    $item->setQty($item->getQty() - 1);
                 } else {
                     $address->removeItem($item->getId());
                 }
@@ -251,7 +249,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                 /**
                  * Require shipping rate recollect
                  */
-                $address->setCollectShippingRates((boolean) $this->getCollectRatesFlag());
+                $address->setCollectShippingRates((bool)$this->getCollectRatesFlag());
 
                 if (count($address->getAllItems()) == 0) {
                     $address->isDeleted(true);
@@ -259,9 +257,9 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
                 $quoteItem = $this->getQuote()->getItemById($item->getQuoteItemId());
                 if ($quoteItem) {
-                    $newItemQty = $quoteItem->getQty()-1;
+                    $newItemQty = $quoteItem->getQty() - 1;
                     if ($newItemQty > 0 && !$item->getProduct()->getIsVirtual()) {
-                        $quoteItem->setQty($quoteItem->getQty()-1);
+                        $quoteItem->setQty($quoteItem->getQty() - 1);
                     } else {
                         $this->getQuote()->removeItem($quoteItem->getId());
                     }
@@ -301,10 +299,12 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
             $maxQty = $this->helper->getMaximumQty();
             if ($allQty > $maxQty) {
-                throw new \Magento\Core\Exception(__('Maximum qty allowed for Shipping to multiple addresses is %1', $maxQty));
+                throw new \Magento\Core\Exception(
+                    __('Maximum qty allowed for Shipping to multiple addresses is %1', $maxQty)
+                );
             }
             $quote = $this->getQuote();
-            $addresses  = $quote->getAllShippingAddresses();
+            $addresses = $quote->getAllShippingAddresses();
             foreach ($addresses as $address) {
                 $quote->removeAddress($address->getId());
             }
@@ -320,9 +320,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
              * MultishippingQty should be defined for each quote item when it processed with _addShippingItem
              */
             foreach ($quote->getAllItems() as $_item) {
-                if (!$_item->getProduct()->getIsVirtual() &&
-                    !$_item->getParentItem() &&
-                    !$_item->getMultishippingQty()
+                if (!$_item->getProduct()->getIsVirtual() && !$_item->getParentItem() && !$_item->getMultishippingQty()
                 ) {
                     $quote->removeItem($_item->getId());
                 }
@@ -352,12 +350,11 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                         $_item->setQty(0);
                         $quote->removeItem($_item->getId());
                     }
-                 }
-
+                }
             }
 
             $this->save();
-            $this->_eventManager->dispatch('checkout_type_multishipping_set_shipping_items', array('quote'=>$quote));
+            $this->_eventManager->dispatch('checkout_type_multishipping_set_shipping_items', array('quote' => $quote));
         }
         return $this;
     }
@@ -371,7 +368,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     protected function _addShippingItem($quoteItemId, $data)
     {
-        $qty       = isset($data['qty']) ? (int) $data['qty'] : 1;
+        $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
         //$qty       = $qty > 0 ? $qty : 1;
         $addressId = isset($data['address']) ? $data['address'] : false;
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
@@ -383,7 +380,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             if ($qty === 0) {
                 return $this;
             }
-            $quoteItem->setMultishippingQty((int)$quoteItem->getMultishippingQty()+$qty);
+            $quoteItem->setMultishippingQty((int)$quoteItem->getMultishippingQty() + $qty);
             $quoteItem->setQty($quoteItem->getMultishippingQty());
             try {
                 $address = $this->_customerAddressService->getAddress($addressId);
@@ -391,7 +388,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                 /** Customer address does not exist. */
             }
             if (isset($address)) {
-                if (!$quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId())) {
+                if (!($quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId()))) {
                     $quoteAddress = $this->_addressFactory->create()->importCustomerAddressData($address);
                     $this->getQuote()->addShippingAddress($quoteAddress);
                 }
@@ -399,14 +396,14 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                 $quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId());
                 $quoteAddressItem = $quoteAddress->getItemByQuoteItemId($quoteItemId);
                 if ($quoteAddressItem) {
-                    $quoteAddressItem->setQty((int)($quoteAddressItem->getQty()+$qty));
+                    $quoteAddressItem->setQty((int)($quoteAddressItem->getQty() + $qty));
                 } else {
                     $quoteAddress->addItem($quoteItem, $qty);
                 }
                 /**
                  * Require shipping rate recollect
                  */
-                $quoteAddress->setCollectShippingRates((boolean) $this->getCollectRatesFlag());
+                $quoteAddress->setCollectShippingRates((bool)$this->getCollectRatesFlag());
             }
         }
         return $this;
@@ -426,10 +423,13 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             /** Customer address does not exist. */
         }
         if (isset($address)) {
-            $this->getQuote()->getShippingAddressByCustomerAddressId($addressId)
-                ->setCollectShippingRates(true)
-                ->importCustomerAddressData($address)
-                ->collectTotals();
+            $this->getQuote()->getShippingAddressByCustomerAddressId(
+                $addressId
+            )->setCollectShippingRates(
+                true
+            )->importCustomerAddressData(
+                $address
+            )->collectTotals();
             $this->getQuote()->save();
         }
         return $this;
@@ -449,9 +449,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             /** Customer address does not exist. */
         }
         if (isset($address)) {
-            $this->getQuote()->getBillingAddress($addressId)
-                ->importCustomerAddressData($address)
-                ->collectTotals();
+            $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address)->collectTotals();
             $this->getQuote()->collectTotals()->save();
         }
         return $this;
@@ -520,9 +518,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
 
         $order = $this->_quote->addressToOrder($address);
         $order->setQuote($quote);
-        $order->setBillingAddress(
-            $this->_quote->addressToOrderAddress($quote->getBillingAddress())
-        );
+        $order->setBillingAddress($this->_quote->addressToOrderAddress($quote->getBillingAddress()));
 
         if ($address->getAddressType() == 'billing') {
             $order->setIsVirtual(1);
@@ -540,10 +536,11 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             if (!$_quoteItem) {
                 throw new \Magento\Checkout\Exception(__('Item not found or already ordered'));
             }
-            $item->setProductType($_quoteItem->getProductType())
-                ->setProductOptions(
-                    $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
-                );
+            $item->setProductType(
+                $_quoteItem->getProductType()
+            )->setProductOptions(
+                $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
+            );
             $orderItem = $this->_quote->itemToOrderItem($item);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
@@ -576,8 +573,8 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             if ($addressValidation !== true) {
                 throw new \Magento\Core\Exception(__('Please check shipping addresses information.'));
             }
-            $method= $address->getShippingMethod();
-            $rate  = $address->getShippingRateByCode($method);
+            $method = $address->getShippingMethod();
+            $rate = $address->getShippingRateByCode($method);
             if (!$method || !$rate) {
                 throw new \Magento\Core\Exception(__('Please specify shipping methods for all addresses.'));
             }
@@ -613,14 +610,14 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
                 $orders[] = $order;
                 $this->_eventManager->dispatch(
                     'checkout_type_multishipping_create_orders_single',
-                    array('order'=>$order, 'address'=>$address)
+                    array('order' => $order, 'address' => $address)
                 );
             }
 
             foreach ($orders as $order) {
                 $order->place();
                 $order->save();
-                if ($order->getCanSendNewEmailFlag()){
+                if ($order->getCanSendNewEmailFlag()) {
                     $order->sendNewOrderEmail();
                 }
                 $orderIds[$order->getId()] = $order->getIncrementId();
@@ -629,11 +626,12 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
             $this->_session->setOrderIds($orderIds);
             $this->_checkoutSession->setLastQuoteId($this->getQuote()->getId());
 
-            $this->getQuote()
-                ->setIsActive(false)
-                ->save();
+            $this->getQuote()->setIsActive(false)->save();
 
-            $this->_eventManager->dispatch('checkout_submit_all_after', array('orders' => $orders, 'quote' => $this->getQuote()));
+            $this->_eventManager->dispatch(
+                'checkout_submit_all_after',
+                array('orders' => $orders, 'quote' => $this->getQuote())
+            );
 
             return $this;
         } catch (\Exception $e) {
@@ -649,8 +647,7 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function save()
     {
-        $this->getQuote()->collectTotals()
-            ->save();
+        $this->getQuote()->collectTotals()->save();
         return $this;
     }
 
@@ -672,9 +669,11 @@ class Multishipping extends \Magento\Checkout\Model\Type\AbstractType
      */
     public function validateMinimumAmount()
     {
-        return !($this->_coreStoreConfig->getConfigFlag('sales/minimum_order/active')
-            && $this->_coreStoreConfig->getConfigFlag('sales/minimum_order/multi_address')
-            && !$this->getQuote()->validateMinimumAmount());
+        return !($this->_coreStoreConfig->getConfigFlag(
+            'sales/minimum_order/active'
+        ) && $this->_coreStoreConfig->getConfigFlag(
+            'sales/minimum_order/multi_address'
+        ) && !$this->getQuote()->validateMinimumAmount());
     }
 
     /**

@@ -46,7 +46,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @var bool
      */
-    protected $_selectionsAppended   = false;
+    protected $_selectionsAppended = false;
 
     /**
      * Init model and resource model
@@ -66,13 +66,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function joinValues($storeId)
     {
-        $this->getSelect()
-            ->joinLeft(
-                array('option_value_default' => $this->getTable('catalog_product_bundle_option_value')),
-                'main_table.option_id = option_value_default.option_id and option_value_default.store_id = 0',
-                array()
-            )
-            ->columns(array('default_title' => 'option_value_default.title'));
+        $this->getSelect()->joinLeft(
+            array('option_value_default' => $this->getTable('catalog_product_bundle_option_value')),
+            'main_table.option_id = option_value_default.option_id and option_value_default.store_id = 0',
+            array()
+        )->columns(
+            array('default_title' => 'option_value_default.title')
+        );
 
         $title = $this->getConnection()->getCheckSql(
             'option_value.title IS NOT NULL',
@@ -80,15 +80,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             'option_value_default.title'
         );
         if ($storeId !== null) {
-            $this->getSelect()
-                ->columns(array('title' => $title))
-                ->joinLeft(array('option_value' => $this->getTable('catalog_product_bundle_option_value')),
-                    $this->getConnection()->quoteInto(
-                        'main_table.option_id = option_value.option_id and option_value.store_id = ?',
-                        $storeId
-                    ),
-                    array()
-                );
+            $this->getSelect()->columns(
+                array('title' => $title)
+            )->joinLeft(
+                array('option_value' => $this->getTable('catalog_product_bundle_option_value')),
+                $this->getConnection()->quoteInto(
+                    'main_table.option_id = option_value.option_id and option_value.store_id = ?',
+                    $storeId
+                ),
+                array()
+            );
         }
         return $this;
     }
@@ -112,8 +113,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function setPositionOrder()
     {
-        $this->getSelect()->order('main_table.position asc')
-            ->order('main_table.option_id asc');
+        $this->getSelect()->order('main_table.position asc')->order('main_table.option_id asc');
         return $this;
     }
 
@@ -136,7 +136,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         if (!$this->_selectionsAppended) {
             foreach ($selectionsCollection->getItems() as $key => $_selection) {
                 if ($_option = $this->getItemById($_selection->getOptionId())) {
-                    if ($appendAll || ($_selection->isSalable() && !$_selection->getRequiredOptions())) {
+                    if ($appendAll || $_selection->isSalable() && !$_selection->getRequiredOptions()) {
                         $_selection->setOption($_option);
                         $_option->addSelection($_selection);
                     } else {

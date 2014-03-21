@@ -64,8 +64,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     {
         if (empty($ids)) {
             $ids = array();
-        }
-        elseif (!is_array($ids)) {
+        } elseif (!is_array($ids)) {
             $ids = array((int)$ids);
         }
         $this->_selectedIds = $ids;
@@ -80,12 +79,12 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     protected function _getNodeJson($node, $level = 1)
     {
         $item = array();
-        $item['text']= $this->escapeHtml($node->getName());
+        $item['text'] = $this->escapeHtml($node->getName());
 
         if ($this->_withProductCount) {
-             $item['text'].= ' ('.$node->getProductCount().')';
+            $item['text'] .= ' (' . $node->getProductCount() . ')';
         }
-        $item['id']  = $node->getId();
+        $item['id'] = $node->getId();
         $item['path'] = $node->getData('path');
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');
         $item['allowDrop'] = false;
@@ -118,7 +117,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * @param int $recursionLevel
      * @return Node|array|null
      */
-    public function getRoot($parentNodeCategory=null, $recursionLevel=3)
+    public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {
         return $this->getRootByIds($this->getCategoryIds());
     }

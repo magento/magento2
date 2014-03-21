@@ -34,7 +34,6 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
  */
 class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
-
     /**
      * TODO: Enter description here...
      *
@@ -49,7 +48,7 @@ class Urlkey extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($urlKey === false) {
             return $this;
         }
-        if ($urlKey=='') {
+        if ($urlKey == '') {
             $urlKey = $object->getName();
         }
 

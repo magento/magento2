@@ -30,7 +30,7 @@ class Item extends \Magento\Object
     /**
      * @var bool
      */
-    protected $_isEmpty  = false;
+    protected $_isEmpty = false;
 
     /**
      * @var array
@@ -63,7 +63,8 @@ class Item extends \Magento\Object
      * @return void
      */
     public function hasIsEmpty()
-    {}
+    {
+    }
 
     /**
      * Get children
@@ -94,7 +95,7 @@ class Item extends \Magento\Object
      */
     public function hasChildren()
     {
-        return (count($this->_children) > 0) ? true : false;
+        return count($this->_children) > 0 ? true : false;
     }
 
     /**

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cron\Model\Groups\Config\Reader;
 
 /**
@@ -36,9 +35,7 @@ class Xml extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/group' => 'id'
-    );
+    protected $_idAttributes = array('/config/group' => 'id');
 
     /**
      * @param \Magento\Config\FileResolverInterface $fileResolver

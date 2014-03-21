@@ -32,8 +32,7 @@ namespace Magento\Customer\Model\Resource\Address\Attribute\Backend;
  * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Region
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Directory\Model\RegionFactory
@@ -44,10 +43,8 @@ class Region
      * @param \Magento\Logger $logger
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Directory\Model\RegionFactory $regionFactory
-    ) {
+    public function __construct(\Magento\Logger $logger, \Magento\Directory\Model\RegionFactory $regionFactory)
+    {
         $this->_regionFactory = $regionFactory;
         parent::__construct($logger);
     }
@@ -65,8 +62,7 @@ class Region
             $regionModel = $this->_createRegionInstance();
             $regionModel->load($region);
             if ($regionModel->getId() && $object->getCountryId() == $regionModel->getCountryId()) {
-                $object->setRegionId($regionModel->getId())
-                    ->setRegion($regionModel->getName());
+                $object->setRegionId($regionModel->getId())->setRegion($regionModel->getName());
             }
         }
         return $this;

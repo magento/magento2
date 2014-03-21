@@ -48,10 +48,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -77,10 +74,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -113,10 +107,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -142,10 +133,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -180,11 +168,11 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var \Magento\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get('Magento\Data\Form\FormKey');
-        $postData = [
-            'cart' => [$quoteItem->getId() => ['qty' => $updatedQuantity]],
+        $postData = array(
+            'cart' => array($quoteItem->getId() => array('qty' => $updatedQuantity)),
             'update_cart_action' => 'update_qty',
             'form_key' => $formKey->getFormKey()
-        ];
+        );
         $this->getRequest()->setPost($postData);
         /** @var $customerSession \Magento\Customer\Model\Session */
         $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');
@@ -205,11 +193,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
         $quote->load($checkoutSession->getQuote()->getId());
         $quoteItem = $this->_getQuoteItemIdByProductId($quote, 1);
-        $this->assertEquals(
-            $updatedQuantity,
-            $quoteItem->getQty(),
-            "Invalid quote item quantity"
-        );
+        $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
     }
 
     /**

@@ -32,8 +32,7 @@ namespace Magento\Sales\Model\Resource\Quote\Address\Attribute;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Frontend
-    extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+class Frontend extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
      * Fetch totals
@@ -44,7 +43,7 @@ class Frontend
     public function fetchTotals(\Magento\Sales\Model\Quote\Address $address)
     {
         $arr = array();
-        
+
         return $arr;
     }
 }

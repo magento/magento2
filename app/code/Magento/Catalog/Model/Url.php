@@ -106,12 +106,12 @@ class Url
      */
     protected $_saveRewritesHistory = null;
 
-     /**
-      * Singleton of category model for building URL path
-      *
-      * @var \Magento\Catalog\Model\Category
-      */
-    static protected $_categoryForUrlPath;
+    /**
+     * Singleton of category model for building URL path
+     *
+     * @var \Magento\Catalog\Model\Category
+     */
+    protected static $_categoryForUrlPath;
 
     /**
      * Catalog data
@@ -188,7 +188,7 @@ class Url
      */
     protected function _addCategoryUrlPath($category)
     {
-        if (!($category instanceof \Magento\Object) || $category->getUrlPath()) {
+        if (!$category instanceof \Magento\Object || $category->getUrlPath()) {
             return;
         }
 
@@ -204,9 +204,7 @@ class Url
         }
 
         // Generate url_path
-        $urlPath = self::$_categoryForUrlPath
-            ->setData($category->getData())
-            ->getUrlPath();
+        $urlPath = self::$_categoryForUrlPath->setData($category->getData())->getUrlPath();
         $category->setUrlPath($urlPath);
     }
 
@@ -332,18 +330,18 @@ class Url
                 $urlKey = $this->getCategoryModel()->formatUrlKey($category->getUrlKey());
             }
 
-            $idPath      = $this->generatePath('id', null, $category);
-            $targetPath  = $this->generatePath('target', null, $category);
+            $idPath = $this->generatePath('id', null, $category);
+            $targetPath = $this->generatePath('target', null, $category);
             $requestPath = $this->getCategoryRequestPath($category, $parentPath);
 
             $rewriteData = array(
-                'store_id'      => $category->getStoreId(),
-                'category_id'   => $category->getId(),
-                'product_id'    => null,
-                'id_path'       => $idPath,
-                'request_path'  => $requestPath,
-                'target_path'   => $targetPath,
-                'is_system'     => 1
+                'store_id' => $category->getStoreId(),
+                'category_id' => $category->getId(),
+                'product_id' => null,
+                'id_path' => $idPath,
+                'request_path' => $requestPath,
+                'target_path' => $targetPath,
+                'is_system' => 1
             );
 
             $this->getResource()->saveRewrite($rewriteData, $this->_rewrite);
@@ -396,8 +394,8 @@ class Url
             $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
         }
 
-        $idPath      = $this->generatePath('id', $product, $category);
-        $targetPath  = $this->generatePath('target', $product, $category);
+        $idPath = $this->generatePath('id', $product, $category);
+        $targetPath = $this->generatePath('target', $product, $category);
         $requestPath = $this->getProductRequestPath($product, $category);
 
         $categoryId = null;
@@ -408,13 +406,13 @@ class Url
         }
 
         $rewriteData = array(
-            'store_id'      => $category->getStoreId(),
-            'category_id'   => $categoryId,
-            'product_id'    => $product->getId(),
-            'id_path'       => $idPath,
-            'request_path'  => $requestPath,
-            'target_path'   => $targetPath,
-            'is_system'     => 1
+            'store_id' => $category->getStoreId(),
+            'category_id' => $categoryId,
+            'product_id' => $product->getId(),
+            'id_path' => $idPath,
+            'request_path' => $requestPath,
+            'target_path' => $targetPath,
+            'is_system' => 1
         );
 
         $this->getResource()->saveRewrite($rewriteData, $this->_rewrite);
@@ -580,9 +578,9 @@ class Url
      */
     public function refreshProductRewrites($storeId)
     {
-        $this->_categories      = array();
-        $storeRootCategoryId    = $this->getStores($storeId)->getRootCategoryId();
-        $storeRootCategoryPath  = $this->getStores($storeId)->getRootCategoryPath();
+        $this->_categories = array();
+        $storeRootCategoryId = $this->getStores($storeId)->getRootCategoryId();
+        $storeRootCategoryPath = $this->getStores($storeId)->getRootCategoryPath();
         $this->_categories[$storeRootCategoryId] = $this->getResource()->getCategory($storeRootCategoryId, $storeId);
 
         $lastEntityId = 0;
@@ -701,15 +699,18 @@ class Url
             $match = array();
             $suffix = preg_quote($suffix);
             $quotedUrlKey = preg_quote($urlKey);
-            $regularExpression = "#(?P<urlKey>{$quotedUrlKey})(\-(?P<copyNum>[0-9]+))?(?P<suffix>{$suffix})?$#i";
+            $regularExpression = "#(?P<urlKey>{$quotedUrlKey})(\\-(?P<copyNum>[0-9]+))?(?P<suffix>{$suffix})?\$#i";
             if (!preg_match($regularExpression, $requestPath, $match)) {
                 return $this->getUnusedPath($storeId, '-', $idPath, $urlKey);
             }
             $match['urlKey'] = $match['urlKey'] . '-';
             $match['suffix'] = isset($match['suffix']) ? $match['suffix'] : '';
 
-            $lastRequestPath = $this->getResource()
-                ->getLastUsedRewriteRequestIncrement($match['urlKey'], $match['suffix'], $storeId);
+            $lastRequestPath = $this->getResource()->getLastUsedRewriteRequestIncrement(
+                $match['urlKey'],
+                $match['suffix'],
+                $storeId
+            );
             if ($lastRequestPath) {
                 $match['copyNum'] = $lastRequestPath;
             }
@@ -751,7 +752,7 @@ class Url
     public function getCategoryRequestPath($category, $parentPath)
     {
         $storeId = $category->getStoreId();
-        $idPath  = $this->generatePath('id', null, $category);
+        $idPath = $this->generatePath('id', null, $category);
         $categoryUrlSuffix = $this->getCategoryUrlSuffix($storeId);
 
         if (isset($this->_rewrites[$idPath])) {
@@ -820,16 +821,15 @@ class Url
             $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
         }
         $storeId = $category->getStoreId();
-        $suffix  = $this->getProductUrlSuffix($storeId);
-        $idPath  = $this->generatePath('id', $product, $category);
+        $suffix = $this->getProductUrlSuffix($storeId);
+        $idPath = $this->generatePath('id', $product, $category);
         /**
          * Prepare product base request path
          */
         if ($category->getLevel() > 1) {
             // To ensure, that category has path either from attribute or generated now
             $this->_addCategoryUrlPath($category);
-            $categoryUrl = $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath(),
-                false, $storeId);
+            $categoryUrl = $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath(), false, $storeId);
             $requestPath = $categoryUrl . '/' . $urlKey;
         } else {
             $requestPath = $urlKey;
@@ -856,18 +856,19 @@ class Url
             /**
              * Check if existing request past can be used
              */
-            if ($product->getUrlKey() == '' && !empty($requestPath)
-                && strpos($existingRequestPath, $requestPath) === 0
+            if ($product->getUrlKey() == '' && !empty($requestPath) && strpos($existingRequestPath, $requestPath) === 0
             ) {
                 $existingRequestPath = preg_replace(
-                    '/^' . preg_quote($requestPath, '/') . '/', '', $existingRequestPath
+                    '/^' . preg_quote($requestPath, '/') . '/',
+                    '',
+                    $existingRequestPath
                 );
                 if (preg_match('#^-([0-9]+)$#i', $existingRequestPath)) {
                     return $this->_rewrites[$idPath]->getRequestPath();
                 }
             }
 
-            $fullPath = $requestPath.$suffix;
+            $fullPath = $requestPath . $suffix;
             if ($this->_deleteOldTargetPath($fullPath, $idPath, $storeId)) {
                 return $fullPath;
             }
@@ -876,7 +877,7 @@ class Url
          * Check 2 variants: $requestPath and $requestPath . '-' . $productId
          */
         $validatedPath = $this->getResource()->checkRequestPaths(
-            array($requestPath.$suffix, $requestPath.'-'.$product->getId().$suffix),
+            array($requestPath . $suffix, $requestPath . '-' . $product->getId() . $suffix),
             $storeId
         );
 
@@ -936,11 +937,13 @@ class Url
                 } elseif ($parentPath == '/') {
                     $parentPath = '';
                 }
-                $parentPath = $this->_catalogCategory->getCategoryUrlPath($parentPath,
-                    true, $category->getStoreId());
+                $parentPath = $this->_catalogCategory->getCategoryUrlPath($parentPath, true, $category->getStoreId());
 
-                return $this->getUnusedPath($category->getStoreId(), $parentPath . $urlKey . $categoryUrlSuffix,
-                    $this->generatePath('id', null, $category), $urlKey
+                return $this->getUnusedPath(
+                    $category->getStoreId(),
+                    $parentPath . $urlKey . $categoryUrlSuffix,
+                    $this->generatePath('id', null, $category),
+                    $urlKey
                 );
             }
 
@@ -956,12 +959,15 @@ class Url
             } else {
                 $urlKey = $this->productUrl->formatUrlKey($product->getUrlKey());
             }
-            $productUrlSuffix  = $this->getProductUrlSuffix($category->getStoreId());
+            $productUrlSuffix = $this->getProductUrlSuffix($category->getStoreId());
             if ($category->getLevel() > 1) {
                 // To ensure, that category has url path either from attribute or generated now
                 $this->_addCategoryUrlPath($category);
-                $categoryUrl = $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath(),
-                    false, $category->getStoreId());
+                $categoryUrl = $this->_catalogCategory->getCategoryUrlPath(
+                    $category->getUrlPath(),
+                    false,
+                    $category->getStoreId()
+                );
                 return $this->getUnusedPath(
                     $category->getStoreId(),
                     $categoryUrl . '/' . $urlKey . $productUrlSuffix,
@@ -971,8 +977,11 @@ class Url
             }
 
             // for product only
-            return $this->getUnusedPath($category->getStoreId(), $urlKey . $productUrlSuffix,
-                $this->generatePath('id', $product), $urlKey
+            return $this->getUnusedPath(
+                $category->getStoreId(),
+                $urlKey . $productUrlSuffix,
+                $this->generatePath('id', $product),
+                $urlKey
             );
         }
 
@@ -1011,7 +1020,8 @@ class Url
             $rewriteData['request_path'] = $rewrite->getRequestPath();
             $rewriteData['id_path'] = $this->generateUniqueIdPath();
             $rewriteData['is_system'] = 0;
-            $rewriteData['options'] = 'RP'; // Redirect = Permanent
+            $rewriteData['options'] = 'RP';
+            // Redirect = Permanent
             $this->getResource()->saveRewriteHistory($rewriteData);
         }
 

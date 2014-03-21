@@ -62,40 +62,40 @@ class StateTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'enabled' => array(
-                'cacheType' =>          'cache_type',
-                'typeOptions' =>        array('some_type' => false, 'cache_type' => true),
-                'appInstalled' =>       true,
-                'banAll' =>             false,
-                'expectedIsEnabled' =>  true,
+                'cacheType' => 'cache_type',
+                'typeOptions' => array('some_type' => false, 'cache_type' => true),
+                'appInstalled' => true,
+                'banAll' => false,
+                'expectedIsEnabled' => true
             ),
             'disabled' => array(
-                'cacheType' =>          'cache_type',
-                'typeOptions' =>        array('some_type' => true, 'cache_type' => false),
-                'appInstalled' =>       true,
-                'banAll' =>             false,
-                'expectedIsEnabled' =>  false,
+                'cacheType' => 'cache_type',
+                'typeOptions' => array('some_type' => true, 'cache_type' => false),
+                'appInstalled' => true,
+                'banAll' => false,
+                'expectedIsEnabled' => false
             ),
             'unknown is disabled' => array(
-                'cacheType' =>          'unknown_cache_type',
-                'typeOptions' =>        array('some_type' => true),
-                'appInstalled' =>       true,
-                'banAll' =>             false,
-                'expectedIsEnabled' =>  false,
+                'cacheType' => 'unknown_cache_type',
+                'typeOptions' => array('some_type' => true),
+                'appInstalled' => true,
+                'banAll' => false,
+                'expectedIsEnabled' => false
             ),
             'disabled, when app is not installed' => array(
-                'cacheType' =>          'cache_type',
-                'typeOptions' =>        array('cache_type' => true),
-                'appInstalled' =>       false,
-                'banAll' =>             false,
-                'expectedIsEnabled' =>  false,
+                'cacheType' => 'cache_type',
+                'typeOptions' => array('cache_type' => true),
+                'appInstalled' => false,
+                'banAll' => false,
+                'expectedIsEnabled' => false
             ),
             'disabled, when all caches are banned' => array(
-                'cacheType' =>          'cache_type',
-                'typeOptions' =>        array('cache_type' => true),
-                'appInstalled' =>       true,
-                'banAll' =>             true,
-                'expectedIsEnabled' =>  false,
-            ),
+                'cacheType' => 'cache_type',
+                'typeOptions' => array('cache_type' => true),
+                'appInstalled' => true,
+                'banAll' => true,
+                'expectedIsEnabled' => false
+            )
         );
     }
 
@@ -115,27 +115,37 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $banAll = false
     ) {
         $this->_cacheFrontend = $this->getMock('Magento\Cache\FrontendInterface');
-        $this->_cacheFrontend->expects($this->any())
-            ->method('load')
-            ->with(\Magento\App\Cache\State::CACHE_ID)
-            ->will($this->returnValue(
-            $cacheTypeOptions === false ? false : serialize($cacheTypeOptions)
-        ));
+        $this->_cacheFrontend->expects(
+            $this->any()
+        )->method(
+            'load'
+        )->with(
+            \Magento\App\Cache\State::CACHE_ID
+        )->will(
+            $this->returnValue($cacheTypeOptions === false ? false : serialize($cacheTypeOptions))
+        );
         $cacheFrontendPool = $this->getMock('Magento\App\Cache\Frontend\Pool', array(), array(), '', false);
-        $cacheFrontendPool->expects($this->any())
-            ->method('get')
-            ->with(\Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID)
-            ->will($this->returnValue($this->_cacheFrontend));
+        $cacheFrontendPool->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            \Magento\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID
+        )->will(
+            $this->returnValue($this->_cacheFrontend)
+        );
 
         $this->_resource = $this->getMock('Magento\Core\Model\Resource\Cache', array(), array(), '', false);
-        $this->_resource->expects($this->any())
-            ->method('getAllOptions')
-            ->will($this->returnValue($resourceTypeOptions));
+        $this->_resource->expects(
+            $this->any()
+        )->method(
+            'getAllOptions'
+        )->will(
+            $this->returnValue($resourceTypeOptions)
+        );
 
         $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $appState->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue($appInstalled));
+        $appState->expects($this->any())->method('isInstalled')->will($this->returnValue($appInstalled));
 
         $this->_model = new \Magento\App\Cache\State($this->_resource, $cacheFrontendPool, $appState, $banAll);
 
@@ -170,12 +180,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $cacheTypes = array('cache_type' => false);
         $model = $this->_buildModel($cacheTypes);
 
-        $this->_resource->expects($this->once())
-            ->method('saveAllOptions')
-            ->with($cacheTypes);
-        $this->_cacheFrontend->expects($this->once())
-            ->method('remove')
-            ->with(\Magento\App\Cache\State::CACHE_ID);
+        $this->_resource->expects($this->once())->method('saveAllOptions')->with($cacheTypes);
+        $this->_cacheFrontend->expects($this->once())->method('remove')->with(\Magento\App\Cache\State::CACHE_ID);
 
         $model->persist();
     }

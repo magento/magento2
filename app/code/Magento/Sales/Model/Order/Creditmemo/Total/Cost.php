@@ -37,8 +37,8 @@ class Cost extends AbstractTotal
     {
         $baseRefundTotalCost = 0;
         foreach ($creditmemo->getAllItems() as $item) {
-            if (!$item->getHasChildren()){
-                $baseRefundTotalCost += $item->getBaseCost()*$item->getQty();
+            if (!$item->getHasChildren()) {
+                $baseRefundTotalCost += $item->getBaseCost() * $item->getQty();
             }
         }
         $creditmemo->setBaseCost($baseRefundTotalCost);

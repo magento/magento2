@@ -41,10 +41,8 @@ class Order extends \Magento\App\Action\Action
      * @param \Magento\App\Action\Context $context
      * @param \Magento\Registry $coreRegistry
      */
-    public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Registry $coreRegistry
-    ) {
+    public function __construct(\Magento\App\Action\Context $context, \Magento\Registry $coreRegistry)
+    {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -56,8 +54,11 @@ class Order extends \Magento\App\Action\Action
      */
     public function statusAction()
     {
-        $order = $this->_objectManager->get('Magento\Rss\Helper\Order')
-            ->getOrderByStatusUrlKey((string)$this->getRequest()->getParam('data'));
+        $order = $this->_objectManager->get(
+            'Magento\Rss\Helper\Order'
+        )->getOrderByStatusUrlKey(
+            (string)$this->getRequest()->getParam('data')
+        );
 
         if (!is_null($order)) {
             $this->_coreRegistry->register('current_order', $order);

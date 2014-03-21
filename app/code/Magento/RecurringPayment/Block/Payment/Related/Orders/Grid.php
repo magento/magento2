@@ -32,6 +32,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
      * @var \Magento\Sales\Model\Resource\Order\Collection
      */
     protected $_orderCollection;
+
     /**
      * @var \Magento\Sales\Model\Order\Config
      */
@@ -72,6 +73,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
         $this->_isScopePrivate = true;
         $this->_recurringCollectionFilter = $recurringCollectionFilter;
     }
+
     /**
      * Prepare related orders collection
      *
@@ -81,10 +83,15 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
     protected function _prepareRelatedOrders($fieldsToSelect = '*')
     {
         if (null === $this->_relatedOrders) {
-            $this->_orderCollection
-                ->addFieldToSelect($fieldsToSelect)
-                ->addFieldToFilter('customer_id', $this->_registry->registry('current_customer')->getId())
-                ->setOrder('entity_id', 'desc');
+            $this->_orderCollection->addFieldToSelect(
+                $fieldsToSelect
+            )->addFieldToFilter(
+                'customer_id',
+                $this->_registry->registry('current_customer')->getId()
+            )->setOrder(
+                'entity_id',
+                'desc'
+            );
             $this->_relatedOrders = $this->_recurringCollectionFilter->byIds(
                 $this->_orderCollection,
                 $this->_recurringPayment->getId()
@@ -101,61 +108,63 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
     {
         parent::_prepareLayout();
 
-        $this->_prepareRelatedOrders(array(
-            'increment_id', 'created_at', 'customer_firstname', 'customer_lastname', 'base_grand_total', 'status'
-        ));
-        $this->_relatedOrders->addFieldToFilter('state', array(
-            'in' => $this->_config->getVisibleOnFrontStates()
-        ));
+        $this->_prepareRelatedOrders(
+            array(
+                'increment_id',
+                'created_at',
+                'customer_firstname',
+                'customer_lastname',
+                'base_grand_total',
+                'status'
+            )
+        );
+        $this->_relatedOrders->addFieldToFilter('state', array('in' => $this->_config->getVisibleOnFrontStates()));
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager')
-            ->setCollection($this->_relatedOrders)->setIsOutputRequired(false);
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager'
+        )->setCollection(
+            $this->_relatedOrders
+        )->setIsOutputRequired(
+            false
+        );
         $this->setChild('pager', $pager);
 
-        $this->setGridColumns(array(
-            new \Magento\Object(array(
-                'index' => 'increment_id',
-                'title' => __('Order #'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-            new \Magento\Object(array(
-                'index' => 'created_at',
-                'title' => __('Date'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-            new \Magento\Object(array(
-                'index' => 'customer_name',
-                'title' => __('Customer Name'),
-            )),
-            new \Magento\Object(array(
-                'index' => 'base_grand_total',
-                'title' => __('Order Total'),
-                'is_nobr' => true,
-                'width' => 1,
-                'is_amount' => true,
-            )),
-            new \Magento\Object(array(
-                'index' => 'status',
-                'title' => __('Order Status'),
-                'is_nobr' => true,
-                'width' => 1,
-            )),
-        ));
+        $this->setGridColumns(
+            array(
+                new \Magento\Object(
+                    array('index' => 'increment_id', 'title' => __('Order #'), 'is_nobr' => true, 'width' => 1)
+                ),
+                new \Magento\Object(
+                    array('index' => 'created_at', 'title' => __('Date'), 'is_nobr' => true, 'width' => 1)
+                ),
+                new \Magento\Object(array('index' => 'customer_name', 'title' => __('Customer Name'))),
+                new \Magento\Object(
+                    array(
+                        'index' => 'base_grand_total',
+                        'title' => __('Order Total'),
+                        'is_nobr' => true,
+                        'width' => 1,
+                        'is_amount' => true
+                    )
+                ),
+                new \Magento\Object(
+                    array('index' => 'status', 'title' => __('Order Status'), 'is_nobr' => true, 'width' => 1)
+                )
+            )
+        );
 
         $orders = array();
         foreach ($this->_relatedOrders as $order) {
-            $orders[] = new \Magento\Object(array(
-                'increment_id' => $order->getIncrementId(),
-                'created_at' => $this->formatDate($order->getCreatedAt()),
-                'customer_name' => $order->getCustomerName(),
-                'base_grand_total' => $this->_coreHelper->formatCurrency(
-                    $order->getBaseGrandTotal(), false
-                ),
-                'status' => $order->getStatusLabel(),
-                'increment_id_link_url' => $this->getUrl('sales/order/view/', array('order_id' => $order->getId())),
-            ));
+            $orders[] = new \Magento\Object(
+                array(
+                    'increment_id' => $order->getIncrementId(),
+                    'created_at' => $this->formatDate($order->getCreatedAt()),
+                    'customer_name' => $order->getCustomerName(),
+                    'base_grand_total' => $this->_coreHelper->formatCurrency($order->getBaseGrandTotal(), false),
+                    'status' => $order->getStatusLabel(),
+                    'increment_id_link_url' => $this->getUrl('sales/order/view/', array('order_id' => $order->getId()))
+                )
+            );
         }
         if ($orders) {
             $this->setGridElements($orders);

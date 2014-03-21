@@ -68,9 +68,10 @@ class Response extends \Magento\Webapi\Controller\Response
         } catch (\Exception $e) {
             if ($e instanceof \Magento\Webapi\Exception) {
                 // If the server does not support all MIME types accepted by the client it SHOULD send 406.
-                $httpCode = $e->getHttpCode() == \Magento\Webapi\Exception::HTTP_NOT_ACCEPTABLE
-                    ? \Magento\Webapi\Exception::HTTP_NOT_ACCEPTABLE
-                    : \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR;
+                $httpCode = $e->getHttpCode() ==
+                    \Magento\Webapi\Exception::HTTP_NOT_ACCEPTABLE ?
+                    \Magento\Webapi\Exception::HTTP_NOT_ACCEPTABLE :
+                    \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR;
             } else {
                 $httpCode = \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR;
             }
@@ -126,7 +127,7 @@ class Response extends \Magento\Webapi\Controller\Response
         $this->_render($outputData);
         if ($this->getMessages()) {
             $this->_render(array('messages' => $this->getMessages()));
-        };
+        }
         return $this;
     }
 

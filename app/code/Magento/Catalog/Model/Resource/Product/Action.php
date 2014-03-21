@@ -42,11 +42,12 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
     protected function _construct()
     {
         $resource = $this->_resource;
-        $this->setType(\Magento\Catalog\Model\Product::ENTITY)
-            ->setConnection(
-                $resource->getConnection('catalog_read'),
-                $resource->getConnection('catalog_write')
-            );
+        $this->setType(
+            \Magento\Catalog\Model\Product::ENTITY
+        )->setConnection(
+            $resource->getConnection('catalog_read'),
+            $resource->getConnection('catalog_write')
+        );
     }
 
     /**
@@ -61,8 +62,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
     public function updateAttributes($entityIds, $attrData, $storeId)
     {
         $object = new \Magento\Object();
-        $object->setIdFieldName('entity_id')
-            ->setStoreId($storeId);
+        $object->setIdFieldName('entity_id')->setStoreId($storeId);
 
         $this->_getWriteAdapter()->beginTransaction();
         try {

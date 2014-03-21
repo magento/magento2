@@ -77,11 +77,11 @@ class View extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        $this->addChild('submit_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id'      => 'submit_comment_button',
-            'label'   => __('Submit Comment'),
-            'class'   => 'save'
-        ));
+        $this->addChild(
+            'submit_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('id' => 'submit_comment_button', 'label' => __('Submit Comment'), 'class' => 'save')
+        );
         return parent::_prepareLayout();
     }
 
@@ -102,14 +102,17 @@ class View extends \Magento\Backend\Block\Template
     {
         switch ($this->getParentType()) {
             case 'invoice':
-                return $this->_salesData
-                    ->canSendInvoiceCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendInvoiceCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
             case 'shipment':
-                return $this->_salesData
-                    ->canSendShipmentCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendShipmentCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
             case 'creditmemo':
-                return $this->_salesData
-                    ->canSendCreditmemoCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendCreditmemoCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
         }
         return true;
     }

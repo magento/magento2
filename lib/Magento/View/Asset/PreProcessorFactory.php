@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 /**
@@ -57,8 +56,8 @@ class PreProcessorFactory
     public function create($instanceName, array $data = array())
     {
         $processorInstance = $this->objectManager->create($instanceName, $data);
-        if (!($processorInstance instanceof PreProcessor\PreProcessorInterface)) {
-            throw new \UnexpectedValueException("$instanceName has to implement the pre-processor interface.");
+        if (!$processorInstance instanceof PreProcessor\PreProcessorInterface) {
+            throw new \UnexpectedValueException("{$instanceName} has to implement the pre-processor interface.");
         }
         return $processorInstance;
     }

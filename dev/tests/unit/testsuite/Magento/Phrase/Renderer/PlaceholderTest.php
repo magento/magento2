@@ -51,47 +51,27 @@ class PlaceholderTest extends \PHPUnit_Framework_TestCase
      */
     public function renderPlaceholderDataProvider()
     {
-        return [
-            [
-                'text %1 %2',
-                ['one', 'two'],
-                'text one two'
-            ],
-            [
-                'text %one %two',
-                ['one' => 'one', 'two' => 'two'],
-                'text one two'
-            ],
-            [
-                '%one text %two %1',
-                ['one' => 'one', 'two' => 'two', 'three'],
-                'one text two three'
-            ],
-            [
+        return array(
+            array('text %1 %2', array('one', 'two'), 'text one two'),
+            array('text %one %two', array('one' => 'one', 'two' => 'two'), 'text one two'),
+            array('%one text %two %1', array('one' => 'one', 'two' => 'two', 'three'), 'one text two three'),
+            array(
                 'text %1 %two %2 %3 %five %4 %5',
-                ['one', 'two' => 'two', 'three', 'four', 'five' => 'five', 'six', 'seven'],
+                array('one', 'two' => 'two', 'three', 'four', 'five' => 'five', 'six', 'seven'),
                 'text one two three four five six seven'
-            ],
-            [
+            ),
+            array(
                 '%one text %two text %three %1 %2',
-                ['two' => 'two', 'one' => 'one', 'three' => 'three', 'four', 'five'],
+                array('two' => 'two', 'one' => 'one', 'three' => 'three', 'four', 'five'),
                 'one text two text three four five'
-            ],
-            [
+            ),
+            array(
                 '%three text %two text %1',
-                ['two' => 'two', 'three' => 'three', 'one'],
+                array('two' => 'two', 'three' => 'three', 'one'),
                 'three text two text one'
-            ],
-            [
-                'text %1 text %2 text',
-                [],
-                'text %1 text %2 text'
-            ],
-            [
-                '%1 text %2',
-                ['one'],
-                'one text %2'
-            ]
-        ];
+            ),
+            array('text %1 text %2 text', array(), 'text %1 text %2 text'),
+            array('%1 text %2', array('one'), 'one text %2')
+        );
     }
 }

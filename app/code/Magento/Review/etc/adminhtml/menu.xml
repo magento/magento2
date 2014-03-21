@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
     <menu>
         <add id="Magento_Review::catalog_reviews_ratings_ratings" title="Rating" module="Magento_Review" sortOrder="60" parent="Magento_Backend::stores_attributes" action="rating/index/" resource="Magento_Rating::ratings"/>
         <add id="Magento_Review::catalog_reviews_ratings_reviews_all" title="Reviews" module="Magento_Review" parent="Magento_Backend::marketing_user_content" sortOrder="10" action="catalog/product_review/" resource="Magento_Review::reviews_all"/>

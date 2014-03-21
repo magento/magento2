@@ -31,6 +31,7 @@ interface TemplateTypesInterface
      * Types of template
      */
     const TYPE_TEXT = 1;
+
     const TYPE_HTML = 2;
 
     /**

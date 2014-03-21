@@ -33,8 +33,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class Ip
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Render the grid cell value

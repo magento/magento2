@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Model\Config\Integration;
 
-use \Magento\Webapi\Model\Config\Integration\Converter;
+use Magento\Webapi\Model\Config\Integration\Converter;
 
 /**
  * Test for conversion of integration API XML config into array representation.

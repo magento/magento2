@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Url;
 
-class RouteParamsResolver  extends \Magento\Object implements \Magento\Url\RouteParamsResolverInterface
+class RouteParamsResolver extends \Magento\Object implements \Magento\Url\RouteParamsResolverInterface
 {
     /**
      * @var \Magento\App\RequestInterface
@@ -126,8 +125,10 @@ class RouteParamsResolver  extends \Magento\Object implements \Magento\Url\Route
         }
 
         if (isset($data['_scope_to_url']) && (bool)$data['_scope_to_url'] === true) {
-            if (!$this->_storeConfig->getConfig(\Magento\Core\Model\Store::XML_PATH_STORE_IN_URL, $this->getScope())
-                && !$this->_storeManager->hasSingleStore()
+            if (!$this->_storeConfig->getConfig(
+                \Magento\Core\Model\Store::XML_PATH_STORE_IN_URL,
+                $this->getScope()
+            ) && !$this->_storeManager->hasSingleStore()
             ) {
                 $this->_queryParamsResolver->setQueryParam('___store', $this->getScope()->getCode());
             }

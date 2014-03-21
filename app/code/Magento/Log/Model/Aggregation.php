@@ -112,19 +112,19 @@ class Aggregation extends \Magento\Core\Model\AbstractModel
     private function _process($store)
     {
         $lastDateRecord = null;
-        $start          = $this->_lastRecord;
-        $end            = time();
-        $date           = $start;
+        $start = $this->_lastRecord;
+        $end = time();
+        $date = $start;
 
         while ($date < $end) {
             $to = $date + 3600;
             $counts = $this->_getCounts($this->_date($date), $this->_date($to), $store);
             $data = array(
-                'store_id'=>$store,
-                'visitor_count'=>$counts['visitors'],
-                'customer_count'=>$counts['customers'],
-                'add_date'=>$this->_date($date)
-                );
+                'store_id' => $store,
+                'visitor_count' => $counts['visitors'],
+                'customer_count' => $counts['customers'],
+                'add_date' => $this->_date($date)
+            );
 
             if ($counts['visitors'] || $counts['customers']) {
                 $this->_save($data, $this->_date($date), $this->_date($to));

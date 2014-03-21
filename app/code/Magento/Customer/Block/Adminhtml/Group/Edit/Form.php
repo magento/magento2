@@ -89,19 +89,25 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $customerGroup = $this->_groupService->getGroup($groupId);
         }
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend'=>__('Group Information')));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Group Information')));
 
-        $validateClass = sprintf('required-entry validate-length maximum-length-%d',
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH);
-        $name = $fieldset->addField('customer_group_code', 'text',
+        $validateClass = sprintf(
+            'required-entry validate-length maximum-length-%d',
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH
+        );
+        $name = $fieldset->addField(
+            'customer_group_code',
+            'text',
             array(
-                'name'  => 'code',
+                'name' => 'code',
                 'label' => __('Group Name'),
                 'title' => __('Group Name'),
-                'note'  => __('Maximum length must be less then %1 symbols',
-                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH),
+                'note' => __(
+                    'Maximum length must be less then %1 symbols',
+                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH
+                ),
                 'class' => $validateClass,
-                'required' => true,
+                'required' => true
             )
         );
 
@@ -109,9 +115,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $name->setDisabled(true);
         }
 
-        $fieldset->addField('tax_class_id', 'select',
+        $fieldset->addField(
+            'tax_class_id',
+            'select',
             array(
-                'name'  => 'tax_class',
+                'name' => 'tax_class',
                 'label' => __('Tax Class'),
                 'title' => __('Tax Class'),
                 'class' => 'required-entry',
@@ -122,24 +130,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if (!is_null($customerGroup->getId())) {
             // If edit add id
-            $form->addField('id', 'hidden',
-                array(
-                    'name'  => 'id',
-                    'value' => $customerGroup->getId(),
-                )
-            );
+            $form->addField('id', 'hidden', array('name' => 'id', 'value' => $customerGroup->getId()));
         }
 
-        if ( $this->_backendSession->getCustomerGroupData() ) {
+        if ($this->_backendSession->getCustomerGroupData()) {
             $form->addValues($this->_backendSession->getCustomerGroupData());
             $this->_backendSession->setCustomerGroupData(null);
         } else {
             // TODO: need to figure out how the DATA can work with forms
-            $form->addValues([
-                'id'                  => $customerGroup->getId(),
-                'customer_group_code' => $customerGroup->getCode(),
-                'tax_class_id'        => $customerGroup->getTaxClassId(),
-            ]);
+            $form->addValues(
+                array(
+                    'id' => $customerGroup->getId(),
+                    'customer_group_code' => $customerGroup->getCode(),
+                    'tax_class_id' => $customerGroup->getTaxClassId()
+                )
+            );
         }
 
         $form->setUseContainer(true);

@@ -71,8 +71,11 @@ class MerchantCountry extends \Magento\Core\Model\Config\Value
         $value = (string)$this->getValue();
         if (empty($value)) {
             if ($this->getWebsite()) {
-                $defaultCountry = $this->_storeManager->getWebsite($this->getWebsite())
-                    ->getConfig(\Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY);
+                $defaultCountry = $this->_storeManager->getWebsite(
+                    $this->getWebsite()
+                )->getConfig(
+                    \Magento\Core\Helper\Data::XML_PATH_DEFAULT_COUNTRY
+                );
             } else {
                 $defaultCountry = $this->_coreData->getDefaultCountry($this->getStore());
             }

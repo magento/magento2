@@ -44,7 +44,8 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     /**
      * Possible customer address types
      */
-    const TYPE_BILLING  = 'billing';
+    const TYPE_BILLING = 'billing';
+
     const TYPE_SHIPPING = 'shipping';
 
     /**
@@ -66,14 +67,14 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      *
      * @var \Magento\Directory\Model\Country[]
      */
-    static protected $_countryModels = array();
+    protected static $_countryModels = array();
 
     /**
      * Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
      */
-    static protected $_regionModels = array();
+    protected static $_regionModels = array();
 
     /**
      * Directory data
@@ -151,7 +152,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         if ($config->getAttribute('customer_address', 'middlename')->getIsVisible() && $this->getMiddlename()) {
             $name .= ' ' . $this->getMiddlename();
         }
-        $name .=  ' ' . $this->getLastname();
+        $name .= ' ' . $this->getLastname();
         if ($config->getAttribute('customer_address', 'suffix')->getIsVisible() && $this->getSuffix()) {
             $name .= ' ' . $this->getSuffix();
         }
@@ -299,7 +300,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     {
         $streetLines = $this->getStreet();
         foreach ($streetLines as $i => $line) {
-            $this->setData('street' . ($i+1), $line);
+            $this->setData('street' . ($i + 1), $line);
         }
         return $this;
     }
@@ -312,7 +313,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     public function getRegion()
     {
         $regionId = $this->getData('region_id');
-        $region   = $this->getData('region');
+        $region = $this->getData('region');
 
         if ($regionId) {
             if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
@@ -345,7 +346,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     public function getRegionCode()
     {
         $regionId = $this->getData('region_id');
-        $region   = $this->getData('region');
+        $region = $this->getData('region');
 
         if (!$regionId && is_numeric($region)) {
             if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
@@ -367,15 +368,17 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
     public function getRegionId()
     {
         $regionId = $this->getData('region_id');
-        $region   = $this->getData('region');
+        $region = $this->getData('region');
         if (!$regionId) {
             if (is_numeric($region)) {
                 $this->setData('region_id', $region);
                 //@TODO method unsRegion() is neither defined in abstract model nor in it's children
                 $this->unsRegion();
             } else {
-                $regionModel = $this->_createRegionInstance()
-                    ->loadByCode($this->getRegionCode(), $this->getCountryId());
+                $regionModel = $this->_createRegionInstance()->loadByCode(
+                    $this->getRegionCode(),
+                    $this->getCountryId()
+                );
                 $this->setData('region_id', $regionModel->getId());
             }
         }
@@ -442,8 +445,7 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
      */
     public function format($type)
     {
-        if (!($formatType = $this->getConfig()->getFormatByCode($type))
-            || !$formatType->getRenderer()) {
+        if (!($formatType = $this->getConfig()->getFormatByCode($type)) || !$formatType->getRenderer()) {
             return null;
         }
         $this->_eventManager->dispatch('customer_address_format', array('type' => $formatType, 'address' => $this));
@@ -499,8 +501,13 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
         }
 
         $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();
-        if (!in_array($this->getCountryId(), $_havingOptionalZip)
-            && !\Zend_Validate::is($this->getPostcode(), 'NotEmpty')
+        if (!in_array(
+            $this->getCountryId(),
+            $_havingOptionalZip
+        ) && !\Zend_Validate::is(
+            $this->getPostcode(),
+            'NotEmpty'
+        )
         ) {
             $errors[] = __('Please enter the zip/postal code.');
         }
@@ -509,9 +516,12 @@ class AbstractAddress extends \Magento\Core\Model\AbstractModel
             $errors[] = __('Please enter the country.');
         }
 
-        if ($this->getCountryModel()->getRegionCollection()->getSize()
-               && !\Zend_Validate::is($this->getRegionId(), 'NotEmpty')
-               && $this->_directoryData->isRegionRequired($this->getCountryId())
+        if ($this->getCountryModel()->getRegionCollection()->getSize() && !\Zend_Validate::is(
+            $this->getRegionId(),
+            'NotEmpty'
+        ) && $this->_directoryData->isRegionRequired(
+            $this->getCountryId()
+        )
         ) {
             $errors[] = __('Please enter the state/province.');
         }

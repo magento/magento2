@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 /**
@@ -43,12 +42,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $this->_product->load(1); // fixture
+        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $this->_product->load(1);
+        // fixture
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ConfigurableProduct\Model\Product\Type\Configurable');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable'
+        );
         // prevent fatal errors by assigning proper "singleton" of type instance to the product
         $this->_product->setTypeInstance($this->_model);
     }
@@ -64,7 +66,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildrenIds()
     {
-        $ids = $this->_model->getChildrenIds(1); // fixture
+        $ids = $this->_model->getChildrenIds(1);
+        // fixture
         $this->assertArrayHasKey(0, $ids);
         $this->assertTrue(2 === count($ids[0]));
 
@@ -96,9 +99,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey(0, $attributes);
         $this->assertInstanceOf(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute',
-            $attributes[0]);
-        $this->assertSame($testConfigurable, $attributes[0]->getProductAttribute()
+            $attributes[0]
         );
+        $this->assertSame($testConfigurable, $attributes[0]->getProductAttribute());
     }
 
     public function testGetUsedProductAttributes()
@@ -125,7 +128,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             );
             $this->assertEquals($testConfigurable->getId(), $attribute->getAttributeId());
             $prices = $attribute->getPrices();
-            $this->assertCount(2, $prices); // fixture
+            $this->assertCount(2, $prices);
+            // fixture
             $this->assertArrayHasKey('pricing_value', $prices[0]);
             $this->assertEquals('Option 1', $prices[0]['label']);
             $this->assertEquals(5, $prices[0]['pricing_value']);
@@ -173,7 +177,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attributes = $this->_model->getConfigurableAttributesAsArray($this->_product);
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
-        $result = $this->_model->getParentIdsByChild($optionValueId * 10); // fixture
+        $result = $this->_model->getParentIdsByChild($optionValueId * 10);
+        // fixture
         $this->assertEquals(array(1), $result);
     }
 
@@ -255,19 +260,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->_product->addCustomOption(
-            'attributes', serialize(array($attribute['attribute_id'] => $optionValueId))
-        );
+        $this->_product->addCustomOption('attributes', serialize(array($attribute['attribute_id'] => $optionValueId)));
         $info = $this->_model->getSelectedAttributesInfo($this->_product);
-        $this->assertEquals(
-            array(
-                array(
-                    'label' => 'Test Configurable',
-                    'value' => 'Option 1'
-                )
-            ),
-            $info
-        );
+        $this->assertEquals(array(array('label' => 'Test Configurable', 'value' => 'Option 1')), $info);
     }
 
     /**
@@ -280,25 +275,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $this->_product->addCustomOption(
-            'attributes',
-            serialize(array($attribute['attribute_id'] => $optionValueId))
-        );
+        $this->_product->addCustomOption('attributes', serialize(array($attribute['attribute_id'] => $optionValueId)));
 
         $configurableAttr = $this->_model->getConfigurableAttributes($this->_product);
         $attribute = $configurableAttr->getFirstItem();
 
         $attribute->getProductAttribute()->setStoreLabel('store label');
         $info = $this->_model->getSelectedAttributesInfo($this->_product);
-        $this->assertEquals(
-            array(
-                array(
-                    'label' => 'store label',
-                    'value' => 'Option 1'
-                )
-            ),
-            $info
-        );
+        $this->assertEquals(array(array('label' => 'store label', 'value' => 'Option 1')), $info);
     }
 
     /**
@@ -310,10 +294,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Object(array(
-            'qty' => 5,
-            'super_attribute' => array($attribute['attribute_id'] => $optionValueId)
-        ));
+        $buyRequest = new \Magento\Object(
+            array('qty' => 5, 'super_attribute' => array($attribute['attribute_id'] => $optionValueId))
+        );
         $result = $this->_model->prepareForCart($buyRequest, $this->_product);
         $this->assertInternalType('array', $result);
         $this->assertTrue(2 === count($result));
@@ -340,15 +323,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('info_buyRequest', $result);
         $this->assertArrayHasKey('attributes_info', $result);
         $this->assertEquals(
-            array(array('label' => 'Test Configurable', 'value' => 'Option 1')), $result['attributes_info']
+            array(array('label' => 'Test Configurable', 'value' => 'Option 1')),
+            $result['attributes_info']
         );
         $this->assertArrayHasKey('product_calculations', $result);
         $this->assertArrayHasKey('shipment_type', $result);
         $this->assertEquals(
-            \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT, $result['product_calculations']
+            \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_PARENT,
+            $result['product_calculations']
         );
-        $this->assertEquals(\Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER,
-            $result['shipment_type']);
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_TOGETHER,
+            $result['shipment_type']
+        );
     }
 
     /**
@@ -370,22 +357,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->_model->getWeight($this->_product));
 
-        $this->_product->setCustomOptions(array(
-            'simple_product' => new \Magento\Object(array(
-                'product' => new \Magento\Object(array(
-                    'weight' => 2
-                ))
-            ))
-        ));
+        $this->_product->setCustomOptions(
+            array(
+                'simple_product' => new \Magento\Object(array('product' => new \Magento\Object(array('weight' => 2))))
+            )
+        );
         $this->assertEquals(2, $this->_model->getWeight($this->_product));
     }
 
     public function testAssignProductToOption()
     {
-        $option = new \Magento\Object;
+        $option = new \Magento\Object();
         $this->_model->assignProductToOption('test', $option, $this->_product);
         $this->assertEquals('test', $option->getProduct());
-
         // other branch of logic depends on \Magento\Sales module
     }
 
@@ -394,7 +378,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $result = $this->_model->getProductsToPurchaseByReqGroups($this->_product);
         $this->assertArrayHasKey(0, $result);
         $this->assertInternalType('array', $result[0]);
-        $this->assertTrue(2 === count($result[0])); // fixture has 2 simple products
+        $this->assertTrue(2 === count($result[0]));
+        // fixture has 2 simple products
         foreach ($result[0] as $product) {
             $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
         }
@@ -441,10 +426,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_model->save($this->_product);
         $this->_product->load(1);
 
-        $this->assertEquals(
-            array(array()),
-            $this->_product->getTypeInstance()->getChildrenIds(1)
-        );
+        $this->assertEquals(array(array()), $this->_product->getTypeInstance()->getChildrenIds(1));
     }
 
     /**
@@ -453,13 +435,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSimpleProducts($productsData)
     {
-        $this->_product->setNewVariationsAttributeSetId(4); // Default attribute set id
+        $this->_product->setNewVariationsAttributeSetId(4);
+        // Default attribute set id
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
         $this->assertEquals(3, count($generatedProducts));
         foreach ($generatedProducts as $productId) {
             /** @var $product \Magento\Catalog\Model\Product */
-            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Catalog\Model\Product'
+            );
             $product->load($productId);
             $this->assertNotNull($product->getName());
             $this->assertNotNull($product->getSku());
@@ -479,8 +463,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
         foreach ($generatedProducts as $productId) {
             /** @var $product \Magento\Catalog\Model\Product */
-            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Catalog\Model\Product'
+            );
             $product->load($productId);
             $this->assertEquals('0', $product->getStockItem()->getData('manage_stock'));
         }
@@ -491,30 +476,36 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public static function generateSimpleProductsDataProvider()
     {
-        return array(array(array(
+        return array(
             array(
-                'name' => '1-aaa',
-                'configurable_attribute' => '{"configurable_attribute":"25"}',
-                'price' => '3',
-                'sku' => '1-aaa',
-                'quantity_and_stock_status' => array('qty' => '5'),
-                'weight' => '6'),
-            array(
-                'name' => '1-bbb',
-                'configurable_attribute' => '{"configurable_attribute":"24"}',
-                'price' => '3',
-                'sku' => '1-bbb',
-                'quantity_and_stock_status' => array('qty' => '5'),
-                'weight' => '6'),
-            array(
-                'name' => '1-ccc',
-                'configurable_attribute' => '{"configurable_attribute":"23"}',
-                'price' => '3',
-                'sku' => '1-ccc',
-                'quantity_and_stock_status' => array('qty' => '5'),
-                'weight' => '6'
-            ),
-        )));
+                array(
+                    array(
+                        'name' => '1-aaa',
+                        'configurable_attribute' => '{"configurable_attribute":"25"}',
+                        'price' => '3',
+                        'sku' => '1-aaa',
+                        'quantity_and_stock_status' => array('qty' => '5'),
+                        'weight' => '6'
+                    ),
+                    array(
+                        'name' => '1-bbb',
+                        'configurable_attribute' => '{"configurable_attribute":"24"}',
+                        'price' => '3',
+                        'sku' => '1-bbb',
+                        'quantity_and_stock_status' => array('qty' => '5'),
+                        'weight' => '6'
+                    ),
+                    array(
+                        'name' => '1-ccc',
+                        'configurable_attribute' => '{"configurable_attribute":"23"}',
+                        'price' => '3',
+                        'sku' => '1-ccc',
+                        'quantity_and_stock_status' => array('qty' => '5'),
+                        'weight' => '6'
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -522,16 +513,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public static function generateSimpleProductsWithoutQtyDataProvider()
     {
-        return array(array(array(
+        return array(
             array(
-                'name' => '1-aaa',
-                'configurable_attribute' => '{"configurable_attribute":"23"}',
-                'price' => '3',
-                'sku' => '1-aaa-1',
-                'quantity_and_stock_status' => array('qty' => ''),
-                'weight' => '6')
-            ),
-        ));
+                array(
+                    array(
+                        'name' => '1-aaa',
+                        'configurable_attribute' => '{"configurable_attribute":"23"}',
+                        'price' => '3',
+                        'sku' => '1-aaa-1',
+                        'quantity_and_stock_status' => array('qty' => ''),
+                        'weight' => '6'
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -542,8 +537,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAttributeByCode($code)
     {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
-            ->getAttribute('catalog_product', $code);
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Eav\Model\Config'
+        )->getAttribute(
+            'catalog_product',
+            $code
+        );
     }
 
     /**
@@ -555,10 +554,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attribute = reset($attributes);
         $optionValueId = $attribute['values'][0]['value_index'];
 
-        $buyRequest = new \Magento\Object(array(
-            'qty' => 5,
-            'super_attribute' => array($attribute['attribute_id'] => $optionValueId)
-        ));
+        $buyRequest = new \Magento\Object(
+            array('qty' => 5, 'super_attribute' => array($attribute['attribute_id'] => $optionValueId))
+        );
         $this->_model->prepareForCart($buyRequest, $this->_product);
     }
 }

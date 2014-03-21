@@ -41,7 +41,7 @@ class Collection extends \Magento\Eav\Model\Resource\Attribute\Collection
      *
      * @var string
      */
-    protected $_entityTypeCode   = 'customer';
+    protected $_entityTypeCode = 'customer';
 
     /**
      * Default attribute entity type code

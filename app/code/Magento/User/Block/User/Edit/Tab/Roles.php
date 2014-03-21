@@ -95,10 +95,10 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
                 $userRoles = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('role_id', array('in'=>$userRoles));
+                $this->getCollection()->addFieldToFilter('role_id', array('in' => $userRoles));
             } else {
                 if ($userRoles) {
-                    $this->getCollection()->addFieldToFilter('role_id', array('nin'=>$userRoles));
+                    $this->getCollection()->addFieldToFilter('role_id', array('nin' => $userRoles));
                 }
             }
         } else {
@@ -124,20 +124,20 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareColumns()
     {
 
-        $this->addColumn('assigned_user_role', array(
-            'header_css_class' => 'a-center',
-            'header'    => __('Assigned'),
-            'type'      => 'radio',
-            'html_name' => 'roles[]',
-            'values'    => $this->getSelectedRoles(),
-            'align'     => 'center',
-            'index'     => 'role_id'
-        ));
+        $this->addColumn(
+            'assigned_user_role',
+            array(
+                'header_css_class' => 'a-center',
+                'header' => __('Assigned'),
+                'type' => 'radio',
+                'html_name' => 'roles[]',
+                'values' => $this->getSelectedRoles(),
+                'align' => 'center',
+                'index' => 'role_id'
+            )
+        );
 
-        $this->addColumn('role_name', array(
-            'header'    => __('Role'),
-            'index'     => 'role_name'
-        ));
+        $this->addColumn('role_name', array('header' => __('Role'), 'index' => 'role_name'));
 
         return parent::_prepareColumns();
     }
@@ -155,9 +155,9 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param bool $json
      * @return array|string
      */
-    public function getSelectedRoles($json=false)
+    public function getSelectedRoles($json = false)
     {
-        if ( $this->getRequest()->getParam('user_roles') != "" ) {
+        if ($this->getRequest()->getParam('user_roles') != "") {
             return $this->getRequest()->getParam('user_roles');
         }
         /* @var $user \Magento\User\Model\User */
@@ -171,7 +171,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         if ($json) {
-            $jsonRoles = Array();
+            $jsonRoles = array();
             foreach ($uRoles as $urid) {
                 $jsonRoles[$urid] = 0;
             }
@@ -180,5 +180,4 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
             return $uRoles;
         }
     }
-
 }

@@ -60,7 +60,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidLayoutArgumentsXmlArray.php');
+        return include __DIR__ . '/_files/invalidLayoutArgumentsXmlArray.php';
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()

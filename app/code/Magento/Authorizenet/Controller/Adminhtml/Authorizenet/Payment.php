@@ -60,21 +60,23 @@ class Payment extends \Magento\Backend\App\Action
     {
         $result['success'] = false;
         try {
-            $paymentMethod = $this->_objectManager->get('Magento\Payment\Helper\Data')
-                ->getMethodInstance(\Magento\Authorizenet\Model\Authorizenet::METHOD_CODE);
+            $paymentMethod = $this->_objectManager->get(
+                'Magento\Payment\Helper\Data'
+            )->getMethodInstance(
+                \Magento\Authorizenet\Model\Authorizenet::METHOD_CODE
+            );
 
             if ($paymentMethod) {
-                $paymentMethod->setStore(
-                    $this->_sessionQuote->getQuote()->getStoreId()
-                );
-                $paymentMethod->cancelPartialAuthorization(
-                    $this->_sessionQuote->getQuote()->getPayment()
-                );
+                $paymentMethod->setStore($this->_sessionQuote->getQuote()->getStoreId());
+                $paymentMethod->cancelPartialAuthorization($this->_sessionQuote->getQuote()->getPayment());
             }
 
-            $result['success']  = true;
-            $result['update_html'] = $this->_objectManager->get('Magento\Authorizenet\Helper\Data')
-                ->getPaymentMethodsHtml($this->_view);
+            $result['success'] = true;
+            $result['update_html'] = $this->_objectManager->get(
+                'Magento\Authorizenet\Helper\Data'
+            )->getPaymentMethodsHtml(
+                $this->_view
+            );
         } catch (\Magento\Core\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['error_message'] = $e->getMessage();

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RecurringPayment\Model\Method;
 
 use Magento\Payment\Model\Method\Specification\AbstractSpecification;
@@ -41,7 +40,8 @@ class RecurringPaymentSpecification extends AbstractSpecification
      */
     public function isSatisfiedBy($paymentMethod)
     {
-        return isset($this->methodsInfo[$paymentMethod][self::CONFIG_KEY])
-            && $this->methodsInfo[$paymentMethod][self::CONFIG_KEY];
+        return isset(
+            $this->methodsInfo[$paymentMethod][self::CONFIG_KEY]
+        ) && $this->methodsInfo[$paymentMethod][self::CONFIG_KEY];
     }
 }

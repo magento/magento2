@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Usps\Model\Source;
 
 use Magento\Shipping\Model\Carrier\Source\GenericInterface;
@@ -59,11 +58,11 @@ class Generic implements GenericInterface
      */
     public function toOptionArray()
     {
-        $options = [];
+        $options = array();
         $codes = $this->shippingUsps->getCode($this->code);
         if ($codes) {
             foreach ($codes as $code => $title) {
-                $options[] = ['value' => $code, 'label' => __($title)];
+                $options[] = array('value' => $code, 'label' => __($title));
             }
         }
         return $options;

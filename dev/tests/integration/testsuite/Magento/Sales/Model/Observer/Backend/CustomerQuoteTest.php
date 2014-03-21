@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Backend;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -66,8 +65,8 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $newCustomerGroupId,
             $quote->getCustomerGroupId(),
-            'Customer group in quote was not updated on "customer_save_after_data_object" event '
-                . 'by Magento\Sales\Model\Observer\Backend\CustomerQuote::dispatch().'
+            'Customer group in quote was not updated on "customer_save_after_data_object" event ' .
+            'by Magento\Sales\Model\Observer\Backend\CustomerQuote::dispatch().'
         );
     }
 }

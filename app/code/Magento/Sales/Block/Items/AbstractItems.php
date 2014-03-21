@@ -49,9 +49,11 @@ class AbstractItems extends \Magento\View\Element\Template
     public function getItemRenderer($type)
     {
         /** @var \Magento\View\Element\RendererList $rendererList */
-        $rendererList = $this->getRendererListName()
-            ? $this->getLayout()->getBlock($this->getRendererListName())
-            : $this->getChildBlock('renderer.list');
+        $rendererList = $this->getRendererListName() ? $this->getLayout()->getBlock(
+            $this->getRendererListName()
+        ) : $this->getChildBlock(
+            'renderer.list'
+        );
         if (!$rendererList) {
             throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
@@ -101,8 +103,7 @@ class AbstractItems extends \Magento\View\Element\Template
     {
         $type = $this->_getItemType($item);
 
-        $block = $this->getItemRenderer($type)
-            ->setItem($item);
+        $block = $this->getItemRenderer($type)->setItem($item);
         $this->_prepareItem($block);
         return $block->toHtml();
     }

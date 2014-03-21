@@ -85,7 +85,6 @@ abstract class AbstractFieldArray extends \Magento\Backend\Block\System\Config\F
             $this->_addButtonLabel = __('Add');
         }
         parent::_construct();
-
     }
 
     /**
@@ -98,13 +97,13 @@ abstract class AbstractFieldArray extends \Magento\Backend\Block\System\Config\F
     public function addColumn($name, $params)
     {
         $this->_columns[$name] = array(
-            'label'     => $this->_getParam($params, 'label', 'Column'),
-            'size'      => $this->_getParam($params, 'size', false),
-            'style'     => $this->_getParam($params, 'style'),
-            'class'     => $this->_getParam($params, 'class'),
-            'renderer'  => false,
+            'label' => $this->_getParam($params, 'label', 'Column'),
+            'size' => $this->_getParam($params, 'size', false),
+            'style' => $this->_getParam($params, 'style'),
+            'class' => $this->_getParam($params, 'class'),
+            'renderer' => false
         );
-        if ((!empty($params['renderer'])) && ($params['renderer'] instanceof \Magento\View\Element\AbstractBlock)) {
+        if (!empty($params['renderer']) && $params['renderer'] instanceof \Magento\View\Element\AbstractBlock) {
             $this->_columns[$name]['renderer'] = $params['renderer'];
         }
     }
@@ -132,7 +131,8 @@ abstract class AbstractFieldArray extends \Magento\Backend\Block\System\Config\F
     {
         $this->setElement($element);
         $html = $this->_toHtml();
-        $this->_arrayRowsCache = null; // doh, the object is used as singleton!
+        $this->_arrayRowsCache = null;
+        // doh, the object is used as singleton!
         return $html;
     }
 
@@ -215,22 +215,40 @@ abstract class AbstractFieldArray extends \Magento\Backend\Block\System\Config\F
         if (empty($this->_columns[$columnName])) {
             throw new \Exception('Wrong column name specified.');
         }
-        $column     = $this->_columns[$columnName];
-        $inputName  = $this->_getCellInputElementName($columnName);
+        $column = $this->_columns[$columnName];
+        $inputName = $this->_getCellInputElementName($columnName);
 
         if ($column['renderer']) {
-            return $column['renderer']->setInputName($inputName)
-                ->setInputId($this->_getCellInputElementId('#{_id}', $columnName))
-                ->setColumnName($columnName)
-                ->setColumn($column)
-                ->toHtml();
+            return $column['renderer']->setInputName(
+                $inputName
+            )->setInputId(
+                $this->_getCellInputElementId('#{_id}', $columnName)
+            )->setColumnName(
+                $columnName
+            )->setColumn(
+                $column
+            )->toHtml();
         }
 
-        return '<input type="text" id="' . $this->_getCellInputElementId('#{_id}', $columnName) .'"' .
-            ' name="' . $inputName . '" value="#{' . $columnName . '}" ' .
-            ($column['size'] ? 'size="' . $column['size'] . '"' : '') . ' class="' .
-            (isset($column['class']) ? $column['class'] : 'input-text') . '"'.
-            (isset($column['style']) ? ' style="'.$column['style'] . '"' : '') . '/>';
+        return '<input type="text" id="' . $this->_getCellInputElementId(
+            '#{_id}',
+            $columnName
+        ) .
+            '"' .
+            ' name="' .
+            $inputName .
+            '" value="#{' .
+            $columnName .
+            '}" ' .
+            ($column['size'] ? 'size="' .
+            $column['size'] .
+            '"' : '') .
+            ' class="' .
+            (isset(
+            $column['class']
+        ) ? $column['class'] : 'input-text') . '"' . (isset(
+            $column['style']
+        ) ? ' style="' . $column['style'] . '"' : '') . '/>';
     }
 
     /**

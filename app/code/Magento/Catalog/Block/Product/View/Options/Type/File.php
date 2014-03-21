@@ -34,8 +34,7 @@
  */
 namespace Magento\Catalog\Block\Product\View\Options\Type;
 
-class File
-    extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
+class File extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 {
     /**
      * Returns info of file

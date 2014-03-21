@@ -64,7 +64,7 @@ class CsvfileTest extends \PHPUnit_Framework_TestCase
                 'filePath' => '/var/www/project/log/example.csv',
                 'delimiter' => "\t",
                 'enclosure' => '"'
-            ),
+            )
         );
     }
 }

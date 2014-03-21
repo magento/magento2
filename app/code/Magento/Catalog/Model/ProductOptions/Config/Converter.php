@@ -53,7 +53,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 $data['types'][$inputTypeName] = array(
                     'name' => $inputTypeName,
                     'label' => $this->_getAttributeValue($childNode, 'label'),
-                    'disabled' => 'true' == $this->_getAttributeValue($childNode, 'disabled', 'false') ? true : false,
+                    'disabled' => 'true' == $this->_getAttributeValue($childNode, 'disabled', 'false') ? true : false
                 );
             }
             $output[$optionName] = $data;

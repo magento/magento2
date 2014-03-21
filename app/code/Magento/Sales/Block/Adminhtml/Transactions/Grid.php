@@ -130,82 +130,103 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('transaction_id', array(
-            'header' => __('ID'),
-            'index' => 'transaction_id',
-            'type' => 'number',
-            'header_css_class' => 'col-id',
-            'column_css_class' => 'col-id'
-        ));
+        $this->addColumn(
+            'transaction_id',
+            array(
+                'header' => __('ID'),
+                'index' => 'transaction_id',
+                'type' => 'number',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
-        $this->addColumn('increment_id', array(
-            'header' => __('Order ID'),
-            'index' => 'increment_id',
-            'type' => 'text',
-            'header_css_class' => 'col-order-id',
-            'column_css_class' => 'col-order-id'
-        ));
+        $this->addColumn(
+            'increment_id',
+            array(
+                'header' => __('Order ID'),
+                'index' => 'increment_id',
+                'type' => 'text',
+                'header_css_class' => 'col-order-id',
+                'column_css_class' => 'col-order-id'
+            )
+        );
 
-        $this->addColumn('txn_id', array(
-            'header' => __('Transaction ID'),
-            'index' => 'txn_id',
-            'type' => 'text',
-            'header_css_class' => 'col-transaction-id',
-            'column_css_class' => 'col-transaction-id'
-        ));
+        $this->addColumn(
+            'txn_id',
+            array(
+                'header' => __('Transaction ID'),
+                'index' => 'txn_id',
+                'type' => 'text',
+                'header_css_class' => 'col-transaction-id',
+                'column_css_class' => 'col-transaction-id'
+            )
+        );
 
-        $this->addColumn('parent_txn_id', array(
-            'header' => __('Parent Transaction ID'),
-            'index' => 'parent_txn_id',
-            'type' => 'text',
-            'header_css_class' => 'col-parent-transaction-id',
-            'column_css_class' => 'col-parent-transaction-id'
-        ));
+        $this->addColumn(
+            'parent_txn_id',
+            array(
+                'header' => __('Parent Transaction ID'),
+                'index' => 'parent_txn_id',
+                'type' => 'text',
+                'header_css_class' => 'col-parent-transaction-id',
+                'column_css_class' => 'col-parent-transaction-id'
+            )
+        );
 
-        $this->addColumn('method', array(
-            'header' => __('Payment Method'),
-            'index' => 'method',
-            'type' => 'options',
-            'options' => $this->_paymentData->getPaymentMethodList(true),
-            'option_groups' => $this->_paymentData->getPaymentMethodList(true, true, true),
-            'header_css_class' => 'col-method',
-            'column_css_class' => 'col-method'
-        ));
+        $this->addColumn(
+            'method',
+            array(
+                'header' => __('Payment Method'),
+                'index' => 'method',
+                'type' => 'options',
+                'options' => $this->_paymentData->getPaymentMethodList(true),
+                'option_groups' => $this->_paymentData->getPaymentMethodList(true, true, true),
+                'header_css_class' => 'col-method',
+                'column_css_class' => 'col-method'
+            )
+        );
 
-        $this->addColumn('txn_type', array(
-            'header' => __('Transaction Type'),
-            'index' => 'txn_type',
-            'type' => 'options',
-            'options' => $this->_transaction->getTransactionTypes(),
-            'header_css_class' => 'col-transaction-type',
-            'column_css_class' => 'col-transaction-type'
-        ));
+        $this->addColumn(
+            'txn_type',
+            array(
+                'header' => __('Transaction Type'),
+                'index' => 'txn_type',
+                'type' => 'options',
+                'options' => $this->_transaction->getTransactionTypes(),
+                'header_css_class' => 'col-transaction-type',
+                'column_css_class' => 'col-transaction-type'
+            )
+        );
 
-        $this->addColumn('is_closed', array(
-            'header' => __('Closed'),
-            'index' => 'is_closed',
-            'width' => 1,
-            'type' => 'options',
-            'align' => 'center',
-            'options' => array(
-                1 => __('Yes'),
-                0 => __('No'),
-            ),
-            'header_css_class' => 'col-closed',
-            'column_css_class' => 'col-closed'
-        ));
+        $this->addColumn(
+            'is_closed',
+            array(
+                'header' => __('Closed'),
+                'index' => 'is_closed',
+                'width' => 1,
+                'type' => 'options',
+                'align' => 'center',
+                'options' => array(1 => __('Yes'), 0 => __('No')),
+                'header_css_class' => 'col-closed',
+                'column_css_class' => 'col-closed'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header' => __('Created'),
-            'index' => 'created_at',
-            'width' => 1,
-            'type' => 'datetime',
-            'align' => 'center',
-            'default' => __('N/A'),
-            'html_decorators' => array('nobr'),
-            'header_css_class' => 'col-period',
-            'column_css_class' => 'col-period'
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Created'),
+                'index' => 'created_at',
+                'width' => 1,
+                'type' => 'datetime',
+                'align' => 'center',
+                'default' => __('N/A'),
+                'html_decorators' => array('nobr'),
+                'header_css_class' => 'col-period',
+                'column_css_class' => 'col-period'
+            )
+        );
 
         return parent::_prepareColumns();
     }

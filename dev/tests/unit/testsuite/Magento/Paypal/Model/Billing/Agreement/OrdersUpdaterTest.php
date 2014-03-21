@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Model\Billing\Agreement;
 
 class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
@@ -46,11 +45,11 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_registry = $this->getMock('Magento\Registry', [], [], '', false);
+        $this->_registry = $this->getMock('Magento\Registry', array(), array(), '', false);
         $this->_agreementResource = $this->getMock(
             '\Magento\Paypal\Model\Resource\Billing\Agreement',
-            [],
-            [],
+            array(),
+            array(),
             '',
             false
         );
@@ -58,25 +57,34 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Paypal\Model\Billing\Agreement\OrdersUpdater',
-            ['coreRegistry' => $this->_registry, 'agreementResource' => $this->_agreementResource]
+            array('coreRegistry' => $this->_registry, 'agreementResource' => $this->_agreementResource)
         );
     }
 
     public function testUpdate()
     {
-        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', [], [], '', false);
-        $argument = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
+        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', array(), array(), '', false);
+        $argument = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', array(), array(), '', false);
 
-        $this->_registry->expects($this->once())
-            ->method('registry')
-            ->with('current_billing_agreement')
-            ->will($this->returnValue($agreement));
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_billing_agreement'
+        )->will(
+            $this->returnValue($agreement)
+        );
 
         $agreement->expects($this->once())->method('getId')->will($this->returnValue('agreement id'));
-        $this->_agreementResource
-            ->expects($this->once())
-            ->method('addOrdersFilter')
-            ->with($this->identicalTo($argument), 'agreement id');
+        $this->_agreementResource->expects(
+            $this->once()
+        )->method(
+            'addOrdersFilter'
+        )->with(
+            $this->identicalTo($argument),
+            'agreement id'
+        );
 
         $this->assertSame($argument, $this->_model->update($argument));
     }
@@ -86,10 +94,15 @@ class OrdersUpdaterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateWhenBillingAgreementIsNotSet()
     {
-        $this->_registry->expects($this->once())
-            ->method('registry')
-            ->with('current_billing_agreement')
-            ->will($this->returnValue(null));
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_billing_agreement'
+        )->will(
+            $this->returnValue(null)
+        );
 
         $this->_model->update('any argument');
     }

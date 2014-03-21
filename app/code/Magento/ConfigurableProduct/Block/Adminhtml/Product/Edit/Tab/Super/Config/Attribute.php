@@ -29,8 +29,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-class Attribute
-    extends \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config
+class Attribute extends \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config
 {
     /**
      * Render block

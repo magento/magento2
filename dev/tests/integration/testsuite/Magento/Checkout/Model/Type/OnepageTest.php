@@ -21,7 +21,6 @@
  * @category    Magento
  * @package     Magento_Checkout
  */
-
 namespace Magento\Checkout\Model\Type;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -57,14 +56,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveShippingWithCustomerId()
     {
-        $this->_currentQuote->setCustomerId(1)
-            ->save();
-        $data = [
+        $this->_currentQuote->setCustomerId(1)->save();
+        $data = array(
             'address_id' => '',
             'firstname' => 'Joe',
             'lastname' => 'Black',
             'company' => 'Lunatis',
-            'street' => ['1100 Parmer', 'ln.'],
+            'street' => array('1100 Parmer', 'ln.'),
             'city' => 'Austin',
             'region_id' => '57',
             'region' => '',
@@ -73,7 +71,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'telephone' => '(512) 999-9999',
             'fax' => '',
             'save_in_address_book' => 1
-        ];
+        );
         $this->_model->saveShipping($data, 1);
 
         $address = $this->_currentQuote->getShippingAddress();
@@ -81,7 +79,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /* Verify that data from Customer Address identified by id=1 is set */
         $this->assertEquals('John', $address->getFirstname());
         $this->assertEquals('Smith', $address->getLastname());
-        $this->assertEquals(['Green str, 67'], $address->getStreet());
+        $this->assertEquals(array('Green str, 67'), $address->getStreet());
         $this->assertEquals('CityM', $address->getCity());
         $this->assertEquals('Alabama', $address->getRegion());
         $this->assertEquals(1, $address->getRegionId());
@@ -101,12 +99,12 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveShippingWithData()
     {
-        $data = [
+        $data = array(
             'address_id' => '',
             'firstname' => 'Joe',
             'lastname' => 'Black',
             'company' => 'Lunatis',
-            'street' => ['1100 Parmer', 'ln.'],
+            'street' => array('1100 Parmer', 'ln.'),
             'city' => 'Austin',
             'region_id' => '57',
             'region' => '',
@@ -115,7 +113,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'telephone' => '(512) 999-9999',
             'fax' => '',
             'save_in_address_book' => 1
-        ];
+        );
         $this->_model->saveShipping($data, null);
 
         $address = $this->_currentQuote->getShippingAddress();
@@ -144,19 +142,26 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->_model->saveOrder();
 
         /** @var $order \Magento\Sales\Model\Order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->loadByIncrementId($this->_model->getLastOrderId());
 
-        $this->assertNotEmpty($this->_model->getQuote()->getShippingAddress()->getCustomerAddressId(),
-            'Quote shipping CustomerAddressId should not be empty');
-        $this->assertNotEmpty($this->_model->getQuote()->getBillingAddress()->getCustomerAddressId(),
-            'Quote billing CustomerAddressId should not be empty');
+        $this->assertNotEmpty(
+            $this->_model->getQuote()->getShippingAddress()->getCustomerAddressId(),
+            'Quote shipping CustomerAddressId should not be empty'
+        );
+        $this->assertNotEmpty(
+            $this->_model->getQuote()->getBillingAddress()->getCustomerAddressId(),
+            'Quote billing CustomerAddressId should not be empty'
+        );
 
-        $this->assertNotEmpty($order->getShippingAddress()->getCustomerAddressId(),
-            'Order shipping CustomerAddressId should not be empty');
-        $this->assertNotEmpty($order->getBillingAddress()->getCustomerAddressId(),
-            'Order billing CustomerAddressId should not be empty');
+        $this->assertNotEmpty(
+            $order->getShippingAddress()->getCustomerAddressId(),
+            'Order shipping CustomerAddressId should not be empty'
+        );
+        $this->assertNotEmpty(
+            $order->getBillingAddress()->getCustomerAddressId(),
+            'Order billing CustomerAddressId should not be empty'
+        );
     }
 
     /**
@@ -168,8 +173,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /* The customer session must be cleared before the real test begins. Need to
            have a customer via the data fixture to actually log out. */
         /** @var $customerSession \Magento\Customer\Model\Session*/
-        $customerSession = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Session');
+        $customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
         $customerSession->setCustomerId(1);
         $customerSession->logout();
 
@@ -194,16 +198,16 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $customerIdFromFixture = 1;
         $emailFromFixture = 'customer@example.com';
         /** @var $customerSession \Magento\Customer\Model\Session*/
-        $customerSession = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Session');
+        $customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
         /** @var $customerService \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
-        $customerService = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $customerService = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        );
         $customerData = $customerService->getCustomer($customerIdFromFixture);
         $customerSession->setCustomerDataObject($customerData);
         $this->_model = Bootstrap::getObjectManager()->create(
             'Magento\Checkout\Model\Type\Onepage',
-            ['customerSession' => $customerSession]
+            array('customerSession' => $customerSession)
         );
         $this->assertTrue($this->_model->getCheckout()->getSteps()['shipping']['allow']);
         $this->assertTrue($this->_model->getCheckout()->getSteps()['billing']['allow']);
@@ -244,13 +248,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $this->assertEquals([], $result, 'Return value is invalid');
+        $this->assertEquals(array(), $result, 'Return value is invalid');
 
         /** Ensure that quote addresses were persisted correctly */
         $billingAddress = $quote->getBillingAddress();
         $shippingAddress = $quote->getShippingAddress();
 
-        $quoteAddressFieldsToCheck = [
+        $quoteAddressFieldsToCheck = array(
             'quote_id' => $quote->getId(),
             'firstname' => 'John',
             'lastname' => 'Smith',
@@ -264,7 +268,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'telephone' => '(323) 255-5861',
             'customer_id' => null,
             'customer_address_id' => null
-        ];
+        );
 
         foreach ($quoteAddressFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $billingAddress->getData($field), "{$field} value is invalid");
@@ -285,11 +289,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
 
         /** Ensure that customer-related data was ported to quote correctly */
-        $quoteFieldsToCheck = [
+        $quoteFieldsToCheck = array(
             'customer_firstname' => 'John',
             'customer_lastname' => 'Smith',
             'customer_email' => 'John.Smith@example.com'
-        ];
+        );
         foreach ($quoteFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $quote->getData($field), "{$field} value is set to quote incorrectly.");
         }
@@ -332,13 +336,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $this->assertEquals([], $result, 'Return value is invalid');
+        $this->assertEquals(array(), $result, 'Return value is invalid');
 
         /** Ensure that quote addresses were persisted correctly */
         $billingAddress = $quote->getBillingAddress();
         $shippingAddress = $quote->getShippingAddress();
 
-        $quoteAddressFieldsToCheck = [
+        $quoteAddressFieldsToCheck = array(
             'quote_id' => $quote->getId(),
             'firstname' => 'John',
             'lastname' => 'Smith',
@@ -352,7 +356,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'telephone' => '(323) 255-5861',
             'customer_id' => null,
             'customer_address_id' => null
-        ];
+        );
 
         foreach ($quoteAddressFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $billingAddress->getData($field), "{$field} value is invalid");
@@ -369,11 +373,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
 
         /** Ensure that customer-related data was ported to quote correctly */
-        $quoteFieldsToCheck = [
+        $quoteFieldsToCheck = array(
             'customer_firstname' => 'John',
             'customer_lastname' => 'Smith',
             'customer_email' => 'John.Smith@example.com'
-        ];
+        );
         foreach ($quoteFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $quote->getData($field), "{$field} value is set to quote incorrectly.");
         }
@@ -398,11 +402,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $validationErrors = [
+        $validationErrors = array(
             '"First Name" is a required value.',
             '"First Name" length must be equal or greater than 1 characters.'
-        ];
-        $this->assertEquals(['error' => 1, 'message' => $validationErrors], $result, 'Validation error is invalid.');
+        );
+        $this->assertEquals(
+            array('error' => 1, 'message' => $validationErrors),
+            $result,
+            'Validation error is invalid.'
+        );
     }
 
     /**
@@ -426,7 +434,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
          * that's why no error occurs when invalid data is provided
          */
         $result = $this->_model->saveBilling($customerData, $addressIdFromFixture);
-        $this->assertEquals([], $result, 'No errors expected.');
+        $this->assertEquals(array(), $result, 'No errors expected.');
     }
 
     /**
@@ -448,7 +456,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $addressIdFromFixture);
         $validationErrors = 'The customer address is not valid.';
-        $this->assertEquals(['error' => 1, 'message' => $validationErrors], $result, 'Validation error is invalid.');
+        $this->assertEquals(
+            array('error' => 1, 'message' => $validationErrors),
+            $result,
+            'Validation error is invalid.'
+        );
     }
 
     /**
@@ -457,10 +469,14 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testSaveBillingEmptyData()
     {
         /** Execute SUT */
-        $customerData = [];
+        $customerData = array();
         $customerAddressId = false;
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $result, 'Validation error is invalid.');
+        $this->assertEquals(
+            array('error' => -1, 'message' => 'Invalid data'),
+            $result,
+            'Validation error is invalid.'
+        );
     }
 
     /**
@@ -501,7 +517,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
         $validationErrors = 'Please correct this email address: "invalidemail".';
-        $this->assertEquals(['error' => -1, 'message' => $validationErrors], $result, 'Validation error is invalid.');
+        $this->assertEquals(
+            array('error' => -1, 'message' => $validationErrors),
+            $result,
+            'Validation error is invalid.'
+        );
     }
 
     /**
@@ -520,8 +540,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected function _prepareQuote($quote)
     {
         /** @var $rate \Magento\Sales\Model\Quote\Address\Rate */
-        $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Quote\Address\Rate');
+        $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Quote\Address\Rate'
+        );
         $rate->setCode('freeshipping_freeshipping');
         $rate->getPrice(1);
 
@@ -537,14 +558,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getCustomerData()
     {
-        return array (
+        return array(
             'firstname' => 'John',
             'lastname' => 'Smith',
             'email' => 'John.Smith@example.com',
-            'street' =>array (
-                0 => '6131 Monterey Rd, Apt 1',
-                1 => '',
-            ),
+            'street' => array(0 => '6131 Monterey Rd, Apt 1', 1 => ''),
             'city' => 'Los Angeles',
             'postcode' => '90042',
             'country_id' => 'US',
@@ -553,7 +571,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'customer_password' => 'password',
             'confirm_password' => 'password',
             'save_in_address_book' => '1',
-            'use_for_shipping' => '1',
+            'use_for_shipping' => '1'
         );
     }
 }

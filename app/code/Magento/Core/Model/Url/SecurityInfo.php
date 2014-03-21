@@ -52,8 +52,10 @@ class SecurityInfo implements \Magento\Url\SecurityInfoInterface
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $secureUrlList
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager, array $secureUrlList = array())
-    {
+    public function __construct(
+        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        array $secureUrlList = array()
+    ) {
         $this->_storeManager = $storeManager;
         $this->_secureUrlList = $secureUrlList;
     }

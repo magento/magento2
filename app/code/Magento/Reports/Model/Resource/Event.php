@@ -85,13 +85,10 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = array())
     {
         if ($types) {
-            $this->_getWriteAdapter()->update($this->getMainTable(),
+            $this->_getWriteAdapter()->update(
+                $this->getMainTable(),
                 array('subject_id' => (int)$customerId, 'subtype' => 0),
-                array(
-                    'subject_id = ?'      => (int)$visitorId,
-                    'subtype = ?'         => 1,
-                    'event_type_id IN(?)' => $types
-                )
+                array('subject_id = ?' => (int)$visitorId, 'subtype = ?' => 1, 'event_type_id IN(?)' => $types)
             );
         }
         return $this;
@@ -109,20 +106,33 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param array $skipIds
      * @return $this
      */
-    public function applyLogToCollection(\Magento\Data\Collection\Db $collection, $eventTypeId, $eventSubjectId, $subtype,
-        $skipIds = array())
-    {
+    public function applyLogToCollection(
+        \Magento\Data\Collection\Db $collection,
+        $eventTypeId,
+        $eventSubjectId,
+        $subtype,
+        $skipIds = array()
+    ) {
         $idFieldName = $collection->getResource()->getIdFieldName();
 
-        $derivedSelect = $this->getReadConnection()->select()
-            ->from(
-                $this->getTable('report_event'),
-                array('event_id' => new \Zend_Db_Expr('MAX(event_id)'), 'object_id'))
-            ->where('event_type_id = ?', (int)$eventTypeId)
-            ->where('subject_id = ?', (int)$eventSubjectId)
-            ->where('subtype = ?', (int)$subtype)
-            ->where('store_id IN(?)', $this->getCurrentStoreIds())
-            ->group('object_id');
+        $derivedSelect = $this->getReadConnection()->select()->from(
+            $this->getTable('report_event'),
+            array('event_id' => new \Zend_Db_Expr('MAX(event_id)'), 'object_id')
+        )->where(
+            'event_type_id = ?',
+            (int)$eventTypeId
+        )->where(
+            'subject_id = ?',
+            (int)$eventSubjectId
+        )->where(
+            'subtype = ?',
+            (int)$subtype
+        )->where(
+            'store_id IN(?)',
+            $this->getCurrentStoreIds()
+        )->group(
+            'object_id'
+        );
 
         if ($skipIds) {
             if (!is_array($skipIds)) {
@@ -131,12 +141,13 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
             $derivedSelect->where('object_id NOT IN(?)', $skipIds);
         }
 
-        $collection->getSelect()
-            ->joinInner(
-                array('evt' => new \Zend_Db_Expr("({$derivedSelect})")),
-                "{$idFieldName} = evt.object_id",
-                array())
-            ->order('evt.event_id ' . \Magento\DB\Select::SQL_DESC);
+        $collection->getSelect()->joinInner(
+            array('evt' => new \Zend_Db_Expr("({$derivedSelect})")),
+            "{$idFieldName} = evt.object_id",
+            array()
+        )->order(
+            'evt.event_id ' . \Magento\DB\Select::SQL_DESC
+        );
 
         return $this;
     }
@@ -159,7 +170,8 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
                     $stores[] = $store->getId();
                 }
             }
-        } else { // get all stores, required by configuration in current store scope
+        } else {
+            // get all stores, required by configuration in current store scope
             switch ($this->_coreStoreConfig->getConfig('catalog/recently_products/scope')) {
                 case 'website':
                     $resourceStore = $this->_storeManager->getStore()->getWebsite()->getStores();
@@ -192,15 +204,21 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function clean(\Magento\Reports\Model\Event $object)
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()
-                ->from(array('event_table' => $this->getMainTable()), array('event_id'))
-                ->joinLeft(
-                    array('visitor_table' => $this->getTable('log_visitor')),
-                    'event_table.subject_id = visitor_table.visitor_id',
-                    array())
-                ->where('visitor_table.visitor_id IS NULL')
-                ->where('event_table.subtype = ?', 1)
-                ->limit(1000);
+            $select = $this->_getReadAdapter()->select()->from(
+                array('event_table' => $this->getMainTable()),
+                array('event_id')
+            )->joinLeft(
+                array('visitor_table' => $this->getTable('log_visitor')),
+                'event_table.subject_id = visitor_table.visitor_id',
+                array()
+            )->where(
+                'visitor_table.visitor_id IS NULL'
+            )->where(
+                'event_table.subtype = ?',
+                1
+            )->limit(
+                1000
+            );
             $eventIds = $this->_getReadAdapter()->fetchCol($select);
 
             if (!$eventIds) {
@@ -212,4 +230,3 @@ class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
         return $this;
     }
 }
-

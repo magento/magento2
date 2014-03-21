@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Model\Resource\Page;
 
 /**
@@ -37,7 +36,6 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @var bool
      */
     protected $_previewFlag;
-
 
     /**
      * Store manager
@@ -77,7 +75,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         $this->_init('Magento\Cms\Model\Page', 'Magento\Cms\Model\Resource\Page');
         $this->_map['fields']['page_id'] = 'main_table.page_id';
-        $this->_map['fields']['store']   = 'store_table.store_id';
+        $this->_map['fields']['store'] = 'store_table.store_id';
     }
 
     /**
@@ -131,9 +129,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             $items = $this->getColumnValues('page_id');
             $connection = $this->getConnection();
             if (count($items)) {
-                $select = $connection->select()
-                        ->from(array('cps'=>$this->getTable('cms_page_store')))
-                        ->where('cps.page_id IN (?)', $items);
+                $select = $connection->select()->from(
+                    array('cps' => $this->getTable('cms_page_store'))
+                )->where(
+                    'cps.page_id IN (?)',
+                    $items
+                );
 
                 if ($result = $connection->fetchPairs($select)) {
                     foreach ($this as $item) {
@@ -197,11 +198,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 array('store_table' => $this->getTable('cms_page_store')),
                 'main_table.page_id = store_table.page_id',
                 array()
-            )->group('main_table.page_id');
+            )->group(
+                'main_table.page_id'
+            );
         }
         return parent::_renderFiltersBefore();
     }
-
 
     /**
      * Get SQL for get record count.

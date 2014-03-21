@@ -71,17 +71,20 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addTitleToResult($storeId = 0)
     {
-        $ifNullDefaultTitle = $this->getConnection()
-            ->getIfNullSql('st.title', 'd.title');
-        $this->getSelect()
-            ->joinLeft(array('d' => $this->getTable('downloadable_sample_title')),
-                'd.sample_id=main_table.sample_id AND d.store_id = 0',
-                array('default_title' => 'title'))
-            ->joinLeft(array('st' => $this->getTable('downloadable_sample_title')),
-                'st.sample_id=main_table.sample_id AND st.store_id = ' . (int)$storeId,
-                array('store_title' => 'title','title' => $ifNullDefaultTitle))
-            ->order('main_table.sort_order ASC')
-            ->order('title ASC');
+        $ifNullDefaultTitle = $this->getConnection()->getIfNullSql('st.title', 'd.title');
+        $this->getSelect()->joinLeft(
+            array('d' => $this->getTable('downloadable_sample_title')),
+            'd.sample_id=main_table.sample_id AND d.store_id = 0',
+            array('default_title' => 'title')
+        )->joinLeft(
+            array('st' => $this->getTable('downloadable_sample_title')),
+            'st.sample_id=main_table.sample_id AND st.store_id = ' . (int)$storeId,
+            array('store_title' => 'title', 'title' => $ifNullDefaultTitle)
+        )->order(
+            'main_table.sort_order ASC'
+        )->order(
+            'title ASC'
+        );
 
         return $this;
     }

@@ -25,8 +25,7 @@
  */
 namespace Magento\Connect\Command;
 
-final class Remote
-extends \Magento\Connect\Command
+final class Remote extends \Magento\Connect\Command
 {
     /**
      * List-upgrades callback
@@ -41,34 +40,34 @@ extends \Magento\Connect\Command
         $this->cleanupParams($params);
         try {
             $packager = new \Magento\Connect\Packager();
-            $channelAuth = isset($options['auth'])?$options['auth']:array();
+            $channelAuth = isset($options['auth']) ? $options['auth'] : array();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
                 $config = $this->config();
             }
 
-            if(!empty($params[0])) {
+            if (!empty($params[0])) {
                 $channels = $params[0];
                 $cache->getChannel($channels);
             } else {
                 $channels = $cache->getChannelNames();
             }
             $rest = $this->rest();
-            if(!empty($channelAuth)){
+            if (!empty($channelAuth)) {
                 $rest->getLoader()->setCredentials($channelAuth['username'], $channelAuth['password']);
             }
             $ups = $packager->getUpgradesList($channels, $cache, $config, $rest);
 
-            if(count($ups)) {
-                $data = array($command => array('data'=>$ups));
+            if (count($ups)) {
+                $data = array($command => array('data' => $ups));
             } else {
                 $data = "No upgrades available";
             }
             $this->ui()->output($data);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->doError($command, $e->getMessage());
         }
     }
@@ -80,7 +79,6 @@ extends \Magento\Connect\Command
      * @param string[] $params
      * @return void
      */
-
     public function doListAvailable($command, $options, $params)
     {
         $this->cleanupParams($params);
@@ -88,21 +86,21 @@ extends \Magento\Connect\Command
         try {
             $packager = new \Magento\Connect\Packager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
                 $config = $this->config();
             }
 
-            if(!empty($params[0])) {
+            if (!empty($params[0])) {
                 $channels = array($params[0]);
                 $cache->getChannel($channels[0]);
             } else {
-                $channels =  $cache->getChannelNames();
+                $channels = $cache->getChannelNames();
             }
-            
-            
+
+
 
             $packs = array();
             foreach ($channels as $channel) {
@@ -114,15 +112,15 @@ extends \Magento\Connect\Command
                     $rest->setChannel($uri);
 
                     $packages = $rest->getPackages();
-                    if(!count($packages)) {
+                    if (!count($packages)) {
                         $this->ui()->output("Channel '{$channel}' has no packages");
                         continue;
                     }
-                    $packs[$channel]['title'] = "Packages for channel '".$channel."':";
-                    foreach($packages as $p) {
+                    $packs[$channel]['title'] = "Packages for channel '" . $channel . "':";
+                    foreach ($packages as $p) {
                         $packageName = $p['n'];
                         $releases = array();
-                        foreach($p['r'] as $k=>$r) {
+                        foreach ($p['r'] as $k => $r) {
                             $releases[$r] = $rest->shortStateToLong($k);
                         }
                         $packs[$channel]['packages'][$packageName]['releases'] = $releases;
@@ -132,13 +130,11 @@ extends \Magento\Connect\Command
                 }
             }
             $dataOut = array();
-            $dataOut[$command]= array('data'=>$packs);
+            $dataOut[$command] = array('data' => $packs);
             $this->ui()->output($dataOut);
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->doError($command, $e->getMessage());
         }
-         
     }
 
     /**
@@ -154,7 +150,7 @@ extends \Magento\Connect\Command
         $this->cleanupParams($params);
         //$this->splitPackageArgs($params);
         try {
-            if(count($params) < 2) {
+            if (count($params) < 2) {
                 throw new \Exception("Arguments should be: channel Package");
             }
 
@@ -163,7 +159,7 @@ extends \Magento\Connect\Command
 
             $packager = $this->getPackager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
@@ -176,20 +172,20 @@ extends \Magento\Connect\Command
             $rest = $this->rest();
             $rest->setChannel($uri);
             $c = $rest->getReleases($package);
-            if(!count($c)) {
+            if (!count($c)) {
                 throw new \Exception("No releases found for package");
             }
             $version = $cache->detectVersionFromRestArray($c);
             $dir = $config->getChannelCacheDir($channel);
-            $file = $dir . '/' . $package."-".$version.".tgz";
+            $file = $dir . '/' . $package . "-" . $version . ".tgz";
             $rest->downloadPackageFileOfRelease($package, $version, $file);
-            if($ftp) {
+            if ($ftp) {
                 @unlink($config->getFilename());
                 @unlink($cache->getFilename());
             }
-            $this->ui()->output("Saved to: ". $file);
+            $this->ui()->output("Saved to: " . $file);
         } catch (\Exception $e) {
-            if($ftp) {
+            if ($ftp) {
                 @unlink($config->getFilename());
                 @unlink($cache->getFilename());
             }
@@ -210,16 +206,16 @@ extends \Magento\Connect\Command
         try {
             $packager = new \Magento\Connect\Packager();
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $ftpObj) = $packager->getRemoteCache($ftp);
                 $cache->clear();
-                $packager->writeToRemoteCache($cache, $ftpObj);              
+                $packager->writeToRemoteCache($cache, $ftpObj);
             } else {
                 $cache = $this->getSconfig();
                 $cache->clear();
             }
         } catch (\Exception $e) {
-             $this->doError($command, $e->getMessage());
+            $this->doError($command, $e->getMessage());
         }
     }
 }

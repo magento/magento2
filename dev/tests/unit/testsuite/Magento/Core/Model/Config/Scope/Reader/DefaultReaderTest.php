@@ -56,9 +56,7 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_model = new \Magento\Core\Model\Config\Scope\Reader\DefaultReader(
             $this->_initialConfigMock,
             new \Magento\App\Config\Scope\Converter(),
@@ -69,25 +67,31 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $this->_initialConfigMock->expects($this->any())
-            ->method('getData')
-            ->with(\Magento\BaseScopeInterface::SCOPE_DEFAULT)
-            ->will($this->returnValue(array(
-                'config' => array('key1' => 'default_value1', 'key2' => 'default_value2'),
-            )));
-        $this->_collectionFactory->expects($this->once())
-            ->method('create')
-            ->with(array('scope' => 'default'))
-            ->will($this->returnValue(array(
-                new \Magento\Object(array('path' => 'config/key1', 'value' => 'default_db_value1')),
-                new \Magento\Object(array('path' => 'config/key3', 'value' => 'default_db_value3')),
-            )));
+        $this->_initialConfigMock->expects(
+            $this->any()
+        )->method(
+            'getData'
+        )->with(
+            \Magento\BaseScopeInterface::SCOPE_DEFAULT
+        )->will(
+            $this->returnValue(array('config' => array('key1' => 'default_value1', 'key2' => 'default_value2')))
+        );
+        $this->_collectionFactory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            array('scope' => 'default')
+        )->will(
+            $this->returnValue(
+                array(
+                    new \Magento\Object(array('path' => 'config/key1', 'value' => 'default_db_value1')),
+                    new \Magento\Object(array('path' => 'config/key3', 'value' => 'default_db_value3'))
+                )
+            )
+        );
         $expectedData = array(
-            'config' => array(
-                'key1' => 'default_db_value1',
-                'key2' => 'default_value2',
-                'key3' => 'default_db_value3'
-            ),
+            'config' => array('key1' => 'default_db_value1', 'key2' => 'default_value2', 'key3' => 'default_db_value3')
         );
         $this->assertEquals($expectedData, $this->_model->read());
     }

@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Model\Resource\Block;
 
 /**
@@ -105,9 +104,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
                 array('store_table' => $this->getTable('cms_block_store')),
                 'main_table.block_id = store_table.block_id',
                 array()
-            )->group('main_table.block_id');
+            )->group(
+                'main_table.block_id'
+            );
         }
         return parent::_renderFiltersBefore();
     }
-
 }

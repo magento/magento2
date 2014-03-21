@@ -53,47 +53,65 @@ class TreeTest extends \PHPUnit_Framework_TestCase
         $connection = $this->getMock('Magento\DB\Adapter\AdapterInterface');
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $this->_resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
-        $this->_resource
-            ->expects($this->once())
-            ->method('getConnection')
-            ->with('catalog_write')
-            ->will($this->returnValue($connection))
-        ;
-        $this->_resource
-            ->expects($this->once())
-            ->method('getTableName')
-            ->with('catalog_category_entity')
-            ->will($this->returnArgument(0))
-        ;
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $this->_attributeConfig = $this->getMock('Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
-        $this->_collectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\Collection\Factory', array(), array(), '', false
+        $this->_resource->expects(
+            $this->once()
+        )->method(
+            'getConnection'
+        )->with(
+            'catalog_write'
+        )->will(
+            $this->returnValue($connection)
         );
-        $this->_model = $objectHelper->getObject('Magento\Catalog\Model\Resource\Category\Tree', array(
-            'resource' => $this->_resource,
-            'eventManager' => $eventManager,
-            'attributeConfig' => $this->_attributeConfig,
-            'collectionFactory' => $this->_collectionFactory,
-        ));
+        $this->_resource->expects(
+            $this->once()
+        )->method(
+            'getTableName'
+        )->with(
+            'catalog_category_entity'
+        )->will(
+            $this->returnArgument(0)
+        );
+        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $this->_attributeConfig = $this->getMock(
+            'Magento\Catalog\Model\Attribute\Config',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_collectionFactory = $this->getMock(
+            'Magento\Catalog\Model\Resource\Category\Collection\Factory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_model = $objectHelper->getObject(
+            'Magento\Catalog\Model\Resource\Category\Tree',
+            array(
+                'resource' => $this->_resource,
+                'eventManager' => $eventManager,
+                'attributeConfig' => $this->_attributeConfig,
+                'collectionFactory' => $this->_collectionFactory
+            )
+        );
     }
 
     public function testGetCollection()
     {
         $attributes = array('attribute_one', 'attribute_two');
-        $this->_attributeConfig
-            ->expects($this->once())
-            ->method('getAttributeNames')
-            ->with('catalog_category')
-            ->will($this->returnValue($attributes))
-        ;
+        $this->_attributeConfig->expects(
+            $this->once()
+        )->method(
+            'getAttributeNames'
+        )->with(
+            'catalog_category'
+        )->will(
+            $this->returnValue($attributes)
+        );
         $collection = $this->getCollectionMock();
         $collection->expects($this->once())->method('addAttributeToSelect')->with($attributes);
-        $this->_collectionFactory
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($collection))
-        ;
+        $this->_collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->assertSame($collection, $this->_model->getCollection());
         // Makes sure the value is calculated only once
         $this->assertSame($collection, $this->_model->getCollection());

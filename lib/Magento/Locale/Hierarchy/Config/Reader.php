@@ -30,9 +30,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/locale' => 'code',
-    );
+    protected $_idAttributes = array('/config/locale' => 'code');
 
     /**
      * @param FileResolver $fileResolver

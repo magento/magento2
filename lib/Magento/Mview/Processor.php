@@ -33,9 +33,8 @@ class Processor implements ProcessorInterface
     /**
      * @param View\CollectionFactory $viewsFactory
      */
-    public function __construct(
-        View\CollectionFactory $viewsFactory
-    ) {
+    public function __construct(View\CollectionFactory $viewsFactory)
+    {
         $this->viewsFactory = $viewsFactory;
     }
 

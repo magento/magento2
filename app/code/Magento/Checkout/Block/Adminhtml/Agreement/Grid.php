@@ -74,50 +74,54 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('agreement_id',
+        $this->addColumn(
+            'agreement_id',
             array(
-                'header'=>__('ID'),
+                'header' => __('ID'),
                 'index' => 'agreement_id',
-                'header_css_class'  => 'col-id',
-                'column_css_class'  => 'col-id'
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
             )
         );
 
-        $this->addColumn('name',
+        $this->addColumn(
+            'name',
             array(
-                'header'=>__('Condition'),
+                'header' => __('Condition'),
                 'index' => 'name',
-                'header_css_class'  => 'col-name',
-                'column_css_class'  => 'col-name'
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
             )
         );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'        => __('Store View'),
-                'index'         => 'store_id',
-                'type'          => 'store',
-                'store_all'     => true,
-                'store_view'    => true,
-                'sortable'      => false,
-                'filter_condition_callback'
-                                => array($this, '_filterStoreCondition'),
-                'header_css_class'  => 'col-store-view',
-                'column_css_class'  => 'col-store-view'
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Store View'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_all' => true,
+                    'store_view' => true,
+                    'sortable' => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition'),
+                    'header_css_class' => 'col-store-view',
+                    'column_css_class' => 'col-store-view'
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'type'      => 'options',
-            'options'   => array(
-                0 => __('Disabled'),
-                1 => __('Enabled')
-            ),
-            'header_css_class'  => 'col-status',
-            'column_css_class'  => 'col-status'
-        ));
+        $this->addColumn(
+            'is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => array(0 => __('Disabled'), 1 => __('Enabled')),
+                'header_css_class' => 'col-status',
+                'column_css_class' => 'col-status'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -138,7 +142,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _filterStoreCondition($collection, $column)
     {
-        if (!$value = $column->getFilter()->getValue()) {
+        if (!($value = $column->getFilter()->getValue())) {
             return;
         }
 
@@ -153,5 +157,4 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         return $this->getUrl('checkout/*/edit', array('id' => $row->getId()));
     }
-
 }

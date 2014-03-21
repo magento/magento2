@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -68,7 +67,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var $storeManager \Magento\Core\Model\StoreManagerInterface */
-        $storeManager  = self::$_objectManager->get('Magento\Core\Model\StoreManagerInterface');
+        $storeManager = self::$_objectManager->get('Magento\Core\Model\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
         $this->_model = self::$_objectManager->create('Magento\Catalog\Model\Category');
     }
@@ -139,10 +138,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStoreIds()
     {
-        $this->_model->load(3); /* id from fixture */
+        $this->_model->load(3);
+        /* id from fixture */
         $this->assertContains(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->getId(),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\StoreManagerInterface'
+            )->getStore()->getId(),
             $this->_model->getStoreIds()
         );
     }
@@ -150,8 +151,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testSetGetStoreId()
     {
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->getId(),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\StoreManagerInterface'
+            )->getStore()->getId(),
             $this->_model->getStoreId()
         );
         $this->_model->setStoreId(1000);
@@ -166,8 +168,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testSetStoreIdWithNonNumericValue()
     {
         /** @var $store \Magento\Core\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Store');
         $store->load('fixturestore');
 
         $this->assertNotEquals($this->_model->getStoreId(), $store->getId());

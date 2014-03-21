@@ -52,7 +52,8 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $this->_subscriberOne = $this->getMock('stdClass', array('testEvent'));
         $this->_subscriberTwo = $this->getMock('stdClass', array('testEvent'));
         $this->_eventManager = new \Magento\TestFramework\EventManager(
-            array($this->_subscriberOne, $this->_subscriberTwo));
+            array($this->_subscriberOne, $this->_subscriberTwo)
+        );
     }
 
     /**
@@ -66,19 +67,11 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
         $callback = function () use (&$actualSubscribers) {
             $actualSubscribers[] = 'subscriberOne';
         };
-        $this->_subscriberOne
-            ->expects($this->once())
-            ->method('testEvent')
-            ->will($this->returnCallback($callback))
-        ;
+        $this->_subscriberOne->expects($this->once())->method('testEvent')->will($this->returnCallback($callback));
         $callback = function () use (&$actualSubscribers) {
             $actualSubscribers[] = 'subscriberTwo';
         };
-        $this->_subscriberTwo
-            ->expects($this->once())
-            ->method('testEvent')
-            ->will($this->returnCallback($callback))
-        ;
+        $this->_subscriberTwo->expects($this->once())->method('testEvent')->will($this->returnCallback($callback));
         $this->_eventManager->fireEvent('testEvent', array(), $reverseOrder);
         $this->assertEquals($expectedSubscribers, $actualSubscribers);
     }
@@ -87,7 +80,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'straight order' => array(false, array('subscriberOne', 'subscriberTwo')),
-            'reverse order'  => array(true,  array('subscriberTwo', 'subscriberOne')),
+            'reverse order' => array(true, array('subscriberTwo', 'subscriberOne'))
         );
     }
 
@@ -95,16 +88,8 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $paramOne = 123;
         $paramTwo = 456;
-        $this->_subscriberOne
-            ->expects($this->once())
-            ->method('testEvent')
-            ->with($paramOne, $paramTwo)
-        ;
-        $this->_subscriberTwo
-            ->expects($this->once())
-            ->method('testEvent')
-            ->with($paramOne, $paramTwo)
-        ;
+        $this->_subscriberOne->expects($this->once())->method('testEvent')->with($paramOne, $paramTwo);
+        $this->_subscriberTwo->expects($this->once())->method('testEvent')->with($paramOne, $paramTwo);
         $this->_eventManager->fireEvent('testEvent', array($paramOne, $paramTwo));
     }
 }

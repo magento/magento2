@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Stdlib;
 
 class BooleanUtilsTest extends \PHPUnit_Framework_TestCase
@@ -58,14 +57,14 @@ class BooleanUtilsTest extends \PHPUnit_Framework_TestCase
     public function toBooleanDataProvider()
     {
         return array(
-            'boolean "true"'         => array(true, true),
-            'boolean "false"'        => array(false, false),
-            'boolean string "true"'  => array('true', true),
+            'boolean "true"' => array(true, true),
+            'boolean "false"' => array(false, false),
+            'boolean string "true"' => array('true', true),
             'boolean string "false"' => array('false', false),
-            'boolean numeric "1"'    => array(1, true),
-            'boolean numeric "0"'    => array(0, false),
-            'boolean string "1"'     => array('1', true),
-            'boolean string "0"'     => array('0', false),
+            'boolean numeric "1"' => array(1, true),
+            'boolean numeric "0"' => array(0, false),
+            'boolean string "1"' => array('1', true),
+            'boolean string "0"' => array('0', false)
         );
     }
 
@@ -84,14 +83,14 @@ class BooleanUtilsTest extends \PHPUnit_Framework_TestCase
     public function toBooleanExceptionDataProvider()
     {
         return array(
-            'boolean string "on"'    => array('on'),
-            'boolean string "off"'   => array('off'),
-            'boolean string "yes"'   => array('yes'),
-            'boolean string "no"'    => array('no'),
-            'boolean string "TRUE"'  => array('TRUE'),
+            'boolean string "on"' => array('on'),
+            'boolean string "off"' => array('off'),
+            'boolean string "yes"' => array('yes'),
+            'boolean string "no"' => array('no'),
+            'boolean string "TRUE"' => array('TRUE'),
             'boolean string "FALSE"' => array('FALSE'),
-            'empty string'           => array(''),
-            'null'                   => array(null),
+            'empty string' => array(''),
+            'null' => array(null)
         );
     }
 }

@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data;
 
 use Magento\Data\Form\Element\AbstractElement;
@@ -58,17 +57,17 @@ class Form extends \Magento\Data\Form\AbstractForm
     /**
      * @var RendererInterface
      */
-    static protected $_defaultElementRenderer;
+    protected static $_defaultElementRenderer;
 
     /**
      * @var RendererInterface
      */
-    static protected $_defaultFieldsetRenderer;
+    protected static $_defaultFieldsetRenderer;
 
     /**
      * @var RendererInterface
      */
-    static protected $_defaultFieldsetElementRenderer;
+    protected static $_defaultFieldsetElementRenderer;
 
     /**
      * @param Factory $factoryElement
@@ -334,19 +333,17 @@ class Form extends \Magento\Data\Form\AbstractForm
             $html .= '<form ' . $this->serialize($this->getHtmlAttributes()) . '>';
             $html .= '<div>';
             if (strtolower($this->getData('method')) == 'post') {
-                $html .= '<input name="form_key" type="hidden" value="'
-                    . $this->formKey->getFormKey()
-                    . '" />';
+                $html .= '<input name="form_key" type="hidden" value="' . $this->formKey->getFormKey() . '" />';
             }
             $html .= '</div>';
         }
 
         foreach ($this->getElements() as $element) {
-            $html.= $element->toHtml();
+            $html .= $element->toHtml();
         }
 
         if ($useContainer) {
-            $html.= '</form>';
+            $html .= '</form>';
         }
         Profiler::stop('form/toHtml');
         return $html;

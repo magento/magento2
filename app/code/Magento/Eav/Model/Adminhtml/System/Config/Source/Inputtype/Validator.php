@@ -34,7 +34,6 @@ namespace Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
  */
 class Validator extends \Zend_Validate_InArray
 {
-
     /**
      * Eav data
      *
@@ -45,9 +44,8 @@ class Validator extends \Zend_Validate_InArray
     /**
      * @param \Magento\Eav\Helper\Data $eavData
      */
-    public function __construct(
-        \Magento\Eav\Helper\Data $eavData
-    ) {
+    public function __construct(\Magento\Eav\Helper\Data $eavData)
+    {
         $this->_eavData = $eavData;
         //set data haystack
         $haystack = $this->_eavData->getInputTypesValidatorData();
@@ -57,10 +55,7 @@ class Validator extends \Zend_Validate_InArray
         $this->_initMessageTemplates();
 
         //parent construct with options
-        parent::__construct(array(
-             'haystack' => $haystack,
-             'strict'   => true,
-        ));
+        parent::__construct(array('haystack' => $haystack, 'strict' => true));
     }
 
     /**
@@ -72,8 +67,7 @@ class Validator extends \Zend_Validate_InArray
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = array(
-                self::NOT_IN_ARRAY =>
-                    __('Input type "%value%" not found in the input types list.'),
+                self::NOT_IN_ARRAY => __('Input type "%value%" not found in the input types list.')
             );
         }
         return $this;
@@ -87,8 +81,8 @@ class Validator extends \Zend_Validate_InArray
      */
     public function addInputType($type)
     {
-        if (!in_array((string) $type, $this->_haystack, true)) {
-            $this->_haystack[] = (string) $type;
+        if (!in_array((string)$type, $this->_haystack, true)) {
+            $this->_haystack[] = (string)$type;
         }
         return $this;
     }

@@ -124,7 +124,6 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
             $data,
             $priceBlockTypes
         );
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -135,21 +134,14 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
         $product = $this->_coreRegistry->registry('product');
         /* @var $product \Magento\Catalog\Model\Product */
 
-        $this->_itemCollection = $product->getRelatedProductCollection()
-            ->addAttributeToSelect('required_options')
-            ->setPositionOrder()
-            ->addStoreFilter();
+        $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
+            'required_options'
+        )->setPositionOrder()->addStoreFilter();
 
         if ($this->_catalogData->isModuleEnabled('Magento_Checkout')) {
-            $this->_checkoutCart->addExcludeProductFilter(
-                $this->_itemCollection,
-                $this->_checkoutSession->getQuoteId()
-            );
             $this->_addProductAttributesAndPrices($this->_itemCollection);
         }
-        $this->_itemCollection->setVisibility(
-            $this->_catalogProductVisibility->getVisibleInCatalogIds()
-        );
+        $this->_itemCollection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 
         $this->_itemCollection->load();
 
@@ -186,7 +178,7 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
     {
         $identities = array();
         foreach ($this->getItems() as $item) {
-            $identities[] = $item->getIdentities();
+            $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;
     }

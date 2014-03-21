@@ -99,31 +99,18 @@ class Shipment extends AbstractPdf
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0.93, 0.92, 0.92));
         $page->setLineColor(new \Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y-15);
+        $page->drawRectangle(25, $this->y, 570, $this->y - 15);
         $this->y -= 10;
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0, 0, 0));
 
         //columns headers
-        $lines[0][] = array(
-            'text' => __('Products'),
-            'feed' => 100,
-        );
+        $lines[0][] = array('text' => __('Products'), 'feed' => 100);
 
-        $lines[0][] = array(
-            'text'  => __('Qty'),
-            'feed'  => 35
-        );
+        $lines[0][] = array('text' => __('Qty'), 'feed' => 35);
 
-        $lines[0][] = array(
-            'text'  => __('SKU'),
-            'feed'  => 565,
-            'align' => 'right'
-        );
+        $lines[0][] = array('text' => __('SKU'), 'feed' => 565, 'align' => 'right');
 
-        $lineBlock = array(
-            'lines'  => $lines,
-            'height' => 10
-        );
+        $lineBlock = array('lines' => $lines, 'height' => 10);
 
         $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
@@ -150,7 +137,7 @@ class Shipment extends AbstractPdf
                 $this->_localeResolver->emulate($shipment->getStoreId());
                 $this->_storeManager->setCurrentStore($shipment->getStoreId());
             }
-            $page  = $this->newPage();
+            $page = $this->newPage();
             $order = $shipment->getOrder();
             /* Add image */
             $this->insertLogo($page, $shipment->getStore());
@@ -163,7 +150,8 @@ class Shipment extends AbstractPdf
                 $this->_coreStoreConfig->getConfigFlag(
                     self::XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID,
                     $order->getStoreId()
-            ));
+                )
+            );
             /* Add document text and number */
             $this->insertDocumentNumber($page, __('Packing Slip # ') . $shipment->getIncrementId());
             /* Add table */

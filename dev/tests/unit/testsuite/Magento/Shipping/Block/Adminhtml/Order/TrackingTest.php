@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
 class TrackingTest extends \PHPUnit_Framework_TestCase
@@ -30,34 +29,54 @@ class TrackingTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $shipment = new \Magento\Object(['store_id' => 1]);
+        $shipment = new \Magento\Object(array('store_id' => 1));
 
-        $registry = $this->getMock('Magento\Registry', ['registry'], [], '', false);
-        $registry->expects($this->once())->method('registry')
-            ->with('current_shipment')->will($this->returnValue($shipment));
+        $registry = $this->getMock('Magento\Registry', array('registry'), array(), '', false);
+        $registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_shipment'
+        )->will(
+            $this->returnValue($shipment)
+        );
 
-        $carrier = $this->getMock('Magento\OfflineShipping\Model\Carrier\Freeshipping',
-            ['isTrackingAvailable', 'getConfigData'], [], '', false);
+        $carrier = $this->getMock(
+            'Magento\OfflineShipping\Model\Carrier\Freeshipping',
+            array('isTrackingAvailable', 'getConfigData'),
+            array(),
+            '',
+            false
+        );
         $carrier->expects($this->once())->method('isTrackingAvailable')->will($this->returnValue(true));
-        $carrier->expects($this->once())->method('getConfigData')->with('title')
-            ->will($this->returnValue('configdata'));
+        $carrier->expects(
+            $this->once()
+        )->method(
+            'getConfigData'
+        )->with(
+            'title'
+        )->will(
+            $this->returnValue('configdata')
+        );
 
-        $config = $this->getMock('Magento\Shipping\Model\Config', ['getAllCarriers'], [], '', false);
-        $config->expects($this->once())->method('getAllCarriers')
-            ->with(1)->will($this->returnValue(['free' => $carrier]));
+        $config = $this->getMock('Magento\Shipping\Model\Config', array('getAllCarriers'), array(), '', false);
+        $config->expects(
+            $this->once()
+        )->method(
+            'getAllCarriers'
+        )->with(
+            1
+        )->will(
+            $this->returnValue(array('free' => $carrier))
+        );
 
         /** @var \Magento\Shipping\Block\Adminhtml\Order\Tracking $model */
         $model = $helper->getObject(
             'Magento\Shipping\Block\Adminhtml\Order\Tracking',
-            [
-                'registry' => $registry,
-                'shippingConfig' => $config
-            ]
+            array('registry' => $registry, 'shippingConfig' => $config)
         );
 
-        $this->assertEquals([
-            'custom' => 'Custom Value',
-            'free' => 'configdata'
-        ], $model->getCarriers());
+        $this->assertEquals(array('custom' => 'Custom Value', 'free' => 'configdata'), $model->getCarriers());
     }
 }

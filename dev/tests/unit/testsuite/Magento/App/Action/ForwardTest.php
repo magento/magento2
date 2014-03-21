@@ -42,12 +42,10 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false );
+        $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
         $this->_response = $this->getMock('\Magento\App\Response\Http', array(), array(), '', false);
 
-        $this->_actionAbstract = new \Magento\App\Action\Forward(
-            $this->_request,
-            $this->_response);
+        $this->_actionAbstract = new \Magento\App\Action\Forward($this->_request, $this->_response);
     }
 
     public function testDispatch()

@@ -49,10 +49,8 @@ class Plugin
      * @param AttributeFactory $attributeFactory
      * @param Registry $registry
      */
-    public function __construct(
-        AttributeFactory $attributeFactory,
-        Registry $registry
-    ) {
+    public function __construct(AttributeFactory $attributeFactory, Registry $registry)
+    {
         $this->registry = $registry;
         $this->attributeFactory = $attributeFactory;
     }
@@ -77,7 +75,10 @@ class Plugin
         if (!isset($this->configurableAttributes[$setId])) {
             $this->configurableAttributes[$setId] = $this->attributeFactory->create()->getUsedAttributes($setId);
         }
-        $result['is_configurable'] = (int)in_array($attribute->getAttributeId(), $this->configurableAttributes[$setId]);
+        $result['is_configurable'] = (int)in_array(
+            $attribute->getAttributeId(),
+            $this->configurableAttributes[$setId]
+        );
         return $result;
     }
 }

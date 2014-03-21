@@ -35,15 +35,19 @@ class InputException extends \Magento\Exception\Exception
 
     // These are possible code to be stored in params
     const INVALID_FIELD_RANGE = 'INVALID_FIELD_RANGE';
+
     const INVALID_FIELD_VALUE = 'INVALID_FIELD_VALUE';
+
     const REQUIRED_FIELD = 'REQUIRED_FIELD';
 
     /**
      * @param string $message
      * @param int    $code
      */
-    public function __construct($message = 'One or more input exceptions have occurred.', $code = self::INPUT_EXCEPTION)
-    {
+    public function __construct(
+        $message = 'One or more input exceptions have occurred.',
+        $code = self::INPUT_EXCEPTION
+    ) {
         parent::__construct($message, $code);
     }
 
@@ -56,7 +60,7 @@ class InputException extends \Magento\Exception\Exception
      * @param array  $params
      * @return InputException
      */
-    public static function create($code, $fieldName, $value, array $params = [])
+    public static function create($code, $fieldName, $value, array $params = array())
     {
         $exception = new self();
         $exception->addError($code, $fieldName, $value, $params);
@@ -93,10 +97,10 @@ class InputException extends \Magento\Exception\Exception
      * @param array  $errorData Extra error debug data
      * @return $this
      */
-    public function addError($code, $fieldName, $value, array $errorData = [])
+    public function addError($code, $fieldName, $value, array $errorData = array())
     {
         $printParams = empty($errorData) ? "[]\n" : print_r($errorData, true);
-        $this->message .= "\n{\n\tcode: $code\n\t$fieldName: $value\n\tparams: $printParams }\n";
+        $this->message .= "\n{\n\tcode: {$code}\n\t{$fieldName}: {$value}\n\tparams: {$printParams} }\n";
         $errorData['fieldName'] = $fieldName;
         $errorData['code'] = $code;
         $errorData['value'] = $value;

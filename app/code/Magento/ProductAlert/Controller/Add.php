@@ -65,8 +65,11 @@ class Add extends \Magento\App\Action\Action
         if (!$this->_objectManager->get('Magento\Customer\Model\Session')->authenticate($this)) {
             $this->_actionFlag->set('', 'no-dispatch', true);
             if (!$this->_objectManager->get('Magento\Customer\Model\Session')->getBeforeUrl()) {
-                $this->_objectManager->get('Magento\Customer\Model\Session')
-                    ->setBeforeUrl($this->_redirect->getRefererUrl());
+                $this->_objectManager->get(
+                    'Magento\Customer\Model\Session'
+                )->setBeforeUrl(
+                    $this->_redirect->getRefererUrl()
+                );
             }
         }
         return parent::dispatch($request);
@@ -87,11 +90,11 @@ class Add extends \Magento\App\Action\Action
      */
     public function priceAction()
     {
-        $backUrl    = $this->getRequest()->getParam(\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED);
-        $productId  = (int) $this->getRequest()->getParam('product_id');
+        $backUrl = $this->getRequest()->getParam(\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $productId = (int)$this->getRequest()->getParam('product_id');
         if (!$backUrl || !$productId) {
             $this->_redirect('/');
-            return ;
+            return;
         }
 
         $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId);
@@ -103,21 +106,24 @@ class Add extends \Magento\App\Action\Action
             } else {
                 $this->_redirect('/');
             }
-            return ;
+            return;
         }
 
         try {
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Price')
-                ->setCustomerId($this->_objectManager->get('Magento\Customer\Model\Session')->getId())
-                ->setProductId($product->getId())
-                ->setPrice($product->getFinalPrice())
-                ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
-                );
+            $model = $this->_objectManager->create(
+                'Magento\ProductAlert\Model\Price'
+            )->setCustomerId(
+                $this->_objectManager->get('Magento\Customer\Model\Session')->getId()
+            )->setProductId(
+                $product->getId()
+            )->setPrice(
+                $product->getFinalPrice()
+            )->setWebsiteId(
+                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+            );
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
@@ -128,31 +134,33 @@ class Add extends \Magento\App\Action\Action
      */
     public function stockAction()
     {
-        $backUrl    = $this->getRequest()->getParam(\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED);
-        $productId  = (int) $this->getRequest()->getParam('product_id');
+        $backUrl = $this->getRequest()->getParam(\Magento\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $productId = (int)$this->getRequest()->getParam('product_id');
         if (!$backUrl || !$productId) {
             $this->_redirect('/');
-            return ;
+            return;
         }
 
-        if (!$product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId)) {
+        if (!($product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId))) {
             /* @var $product \Magento\Catalog\Model\Product */
             $this->messageManager->addError(__('There are not enough parameters.'));
             $this->getResponse()->setRedirect($backUrl);
-            return ;
+            return;
         }
 
         try {
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Stock')
-                ->setCustomerId($this->_objectManager->get('Magento\Customer\Model\Session')->getId())
-                ->setProductId($product->getId())
-                ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
-                );
+            $model = $this->_objectManager->create(
+                'Magento\ProductAlert\Model\Stock'
+            )->setCustomerId(
+                $this->_objectManager->get('Magento\Customer\Model\Session')->getId()
+            )->setProductId(
+                $product->getId()
+            )->setWebsiteId(
+                $this->_objectManager->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+            );
             $model->save();
             $this->messageManager->addSuccess(__('Alert subscription has been saved.'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Unable to update the alert subscription.'));
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
@@ -170,7 +178,12 @@ class Add extends \Magento\App\Action\Action
             return false;
         }
         $currentStore = $this->_storeManager->getStore();
-        return strpos($url, $currentStore->getBaseUrl()) === 0
-            || strpos($url, $currentStore->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)) === 0;
+        return strpos(
+            $url,
+            $currentStore->getBaseUrl()
+        ) === 0 || strpos(
+            $url,
+            $currentStore->getBaseUrl(\Magento\UrlInterface::URL_TYPE_LINK, true)
+        ) === 0;
     }
 }

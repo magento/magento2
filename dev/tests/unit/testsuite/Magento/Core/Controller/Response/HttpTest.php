@@ -57,18 +57,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function headersDataProvider()
     {
         return array(
-            array(
-                array(
-                    'name' => 'X-Frame-Options',
-                    'value' => 'SAMEORIGIN',
-                    'replace' => true)
-            ),
-            array(
-                array(
-                    'name' => 'Test2',
-                    'value' => 'Test2',
-                    'replace' => false)
-            )
+            array(array('name' => 'X-Frame-Options', 'value' => 'SAMEORIGIN', 'replace' => true)),
+            array(array('name' => 'Test2', 'value' => 'Test2', 'replace' => false))
         );
     }
 

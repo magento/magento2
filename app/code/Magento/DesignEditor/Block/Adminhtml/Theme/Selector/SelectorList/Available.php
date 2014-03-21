@@ -31,8 +31,7 @@ namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
  * @method int getNextPage()
  * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available setNextPage(int $page)
  */
-class Available
-    extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+class Available extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
 {
     /**
      * Get tab title
@@ -51,9 +50,10 @@ class Available
      */
     public function getNextPageUrl()
     {
-        return $this->getNextPage() <= $this->getCollection()->getLastPageNumber()
-            ? $this->getUrl('adminhtml/*/*', array('page' => $this->getNextPage()))
-            : '';
+        return $this->getNextPage() <= $this->getCollection()->getLastPageNumber() ? $this->getUrl(
+            'adminhtml/*/*',
+            array('page' => $this->getNextPage())
+        ) : '';
     }
 
     /**
@@ -68,21 +68,21 @@ class Available
 
         /** @var $assignButton \Magento\Backend\Block\Widget\Button */
         $assignButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $assignButton->setData(array(
-            'label' => __('Edit'),
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'themeEdit',
-                        'target' => 'body',
-                        'eventData' => array(
-                            'theme_id' => $themeId
+        $assignButton->setData(
+            array(
+                'label' => __('Edit'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'themeEdit',
+                            'target' => 'body',
+                            'eventData' => array('theme_id' => $themeId)
                         )
-                    ),
+                    )
                 ),
-            ),
-            'class' => 'action-edit',
-        ));
+                'class' => 'action-edit'
+            )
+        );
 
         $themeBlock->addButton($assignButton);
     }

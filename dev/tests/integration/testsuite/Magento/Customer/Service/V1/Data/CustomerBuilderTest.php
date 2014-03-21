@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -51,7 +50,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $userDefinedAttributeCode = FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME;
         $attributeCodes = $this->_customerBuilder->getCustomAttributesCodes();
-        $expectedAttributes = [
+        $expectedAttributes = array(
             'disable_auto_group_change',
             'prefix',
             'middlename',
@@ -61,7 +60,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
             'taxvat',
             'gender',
             $userDefinedAttributeCode
-        ];
+        );
         $this->assertEquals($expectedAttributes, $attributeCodes, 'Custom attribute codes list is invalid.');
     }
 }

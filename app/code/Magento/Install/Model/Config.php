@@ -35,7 +35,6 @@ namespace Magento\Install\Model;
 
 class Config
 {
-
     /**
      * Config data model
      *
@@ -56,12 +55,10 @@ class Config
      * @param Config\Data $dataStorage
      * @param \Magento\App\Filesystem $filesystem
      */
-    public function __construct(
-        \Magento\Install\Model\Config\Data  $dataStorage,
-        \Magento\App\Filesystem                 $filesystem
-    ) {
+    public function __construct(\Magento\Install\Model\Config\Data $dataStorage, \Magento\App\Filesystem $filesystem)
+    {
         $this->_dataStorage = $dataStorage;
-        $this->filesystem   = $filesystem;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -103,9 +100,11 @@ class Config
         $data = $this->_dataStorage->get();
         $res = array();
 
-        $items = (isset($data['filesystem_prerequisites'])
-            && isset($data['filesystem_prerequisites']['writables'])) ?
-            $data['filesystem_prerequisites']['writables'] : array();
+        $items = isset(
+            $data['filesystem_prerequisites']
+        ) && isset(
+            $data['filesystem_prerequisites']['writables']
+        ) ? $data['filesystem_prerequisites']['writables'] : array();
 
         foreach ($items as $item) {
             $res['writeable'][] = $item;
@@ -123,9 +122,11 @@ class Config
     {
         $data = $this->_dataStorage->get();
         $paths = array();
-        $items = (isset($data['filesystem_prerequisites'])
-            && isset($data['filesystem_prerequisites']['writables'])) ?
-            $data['filesystem_prerequisites']['writables'] : array();
+        $items = isset(
+            $data['filesystem_prerequisites']
+        ) && isset(
+            $data['filesystem_prerequisites']['writables']
+        ) ? $data['filesystem_prerequisites']['writables'] : array();
         foreach ($items as $nodeKey => $item) {
             $value = $item;
             $value['path'] = $this->filesystem->getPath($nodeKey);

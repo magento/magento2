@@ -46,11 +46,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $this->addButton('back_button', array(
-            'label'   => __('Back'),
-            'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*') . '\')',
-            'class'   => 'back'
-        ));
+        $this->addButton(
+            'back_button',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*') . '\')',
+                'class' => 'back'
+            )
+        );
 
         parent::_prepareLayout();
     }

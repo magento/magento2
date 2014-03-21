@@ -25,8 +25,7 @@
  */
 namespace Magento\Authorizenet\Controller\Adminhtml\Authorizenet\Directpost;
 
-class Payment
-    extends \Magento\Sales\Controller\Adminhtml\Order\Create
+class Payment extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
      * Core registry
@@ -95,15 +94,18 @@ class Payment
         $orderData = $this->getRequest()->getPost('order');
         $sendConfirmationFlag = 0;
         if ($orderData) {
-            $sendConfirmationFlag = (!empty($orderData['send_confirmation'])) ? 1 : 0;
+            $sendConfirmationFlag = !empty($orderData['send_confirmation']) ? 1 : 0;
         } else {
             $orderData = array();
         }
 
         if (isset($paymentParam['method'])) {
             $result = array();
-            $params = $this->_objectManager->get('Magento\Authorizenet\Helper\Data')
-                ->getSaveOrderUrlParams($controller);
+            $params = $this->_objectManager->get(
+                'Magento\Authorizenet\Helper\Data'
+            )->getSaveOrderUrlParams(
+                $controller
+            );
             //create order partially
             $this->_getOrderCreateModel()->setPaymentData($paymentParam);
             $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentParam);
@@ -116,15 +118,16 @@ class Payment
                 $oldOrder = $this->_getOrderCreateModel()->getSession()->getOrder();
                 $oldOrder->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_CANCEL, false);
 
-                $order = $this->_getOrderCreateModel()
-                    ->setIsValidate(true)
-                    ->importPostData($this->getRequest()->getPost('order'))
-                    ->createOrder();
+                $order = $this->_getOrderCreateModel()->setIsValidate(
+                    true
+                )->importPostData(
+                    $this->getRequest()->getPost('order')
+                )->createOrder();
 
                 $payment = $order->getPayment();
-                if ($payment
-                    && $payment->getMethod()
-                        == $this->_objectManager->create('Magento\Authorizenet\Model\Directpost')->getCode()
+                if ($payment && $payment->getMethod() == $this->_objectManager->create(
+                    'Magento\Authorizenet\Model\Directpost'
+                )->getCode()
                 ) {
                     //return json with data.
                     $session = $this->_getDirectPostSession();
@@ -161,17 +164,16 @@ class Payment
             if ($isError) {
                 $result['success'] = 0;
                 $result['error'] = 1;
-                $result['redirect'] = $this->_objectManager
-                    ->get('Magento\Backend\Model\UrlInterface')
-                    ->getUrl('sales/order_create/');
+                $result['redirect'] = $this->_objectManager->get(
+                    'Magento\Backend\Model\UrlInterface'
+                )->getUrl(
+                    'sales/order_create/'
+                );
             }
 
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
-        }
-        else {
-            $result = array(
-                'error_messages' => __('Please choose a payment method.')
-            );
+        } else {
+            $result = array('error_messages' => __('Please choose a payment method.'));
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
         }
     }
@@ -185,22 +187,29 @@ class Payment
     {
         $redirectParams = $this->getRequest()->getParams();
         $params = array();
-        if (!empty($redirectParams['success'])
-            && isset($redirectParams['x_invoice_num'])
-            && isset($redirectParams['controller_action_name'])
+        if (!empty($redirectParams['success']) && isset(
+            $redirectParams['x_invoice_num']
+        ) && isset(
+            $redirectParams['controller_action_name']
+        )
         ) {
-            $params['redirect_parent'] = $this->_objectManager->get('Magento\Authorizenet\Helper\HelperInterface')
-                ->getSuccessOrderUrl($redirectParams);
+            $params['redirect_parent'] = $this->_objectManager->get(
+                'Magento\Authorizenet\Helper\HelperInterface'
+            )->getSuccessOrderUrl(
+                $redirectParams
+            );
             $this->_getDirectPostSession()->unsetData('quote_id');
             //cancel old order
             $oldOrder = $this->_getOrderCreateModel()->getSession()->getOrder();
             if ($oldOrder->getId()) {
                 /* @var $order \Magento\Sales\Model\Order */
-                $order = $this->_objectManager->create('Magento\Sales\Model\Order')
-                    ->loadByIncrementId($redirectParams['x_invoice_num']);
+                $order = $this->_objectManager->create(
+                    'Magento\Sales\Model\Order'
+                )->loadByIncrementId(
+                    $redirectParams['x_invoice_num']
+                );
                 if ($order->getId()) {
-                    $oldOrder->cancel()
-                        ->save();
+                    $oldOrder->cancel()->save();
                     $order->save();
                     $this->_getOrderCreateModel()->getSession()->unsOrderId();
                 }
@@ -229,8 +238,9 @@ class Payment
     public function returnQuoteAction()
     {
         $this->_returnQuote();
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')
-            ->jsonEncode(array('success' => 1)));
+        $this->getResponse()->setBody(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array('success' => 1))
+        );
     }
 
     /**

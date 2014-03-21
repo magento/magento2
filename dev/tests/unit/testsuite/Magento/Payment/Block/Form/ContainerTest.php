@@ -50,11 +50,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             }
             return null;
         };
-        $block = $this->getMock('Magento\Payment\Block\Form\Container', array('getChildBlock'),
-            array(), '', false);
-        $block->expects($this->atLeastOnce())
-            ->method('getChildBlock')
-            ->will($this->returnCallback($func));
+        $block = $this->getMock('Magento\Payment\Block\Form\Container', array('getChildBlock'), array(), '', false);
+        $block->expects($this->atLeastOnce())->method('getChildBlock')->will($this->returnCallback($func));
 
         $template = 'any_template.phtml';
         $this->assertNotEquals($template, $childBlockA->getTemplate());

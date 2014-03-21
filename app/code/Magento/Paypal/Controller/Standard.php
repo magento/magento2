@@ -101,8 +101,11 @@ class Standard extends \Magento\App\Action\Action
 
         if ($session->getLastRealOrderId()) {
             /** @var \Magento\Sales\Model\Order $order */
-            $order = $this->_objectManager->create('Magento\Sales\Model\Order')
-                ->loadByIncrementId($session->getLastRealOrderId());
+            $order = $this->_objectManager->create(
+                'Magento\Sales\Model\Order'
+            )->loadByIncrementId(
+                $session->getLastRealOrderId()
+            );
             if ($order->getId()) {
                 $order->cancel()->save();
             }

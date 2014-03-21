@@ -43,8 +43,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function hasSamples()
     {
-        return $this->getProduct()->getTypeInstance()
-            ->hasSamples($this->getProduct());
+        return $this->getProduct()->getTypeInstance()->hasSamples($this->getProduct());
     }
 
     /**
@@ -54,8 +53,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getSamples()
     {
-        return $this->getProduct()->getTypeInstance()
-            ->getSamples($this->getProduct());
+        return $this->getProduct()->getTypeInstance()->getSamples($this->getProduct());
     }
 
     /**

@@ -141,12 +141,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $model = $this->_getModel();
         $this->_formValues = array(
-            'store_id'     => $model->getStoreId(),
-            'id_path'      => $model->getIdPath(),
+            'store_id' => $model->getStoreId(),
+            'id_path' => $model->getIdPath(),
             'request_path' => $model->getRequestPath(),
-            'target_path'  => $model->getTargetPath(),
-            'options'      => $model->getOptions(),
-            'description'  => $model->getDescription(),
+            'target_path' => $model->getTargetPath(),
+            'options' => $model->getOptions(),
+            'description' => $model->getDescription()
         );
 
         $sessionData = $this->_getSessionData();
@@ -165,6 +165,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare the form layout
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
@@ -172,75 +173,93 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         // Prepare form
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'            => 'edit_form',
-                'use_container' => true,
-                'method'        => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'use_container' => true, 'method' => 'post'))
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', array(
-            'legend' => __('URL Rewrite Information')
-        ));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('URL Rewrite Information')));
 
         /** @var $typesModel \Magento\Core\Model\Source\Urlrewrite\Types */
         $typesModel = $this->_typesFactory->create();
-        $fieldset->addField('is_system', 'select', array(
-            'label'    => __('Type'),
-            'title'    => __('Type'),
-            'name'     => 'is_system',
-            'required' => true,
-            'options'  => $typesModel->getAllOptions(),
-            'disabled' => true,
-            'value'    => $this->_getModel()->getIsSystem()
-        ));
+        $fieldset->addField(
+            'is_system',
+            'select',
+            array(
+                'label' => __('Type'),
+                'title' => __('Type'),
+                'name' => 'is_system',
+                'required' => true,
+                'options' => $typesModel->getAllOptions(),
+                'disabled' => true,
+                'value' => $this->_getModel()->getIsSystem()
+            )
+        );
 
-        $fieldset->addField('id_path', 'text', array(
-            'label'    => __('ID Path'),
-            'title'    => __('ID Path'),
-            'name'     => 'id_path',
-            'required' => true,
-            'disabled' => false,
-            'value'    => $this->_formValues['id_path']
-        ));
+        $fieldset->addField(
+            'id_path',
+            'text',
+            array(
+                'label' => __('ID Path'),
+                'title' => __('ID Path'),
+                'name' => 'id_path',
+                'required' => true,
+                'disabled' => false,
+                'value' => $this->_formValues['id_path']
+            )
+        );
 
-        $fieldset->addField('request_path', 'text', array(
-            'label'    => __('Request Path'),
-            'title'    => __('Request Path'),
-            'name'     => 'request_path',
-            'required' => true,
-            'value'    => $this->_formValues['request_path']
-        ));
+        $fieldset->addField(
+            'request_path',
+            'text',
+            array(
+                'label' => __('Request Path'),
+                'title' => __('Request Path'),
+                'name' => 'request_path',
+                'required' => true,
+                'value' => $this->_formValues['request_path']
+            )
+        );
 
-        $fieldset->addField('target_path', 'text', array(
-            'label'    => __('Target Path'),
-            'title'    => __('Target Path'),
-            'name'     => 'target_path',
-            'required' => true,
-            'disabled' => false,
-            'value'    => $this->_formValues['target_path'],
-        ));
+        $fieldset->addField(
+            'target_path',
+            'text',
+            array(
+                'label' => __('Target Path'),
+                'title' => __('Target Path'),
+                'name' => 'target_path',
+                'required' => true,
+                'disabled' => false,
+                'value' => $this->_formValues['target_path']
+            )
+        );
 
         /** @var $optionsModel \Magento\Core\Model\Source\Urlrewrite\Options */
         $optionsModel = $this->_optionFactory->create();
-        $fieldset->addField('options', 'select', array(
-            'label'   => __('Redirect'),
-            'title'   => __('Redirect'),
-            'name'    => 'options',
-            'options' => $optionsModel->getAllOptions(),
-            'value'   => $this->_formValues['options']
-        ));
+        $fieldset->addField(
+            'options',
+            'select',
+            array(
+                'label' => __('Redirect'),
+                'title' => __('Redirect'),
+                'name' => 'options',
+                'options' => $optionsModel->getAllOptions(),
+                'value' => $this->_formValues['options']
+            )
+        );
 
-        $fieldset->addField('description', 'textarea', array(
-            'label' => __('Description'),
-            'title' => __('Description'),
-            'name'  => 'description',
-            'cols'  => 20,
-            'rows'  => 5,
-            'value' => $this->_formValues['description'],
-            'wrap'  => 'soft'
-        ));
+        $fieldset->addField(
+            'description',
+            'textarea',
+            array(
+                'label' => __('Description'),
+                'title' => __('Description'),
+                'name' => 'description',
+                'cols' => 20,
+                'rows' => 5,
+                'value' => $this->_formValues['description'],
+                'wrap' => 'soft'
+            )
+        );
 
         $this->_prepareStoreElement($fieldset);
 
@@ -260,24 +279,32 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         // get store switcher or a hidden field with it's id
         if ($this->_storeManager->isSingleStoreMode()) {
-            $fieldset->addField('store_id', 'hidden', array(
-                'name'  => 'store_id',
-                'value' => $this->_storeManager->getStore(true)->getId()
-            ), 'id_path');
+            $fieldset->addField(
+                'store_id',
+                'hidden',
+                array('name' => 'store_id', 'value' => $this->_storeManager->getStore(true)->getId()),
+                'id_path'
+            );
         } else {
             /** @var $renderer \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element */
-            $renderer = $this->getLayout()
-                ->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            $renderer = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
+            );
 
-            $storeElement = $fieldset->addField('store_id', 'select', array(
-                'label'    => __('Store'),
-                'title'    => __('Store'),
-                'name'     => 'store_id',
-                'required' => true,
-                'values'   => $this->_getRestrictedStoresList(),
-                'disabled' => $this->_getModel()->getIsSystem(),
-                'value'    => $this->_formValues['store_id'],
-            ), 'id_path');
+            $storeElement = $fieldset->addField(
+                'store_id',
+                'select',
+                array(
+                    'label' => __('Store'),
+                    'title' => __('Store'),
+                    'name' => 'store_id',
+                    'required' => true,
+                    'values' => $this->_getRestrictedStoresList(),
+                    'disabled' => $this->_getModel()->getIsSystem(),
+                    'value' => $this->_formValues['store_id']
+                ),
+                'id_path'
+            );
             $storeElement->setRenderer($renderer);
         }
     }
@@ -290,9 +317,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _formPostInit($form)
     {
-        $form->setAction($this->_adminhtmlData->getUrl('adminhtml/*/save', array(
-            'id' => $this->_getModel()->getId()
-        )));
+        $form->setAction(
+            $this->_adminhtmlData->getUrl('adminhtml/*/save', array('id' => $this->_getModel()->getId()))
+        );
         return $this;
     }
 

@@ -68,14 +68,14 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
     /**
      * Customer session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * Catalog layer
      *
-     * @var \Magento\Catalog\Model\Layer
+     * @var \Magento\Catalog\Model\Layer\Category
      */
     protected $_catalogLayer;
 
@@ -95,8 +95,9 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Registry $registry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState
@@ -106,8 +107,9 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         \Magento\View\Element\Template\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer\Category $catalogLayer,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Registry $registry,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $flatState,
@@ -115,7 +117,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_catalogLayer = $catalogLayer;
-        $this->_customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         $this->_catalogCategory = $catalogCategory;
         $this->_registry = $registry;
         $this->flatState = $flatState;
@@ -129,13 +131,12 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
      */
     protected function _construct()
     {
-        $this->addData(array(
-            'cache_lifetime'    => false,
-            'cache_tags'        => array(
-                Category::CACHE_TAG,
-                \Magento\Core\Model\Store\Group::CACHE_TAG
-            ),
-        ));
+        $this->addData(
+            array(
+                'cache_lifetime' => false,
+                'cache_tags' => array(Category::CACHE_TAG, \Magento\Core\Model\Store\Group::CACHE_TAG)
+            )
+        );
     }
 
     /**
@@ -159,7 +160,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
             'CATALOG_NAVIGATION',
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
-            $this->_customerSession->getCustomerGroupId(),
+            $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_GROUP),
             'template' => $this->getTemplate(),
             'name' => $this->getNameInLayout(),
             $this->getCurrenCategoryKey()
@@ -245,9 +246,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         if ($category instanceof Category) {
             $url = $category->getUrl();
         } else {
-            $url = $this->_categoryInstance
-                ->setData($category->getData())
-                ->getUrl();
+            $url = $this->_categoryInstance->setData($category->getData())->getUrl();
         }
 
         return $url;
@@ -262,7 +261,9 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
     protected function _getItemPosition($level)
     {
         if ($level == 0) {
-            $zeroLevelPosition = isset($this->_itemLevelPositions[$level]) ? $this->_itemLevelPositions[$level] + 1 : 1;
+            $zeroLevelPosition = isset(
+                $this->_itemLevelPositions[$level]
+            ) ? $this->_itemLevelPositions[$level] + 1 : 1;
             $this->_itemLevelPositions = array();
             $this->_itemLevelPositions[$level] = $zeroLevelPosition;
         } elseif (isset($this->_itemLevelPositions[$level])) {
@@ -293,8 +294,15 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
      * @param boolean $noEventAttributes Whether ot not to add on* attributes to list item
      * @return string
      */
-    protected function _renderCategoryMenuItemHtml($category, $level = 0, $isLast = false, $isFirst = false,
-        $isOutermost = false, $outermostItemClass = '', $childrenWrapClass = '', $noEventAttributes = false
+    protected function _renderCategoryMenuItemHtml(
+        $category,
+        $level = 0,
+        $isLast = false,
+        $isFirst = false,
+        $isOutermost = false,
+        $outermostItemClass = '',
+        $childrenWrapClass = '',
+        $noEventAttributes = false
     ) {
         if (!$category->getIsActive()) {
             return '';
@@ -316,7 +324,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         }
 
         $activeChildrenCount = count($activeChildren);
-        $hasActiveChildren = ($activeChildrenCount > 0);
+        $hasActiveChildren = $activeChildrenCount > 0;
 
         // prepare list item html classes
         $classes = array();
@@ -329,7 +337,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         $linkClass = '';
         if ($isOutermost && $outermostItemClass) {
             $classes[] = $outermostItemClass;
-            $linkClass = ' class="'.$outermostItemClass.'"';
+            $linkClass = ' class="' . $outermostItemClass . '"';
         }
         if ($isFirst) {
             $classes[] = 'first';
@@ -347,8 +355,8 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
             $attributes['class'] = implode(' ', $classes);
         }
         if ($hasActiveChildren && !$noEventAttributes) {
-             $attributes['onmouseover'] = 'toggleMenu(this,1)';
-             $attributes['onmouseout'] = 'toggleMenu(this,0)';
+            $attributes['onmouseover'] = 'toggleMenu(this,1)';
+            $attributes['onmouseout'] = 'toggleMenu(this,0)';
         }
 
         // assemble list item with attributes
@@ -361,7 +369,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         $html = array();
         $html[] = $htmlLi;
 
-        $html[] = '<a href="'.$this->getCategoryUrl($category).'"'.$linkClass.'>';
+        $html[] = '<a href="' . $this->getCategoryUrl($category) . '"' . $linkClass . '>';
         $html[] = '<span>' . $this->escapeHtml($category->getName()) . '</span>';
         $html[] = '</a>';
 
@@ -371,9 +379,9 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         foreach ($activeChildren as $child) {
             $htmlChildren .= $this->_renderCategoryMenuItemHtml(
                 $child,
-                ($level + 1),
-                ($j == $activeChildrenCount - 1),
-                ($j == 0),
+                $level + 1,
+                $j == $activeChildrenCount - 1,
+                $j == 0,
                 false,
                 $outermostItemClass,
                 $childrenWrapClass,
@@ -442,8 +450,11 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
         }
 
         $html .= '>' . "\n";
-        $html .= '<a href="'.$this->getCategoryUrl($category).'">'
-            . '<span>' . $this->escapeHtml($category->getName()) . '</span></a>' . "\n";
+        $html .= '<a href="' . $this->getCategoryUrl(
+            $category
+        ) . '">' . '<span>' . $this->escapeHtml(
+            $category->getName()
+        ) . '</span></a>' . "\n";
 
         if (in_array($category->getId(), $this->getCurrentCategoryPath())) {
             $children = $category->getChildren();
@@ -460,7 +471,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
                 }
             }
         }
-        $html .= '</li>'."\n";
+        $html .= '</li>' . "\n";
 
         return $html;
     }
@@ -482,7 +493,7 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
             }
         }
         $activeCategoriesCount = count($activeCategories);
-        $hasActiveCategoriesCount = ($activeCategoriesCount > 0);
+        $hasActiveCategoriesCount = $activeCategoriesCount > 0;
 
         if (!$hasActiveCategoriesCount) {
             return '';
@@ -494,8 +505,8 @@ class Navigation extends \Magento\View\Element\Template implements \Magento\View
             $html .= $this->_renderCategoryMenuItemHtml(
                 $category,
                 $level,
-                ($j == $activeCategoriesCount - 1),
-                ($j == 0),
+                $j == $activeCategoriesCount - 1,
+                $j == 0,
                 true,
                 $outermostItemClass,
                 $childrenWrapClass,

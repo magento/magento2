@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Translate;
 
 class InlineTest extends \PHPUnit_Framework_TestCase
@@ -39,19 +38,34 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_blank');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\DesignInterface'
+        )->setDesignTheme(
+            'magento_blank'
+        );
     }
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Translate\Inline');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Translate\Inline'
+        );
         /* Called getConfig as workaround for setConfig bug */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore($this->_storeId)->getConfig('dev/translate_inline/active');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore($this->_storeId)->setConfig('dev/translate_inline/active', true);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore(
+            $this->_storeId
+        )->getConfig(
+            'dev/translate_inline/active'
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore(
+            $this->_storeId
+        )->setConfig(
+            'dev/translate_inline/active',
+            true
+        );
     }
 
     public function testIsAllowed()
@@ -60,8 +74,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->isAllowed($this->_storeId));
         $this->assertTrue(
             $this->_model->isAllowed(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore($this->_storeId)
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Core\Model\StoreManagerInterface'
+                )->getStore(
+                    $this->_storeId
+                )
             )
         );
         $this->_model->disable();
@@ -69,8 +86,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isAllowed($this->_storeId));
         $this->assertFalse(
             $this->_model->isAllowed(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore($this->_storeId)
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Core\Model\StoreManagerInterface'
+                )->getStore(
+                    $this->_storeId
+                )
             )
         );
     }
@@ -86,12 +106,12 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->_model->processResponseBody($actualText, false);
         $this->markTestIncomplete('Bug MAGE-2494');
 
-        $expected = new \DOMDocument;
-        $expected->preserveWhiteSpace = FALSE;
+        $expected = new \DOMDocument();
+        $expected->preserveWhiteSpace = false;
         $expected->loadHTML($expectedText);
 
-        $actual = new \DOMDocument;
-        $actual->preserveWhiteSpace = FALSE;
+        $actual = new \DOMDocument();
+        $actual->preserveWhiteSpace = false;
         $actual->loadHTML($actualText);
 
         $this->assertEquals($expected, $actual);
@@ -105,19 +125,14 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
         $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
 
-        $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface')
-            ->getDesignTheme()
-            ->getPackageCode();
-        $expectedText = str_replace(
-            '{{design_package}}',
-            $package,
-            $expectedText
-        );
+        $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\View\DesignInterface'
+        )->getDesignTheme()->getPackageCode();
+        $expectedText = str_replace('{{design_package}}', $package, $expectedText);
         return array(
-            'plain text'  => array('text with no translations and tags', 'text with no translations and tags'),
+            'plain text' => array('text with no translations and tags', 'text with no translations and tags'),
             'html string' => array($originalText, $expectedText),
-            'html array'  => array(array($originalText), array($expectedText)),
+            'html array' => array(array($originalText), array($expectedText))
         );
     }
 }

@@ -44,4 +44,3 @@ class Address extends \Magento\Sales\Model\Resource\AbstractResource
         $this->_init('sales_flat_quote_address', 'address_id');
     }
 }
-

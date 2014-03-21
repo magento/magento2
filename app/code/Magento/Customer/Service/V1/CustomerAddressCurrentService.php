@@ -57,8 +57,7 @@ class CustomerAddressCurrentService implements \Magento\Customer\Service\V1\Cust
      */
     public function getCustomerAddresses()
     {
-        return $this->customerAddressService
-            ->getAddresses($this->customerCurrentService->getCustomerId());
+        return $this->customerAddressService->getAddresses($this->customerCurrentService->getCustomerId());
     }
 
     /**
@@ -68,8 +67,7 @@ class CustomerAddressCurrentService implements \Magento\Customer\Service\V1\Cust
      */
     public function getDefaultBillingAddress()
     {
-        return $this->customerAddressService
-            ->getDefaultBillingAddress($this->customerCurrentService->getCustomerId());
+        return $this->customerAddressService->getDefaultBillingAddress($this->customerCurrentService->getCustomerId());
     }
 
     /**
@@ -79,7 +77,8 @@ class CustomerAddressCurrentService implements \Magento\Customer\Service\V1\Cust
      */
     public function getDefaultShippingAddress()
     {
-        return $this->customerAddressService
-            ->getDefaultShippingAddress($this->customerCurrentService->getCustomerId());
+        return $this->customerAddressService->getDefaultShippingAddress(
+            $this->customerCurrentService->getCustomerId()
+        );
     }
 }

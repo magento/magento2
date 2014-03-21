@@ -37,10 +37,13 @@ namespace Magento\Data\Tree;
  */
 class Db extends \Magento\Data\Tree
 {
-    const ID_FIELD      = 'id';
-    const PARENT_FIELD  = 'parent';
-    const LEVEL_FIELD   = 'level';
-    const ORDER_FIELD   = 'order';
+    const ID_FIELD = 'id';
+
+    const PARENT_FIELD = 'parent';
+
+    const LEVEL_FIELD = 'level';
+
+    const ORDER_FIELD = 'order';
 
     /**
      * DB connection
@@ -114,23 +117,29 @@ class Db extends \Magento\Data\Tree
             throw new \Exception('Wrong "$connection" parametr');
         }
 
-        $this->_conn    = $connection;
-        $this->_table   = $table;
+        $this->_conn = $connection;
+        $this->_table = $table;
 
-        if (!isset($fields[self::ID_FIELD]) ||
-            !isset($fields[self::PARENT_FIELD]) ||
-            !isset($fields[self::LEVEL_FIELD]) ||
-            !isset($fields[self::ORDER_FIELD])) {
+        if (!isset(
+            $fields[self::ID_FIELD]
+        ) || !isset(
+            $fields[self::PARENT_FIELD]
+        ) || !isset(
+            $fields[self::LEVEL_FIELD]
+        ) || !isset(
+            $fields[self::ORDER_FIELD]
+        )
+        ) {
 
             throw new \Exception('"$fields" tree configuratin array');
         }
 
-        $this->_idField     = $fields[self::ID_FIELD];
+        $this->_idField = $fields[self::ID_FIELD];
         $this->_parentField = $fields[self::PARENT_FIELD];
-        $this->_levelField  = $fields[self::LEVEL_FIELD];
-        $this->_orderField  = $fields[self::ORDER_FIELD];
+        $this->_levelField = $fields[self::LEVEL_FIELD];
+        $this->_orderField = $fields[self::ORDER_FIELD];
 
-        $this->_select  = $this->_conn->select();
+        $this->_select = $this->_conn->select();
         $this->_select->from($this->_table, array_values($fields));
     }
 
@@ -159,7 +168,7 @@ class Db extends \Magento\Data\Tree
      * @return  $this
      * @throws \Exception
      */
-    public function load($parentNode=null, $recursionLevel=100)
+    public function load($parentNode = null, $recursionLevel = 100)
     {
         if (is_null($parentNode)) {
             $this->_loadFullTree();
@@ -174,8 +183,8 @@ class Db extends \Magento\Data\Tree
         }
 
         $select = clone $this->_select;
-        $select->order($this->_table.'.'.$this->_orderField . ' ASC');
-        $condition = $this->_conn->quoteInto("$this->_table.$this->_parentField=?", $parentId);
+        $select->order($this->_table . '.' . $this->_orderField . ' ASC');
+        $condition = $this->_conn->quoteInto("{$this->_table}.{$this->_parentField}=?", $parentId);
         $select->where($condition);
         $arrNodes = $this->_conn->fetchAll($select);
         foreach ($arrNodes as $nodeInfo) {
@@ -183,7 +192,7 @@ class Db extends \Magento\Data\Tree
             $this->addNode($node, $parentNode);
 
             if ($recursionLevel) {
-                $node->loadChildren($recursionLevel-1);
+                $node->loadChildren($recursionLevel - 1);
             }
         }
         return $this;
@@ -196,7 +205,7 @@ class Db extends \Magento\Data\Tree
     public function loadNode($nodeId)
     {
         $select = clone $this->_select;
-        $condition = $this->_conn->quoteInto("$this->_table.$this->_idField=?", $nodeId);
+        $condition = $this->_conn->quoteInto("{$this->_table}.{$this->_idField}=?", $nodeId);
         $select->where($condition);
         $node = new Node($this->_conn->fetchRow($select), $this->_idField, $this);
         $this->addNode($node);
@@ -209,16 +218,20 @@ class Db extends \Magento\Data\Tree
      * @param Node $prevNode
      * @return Node
      */
-    public function appendChild($data, $parentNode, $prevNode=null)
+    public function appendChild($data, $parentNode, $prevNode = null)
     {
         $orderSelect = $this->_conn->select();
-        $orderSelect->from($this->_table, new \Zend_Db_Expr('MAX('.$this->_conn->quoteIdentifier($this->_orderField).')'))
-            ->where($this->_conn->quoteIdentifier($this->_parentField).'='.$parentNode->getId());
+        $orderSelect->from(
+            $this->_table,
+            new \Zend_Db_Expr('MAX(' . $this->_conn->quoteIdentifier($this->_orderField) . ')')
+        )->where(
+            $this->_conn->quoteIdentifier($this->_parentField) . '=' . $parentNode->getId()
+        );
 
         $order = $this->_conn->fetchOne($orderSelect);
         $data[$this->_parentField] = $parentNode->getId();
-        $data[$this->_levelField]  = $parentNode->getData($this->_levelField)+1;
-        $data[$this->_orderField]  = $order+1;
+        $data[$this->_levelField] = $parentNode->getData($this->_levelField) + 1;
+        $data[$this->_orderField] = $order + 1;
 
         $this->_conn->insert($this->_table, $data);
         $data[$this->_idField] = $this->_conn->lastInsertId();
@@ -235,32 +248,42 @@ class Db extends \Magento\Data\Tree
      * @return void
      * @throws \Exception
      */
-    public function moveNodeTo($node, $parentNode, $prevNode=null)
+    public function moveNodeTo($node, $parentNode, $prevNode = null)
     {
         $data = array();
-        $data[$this->_parentField]  = $parentNode->getId();
-        $data[$this->_levelField]   = $parentNode->getData($this->_levelField)+1;
+        $data[$this->_parentField] = $parentNode->getId();
+        $data[$this->_levelField] = $parentNode->getData($this->_levelField) + 1;
         // New node order
         if (is_null($prevNode) || is_null($prevNode->getData($this->_orderField))) {
             $data[$this->_orderField] = 1;
         } else {
-            $data[$this->_orderField] = $prevNode->getData($this->_orderField)+1;
+            $data[$this->_orderField] = $prevNode->getData($this->_orderField) + 1;
         }
-        $condition = $this->_conn->quoteInto("$this->_idField=?", $node->getId());
+        $condition = $this->_conn->quoteInto("{$this->_idField}=?", $node->getId());
 
         // For reorder new node branch
         $dataReorderNew = array(
-            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField).'+1')
+            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField) . '+1')
         );
-        $conditionReorderNew = $this->_conn->quoteIdentifier($this->_parentField).'='.$parentNode->getId().
-                            ' AND '.$this->_conn->quoteIdentifier($this->_orderField).'>='. $data[$this->_orderField];
+        $conditionReorderNew = $this->_conn->quoteIdentifier(
+            $this->_parentField
+        ) . '=' . $parentNode->getId() . ' AND ' . $this->_conn->quoteIdentifier(
+            $this->_orderField
+        ) . '>=' . $data[$this->_orderField];
 
         // For reorder old node branch
         $dataReorderOld = array(
-            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField).'-1')
+            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField) . '-1')
         );
-        $conditionReorderOld = $this->_conn->quoteIdentifier($this->_parentField).'='.$node->getData($this->_parentField).
-                            ' AND '.$this->_conn->quoteIdentifier($this->_orderField).'>'.$node->getData($this->_orderField);
+        $conditionReorderOld = $this->_conn->quoteIdentifier(
+            $this->_parentField
+        ) . '=' . $node->getData(
+            $this->_parentField
+        ) . ' AND ' . $this->_conn->quoteIdentifier(
+            $this->_orderField
+        ) . '>' . $node->getData(
+            $this->_orderField
+        );
 
         $this->_conn->beginTransaction();
         try {
@@ -272,8 +295,7 @@ class Db extends \Magento\Data\Tree
             $this->_conn->update($this->_table, $dataReorderOld, $conditionReorderOld);
             $this->_updateChildLevels($node->getId(), $data[$this->_levelField]);
             $this->_conn->commit();
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->_conn->rollBack();
             throw new \Exception('Can\'t move tree node');
         }
@@ -286,17 +308,23 @@ class Db extends \Magento\Data\Tree
      */
     protected function _updateChildLevels($parentId, $parentLevel)
     {
-        $select = $this->_conn->select()
-            ->from($this->_table, $this->_idField)
-            ->where($this->_parentField.'=?', $parentId);
+        $select = $this->_conn->select()->from(
+            $this->_table,
+            $this->_idField
+        )->where(
+            $this->_parentField . '=?',
+            $parentId
+        );
         $ids = $this->_conn->fetchCol($select);
 
         if (!empty($ids)) {
-            $this->_conn->update($this->_table,
-                array($this->_levelField=>$parentLevel+1),
-                $this->_conn->quoteInto($this->_idField.' IN (?)', $ids));
+            $this->_conn->update(
+                $this->_table,
+                array($this->_levelField => $parentLevel + 1),
+                $this->_conn->quoteInto($this->_idField . ' IN (?)', $ids)
+            );
             foreach ($ids as $id) {
-                $this->_updateChildLevels($id, $parentLevel+1);
+                $this->_updateChildLevels($id, $parentLevel + 1);
             }
         }
         return $this;
@@ -308,8 +336,7 @@ class Db extends \Magento\Data\Tree
     protected function _loadFullTree()
     {
         $select = clone $this->_select;
-        $select->order($this->_table . '.' . $this->_levelField)
-            ->order($this->_table.'.'.$this->_orderField);
+        $select->order($this->_table . '.' . $this->_levelField)->order($this->_table . '.' . $this->_orderField);
 
         $arrNodes = $this->_conn->fetchAll($select);
 
@@ -331,20 +358,26 @@ class Db extends \Magento\Data\Tree
     {
         // For reorder old node branch
         $dataReorderOld = array(
-            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField).'-1')
+            $this->_orderField => new \Zend_Db_Expr($this->_conn->quoteIdentifier($this->_orderField) . '-1')
         );
-        $conditionReorderOld = $this->_conn->quoteIdentifier($this->_parentField).'='.$node->getData($this->_parentField).
-                            ' AND '.$this->_conn->quoteIdentifier($this->_orderField).'>'.$node->getData($this->_orderField);
+        $conditionReorderOld = $this->_conn->quoteIdentifier(
+            $this->_parentField
+        ) . '=' . $node->getData(
+            $this->_parentField
+        ) . ' AND ' . $this->_conn->quoteIdentifier(
+            $this->_orderField
+        ) . '>' . $node->getData(
+            $this->_orderField
+        );
 
         $this->_conn->beginTransaction();
         try {
-            $condition = $this->_conn->quoteInto("$this->_idField=?", $node->getId());
+            $condition = $this->_conn->quoteInto("{$this->_idField}=?", $node->getId());
             $this->_conn->delete($this->_table, $condition);
             // Update old node branch
             $this->_conn->update($this->_table, $dataReorderOld, $conditionReorderOld);
             $this->_conn->commit();
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->_conn->rollBack();
             throw new \Exception('Can\'t remove tree node');
         }

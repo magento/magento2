@@ -23,13 +23,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
 use Magento\Data\Form\Element\AbstractElement;
 
-class Updater
-    extends \Magento\Backend\Block\System\Config\Form\Field
+class Updater extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
      * @var \Magento\Directory\Helper\Data
@@ -76,6 +74,3 @@ class Updater
         return $html;
     }
 }
-
-
-

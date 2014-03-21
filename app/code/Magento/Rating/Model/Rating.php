@@ -45,9 +45,11 @@ class Rating extends \Magento\Core\Model\AbstractModel
     /**
      * rating entity codes
      */
-    const ENTITY_PRODUCT_CODE           = 'product';
-    const ENTITY_PRODUCT_REVIEW_CODE    = 'product_review';
-    const ENTITY_REVIEW_CODE            = 'review';
+    const ENTITY_PRODUCT_CODE = 'product';
+
+    const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
+
+    const ENTITY_REVIEW_CODE = 'review';
 
     /**
      * @var \Magento\Rating\Model\Rating\OptionFactory
@@ -99,11 +101,15 @@ class Rating extends \Magento\Core\Model\AbstractModel
      */
     public function addOptionVote($optionId, $entityPkValue)
     {
-        $this->_ratingOptionFactory->create()->setOptionId($optionId)
-            ->setRatingId($this->getId())
-            ->setReviewId($this->getReviewId())
-            ->setEntityPkValue($entityPkValue)
-            ->addVote();
+        $this->_ratingOptionFactory->create()->setOptionId(
+            $optionId
+        )->setRatingId(
+            $this->getId()
+        )->setReviewId(
+            $this->getReviewId()
+        )->setEntityPkValue(
+            $entityPkValue
+        )->addVote();
         return $this;
     }
 
@@ -113,11 +119,15 @@ class Rating extends \Magento\Core\Model\AbstractModel
      */
     public function updateOptionVote($optionId)
     {
-        $this->_ratingOptionFactory->create()->setOptionId($optionId)
-            ->setVoteId($this->getVoteId())
-            ->setReviewId($this->getReviewId())
-            ->setDoUpdate(1)
-            ->addVote();
+        $this->_ratingOptionFactory->create()->setOptionId(
+            $optionId
+        )->setVoteId(
+            $this->getVoteId()
+        )->setReviewId(
+            $this->getReviewId()
+        )->setDoUpdate(
+            1
+        )->addVote();
         return $this;
     }
 
@@ -132,11 +142,9 @@ class Rating extends \Magento\Core\Model\AbstractModel
         if ($options) {
             return $options;
         } elseif ($this->getId()) {
-            return $this->_ratingCollectionF->create()
-               ->addRatingFilter($this->getId())
-               ->setPositionOrder()
-               ->load()
-               ->getItems();
+            return $this->_ratingCollectionF->create()->addRatingFilter(
+                $this->getId()
+            )->setPositionOrder()->load()->getItems();
         }
         return array();
     }
@@ -148,7 +156,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
      * @param bool $onlyForCurrentStore
      * @return \Magento\Data\Collection\Db
      */
-    public function getEntitySummary($entityPkValue,  $onlyForCurrentStore = true)
+    public function getEntitySummary($entityPkValue, $onlyForCurrentStore = true)
     {
         $this->setEntityPkValue($entityPkValue);
         return $this->_getResource()->getEntitySummary($this, $onlyForCurrentStore);
@@ -159,7 +167,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
      * @param bool $onlyForCurrentStore
      * @return array
      */
-    public function getReviewSummary($reviewId,  $onlyForCurrentStore = true)
+    public function getReviewSummary($reviewId, $onlyForCurrentStore = true)
     {
         $this->setReviewId($reviewId);
         return $this->_getResource()->getReviewSummary($this, $onlyForCurrentStore);

@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Tax\Model\TaxClass\Source;
-use Magento\Tax\Model\Resource\TaxClass\CollectionFactory as CollectionFactory;
+
+use Magento\Tax\Model\Resource\TaxClass\CollectionFactory;
 
 class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
@@ -49,9 +48,10 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->collectionFactory->create()
-                ->addFieldToFilter('class_type', \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-                ->load()->toOptionArray();
+            $this->_options = $this->collectionFactory->create()->addFieldToFilter(
+                'class_type',
+                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+            )->load()->toOptionArray();
         }
         return $this->_options;
     }

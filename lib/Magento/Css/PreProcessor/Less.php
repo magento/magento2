@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor;
 
-use \Magento\View\Asset\PreProcessor\PreProcessorInterface;
+use Magento\View\Asset\PreProcessor\PreProcessorInterface;
 
 /**
  * Css pre-processor less
@@ -100,10 +99,12 @@ class Less implements PreProcessorInterface
             }
         } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->logger->logException($e);
-            return $publisherFile; // It has 'null' source path
+            // It has 'null' source path
+            return $publisherFile;
         } catch (Adapter\AdapterException $e) {
             $this->logger->logException($e);
-            return $publisherFile; // It has 'null' source path
+            // It has 'null' source path
+            return $publisherFile;
         } catch (\Less_Exception_Compiler $e) {
             $this->logger->logException($e);
             return $publisherFile;

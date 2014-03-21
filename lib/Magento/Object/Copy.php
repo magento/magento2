@@ -95,11 +95,7 @@ class Copy
         }
 
         $eventName = sprintf('core_copy_fieldset_%s_%s', $fieldset, $aspect);
-        $this->_eventManager->dispatch($eventName, array(
-            'target' => $target,
-            'source' => $source,
-            'root'   => $root
-        ));
+        $this->_eventManager->dispatch($eventName, array('target' => $target, 'source' => $source, 'root' => $root));
 
         return $target;
     }
@@ -114,7 +110,7 @@ class Copy
      * @param string $root
      * @return array $data
      */
-    public function getDataFromFieldset($fieldset, $aspect, $source, $root='global')
+    public function getDataFromFieldset($fieldset, $aspect, $source, $root = 'global')
     {
         if (!(is_array($source) || $source instanceof \Magento\Object)) {
             return null;
@@ -149,8 +145,11 @@ class Copy
      */
     protected function _isFieldsetInputValid($source, $target)
     {
-        return (is_array($source) || $source instanceof \Magento\Object)
-        && (is_array($target) || $target instanceof \Magento\Object);
+        return (is_array(
+            $source
+        ) || $source instanceof \Magento\Object) && (is_array(
+            $target
+        ) || $target instanceof \Magento\Object);
     }
 
     /**

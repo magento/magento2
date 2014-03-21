@@ -39,7 +39,7 @@ class Collection extends \Magento\Core\Model\Resource\Website\Collection
      *
      * @return $this
      */
-    protected function  _initSelect()
+    protected function _initSelect()
     {
         parent::_initSelect();
         $this->joinGroupAndStore();

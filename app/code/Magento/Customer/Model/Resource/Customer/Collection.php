@@ -112,13 +112,14 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      */
     public function groupByEmail()
     {
-        $this->getSelect()
-            ->from(
-                array('email' => $this->getEntity()->getEntityTable()),
-                array('email_count' => new \Zend_Db_Expr('COUNT(email.entity_id)'))
-            )
-            ->where('email.entity_id = e.entity_id')
-            ->group('email.email');
+        $this->getSelect()->from(
+            array('email' => $this->getEntity()->getEntityTable()),
+            array('email_count' => new \Zend_Db_Expr('COUNT(email.entity_id)'))
+        )->where(
+            'email.entity_id = e.entity_id'
+        )->group(
+            'email.email'
+        );
 
         return $this;
     }
@@ -144,7 +145,8 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $concatenate[] = $adapter->getCheckSql(
                 '{{prefix}} IS NOT NULL AND {{prefix}} != \'\'',
                 $adapter->getConcatSql(array('LTRIM(RTRIM({{prefix}}))', '\' \'')),
-                '\'\'');
+                '\'\''
+            );
         }
         $concatenate[] = 'LTRIM(RTRIM({{firstname}}))';
         $concatenate[] = '\' \'';
@@ -152,14 +154,16 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $concatenate[] = $adapter->getCheckSql(
                 '{{middlename}} IS NOT NULL AND {{middlename}} != \'\'',
                 $adapter->getConcatSql(array('LTRIM(RTRIM({{middlename}}))', '\' \'')),
-                '\'\'');
+                '\'\''
+            );
         }
         $concatenate[] = 'LTRIM(RTRIM({{lastname}}))';
         if (isset($fields['suffix'])) {
-            $concatenate[] = $adapter
-                    ->getCheckSql('{{suffix}} IS NOT NULL AND {{suffix}} != \'\'',
+            $concatenate[] = $adapter->getCheckSql(
+                '{{suffix}} IS NOT NULL AND {{suffix}} != \'\'',
                 $adapter->getConcatSql(array('\' \'', 'LTRIM(RTRIM({{suffix}}))')),
-                '\'\'');
+                '\'\''
+            );
         }
 
         $nameExpr = $adapter->getConcatSql($concatenate);

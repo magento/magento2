@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Email\Model\Template;
 
 class SenderResolver implements \Magento\Mail\Template\SenderResolverInterface
@@ -38,9 +37,8 @@ class SenderResolver implements \Magento\Mail\Template\SenderResolverInterface
     /**
      * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
      */
-    public function __construct(
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-    ) {
+    public function __construct(\Magento\Core\Model\Store\ConfigInterface $coreStoreConfig)
+    {
         $this->_storeConfig = $coreStoreConfig;
     }
 

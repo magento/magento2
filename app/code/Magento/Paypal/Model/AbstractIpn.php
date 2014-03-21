@@ -131,18 +131,30 @@ class AbstractIpn
     protected function _filterPaymentStatus($ipnPaymentStatus)
     {
         switch ($ipnPaymentStatus) {
-            case 'Created': // break is intentionally omitted
-            case 'Completed': return Info::PAYMENTSTATUS_COMPLETED;
-            case 'Denied':    return Info::PAYMENTSTATUS_DENIED;
-            case 'Expired':   return Info::PAYMENTSTATUS_EXPIRED;
-            case 'Failed':    return Info::PAYMENTSTATUS_FAILED;
-            case 'Pending':   return Info::PAYMENTSTATUS_PENDING;
-            case 'Refunded':  return Info::PAYMENTSTATUS_REFUNDED;
-            case 'Reversed':  return Info::PAYMENTSTATUS_REVERSED;
-            case 'Canceled_Reversal': return Info::PAYMENTSTATUS_UNREVERSED;
-            case 'Processed': return Info::PAYMENTSTATUS_PROCESSED;
-            case 'Voided':    return Info::PAYMENTSTATUS_VOIDED;
-            default:          return '';
+            case 'Created':
+                // break is intentionally omitted
+            case 'Completed':
+                return Info::PAYMENTSTATUS_COMPLETED;
+            case 'Denied':
+                return Info::PAYMENTSTATUS_DENIED;
+            case 'Expired':
+                return Info::PAYMENTSTATUS_EXPIRED;
+            case 'Failed':
+                return Info::PAYMENTSTATUS_FAILED;
+            case 'Pending':
+                return Info::PAYMENTSTATUS_PENDING;
+            case 'Refunded':
+                return Info::PAYMENTSTATUS_REFUNDED;
+            case 'Reversed':
+                return Info::PAYMENTSTATUS_REVERSED;
+            case 'Canceled_Reversal':
+                return Info::PAYMENTSTATUS_UNREVERSED;
+            case 'Processed':
+                return Info::PAYMENTSTATUS_PROCESSED;
+            case 'Voided':
+                return Info::PAYMENTSTATUS_VOIDED;
+            default:
+                return '';
         }
         // documented in NVP, but not documented in IPN:
         //Info::PAYMENTSTATUS_NONE
@@ -158,9 +170,10 @@ class AbstractIpn
     protected function _debug()
     {
         if ($this->_config && $this->_config->debug) {
-            $file = $this->_config->getMethodCode()
-                ? "payment_{$this->_config->getMethodCode()}.log"
-                : self::DEFAULT_LOG_FILE;
+            $file = $this->_config
+                ->getMethodCode() ? "payment_{$this
+                ->_config
+                ->getMethodCode()}.log" : self::DEFAULT_LOG_FILE;
             $this->_logAdapterFactory->create(array('fileName' => $file))->log($this->_debugData);
         }
     }

@@ -116,7 +116,7 @@ abstract class AbstractXml
     protected function _performValidate($file = null)
     {
         if (!$this->_getDomConfigModel()->validate($this->getSchemaFile(), $errors)) {
-            $message = is_null($file) ?  "Invalid Document \n" : "Invalid XML-file: {$file}\n";
+            $message = is_null($file) ? "Invalid Document \n" : "Invalid XML-file: {$file}\n";
             throw new \Magento\Exception($message . implode("\n", $errors));
         }
         return $this;
@@ -141,11 +141,14 @@ abstract class AbstractXml
     protected function _getDomConfigModel()
     {
         if (is_null($this->_domConfig)) {
-            $schemaFile = $this->getPerFileSchemaFile() && $this->_isRuntimeValidated()
-                ? $this->getPerFileSchemaFile()
-                : null;
-            $this->_domConfig =
-                new \Magento\Config\Dom($this->_getInitialXml(), $this->_getIdAttributes(), null, $schemaFile);
+            $schemaFile = $this->getPerFileSchemaFile() &&
+                $this->_isRuntimeValidated() ? $this->getPerFileSchemaFile() : null;
+            $this->_domConfig = new \Magento\Config\Dom(
+                $this->_getInitialXml(),
+                $this->_getIdAttributes(),
+                null,
+                $schemaFile
+            );
         }
         return $this->_domConfig;
     }

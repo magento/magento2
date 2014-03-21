@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Circular\Data;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -45,15 +44,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->moduleFirst = $this->getMock('Magento\Tools\Dependency\Report\Circular\Data\Module', [], [], '',
-            false);
-        $this->moduleSecond = $this->getMock('Magento\Tools\Dependency\Report\Circular\Data\Module', [], [], '',
-            false);
+        $this->moduleFirst = $this->getMock(
+            'Magento\Tools\Dependency\Report\Circular\Data\Module',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->moduleSecond = $this->getMock(
+            'Magento\Tools\Dependency\Report\Circular\Data\Module',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $objectManagerHelper = new ObjectManager($this);
-        $this->config = $objectManagerHelper->getObject('Magento\Tools\Dependency\Report\Circular\Data\Config', [
-            'modules' => [$this->moduleFirst, $this->moduleSecond],
-        ]);
+        $this->config = $objectManagerHelper->getObject(
+            'Magento\Tools\Dependency\Report\Circular\Data\Config',
+            array('modules' => array($this->moduleFirst, $this->moduleSecond))
+        );
     }
 
     public function testGetDependenciesCount()

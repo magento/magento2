@@ -104,10 +104,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected $_fieldMap = array(
         'customer_firstname' => 'customer_firstname_table.value',
-        'customer_lastname'  => 'customer_lastname_table.value',
-        'customer_email'     => 'customer_email_table.email',
-        'customer_id'        => 'customer_table.customer_id',
-        'url'                => 'url_info_table.url'
+        'customer_lastname' => 'customer_lastname_table.value',
+        'customer_email' => 'customer_email_table.email',
+        'customer_id' => 'customer_table.customer_id',
+        'url' => 'url_info_table.url'
     );
 
     /**
@@ -119,14 +119,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         $this->_init('Magento\Log\Model\Visitor', 'Magento\Log\Model\Resource\Visitor');
 
-        $this->_visitorTable     = $this->getTable('log_visitor');
+        $this->_visitorTable = $this->getTable('log_visitor');
         $this->_visitorInfoTable = $this->getTable('log_visitor_info');
-        $this->_urlTable         = $this->getTable('log_url');
-        $this->_urlInfoTable     = $this->getTable('log_url_info');
-        $this->_customerTable    = $this->getTable('log_customer');
-        $this->_summaryTable     = $this->getTable('log_summary');
+        $this->_urlTable = $this->getTable('log_url');
+        $this->_urlInfoTable = $this->getTable('log_url_info');
+        $this->_customerTable = $this->getTable('log_customer');
+        $this->_summaryTable = $this->getTable('log_summary');
         $this->_summaryTypeTable = $this->getTable('log_summary_type');
-        $this->_quoteTable       = $this->getTable('log_quote');
+        $this->_quoteTable = $this->getTable('log_quote');
     }
 
     /**
@@ -136,9 +136,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function showCustomersOnly()
     {
-        $this->getSelect()
-            ->where('customer_table.customer_id > 0')
-            ->group('customer_table.customer_id');
+        $this->getSelect()->where('customer_table.customer_id > 0')->group('customer_table.customer_id');
         return $this;
     }
 
@@ -170,7 +168,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected function _getFieldMap($fieldName)
     {
-        if(isset($this->_fieldMap[$fieldName])) {
+        if (isset($this->_fieldMap[$fieldName])) {
             return $this->_fieldMap[$fieldName];
         } else {
             return 'main_table.' . $fieldName;

@@ -197,7 +197,11 @@ class Config extends \Magento\Object
      */
     public function isValidDefaultCurrencyCode($storeId = null)
     {
-        return $this->_storeManager->getStore($storeId)->getDefaultCurrencyCode() == $this->getTargetCurrency($storeId);
+        return $this->_storeManager->getStore(
+            $storeId
+        )->getDefaultCurrencyCode() == $this->getTargetCurrency(
+            $storeId
+        );
     }
 
     /**

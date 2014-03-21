@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 class BuyXGetY extends AbstractDiscount
@@ -39,10 +38,10 @@ class BuyXGetY extends AbstractDiscount
         /** @var \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData */
         $discountData = $this->discountFactory->create();
 
-        $itemPrice              = $this->validator->getItemPrice($item);
-        $baseItemPrice          = $this->validator->getItemBasePrice($item);
-        $itemOriginalPrice      = $this->validator->getItemOriginalPrice($item);
-        $baseItemOriginalPrice  = $this->validator->getItemBaseOriginalPrice($item);
+        $itemPrice = $this->validator->getItemPrice($item);
+        $baseItemPrice = $this->validator->getItemBasePrice($item);
+        $itemOriginalPrice = $this->validator->getItemOriginalPrice($item);
+        $baseItemOriginalPrice = $this->validator->getItemBaseOriginalPrice($item);
 
         $x = $rule->getDiscountStep();
         $y = $rule->getDiscountAmount();
@@ -52,7 +51,7 @@ class BuyXGetY extends AbstractDiscount
         $buyAndDiscountQty = $x + $y;
 
         $fullRuleQtyPeriod = floor($qty / $buyAndDiscountQty);
-        $freeQty  = $qty - $fullRuleQtyPeriod * $buyAndDiscountQty;
+        $freeQty = $qty - $fullRuleQtyPeriod * $buyAndDiscountQty;
 
         $discountQty = $fullRuleQtyPeriod * $y;
         if ($freeQty > $x) {

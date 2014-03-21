@@ -87,6 +87,11 @@ class Form extends \Magento\View\Element\Template
     protected $messageManager;
 
     /**
+     * @var \Magento\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @param \Magento\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Session\Generic $reviewSession
@@ -95,6 +100,7 @@ class Form extends \Magento\View\Element\Template
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Rating\Model\RatingFactory $ratingFactory
      * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
@@ -106,6 +112,7 @@ class Form extends \Magento\View\Element\Template
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Rating\Model\RatingFactory $ratingFactory,
         \Magento\Message\ManagerInterface $messageManager,
+        \Magento\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
@@ -115,6 +122,7 @@ class Form extends \Magento\View\Element\Template
         $this->_productFactory = $productFactory;
         $this->_ratingFactory = $ratingFactory;
         $this->messageManager = $messageManager;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -140,22 +148,30 @@ class Form extends \Magento\View\Element\Template
         }
 
         $this->setAllowWriteReviewFlag(
-            $this->_customerSession->isLoggedIn() || $this->_reviewData->getIsGuestAllowToWrite()
+            $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)
+            || $this->_reviewData->getIsGuestAllowToWrite()
         );
         if (!$this->getAllowWriteReviewFlag()) {
             $queryParam = $this->_coreData->urlEncode(
                 $this->getUrl('*/*/*', array('_current' => true)) . '#review-form'
             );
-            $this->setLoginLink($this->getUrl(
+            $this->setLoginLink(
+                $this->getUrl(
                     'customer/account/login/',
                     array(\Magento\Customer\Helper\Data::REFERER_QUERY_PARAM_NAME => $queryParam)
                 )
             );
         }
 
-        $this->setTemplate('form.phtml')
-            ->assign('data', $data)
-            ->assign('messages', $this->messageManager->getMessages(true));
+        $this->setTemplate(
+            'form.phtml'
+        )->assign(
+            'data',
+            $data
+        )->assign(
+            'messages',
+            $this->messageManager->getMessages(true)
+        );
     }
 
     /**
@@ -187,14 +203,14 @@ class Form extends \Magento\View\Element\Template
      */
     public function getRatings()
     {
-        return $this->_ratingFactory->create()
-            ->getResourceCollection()
-            ->addEntityFilter('product')
-            ->setPositionOrder()
-            ->addRatingPerStoreName($this->_storeManager->getStore()->getId())
-            ->setStoreFilter($this->_storeManager->getStore()->getId())
-            ->setActiveFilter(true)
-            ->load()
-            ->addOptionToItems();
+        return $this->_ratingFactory->create()->getResourceCollection()->addEntityFilter(
+            'product'
+        )->setPositionOrder()->addRatingPerStoreName(
+            $this->_storeManager->getStore()->getId()
+        )->setStoreFilter(
+            $this->_storeManager->getStore()->getId()
+        )->setActiveFilter(
+            true
+        )->load()->addOptionToItems();
     }
 }

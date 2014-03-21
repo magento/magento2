@@ -94,7 +94,7 @@ class Search extends \Magento\Backend\Block\Widget
             'minLength' => 0,
             'ajaxOptions' => array('data' => array('template_id' => $templateId)),
             'template' => '[data-template-for="product-attribute-search"]',
-            'data' => $this->getSuggestedAttributes('', $templateId),
+            'data' => $this->getSuggestedAttributes('', $templateId)
         );
     }
 
@@ -107,11 +107,17 @@ class Search extends \Magento\Backend\Block\Widget
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {
-        $escapedLabelPart = $this->_helperPool->get('Magento_Core')
-            ->addLikeEscape($labelPart, array('position' => 'any'));
+        $escapedLabelPart = $this->_helperPool->get(
+            'Magento_Core'
+        )->addLikeEscape(
+            $labelPart,
+            array('position' => 'any')
+        );
         /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
-        $collection = $this->_collectionFactory->create()
-            ->addFieldToFilter('frontend_label', array('like' => $escapedLabelPart));
+        $collection = $this->_collectionFactory->create()->addFieldToFilter(
+            'frontend_label',
+            array('like' => $escapedLabelPart)
+        );
 
         $collection->setExcludeSetFilter($templateId ?: $this->getRequest()->getParam('template_id'))->setPageSize(20);
 
@@ -119,9 +125,9 @@ class Search extends \Magento\Backend\Block\Widget
         foreach ($collection->getItems() as $attribute) {
             /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
             $result[] = array(
-                'id'      => $attribute->getId(),
-                'label'   => $attribute->getFrontendLabel(),
-                'code'    => $attribute->getAttributeCode(),
+                'id' => $attribute->getId(),
+                'label' => $attribute->getFrontendLabel(),
+                'code' => $attribute->getAttributeCode()
             );
         }
         return $result;

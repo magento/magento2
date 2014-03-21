@@ -124,8 +124,7 @@ class Created extends \Magento\Backend\Block\Widget
         $result = array();
         if ($this->getRequest()->getParam('product_tab') == 'variations') {
             /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
-            $attribute =
-                $this->_attributeFactory->create()->load($this->getRequest()->getParam('attribute'));
+            $attribute = $this->_attributeFactory->create()->load($this->getRequest()->getParam('attribute'));
             $result = array(
                 'tab' => $this->getRequest()->getParam('product_tab'),
                 'attribute' => array(
@@ -140,10 +139,7 @@ class Created extends \Magento\Backend\Block\Widget
         if ($newAttributeSetId) {
             /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
             $attributeSet = $this->_setFactory->create()->load($newAttributeSetId);
-            $result['set'] = array(
-                'id' => $attributeSet->getId(),
-                'label' => $attributeSet->getAttributeSetName(),
-            );
+            $result['set'] = array('id' => $attributeSet->getId(), 'label' => $attributeSet->getAttributeSetName());
         }
 
         return $this->_jsonEncoder->encode($result);

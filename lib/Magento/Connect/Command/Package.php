@@ -25,8 +25,7 @@
  */
 namespace Magento\Connect\Command;
 
-final class Package
-extends \Magento\Connect\Command
+final class Package extends \Magento\Connect\Command
 {
     /**
      * Dependencies list
@@ -52,31 +51,30 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
 
-        if(count($params) < 1) {
+        if (count($params) < 1) {
             return $this->doError($command, "Parameters count should be >= 1");
         }
 
         $file = strtolower($params[0]);
         $file = realpath($file);
 
-        if(!file_exists($file)) {
+        if (!file_exists($file)) {
             return $this->doError($command, "File {$params[0]} doesn't exist");
         }
 
         try {
             $packager = new \Magento\Connect\Package($file);
             $res = $packager->validate();
-            if(!$res) {
+            if (!$res) {
                 $this->doError($command, implode("\n", $packager->getErrors()));
                 return;
             }
             $packager->save(dirname($file));
             $this->ui()->output('Done building package');
         } catch (\Exception $e) {
-            $this->doError( $command, $e->getMessage() );
+            $this->doError($command, $e->getMessage());
         }
     }
-
 
     /**
      * Display/get dependencies
@@ -90,7 +88,7 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
         try {
-            if(count($params) < 2) {
+            if (count($params) < 2) {
                 return $this->doError($command, "Argument count should be >= 2");
             }
 
@@ -102,15 +100,23 @@ extends \Magento\Connect\Command
 
             $ftp = empty($options['ftp']) ? false : $options['ftp'];
             $packager = $this->getPackager();
-            if($ftp) {
+            if ($ftp) {
                 list($cache, $config, $ftpObj) = $packager->getRemoteConf($ftp);
             } else {
                 $cache = $this->getSconfig();
                 $config = $this->config();
             }
-            $data = $packager->getDependenciesList($channel, $package, $cache, $config, $argVersionMax, $argVersionMin);
-            $this->ui()->output(array($command=> array('data'=>$data['deps'], 'title'=>"Package deps for {$params[1]}: ")));
-
+            $data = $packager->getDependenciesList(
+                $channel,
+                $package,
+                $cache,
+                $config,
+                $argVersionMax,
+                $argVersionMin
+            );
+            $this->ui()->output(
+                array($command => array('data' => $data['deps'], 'title' => "Package deps for {$params[1]}: "))
+            );
         } catch (\Exception $e) {
             $this->doError($command, $e->getMessage());
         }
@@ -126,18 +132,16 @@ extends \Magento\Connect\Command
     {
         $this->cleanupParams($params);
         try {
-            if(count($params) < 1) {
+            if (count($params) < 1) {
                 throw new \Exception("Arguments should be: source.tgz [target.tgz]");
             }
             $sourceFile = $params[0];
             $converter = new \Magento\Connect\Converter();
             $targetFile = isset($params[1]) ? $params[1] : false;
             $result = $converter->convertPearToMage($sourceFile, $targetFile);
-            $this->ui()->output("Saved to: ".$result);
+            $this->ui()->output("Saved to: " . $result);
         } catch (\Exception $e) {
             $this->doError($command, $e->getMessage());
         }
-
     }
-
 }

@@ -36,9 +36,11 @@ use Magento\App\Action\Action;
  */
 class Page extends \Magento\App\Helper\AbstractHelper
 {
-    const XML_PATH_NO_ROUTE_PAGE        = 'web/default/cms_no_route';
-    const XML_PATH_NO_COOKIES_PAGE      = 'web/default/cms_no_cookies';
-    const XML_PATH_HOME_PAGE            = 'web/default/cms_home_page';
+    const XML_PATH_NO_ROUTE_PAGE = 'web/default/cms_no_route';
+
+    const XML_PATH_NO_COOKIES_PAGE = 'web/default/cms_no_cookies';
+
+    const XML_PATH_HOME_PAGE = 'web/default/cms_home_page';
 
     /**
      * Catalog product
@@ -152,9 +154,9 @@ class Page extends \Magento\App\Helper\AbstractHelper
      * @param bool $renderLayout
      * @return bool
      */
-    protected function _renderPage(Action  $action, $pageId = null, $renderLayout = true)
+    protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
     {
-        if (!is_null($pageId) && $pageId!==$this->_page->getId()) {
+        if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
             if ($delimiterPosition) {
                 $pageId = substr($pageId, 0, $delimiterPosition);
@@ -170,8 +172,11 @@ class Page extends \Magento\App\Helper\AbstractHelper
             return false;
         }
 
-        $inRange = $this->_localeDate->isScopeDateInInterval(null, $this->_page->getCustomThemeFrom(),
-            $this->_page->getCustomThemeTo());
+        $inRange = $this->_localeDate->isScopeDateInInterval(
+            null,
+            $this->_page->getCustomThemeFrom(),
+            $this->_page->getCustomThemeTo()
+        );
 
         if ($this->_page->getCustomTheme()) {
             if ($inRange) {
@@ -183,9 +188,9 @@ class Page extends \Magento\App\Helper\AbstractHelper
 
         $this->_view->addActionLayoutHandles();
         if ($this->_page->getRootTemplate()) {
-            $handle = ($this->_page->getCustomRootTemplate()
-                        && $this->_page->getCustomRootTemplate() != 'empty'
-                        && $inRange) ? $this->_page->getCustomRootTemplate() : $this->_page->getRootTemplate();
+            $handle = $this->_page->getCustomRootTemplate() &&
+                $this->_page->getCustomRootTemplate() != 'empty' &&
+                $inRange ? $this->_page->getCustomRootTemplate() : $this->_page->getRootTemplate();
             $this->_pageLayout->applyHandle($handle);
         }
 
@@ -195,8 +200,8 @@ class Page extends \Magento\App\Helper\AbstractHelper
         );
 
         $this->_view->loadLayoutUpdates();
-        $layoutUpdate = ($this->_page->getCustomLayoutUpdateXml() && $inRange)
-            ? $this->_page->getCustomLayoutUpdateXml() : $this->_page->getLayoutUpdateXml();
+        $layoutUpdate = $this->_page->getCustomLayoutUpdateXml() &&
+            $inRange ? $this->_page->getCustomLayoutUpdateXml() : $this->_page->getLayoutUpdateXml();
         if (!empty($layoutUpdate)) {
             $this->_view->getLayout()->getUpdate()->addUpdate($layoutUpdate);
         }
@@ -215,9 +220,7 @@ class Page extends \Magento\App\Helper\AbstractHelper
         /* @TODO: Move catalog and checkout storage types to appropriate modules */
         $messageBlock = $this->_view->getLayout()->getMessagesBlock();
         $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
-        $messageBlock->addMessages(
-            $this->messageManager->getMessages(true)
-        );
+        $messageBlock->addMessages($this->messageManager->getMessages(true));
 
         if ($renderLayout) {
             $this->_view->renderLayout();

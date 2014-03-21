@@ -89,12 +89,15 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMocksForTestLock($nonBlocking)
     {
-        $this->_processFile = $this->getMock('Magento\Index\Model\Process\File', array('processLock'), array(), '',
-            false, false
+        $this->_processFile = $this->getMock(
+            'Magento\Index\Model\Process\File',
+            array('processLock'),
+            array(),
+            '',
+            false,
+            false
         );
-        $this->_processFile->expects($this->once())
-            ->method('processLock')
-            ->with($nonBlocking);
+        $this->_processFile->expects($this->once())->method('processLock')->with($nonBlocking);
 
         $this->_prepareIndexProcess();
     }
@@ -105,10 +108,15 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     protected function _prepareIndexProcess()
     {
         $lockStorage = $this->getMock('Magento\Index\Model\Lock\Storage', array('getFile'), array(), '', false);
-        $lockStorage->expects($this->once())
-            ->method('getFile')
-            ->with(self::PROCESS_ID)
-            ->will($this->returnValue($this->_processFile));
+        $lockStorage->expects(
+            $this->once()
+        )->method(
+            'getFile'
+        )->with(
+            self::PROCESS_ID
+        )->will(
+            $this->returnValue($this->_processFile)
+        );
 
         $resource = $this->getMockForAbstractClass(
             'Magento\Core\Model\Resource\Db\AbstractDb',
@@ -121,26 +129,29 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
         );
         $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('process_id'));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_indexProcess = $helper->getObject('Magento\Index\Model\Process', array(
-            'lockStorage' => $lockStorage,
-            'resource' => $resource,
-            'data' => array('process_id' => self::PROCESS_ID)
-        ));
+        $this->_indexProcess = $helper->getObject(
+            'Magento\Index\Model\Process',
+            array(
+                'lockStorage' => $lockStorage,
+                'resource' => $resource,
+                'data' => array('process_id' => self::PROCESS_ID)
+            )
+        );
     }
 
     public function testUnlock()
     {
-        $streamLock = $this->getMockBuilder('Magento\Filesystem\File\Write')
-            ->setMethods(array('unlock'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $streamLock = $this->getMockBuilder(
+            'Magento\Filesystem\File\Write'
+        )->setMethods(
+            array('unlock')
+        )->disableOriginalConstructor()->getMock();
         $this->_processFile = $this->getMock(
             'Magento\Index\Model\Process\File',
             array('processUnlock', '__wakeup'),
             array($streamLock)
         );
-        $this->_processFile->expects($this->once())
-            ->method('processUnlock');
+        $this->_processFile->expects($this->once())->method('processUnlock');
         $this->_prepareIndexProcess();
 
         $result = $this->_indexProcess->unlock();
@@ -155,8 +166,8 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
     public function isLockedDataProvider()
     {
         return array(
-            'need to unlock process'    => array('$needUnlock' => true),
-            'no need to unlock process' => array('$needUnlock' => false),
+            'need to unlock process' => array('$needUnlock' => true),
+            'no need to unlock process' => array('$needUnlock' => false)
         );
     }
 
@@ -166,19 +177,25 @@ class ProcessTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsLocked($needUnlock)
     {
-        $streamLock = $this->getMockBuilder('Magento\Filesystem\File\Write')
-            ->setMethods(array('unlock'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $streamLock = $this->getMockBuilder(
+            'Magento\Filesystem\File\Write'
+        )->setMethods(
+            array('unlock')
+        )->disableOriginalConstructor()->getMock();
         $this->_processFile = $this->getMock(
             'Magento\Index\Model\Process\File',
             array('isProcessLocked', '__wakeup'),
             array($streamLock)
         );
-        $this->_processFile->expects($this->once())
-            ->method('isProcessLocked')
-            ->with($needUnlock)
-            ->will($this->returnArgument(0));
+        $this->_processFile->expects(
+            $this->once()
+        )->method(
+            'isProcessLocked'
+        )->with(
+            $needUnlock
+        )->will(
+            $this->returnArgument(0)
+        );
         $this->_prepareIndexProcess();
 
         $this->assertEquals($needUnlock, $this->_indexProcess->isLocked($needUnlock));

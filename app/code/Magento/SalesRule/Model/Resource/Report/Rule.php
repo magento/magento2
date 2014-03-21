@@ -104,14 +104,17 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     {
         $adapter = $this->_getReadAdapter();
         $tableName = $this->getTable('coupon_aggregated');
-        $select = $adapter->select()
-            ->from(
-                $tableName,
-                new \Zend_Db_Expr('DISTINCT rule_name')
-            )
-            ->where('rule_name IS NOT NULL')
-            ->where('rule_name <> ?', '')
-            ->order('rule_name ASC');
+        $select = $adapter->select()->from(
+            $tableName,
+            new \Zend_Db_Expr('DISTINCT rule_name')
+        )->where(
+            'rule_name IS NOT NULL'
+        )->where(
+            'rule_name <> ?',
+            ''
+        )->order(
+            'rule_name ASC'
+        );
 
         $rulesNames = $adapter->fetchAll($select);
 

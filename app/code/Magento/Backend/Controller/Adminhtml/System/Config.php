@@ -80,7 +80,7 @@ class Config extends AbstractConfig
 
         $current = $this->getRequest()->getParam('section');
         $website = $this->getRequest()->getParam('website');
-        $store   = $this->getRequest()->getParam('store');
+        $store = $this->getRequest()->getParam('store');
 
         /** @var $section \Magento\Backend\Model\Config\Structure\Element\Section */
         $section = $this->_configStructure->getElement($current);
@@ -93,11 +93,7 @@ class Config extends AbstractConfig
         $this->_setActiveMenu('Magento_Backend::system_config');
         $this->_view->getLayout()->getBlock('menu')->setAdditionalCacheKeyInfo(array($current));
 
-        $this->_addBreadcrumb(
-            __('System'),
-            __('System'),
-            $this->getUrl('*\/system')
-        );
+        $this->_addBreadcrumb(__('System'), __('System'), $this->getUrl('*\/system'));
 
         $this->_view->renderLayout();
     }
@@ -109,12 +105,15 @@ class Config extends AbstractConfig
      */
     public function stateAction()
     {
-        if ($this->getRequest()->getParam('isAjax') && $this->getRequest()->getParam('container') != ''
-            && $this->getRequest()->getParam('value') != ''
+        if ($this->getRequest()->getParam(
+            'isAjax'
+        ) && $this->getRequest()->getParam(
+            'container'
+        ) != '' && $this->getRequest()->getParam(
+            'value'
+        ) != ''
         ) {
-            $configState = array(
-                $this->getRequest()->getParam('container') => $this->getRequest()->getParam('value')
-            );
+            $configState = array($this->getRequest()->getParam('container') => $this->getRequest()->getParam('value'));
             $this->_saveState($configState);
             $this->getResponse()->setBody('success');
         }

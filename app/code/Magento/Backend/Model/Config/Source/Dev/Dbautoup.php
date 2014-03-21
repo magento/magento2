@@ -33,19 +33,9 @@ class Dbautoup implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value'=> \Magento\App\Resource::AUTO_UPDATE_ALWAYS,
-                'label' => __('Always (during development)')
-            ),
-            array(
-                'value'=> \Magento\App\Resource::AUTO_UPDATE_ONCE,
-                'label' => __('Only Once (version upgrade)')
-            ),
-            array(
-                'value'=> \Magento\App\Resource::AUTO_UPDATE_NEVER,
-                'label' => __('Never (production)')
-            ),
+            array('value' => \Magento\App\Resource::AUTO_UPDATE_ALWAYS, 'label' => __('Always (during development)')),
+            array('value' => \Magento\App\Resource::AUTO_UPDATE_ONCE, 'label' => __('Only Once (version upgrade)')),
+            array('value' => \Magento\App\Resource::AUTO_UPDATE_NEVER, 'label' => __('Never (production)'))
         );
     }
-
 }

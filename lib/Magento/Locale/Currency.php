@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Locale;
 
 class Currency implements \Magento\Locale\CurrencyInterface
@@ -85,25 +84,23 @@ class Currency implements \Magento\Locale\CurrencyInterface
         if (!isset(self::$_currencyCache[$this->_localeResolver->getLocaleCode()][$currency])) {
             $options = array();
             try {
-                $currencyObject = $this->_currencyFactory->create(array(
-                    'options' => $currency,
-                    'locale' => $this->_localeResolver->getLocale(),
-                ));
+                $currencyObject = $this->_currencyFactory->create(
+                    array('options' => $currency, 'locale' => $this->_localeResolver->getLocale())
+                );
             } catch (\Exception $e) {
-                $currencyObject = $this->_currencyFactory->create(array(
-                    'options' => $this->getDefaultCurrency(),
-                    'locale' => $this->_localeResolver->getLocale(),
-                ));
+                $currencyObject = $this->_currencyFactory->create(
+                    array('options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale())
+                );
                 $options['name'] = $currency;
                 $options['currency'] = $currency;
                 $options['symbol'] = $currency;
             }
 
             $options = new \Magento\Object($options);
-            $this->_eventManager->dispatch('currency_display_options_forming', array(
-                'currency_options' => $options,
-                'base_code' => $currency
-            ));
+            $this->_eventManager->dispatch(
+                'currency_display_options_forming',
+                array('currency_options' => $options, 'base_code' => $currency)
+            );
 
             $currencyObject->setFormat($options->toArray());
             self::$_currencyCache[$this->_localeResolver->getLocaleCode()][$currency] = $currencyObject;

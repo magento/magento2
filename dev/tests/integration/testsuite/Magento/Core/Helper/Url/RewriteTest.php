@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper\Url;
 
 class RewriteTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +35,9 @@ class RewriteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Helper\Url\Rewrite');
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Helper\Url\Rewrite'
+        );
     }
 
     /**
@@ -78,16 +78,16 @@ class RewriteTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'no leading slash' => array('correct/request/path'),
-            'leading slash'    => array('another/good/request/path/'),
+            'leading slash' => array('another/good/request/path/')
         );
     }
 
     public function requestPathExceptionDataProvider()
     {
         return array(
-            'two slashes'   => array('request/path/with/two//slashes'),
+            'two slashes' => array('request/path/with/two//slashes'),
             'three slashes' => array('request/path/with/three///slashes'),
-            'anchor'        => array('request/path/with#anchor'),
+            'anchor' => array('request/path/with#anchor')
         );
     }
 }

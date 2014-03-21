@@ -30,9 +30,5 @@ return array(
             'Magento_SalesRule::quote'
         )
     ),
-    'TestIntegration2' => array(
-        'resources' => array(
-            'Magento_Catalog::product_read'
-        )
-    ),
+    'TestIntegration2' => array('resources' => array('Magento_Catalog::product_read'))
 );

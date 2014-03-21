@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 
 class GridTest extends \PHPUnit_Framework_TestCase
@@ -44,47 +43,50 @@ class GridTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()->getMock();
 
-        $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
 
-        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getQuote', '__wakeup'))
-            ->getMock();
+        $sessionMock = $this->getMockBuilder(
+            'Magento\Backend\Model\Session\Quote'
+        )->disableOriginalConstructor()->setMethods(
+            array('getQuote', '__wakeup')
+        )->getMock();
 
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getStore', '__wakeup'))
-            ->getMock();
+        $quoteMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Quote'
+        )->disableOriginalConstructor()->setMethods(
+            array('getStore', '__wakeup')
+        )->getMock();
 
-        $storeMock = $this->getMockBuilder('Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->setMethods(array('__wakeup', 'convertPrice'))
-            ->getMock();
+        $storeMock = $this->getMockBuilder(
+            'Magento\Core\Model\Store'
+        )->disableOriginalConstructor()->setMethods(
+            array('__wakeup', 'convertPrice')
+        )->getMock();
         $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
 
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
 
-        $wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
-            ->setMethods(array('methods', '__wakeup'))
-            ->getMock();
+        $wishlistFactoryMock = $this->getMockBuilder(
+            'Magento\Wishlist\Model\WishlistFactory'
+        )->setMethods(
+            array('methods', '__wakeup')
+        )->getMock();
 
-        $giftMessageSave = $this->getMockBuilder('Magento\Giftmessage\Model\Save')
-            ->setMethods(array('__wakeup'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $giftMessageSave = $this->getMockBuilder(
+            'Magento\Giftmessage\Model\Save'
+        )->setMethods(
+            array('__wakeup')
+        )->disableOriginalConstructor()->getMock();
 
         $taxConfig = $this->getMockBuilder('Magento\Tax\Model\Config')->disableOriginalConstructor()->getMock();
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_block = $helper->getObject('Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid',
+        $this->_block = $helper->getObject(
+            'Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid',
             array(
                 'wishlistFactory' => $wishlistFactoryMock,
                 'giftMessageSave' => $giftMessageSave,
@@ -139,11 +141,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 '2 for 50<br/>3 for 150',
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
             ),
-            array(
-                0,
-                '',
-                \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-            ),
+            array(0, '', \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         );
     }
 
@@ -154,23 +152,23 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareItem($tierPrices, $productType)
     {
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getTierPrice', '__wakeup'))
-            ->getMock();
-        $product->expects($this->once())
-            ->method('getTierPrice')
-            ->will($this->returnValue($tierPrices));
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item',
-            array(), array('getProduct', 'getProductType'), '', false);
-        $item->expects($this->once())
-            ->method('getProduct')
-            ->will($this->returnValue($product));
+        $product = $this->getMockBuilder(
+            'Magento\Catalog\Model\Product'
+        )->disableOriginalConstructor()->setMethods(
+            array('getTierPrice', '__wakeup')
+        )->getMock();
+        $product->expects($this->once())->method('getTierPrice')->will($this->returnValue($tierPrices));
+        $item = $this->getMock(
+            'Magento\Sales\Model\Quote\Item',
+            array(),
+            array('getProduct', 'getProductType'),
+            '',
+            false
+        );
+        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
 
         $calledTimes = $tierPrices ? 'once' : 'never';
-        $item->expects($this->$calledTimes())
-            ->method('getProductType')
-            ->will($this->returnValue($productType));
+        $item->expects($this->{$calledTimes}())->method('getProductType')->will($this->returnValue($productType));
         return $item;
     }
 }

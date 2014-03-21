@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento;
 
 /**
@@ -61,21 +60,26 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             'en_US.csv'
         );
 
-        $this->_viewFileSystem = $this->getMock('Magento\View\FileSystem',
-            array('getFilename', 'getDesignTheme'), array(), '', false);
+        $this->_viewFileSystem = $this->getMock(
+            'Magento\View\FileSystem',
+            array('getFilename', 'getDesignTheme'),
+            array(),
+            '',
+            false
+        );
 
-        $this->_viewFileSystem->expects($this->any())
-            ->method('getFilename')
-            ->will($this->returnValue(implode('/', $pathChunks)));
+        $this->_viewFileSystem->expects(
+            $this->any()
+        )->method(
+            'getFilename'
+        )->will(
+            $this->returnValue(implode('/', $pathChunks))
+        );
 
         $theme = $this->getMock('\Magento\View\Design\ThemeInterface', array());
-        $theme->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(10));
+        $theme->expects($this->any())->method('getId')->will($this->returnValue(10));
 
-        $this->_viewFileSystem->expects($this->any())
-            ->method('getDesignTheme')
-            ->will($this->returnValue($theme));
+        $this->_viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->addSharedInstance($this->_viewFileSystem, 'Magento\View\FileSystem');
@@ -83,11 +87,11 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         /** @var $moduleReader \Magento\Module\Dir\Reader */
         $moduleReader = $objectManager->get('Magento\Module\Dir\Reader');
         $moduleReader->setModuleDir('Magento_Core', 'i18n', __DIR__ . '/Core/Model/_files/Magento/Core/i18n');
-        $moduleReader->setModuleDir('Magento_Catalog', 'i18n',
-            __DIR__ . '/Core/Model/_files/Magento/Catalog/i18n');
+        $moduleReader->setModuleDir('Magento_Catalog', 'i18n', __DIR__ . '/Core/Model/_files/Magento/Catalog/i18n');
 
         /** @var \Magento\Core\Model\View\Design _designModel */
-        $this->_designModel = $this->getMock('Magento\Core\Model\View\Design',
+        $this->_designModel = $this->getMock(
+            'Magento\Core\Model\View\Design',
             array('getDesignTheme'),
             array(
                 $objectManager->get('Magento\Core\Model\StoreManagerInterface'),
@@ -101,14 +105,11 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_designModel->expects($this->any())
-            ->method('getDesignTheme')
-            ->will($this->returnValue($theme));
+        $this->_designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
         $objectManager->addSharedInstance($this->_designModel, 'Magento\Core\Model\View\Design\Proxy');
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Translate');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Translate');
         $this->_model->init(\Magento\Core\Model\App\Area::AREA_FRONTEND);
     }
 
@@ -124,19 +125,22 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->_model->init(\Magento\Core\Model\App\Area::AREA_FRONTEND, null);
 
         /** @var \Magento\Core\Model\Resource\Translate\String $translateString */
-        $translateString = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Resource\Translate\String');
+        $translateString = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Resource\Translate\String'
+        );
         $translateString->saveTranslate('Fixture String', 'New Db Translation');
 
         $this->_model->init(\Magento\Core\Model\App\Area::AREA_FRONTEND, null);
         $this->assertEquals(
-            'Fixture Db Translation', $this->_model->translate(array('Fixture String')),
+            'Fixture Db Translation',
+            $this->_model->translate(array('Fixture String')),
             'Translation is expected to be cached'
         );
 
         $this->_model->init(\Magento\Core\Model\App\Area::AREA_FRONTEND, null, true);
         $this->assertEquals(
-            'New Db Translation', $this->_model->translate(array('Fixture String')),
+            'New Db Translation',
+            $this->_model->translate(array('Fixture String')),
             'Forced load should not use cache'
         );
     }
@@ -147,8 +151,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Translate');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Translate');
         $this->_model->init(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $actualTranslation = $this->_model->translate(array($inputText));
@@ -162,18 +165,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('', ''),
-            array(
-                'Text with different translation on different modules',
-                'Text translation that was last loaded'
-            ),
-            array(
-                'text_with_no_translation',
-                'text_with_no_translation'
-            ),
-            array(
-                'Design value to translate',
-                'Design translated value'
-            )
+            array('Text with different translation on different modules', 'Text translation that was last loaded'),
+            array('text_with_no_translation', 'text_with_no_translation'),
+            array('Design value to translate', 'Design translated value')
         );
     }
 

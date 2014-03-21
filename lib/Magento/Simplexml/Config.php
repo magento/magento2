@@ -34,7 +34,6 @@ namespace Magento\Simplexml;
  */
 class Config
 {
-
     /**
      * Configuration xml
      *
@@ -141,7 +140,7 @@ class Config
      * @param   string $path
      * @return  \Magento\Simplexml\Element|bool
      */
-    public function getNode($path=null)
+    public function getNode($path = null)
     {
         if (!$this->_xml instanceof \Magento\Simplexml\Element) {
             return false;
@@ -164,7 +163,7 @@ class Config
             return false;
         }
 
-        if (!$result = @$this->_xml->xpath($xpath)) {
+        if (!($result = @$this->_xml->xpath($xpath))) {
             return false;
         }
 
@@ -291,7 +290,7 @@ class Config
     {
         if (is_null($data)) {
             $this->_cacheChecksum = null;
-        } elseif (false===$data || 0===$data) {
+        } elseif (false === $data || 0 === $data) {
             $this->_cacheChecksum = false;
         } else {
             $this->_cacheChecksum = md5($data);
@@ -307,13 +306,13 @@ class Config
      */
     public function updateCacheChecksum($data)
     {
-        if (false===$this->getCacheChecksum()) {
+        if (false === $this->getCacheChecksum()) {
             return $this;
         }
-        if (false===$data || 0===$data) {
+        if (false === $data || 0 === $data) {
             $this->_cacheChecksum = false;
         } else {
-            $this->setCacheChecksum($this->getCacheChecksum().':'.$data);
+            $this->setCacheChecksum($this->getCacheChecksum() . ':' . $data);
         }
         return $this;
     }
@@ -335,7 +334,7 @@ class Config
      */
     public function getCacheChecksumId()
     {
-        return $this->getCacheId().'__CHECKSUM';
+        return $this->getCacheId() . '__CHECKSUM';
     }
 
     /**
@@ -356,14 +355,14 @@ class Config
     public function validateCacheChecksum()
     {
         $newChecksum = $this->getCacheChecksum();
-        if (false===$newChecksum) {
+        if (false === $newChecksum) {
             return false;
         }
         if (is_null($newChecksum)) {
             return true;
         }
         $cachedChecksum = $this->getCache()->load($this->getCacheChecksumId());
-        return $newChecksum===false && $cachedChecksum===false || $newChecksum===$cachedChecksum;
+        return $newChecksum === false && $cachedChecksum === false || $newChecksum === $cachedChecksum;
     }
 
     /**
@@ -394,12 +393,12 @@ class Config
      * @param array $tags
      * @return $this
      */
-    public function saveCache($tags=null)
+    public function saveCache($tags = null)
     {
         if ($this->getCacheSaved()) {
             return $this;
         }
-        if (false===$this->getCacheChecksum()) {
+        if (false === $this->getCacheChecksum()) {
             return $this;
         }
 
@@ -408,7 +407,12 @@ class Config
         }
 
         if (!is_null($this->getCacheChecksum())) {
-            $this->_saveCache($this->getCacheChecksum(), $this->getCacheChecksumId(), $tags, $this->getCacheLifetime());
+            $this->_saveCache(
+                $this->getCacheChecksum(),
+                $this->getCacheChecksumId(),
+                $tags,
+                $this->getCacheLifetime()
+            );
         }
 
         $xmlString = $this->getXmlString();
@@ -461,7 +465,7 @@ class Config
      * @param int|boolean $lifetime
      * @return boolean
      */
-    protected function _saveCache($data, $id, $tags=array(), $lifetime=false)
+    protected function _saveCache($data, $id, $tags = array(), $lifetime = false)
     {
         return $this->getCache()->save($data, $id, $tags, $lifetime);
     }
@@ -540,7 +544,7 @@ class Config
      * @param boolean $overwrite
      * @return $this
      */
-    public function setNode($path, $value, $overwrite=true)
+    public function setNode($path, $value, $overwrite = true)
     {
         $xml = $this->_xml->setNode($path, $value, $overwrite);
         return $this;
@@ -590,7 +594,7 @@ class Config
      * @param boolean $overwrite
      * @return $this
      */
-    public function extend(\Magento\Simplexml\Config $config, $overwrite=true)
+    public function extend(\Magento\Simplexml\Config $config, $overwrite = true)
     {
         $this->getNode()->extend($config->getNode(), $overwrite);
         return $this;

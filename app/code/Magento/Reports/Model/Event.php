@@ -49,12 +49,17 @@ namespace Magento\Reports\Model;
  */
 class Event extends \Magento\Core\Model\AbstractModel
 {
-    const EVENT_PRODUCT_VIEW    = 1;
-    const EVENT_PRODUCT_SEND    = 2;
+    const EVENT_PRODUCT_VIEW = 1;
+
+    const EVENT_PRODUCT_SEND = 2;
+
     const EVENT_PRODUCT_COMPARE = 3;
+
     const EVENT_PRODUCT_TO_CART = 4;
+
     const EVENT_PRODUCT_TO_WISHLIST = 5;
-    const EVENT_WISHLIST_SHARE  = 6;
+
+    const EVENT_WISHLIST_SHARE = 6;
 
     /**
      * @var \Magento\Stdlib\DateTime\DateTimeFactory
@@ -123,9 +128,7 @@ class Event extends \Magento\Core\Model\AbstractModel
     {
         if (is_null($types)) {
             $types = array();
-            $typesCollection = $this->_eventTypeFactory
-                ->create()
-                ->getCollection();
+            $typesCollection = $this->_eventTypeFactory->create()->getCollection();
             foreach ($typesCollection as $eventType) {
                 if ($eventType->getCustomerLogin()) {
                     $types[$eventType->getId()] = $eventType->getId();

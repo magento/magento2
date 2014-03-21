@@ -31,8 +31,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
 use Magento\Core\Model\Resource\Website\Collection;
 
-class Website
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * Website collection
@@ -88,7 +87,7 @@ class Website
     protected function _getOptions()
     {
         $result = $this->getCollection()->toOptionArray();
-        array_unshift($result, array('label'=>null, 'value'=>null));
+        array_unshift($result, array('label' => null, 'value' => null));
         return $result;
     }
 

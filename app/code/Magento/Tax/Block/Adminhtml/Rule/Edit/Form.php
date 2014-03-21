@@ -79,39 +79,29 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        $model  = $this->_coreRegistry->registry('tax_rule');
+        $model = $this->_coreRegistry->registry('tax_rule');
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getData('action'),
-                'method'    => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
 
-        $fieldset   = $form->addFieldset('base_fieldset', array(
-            'legend' => __('Tax Rule Information')
-        ));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Tax Rule Information')));
 
-        $rates = $this->_rateFactory->create()
-            ->getCollection()
-            ->toOptionArray();
+        $rates = $this->_rateFactory->create()->getCollection()->toOptionArray();
 
-         $fieldset->addField('code', 'text',
-            array(
-                'name'      => 'code',
-                'label'     => __('Name'),
-                'class'     => 'required-entry',
-                'required'  => true,
-            )
+        $fieldset->addField(
+            'code',
+            'text',
+            array('name' => 'code', 'label' => __('Name'), 'class' => 'required-entry', 'required' => true)
         );
 
         // Editable multiselect for customer tax class
         $selectConfig = $this->getTaxClassSelectConfig(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER);
-        $selectedCustomerTax = $model->getId()
-            ? $model->getCustomerTaxClasses()
-            : $model->getCustomerTaxClassWithDefault();
-        $fieldset->addField($this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
+        $selectedCustomerTax = $model->getId() ? $model
+            ->getCustomerTaxClasses() : $model
+            ->getCustomerTaxClassWithDefault();
+        $fieldset->addField(
+            $this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
             'editablemultiselect',
             array(
                 'name' => $this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
@@ -120,7 +110,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'values' => $model->getAllOptionsForClass(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
                 'value' => $selectedCustomerTax,
                 'required' => true,
-                'select_config' => $selectConfig,
+                'select_config' => $selectConfig
             ),
             false,
             true
@@ -128,10 +118,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         // Editable multiselect for product tax class
         $selectConfig = $this->getTaxClassSelectConfig(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT);
-        $selectedProductTax = $model->getId()
-            ? $model->getProductTaxClasses()
-            : $model->getProductTaxClassWithDefault();
-        $fieldset->addField($this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT),
+        $selectedProductTax = $model->getId() ? $model
+            ->getProductTaxClasses() : $model
+            ->getProductTaxClassWithDefault();
+        $fieldset->addField(
+            $this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT),
             'editablemultiselect',
             array(
                 'name' => $this->getTaxClassSelectHtmlId(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT),
@@ -146,7 +137,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             true
         );
 
-        $fieldset->addField('tax_rate',
+        $fieldset->addField(
+            'tax_rate',
             'editablemultiselect',
             array(
                 'name' => 'tax_rate',
@@ -156,41 +148,43 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'value' => $model->getRates(),
                 'required' => true,
                 'element_js_class' => 'TaxRateEditableMultiselect',
-                'select_config' => array('is_entity_editable' => true),
+                'select_config' => array('is_entity_editable' => true)
             )
         );
 
-        $fieldset->addField('priority', 'text',
+        $fieldset->addField(
+            'priority',
+            'text',
             array(
-                'name'      => 'priority',
-                'label'     => __('Priority'),
-                'class'     => 'validate-not-negative-number',
-                'value'     => (int) $model->getPriority(),
-                'required'  => true,
-                'note'      => __('Tax rates at the same priority are added, others are compounded.'),
+                'name' => 'priority',
+                'label' => __('Priority'),
+                'class' => 'validate-not-negative-number',
+                'value' => (int)$model->getPriority(),
+                'required' => true,
+                'note' => __('Tax rates at the same priority are added, others are compounded.')
             ),
             false,
             true
         );
-        $fieldset->addField('position', 'text',
+        $fieldset->addField(
+            'position',
+            'text',
             array(
-                'name'      => 'position',
-                'label'     => __('Sort Order'),
-                'class'     => 'validate-not-negative-number',
-                'value'     => (int) $model->getPosition(),
-                'required'  => true,
+                'name' => 'position',
+                'label' => __('Sort Order'),
+                'class' => 'validate-not-negative-number',
+                'value' => (int)$model->getPosition(),
+                'required' => true
             ),
             false,
             true
         );
 
-        if ($model->getId() > 0 ) {
-            $fieldset->addField('tax_calculation_rule_id', 'hidden',
-                array(
-                    'name'      => 'tax_calculation_rule_id',
-                    'value'     => $model->getId(),
-                    'no_span'   => true
-                )
+        if ($model->getId() > 0) {
+            $fieldset->addField(
+                'tax_calculation_rule_id',
+                'hidden',
+                array('name' => 'tax_calculation_rule_id', 'value' => $model->getId(), 'no_span' => true)
             );
         }
 
@@ -213,7 +207,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         return 'tax_' . strtolower($classType) . '_class';
     }
 
-
     /**
      * Retrieve configuration options for tax class editable multiselect
      *
@@ -229,10 +222,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'delete_confirm_message' => __('Do you really want to delete this tax class?'),
             'target_select_id' => $this->getTaxClassSelectHtmlId($classType),
             'add_button_caption' => __('Add New Tax Class'),
-            'submit_data' => array(
-                'class_type' => $classType,
-                'form_key' => $this->formKey->getFormKey(),
-            ),
+            'submit_data' => array('class_type' => $classType, 'form_key' => $this->formKey->getFormKey()),
             'entity_id_name' => 'class_id',
             'entity_value_name' => 'class_name',
             'is_entity_editable' => true

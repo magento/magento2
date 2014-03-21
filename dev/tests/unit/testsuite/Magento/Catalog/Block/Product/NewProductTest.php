@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 class NewProductTest extends \PHPUnit_Framework_TestCase
@@ -44,9 +43,6 @@ class NewProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentities()
     {
-        $this->assertEquals(
-            array(\Magento\Catalog\Model\Product::CACHE_TAG),
-            $this->block->getIdentities()
-        );
+        $this->assertEquals(array(\Magento\Catalog\Model\Product::CACHE_TAG), $this->block->getIdentities());
     }
 }

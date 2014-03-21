@@ -142,8 +142,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         /** @var $collection \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\Collection */
         $collection = $this->_collectionFactory->create();
-        $collection->setConditionFilter($this->getConditionName())
-            ->setWebsiteFilter($this->getWebsiteId());
+        $collection->setConditionFilter($this->getConditionName())->setWebsiteFilter($this->getWebsiteId());
 
         $this->setCollection($collection);
 
@@ -157,34 +156,25 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('dest_country', array(
-            'header'    => __('Country'),
-            'index'     => 'dest_country',
-            'default'   => '*',
-        ));
+        $this->addColumn(
+            'dest_country',
+            array('header' => __('Country'), 'index' => 'dest_country', 'default' => '*')
+        );
 
-        $this->addColumn('dest_region', array(
-            'header'    => __('Region/State'),
-            'index'     => 'dest_region',
-            'default'   => '*',
-        ));
+        $this->addColumn(
+            'dest_region',
+            array('header' => __('Region/State'), 'index' => 'dest_region', 'default' => '*')
+        );
 
-        $this->addColumn('dest_zip', array(
-            'header'    => __('Zip/Postal Code'),
-            'index'     => 'dest_zip',
-            'default'   => '*',
-        ));
+        $this->addColumn(
+            'dest_zip',
+            array('header' => __('Zip/Postal Code'), 'index' => 'dest_zip', 'default' => '*')
+        );
 
         $label = $this->_tablerate->getCode('condition_name_short', $this->getConditionName());
-        $this->addColumn('condition_value', array(
-            'header'    => $label,
-            'index'     => 'condition_value',
-        ));
+        $this->addColumn('condition_value', array('header' => $label, 'index' => 'condition_value'));
 
-        $this->addColumn('price', array(
-            'header'    => __('Shipping Price'),
-            'index'     => 'price',
-        ));
+        $this->addColumn('price', array('header' => __('Shipping Price'), 'index' => 'price'));
 
         return parent::_prepareColumns();
     }

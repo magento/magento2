@@ -106,7 +106,8 @@ class View extends \Magento\Config\AbstractXml
      */
     protected function _getInitialXml()
     {
-        return '<?xml version="1.0" encoding="UTF-8"?><view></view>';
+        return '<?xml version="1.0" encoding="UTF-8"?>'.
+               '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
     }
 
     /**

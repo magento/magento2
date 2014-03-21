@@ -117,7 +117,8 @@ class Handler
                 array(),
                 'authorization',
                 "Consumer ID = {$this->_request->getConsumerId()}",
-                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', '));
+                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', ')
+            );
         }
         $service = $this->_objectManager->get($serviceClass);
         $inputData = $this->_prepareRequestData($serviceClass, $serviceMethod, $arguments);
@@ -196,7 +197,7 @@ class Handler
                 $fieldValue = $this->_unpackArray($fieldValue);
             }
             $fieldName = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $fieldName))));
-            $response->$fieldName = $fieldValue;
+            $response->{$fieldName} = $fieldValue;
         }
         return $response;
     }
@@ -209,7 +210,7 @@ class Handler
      */
     protected function _isDataObject($var)
     {
-        return (is_object($var) && method_exists($var, '__toArray'));
+        return is_object($var) && method_exists($var, '__toArray');
     }
 
     /**

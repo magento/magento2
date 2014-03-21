@@ -25,16 +25,12 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Attribute');
-$model->loadByCode('customer', 'prefix')
-      ->setIsVisible('1');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model->loadByCode('customer', 'prefix')->setIsVisible('1');
 $model->save();
 
-$model->loadByCode('customer', 'middlename')
-    ->setIsVisible('1');
+$model->loadByCode('customer', 'middlename')->setIsVisible('1');
 $model->save();
 
-$model->loadByCode('customer', 'suffix')
-    ->setIsVisible('1');
+$model->loadByCode('customer', 'suffix')->setIsVisible('1');
 $model->save();

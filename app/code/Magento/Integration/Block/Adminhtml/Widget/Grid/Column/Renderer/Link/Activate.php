@@ -36,7 +36,7 @@ class Activate extends Link
      */
     public function getCaption()
     {
-        return ($this->_row->getStatus() == Integration::STATUS_INACTIVE) ? __('Activate') : __('Reauthorize');
+        return $this->_row->getStatus() == Integration::STATUS_INACTIVE ? __('Activate') : __('Reauthorize');
     }
 
     /**
@@ -53,7 +53,7 @@ class Activate extends Link
      */
     protected function _getAttributes()
     {
-        return array_merge(parent::_getAttributes(), ['onclick' => 'integration.popup.show(this);']);
+        return array_merge(parent::_getAttributes(), array('onclick' => 'integration.popup.show(this);'));
     }
 
     /**
@@ -61,11 +61,11 @@ class Activate extends Link
      */
     protected function _getDataAttributes()
     {
-        return [
+        return array(
             'row-id' => $this->_row->getId(),
             'row-dialog' => 'permissions',
-            'row-is-reauthorize' => ($this->_row->getStatus() == Integration::STATUS_INACTIVE) ? '0' : '1',
-            'row-is-token-exchange' => ($this->_row->getEndpoint() && $this->_row->getIdentityLinkUrl()) ? '1' : '0'
-        ];
+            'row-is-reauthorize' => $this->_row->getStatus() == Integration::STATUS_INACTIVE ? '0' : '1',
+            'row-is-token-exchange' => $this->_row->getEndpoint() && $this->_row->getIdentityLinkUrl() ? '1' : '0'
+        );
     }
 }

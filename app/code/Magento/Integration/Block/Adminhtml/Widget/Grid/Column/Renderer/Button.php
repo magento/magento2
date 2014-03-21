@@ -52,8 +52,11 @@ class Button extends AbstractRenderer
      */
     protected function _isConfigBasedIntegration(Object $row)
     {
-        return ($row->hasData(Integration::SETUP_TYPE)
-            && $row->getData(Integration::SETUP_TYPE) == Integration::TYPE_CONFIG);
+        return $row->hasData(
+            Integration::SETUP_TYPE
+        ) && $row->getData(
+            Integration::SETUP_TYPE
+        ) == Integration::TYPE_CONFIG;
     }
 
     /**
@@ -89,13 +92,16 @@ class Button extends AbstractRenderer
      */
     protected function _prepareAttributes(Object $row)
     {
-        $attributes = [];
+        $attributes = array();
         foreach ($this->_getValidAttributes() as $attributeName) {
             $methodName = sprintf('_get%sAttribute', ucfirst($attributeName));
             $rowMethodName = sprintf('get%s', ucfirst($attributeName));
-            $attributeValue = method_exists($this, $methodName)
-                ? $this->$methodName($row)
-                : $this->getColumn()->$rowMethodName();
+            $attributeValue = method_exists(
+                $this,
+                $methodName
+            ) ? $this->{$methodName}(
+                $row
+            ) : $this->getColumn()->{$rowMethodName}();
 
             if ($attributeValue) {
                 $attributes[] = sprintf('%s="%s"', $attributeName, $this->escapeHtml($attributeValue));
@@ -111,14 +117,32 @@ class Button extends AbstractRenderer
      */
     protected function _getValidAttributes()
     {
-        return [
-            // HTML global attributes
-            'accesskey', 'class', 'id', 'lang', 'style', 'tabindex', 'title',
-            // HTML mouse event attributes
-            'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup',
-            // Element attributes
-            'disabled', 'name', 'type', 'value',
-        ];
+        /*
+         * HTML global attributes - 'accesskey', 'class', 'id', 'lang', 'style', 'tabindex', 'title'
+         * HTML mouse event attributes - 'onclick', 'ondblclick', 'onmousedown', 'onmousemove', 'onmouseout',
+         *                               'onmouseover', 'onmouseup'
+         * Element attributes - 'disabled', 'name', 'type', 'value'
+         */
+        return array(
+            'accesskey',
+            'class',
+            'id',
+            'lang',
+            'style',
+            'tabindex',
+            'title',
+            'onclick',
+            'ondblclick',
+            'onmousedown',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'disabled',
+            'name',
+            'type',
+            'value'
+        );
     }
 
     /**

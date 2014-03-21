@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument\Interpreter;
 
 class NumberTest extends \PHPUnit_Framework_TestCase
@@ -49,10 +48,7 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateExceptionDataProvider()
     {
-        return array(
-            'no value' => array(array()),
-            'non-numeric value' => array(array('value' => 'non-numeric')),
-        );
+        return array('no value' => array(array()), 'non-numeric value' => array(array('value' => 'non-numeric')));
     }
 
     /**
@@ -70,10 +66,10 @@ class NumberTest extends \PHPUnit_Framework_TestCase
     public function evaluateDataProvider()
     {
         return array(
-            'integer'                  => array(10, 10),
-            'float'                    => array(10.5, 10.5),
+            'integer' => array(10, 10),
+            'float' => array(10.5, 10.5),
             'string numeric (integer)' => array('10', '10'),
-            'string numeric (float)'   => array('10.5', '10.5'),
+            'string numeric (float)' => array('10.5', '10.5')
         );
     }
 }

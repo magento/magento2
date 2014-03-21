@@ -34,8 +34,7 @@
  */
 namespace Magento\GoogleShopping\Block\Adminhtml\Items\Renderer;
 
-class Id
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders Google Shopping Item Id
@@ -59,7 +58,10 @@ class Id
 
         return sprintf(
             '<a href="%s" alt="%s" title="%s" target="_blank">%s</a>',
-            $baseUrl . $itemId, $title, $title, $itemId
+            $baseUrl . $itemId,
+            $title,
+            $title,
+            $itemId
         );
     }
 }

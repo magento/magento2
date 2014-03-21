@@ -32,8 +32,7 @@ namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
  * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attributes
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Attributes extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * @var string
@@ -79,7 +78,6 @@ class Attributes
         parent::__construct($context, $data);
     }
 
-
     /**
      * Preparing global layout
      *
@@ -87,17 +85,25 @@ class Attributes
      */
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Add New Attribute'),
-            'class' => 'add',
-            'id'    => 'add_new_attribute',
-            'on_click' => 'gContentAttribute.add()'
-        ));
-        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Remove'),
-            'class' => 'delete delete-product-option',
-            'on_click' => 'gContentAttribute.remove(event)'
-        ));
+        $this->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Add New Attribute'),
+                'class' => 'add',
+                'id' => 'add_new_attribute',
+                'on_click' => 'gContentAttribute.add()'
+            )
+        );
+        $this->addChild(
+            'delete_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Remove'),
+                'class' => 'delete delete-product-option',
+                'on_click' => 'gContentAttribute.remove(event)'
+            )
+        );
 
         return parent::_prepareLayout();
     }
@@ -117,7 +123,7 @@ class Attributes
      *
      * @return string
      */
-    public function getFieldName ()
+    public function getFieldName()
     {
         return 'attributes';
     }
@@ -134,26 +140,25 @@ class Attributes
         $attributesTree = $this->_config->getAttributesByCountry($this->getTargetCountry());
 
         foreach ($attributesTree as $destination => $attributes) {
-            $options[] = array(
-                'label' => $destination,
-                'is_group' => true,
-            );
+            $options[] = array('label' => $destination, 'is_group' => true);
             foreach ($attributes as $attribute => $params) {
                 $options[$attribute] = array('label' => $params['name']);
                 if ((int)$params['required'] == 1) {
                     $options[$attribute]['style'] = 'color: #940000;';
                 }
             }
-            $options[] = array(
-                'is_group' => true,
-                'is_close' => true
-            );
+            $options[] = array('is_group' => true, 'is_close' => true);
         }
 
-        $select = $this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Select')
-            ->setId($this->getFieldId().'_{{index}}_gattribute')
-            ->setName($this->getFieldName().'[{{index}}][gcontent_attribute]')
-            ->setOptions($options);
+        $select = $this->getLayout()->createBlock(
+            'Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Select'
+        )->setId(
+            $this->getFieldId() . '_{{index}}_gattribute'
+        )->setName(
+            $this->getFieldName() . '[{{index}}][gcontent_attribute]'
+        )->setOptions(
+            $options
+        );
 
         return $this->_toOneLineString($select->toHtml());
     }
@@ -166,10 +171,15 @@ class Attributes
      */
     public function getAttributesSelectHtml($escapeJsQuotes = false)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setId($this->getFieldId().'_{{index}}_attribute')
-            ->setName($this->getFieldName().'[{{index}}][attribute_id]')
-            ->setOptions($this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes));
+        $select = $this->getLayout()->createBlock(
+            'Magento\View\Element\Html\Select'
+        )->setId(
+            $this->getFieldId() . '_{{index}}_attribute'
+        )->setName(
+            $this->getFieldName() . '[{{index}}][attribute_id]'
+        )->setOptions(
+            $this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes)
+        );
         return $select->getHtml();
     }
 
@@ -208,9 +218,9 @@ class Attributes
 
         foreach ($attributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            $result[$attribute->getAttributeId()] = $escapeJsQuotes
-                ? $this->escapeJsQuote($attribute->getFrontendLabel())
-                : $attribute->getFrontendLabel();
+            $result[$attribute->getAttributeId()] = $escapeJsQuotes ? $this->escapeJsQuote(
+                $attribute->getFrontendLabel()
+            ) : $attribute->getFrontendLabel();
         }
         return $result;
     }
@@ -236,5 +246,4 @@ class Attributes
     {
         return str_replace(array("\r\n", "\n", "\r"), "", $string);
     }
-
 }

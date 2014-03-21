@@ -25,8 +25,7 @@
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price;
 
-class Configurable
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
+class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice
 {
     /**
      * Reindex temporary (price result data) for all products
@@ -124,45 +123,50 @@ class Configurable
      */
     protected function _applyConfigurableOption()
     {
-        $write      = $this->_getWriteAdapter();
-        $coaTable   = $this->_getConfigurableOptionAggregateTable();
-        $copTable   = $this->_getConfigurableOptionPriceTable();
+        $write = $this->_getWriteAdapter();
+        $coaTable = $this->_getConfigurableOptionAggregateTable();
+        $copTable = $this->_getConfigurableOptionPriceTable();
 
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
-        $select = $write->select()
-            ->from(array('i' => $this->_getDefaultFinalPriceTable()), array())
-            ->join(
-                array('l' => $this->getTable('catalog_product_super_link')),
-                'l.parent_id = i.entity_id',
-                array('parent_id', 'product_id'))
-            ->columns(array('customer_group_id', 'website_id'), 'i')
-            ->join(
-                array('a' => $this->getTable('catalog_product_super_attribute')),
-                'l.parent_id = a.product_id',
-                array())
-            ->join(
-                array('cp' => $this->getTable('catalog_product_entity_int')),
-                'l.product_id = cp.entity_id AND cp.attribute_id = a.attribute_id AND cp.store_id = 0',
-                array())
-            ->joinLeft(
-                array('apd' => $this->getTable('catalog_product_super_attribute_pricing')),
-                'a.product_super_attribute_id = apd.product_super_attribute_id'
-                    . ' AND apd.website_id = 0 AND cp.value = apd.value_index',
-                array())
-            ->joinLeft(
-                array('apw' => $this->getTable('catalog_product_super_attribute_pricing')),
-                'a.product_super_attribute_id = apw.product_super_attribute_id'
-                    . ' AND apw.website_id = i.website_id AND cp.value = apw.value_index',
-                array())
-            ->join(
-                array('le' => $this->getTable('catalog_product_entity')),
-                'le.entity_id = l.product_id',
-                array())
-
-            ->where('le.required_options=0')
-            ->group(array('l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id'));
+        $select = $write->select()->from(
+            array('i' => $this->_getDefaultFinalPriceTable()),
+            array()
+        )->join(
+            array('l' => $this->getTable('catalog_product_super_link')),
+            'l.parent_id = i.entity_id',
+            array('parent_id', 'product_id')
+        )->columns(
+            array('customer_group_id', 'website_id'),
+            'i'
+        )->join(
+            array('a' => $this->getTable('catalog_product_super_attribute')),
+            'l.parent_id = a.product_id',
+            array()
+        )->join(
+            array('cp' => $this->getTable('catalog_product_entity_int')),
+            'l.product_id = cp.entity_id AND cp.attribute_id = a.attribute_id AND cp.store_id = 0',
+            array()
+        )->joinLeft(
+            array('apd' => $this->getTable('catalog_product_super_attribute_pricing')),
+            'a.product_super_attribute_id = apd.product_super_attribute_id' .
+            ' AND apd.website_id = 0 AND cp.value = apd.value_index',
+            array()
+        )->joinLeft(
+            array('apw' => $this->getTable('catalog_product_super_attribute_pricing')),
+            'a.product_super_attribute_id = apw.product_super_attribute_id' .
+            ' AND apw.website_id = i.website_id AND cp.value = apw.value_index',
+            array()
+        )->join(
+            array('le' => $this->getTable('catalog_product_entity')),
+            'le.entity_id = l.product_id',
+            array()
+        )->where(
+            'le.required_options=0'
+        )->group(
+            array('l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id')
+        );
 
         $priceExpression = $write->getCheckSql('apw.value_id IS NOT NULL', 'apw.pricing_value', 'apd.pricing_value');
         $percentExpr = $write->getCheckSql('apw.value_id IS NOT NULL', 'apw.is_percent', 'apd.is_percent');
@@ -181,43 +185,54 @@ class Configurable
         $groupPriceExp = $write->getCheckSql("{$groupPrice} IS NULL", '0', $groupRoundPriceExp);
         $groupPriceColumn = $write->getCheckSql("MIN(i.group_price) IS NOT NULL", "SUM({$groupPriceExp})", 'NULL');
 
-        $select->columns(array(
-            'price'       => $priceColumn,
-            'tier_price'  => $tierPriceColumn,
-            'group_price' => $groupPriceColumn,
-        ));
+        $select->columns(
+            array('price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn)
+        );
 
         $query = $select->insertFromSelect($coaTable);
         $write->query($query);
 
-        $select = $write->select()
-            ->from(
-                array($coaTable),
-                array(
-                    'parent_id', 'customer_group_id', 'website_id',
-                    'MIN(price)', 'MAX(price)', 'MIN(tier_price)', 'MIN(group_price)'
-                ))
-            ->group(array('parent_id', 'customer_group_id', 'website_id'));
+        $select = $write->select()->from(
+            array($coaTable),
+            array(
+                'parent_id',
+                'customer_group_id',
+                'website_id',
+                'MIN(price)',
+                'MAX(price)',
+                'MIN(tier_price)',
+                'MIN(group_price)'
+            )
+        )->group(
+            array('parent_id', 'customer_group_id', 'website_id')
+        );
 
         $query = $select->insertFromSelect($copTable);
         $write->query($query);
 
-        $table  = array('i' => $this->_getDefaultFinalPriceTable());
-        $select = $write->select()
-            ->join(
-                array('io' => $copTable),
-                'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id'
-                    .' AND i.website_id = io.website_id',
-                array());
-        $select->columns(array(
-            'min_price'   => new \Zend_Db_Expr('i.min_price + io.min_price'),
-            'max_price'   => new \Zend_Db_Expr('i.max_price + io.max_price'),
-            'tier_price'  => $write->getCheckSql('i.tier_price IS NOT NULL', 'i.tier_price + io.tier_price', 'NULL'),
-            'group_price' => $write->getCheckSql(
-                'i.group_price IS NOT NULL',
-                'i.group_price + io.group_price', 'NULL'
-            ),
-        ));
+        $table = array('i' => $this->_getDefaultFinalPriceTable());
+        $select = $write->select()->join(
+            array('io' => $copTable),
+            'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
+            ' AND i.website_id = io.website_id',
+            array()
+        );
+        $select->columns(
+            array(
+                'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
+                'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
+                'tier_price' => $write->getCheckSql(
+                    'i.tier_price IS NOT NULL',
+                    'i.tier_price + io.tier_price',
+                    'NULL'
+                ),
+                'group_price' => $write->getCheckSql(
+                    'i.group_price IS NOT NULL',
+                    'i.group_price + io.group_price',
+                    'NULL'
+                )
+            )
+        );
 
         $query = $select->crossUpdateFromSelect($table);
         $write->query($query);

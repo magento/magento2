@@ -61,6 +61,7 @@ class Observer
         $this->_paymentConfig = $paymentConfig;
         $this->_resourceConfig = $resourceConfig;
     }
+
     /**
      * Set forced canCreditmemo flag
      *
@@ -106,7 +107,10 @@ class Observer
         foreach ($methods as $method) {
             if ($method->getConfigData('order_status') == $status) {
                 $this->_resourceConfig->saveConfig(
-                    'payment/' . $method->getCode() . '/order_status', $defaultStatus, 'default', 0
+                    'payment/' . $method->getCode() . '/order_status',
+                    $defaultStatus,
+                    'default',
+                    0
                 );
             }
         }

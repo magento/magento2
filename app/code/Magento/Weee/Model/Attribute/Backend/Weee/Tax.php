@@ -100,9 +100,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             $key1 = implode('-', array($tax['website_id'], $tax['country'], $state));
 
             if (!empty($dup[$key1])) {
-                throw new Exception(
-                    __('We found a duplicate website, country, and state tax.')
-                );
+                throw new Exception(__('We found a duplicate website, country, and state tax.'));
             }
             $dup[$key1] = 1;
         }
@@ -119,19 +117,19 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     {
         $data = $this->_attributeTax->loadProductData($object, $this->getAttribute());
 
-        foreach ($data as $i=>$row) {
+        foreach ($data as $i => $row) {
             if ($data[$i]['website_id'] == 0) {
-                $rate = $this->_storeManager->getStore()
-                    ->getBaseCurrency()->getRate($this->_directoryHelper->getBaseCurrencyCode());
+                $rate = $this->_storeManager->getStore()->getBaseCurrency()->getRate(
+                    $this->_directoryHelper->getBaseCurrencyCode()
+                );
                 if ($rate) {
-                    $data[$i]['website_value'] = $data[$i]['value']/$rate;
+                    $data[$i]['website_value'] = $data[$i]['value'] / $rate;
                 } else {
                     unset($data[$i]);
                 }
             } else {
                 $data[$i]['website_value'] = $data[$i]['value'];
             }
-
         }
         $object->setData($this->getAttribute()->getName(), $data);
         return $this;
@@ -167,10 +165,10 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             }
 
             $data = array();
-            $data['website_id']   = $tax['website_id'];
-            $data['country']      = $tax['country'];
-            $data['state']        = $state;
-            $data['value']        = $tax['price'];
+            $data['website_id'] = $tax['website_id'];
+            $data['country'] = $tax['country'];
+            $data['state'] = $state;
+            $data['value'] = $tax['price'];
             $data['attribute_id'] = $this->getAttribute()->getId();
 
             $this->_attributeTax->insertProductData($object, $data);
@@ -196,4 +194,3 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         return $this->_attributeTax->getTable('weee_tax');
     }
 }
-

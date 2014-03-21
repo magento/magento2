@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Group;
 
 class ProxyTest extends \PHPUnit_Framework_TestCase
@@ -53,15 +52,25 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
 
     public function testProxyInitializesProxiedObjectOnFirstCall()
     {
-        $groupMock = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Group', array(), array(), '',
-            false);
+        $groupMock = $this->getMock(
+            'Magento\Backend\Model\Config\Structure\Element\Group',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $groupMock->expects($this->once())->method('setData');
         $groupMock->expects($this->once())->method('getId')->will($this->returnValue('group_id'));
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Backend\Model\Config\Structure\Element\Group')
-            ->will($this->returnValue($groupMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Backend\Model\Config\Structure\Element\Group'
+        )->will(
+            $this->returnValue($groupMock)
+        );
 
         $this->_model->setData(array(), '');
         $this->assertEquals('group_id', $this->_model->getId());

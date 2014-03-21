@@ -23,8 +23,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Email;
 
-class Template extends \Magento\Object
-    implements \Magento\Option\ArrayInterface
+class Template extends \Magento\Object implements \Magento\Option\ArrayInterface
 {
     /**
      * @var \Magento\Registry
@@ -67,7 +66,7 @@ class Template extends \Magento\Object
     public function toOptionArray()
     {
         /** @var $collection \Magento\Email\Model\Resource\Template\Collection */
-        if (!$collection = $this->_coreRegistry->registry('config_system_email_template')) {
+        if (!($collection = $this->_coreRegistry->registry('config_system_email_template'))) {
             $collection = $this->_templatesFactory->create();
             $collection->load();
             $this->_coreRegistry->register('config_system_email_template', $collection);
@@ -76,10 +75,7 @@ class Template extends \Magento\Object
         $templateId = str_replace('/', '_', $this->getPath());
         $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
         $templateLabel = __('%1 (Default)', $templateLabel);
-        array_unshift($options, array(
-            'value' => $templateId,
-            'label' => $templateLabel
-        ));
+        array_unshift($options, array('value' => $templateId, 'label' => $templateLabel));
         return $options;
     }
 }

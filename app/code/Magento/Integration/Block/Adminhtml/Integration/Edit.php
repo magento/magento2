@@ -73,42 +73,38 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_removeButton('delete');
 
         if ($this->_integrationHelper->isConfigType(
-            $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION))
+            $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)
+        )
         ) {
             $this->_removeButton('save');
         }
 
         if ($this->_isNewIntegration()) {
-            $this->removeButton('save')->addButton(
+            $this->removeButton(
+                'save'
+            )->addButton(
                 'save',
-                [
+                array(
                     'id' => 'save-split-button',
                     'label' => __('Save'),
                     'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
                     'button_class' => 'PrimarySplitButton',
-                    'data_attribute' => [
-                        'mage-init' => [
-                            'button' => ['event' => 'save', 'target' => '#edit_form'],
-                        ],
-                    ],
-                    'options' => [
-                        'save_activate' => [
+                    'data_attribute' => array(
+                        'mage-init' => array('button' => array('event' => 'save', 'target' => '#edit_form'))
+                    ),
+                    'options' => array(
+                        'save_activate' => array(
                             'id' => 'activate',
                             'label' => __('Save & Activate'),
-                            'data_attribute' => [
-                                'mage-init' => [
-                                    'button' => [
-                                        'event' => 'saveAndActivate',
-                                        'target' => '#edit_form',
-                                    ],
-                                    'integration' => [
-                                        'gridUrl' => $this->getUrl('*/*/'),
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+                            'data_attribute' => array(
+                                'mage-init' => array(
+                                    'button' => array('event' => 'saveAndActivate', 'target' => '#edit_form'),
+                                    'integration' => array('gridUrl' => $this->getUrl('*/*/'))
+                                )
+                            )
+                        )
+                    )
+                )
             );
         }
     }

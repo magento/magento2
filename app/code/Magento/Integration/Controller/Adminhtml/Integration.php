@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
@@ -246,16 +245,17 @@ class Integration extends Action
                 }
                 if (!$this->getRequest()->isXmlHttpRequest()) {
                     $this->messageManager->addSuccess(
-                        __('The integration \'%1\' has been saved.',
+                        __(
+                            'The integration \'%1\' has been saved.',
                             $this->escaper->escapeHtml($integration->getName())
                         )
                     );
                 }
                 if ($this->getRequest()->isXmlHttpRequest()) {
-                    $isTokenExchange = ($integration->getEndpoint() && $integration->getIdentityLinkUrl()) ? '1' : '0';
+                    $isTokenExchange = $integration->getEndpoint() && $integration->getIdentityLinkUrl() ? '1' : '0';
                     $this->getResponse()->setBody(
                         $this->_coreHelper->jsonEncode(
-                            ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
+                            array('integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange)
                         )
                     );
                 } else {
@@ -307,8 +307,9 @@ class Integration extends Action
         }
 
         /** Add handles of the tabs which are defined in other modules */
-        $handleNodes = $this->_view->getLayout()->getUpdate()->getFileLayoutUpdatesXml()
-            ->xpath('//referenceBlock[@name="integration.activate.permissions.tabs"]/../@id');
+        $handleNodes = $this->_view->getLayout()->getUpdate()->getFileLayoutUpdatesXml()->xpath(
+            '//referenceBlock[@name="integration.activate.permissions.tabs"]/../@id'
+        );
         $handles = array();
         if (is_array($handleNodes)) {
             foreach ($handleNodes as $node) {
@@ -332,7 +333,8 @@ class Integration extends Action
                 $integrationData = $this->_integrationService->get($integrationId);
                 if ($this->_integrationData->isConfigType($integrationData)) {
                     $this->messageManager->addError(
-                        __("Uninstall the extension to remove integration '%1'.",
+                        __(
+                            "Uninstall the extension to remove integration '%1'.",
                             $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])
                         )
                     );
@@ -348,10 +350,12 @@ class Integration extends Action
                         $this->_oauthService->deleteConsumer($integrationData[Info::DATA_CONSUMER_ID]);
                     }
                     $this->_registry->register(self::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
-                    $this->messageManager
-                        ->addSuccess(__("The integration '%1' has been deleted.",
+                    $this->messageManager->addSuccess(
+                        __(
+                            "The integration '%1' has been deleted.",
                             $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])
-                        ));
+                        )
+                    );
                 }
             } else {
                 $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
@@ -378,9 +382,9 @@ class Integration extends Action
             if ($this->_oauthService->createAccessToken($integration->getConsumerId(), $clearExistingToken)) {
                 $integration->setStatus(IntegrationModel::STATUS_ACTIVE)->save();
             }
+            // Important to call get() once again - that will pull newly generated token
             $this->_registry->register(
                 self::REGISTRY_KEY_CURRENT_INTEGRATION,
-                // Important to call get() once again - that will pull newly generated token
                 $this->_integrationService->get($integrationId)->getData()
             );
         } catch (\Magento\Core\Exception $e) {
@@ -424,11 +428,11 @@ class Integration extends Action
             $this->_view->renderLayout();
             $popupContent = $this->_response->getBody();
             /** Initialize response body */
-            $result = [
+            $result = array(
                 IntegrationModel::IDENTITY_LINK_URL => $integration->getIdentityLinkUrl(),
                 IntegrationModel::CONSUMER_ID => $integration->getConsumerId(),
                 'popup_content' => $popupContent
-            ];
+            );
             $this->getResponse()->setBody($this->_coreHelper->jsonEncode($result));
         } catch (\Magento\Core\Exception $e) {
             $this->messageManager->addError($e->getMessage());
@@ -478,7 +482,7 @@ class Integration extends Action
     {
         if ($this->getRequest()->isXmlHttpRequest()) {
             $this->getResponse()->setBody(
-                $this->_coreHelper->jsonEncode(['_redirect' => $this->getUrl($path, $arguments)])
+                $this->_coreHelper->jsonEncode(array('_redirect' => $this->getUrl($path, $arguments)))
             );
             return $this;
         } else {
@@ -496,8 +500,13 @@ class Integration extends Action
     protected function _setActivationSuccessMsg($isReauthorize, $integrationName)
     {
         $integrationName = $this->escaper->escapeHtml($integrationName);
-        $successMsg = $isReauthorize ? __("The integration '%1' has been re-authorized.", $integrationName)
-            : __("The integration '%1' has been activated.", $integrationName);
+        $successMsg = $isReauthorize ? __(
+            "The integration '%1' has been re-authorized.",
+            $integrationName
+        ) : __(
+            "The integration '%1' has been activated.",
+            $integrationName
+        );
         $this->messageManager->addSuccess($successMsg);
     }
 
@@ -510,8 +519,13 @@ class Integration extends Action
      */
     protected function _setActivationFailedMsg($isReauthorize, $integrationName)
     {
-        $msg = $isReauthorize ? __("Integration '%1' re-authorization has been failed.", $integrationName)
-            : __("Integration '%1' activation has been failed.", $integrationName);
+        $msg = $isReauthorize ? __(
+            "Integration '%1' re-authorization has been failed.",
+            $integrationName
+        ) : __(
+            "Integration '%1' activation has been failed.",
+            $integrationName
+        );
         $this->messageManager->addError($msg);
     }
 
@@ -524,8 +538,13 @@ class Integration extends Action
      */
     protected function _setActivationInProcessMsg($isReauthorize, $integrationName)
     {
-        $msg = $isReauthorize ? __("Integration '%1' has been sent for re-authorization.", $integrationName)
-            : __("Integration '%1' has been sent for activation.", $integrationName);
+        $msg = $isReauthorize ? __(
+            "Integration '%1' has been sent for re-authorization.",
+            $integrationName
+        ) : __(
+            "Integration '%1' has been sent for activation.",
+            $integrationName
+        );
         $this->messageManager->addNotice($msg);
     }
 }

@@ -31,8 +31,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 use Magento\View\Element\AbstractBlock;
 
-class Country
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\Locale\ListsInterface

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Model\Config\Source\Online;
 
 use Magento\Data\OptionSourceInterface;
@@ -40,7 +39,7 @@ class Requesttype implements OptionSourceInterface
     {
         return array(
             array('value' => 0, 'label' => __('Divide to equal weight (one request)')),
-            array('value' => 1, 'label' => __('Use origin weight (few requests)')),
+            array('value' => 1, 'label' => __('Use origin weight (few requests)'))
         );
     }
 }

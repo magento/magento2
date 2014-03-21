@@ -76,11 +76,9 @@ class Manager
     {
         $this->_session->setSessionLocale(null);
 
-        $this->_authSession->getUser()
-            ->setInterfaceLocale($localeCode);
+        $this->_authSession->getUser()->setInterfaceLocale($localeCode);
 
-        $this->_translator->setLocale($localeCode)
-            ->init(null, true);
+        $this->_translator->setLocale($localeCode)->init(null, true);
 
         return $this;
     }

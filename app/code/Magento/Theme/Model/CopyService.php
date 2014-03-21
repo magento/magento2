@@ -108,10 +108,8 @@ class CopyService
      * @param ThemeInterface $target
      * @return void
      */
-    protected function _copyDatabaseCustomization(
-        ThemeInterface $source,
-        ThemeInterface $target
-    ) {
+    protected function _copyDatabaseCustomization(ThemeInterface $source, ThemeInterface $target)
+    {
         /** @var $themeFile \Magento\Core\Model\Theme\File */
         foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
@@ -122,11 +120,11 @@ class CopyService
             $newThemeFile = $this->_fileFactory->create();
             $newThemeFile->setData(
                 array(
-                   'theme_id'      => $target->getId(),
-                   'file_path'     => $themeFile->getFilePath(),
-                   'file_type'     => $themeFile->getFileType(),
-                   'content'       => $themeFile->getContent(),
-                   'sort_order'    => $themeFile->getData('sort_order'),
+                    'theme_id' => $target->getId(),
+                    'file_path' => $themeFile->getFilePath(),
+                    'file_type' => $themeFile->getFileType(),
+                    'content' => $themeFile->getContent(),
+                    'sort_order' => $themeFile->getData('sort_order')
                 )
             );
             $newThemeFile->save();
@@ -140,10 +138,8 @@ class CopyService
      * @param ThemeInterface $target
      * @return void
      */
-    protected function _copyLayoutCustomization(
-        ThemeInterface $source,
-        ThemeInterface $target
-    ) {
+    protected function _copyLayoutCustomization(ThemeInterface $source, ThemeInterface $target)
+    {
         $update = $this->_updateFactory->create();
         /** @var $targetUpdates \Magento\Core\Model\Resource\Layout\Update\Collection */
         $targetUpdates = $update->getCollection();
@@ -176,10 +172,8 @@ class CopyService
      * @param ThemeInterface $target
      * @return void
      */
-    protected function _copyFilesystemCustomization(
-        ThemeInterface $source,
-        ThemeInterface $target
-    ) {
+    protected function _copyFilesystemCustomization(ThemeInterface $source, ThemeInterface $target)
+    {
         $sourcePath = $this->_customizationPath->getCustomizationPath($source);
         $targetPath = $this->_customizationPath->getCustomizationPath($target);
 

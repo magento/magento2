@@ -158,14 +158,14 @@ class Observer
         $this->_eventManager->dispatch('clear_expired_quotes_before', array('sales_observer' => $this));
 
         $lifetimes = $this->_storeConfig->getStoresConfigByPath('checkout/cart/delete_quote_after');
-        foreach ($lifetimes as $storeId=>$lifetime) {
+        foreach ($lifetimes as $storeId => $lifetime) {
             $lifetime *= 86400;
 
             /** @var $quotes \Magento\Sales\Model\Resource\Quote\Collection */
             $quotes = $this->_quoteCollectionFactory->create();
 
             $quotes->addFieldToFilter('store_id', $storeId);
-            $quotes->addFieldToFilter('updated_at', array('to'=>date("Y-m-d", time()-$lifetime)));
+            $quotes->addFieldToFilter('updated_at', array('to' => date("Y-m-d", time() - $lifetime)));
             $quotes->addFieldToFilter('is_active', 0);
 
             foreach ($this->getExpireQuotesAdditionalFilterFields() as $field => $condition) {
@@ -299,18 +299,19 @@ class Observer
         $orderInstance = $observer->getOrder();
         /** @var $orderAddress \Magento\Sales\Model\Order\Address */
         $orderAddress = $this->_getVatRequiredSalesAddress($orderInstance);
-        if (!($orderAddress instanceof \Magento\Sales\Model\Order\Address)) {
+        if (!$orderAddress instanceof \Magento\Sales\Model\Order\Address) {
             return;
         }
 
         $vatRequestId = $orderAddress->getVatRequestId();
         $vatRequestDate = $orderAddress->getVatRequestDate();
-        if (is_string($vatRequestId) && !empty($vatRequestId) && is_string($vatRequestDate)
-            && !empty($vatRequestDate)
+        if (is_string($vatRequestId) && !empty($vatRequestId) && is_string($vatRequestDate) && !empty($vatRequestDate)
         ) {
-            $orderHistoryComment = __('VAT Request Identifier')
-                . ': ' . $vatRequestId . '<br />' . __('VAT Request Date')
-                . ': ' . $vatRequestDate;
+            $orderHistoryComment = __(
+                'VAT Request Identifier'
+            ) . ': ' . $vatRequestId . '<br />' . __(
+                'VAT Request Date'
+            ) . ': ' . $vatRequestDate;
             $orderInstance->addStatusHistoryComment($orderHistoryComment, false);
         }
     }
@@ -348,8 +349,8 @@ class Observer
         $quoteAddress = $observer->getQuoteAddress();
         $configAddressType = $this->_customerAddressHelper->getTaxCalculationAddressType();
         // Restore initial customer group ID in quote only if VAT is calculated based on shipping address
-        if ($quoteAddress->hasPrevQuoteCustomerGroupId()
-            && $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING
+        if ($quoteAddress->hasPrevQuoteCustomerGroupId() &&
+            $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING
         ) {
             $quoteAddress->getQuote()->setCustomerGroupId($quoteAddress->getPrevQuoteCustomerGroupId());
             $quoteAddress->unsPrevQuoteCustomerGroupId();

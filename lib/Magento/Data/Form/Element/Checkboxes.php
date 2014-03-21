@@ -71,7 +71,7 @@ class Checkboxes extends AbstractElement
     protected function _prepareValues()
     {
         $options = array();
-        $values  = array();
+        $values = array();
 
         if ($this->getValues()) {
             if (!is_array($this->getValues())) {
@@ -88,16 +88,10 @@ class Checkboxes extends AbstractElement
                     if (!isset($v['label'])) {
                         $v['label'] = $v['value'];
                     }
-                    $values[] = array(
-                        'label' => $v['label'],
-                        'value' => $v['value']
-                    );
+                    $values[] = array('label' => $v['label'], 'value' => $v['value']);
                 }
             } else {
-                $values[] = array(
-                    'label' => $v,
-                    'value' => $k
-                );
+                $values[] = array('label' => $v, 'value' => $k);
             }
         }
 
@@ -117,12 +111,11 @@ class Checkboxes extends AbstractElement
             return '';
         }
 
-        $html  = '<div class=nested>';
+        $html = '<div class=nested>';
         foreach ($values as $value) {
-            $html.= $this->_optionToHtml($value);
+            $html .= $this->_optionToHtml($value);
         }
-        $html .= '</div>'
-            . $this->getAfterElementHtml();
+        $html .= '</div>' . $this->getAfterElementHtml();
 
         return $html;
     }
@@ -134,9 +127,7 @@ class Checkboxes extends AbstractElement
     public function getChecked($value)
     {
         if ($checked = $this->getValue()) {
-
         } elseif ($checked = $this->getData('checked')) {
-
         } else {
             return;
         }
@@ -198,13 +189,13 @@ class Checkboxes extends AbstractElement
         return;
     }
 
-//    public function getName($value)
-//    {
-//        if ($name = $this->getData('name')) {
-//            return str_replace('$value', $value, $name);
-//        }
-//        return ;
-//    }
+    //    public function getName($value)
+    //    {
+    //        if ($name = $this->getData('name')) {
+    //            return str_replace('$value', $value, $name);
+    //        }
+    //        return ;
+    //    }
 
     /**
      * @param array $option
@@ -212,17 +203,23 @@ class Checkboxes extends AbstractElement
      */
     protected function _optionToHtml($option)
     {
-        $id = $this->getHtmlId().'_'.$this->_escape($option['value']);
+        $id = $this->getHtmlId() . '_' . $this->_escape($option['value']);
 
-        $html = '<div class="field choice"><input id="'.$id.'"';
+        $html = '<div class="field choice"><input id="' . $id . '"';
         foreach ($this->getHtmlAttributes() as $attribute) {
             if ($value = $this->getDataUsingMethod($attribute, $option['value'])) {
-                $html .= ' '.$attribute.'="'.$value.'"';
+                $html .= ' ' . $attribute . '="' . $value . '"';
             }
         }
-        $html .= ' value="'.$option['value'].'" />'
-            . ' <label for="'.$id.'">' . $option['label'] . '</label></div>'
-            . "\n";
+        $html .= ' value="' .
+            $option['value'] .
+            '" />' .
+            ' <label for="' .
+            $id .
+            '">' .
+            $option['label'] .
+            '</label></div>' .
+            "\n";
         return $html;
     }
 }

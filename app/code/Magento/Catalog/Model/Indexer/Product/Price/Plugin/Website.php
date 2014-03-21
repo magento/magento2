@@ -33,9 +33,8 @@ class Website
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
      */
-    public function __construct(
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $processor
-    ) {
+    public function __construct(\Magento\Catalog\Model\Indexer\Product\Price\Processor $processor)
+    {
         $this->_processor = $processor;
     }
 

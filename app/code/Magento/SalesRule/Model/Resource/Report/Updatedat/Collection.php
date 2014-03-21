@@ -32,8 +32,7 @@ namespace Magento\SalesRule\Model\Resource\Report\Updatedat;
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection
-    extends \Magento\SalesRule\Model\Resource\Report\Collection
+class Collection extends \Magento\SalesRule\Model\Resource\Report\Collection
 {
     /**
      * Aggregated Data Table

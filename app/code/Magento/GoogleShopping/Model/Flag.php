@@ -53,8 +53,7 @@ class Flag extends \Magento\Core\Model\Flag
      */
     public function lock()
     {
-        $this->setState(1)
-            ->save();
+        $this->setState(1)->save();
     }
 
     /**
@@ -91,7 +90,7 @@ class Flag extends \Magento\Core\Model\Flag
     {
         if (!!$this->getState() && \Magento\GoogleShopping\Model\Flag::FLAG_TTL) {
             if ($this->getLastUpdate()) {
-                return (time() > (strtotime($this->getLastUpdate()) + \Magento\GoogleShopping\Model\Flag::FLAG_TTL));
+                return time() > strtotime($this->getLastUpdate()) + \Magento\GoogleShopping\Model\Flag::FLAG_TTL;
             } else {
                 return true;
             }

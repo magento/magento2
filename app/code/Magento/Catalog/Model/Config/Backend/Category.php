@@ -73,26 +73,22 @@ class Category extends \Magento\Core\Model\Config\Value
     protected function _afterSave()
     {
         if ($this->getScope() == 'stores') {
-            $rootId     = $this->getValue();
-            $storeId    = $this->getScopeId();
+            $rootId = $this->getValue();
+            $storeId = $this->getScopeId();
 
-            $tree       = $this->_catalogCategory->getTreeModel();
+            $tree = $this->_catalogCategory->getTreeModel();
 
             // Create copy of categories attributes for choosed store
             $tree->load();
             $root = $tree->getNodeById($rootId);
 
             // Save root
-            $this->_catalogCategory->setStoreId(0)
-               ->load($root->getId());
-            $this->_catalogCategory->setStoreId($storeId)
-                ->save();
+            $this->_catalogCategory->setStoreId(0)->load($root->getId());
+            $this->_catalogCategory->setStoreId($storeId)->save();
 
             foreach ($root->getAllChildNodes() as $node) {
-                $this->_catalogCategory->setStoreId(0)
-                   ->load($node->getId());
-                $this->_catalogCategory->setStoreId($storeId)
-                    ->save();
+                $this->_catalogCategory->setStoreId(0)->load($node->getId());
+                $this->_catalogCategory->setStoreId($storeId)->save();
             }
         }
         return $this;

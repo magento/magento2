@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -76,38 +75,45 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManagerMock = $this->getMock(
-            'Magento\Event\ManagerInterface',
-            array(), array(), '', false
-        );
+        $this->_eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $this->_structureReaderMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Reader',
-            array(), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
-        $structureMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure',
-            array(), array(), '', false
-        );
+        $structureMock = $this->getMock('Magento\Backend\Model\Config\Structure', array(), array(), '', false);
 
-        $this->_structureReaderMock->expects($this->any())->method('getConfiguration')->will(
+        $this->_structureReaderMock->expects(
+            $this->any()
+        )->method(
+            'getConfiguration'
+        )->will(
             $this->returnValue($structureMock)
         );
 
         $this->_transFactoryMock = $this->getMock(
             'Magento\Core\Model\Resource\TransactionFactory',
-            array('create'), array(), '', false
+            array('create'),
+            array(),
+            '',
+            false
         );
-        $this->_appConfigMock = $this->getMock(
-            'Magento\App\ConfigInterface',
-            array(), array(), '', false
-        );
+        $this->_appConfigMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMock(
             'Magento\Backend\Model\Config\Loader',
-            array('getConfigByPath'), array(), '', false
+            array('getConfigByPath'),
+            array(),
+            '',
+            false
         );
         $this->_dataFactoryMock = $this->getMock(
             'Magento\Core\Model\Config\ValueFactory',
-            array(), array(), '', false
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_storeManager = $this->getMockForAbstractClass('Magento\Core\Model\StoreManagerInterface');
@@ -143,25 +149,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
     {
-        $transactionMock = $this->getMock(
-            'Magento\Core\Model\Resource\Transaction', array(), array(), '', false
+        $transactionMock = $this->getMock('Magento\Core\Model\Resource\Transaction', array(), array(), '', false);
+
+        $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
+
+        $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue(array()));
+
+        $this->_eventManagerMock->expects(
+            $this->at(1)
+        )->method(
+            'dispatch'
+        )->with(
+            $this->equalTo('admin_system_config_changed_section_'),
+            $this->arrayHasKey('website')
         );
 
-        $this->_transFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($transactionMock));
-
-        $this->_configLoaderMock->expects($this->any())
-            ->method('getConfigByPath')
-            ->will($this->returnValue(array()));
-
-        $this->_eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with($this->equalTo('admin_system_config_changed_section_'), $this->arrayHasKey('website'));
-
-        $this->_eventManagerMock->expects($this->at(1))
-            ->method('dispatch')
-            ->with($this->equalTo('admin_system_config_changed_section_'), $this->arrayHasKey('store'));
+        $this->_eventManagerMock->expects(
+            $this->at(1)
+        )->method(
+            'dispatch'
+        )->with(
+            $this->equalTo('admin_system_config_changed_section_'),
+            $this->arrayHasKey('store')
+        );
 
         $this->_model->setGroups(array('1' => array('data')));
         $this->_model->save();

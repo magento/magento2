@@ -54,9 +54,12 @@ class Entity extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
 
-        $select  = $adapter->select()
-            ->from($this->getTable('rating_entity'), $this->getIdFieldName())
-            ->where('entity_code = :entity_code');
+        $select = $adapter->select()->from(
+            $this->getTable('rating_entity'),
+            $this->getIdFieldName()
+        )->where(
+            'entity_code = :entity_code'
+        );
         return $adapter->fetchOne($select, array(':entity_code' => $entityCode));
     }
 }

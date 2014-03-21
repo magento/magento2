@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Scan javascript files for invocations of mage.__() function, verifies that all the translations
  * were output to the page.
@@ -62,17 +61,25 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
         foreach ($this->_getJavascriptPhrases(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) as $phrase) {
             if (!in_array($phrase['phrase'], $registeredPhrases)) {
-                $unregisteredMessages[]
-                    = sprintf("'%s' \n in file %s, line# %s", $phrase['phrase'], $phrase['file'], $phrase['line']);
+                $unregisteredMessages[] = sprintf(
+                    "'%s' \n in file %s, line# %s",
+                    $phrase['phrase'],
+                    $phrase['file'],
+                    $phrase['line']
+                );
                 $untranslated[] = $phrase['phrase'];
             }
-
         }
 
         if (count($unregisteredMessages) > 0) {
-            $this->fail('There are UI messages in javascript files for adminhtml area ' .
-                "which requires translations to be output to the page: \n\n"
-                . implode("\n", $unregisteredMessages));
+            $this->fail(
+                'There are UI messages in javascript files for adminhtml area ' .
+                "which requires translations to be output to the page: \n\n" .
+                implode(
+                    "\n",
+                    $unregisteredMessages
+                )
+            );
         }
     }
 
@@ -85,17 +92,25 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
         foreach ($this->_getJavascriptPhrases('frontend') as $phrase) {
             if (!in_array($phrase['phrase'], $registeredPhrases)) {
-                $unregisteredMessages[]
-                    = sprintf("'%s' \n in file %s, line# %s", $phrase['phrase'], $phrase['file'], $phrase['line']);
+                $unregisteredMessages[] = sprintf(
+                    "'%s' \n in file %s, line# %s",
+                    $phrase['phrase'],
+                    $phrase['file'],
+                    $phrase['line']
+                );
                 $untranslated[] = $phrase['phrase'];
             }
-
         }
 
         if (count($unregisteredMessages) > 0) {
-            $this->fail('There are UI messages in javascript files for frontend area ' .
-                "which requires translations to be output to the page: \n\n"
-                . implode("\n", $unregisteredMessages));
+            $this->fail(
+                'There are UI messages in javascript files for frontend area ' .
+                "which requires translations to be output to the page: \n\n" .
+                implode(
+                    "\n",
+                    $unregisteredMessages
+                )
+            );
         }
     }
 
@@ -106,8 +121,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
      */
     protected function _getRegisteredPhrases()
     {
-        $jsHelperFile =  __DIR__ .
-            '../../../../../../../../../app/code/Magento/Core/Helper/Js.php';
+        $jsHelperFile = __DIR__ . '../../../../../../../../../app/code/Magento/Core/Helper/Js.php';
 
         $this->_phraseCollector->parse($jsHelperFile);
 

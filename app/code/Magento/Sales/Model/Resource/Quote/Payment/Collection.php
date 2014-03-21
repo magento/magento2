@@ -99,4 +99,3 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         return parent::_afterLoad();
     }
 }
-

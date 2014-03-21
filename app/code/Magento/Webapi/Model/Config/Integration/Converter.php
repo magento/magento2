@@ -32,7 +32,9 @@ class Converter implements \Magento\Config\ConverterInterface
      * Array keys for config internal representation.
      */
     const API_RESOURCES = 'resources';
+
     const API_RESOURCE_NAME = 'name';
+
     /**#@-*/
 
     /**

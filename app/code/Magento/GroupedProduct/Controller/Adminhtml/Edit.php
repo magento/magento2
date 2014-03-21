@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Controller\Adminhtml;
 
 class Edit extends \Magento\Backend\App\AbstractAction
@@ -76,7 +75,7 @@ class Edit extends \Magento\Backend\App\AbstractAction
      */
     public function popupAction()
     {
-        $productId  = (int)$this->getRequest()->getParam('id');
+        $productId = (int)$this->getRequest()->getParam('id');
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->factory->create();

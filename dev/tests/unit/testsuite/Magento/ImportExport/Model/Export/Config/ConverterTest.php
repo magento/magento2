@@ -46,7 +46,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $testDom = $this->_filePath . 'export.xml';
         $dom = new \DOMDocument();
         $dom->load($testDom);
-        $expectedArray = include($this->_filePath . 'export.php');
+        $expectedArray = include $this->_filePath . 'export.php';
         $this->assertEquals($expectedArray, $this->_model->convert($dom));
     }
 }

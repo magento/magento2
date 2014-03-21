@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Event/etc/events.xsd">
     <event name="catalog_entity_attribute_save_before">
         <observer name="weee" instance="Magento\Weee\Model\Observer" method="assignBackendModelToAttribute" shared="false" />
     </event>

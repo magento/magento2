@@ -140,8 +140,11 @@ class Composite extends \Magento\App\Helper\AbstractHelper
     {
         $update = $this->_view->getLayout()->getUpdate();
         if ($isOk) {
-            $update->addHandle('CATALOG_PRODUCT_COMPOSITE_CONFIGURE')
-                ->addHandle('catalog_product_view_type_' . $productType);
+            $update->addHandle(
+                'CATALOG_PRODUCT_COMPOSITE_CONFIGURE'
+            )->addHandle(
+                'catalog_product_view_type_' . $productType
+            );
         } else {
             $update->addHandle('CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR');
         }
@@ -166,16 +169,18 @@ class Composite extends \Magento\App\Helper\AbstractHelper
         try {
             if (!$configureResult->getOk()) {
                 throw new \Magento\Core\Exception($configureResult->getMessage());
-            };
+            }
 
             $currentStoreId = (int)$configureResult->getCurrentStoreId();
             if (!$currentStoreId) {
                 $currentStoreId = $this->_storeManager->getStore()->getId();
             }
 
-            $product = $this->_productFactory->create()
-                ->setStoreId($currentStoreId)
-                ->load($configureResult->getProductId());
+            $product = $this->_productFactory->create()->setStoreId(
+                $currentStoreId
+            )->load(
+                $configureResult->getProductId()
+            );
             if (!$product->getId()) {
                 throw new \Magento\Core\Exception(__('The product is not loaded.'));
             }

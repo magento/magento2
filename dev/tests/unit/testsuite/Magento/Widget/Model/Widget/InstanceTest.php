@@ -60,91 +60,90 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_widgetModelMock = $this->getMockBuilder('Magento\Widget\Model\Widget')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_viewFileSystemMock = $this->getMockBuilder('Magento\View\FileSystem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_namespaceResolver = $this->getMockBuilder('\Magento\Widget\Model\NamespaceResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_widgetModelMock = $this->getMockBuilder(
+            'Magento\Widget\Model\Widget'
+        )->disableOriginalConstructor()->getMock();
+        $this->_viewFileSystemMock = $this->getMockBuilder(
+            'Magento\View\FileSystem'
+        )->disableOriginalConstructor()->getMock();
+        $this->_namespaceResolver = $this->getMockBuilder(
+            '\Magento\Widget\Model\NamespaceResolver'
+        )->disableOriginalConstructor()->getMock();
         $this->_cacheTypesListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
-        $this->_readerMock = $this->getMockBuilder('Magento\Widget\Model\Config\Reader')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_readerMock = $this->getMockBuilder(
+            'Magento\Widget\Model\Config\Reader'
+        )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock =$this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
         $this->_directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($this->_directoryMock));
-        $this->_directoryMock->expects($this->any())
-            ->method('isReadable')
-            ->will($this->returnArgument(0));
-        $this->_directoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $args = $objectManagerHelper->getConstructArguments('Magento\Widget\Model\Widget\Instance', array(
-            'filesystem' => $filesystemMock,
-            'viewFileSystem' => $this->_viewFileSystemMock,
-            'cacheTypeList' => $this->_cacheTypesListMock,
-            'reader' => $this->_readerMock,
-            'widgetModel' => $this->_widgetModelMock,
-            'namespaceResolver' => $this->_namespaceResolver
-        ));
-        /** @var \Magento\Widget\Model\Widget\Instance _model */
-        $this->_model = $this->getMock(
-            'Magento\Widget\Model\Widget\Instance',
-            array('_construct'),
-            $args,
-            '',
-            true
+        $filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($this->_directoryMock)
         );
+        $this->_directoryMock->expects($this->any())->method('isReadable')->will($this->returnArgument(0));
+        $this->_directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $args = $objectManagerHelper->getConstructArguments(
+            'Magento\Widget\Model\Widget\Instance',
+            array(
+                'filesystem' => $filesystemMock,
+                'viewFileSystem' => $this->_viewFileSystemMock,
+                'cacheTypeList' => $this->_cacheTypesListMock,
+                'reader' => $this->_readerMock,
+                'widgetModel' => $this->_widgetModelMock,
+                'namespaceResolver' => $this->_namespaceResolver
+            )
+        );
+        /** @var \Magento\Widget\Model\Widget\Instance _model */
+        $this->_model = $this->getMock('Magento\Widget\Model\Widget\Instance', array('_construct'), $args, '', true);
     }
 
     public function testGetWidgetConfigAsArray()
     {
         $widget = array(
-            '@' => array(
-                'type' => 'Magento\Cms\Block\Widget\Page\Link',
-                'module' => 'Magento_Cms',
-            ),
+            '@' => array('type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'),
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
             'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif',
             'parameters' => array(
                 'page_id' => array(
-                    '@' => array(
-                        'type' => 'complex',
-                    ),
+                    '@' => array('type' => 'complex'),
                     'type' => 'label',
                     'helper_block' => array(
                         'type' => 'Magento\Cms\Block\Adminhtml\Page\Widget\Chooser',
-                        'data' => array(
-                            'button' => array(
-                                'open' => 'Select Page...',
-                            ),
-                        ),
+                        'data' => array('button' => array('open' => 'Select Page...'))
                     ),
                     'visible' => 'true',
                     'required' => 'true',
                     'sort_order' => '10',
-                    'label' => 'CMS Page',
-                ),
-            ),
+                    'label' => 'CMS Page'
+                )
+            )
         );
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
         $xmlFile = __DIR__ . '/../_files/widget.xml';
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue($xmlFile));
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue($xmlFile));
         $themeConfigFile = __DIR__ . '/../_files/mappedConfigArrayAll.php';
         $themeConfig = include $themeConfigFile;
-        $this->_readerMock->expects($this->once())->method('readFile')->with($this->equalTo($xmlFile))
-            ->will($this->returnValue($themeConfig));
+        $this->_readerMock->expects(
+            $this->once()
+        )->method(
+            'readFile'
+        )->with(
+            $this->equalTo($xmlFile)
+        )->will(
+            $this->returnValue($themeConfig)
+        );
 
         $result = $this->_model->getWidgetConfigAsArray();
 
@@ -157,18 +156,22 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $widget = include $expectedConfigFile;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array(
             'default' => array(
                 'value' => 'product/widget/link/link_block.phtml',
-                'label' => 'Product Link Block Template',
+                'label' => 'Product Link Block Template'
             ),
             'link_inline' => array(
                 'value' => 'product/widget/link/link_inline.phtml',
-                'label' => 'Product Link Inline Template',
+                'label' => 'Product Link Inline Template'
             )
         );
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
@@ -177,10 +180,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetTemplatesValueOnly()
     {
         $widget = array(
-            '@' => array(
-                'type' => 'Magento\Cms\Block\Widget\Page\Link',
-                'module' => 'Magento_Cms',
-            ),
+            '@' => array('type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'),
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -188,27 +188,25 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             'parameters' => array(
                 'template' => array(
                     'values' => array(
-                        'default' => array(
-                            'value' => 'product/widget/link/link_block.phtml',
-                            'label' => 'Template'
-                        )
+                        'default' => array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Template')
                     ),
                     'type' => 'select',
                     'visible' => 'true',
                     'label' => 'Template',
-                    'value' => 'product/widget/link/link_block.phtml',
-                ),
-            ),
+                    'value' => 'product/widget/link/link_block.phtml'
+                )
+            )
         );
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array(
-            'default' => array(
-                'value' => 'product/widget/link/link_block.phtml',
-                'label' => 'Template',
-            ),
+            'default' => array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Template')
         );
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
     }
@@ -216,21 +214,21 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetTemplatesNoTemplate()
     {
         $widget = array(
-            '@' => array(
-                'type' => 'Magento\Cms\Block\Widget\Page\Link',
-                'module' => 'Magento_Cms',
-            ),
+            '@' => array('type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'),
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
             'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif',
-            'parameters' => array(
-            ),
+            'parameters' => array()
         );
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array();
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetTemplates());
     }
@@ -239,10 +237,14 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $widget = include $expectedConfigFile;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = array('left', 'content');
         $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
@@ -250,19 +252,20 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetSupportedContainersNoContainer()
     {
         $widget = array(
-            '@' => array(
-                'type' => 'Magento\Cms\Block\Widget\Page\Link',
-                'module' => 'Magento_Cms',
-            ),
+            '@' => array('type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'),
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
-            'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif',
+            'placeholder_image' => 'Magento_Cms::images/widget_page_link.gif'
         );
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = array();
         $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedContainers());
     }
@@ -271,19 +274,17 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $widget = include $expectedConfigFile;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array(
-            array(
-                'value' => 'product/widget/link/link_block.phtml',
-                'label' => 'Product Link Block Template',
-            ),
-            array(
-                'value' => 'product/widget/link/link_inline.phtml',
-                'label' => 'Product Link Inline Template',
-            )
+            array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template'),
+            array('value' => 'product/widget/link/link_inline.phtml', 'label' => 'Product Link Inline Template')
         );
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('left'));
     }
@@ -292,15 +293,16 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $widget = include $expectedConfigFile;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array(
-            array(
-                'value' => 'product/widget/link/link_block.phtml',
-                'label' => 'Product Link Block Template',
-            ),
+            array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Product Link Block Template')
         );
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
     }
@@ -308,10 +310,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     public function testGetWidgetSupportedTemplatesByContainersNoSupportedContainersSpecified()
     {
         $widget = array(
-            '@' => array(
-                'type' => 'Magento\Cms\Block\Widget\Page\Link',
-                'module' => 'Magento_Cms',
-            ),
+            '@' => array('type' => 'Magento\Cms\Block\Widget\Page\Link', 'module' => 'Magento_Cms'),
             'name' => 'CMS Page Link',
             'description' => 'Link to a CMS Page',
             'is_email_compatible' => 'true',
@@ -319,27 +318,25 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             'parameters' => array(
                 'template' => array(
                     'values' => array(
-                        'default' => array(
-                            'value' => 'product/widget/link/link_block.phtml',
-                            'label' => 'Template'
-                        )
+                        'default' => array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Template')
                     ),
                     'type' => 'select',
                     'visible' => 'true',
                     'label' => 'Template',
-                    'value' => 'product/widget/link/link_block.phtml',
-                ),
-            ),
-        );;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+                    'value' => 'product/widget/link/link_block.phtml'
+                )
+            )
+        );
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedContainers = array(
-            'default' => array(
-                'value' => 'product/widget/link/link_block.phtml',
-                'label' => 'Template',
-            ),
+            'default' => array('value' => 'product/widget/link/link_block.phtml', 'label' => 'Template')
         );
         $this->assertEquals($expectedContainers, $this->_model->getWidgetSupportedTemplatesByContainer('content'));
     }
@@ -348,10 +345,14 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
     {
         $expectedConfigFile = __DIR__ . '/../_files/mappedConfigArray1.php';
         $widget = include $expectedConfigFile;
-        $this->_widgetModelMock->expects($this->once())->method('getWidgetByClassType')
-            ->will($this->returnValue($widget));
-        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')
-            ->will($this->returnValue(''));
+        $this->_widgetModelMock->expects(
+            $this->once()
+        )->method(
+            'getWidgetByClassType'
+        )->will(
+            $this->returnValue($widget)
+        );
+        $this->_viewFileSystemMock->expects($this->once())->method('getFilename')->will($this->returnValue(''));
         $expectedTemplates = array();
         $this->assertEquals($expectedTemplates, $this->_model->getWidgetSupportedTemplatesByContainer('unknown'));
     }

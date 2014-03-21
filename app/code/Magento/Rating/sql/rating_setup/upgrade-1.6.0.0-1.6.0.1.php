@@ -27,10 +27,13 @@
 /* @var $installer \Magento\Core\Model\Resource\Setup */
 $installer = $this;
 
-$installer->getConnection()
-    ->addColumn($installer->getTable('rating'), 'is_active', array(
-        'type'      => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-        'nullable'  => false,
-        'default'   => '1',
-        'comment'   => 'Rating is active.'
-    ));
+$installer->getConnection()->addColumn(
+    $installer->getTable('rating'),
+    'is_active',
+    array(
+        'type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
+        'nullable' => false,
+        'default' => '1',
+        'comment' => 'Rating is active.'
+    )
+);

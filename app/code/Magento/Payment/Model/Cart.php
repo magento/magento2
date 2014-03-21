@@ -32,9 +32,13 @@ class Cart
      * Amounts
      */
     const AMOUNT_TAX = 'tax';
+
     const AMOUNT_SHIPPING = 'shipping';
+
     const AMOUNT_DISCOUNT = 'discount';
+
     const AMOUNT_SUBTOTAL = 'subtotal';
+
     /**@@+*/
 
     /**
@@ -323,8 +327,11 @@ class Cart
                 continue;
             }
 
-            $this->_salesModelItems[] = $this->_createItemFromData($item->getName(), $item->getQty(),
-                $item->getPrice());
+            $this->_salesModelItems[] = $this->_createItemFromData(
+                $item->getName(),
+                $item->getQty(),
+                $item->getPrice()
+            );
         }
 
         $this->addSubtotal($this->_salesModel->getBaseSubtotal());
@@ -373,7 +380,7 @@ class Cart
      */
     protected function _setAmount($amountType, $amount)
     {
-        $this->_amounts[$amountType] = (float)$amount;
+        $this->_amounts[$amountType] = (double)$amount;
     }
 
     /**
@@ -383,7 +390,7 @@ class Cart
      */
     protected function _addAmount($amountType, $amount)
     {
-        $this->_amounts[$amountType] += (float)$amount;
+        $this->_amounts[$amountType] += (double)$amount;
     }
 
     /**
@@ -408,11 +415,7 @@ class Cart
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
-        $item = new \Magento\Object(array(
-            'name'   => $name,
-            'qty'    => $qty,
-            'amount' => (float)$amount,
-        ));
+        $item = new \Magento\Object(array('name' => $name, 'qty' => $qty, 'amount' => (double)$amount));
 
         if ($identifier) {
             $item->setData('id', $identifier);
@@ -432,7 +435,7 @@ class Cart
             self::AMOUNT_DISCOUNT => 0,
             self::AMOUNT_SHIPPING => 0,
             self::AMOUNT_SUBTOTAL => 0,
-            self::AMOUNT_TAX      => 0
+            self::AMOUNT_TAX => 0
         );
     }
 }

@@ -25,10 +25,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Resource\Eav\Attribute');
-$model->setName('system_attribute')
-    ->setId(2)
-    ->setEntityTypeId(4)
-    ->setIsUserDefined(0);
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Catalog\Model\Resource\Eav\Attribute'
+);
+$model->setName('system_attribute')->setId(2)->setEntityTypeId(4)->setIsUserDefined(0);
 $model->save();

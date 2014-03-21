@@ -23,8 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
-class Survey
-    implements \Magento\AdminNotification\Model\System\MessageInterface
+class Survey implements \Magento\AdminNotification\Model\System\MessageInterface
 {
     /**
      * @var \Magento\Backend\Model\Auth\Session
@@ -91,10 +90,9 @@ class Survey
      */
     public function isDisplayed()
     {
-        if ($this->_authSession->getHideSurveyQuestion()
-            || false == $this->_authorization->isAllowed(null)
-            || $this->_survey->isSurveyViewed()
-            || false == $this->_survey->isSurveyUrlValid()
+        if ($this->_authSession->getHideSurveyQuestion() || false == $this->_authorization->isAllowed(
+            null
+        ) || $this->_survey->isSurveyViewed() || false == $this->_survey->isSurveyUrlValid()
         ) {
             return false;
         }
@@ -115,11 +113,14 @@ class Survey
                 'eventData' => array(
                     'surveyUrl' => $this->_survey->getSurveyUrl(),
                     'surveyAction' => $this->_urlBuilder->getUrl('*/survey/index', array('_current' => true)),
-                    'decision' => 'yes',
-                ),
-            ),
+                    'decision' => 'yes'
+                )
+            )
         );
-        return __('We appreciate our merchants\' feedback. Please <a href="#" data-mage-init=%1>take our survey</a> and tell us about features you\'d like to see in Magento.', json_encode($params, JSON_FORCE_OBJECT));
+        return __(
+            'We appreciate our merchants\' feedback. Please <a href="#" data-mage-init=%1>take our survey</a> and tell us about features you\'d like to see in Magento.',
+            json_encode($params, JSON_FORCE_OBJECT)
+        );
     }
 
     /**

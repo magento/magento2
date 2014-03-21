@@ -75,7 +75,10 @@ class Observer
         foreach ($this->_collection as $order) {
             $conversionValue += $order->getBaseGrandTotal();
         }
-        $this->_registry->register(\Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME, $conversionValue);
+        $this->_registry->register(
+            \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_REGISTRY_NAME,
+            $conversionValue
+        );
         return $this;
     }
 }

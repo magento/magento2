@@ -29,8 +29,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
-class Theme
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
      * @var \Magento\View\Design\Theme\LabelFactory
@@ -62,10 +61,7 @@ class Theme
     {
         $options = $this->getOptions();
         if ($this->getColumn()->getWithEmpty()) {
-            array_unshift($options, array(
-                'value' => '',
-                'label' => ''
-            ));
+            array_unshift($options, array('value' => '', 'label' => ''));
         }
         $html = sprintf(
             '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
@@ -107,19 +103,19 @@ class Theme
         }
 
         $value = $this->getValue();
-        $html  = '';
+        $html = '';
 
         foreach ($options as $option) {
             if (!isset($option['value']) || !isset($option['label'])) {
                 continue;
             }
             if (is_array($option['value'])) {
-                $html .= '<optgroup label="'.$option['label'].'">'
-                    . $this->_drawOptions($option['value'])
-                    . '</optgroup>';
+                $html .= '<optgroup label="' . $option['label'] . '">' . $this->_drawOptions(
+                    $option['value']
+                ) . '</optgroup>';
             } else {
-                $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '');
-                $html .= '<option value="'.$option['value'].'"'.$selected.'>'.$option['label'].'</option>';
+                $selected = $option['value'] == $value && !is_null($value) ? ' selected="selected"' : '';
+                $html .= '<option value="' . $option['value'] . '"' . $selected . '>' . $option['label'] . '</option>';
             }
         }
 

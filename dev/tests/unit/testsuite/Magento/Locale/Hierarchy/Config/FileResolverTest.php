@@ -50,19 +50,26 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(\Magento\App\Filesystem::APP_DIR)
-            ->will($this->returnValue($this->_directoryMock));
-        $this->_directoryMock->expects($this->once())
-            ->method('isExist')
-            ->with('locale')
-            ->will($this->returnValue(true));
-        $this->iteratorFactory = $this->getMock('Magento\Config\FileIteratorFactory', array(), array(), '', false);
-        $this->_model = new \Magento\Locale\Hierarchy\Config\FileResolver(
-            $filesystem,
-            $this->iteratorFactory
+        $filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            \Magento\App\Filesystem::APP_DIR
+        )->will(
+            $this->returnValue($this->_directoryMock)
         );
+        $this->_directoryMock->expects(
+            $this->once()
+        )->method(
+            'isExist'
+        )->with(
+            'locale'
+        )->will(
+            $this->returnValue(true)
+        );
+        $this->iteratorFactory = $this->getMock('Magento\Config\FileIteratorFactory', array(), array(), '', false);
+        $this->_model = new \Magento\Locale\Hierarchy\Config\FileResolver($filesystem, $this->iteratorFactory);
     }
 
     /**
@@ -74,16 +81,10 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/_files/custom/hierarchy_config.xml',
             __DIR__ . '/_files/default/hierarchy_config.xml'
         );
-        $expected = array(
-            0 => $paths
-        );
+        $expected = array(0 => $paths);
 
-        $this->_directoryMock->expects($this->once())
-            ->method('search')
-            ->will($this->returnValue(array($paths)));
-        $this->iteratorFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(array($paths)));
+        $this->_directoryMock->expects($this->once())->method('search')->will($this->returnValue(array($paths)));
+        $this->iteratorFactory->expects($this->once())->method('create')->will($this->returnValue(array($paths)));
         $this->assertEquals($expected, $this->_model->get('hierarchy_config.xml', 'scope'));
     }
 }

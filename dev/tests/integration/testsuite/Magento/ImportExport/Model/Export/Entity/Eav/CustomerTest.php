@@ -39,8 +39,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ImportExport\Model\Export\Entity\Eav\Customer');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ImportExport\Model\Export\Entity\Eav\Customer'
+        );
     }
 
     /**
@@ -52,16 +53,20 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $expectedAttributes = array();
         /** @var $collection \Magento\Customer\Model\Resource\Attribute\Collection */
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Attribute\Collection');
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Attribute\Collection'
+        );
         /** @var $attribute \Magento\Customer\Model\Attribute */
         foreach ($collection as $attribute) {
             $expectedAttributes[] = $attribute->getAttributeCode();
         }
         $expectedAttributes = array_diff($expectedAttributes, $this->_model->getDisabledAttributes());
 
-        $this->_model->setWriter(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ImportExport\Model\Export\Adapter\Csv'));
+        $this->_model->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\ImportExport\Model\Export\Adapter\Csv'
+            )
+        );
         $data = $this->_model->export();
         $this->assertNotEmpty($data);
 
@@ -78,8 +83,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $customers \Magento\Customer\Model\Customer[] */
-        $customers = $objectManager->get('Magento\Registry')
-            ->registry('_fixture/Magento_ImportExport_Customer_Collection');
+        $customers = $objectManager->get(
+            'Magento\Registry'
+        )->registry(
+            '_fixture/Magento_ImportExport_Customer_Collection'
+        );
         foreach ($customers as $key => $customer) {
             foreach ($expectedAttributes as $code) {
                 if (!in_array($code, $this->_model->getDisabledAttributes()) && isset($lines[$key][$code])) {
@@ -106,7 +114,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributeCollection()
     {
-        $this->assertInstanceOf('Magento\Customer\Model\Resource\Attribute\Collection',
+        $this->assertInstanceOf(
+            'Magento\Customer\Model\Resource\Attribute\Collection',
             $this->_model->getAttributeCollection()
         );
     }
@@ -168,15 +177,19 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /**
          * Change created_at date of first customer for future filter test.
          */
-        $customers = $objectManager->get('Magento\Registry')
-            ->registry('_fixture/Magento_ImportExport_Customer_Collection');
+        $customers = $objectManager->get(
+            'Magento\Registry'
+        )->registry(
+            '_fixture/Magento_ImportExport_Customer_Collection'
+        );
         $customers[0]->setCreatedAt($createdAtDate);
         $customers[0]->save();
         /**
          * Change type of created_at attribute. In this case we have possibility to test date rage filter
          */
-        $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Attribute\Collection');
+        $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Attribute\Collection'
+        );
         $attributeCollection->addFieldToFilter('attribute_code', 'created_at');
         /** @var $createdAtAttribute \Magento\Customer\Model\Attribute */
         $createdAtAttribute = $attributeCollection->getFirstItem();
@@ -187,17 +200,19 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
          */
         $parameters = array(
             \Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP => array(
-                'email'      => 'example.com',
+                'email' => 'example.com',
                 'created_at' => array($createdAtDate, ''),
-                'store_id'   => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId()
+                'store_id' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Core\Model\StoreManagerInterface'
+                )->getStore()->getId()
             )
         );
         $this->_model->setParameters($parameters);
         /** @var $customers \Magento\Customer\Model\Resource\Customer\Collection */
         $collection = $this->_model->filterEntityCollection(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->create('Magento\Customer\Model\Resource\Customer\Collection')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\Customer\Model\Resource\Customer\Collection'
+            )
         );
         $collection->load();
 
@@ -214,10 +229,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _csvToArray($content, $entityId = null)
     {
-        $data = array(
-            'header' => array(),
-            'data'   => array()
-        );
+        $data = array('header' => array(), 'data' => array());
 
         $lines = str_getcsv($content, "\n");
         foreach ($lines as $index => $line) {

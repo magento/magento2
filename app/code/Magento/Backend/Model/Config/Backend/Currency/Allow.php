@@ -60,8 +60,16 @@ class Allow extends AbstractCurrency
         array $data = array()
     ) {
         $this->_localeCurrency = $localeCurrency;
-        parent::__construct($context, $registry, $storeManager, $config, $coreStoreConfig, $resource,
-            $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $storeManager,
+            $config,
+            $coreStoreConfig,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -76,14 +84,16 @@ class Allow extends AbstractCurrency
         $exceptions = array();
         foreach ($this->_getAllowedCurrencies() as $currencyCode) {
             if (!in_array($currencyCode, $this->_getInstalledCurrencies())) {
-                $exceptions[] = __('Selected allowed currency "%1" is not available in installed currencies.',
+                $exceptions[] = __(
+                    'Selected allowed currency "%1" is not available in installed currencies.',
                     $this->_localeCurrency->getCurrency($currencyCode)->getName()
                 );
             }
         }
 
         if (!in_array($this->_getCurrencyDefault(), $this->_getAllowedCurrencies())) {
-            $exceptions[] = __('Default display currency "%1" is not available in allowed currencies.',
+            $exceptions[] = __(
+                'Default display currency "%1" is not available in allowed currencies.',
                 $this->_localeCurrency->getCurrency($this->_getCurrencyDefault())->getName()
             );
         }

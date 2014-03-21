@@ -47,7 +47,7 @@ namespace Magento\Log\Model;
  */
 class Log extends \Magento\Core\Model\AbstractModel
 {
-    const XML_LOG_CLEAN_DAYS    = 'system/log/clean_after_day';
+    const XML_LOG_CLEAN_DAYS = 'system/log/clean_after_day';
 
     /**
      * Core store config

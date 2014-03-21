@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogRule\Model\Product;
 
 class PriceModifierTest extends \PHPUnit_Framework_TestCase
@@ -51,9 +50,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
         $this->ruleFactoryMock = $this->getMock('Magento\CatalogRule\Model\RuleFactory', array('create'));
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', array(), array(), '', false);
-        $this->priceModifier = new \Magento\CatalogRule\Model\Product\PriceModifier(
-            $this->ruleFactoryMock
-        );
+        $this->priceModifier = new \Magento\CatalogRule\Model\Product\PriceModifier($this->ruleFactoryMock);
     }
 
     /**
@@ -64,20 +61,22 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
     public function testModifyPriceIfPriceExists($resultPrice, $expectedPrice)
     {
         $this->ruleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->ruleMock));
-        $this->ruleMock
-            ->expects($this->once())
-            ->method('calcProductPriceRule')
-            ->with($this->productMock, 100)
-            ->will($this->returnValue($resultPrice));
+        $this->ruleMock->expects(
+            $this->once()
+        )->method(
+            'calcProductPriceRule'
+        )->with(
+            $this->productMock,
+            100
+        )->will(
+            $this->returnValue($resultPrice)
+        );
         $this->assertEquals($expectedPrice, $this->priceModifier->modifyPrice(100, $this->productMock));
     }
 
     public function modifyPriceDataProvider()
     {
-        return array(
-            'resulted_price_exists' => array(150, 150),
-            'resulted_price_not_exists' => array(null, 100)
-        );
+        return array('resulted_price_exists' => array(150, 150), 'resulted_price_not_exists' => array(null, 100));
     }
 
     public function testModifyPriceIfPriceNotExist()

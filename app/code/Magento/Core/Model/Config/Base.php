@@ -55,7 +55,7 @@ class Base extends \Magento\Simplexml\Config
     public static function destroy()
     {
         if (is_array(self::$instances)) {
-            foreach (self::$instances  as $instance) {
+            foreach (self::$instances as $instance) {
                 $instance->_xml = null;
             }
         }

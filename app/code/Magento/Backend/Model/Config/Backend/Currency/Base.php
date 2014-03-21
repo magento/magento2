@@ -46,4 +46,3 @@ class Base extends AbstractCurrency
         return $this;
     }
 }
-

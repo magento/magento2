@@ -59,6 +59,7 @@ class Observer
         $this->_reviewFactory = $reviewFactory;
         $this->_resourceReview = $resourceReview;
     }
+
     /**
      * Add review summary info for tagged product collection
      *

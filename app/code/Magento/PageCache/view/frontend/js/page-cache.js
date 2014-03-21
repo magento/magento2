@@ -96,6 +96,8 @@
             } else {
                 $(parent).prepend(html);
             }
+            // trigger event to use mage-data-init attribute
+            $(parent).trigger('contentUpdated');
         },
         _ajax: function (placeholders, version) {
             var data = {

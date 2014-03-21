@@ -25,7 +25,7 @@
  */
 namespace Magento\Cron\App\Cron\Plugin;
 
-use \Magento\AppInterface;
+use Magento\AppInterface;
 
 class ApplicationInitializer
 {
@@ -43,10 +43,8 @@ class ApplicationInitializer
      * @param AppInterface $application
      * @param \Magento\Session\SidResolverInterface $sidResolver
      */
-    public function __construct(
-        AppInterface $application,
-        \Magento\Session\SidResolverInterface $sidResolver
-    ) {
+    public function __construct(AppInterface $application, \Magento\Session\SidResolverInterface $sidResolver)
+    {
         $this->_application = $application;
         $this->_sidResolver = $sidResolver;
     }
@@ -65,4 +63,3 @@ class ApplicationInitializer
         $this->_application->requireInstalledInstance();
     }
 }
-

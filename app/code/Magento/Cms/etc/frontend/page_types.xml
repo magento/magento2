@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="cms_index_defaultindex" label="CMS Home Default Page"/>
     <type id="cms_index_defaultnoroute" label="CMS No-Route Default Page"/>
     <type id="cms_index_index" label="CMS Home Page"/>

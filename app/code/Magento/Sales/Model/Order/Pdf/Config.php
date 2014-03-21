@@ -48,7 +48,7 @@ class Config
      */
     public function getRenderersPerProduct($pageType)
     {
-        return $this->_dataStorage->get("renderers/$pageType", array());
+        return $this->_dataStorage->get("renderers/{$pageType}", array());
     }
 
     /**

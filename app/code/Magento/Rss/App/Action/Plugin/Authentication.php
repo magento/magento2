@@ -51,10 +51,7 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      */
     protected $_aclResources = array(
         'authenticate' => 'Magento_Rss::rss',
-        'catalog' => array(
-            'notifystock' => 'Magento_Catalog::products',
-            'review' => 'Magento_Review::reviews_all'
-        ),
+        'catalog' => array('notifystock' => 'Magento_Catalog::products', 'review' => 'Magento_Review::reviews_all'),
         'order' => 'Magento_Sales::sales_order'
     );
 
@@ -93,16 +90,17 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        AbstractAction $subject,
-        \Closure $proceed,
-        RequestInterface $request
-    ) {
-        $resource = isset($this->_aclResources[$request->getControllerName()])
-            ? (isset($this->_aclResources[$request->getControllerName()][$request->getActionName()])
-                ? $this->_aclResources[$request->getControllerName()][$request->getActionName()]
-                : $this->_aclResources[$request->getControllerName()])
-            : null;
+    public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
+    {
+        $resource = isset(
+            $this->_aclResources[$request->getControllerName()]
+        ) ? isset(
+            $this->_aclResources[$request->getControllerName()][$request->getActionName()]
+        ) ? $this->_aclResources[$request
+            ->getControllerName()][$request
+            ->getActionName()] : $this
+            ->_aclResources[$request
+            ->getControllerName()] : null;
         if (!$resource) {
             return parent::aroundDispatch($subject, $proceed, $request);
         }

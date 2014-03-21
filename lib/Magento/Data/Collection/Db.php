@@ -308,9 +308,10 @@ class Db extends \Magento\Data\Collection
     {
         $this->_isOrdersRendered = false;
         $field = (string)$this->_getMappedField($field);
-        $direction = (strtoupper($direction) == self::SORT_ORDER_ASC) ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
+        $direction = strtoupper($direction) == self::SORT_ORDER_ASC ? self::SORT_ORDER_ASC : self::SORT_ORDER_DESC;
 
-        unset($this->_orders[$field]); // avoid ordering by the same field twice
+        unset($this->_orders[$field]);
+        // avoid ordering by the same field twice
         if ($unshift) {
             $orders = array($field => $direction);
             foreach ($this->_orders as $key => $dir) {
@@ -338,22 +339,20 @@ class Db extends \Magento\Data\Collection
 
         foreach ($this->_filters as $filter) {
             switch ($filter['type']) {
-                case 'or' :
-                    $condition = $this->_conn->quoteInto($filter['field'].'=?', $filter['value']);
+                case 'or':
+                    $condition = $this->_conn->quoteInto($filter['field'] . '=?', $filter['value']);
                     $this->_select->orWhere($condition);
                     break;
-                case 'string' :
+                case 'string':
                     $this->_select->where($filter['value']);
                     break;
                 case 'public':
                     $field = $this->_getMappedField($filter['field']);
                     $condition = $filter['value'];
-                    $this->_select->where(
-                        $this->_getConditionSql($field, $condition), null, Select::TYPE_CONDITION
-                    );
+                    $this->_select->where($this->_getConditionSql($field, $condition), null, Select::TYPE_CONDITION);
                     break;
                 default:
-                    $condition = $this->_conn->quoteInto($filter['field'].'=?', $filter['value']);
+                    $condition = $this->_conn->quoteInto($filter['field'] . '=?', $filter['value']);
                     $this->_select->where($condition);
             }
         }
@@ -557,9 +556,7 @@ class Db extends \Magento\Data\Collection
 
         $this->_beforeLoad();
 
-        $this->_renderFilters()
-             ->_renderOrders()
-             ->_renderLimit();
+        $this->_renderFilters()->_renderOrders()->_renderLimit();
 
         $this->printLogQuery($printQuery, $logQuery);
         $data = $this->getData();
@@ -590,11 +587,9 @@ class Db extends \Magento\Data\Collection
     public function fetchItem()
     {
         if (null === $this->_fetchStmt) {
-            $this->_renderOrders()
-                 ->_renderLimit();
+            $this->_renderOrders()->_renderLimit();
 
-            $this->_fetchStmt = $this->getConnection()
-                ->query($this->getSelect());
+            $this->_fetchStmt = $this->getConnection()->query($this->getSelect());
         }
         $data = $this->_fetchStmt->fetch();
         if (!empty($data) && is_array($data)) {
@@ -675,9 +670,7 @@ class Db extends \Magento\Data\Collection
     public function getData()
     {
         if ($this->_data === null) {
-            $this->_renderFilters()
-                 ->_renderOrders()
-                 ->_renderLimit();
+            $this->_renderFilters()->_renderOrders()->_renderLimit();
             $select = $this->getSelect();
             $this->_data = $this->_fetchAll($select);
             $this->_afterLoadData();

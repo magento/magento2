@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
 use Zend\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
@@ -153,7 +152,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     protected function _processParameter(\DOMElement $element, $isRequired, $parameterData, $parameterType, $callInfo)
     {
         $element->setAttribute('minOccurs', $isRequired ? 1 : 0);
-        $maxOccurs = (isset($parameterData['isArray']) && $parameterData['isArray']) ? 'unbounded' : 1;
+        $maxOccurs = isset($parameterData['isArray']) && $parameterData['isArray'] ? 'unbounded' : 1;
         $element->setAttribute('maxOccurs', $maxOccurs);
         if ($this->_typeProcessor->isTypeSimple($parameterType)) {
             $typeNs = Wsdl::XSD_NS;
@@ -188,7 +187,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         );
         $arrayTypeData = array(
             'documentation' => sprintf('An array of %s items.', $arrayItemType),
-            'parameters' => $arrayTypeParameters,
+            'parameters' => $arrayTypeParameters
         );
         $this->_typeProcessor->setTypeData($arrayTypeName, $arrayTypeData);
         $this->addComplexType($arrayTypeName, $callInfo);
@@ -257,7 +256,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                                 $callInfo[$direction][$condition] = array(
                                     'allCallsExcept' => $calls[1],
                                 );
-                            } else if (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
+                            } elseif (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
                                 $this->_overrideCallInfoName($callInfo, $callName);
                                 $callInfo[$direction][$condition]['calls'][] = $callName;
                             }
@@ -427,11 +426,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
     {
         if (preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
-            $seeLink = array(
-                'url' => $matches[1],
-                'title' => $matches[2],
-                'for' => $matches[3],
-            );
+            $seeLink = array('url' => $matches[1], 'title' => $matches[2], 'for' => $matches[3]);
             $seeLinkNode = $this->_getDom()->createElement(self::APP_INF_NS . ':seeLink');
             foreach (array('url', 'title', 'for') as $subNodeName) {
                 if (isset($seeLink[$subNodeName])) {

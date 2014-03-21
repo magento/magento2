@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
@@ -33,8 +32,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute'
+        );
     }
 
     public function testAddPrice()
@@ -50,8 +50,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->setProductAttribute(new \Magento\Object(array('store_label' => 'Store Label')));
         $this->assertEquals('Store Label', $this->_model->getLabel());
 
-        $this->_model->setUseDefault(1)
-            ->setProductAttribute(new \Magento\Object(array('store_label' => 'Other Label')));
+        $this->_model->setUseDefault(
+            1
+        )->setProductAttribute(
+            new \Magento\Object(array('store_label' => 'Other Label'))
+        );
         $this->assertEquals('Other Label', $this->_model->getLabel());
     }
 }

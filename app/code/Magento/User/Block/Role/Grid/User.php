@@ -82,7 +82,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultSort('role_user_id');
         $this->setDefaultDir('asc');
         $this->setId('roleUserGrid');
-        $this->setDefaultFilter(array('in_role_users'=>1));
+        $this->setDefaultFilter(array('in_role_users' => 1));
         $this->setUseAjax(true);
     }
 
@@ -98,10 +98,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 $inRoleIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('user_id', array('in'=>$inRoleIds));
+                $this->getCollection()->addFieldToFilter('user_id', array('in' => $inRoleIds));
             } else {
                 if ($inRoleIds) {
-                    $this->getCollection()->addFieldToFilter('user_id', array('nin'=>$inRoleIds));
+                    $this->getCollection()->addFieldToFilter('user_id', array('nin' => $inRoleIds));
                 }
             }
         } else {
@@ -127,58 +127,53 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('in_role_users', array(
-            'header_css_class' => 'a-center',
-            'type'      => 'checkbox',
-            'name'      => 'in_role_users',
-            'values'    => $this->getUsers(),
-            'align'     => 'center',
-            'index'     => 'user_id'
-        ));
+        $this->addColumn(
+            'in_role_users',
+            array(
+                'header_css_class' => 'a-center',
+                'type' => 'checkbox',
+                'name' => 'in_role_users',
+                'values' => $this->getUsers(),
+                'align' => 'center',
+                'index' => 'user_id'
+            )
+        );
 
-        $this->addColumn('role_user_id', array(
-            'header'    =>__('User ID'),
-            'width'     =>5,
-            'align'     =>'left',
-            'sortable'  =>true,
-            'index'     =>'user_id'
-        ));
+        $this->addColumn(
+            'role_user_id',
+            array('header' => __('User ID'), 'width' => 5, 'align' => 'left', 'sortable' => true, 'index' => 'user_id')
+        );
 
-        $this->addColumn('role_user_username', array(
-            'header'    =>__('User Name'),
-            'align'     =>'left',
-            'index'     =>'username'
-        ));
+        $this->addColumn(
+            'role_user_username',
+            array('header' => __('User Name'), 'align' => 'left', 'index' => 'username')
+        );
 
-        $this->addColumn('role_user_firstname', array(
-            'header'    =>__('First Name'),
-            'align'     =>'left',
-            'index'     =>'firstname'
-        ));
+        $this->addColumn(
+            'role_user_firstname',
+            array('header' => __('First Name'), 'align' => 'left', 'index' => 'firstname')
+        );
 
-        $this->addColumn('role_user_lastname', array(
-            'header'    =>__('Last Name'),
-            'align'     =>'left',
-            'index'     =>'lastname'
-        ));
+        $this->addColumn(
+            'role_user_lastname',
+            array('header' => __('Last Name'), 'align' => 'left', 'index' => 'lastname')
+        );
 
-        $this->addColumn('role_user_email', array(
-            'header'    =>__('Email'),
-            'width'     =>40,
-            'align'     =>'left',
-            'index'     =>'email'
-        ));
+        $this->addColumn(
+            'role_user_email',
+            array('header' => __('Email'), 'width' => 40, 'align' => 'left', 'index' => 'email')
+        );
 
-        $this->addColumn('role_user_is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'align'     =>'left',
-            'type'      => 'options',
-            'options'   => array(
-                '1' => __('Active'),
-                '0' => __('Inactive')
-            ),
-        ));
+        $this->addColumn(
+            'role_user_is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'align' => 'left',
+                'type' => 'options',
+                'options' => array('1' => __('Active'), '0' => __('Inactive'))
+            )
+        );
 
         /*
         $this->addColumn('grid_actions',
@@ -214,14 +209,18 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param bool $json
      * @return string|array
      */
-    public function getUsers($json=false)
+    public function getUsers($json = false)
     {
-        if ( $this->getRequest()->getParam('in_role_user') != "" ) {
+        if ($this->getRequest()->getParam('in_role_user') != "") {
             return $this->getRequest()->getParam('in_role_user');
         }
-        $roleId = ( $this->getRequest()->getParam('rid') > 0 ) ?
-            $this->getRequest()->getParam('rid') :
-            $this->_coreRegistry->registry('RID');
+        $roleId = $this->getRequest()->getParam(
+            'rid'
+        ) > 0 ? $this->getRequest()->getParam(
+            'rid'
+        ) : $this->_coreRegistry->registry(
+            'RID'
+        );
         $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         if (sizeof($users) > 0) {
             if ($json) {
@@ -242,4 +241,3 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         }
     }
 }
-

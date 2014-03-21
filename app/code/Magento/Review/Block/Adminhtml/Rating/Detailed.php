@@ -117,44 +117,37 @@ class Detailed extends \Magento\Backend\Block\Template
 
                 $stores = array_diff($stores, array(0));
 
-                $ratingCollection = $this->_ratingsFactory->create()
-                    ->addEntityFilter('product')
-                    ->setStoreFilter($stores)
-                    ->setActiveFilter(true)
-                    ->setPositionOrder()
-                    ->load()
-                    ->addOptionToItems();
+                $ratingCollection = $this->_ratingsFactory->create()->addEntityFilter(
+                    'product'
+                )->setStoreFilter(
+                    $stores
+                )->setActiveFilter(
+                    true
+                )->setPositionOrder()->load()->addOptionToItems();
 
-                $this->_voteCollection = $this->_votesFactory->create()
-                    ->setReviewFilter($this->getReviewId())
-                    ->addOptionInfo()
-                    ->load()
-                    ->addRatingOptions();
-
+                $this->_voteCollection = $this->_votesFactory->create()->setReviewFilter(
+                    $this->getReviewId()
+                )->addOptionInfo()->load()->addRatingOptions();
             } elseif (!$this->getIsIndependentMode()) {
-                $ratingCollection = $this->_ratingsFactory->create()
-                    ->addEntityFilter('product')
-                    ->setStoreFilter(null)
-                    ->setPositionOrder()
-                    ->load()
-                    ->addOptionToItems();
+                $ratingCollection = $this->_ratingsFactory->create()->addEntityFilter(
+                    'product'
+                )->setStoreFilter(
+                    null
+                )->setPositionOrder()->load()->addOptionToItems();
             } else {
                 $stores = $this->getRequest()->getParam('select_stores') ?: $this->getRequest()->getParam('stores');
-                $ratingCollection = $this->_ratingsFactory->create()
-                    ->addEntityFilter('product')
-                    ->setStoreFilter($stores)
-                    ->setPositionOrder()
-                    ->load()
-                    ->addOptionToItems();
+                $ratingCollection = $this->_ratingsFactory->create()->addEntityFilter(
+                    'product'
+                )->setStoreFilter(
+                    $stores
+                )->setPositionOrder()->load()->addOptionToItems();
                 if (intval($this->getRequest()->getParam('id'))) {
-                    $this->_voteCollection = $this->_votesFactory->create()
-                        ->setReviewFilter(intval($this->getRequest()->getParam('id')))
-                        ->addOptionInfo()
-                        ->load()
-                        ->addRatingOptions();
+                    $this->_voteCollection = $this->_votesFactory->create()->setReviewFilter(
+                        intval($this->getRequest()->getParam('id'))
+                    )->addOptionInfo()->load()->addRatingOptions();
                 }
             }
-            $this->setRatingCollection( ( $ratingCollection->getSize() ) ? $ratingCollection : false );
+            $this->setRatingCollection($ratingCollection->getSize() ? $ratingCollection : false);
         }
         return $this->getRatingCollection();
     }

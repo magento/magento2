@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\App;
 
 class StateTest extends \PHPUnit_Framework_TestCase
@@ -54,15 +53,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public static function constructorDataProvider()
     {
         return array(
-            'default mode' => array(
-                \Magento\App\State::MODE_DEFAULT
-            ),
-            'production mode' => array(
-                \Magento\App\State::MODE_PRODUCTION
-            ),
-            'developer mode' => array(
-                \Magento\App\State::MODE_DEVELOPER
-            ),
+            'default mode' => array(\Magento\App\State::MODE_DEFAULT),
+            'production mode' => array(\Magento\App\State::MODE_PRODUCTION),
+            'developer mode' => array(\Magento\App\State::MODE_DEVELOPER)
         );
     }
 

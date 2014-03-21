@@ -58,9 +58,12 @@ class BuyerCountry implements \Magento\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         $supported = $this->_configFactory->create()->getSupportedBuyerCountryCodes();
-        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter($supported, 'iso2')
-            ->loadData()
-            ->toOptionArray($isMultiselect ? false : __('--Please Select--'));
+        $options = $this->_countryCollectionFactory->create()->addCountryCodeFilter(
+            $supported,
+            'iso2'
+        )->loadData()->toOptionArray(
+            $isMultiselect ? false : __('--Please Select--')
+        );
 
         return $options;
     }

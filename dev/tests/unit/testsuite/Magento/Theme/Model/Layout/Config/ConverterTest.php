@@ -60,7 +60,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'template' => '1column.phtml',
                 'layout_handle' => 'page_one_column',
                 'is_default' => 1
-            ),
+            )
         );
         $this->assertEquals($expectedResult, $this->_model->convert($dom), '', 0, 20);
     }

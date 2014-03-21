@@ -35,10 +35,7 @@ class Display implements \Magento\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                'label' => __('Including FPT only')
-            ),
+            array('value' => \Magento\Weee\Model\Tax::DISPLAY_INCL, 'label' => __('Including FPT only')),
             array(
                 'value' => \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
                 'label' => __('Including FPT and FPT description')
@@ -47,11 +44,7 @@ class Display implements \Magento\Option\ArrayInterface
                 'value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
                 'label' => __('Excluding FPT, FPT description, final price')
             ),
-            array(
-                'value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL,
-                'label' => __('Excluding FPT')
-            ),
+            array('value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL, 'label' => __('Excluding FPT'))
         );
     }
-
 }

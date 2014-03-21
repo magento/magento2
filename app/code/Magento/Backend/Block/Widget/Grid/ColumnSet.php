@@ -65,7 +65,7 @@ class ColumnSet extends \Magento\View\Element\Template
      *
      * @var string
      */
-    protected $_emptyTextCss    = 'a-center';
+    protected $_emptyTextCss = 'a-center';
 
     /**
      * Label for empty cell
@@ -137,28 +137,28 @@ class ColumnSet extends \Magento\View\Element\Template
             if (isset($rowUrlParams['generatorClass'])) {
                 $generatorClassName = $rowUrlParams['generatorClass'];
             }
-            $this->_rowUrlGenerator
-                = $generatorFactory->createUrlGenerator($generatorClassName, array('args' => $rowUrlParams));
+            $this->_rowUrlGenerator = $generatorFactory->createUrlGenerator(
+                $generatorClassName,
+                array('args' => $rowUrlParams)
+            );
         }
 
         $this->setFilterVisibility(
-            array_key_exists('filter_visibility', $data) ? (bool) $data['filter_visibility'] : true
+            array_key_exists('filter_visibility', $data) ? (bool)$data['filter_visibility'] : true
         );
 
         parent::__construct($context, $data);
 
-        $this->setEmptyText(__(
-            isset($data['empty_text'])? $data['empty_text'] : 'We couldn\'t find any records.'
-        ));
+        $this->setEmptyText(__(isset($data['empty_text']) ? $data['empty_text'] : 'We couldn\'t find any records.'));
 
-        $this->setEmptyCellLabel(__(
-            isset($data['empty_cell_label'])? $data['empty_cell_label'] : 'We couldn\'t find any records.'
-        ));
+        $this->setEmptyCellLabel(
+            __(isset($data['empty_cell_label']) ? $data['empty_cell_label'] : 'We couldn\'t find any records.')
+        );
 
-        $this->setCountSubTotals(isset($data['count_subtotals'])? (bool) $data['count_subtotals'] : false);
+        $this->setCountSubTotals(isset($data['count_subtotals']) ? (bool)$data['count_subtotals'] : false);
         $this->_subTotals = $subtotals;
 
-        $this->setCountTotals(isset($data['count_totals'])? (bool) $data['count_totals'] : false);
+        $this->setCountTotals(isset($data['count_totals']) ? (bool)$data['count_totals'] : false);
         $this->_totals = $totals;
     }
 
@@ -314,9 +314,7 @@ class ColumnSet extends \Magento\View\Element\Template
      */
     public function shouldRenderSubTotal($item)
     {
-        return ($this->getCountSubTotals() &&
-            count($this->getMultipleRows($item)) > 0
-        );
+        return $this->getCountSubTotals() && count($this->getMultipleRows($item)) > 0;
     }
 
     /**
@@ -326,9 +324,7 @@ class ColumnSet extends \Magento\View\Element\Template
      */
     public function shouldRenderTotal()
     {
-        return ($this->getCountTotals() &&
-            count($this->getCollection()) > 0
-        );
+        return $this->getCountTotals() && count($this->getCollection()) > 0;
     }
 
     /**
@@ -341,8 +337,13 @@ class ColumnSet extends \Magento\View\Element\Template
     public function getRowspan($item, $column)
     {
         if ($this->isColumnGrouped($column)) {
-            return count($this->getMultipleRows($item)) + count($this->_groupedColumn) - 1
-                + (int)$this->shouldRenderSubTotal($item);
+            return count(
+                $this->getMultipleRows($item)
+            ) + count(
+                $this->_groupedColumn
+            ) - 1 + (int)$this->shouldRenderSubTotal(
+                $item
+            );
         }
         return false;
     }
@@ -375,7 +376,7 @@ class ColumnSet extends \Magento\View\Element\Template
      */
     public function shouldRenderEmptyCell($item, $column)
     {
-        return ($item->getIsEmpty() && in_array($column['index'], $this->_groupedColumn));
+        return $item->getIsEmpty() && in_array($column['index'], $this->_groupedColumn);
     }
 
     /**
@@ -654,5 +655,4 @@ class ColumnSet extends \Magento\View\Element\Template
             }
         }
     }
-
 }

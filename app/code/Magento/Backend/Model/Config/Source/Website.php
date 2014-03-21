@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Source;
 
 class Website implements \Magento\Option\ArrayInterface
@@ -56,8 +55,8 @@ class Website implements \Magento\Option\ArrayInterface
             foreach ($this->_storeManager->getWebsites() as $website) {
                 $id = $website->getId();
                 $name = $website->getName();
-                if ($id!=0) {
-                    $this->_options[] = array('value'=>$id, 'label'=>$name);
+                if ($id != 0) {
+                    $this->_options[] = array('value' => $id, 'label' => $name);
                 }
             }
         }

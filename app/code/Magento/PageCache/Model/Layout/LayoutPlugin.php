@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\PageCache\Model\Layout;
+
 use Magento\TestFramework\Inspection\Exception;
 
 /**
@@ -35,7 +36,7 @@ class LayoutPlugin
     protected $layout;
 
     /**
-     * @var \Magento\App\ConfigInterface
+     * @var \Magento\PageCache\Model\Config
      */
     protected $config;
 
@@ -49,12 +50,12 @@ class LayoutPlugin
      *
      * @param \Magento\Core\Model\Layout $layout
      * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\App\ConfigInterface $config
+     * @param \Magento\PageCache\Model\Config $config
      */
     public function __construct(
         \Magento\Core\Model\Layout $layout,
         \Magento\App\ResponseInterface $response,
-        \Magento\App\ConfigInterface $config
+        \Magento\PageCache\Model\Config $config
     ) {
         $this->layout = $layout;
         $this->response = $response;
@@ -71,9 +72,8 @@ class LayoutPlugin
      */
     public function afterGenerateXml(\Magento\Core\Model\Layout $subject, $result)
     {
-        if ($this->layout->isCacheable()) {
-            $maxAge = $this->config->getValue(\Magento\PageCache\Model\Config::XML_PAGECACHE_TTL);
-            $this->response->setPublicHeaders($maxAge);
+        if ($this->layout->isCacheable() && $this->config->isEnabled()) {
+            $this->response->setPublicHeaders($this->config->getTtl());
         }
         return $result;
     }
@@ -87,10 +87,15 @@ class LayoutPlugin
      */
     public function afterGetOutput(\Magento\Core\Model\Layout $subject, $result)
     {
-        if ($this->layout->isCacheable()) {
+        if ($this->layout->isCacheable() && $this->config->isEnabled()) {
             $tags = array();
             foreach ($this->layout->getAllBlocks() as $block) {
                 if ($block instanceof \Magento\View\Block\IdentityInterface) {
+                    $isEsiBlock = ($block->getTtl() > 0);
+                    $isVarnish = $this->config->getType() == \Magento\PageCache\Model\Config::VARNISH;
+                    if ($isVarnish && $isEsiBlock) {
+                        continue;
+                    }
                     $tags = array_merge($tags, $block->getIdentities());
                 }
             }

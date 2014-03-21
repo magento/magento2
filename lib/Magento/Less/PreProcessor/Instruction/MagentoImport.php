@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Less\PreProcessor\Instruction;
 
 use Magento\Less\PreProcessor;
@@ -114,9 +113,8 @@ class MagentoImport implements PreProcessorInterface
             $importFiles = $this->fileSource->getFiles($viewParams['themeModel'], $resolvedPath);
             /** @var $importFile \Magento\View\Layout\File */
             foreach ($importFiles as $importFile) {
-                $importsContent .=  $importFile->getModule()
-                    ? "@import '{$importFile->getModule()}::{$resolvedPath}';\n"
-                    : "@import '{$matchContent['path']}';\n";
+                $importsContent .= $importFile->getModule() ? "@import '{$importFile
+                    ->getModule()}::{$resolvedPath}';\n" : "@import '{$matchContent['path']}';\n";
             }
         } catch (\LogicException $e) {
             $this->errorHandler->processException($e);

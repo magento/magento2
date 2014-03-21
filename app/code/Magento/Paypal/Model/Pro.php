@@ -37,6 +37,7 @@ class Pro
      * Possible payment review actions (for FMF only)
      */
     const PAYMENT_REVIEW_ACCEPT = 'accept';
+
     const PAYMENT_REVIEW_DENY = 'deny';
 
     /**
@@ -260,13 +261,18 @@ class Pro
         if (!$authTransactionId) {
             return false;
         }
-        $api = $this->getApi()
-            ->setAuthorizationId($authTransactionId)
-            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
-            ->setAmount($amount)
-            ->setCurrencyCode($payment->getOrder()->getBaseCurrencyCode())
-            ->setInvNum($payment->getOrder()->getIncrementId());
-            // TODO: pass 'NOTE' to API
+        $api = $this->getApi()->setAuthorizationId(
+            $authTransactionId
+        )->setIsCaptureComplete(
+            $payment->getShouldCloseParentTransaction()
+        )->setAmount(
+            $amount
+        )->setCurrencyCode(
+            $payment->getOrder()->getBaseCurrencyCode()
+        )->setInvNum(
+            $payment->getOrder()->getIncrementId()
+        );
+        // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
         $this->_importCaptureResultToPayment($api, $payment);
@@ -286,20 +292,27 @@ class Pro
         if ($captureTxnId) {
             $api = $this->getApi();
             $order = $payment->getOrder();
-            $api->setPayment($payment)
-                ->setTransactionId($captureTxnId)
-                ->setAmount($amount)
-                ->setCurrencyCode($order->getBaseCurrencyCode());
+            $api->setPayment(
+                $payment
+            )->setTransactionId(
+                $captureTxnId
+            )->setAmount(
+                $amount
+            )->setCurrencyCode(
+                $order->getBaseCurrencyCode()
+            );
             $canRefundMore = $payment->getCreditmemo()->getInvoice()->canRefund();
-            $isFullRefund = !$canRefundMore
-                && (0 == ((float)$order->getBaseTotalOnlineRefunded() + (float)$order->getBaseTotalOfflineRefunded()));
-            $api->setRefundType($isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL
-                : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
+            $isFullRefund = !$canRefundMore &&
+                0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
+            $api->setRefundType(
+                $isFullRefund ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL : \Magento\Paypal\Model\Config::REFUND_TYPE_PARTIAL
             );
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            throw new \Magento\Core\Exception(__('We can\'t issue a refund transaction because there is no capture transaction.'));
+            throw new \Magento\Core\Exception(
+                __('We can\'t issue a refund transaction because there is no capture transaction.')
+            );
         }
     }
 
@@ -325,8 +338,9 @@ class Pro
     public function canReviewPayment(\Magento\Payment\Model\Info $payment)
     {
         $pendingReason = $payment->getAdditionalInformation(\Magento\Paypal\Model\Info::PENDING_REASON_GLOBAL);
-        return $this->_isPaymentReviewRequired($payment)
-            && $pendingReason != \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVIEW;
+        return $this->_isPaymentReviewRequired(
+            $payment
+        ) && $pendingReason != \Magento\Paypal\Model\Info::PAYMENTSTATUS_REVIEW;
     }
 
     /**
@@ -374,13 +388,11 @@ class Pro
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
-        $api = $this->getApi()
-            ->setTransactionId($transactionId)
-            ->setRawResponseNeeded(true);
+        $api = $this->getApi()->setTransactionId($transactionId)->setRawResponseNeeded(true);
         $api->callGetTransactionDetails();
         $this->importPaymentInfo($api, $payment);
         $data = $api->getRawSuccessResponseData();
-        return ($data) ? $data : array();
+        return $data ? $data : array();
     }
 
     /**
@@ -406,9 +418,13 @@ class Pro
      */
     protected function _importRefundResultToPayment($api, $payment, $canRefundMore)
     {
-        $payment->setTransactionId($api->getRefundTransactionId())
-                ->setIsTransactionClosed(1) // refund initiated by merchant
-                ->setShouldCloseParentTransaction(!$canRefundMore);
+        $payment->setTransactionId(
+            $api->getRefundTransactionId()
+        )->setIsTransactionClosed(
+            1 // refund initiated by merchant
+        )->setShouldCloseParentTransaction(
+            !$canRefundMore
+        );
         $this->importPaymentInfo($api, $payment);
     }
 

@@ -95,25 +95,25 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
         $idSuffix = $this->mathRandom->getUniqueHash();
         /** @var \Magento\Data\Form $form */
         $form = $this->_formFactory->create();
-        $dateFields = array(
-            'from' => __('From'),
-            'to'   => __('To'),
-        );
+        $dateFields = array('from' => __('From'), 'to' => __('To'));
         foreach ($dateFields as $key => $label) {
-            $form->addField("{$key}_{$idSuffix}", 'date', array(
-                'format'   => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT, // hardcoded because hardcoded values delimiter
-                'label'    => $label,
-                'image'    => $this->getViewFileUrl('images/grid-cal.gif'),
-                'onchange' => "dateTimeChoose_{$idSuffix}()", // won't work through Event.observe()
-                'value'    => $this->_rangeValues[$key],
-            ));
+            $form->addField(
+                "{$key}_{$idSuffix}",
+                'date',
+                array(
+                    // hardcoded because hardcoded values delimiter
+                    'format' => \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                    'label' => $label,
+                    'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                    // won't work through Event.observe()
+                    'onchange' => "dateTimeChoose_{$idSuffix}()",
+                    'value' => $this->_rangeValues[$key]
+                )
+            );
         }
-        return $form->toHtml() . "<script type=\"text/javascript\">
-            dateTimeChoose_{$idSuffix} = function() {
-                $('{$this->_targetElementId}').value = "
-                    . "$('from_{$idSuffix}').value + '{$this->_rangeDelimiter}' + $('to_{$idSuffix}').value;
-            };
-            </script>";
+        return $form->toHtml() .
+            "<script type=\"text/javascript\">\n            dateTimeChoose_{$idSuffix} = function() {\n                \$('{$this->_targetElementId}').value = " .
+            "\$('from_{$idSuffix}').value + '{$this->_rangeDelimiter}' + \$('to_{$idSuffix}').value;\n            };\n            </script>";
     }
 
     /**
@@ -151,7 +151,8 @@ class Daterange extends \Magento\Backend\Block\AbstractBlock
     public function setRangeValue($delimitedString)
     {
         $split = explode($this->_rangeDelimiter, $delimitedString, 2);
-        $from = $split[0]; $to = '';
+        $from = $split[0];
+        $to = '';
         if (isset($split[1])) {
             $to = $split[1];
         }

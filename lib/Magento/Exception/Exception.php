@@ -30,7 +30,7 @@ abstract class Exception extends \Magento\Service\Exception
     /**
      * @var array
      */
-    protected $_params = [];
+    protected $_params = array();
 
     /**
      * Returns the parameters detailing specifics of this Exception

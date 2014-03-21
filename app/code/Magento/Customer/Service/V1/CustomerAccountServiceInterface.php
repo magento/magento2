@@ -30,16 +30,25 @@ interface CustomerAccountServiceInterface
 {
     /** account response status @deprecated */
     const ACCOUNT_CONFIRMATION = "confirmation";
+
     const ACCOUNT_REGISTERED = "registered";
 
     // Constants for the type of new account email to be sent
-    const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';     // welcome email, when confirmation is disabled
-    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';       // welcome email, when confirmation is enabled
-    const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation'; // email with confirmation link
+    const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
+
+    // welcome email, when confirmation is disabled
+    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
+
+    // welcome email, when confirmation is enabled
+    const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
+
+    // email with confirmation link
 
     // Constants for confirmation statuses
     const ACCOUNT_CONFIRMED = 'account_confirmed';
+
     const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
+
     const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
 
     /**
@@ -48,6 +57,7 @@ interface CustomerAccountServiceInterface
      * forgot, remind, reset email templates
      */
     const EMAIL_REMINDER = 'email_reminder';
+
     const EMAIL_RESET = 'email_reset';
 
     /**
@@ -166,7 +176,6 @@ interface CustomerAccountServiceInterface
      */
     public function initiatePasswordReset($email, $websiteId, $template);
 
-
     /**
      * Reset customer password.
      *
@@ -210,7 +219,10 @@ interface CustomerAccountServiceInterface
      * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes
      * @return array|bool
      */
-    public function validateCustomerData(\Magento\Customer\Service\V1\Data\Customer $customer, array $attributes = []);
+    public function validateCustomerData(
+        \Magento\Customer\Service\V1\Data\Customer $customer,
+        array $attributes = array()
+    );
 
     /**
      * Indicates if the Customer for the provided customerId is restricted to being read only

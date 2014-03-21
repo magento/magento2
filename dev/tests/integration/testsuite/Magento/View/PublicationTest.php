@@ -22,7 +22,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 class PublicationTest extends \PHPUnit_Framework_TestCase
@@ -90,8 +89,11 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     {
         $this->_initTestTheme($allowDuplication);
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Locale\ResolverInterface')
-            ->setLocale($locale);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Locale\ResolverInterface'
+        )->setLocale(
+            $locale
+        );
         $url = $this->viewUrl->getViewFileUrl($file);
         $this->assertStringEndsWith($expectedUrl, $url);
         $viewFile = $this->fileSystem->getViewFile($file);
@@ -114,23 +116,13 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function getViewUrlFilesDuplicationDataProvider()
     {
         return array(
-            'theme file' => array(
-                'css/styles.css',
-                'static/frontend/test_default/en_US/css/styles.css',
-            ),
-            'theme localized file' => array(
-                'logo.gif',
-                'static/frontend/test_default/fr_FR/logo.gif',
-                'fr_FR',
-            ),
+            'theme file' => array('css/styles.css', 'static/frontend/test_default/en_US/css/styles.css'),
+            'theme localized file' => array('logo.gif', 'static/frontend/test_default/fr_FR/logo.gif', 'fr_FR'),
             'modular file' => array(
                 'Namespace_Module::favicon.ico',
-                'static/frontend/test_default/en_US/Namespace_Module/favicon.ico',
+                'static/frontend/test_default/en_US/Namespace_Module/favicon.ico'
             ),
-            'lib folder' => array(
-                'varien',
-                'http://localhost/pub/lib/varien',
-            )
+            'lib folder' => array('varien', 'http://localhost/pub/lib/varien')
         );
     }
 
@@ -150,19 +142,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testGetViewUrlNoFilesDuplicationDataProvider()
     {
         return array(
-            'theme css file' => array(
-                'css/styles.css',
-                'static/frontend/test_default/en_US/css/styles.css',
-            ),
-            'theme file' => array(
-                'images/logo.gif',
-                'static/frontend/test_default/images/logo.gif',
-            ),
-            'theme localized file' => array(
-                'logo.gif',
-                'static/frontend/test_default/i18n/fr_FR/logo.gif',
-                'fr_FR',
-            )
+            'theme css file' => array('css/styles.css', 'static/frontend/test_default/en_US/css/styles.css'),
+            'theme file' => array('images/logo.gif', 'static/frontend/test_default/images/logo.gif'),
+            'theme localized file' => array('logo.gif', 'static/frontend/test_default/i18n/fr_FR/logo.gif', 'fr_FR')
         );
     }
 
@@ -181,8 +163,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function getViewUrlExceptionDataProvider()
     {
         return array(
-            'non-existing theme file'  => array('path/to/non-existing-file.ext'),
-            'non-existing module file' => array('Some_Module::path/to/non-existing-file.ext'),
+            'non-existing theme file' => array('path/to/non-existing-file.ext'),
+            'non-existing module file' => array('Some_Module::path/to/non-existing-file.ext')
         );
     }
 
@@ -211,25 +193,15 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function getProtectedFiles()
     {
         return array(
-            array(
-                array('area' => 'frontend', 'theme' => 'vendor_default'),
-                'access_violation.php'
-            ),
-            array(
-                array('area' => 'frontend', 'theme' => 'vendor_default'),
-                'theme.xml'
-            ),
+            array(array('area' => 'frontend', 'theme' => 'vendor_default'), 'access_violation.php'),
+            array(array('area' => 'frontend', 'theme' => 'vendor_default'), 'theme.xml'),
             array(
                 array('area' => 'frontend', 'theme' => 'test_default', 'module' => 'Magento_Catalog'),
                 'catalog_category_view.xml'
             ),
-            array(
-                array('area' => 'frontend', 'theme' => 'test_default', 'module' => 'Magento_Core'),
-                'test.phtml'
-            ),
+            array(array('area' => 'frontend', 'theme' => 'test_default', 'module' => 'Magento_Core'), 'test.phtml')
         );
     }
-
 
     /**
      * Publication of view files in development mode
@@ -269,22 +241,18 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function getPublicFilePathDataProvider()
     {
-        $designParams = array(
-            'area'    => 'frontend',
-            'theme'   => 'test_default',
-            'locale'  => 'en_US'
-        );
+        $designParams = array('area' => 'frontend', 'theme' => 'test_default', 'locale' => 'en_US');
         return array(
             'view file' => array(
                 'images/logo_email.gif',
                 $designParams,
-                'frontend/test_default/en_US/images/logo_email.gif',
+                'frontend/test_default/en_US/images/logo_email.gif'
             ),
             'view modular file' => array(
                 'Magento_Theme::favicon.ico',
                 $designParams,
-                'frontend/test_default/en_US/Magento_Theme/favicon.ico',
-            ),
+                'frontend/test_default/en_US/Magento_Theme/favicon.ico'
+            )
         );
     }
 
@@ -320,11 +288,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
 
     public function getPublicFilePathLessDataProvider()
     {
-        $designParams = array(
-            'area'    => 'frontend',
-            'theme'   => 'test_default',
-            'locale'  => 'en_US'
-        );
+        $designParams = array('area' => 'frontend', 'theme' => 'test_default', 'locale' => 'en_US');
         return array(
             'view file' => array(
                 'source.css',
@@ -358,10 +322,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         );
         $publishedDir = $this->viewService->getPublicDir() . '/frontend/vendor_default/en_US';
         $this->assertFileNotExists($publishedDir, 'Please verify isolation from previous test(s).');
-        $this->viewUrl->getViewFileUrl('css/file.css', array(
-            'theme'   => 'vendor_default',
-            'locale'  => 'en_US'
-        ));
+        $this->viewUrl->getViewFileUrl('css/file.css', array('theme' => 'vendor_default', 'locale' => 'en_US'));
         foreach ($expectedFiles as $file) {
             $this->assertFileExists("{$publishedDir}/{$file}");
         }
@@ -375,23 +336,29 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider publishCssFileFromModuleDataProvider
      */
     public function testPublishCssFileFromModule(
-        $cssViewFile, $designParams, $expectedCssFile, $expectedCssContent, $expectedRelatedFiles
+        $cssViewFile,
+        $designParams,
+        $expectedCssFile,
+        $expectedCssContent,
+        $expectedRelatedFiles
     ) {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $objectManager->configure(
-            ['Magento\View\Design\Fallback\Factory' => ['arguments' => [
-                'filesystem' => [
-                    'value' => 'Magento\View\MockedFilesystem',
-                    'name' => 'filesystem',
-                    \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'object'
-                ]
-
-            ]]]
+            array(
+                'Magento\View\Design\Fallback\Factory' => array(
+                    'arguments' => array(
+                        'filesystem' => array(
+                            'value' => 'Magento\View\MockedFilesystem',
+                            'name' => 'filesystem',
+                            \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'object'
+                        )
+                    )
+                )
+            )
         );
 
-        $objectManager->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $objectManager->get('Magento\Core\Model\App')->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $this->viewUrl->getViewFileUrl($cssViewFile, $designParams);
 
@@ -424,37 +391,25 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
             'frontend' => array(
                 'product/product.css',
                 array(
-                    'area'    => 'adminhtml',
-                    'theme'   => 'magento_backend',
-                    'locale'  => 'en_US',
-                    'module'  => 'Magento_ModuleA',
+                    'area' => 'adminhtml',
+                    'theme' => 'magento_backend',
+                    'locale' => 'en_US',
+                    'module' => 'Magento_ModuleA'
                 ),
                 'adminhtml/magento_backend/en_US/Magento_ModuleA/product/product.css',
-                array(
-                    'url(../../Magento_ModuleB/images/gallery-image-base-label.png)',
-                ),
-                array(
-                    'adminhtml/magento_backend/en_US/Magento_ModuleB/images/gallery-image-base-label.png',
-                ),
+                array('url(../../Magento_ModuleB/images/gallery-image-base-label.png)'),
+                array('adminhtml/magento_backend/en_US/Magento_ModuleB/images/gallery-image-base-label.png')
             ),
             'adminhtml' => array(
                 'Magento_ModuleC::styles.css',
-                array(
-                    'area'    => 'adminhtml',
-                    'theme'   => 'vendor_test',
-                    'locale'  => 'en_US',
-                    'module'  => false,
-                ),
+                array('area' => 'adminhtml', 'theme' => 'vendor_test', 'locale' => 'en_US', 'module' => false),
                 'adminhtml/vendor_test/en_US/Magento_ModuleC/styles.css',
-                array(
-                    'url(images/logo.png)',
-                    'url(images/allinone.png)',
-                ),
+                array('url(images/logo.png)', 'url(images/allinone.png)'),
                 array(
                     'adminhtml/vendor_test/en_US/Magento_ModuleC/images/logo.png',
-                    'adminhtml/vendor_test/en_US/Magento_ModuleC/images/allinone.png',
-                ),
-            ),
+                    'adminhtml/vendor_test/en_US/Magento_ModuleC/images/allinone.png'
+                )
+            )
         );
     }
 
@@ -466,8 +421,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPublishResourcesAndCssWhenChangedCssDevMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->getMode();
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
         if ($mode != \Magento\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in developer mode only');
         }
@@ -482,8 +436,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotPublishResourcesAndCssWhenChangedCssUsualMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->getMode();
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
         if ($mode == \Magento\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in non-developer mode only');
         }
@@ -510,9 +463,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $this->viewUrl = $objectManager->create('Magento\View\Url');
 
         $themePath = $this->model->getDesignTheme()->getFullPath();
-        
-        $fixtureViewPath = "$appInstallDir/media_for_change/$themePath/";
-        $publishedPath = $this->viewService->getPublicDir() . "/$themePath/en_US/";
+
+        $fixtureViewPath = "{$appInstallDir}/media_for_change/{$themePath}/";
+        $publishedPath = $this->viewService->getPublicDir() . "/{$themePath}/en_US/";
 
         $this->viewUrl->getViewFileUrl('style.css', array('locale' => 'en_US'));
 
@@ -520,24 +473,17 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         sleep(1);
 
         // Change main file and referenced files - everything changed and referenced must appear
-        file_put_contents(
-            $fixtureViewPath . 'style.css',
-            'div {background: url(images/rectangle.gif);}',
-            FILE_APPEND
-        );
-        file_put_contents(
-            $fixtureViewPath . 'sub.css',
-            '.sub2 {border: 1px solid magenta}',
-            FILE_APPEND
-        );
+        file_put_contents($fixtureViewPath . 'style.css', 'div {background: url(images/rectangle.gif);}', FILE_APPEND);
+        file_put_contents($fixtureViewPath . 'sub.css', '.sub2 {border: 1px solid magenta}', FILE_APPEND);
         $this->viewUrl->getViewFileUrl('style.css', array('locale' => 'en_US'));
 
         $assertFileComparison = $expectedPublished ? 'assertFileEquals' : 'assertFileNotEquals';
-        $this->$assertFileComparison($fixtureViewPath . 'style.css', $publishedPath . 'style.css');
-        $this->$assertFileComparison($fixtureViewPath . 'sub.css', $publishedPath . 'sub.css');
+        $this->{$assertFileComparison}($fixtureViewPath . 'style.css', $publishedPath . 'style.css');
+        $this->{$assertFileComparison}($fixtureViewPath . 'sub.css', $publishedPath . 'sub.css');
         if ($expectedPublished) {
             $this->assertFileEquals(
-                $fixtureViewPath . 'images/rectangle.gif', $publishedPath . 'images/rectangle.gif'
+                $fixtureViewPath . 'images/rectangle.gif',
+                $publishedPath . 'images/rectangle.gif'
             );
         } else {
             $this->assertFileNotExists($publishedPath . 'images/rectangle.gif');
@@ -568,8 +514,7 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotPublishChangedResourcesWhenUnchangedCssUsualMode()
     {
-        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->getMode();
+        $mode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->getMode();
         if ($mode == \Magento\App\State::MODE_DEVELOPER) {
             $this->markTestSkipped('Valid in non-developer mode only');
         }
@@ -585,11 +530,13 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     protected function _testPublishChangedResourcesWhenUnchangedCss($expectedPublished)
     {
         $appInstallDir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir();
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => "$appInstallDir/media_for_change"),
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array('path' => "{$appInstallDir}/media_for_change")
+                )
             )
-        ));
+        );
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\App\State')->setAreaCode('frontend');
@@ -602,8 +549,8 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $this->viewUrl = $objectManager->create('Magento\View\Url');
 
         $themePath = $this->model->getDesignTheme()->getFullPath();
-        $fixtureViewPath = "$appInstallDir/media_for_change/$themePath/";
-        $publishedPath = $this->viewService->getPublicDir() . "/$themePath/en_US/";
+        $fixtureViewPath = "{$appInstallDir}/media_for_change/{$themePath}/";
+        $publishedPath = $this->viewService->getPublicDir() . "/{$themePath}/en_US/";
 
         $this->viewUrl->getViewFileUrl('style.css', array('locale' => 'en_US'));
 
@@ -613,17 +560,16 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         // Change referenced files
         copy($fixtureViewPath . 'images/rectangle.gif', $fixtureViewPath . 'images/square.gif');
         touch($fixtureViewPath . 'images/square.gif');
-        file_put_contents(
-            $fixtureViewPath . 'sub.css',
-            '.sub2 {border: 1px solid magenta}',
-            FILE_APPEND
-        );
+        file_put_contents($fixtureViewPath . 'sub.css', '.sub2 {border: 1px solid magenta}', FILE_APPEND);
 
         $this->viewUrl->getViewFileUrl('style.css', array('locale' => 'en_US'));
 
         $assertFileComparison = $expectedPublished ? 'assertFileEquals' : 'assertFileNotEquals';
-        $this->$assertFileComparison($fixtureViewPath . 'sub.css', $publishedPath . 'sub.css');
-        $this->$assertFileComparison($fixtureViewPath . 'images/rectangle.gif', $publishedPath . 'images/square.gif');
+        $this->{$assertFileComparison}($fixtureViewPath . 'sub.css', $publishedPath . 'sub.css');
+        $this->{$assertFileComparison}(
+            $fixtureViewPath . 'images/rectangle.gif',
+            $publishedPath . 'images/square.gif'
+        );
     }
 
     /**
@@ -634,35 +580,41 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     protected function _initTestTheme($allowDuplication = null)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/Core/Model/_files/design')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array(
+                        'path' => dirname(__DIR__) . '/Core/Model/_files/design'
+                    )
+                )
             )
-        ));
+        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\App\State')->setAreaCode('frontend');
 
         if ($allowDuplication !== null) {
-            $objectManager->configure(array(
-                'Magento\View\Publisher\CssFile' => array(
-                    'arguments' => array(
-                        'allowDuplication' => array(
-                            'name' => 'allowDuplication',
-                            \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
-                            'value' => $allowDuplication
+            $objectManager->configure(
+                array(
+                    'Magento\View\Publisher\CssFile' => array(
+                        'arguments' => array(
+                            'allowDuplication' => array(
+                                'name' => 'allowDuplication',
+                                \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
+                                'value' => $allowDuplication
+                            )
+                        )
+                    ),
+                    'Magento\View\Publisher\File' => array(
+                        'arguments' => array(
+                            'allowDuplication' => array(
+                                'name' => 'allowDuplication',
+                                \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
+                                'value' => $allowDuplication
+                            )
                         )
                     )
-                ),
-                'Magento\View\Publisher\File' => array(
-                    'arguments' => array(
-                        'allowDuplication' => array(
-                            'name' => 'allowDuplication',
-                            \Magento\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE => 'boolean',
-                            'value' => $allowDuplication
-                        )
-                    )
-                ),
-            ));
+                )
+            );
         }
 
         // Reinit model with new directories
@@ -682,29 +634,33 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCssWithBase64Data()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\App\Filesystem::THEMES_DIR => array('path' => dirname(__DIR__) . '/Core/Model/_files/design/')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+            array(
+                \Magento\App\Filesystem::PARAM_APP_DIRS => array(
+                    \Magento\App\Filesystem::THEMES_DIR => array(
+                        'path' => dirname(__DIR__) . '/Core/Model/_files/design/'
+                    )
+                )
             )
-        ));
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadAreaPart(
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\App'
+        )->loadAreaPart(
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
             \Magento\Core\Model\App\Area::PART_CONFIG
         );
 
         /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
-        $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Theme\Collection');
-        $theme = $themeCollection
-            ->addTargetPattern('frontend/vendor_default/theme.xml')
-            ->getFirstItem()
-            ->save();
+        $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Theme\Collection'
+        );
+        $theme = $themeCollection->addTargetPattern('frontend/vendor_default/theme.xml')->getFirstItem()->save();
 
         $publishedPath = $this->viewService->getPublicDir() . '/frontend/vendor_default/en_US';
-        $params =  array(
-            'area'    => 'frontend',
-            'theme'   => 'vendor_default',
-            'locale'  => 'en_US',
+        $params = array(
+            'area' => 'frontend',
+            'theme' => 'vendor_default',
+            'locale' => 'en_US',
             'themeModel' => $theme
         );
         $filePath = $this->fileSystem->getViewFile('css/base64.css', $params);
@@ -713,8 +669,9 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
         $this->viewUrl->getViewFileUrl('css/base64.css', $params);
         $this->assertFileEquals($filePath, "{$publishedPath}/css/base64.css");
 
-        $this->model->setDesignTheme(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface'));
+        $this->model->setDesignTheme(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\View\Design\ThemeInterface')
+        );
     }
 
     /**
@@ -741,15 +698,17 @@ class PublicationTest extends \PHPUnit_Framework_TestCase
     public function testGetViewFilePublicPathExistingFile()
     {
         $filePath = 'mage/mage.js';
-        $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\Filesystem')
-                ->getPath(\Magento\App\Filesystem::PUB_LIB_DIR) . '/' . $filePath;
+        $expectedFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\App\Filesystem'
+        )->getPath(
+            \Magento\App\Filesystem::PUB_LIB_DIR
+        ) . '/' . $filePath;
         $this->assertFileExists($expectedFile, 'Please verify existence of public library file');
 
         $actualFile = $this->viewUrl->getViewFilePublicPath($filePath);
         $this->assertFileEquals($expectedFile, $actualFile);
     }
 }
-
 class MockedFilesystem extends \Magento\App\Filesystem
 {
     /**

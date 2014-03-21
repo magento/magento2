@@ -109,9 +109,12 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getTable('checkout_agreement_store'), array('store_id'))
-            ->where('agreement_id = :agreement_id');
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getTable('checkout_agreement_store'),
+            array('store_id')
+        )->where(
+            'agreement_id = :agreement_id'
+        );
 
         if ($stores = $this->_getReadAdapter()->fetchCol($select, array(':agreement_id' => $object->getId()))) {
             $object->setData('store_id', $stores);
@@ -135,11 +138,16 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
             $select->join(
                 array('cps' => $this->getTable('checkout_agreement_store')),
                 $this->getMainTable() . '.agreement_id = cps.agreement_id'
-            )
-            ->where('is_active=1')
-            ->where('cps.store_id IN (0, ?)', $object->getStoreId())
-            ->order('store_id DESC')
-            ->limit(1);
+            )->where(
+                'is_active=1'
+            )->where(
+                'cps.store_id IN (0, ?)',
+                $object->getStoreId()
+            )->order(
+                'store_id DESC'
+            )->limit(
+                1
+            );
         }
         return $select;
     }

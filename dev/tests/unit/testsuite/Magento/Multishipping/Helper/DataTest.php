@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Multishipping\Helper;
 
 /**
@@ -77,7 +76,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array(
                 'context' => $this->contextMock,
                 'coreStoreConfig' => $this->coreStoreConfigMock,
-                'checkoutSession' => $this->checkoutSessionMock,
+                'checkoutSession' => $this->checkoutSessionMock
             )
         );
     }
@@ -85,9 +84,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetMaximumQty()
     {
         $maximumQty = 10;
-        $this->coreStoreConfigMock->expects($this->once())->method('getConfig')
-            ->with(\Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY)
-            ->will($this->returnValue($maximumQty));
+        $this->coreStoreConfigMock->expects(
+            $this->once()
+        )->method(
+            'getConfig'
+        )->with(
+            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
+        )->will(
+            $this->returnValue($maximumQty)
+        );
 
         $this->assertEquals($maximumQty, $this->helper->getMaximumQty());
     }
@@ -104,28 +109,74 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * @param bool $hasNominalItems
      * @dataProvider isMultishippingCheckoutAvailableDataProvider
      */
-    public function testIsMultishippingCheckoutAvailable($result, $quoteHasItems, $isMultiShipping,
-        $hasItemsWithDecimalQty, $validateMinimumAmount, $itemsSummaryQty, $itemVirtualQty, $maximumQty,
+    public function testIsMultishippingCheckoutAvailable(
+        $result,
+        $quoteHasItems,
+        $isMultiShipping,
+        $hasItemsWithDecimalQty,
+        $validateMinimumAmount,
+        $itemsSummaryQty,
+        $itemVirtualQty,
+        $maximumQty,
         $hasNominalItems
     ) {
-        $this->coreStoreConfigMock->expects($this->once())->method('getConfigFlag')
-            ->with(\Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE)
-            ->will($this->returnValue($isMultiShipping));
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+        $this->coreStoreConfigMock->expects(
+            $this->once()
+        )->method(
+            'getConfigFlag'
+        )->with(
+            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_AVAILABLE
+        )->will(
+            $this->returnValue($isMultiShipping)
+        );
+        $this->checkoutSessionMock->expects(
+            $this->once()
+        )->method(
+            'getQuote'
+        )->will(
+            $this->returnValue($this->quoteMock)
+        );
         $this->quoteMock->expects($this->once())->method('hasItems')->will($this->returnValue($quoteHasItems));
 
-        $this->quoteMock->expects($this->any())->method('hasItemsWithDecimalQty')
-            ->will($this->returnValue($hasItemsWithDecimalQty));
-        $this->quoteMock->expects($this->any())->method('validateMinimumAmount')->with(true)
-            ->will($this->returnValue($validateMinimumAmount));
-        $this->quoteMock->expects($this->any())->method('getItemsSummaryQty')
-            ->will($this->returnValue($itemsSummaryQty));
-        $this->quoteMock->expects($this->any())->method('getItemVirtualQty')
-            ->will($this->returnValue($itemVirtualQty));
-        $this->coreStoreConfigMock->expects($this->any())->method('getConfig')
-            ->with(\Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY)
-            ->will($this->returnValue($maximumQty));
+        $this->quoteMock->expects(
+            $this->any()
+        )->method(
+            'hasItemsWithDecimalQty'
+        )->will(
+            $this->returnValue($hasItemsWithDecimalQty)
+        );
+        $this->quoteMock->expects(
+            $this->any()
+        )->method(
+            'validateMinimumAmount'
+        )->with(
+            true
+        )->will(
+            $this->returnValue($validateMinimumAmount)
+        );
+        $this->quoteMock->expects(
+            $this->any()
+        )->method(
+            'getItemsSummaryQty'
+        )->will(
+            $this->returnValue($itemsSummaryQty)
+        );
+        $this->quoteMock->expects(
+            $this->any()
+        )->method(
+            'getItemVirtualQty'
+        )->will(
+            $this->returnValue($itemVirtualQty)
+        );
+        $this->coreStoreConfigMock->expects(
+            $this->any()
+        )->method(
+            'getConfig'
+        )->with(
+            \Magento\Multishipping\Helper\Data::XML_PATH_CHECKOUT_MULTIPLE_MAXIMUM_QUANTITY
+        )->will(
+            $this->returnValue($maximumQty)
+        );
         $this->quoteMock->expects($this->any())->method('hasNominalItems')->will($this->returnValue($hasNominalItems));
 
         $this->assertEquals($result, $this->helper->isMultishippingCheckoutAvailable());
@@ -147,7 +198,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array(false, true, true, false, true, 1, 2, null, null),
             array(false, true, true, false, true, 2, 1, 1, null),
             array(true, true, true, false, true, 2, 1, 3, false),
-            array(false, true, true, false, true, 2, 1, 3, true),
+            array(false, true, true, false, true, 2, 1, 3, true)
         );
     }
 }

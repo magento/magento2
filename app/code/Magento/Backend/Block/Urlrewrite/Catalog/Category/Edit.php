@@ -36,8 +36,7 @@ namespace Magento\Backend\Block\Urlrewrite\Catalog\Category;
  * @package    Magento_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Edit
-    extends \Magento\Backend\Block\Urlrewrite\Edit
+class Edit extends \Magento\Backend\Block\Urlrewrite\Edit
 {
     /**
      * @var \Magento\Catalog\Model\CategoryFactory
@@ -105,11 +104,15 @@ class Edit
      */
     private function _addCategoryLinkBlock()
     {
-        $this->addChild('category_link', 'Magento\Backend\Block\Urlrewrite\Link', array(
-            'item_url'  => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'category',
-            'item_name' => $this->_getCategory()->getName(),
-            'label'     => __('Category:')
-        ));
+        $this->addChild(
+            'category_link',
+            'Magento\Backend\Block\Urlrewrite\Link',
+            array(
+                'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'category',
+                'item_name' => $this->_getCategory()->getName(),
+                'label' => __('Category:')
+            )
+        );
     }
 
     /**
@@ -129,11 +132,10 @@ class Edit
      */
     protected function _createEditFormBlock()
     {
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form', '', array(
-            'data' => array(
-                'category'    => $this->_getCategory(),
-                'url_rewrite' => $this->_getUrlRewrite()
-            )
-        ));
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Urlrewrite\Catalog\Edit\Form',
+            '',
+            array('data' => array('category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite()))
+        );
     }
 }

@@ -36,9 +36,12 @@ abstract class AbstractEntity
      * Database constants
      */
     const DB_MAX_PACKET_COEFFICIENT = 900000;
-    const DB_MAX_PACKET_DATA        = 1048576;
-    const DB_MAX_VARCHAR_LENGTH     = 256;
-    const DB_MAX_TEXT_LENGTH        = 65536;
+
+    const DB_MAX_PACKET_DATA = 1048576;
+
+    const DB_MAX_VARCHAR_LENGTH = 256;
+
+    const DB_MAX_TEXT_LENGTH = 65536;
 
     /**
      * DB connection.
@@ -242,9 +245,9 @@ abstract class AbstractEntity
 
         $entityType = $config->getEntityType($this->getEntityTypeCode());
 
-        $this->_entityTypeId    = $entityType->getEntityTypeId();
+        $this->_entityTypeId = $entityType->getEntityTypeId();
         $this->_dataSourceModel = $importData;
-        $this->_connection      = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection('write');
     }
 
     /**
@@ -308,11 +311,11 @@ abstract class AbstractEntity
      */
     protected function _saveValidatedBunches()
     {
-        $source          = $this->_getSource();
+        $source = $this->_getSource();
         $productDataSize = 0;
-        $bunchRows       = array();
-        $startNewBunch   = false;
-        $nextRowBackup   = array();
+        $bunchRows = array();
+        $startNewBunch = false;
+        $nextRowBackup = array();
         $maxDataSize = $this->_resourceHelper->getMaxDataSize();
         $bunchSize = $this->_importExportData->getBunchSize();
 
@@ -323,26 +326,28 @@ abstract class AbstractEntity
             if ($startNewBunch || !$source->valid()) {
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
-                $bunchRows       = $nextRowBackup;
+                $bunchRows = $nextRowBackup;
                 $productDataSize = strlen(serialize($bunchRows));
-                $startNewBunch   = false;
-                $nextRowBackup   = array();
+                $startNewBunch = false;
+                $nextRowBackup = array();
             }
             if ($source->valid()) {
-                if ($this->_errorsCount >= $this->_errorsLimit) { // errors limit check
+                if ($this->_errorsCount >= $this->_errorsLimit) {
+                    // errors limit check
                     return;
                 }
                 $rowData = $source->current();
 
                 $this->_processedRowsCount++;
 
-                if ($this->validateRow($rowData, $source->key())) { // add row to bunch for save
+                if ($this->validateRow($rowData, $source->key())) {
+                    // add row to bunch for save
                     $rowData = $this->_prepareRowForDb($rowData);
                     $rowSize = strlen($this->_coreData->jsonEncode($rowData));
 
-                    $isBunchSizeExceeded = ($bunchSize > 0 && count($bunchRows) >= $bunchSize);
+                    $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
 
-                    if (($productDataSize + $rowSize) >= $maxDataSize || $isBunchSizeExceeded) {
+                    if ($productDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
                         $startNewBunch = true;
                         $nextRowBackup = array($source->key() => $rowData);
                     } else {
@@ -367,9 +372,10 @@ abstract class AbstractEntity
     public function addRowError($errorCode, $errorRowNum, $colName = null)
     {
         $errorCode = (string)$errorCode;
-        $this->_errors[$errorCode][] = array($errorRowNum + 1, $colName); // one added for human readability
+        $this->_errors[$errorCode][] = array($errorRowNum + 1, $colName);
+        // one added for human readability
         $this->_invalidRows[$errorRowNum] = true;
-        $this->_errorsCount ++;
+        $this->_errorsCount++;
 
         return $this;
     }
@@ -415,7 +421,8 @@ abstract class AbstractEntity
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $value = is_array($option['value']) ? $option['value'] : array($option);
                     foreach ($value as $innerOption) {
-                        if (strlen($innerOption['value'])) { // skip ' -- Please Select -- ' option
+                        if (strlen($innerOption['value'])) {
+                            // skip ' -- Please Select -- ' option
                             $options[strtolower($innerOption[$index])] = $innerOption['value'];
                         }
                     }
@@ -434,10 +441,13 @@ abstract class AbstractEntity
      */
     public function getBehavior()
     {
-        if (!isset($this->_parameters['behavior'])
-            || ($this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-            && $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
-            && $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE)) {
+        if (!isset(
+            $this->_parameters['behavior']
+        ) ||
+            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND &&
+            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE &&
+            $this->_parameters['behavior'] != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
+        ) {
             return \Magento\ImportExport\Model\Import::getDefaultBehavior();
         }
         return $this->_parameters['behavior'];
@@ -468,7 +478,7 @@ abstract class AbstractEntity
      */
     public function getErrorMessages()
     {
-        $messages   = array();
+        $messages = array();
         foreach ($this->_errors as $errorCode => $errorRows) {
             if (isset($this->_messageTemplates[$errorCode])) {
                 $errorCode = __($this->_messageTemplates[$errorCode]);
@@ -589,27 +599,27 @@ abstract class AbstractEntity
     {
         switch ($attrParams['type']) {
             case 'varchar':
-                $val   = $this->string->cleanString($rowData[$attrCode]);
+                $val = $this->string->cleanString($rowData[$attrCode]);
                 $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
                 break;
             case 'decimal':
-                $val   = trim($rowData[$attrCode]);
-                $valid = (float)$val == $val;
+                $val = trim($rowData[$attrCode]);
+                $valid = (double)$val == $val;
                 break;
             case 'select':
             case 'multiselect':
                 $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
                 break;
             case 'int':
-                $val   = trim($rowData[$attrCode]);
+                $val = trim($rowData[$attrCode]);
                 $valid = (int)$val == $val;
                 break;
             case 'datetime':
-                $val   = trim($rowData[$attrCode]);
+                $val = trim($rowData[$attrCode]);
                 $valid = strtotime($val) !== false;
                 break;
             case 'text':
-                $val   = $this->string->cleanString($rowData[$attrCode]);
+                $val = $this->string->cleanString($rowData[$attrCode]);
                 $valid = $this->string->strlen($val) < self::DB_MAX_TEXT_LENGTH;
                 break;
             default:
@@ -626,7 +636,7 @@ abstract class AbstractEntity
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = true;
         }
-        return (bool) $valid;
+        return (bool)$valid;
     }
 
     /**
@@ -714,9 +724,9 @@ abstract class AbstractEntity
             }
 
             // check attribute columns names validity
-            $columnNumber       = 0;
+            $columnNumber = 0;
             $emptyHeaderColumns = array();
-            $invalidColumns     = array();
+            $invalidColumns = array();
             foreach ($this->getSource()->getColNames() as $columnName) {
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {

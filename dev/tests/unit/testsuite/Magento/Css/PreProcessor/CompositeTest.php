@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Css\PreProcessor;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -40,11 +39,17 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject[]
      */
-    protected $callMap = [];
+    protected $callMap = array();
 
     protected function setUp()
     {
-        $this->preProcessorFactoryMock = $this->getMock('Magento\View\Asset\PreProcessorFactory', [], [], '', false);
+        $this->preProcessorFactoryMock = $this->getMock(
+            'Magento\View\Asset\PreProcessorFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
 
@@ -55,30 +60,34 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($preProcessors, $createMap)
     {
-        $publisherFile = $this->getMock('Magento\View\Publisher\CssFile', [], [], '', false);
+        $publisherFile = $this->getMock('Magento\View\Publisher\CssFile', array(), array(), '', false);
         $targetDir = $this->getMock('Magento\Filesystem\Directory\WriteInterface', array(), array(), '', false);
 
         foreach ($createMap as $className) {
             $this->callMap[$className] = $this->getMock($className, array(), array(), '', false);
-            $this->callMap[$className]->expects($this->once())
-                ->method('process')
-                ->with(
-                    $this->equalTo($publisherFile),
-                    $this->equalTo($targetDir)
-                )
-                ->will($this->returnValue($publisherFile));
+            $this->callMap[$className]->expects(
+                $this->once()
+            )->method(
+                'process'
+            )->with(
+                $this->equalTo($publisherFile),
+                $this->equalTo($targetDir)
+            )->will(
+                $this->returnValue($publisherFile)
+            );
         }
 
-        $this->preProcessorFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback(array($this, 'createProcessor')));
+        $this->preProcessorFactoryMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnCallback(array($this, 'createProcessor'))
+        );
 
         $this->composite = $this->objectManagerHelper->getObject(
             'Magento\Css\PreProcessor\Composite',
-            [
-                'preProcessorFactory' => $this->preProcessorFactoryMock,
-                'preProcessors' => $preProcessors
-            ]
+            array('preProcessorFactory' => $this->preProcessorFactoryMock, 'preProcessors' => $preProcessors)
         );
 
         $this->assertEquals($publisherFile, $this->composite->process($publisherFile, $targetDir));
@@ -100,29 +109,19 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function processDataProvider()
     {
-        return [
-            'one processor - LESS' => [
-                'preProcessors' => [
+        return array(
+            'one processor - LESS' => array(
+                'preProcessors' => array('css_source_processor' => 'Magento\Css\PreProcessor\Less'),
+                'createMap' => array('Magento\Css\PreProcessor\Less')
+            ),
+            'list of pre-processors' => array(
+                'preProcessors' => array(
                     'css_source_processor' => 'Magento\Css\PreProcessor\Less',
-                ],
-                'createMap' => [
-                    'Magento\Css\PreProcessor\Less',
-                ],
-            ],
-            'list of pre-processors' => [
-                'preProcessors' => [
-                    'css_source_processor' => 'Magento\Css\PreProcessor\Less',
-                    'css_url_processor' => 'Magento\Css\PreProcessor\UrlResolver',
-                ],
-                'createMap' => [
-                    'Magento\Css\PreProcessor\Less',
-                    'Magento\Css\PreProcessor\UrlResolver',
-                ],
-            ],
-            'no processors' => [
-                'preProcessors' => [],
-                'createMap' => [],
-            ],
-        ];
+                    'css_url_processor' => 'Magento\Css\PreProcessor\UrlResolver'
+                ),
+                'createMap' => array('Magento\Css\PreProcessor\Less', 'Magento\Css\PreProcessor\UrlResolver')
+            ),
+            'no processors' => array('preProcessors' => array(), 'createMap' => array())
+        );
     }
 }

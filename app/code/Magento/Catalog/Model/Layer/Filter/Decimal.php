@@ -50,19 +50,19 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
         array $data = array()
     ) {
         $this->_resource = $filterDecimalFactory->create();
-        parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
+        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
         $this->_requestVar = 'decimal';
     }
 
@@ -80,12 +80,11 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply decimal range filter to product collection
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @param \Magento\Catalog\Block\Layer\Filter\Decimal $filterBlock
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
-        parent::apply($request, $filterBlock);
+        parent::apply($request);
 
         /**
          * Filter must be string: $index, $range
@@ -122,8 +121,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getCacheKey()
     {
-        $key = $this->getLayer()->getStateKey()
-            . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
+        $key = $this->getLayer()->getStateKey() . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
         return $key;
     }
 
@@ -136,8 +134,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderItemLabel($range, $value)
     {
-        $from   = $this->_storeManager->getStore()->formatPrice(($value - 1) * $range, false);
-        $to     = $this->_storeManager->getStore()->formatPrice($value * $range, false);
+        $from = $this->_storeManager->getStore()->formatPrice(($value - 1) * $range, false);
+        $to = $this->_storeManager->getStore()->formatPrice($value * $range, false);
         return __('%1 - %2', $from, $to);
     }
 
@@ -185,11 +183,10 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             $maxValue = $this->getMaxValue();
             $index = 1;
             do {
-                $range = pow(10, (strlen(floor($maxValue)) - $index));
+                $range = pow(10, strlen(floor($maxValue)) - $index);
                 $items = $this->getRangeItemCounts($range);
                 $index++;
-            }
-            while ($range > self::MIN_RANGE_POWER && count($items) < 2);
+            } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
             $this->setData('range', $range);
         }
 
@@ -220,15 +217,15 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        $data       = array();
-        $range      = $this->getRange();
-        $dbRanges   = $this->getRangeItemCounts($range);
+        $data = array();
+        $range = $this->getRange();
+        $dbRanges = $this->getRangeItemCounts($range);
 
         foreach ($dbRanges as $index => $count) {
             $data[] = array(
                 'label' => $this->_renderItemLabel($range, $index),
                 'value' => $index . ',' . $range,
-                'count' => $count,
+                'count' => $count
             );
         }
 

@@ -25,157 +25,147 @@
 ?>
 
 <?php
-switch($type=$this->getType()) {
+switch($type = $this->getType()) {
 
     case 'related-rule':
-    if ($exist = $this->hasItems()) {
-        $type = 'related';
-        $class = $type;
+        if ($exist = $this->hasItems()) {
+            $type = 'related';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='related_products_list';
-        $title = __('Related Products');
-        $items = $this->getItemCollection();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='related_products_list';
+            $title = __('Related Products');
+            $items = $this->getAllItems();
+            $limit = $this->getPositionLimit();
+            $shuffle = (int) $this->isShuffled();
 
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = false;
-        $rating = false;
-        $description = false;
-    }
+            $showWishlist = true;
+            $showCompare = true;
+            $showCart = false;
+            $rating = false;
+            $description = false;
+        }
     break;
 
     case 'related':
-    if ($exist = $this->getItems()->getSize()) {
-        $type = 'related';
-        $class = $type;
+        /** @var \Magento\Catalog\Block\Product\ProductList\Related $this */
+        if ($exist = $this->getItems()->getSize()) {
+            $type = 'related';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='related_products_list';
-        $title = __('Related Products');
-        $items = $this->getItems();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='related_products_list';
+            $title = __('Related Products');
+            $items = $this->getItems();
+            $limit = 0;
+            $shuffle = 0;
 
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = false;
-        $rating = false;
-        $description = false;
-    }
+            $showWishlist = true;
+            $showCompare = true;
+            $showCart = false;
+            $rating = false;
+            $description = false;
+        }
     break;
 
     case 'upsell-rule':
-    if ($exist = $this->hasItems()) {
-        $type = 'upsell';
-        $class = $type;
+        if ($exist = $this->hasItems()) {
+            $type = 'upsell';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='upsell_products_list';
-        $title = __('You may also be interested in the following product(s)');
-        $items = $this->getItemCollection();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='upsell_products_list';
+            $title = __('You may also be interested in the following product(s)');
+            $items = $this->getAllItems();
+            $limit = $this->getPositionLimit();
+            $shuffle = (int) $this->isShuffled();
 
-        $showWishlist = false;
-        $showCompare = false;
-        $showCart = false;
-        $rating = false;
-        $description = false;
-    }
+            $showWishlist = false;
+            $showCompare = false;
+            $showCart = false;
+            $rating = false;
+            $description = false;
+        }
     break;
 
     case 'upsell':
-    if ($exist = count($this->getItemCollection()->getItems())) {
-        $type = 'upsell';
-        $class = $type;
+        /** @var \Magento\Catalog\Block\Product\ProductList\Upsell $this */
+        if ($exist = count($this->getItemCollection()->getItems())) {
+            $type = 'upsell';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='upsell_products_list';
-        $title = __('You may also be interested in the following product(s)');
-        $items = $this->getItemCollection()->getItems();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='upsell_products_list';
+            $title = __('You may also be interested in the following product(s)');
+            $items = $this->getItemCollection()->getItems();
+            $limit = $this->getItemLimit('upsell');
+            $shuffle = 0;
 
-        $showWishlist = false;
-        $showCompare = false;
-        $showCart = false;
-        $rating = false;
-        $description = false;
-    }
+            $showWishlist = false;
+            $showCompare = false;
+            $showCart = false;
+            $rating = false;
+            $description = false;
+        }
     break;
 
     case 'crosssell-rule':
-    if ($exist = $this->hasItems()) {
-        $type = 'crosssell';
-        $class = $type;
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $this */
+        if ($exist = $this->hasItems()) {
+            $type = 'crosssell';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='cart_cross_sell_products';
-        $title = __('More Choices:');
-        $items = $this->getItemCollection();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='cart_cross_sell_products';
+            $title = __('More Choices:');
+            $items = $this->getItemCollection();
 
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = true;
-        $rating = 'short';
-        $description = false;
-    }
+            $showWishlist = true;
+            $showCompare = true;
+            $showCart = true;
+            $rating = 'short';
+            $description = false;
+        }
     break;
 
     case 'crosssell':
-    if ($exist = $this->getItemCount()) {
-        $type = 'crosssell';
-        $class = $type;
+        /** @var \Magento\Catalog\Block\Product\ProductList\Crosssell $this */
+        if ($exist = $this->getItemCount()) {
+            $type = 'crosssell';
+            $class = $type;
 
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image ='cart_cross_sell_products';
-        $title = __('More Choices:');
-        $items = $this->getItems();
+            $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image ='cart_cross_sell_products';
+            $title = __('More Choices:');
+            $items = $this->getItems();
 
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = true;
-        $rating = 'short';
-        $description = false;
-    }
-    break;
-
-    case 'widget-viewed':
-    if ($exist = $this->getRecentlyViewedProducts()) {
-
-        $mode = $this->getViewMode();
-
-        $type = $type . '-' . $mode;
-
-        $class = 'widget viewed' . ' ' . $mode;
-
-        $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image = $this->getImageType();
-        $title = __('Recently Viewed');
-        $items = $exist;
-
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = true;
-        $rating = 'short';
-        $description = ($mode == 'list') ? true : false;
-    }
+            $showWishlist = true;
+            $showCompare = true;
+            $showCart = true;
+            $rating = 'short';
+            $description = false;
+        }
     break;
 
     case 'new':
-    if ($exist = $this->getProductCollection()) {
-        $type = 'new';
-        $mode = 'grid';
-        $type = $type . ' ' . $mode;
+        if ($exist = $this->getProductCollection()) {
+            $type = 'new';
+            $mode = 'grid';
+            $type = $type . ' ' . $mode;
 
-        $class = 'widget' . ' ' . $type;
+            $class = 'widget' . ' ' . $type;
 
-        $imageBlock = $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
-        $image = 'new_products_content_widget_grid';
-        $title = __('New Products');
-        $items = $exist;
+            $imageBlock = $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+            $image = 'new_products_content_widget_grid';
+            $title = __('New Products');
+            $items = $exist;
 
-        $showWishlist = true;
-        $showCompare = true;
-        $showCart = true;
-        $rating = 'short';
-        $description = ($mode == 'list') ? true : false;
-    }
+            $showWishlist = true;
+            $showCompare = true;
+            $showCart = true;
+            $rating = 'short';
+            $description = ($mode == 'list') ? true : false;
+        }
     break;
 
     case 'other':
@@ -184,8 +174,11 @@ switch($type=$this->getType()) {
 ?>
 
 <?php if ($exist):?>
-
-<div class="block <?php echo $class; ?>">
+    <?php if($type == 'related' || $type == 'upsell'): ?>
+        <div class="block <?php echo $class; ?>" data-limit="<?php echo $limit; ?>" data-shuffle="<?php echo $shuffle; ?>">
+    <?php else: ?>
+        <div class="block <?php echo $class; ?>">
+    <?php endif; ?>
     <div class="title">
         <strong><?php echo $title; ?></strong>
     </div>
@@ -197,19 +190,24 @@ switch($type=$this->getType()) {
         </div>
         <?php endif; ?>
         <div class="products wrapper grid">
-            <ol class="products list items <?php echo $type; ?>">
-                <?php $iterator = 1; ?>
-                <?php foreach($items as $_item): ?>
-                    <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
-                    <div class="product">
-                        <?php echo '<!-- ' . $image . '-->' ?>
-                        <a href="<?php echo $this->getProductUrl($_item) ?>" class="product photo">
-                            <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
-                        </a>
-                        <div class="product details">
-                            <strong class="product name"><a title="<?php echo $this->escapeHtml($_item->getName()) ?>" href="<?php echo $this->getProductUrl($_item) ?>">
-                                    <?php echo $this->escapeHtml($_item->getName()) ?></a>
-                            </strong>
+        <ol class="products list items <?php echo $type; ?>">
+        <?php $iterator = 1; ?>
+        <?php foreach($items as $_item): ?>
+            <?php echo ($iterator++==1) ? '' : '</li>' ?>
+                <?php if($type == 'related' || $type == 'upsell'): ?>
+                    <li class="item product" style="display: none;">
+                <?php else: ?>
+                    <li class="item product">
+                <?php endif; ?>
+                <div class="product">
+                    <?php echo '<!-- ' . $image . '-->' ?>
+                    <a href="<?php echo $this->getProductUrl($_item) ?>" class="product photo">
+                        <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                    </a>
+                    <div class="product details">
+                        <strong class="product name"><a title="<?php echo $this->escapeHtml($_item->getName()) ?>" href="<?php echo $this->getProductUrl($_item) ?>">
+                            <?php echo $this->escapeHtml($_item->getName()) ?></a>
+                        </strong>
 
                             <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
 
@@ -287,11 +285,18 @@ switch($type=$this->getType()) {
     <?php if($type == 'related'): ?>
     <script type="text/javascript">
         head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/related-products.js'); ?>", function() {
-            jQuery(".block.related [role='select-all']").relatedProducts({
+            jQuery(".block.related").relatedProducts({
                 relatedCheckbox: '.related.checkbox'
             });
         });
     </script>
+    <?php endif; ?>
+    <?php if($type == 'upsell'): ?>
+        <script type="text/javascript">
+            head.js("<?php echo $this->getViewFileUrl('Magento_Catalog::js/upsell-products.js'); ?>", function() {
+                jQuery(".block.upsell").upsellProducts();
+            });
+        </script>
     <?php endif; ?>
 </div>
 <?php endif;?>

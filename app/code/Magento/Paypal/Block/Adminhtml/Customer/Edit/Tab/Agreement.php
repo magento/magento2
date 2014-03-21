@@ -26,9 +26,8 @@ namespace Magento\Paypal\Block\Adminhtml\Customer\Edit\Tab;
 /**
  * Adminhtml customer billing agreement tab
  */
-class Agreement
-    extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Columns, that should be removed from grid
@@ -63,14 +62,7 @@ class Agreement
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct(
-            $context,
-            $backendHelper,
-            $helper,
-            $agreementFactory,
-            $agreementModel,
-            $data
-        );
+        parent::__construct($context, $backendHelper, $helper, $agreementFactory, $agreementModel, $data);
     }
 
     /**
@@ -148,9 +140,12 @@ class Agreement
         if (!$customerId) {
             $customerId = $this->_coreRegistry->registry('current_customer')->getId();
         }
-        $collection = $this->_agreementFactory->create()
-            ->addFieldToFilter('customer_id', $customerId)
-            ->setOrder('created_at');
+        $collection = $this->_agreementFactory->create()->addFieldToFilter(
+            'customer_id',
+            $customerId
+        )->setOrder(
+            'created_at'
+        );
         $this->setCollection($collection);
         return \Magento\Backend\Block\Widget\Grid::_prepareCollection();
     }

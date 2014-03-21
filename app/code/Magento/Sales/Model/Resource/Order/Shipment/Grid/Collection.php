@@ -39,14 +39,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Shipment\Collection
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_grid_collection';
+    protected $_eventPrefix = 'sales_order_shipment_grid_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_shipment_grid_collection';
+    protected $_eventObject = 'order_shipment_grid_collection';
 
     /**
      * Model initialization

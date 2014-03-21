@@ -125,11 +125,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @return $this
      * @see self::_getConditionSql for $condition
      */
-    public function addFieldToFilter($field, $condition=null)
+    public function addFieldToFilter($field, $condition = null)
     {
         if ($field == 'name') {
             $conditionSql = $this->_getConditionSql(
-                $this->getConnection()->getIfNullSql('p.value', 'p_d.value'), $condition
+                $this->getConnection()->getIfNullSql('p.value', 'p_d.value'),
+                $condition
             );
             $this->getSelect()->where($conditionSql, null, \Magento\DB\Select::TYPE_CONDITION);
             return $this;
@@ -146,35 +147,35 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected function _joinTables()
     {
         $entityType = $this->_eavConfig->getEntityType('catalog_product');
-        $attribute = $this->_eavConfig->getAttribute($entityType->getEntityTypeId(),'name');
+        $attribute = $this->_eavConfig->getAttribute($entityType->getEntityTypeId(), 'name');
 
-        $joinConditionDefault =
-            sprintf("p_d.attribute_id=%d AND p_d.store_id='0' AND main_table.product_id=p_d.entity_id",
-                $attribute->getAttributeId()
-            );
-        $joinCondition =
-            sprintf("p.attribute_id=%d AND p.store_id=main_table.store_id AND main_table.product_id=p.entity_id",
-                $attribute->getAttributeId()
-            );
+        $joinConditionDefault = sprintf(
+            "p_d.attribute_id=%d AND p_d.store_id='0' AND main_table.product_id=p_d.entity_id",
+            $attribute->getAttributeId()
+        );
+        $joinCondition = sprintf(
+            "p.attribute_id=%d AND p.store_id=main_table.store_id AND main_table.product_id=p.entity_id",
+            $attribute->getAttributeId()
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('p_d' => $attribute->getBackend()->getTable()),
-                $joinConditionDefault,
-                array());
+        $this->getSelect()->joinLeft(
+            array('p_d' => $attribute->getBackend()->getTable()),
+            $joinConditionDefault,
+            array()
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('p' => $attribute->getBackend()->getTable()),
-                $joinCondition,
-                array('name' => $this->getConnection()->getIfNullSql('p.value', 'p_d.value')));
+        $this->getSelect()->joinLeft(
+            array('p' => $attribute->getBackend()->getTable()),
+            $joinCondition,
+            array('name' => $this->getConnection()->getIfNullSql('p.value', 'p_d.value'))
+        );
 
-        $this->getSelect()
-            ->joinLeft(
-                array('types' => $this->getTable('googleshopping_types')),
-                'main_table.type_id=types.type_id'
-            );
-        $this->_resourceHelper->prepareColumnsList($this->getSelect()); // avoid column name collision
+        $this->getSelect()->joinLeft(
+            array('types' => $this->getTable('googleshopping_types')),
+            'main_table.type_id=types.type_id'
+        );
+        $this->_resourceHelper->prepareColumnsList($this->getSelect());
+        // avoid column name collision
 
         return $this;
     }

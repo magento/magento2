@@ -21,9 +21,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Url;
-
 
 class ScopeResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,10 +38,10 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_storeManagerMock = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')
-            ->getMock();
-        $this->_object = $objectManager->getObject('Magento\Core\Model\Url\ScopeResolver', array(
-            'storeManager' => $this->_storeManagerMock)
+        $this->_storeManagerMock = $this->getMockBuilder('Magento\Core\Model\StoreManagerInterface')->getMock();
+        $this->_object = $objectManager->getObject(
+            'Magento\Core\Model\Url\ScopeResolver',
+            array('storeManager' => $this->_storeManagerMock)
         );
     }
 
@@ -54,10 +52,15 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetScope($scopeId)
     {
         $scopeMock = $this->getMockBuilder('\Magento\Url\ScopeInterface')->getMock();
-        $this->_storeManagerMock->expects($this->at(0))
-            ->method('getStore')
-            ->with($scopeId)
-            ->will($this->returnValue($scopeMock));
+        $this->_storeManagerMock->expects(
+            $this->at(0)
+        )->method(
+            'getStore'
+        )->with(
+            $scopeId
+        )->will(
+            $this->returnValue($scopeMock)
+        );
         $this->_object->getScope($scopeId);
     }
 
@@ -75,16 +78,12 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function getScopeDataProvider()
     {
-        return array(
-            array(null),
-            array(1),
-        );
+        return array(array(null), array(1));
     }
 
     public function testGetScopes()
     {
-        $this->_storeManagerMock->expects($this->once())
-            ->method('getStores');
+        $this->_storeManagerMock->expects($this->once())->method('getStores');
         $this->_object->getScopes();
     }
 }

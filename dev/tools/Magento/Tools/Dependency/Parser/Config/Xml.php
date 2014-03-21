@@ -39,13 +39,13 @@ class Xml implements ParserInterface
     {
         $this->checkOptions($options);
 
-        $modules = [];
+        $modules = array();
         foreach ($options['files_for_parse'] as $file) {
             $config = $this->getModuleConfig($file);
-            $modules[] = [
+            $modules[] = array(
                 'name' => $this->extractModuleName($config),
-                'dependencies' => $this->extractDependencies($config),
-            ];
+                'dependencies' => $this->extractDependencies($config)
+            );
         }
         return $modules;
     }
@@ -59,8 +59,12 @@ class Xml implements ParserInterface
      */
     protected function checkOptions($options)
     {
-        if (!isset($options['files_for_parse']) || !is_array($options['files_for_parse'])
-            || !$options['files_for_parse']) {
+        if (!isset(
+            $options['files_for_parse']
+        ) || !is_array(
+            $options['files_for_parse']
+        ) || !$options['files_for_parse']
+        ) {
             throw new \InvalidArgumentException('Parse error: Option "files_for_parse" is wrong.');
         }
     }
@@ -84,14 +88,14 @@ class Xml implements ParserInterface
      */
     protected function extractDependencies($config)
     {
-        $dependencies = [];
+        $dependencies = array();
         /** @var \SimpleXMLElement $dependency */
         if ($config->depends) {
             foreach ($config->depends->module as $dependency) {
-                $dependencies[] = [
+                $dependencies[] = array(
                     'module' => $this->prepareModuleName((string)$dependency->attributes()->name),
-                    'type' => (string)$dependency->attributes()->type,
-                ];
+                    'type' => (string)$dependency->attributes()->type
+                );
             }
         }
         return $dependencies;

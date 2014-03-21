@@ -70,9 +70,13 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         );
         $this->_filesystem = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
 
-        $this->_modelBuilder = $this->getMockBuilder('Magento\View\Design\Theme\Customization\AbstractFile')
-            ->setMethods(array('getType', 'getContentType'))
-            ->setConstructorArgs(array($this->_customizationPath, $this->_fileFactory, $this->_filesystem));
+        $this->_modelBuilder = $this->getMockBuilder(
+            'Magento\View\Design\Theme\Customization\AbstractFile'
+        )->setMethods(
+            array('getType', 'getContentType')
+        )->setConstructorArgs(
+            array($this->_customizationPath, $this->_fileFactory, $this->_filesystem)
+        );
     }
 
     protected function tearDown()
@@ -109,8 +113,13 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $file->expects($this->any())->method('getTheme')->will($this->returnValue($theme));
         $file->expects($this->once())->method('getData')->with('file_path')->will($this->returnValue('file.path'));
 
-        $this->_customizationPath->expects($this->once())->method('getCustomizationPath')
-            ->will($this->returnValue('/path'));
+        $this->_customizationPath->expects(
+            $this->once()
+        )->method(
+            'getCustomizationPath'
+        )->will(
+            $this->returnValue('/path')
+        );
 
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */
@@ -137,8 +146,15 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
             $files[] = $file;
         }
         $customization = $this->getMock('Magento\View\Design\Theme\Customization', array(), array(), '', false);
-        $customization->expects($this->atLeastOnce())->method('getFilesByType')->with($type)
-            ->will($this->returnValue($files));
+        $customization->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getFilesByType'
+        )->with(
+            $type
+        )->will(
+            $this->returnValue($files)
+        );
 
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
         $theme->expects($this->any())->method('getCustomization')->will($this->returnValue($customization));
@@ -167,73 +183,34 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         return array(
             'first_condition' => array(
                 'type' => 'css',
-                'fileContent' => array(
-                    'file_name'  => 'test.css',
-                    'content'    => 'test content',
-                    'sort_order' => 1
-                ),
+                'fileContent' => array('file_name' => 'test.css', 'content' => 'test content', 'sort_order' => 1),
                 'expectedContent' => array(
-                    'file_type'  => 'css',
-                    'file_name'  => 'test_1.css',
-                    'file_path'  => 'css/test_1.css',
-                    'content'    => 'test content',
+                    'file_type' => 'css',
+                    'file_name' => 'test_1.css',
+                    'file_path' => 'css/test_1.css',
+                    'content' => 'test content',
                     'sort_order' => 2
                 ),
                 'existedFiles' => array(
-                    array(
-                        'id'         => 1,
-                        'file_path'  => 'css/test.css',
-                        'content'    => 'test content',
-                        'sort_order' => 1
-                    )
+                    array('id' => 1, 'file_path' => 'css/test.css', 'content' => 'test content', 'sort_order' => 1)
                 )
             ),
-
             'second_condition' => array(
                 'type' => 'js',
-                'fileContent' => array(
-                    'file_name'  => 'test.js',
-                    'content'    => 'test content',
-                    'sort_order' => 1
-                ),
+                'fileContent' => array('file_name' => 'test.js', 'content' => 'test content', 'sort_order' => 1),
                 'expectedContent' => array(
-                    'file_type'  => 'js',
-                    'file_name'  => 'test_3.js',
-                    'file_path'  => 'js/test_3.js',
-                    'content'    => 'test content',
+                    'file_type' => 'js',
+                    'file_name' => 'test_3.js',
+                    'file_path' => 'js/test_3.js',
+                    'content' => 'test content',
                     'sort_order' => 12
                 ),
                 'existedFiles' => array(
-                    array(
-                        'id'         => 1,
-                        'file_path'  => 'js/test.js',
-                        'content'    => 'test content',
-                        'sort_order' => 3
-                    ),
-                    array(
-                        'id'         => 2,
-                        'file_path'  => 'js/test_1.js',
-                        'content'    => 'test content',
-                        'sort_order' => 5
-                    ),
-                    array(
-                        'id'         => 3,
-                        'file_path'  => 'js/test_2.js',
-                        'content'    => 'test content',
-                        'sort_order' => 7
-                    ),
-                    array(
-                        'id'         => 4,
-                        'file_path'  => 'js/test_4.js',
-                        'content'    => 'test content',
-                        'sort_order' => 9
-                    ),
-                    array(
-                        'id'         => 5,
-                        'file_path'  => 'js/test_5.js',
-                        'content'    => 'test content',
-                        'sort_order' => 11
-                    )
+                    array('id' => 1, 'file_path' => 'js/test.js', 'content' => 'test content', 'sort_order' => 3),
+                    array('id' => 2, 'file_path' => 'js/test_1.js', 'content' => 'test content', 'sort_order' => 5),
+                    array('id' => 3, 'file_path' => 'js/test_2.js', 'content' => 'test content', 'sort_order' => 7),
+                    array('id' => 4, 'file_path' => 'js/test_4.js', 'content' => 'test content', 'sort_order' => 9),
+                    array('id' => 5, 'file_path' => 'js/test_5.js', 'content' => 'test content', 'sort_order' => 11)
                 )
             )
         );
@@ -248,22 +225,36 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
         $model = $this->_modelBuilder->setMethods(array('getFullPath', 'getType', 'getContentType'))->getMock();
 
         $file = $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup'), array(), '', false);
-        $file->setData(array(
-            'file_type'  => 'js',
-            'file_name'  => 'test_3.js',
-            'file_path'  => 'js/test_3.js',
-            'content'    => 'test content',
-            'sort_order' => 12
-        ));
+        $file->setData(
+            array(
+                'file_type' => 'js',
+                'file_name' => 'test_3.js',
+                'file_path' => 'js/test_3.js',
+                'content' => 'test content',
+                'sort_order' => 12
+            )
+        );
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
 
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write',
-            array('writeFile', 'delete', 'getRelativePath'), array(), '', false);
+        $directoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\Write',
+            array('writeFile', 'delete', 'getRelativePath'),
+            array(),
+            '',
+            false
+        );
         $directoryMock->expects($this->once())->method('writeFile')->will($this->returnValue(true));
         $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
 
-        $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)->will($this->returnValue($directoryMock));
+        $this->_filesystem->expects(
+            $this->any()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue($directoryMock)
+        );
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */
         /** @var $file \Magento\Core\Model\Theme\File */
         $model->save($file);
@@ -277,20 +268,34 @@ class AbstractFileTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->_modelBuilder->setMethods(array('getFullPath', 'getType', 'getContentType'))->getMock();
         $file = $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup'), array(), '', false);
-        $file->setData(array(
-            'file_type'  => 'js',
-            'file_name'  => 'test_3.js',
-            'file_path'  => 'js/test_3.js',
-            'content'    => 'test content',
-            'sort_order' => 12
-        ));
-        $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write',
-            array('touch', 'delete', 'getRelativePath'), array(), '', false);
+        $file->setData(
+            array(
+                'file_type' => 'js',
+                'file_name' => 'test_3.js',
+                'file_path' => 'js/test_3.js',
+                'content' => 'test content',
+                'sort_order' => 12
+            )
+        );
+        $directoryMock = $this->getMock(
+            'Magento\Filesystem\Directory\Write',
+            array('touch', 'delete', 'getRelativePath'),
+            array(),
+            '',
+            false
+        );
         $directoryMock->expects($this->once())->method('touch')->will($this->returnValue(true));
         $directoryMock->expects($this->once())->method('delete')->will($this->returnValue(true));
 
-        $this->_filesystem->expects($this->any())->method('getDirectoryWrite')
-            ->with(\Magento\App\Filesystem::ROOT_DIR)->will($this->returnValue($directoryMock));
+        $this->_filesystem->expects(
+            $this->any()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            \Magento\App\Filesystem::ROOT_DIR
+        )->will(
+            $this->returnValue($directoryMock)
+        );
 
         $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
         /** @var $model \Magento\View\Design\Theme\Customization\AbstractFile */

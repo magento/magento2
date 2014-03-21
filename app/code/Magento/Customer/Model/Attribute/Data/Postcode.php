@@ -73,8 +73,8 @@ class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
      */
     public function validateValue($value)
     {
-        $countryId      = $this->getExtractedData('country_id');
-        $optionalZip    = $this->_directoryData->getCountriesWithOptionalZip();
+        $countryId = $this->getExtractedData('country_id');
+        $optionalZip = $this->_directoryData->getCountriesWithOptionalZip();
         if (!in_array($countryId, $optionalZip)) {
             return parent::validateValue($value);
         }

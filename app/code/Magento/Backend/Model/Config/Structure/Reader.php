@@ -39,7 +39,7 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/config/system/section(/group)+' => 'id',
         '/config/system/section(/group)+/field' => 'id',
         '/config/system/section(/group)+/field/depends/field' => 'id',
-        '/config/system/section(/group)+/field/options/option' => 'label',
+        '/config/system/section(/group)+/field/options/option' => 'label'
     );
 
     /**

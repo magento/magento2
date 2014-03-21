@@ -67,10 +67,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function fileExistProvider()
     {
-        return array(
-            array('popup.csv', 'x'),
-            array('popup.csv', 'x+')
-        );
+        return array(array('popup.csv', 'x'), array('popup.csv', 'x+'));
     }
 
     /**
@@ -170,12 +167,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function csvProvider()
     {
         return array(
-            array(
-                'newcsv1.csv', array('field1', 'field2'), ',', '"'
-            ),
-            array(
-                'newcsv1.csv', array('field1', 'field2'), '%', '@'
-            )
+            array('newcsv1.csv', array('field1', 'field2'), ',', '"'),
+            array('newcsv1.csv', array('field1', 'field2'), '%', '@')
         );
     }
 
@@ -221,14 +214,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     private function getFileInstance($path, $mode)
     {
         $this->currentFilePath = __DIR__ . '/../_files/' . $path;
-        return Bootstrap::getObjectManager()
-            ->create(
-                'Magento\Filesystem\File\Write',
-                array(
-                    'path' => $this->currentFilePath,
-                    'driver' => new \Magento\Filesystem\Driver\File(),
-                    'mode' => $mode
-                )
-            );
+        return Bootstrap::getObjectManager()->create(
+            'Magento\Filesystem\File\Write',
+            array('path' => $this->currentFilePath, 'driver' => new \Magento\Filesystem\Driver\File(), 'mode' => $mode)
+        );
     }
 }

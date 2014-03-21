@@ -39,7 +39,7 @@ class Comment extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_creditmemo_comment_resource';
+    protected $_eventPrefix = 'sales_order_creditmemo_comment_resource';
 
     /**
      * Model initialization

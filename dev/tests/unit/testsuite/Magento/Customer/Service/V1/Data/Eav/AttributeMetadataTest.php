@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Service\V1\Data\Eav;
 
 use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
@@ -33,30 +32,37 @@ class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
      * Constants for testing
      */
     const ATTRIBUTE_CODE = 'ATTRIBUTE_CODE';
+
     const FRONTEND_INPUT = 'FRONT_END_INPUT';
+
     const INPUT_FILTER = 'INPUT_FILTER';
+
     const STORE_LABEL = 'STORE_LABEL';
+
     const VALIDATION_RULES = 'VALIDATION_RULES';
 
     public function testConstructorAndGetters()
     {
-        $options = array(['value' => 'OPTION_ONE'], ['value' => 'OPTION_TWO']);
+        $options = array(array('value' => 'OPTION_ONE'), array('value' => 'OPTION_TWO'));
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Customer\Service\V1\Data\Eav\OptionBuilder $optionBuilder */
         $optionBuilder = $objectManager->getObject('Magento\Customer\Service\V1\Data\Eav\OptionBuilder');
-        $validationRuleBuilder = $objectManager
-            ->getObject('Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder');
+        $validationRuleBuilder = $objectManager->getObject(
+            'Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder'
+        );
 
-        $attributeMetadataBuilder = (new AttributeMetadataBuilder($optionBuilder, $validationRuleBuilder))
-            ->populateWithArray(
-            [
+        $attributeMetadataBuilder = (new AttributeMetadataBuilder(
+            $optionBuilder,
+            $validationRuleBuilder
+        ))->populateWithArray(
+            array(
                 'attribute_code' => self::ATTRIBUTE_CODE,
                 'frontend_input' => self::FRONTEND_INPUT,
                 'input_filter' => self::INPUT_FILTER,
                 'store_label' => self::STORE_LABEL,
-                'validation_rules' => [],
+                'validation_rules' => array(),
                 'options' => $options
-            ]
+            )
         );
         $attributeMetadata = new AttributeMetadata($attributeMetadataBuilder);
 
@@ -64,7 +70,7 @@ class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::FRONTEND_INPUT, $attributeMetadata->getFrontendInput());
         $this->assertSame(self::INPUT_FILTER, $attributeMetadata->getInputFilter());
         $this->assertSame(self::STORE_LABEL, $attributeMetadata->getStoreLabel());
-        $this->assertSame([], $attributeMetadata->getValidationRules());
+        $this->assertSame(array(), $attributeMetadata->getValidationRules());
         $this->assertSame($options[0], $attributeMetadata->getOptions()[0]->__toArray());
         $this->assertSame($options[1], $attributeMetadata->getOptions()[1]->__toArray());
     }

@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Element;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
@@ -55,22 +54,27 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->_filesystem = $this->getMock('\Magento\App\Filesystem', array(), array(), '', false);
 
-        $this->_templateEngine =
-            $this->getMock('Magento\View\TemplateEnginePool', array('render', 'get'), array(), '', false);
+        $this->_templateEngine = $this->getMock(
+            'Magento\View\TemplateEnginePool',
+            array('render', 'get'),
+            array(),
+            '',
+            false
+        );
 
-        $this->_templateEngine->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($this->_templateEngine));
+        $this->_templateEngine->expects($this->any())->method('get')->will($this->returnValue($this->_templateEngine));
 
         $appState = $this->getMock('Magento\App\State', array('getAreaCode'), array(), '', false);
         $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('frontend'));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_block = $helper->getObject('Magento\View\Element\Template', array(
-            'filesystem' => $this->_filesystem,
-            'enginePool' => $this->_templateEngine,
-            'viewFileSystem' => $this->_viewFileSystem,
-            'appState' => $appState,
-            'data' => array('template' => 'template.phtml', 'module_name' => 'Fixture_Module')
+        $this->_block = $helper->getObject(
+            'Magento\View\Element\Template',
+            array(
+                'filesystem' => $this->_filesystem,
+                'enginePool' => $this->_templateEngine,
+                'viewFileSystem' => $this->_viewFileSystem,
+                'appState' => $appState,
+                'data' => array('template' => 'template.phtml', 'module_name' => 'Fixture_Module')
             )
         );
     }
@@ -86,32 +90,28 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectOutputString('');
         $directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $directoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $this->_filesystem
-            ->expects($this->once())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($directoryMock)
+        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->_filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($directoryMock)
         );
-        $this->_filesystem
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValue('themedir')
-        );
-        $directoryMock->expects($this->once())
-            ->method('isFile')
-            ->with('themedir/template.phtml')
-            ->will($this->returnValue(true)
+        $this->_filesystem->expects($this->any())->method('getPath')->will($this->returnValue('themedir'));
+        $directoryMock->expects(
+            $this->once()
+        )->method(
+            'isFile'
+        )->with(
+            'themedir/template.phtml'
+        )->will(
+            $this->returnValue(true)
         );
 
         $output = '<h1>Template Contents</h1>';
         $vars = array('var1' => 'value1', 'var2' => 'value2');
-        $this->_templateEngine
-            ->expects($this->once())
-            ->method('render')
-            ->will($this->returnValue($output))
-        ;
+        $this->_templateEngine->expects($this->once())->method('render')->will($this->returnValue($output));
         $this->_block->assign($vars);
         $this->assertEquals($output, $this->_block->fetchView('themedir/template.phtml'));
     }
@@ -119,31 +119,27 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testSetTemplateContext()
     {
         $directoryMock = $this->getMock('\Magento\Filesystem\Directory\Read', array(), array(), '', false);
-        $directoryMock->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $this->_filesystem
-            ->expects($this->once())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($directoryMock)
+        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->_filesystem->expects(
+            $this->once()
+        )->method(
+            'getDirectoryRead'
+        )->will(
+            $this->returnValue($directoryMock)
         );
-        $this->_filesystem
-            ->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValue('themedir')
-        );
-        $directoryMock->expects($this->once())
-            ->method('isFile')
-            ->with('themedir/template.phtml')
-            ->will($this->returnValue(true)
+        $this->_filesystem->expects($this->any())->method('getPath')->will($this->returnValue('themedir'));
+        $directoryMock->expects(
+            $this->once()
+        )->method(
+            'isFile'
+        )->with(
+            'themedir/template.phtml'
+        )->will(
+            $this->returnValue(true)
         );
 
         $context = new \Magento\Object();
-        $this->_templateEngine
-            ->expects($this->once())
-            ->method('render')
-            ->with($context)
-        ;
+        $this->_templateEngine->expects($this->once())->method('render')->with($context);
         $this->_block->setTemplateContext($context);
         $this->_block->fetchView('themedir/template.phtml');
     }

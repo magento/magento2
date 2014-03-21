@@ -81,7 +81,7 @@ class Media extends \Magento\Backup\Snapshot
         $map = array(
             $rootDir => array('media', 'var', 'pub'),
             $rootDir . '/pub' => array('media'),
-            $rootDir . '/var' => array($this->getDbBackupFilename()),
+            $rootDir . '/var' => array($this->getDbBackupFilename())
         );
 
         foreach ($map as $path => $whiteList) {

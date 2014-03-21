@@ -68,14 +68,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         );
         $storeFactoryMock = $this->getMock('Magento\Core\Model\StoreFactory', array('create'), array(), '', false);
         $this->_storeMock = $this->getMock('Magento\Core\Model\Store', array(), array(), '', false);
-        $storeFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->_storeMock));
+        $storeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_storeMock));
 
         $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $this->_appStateMock->expects($this->any())
-            ->method('isInstalled')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
 
         $placeholderProcessor = $this->getMock(
             'Magento\Core\Model\Config\Scope\Processor\Placeholder',
@@ -84,9 +80,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $placeholderProcessor->expects($this->any())
-            ->method('process')
-            ->will($this->returnArgument(0));
+        $placeholderProcessor->expects($this->any())->method('process')->will($this->returnArgument(0));
         $this->_model = new \Magento\Core\Model\Config\Scope\Reader\Store(
             $this->_initialConfigMock,
             $this->_scopePullMock,
@@ -105,46 +99,66 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $websiteMock = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
         $websiteMock->expects($this->any())->method('getCode')->will($this->returnValue($websiteCode));
         $this->_storeMock->expects($this->any())->method('getWebsite')->will($this->returnValue($websiteMock));
-        $this->_storeMock->expects($this->once())
-            ->method('load')
-            ->with($storeCode);
-        $this->_storeMock->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($storeId));
+        $this->_storeMock->expects($this->once())->method('load')->with($storeCode);
+        $this->_storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
 
         $dataMock = $this->getMock('Magento\App\Config\Data', array(), array(), '', false);
-        $dataMock->expects($this->any())->method('getValue')->will($this->returnValue(array(
-            'config' => array('key0' => 'website_value0', 'key1' => 'website_value1'),
-        )));
+        $dataMock->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->will(
+            $this->returnValue(array('config' => array('key0' => 'website_value0', 'key1' => 'website_value1')))
+        );
 
-        $dataMock->expects($this->once())->method('getSource')->will($this->returnValue(array(
-            'config' => array('key0' => 'website_value0', 'key1' => 'website_value1'),
-        )));
-        $this->_scopePullMock->expects($this->once())
-            ->method('getScope')
-            ->with('website', $websiteCode)
-            ->will($this->returnValue($dataMock));
+        $dataMock->expects(
+            $this->once()
+        )->method(
+            'getSource'
+        )->will(
+            $this->returnValue(array('config' => array('key0' => 'website_value0', 'key1' => 'website_value1')))
+        );
+        $this->_scopePullMock->expects(
+            $this->once()
+        )->method(
+            'getScope'
+        )->with(
+            'website',
+            $websiteCode
+        )->will(
+            $this->returnValue($dataMock)
+        );
 
-        $this->_initialConfigMock->expects($this->once())
-            ->method('getData')
-            ->with("sotres|{$storeCode}")
-            ->will($this->returnValue(array(
-                'config' => array('key1' => 'store_value1', 'key2' => 'store_value2'),
-            )));
-        $this->_collectionFactory->expects($this->once())
-            ->method('create')
-            ->with(array('scope' => 'stores', 'scopeId' => $storeId))
-            ->will($this->returnValue(array(
-                new \Magento\Object(array('path' => 'config/key1', 'value' => 'store_db_value1')),
-                new \Magento\Object(array('path' => 'config/key3', 'value' => 'store_db_value3')),
-            )));
+        $this->_initialConfigMock->expects(
+            $this->once()
+        )->method(
+            'getData'
+        )->with(
+            "sotres|{$storeCode}"
+        )->will(
+            $this->returnValue(array('config' => array('key1' => 'store_value1', 'key2' => 'store_value2')))
+        );
+        $this->_collectionFactory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            array('scope' => 'stores', 'scopeId' => $storeId)
+        )->will(
+            $this->returnValue(
+                array(
+                    new \Magento\Object(array('path' => 'config/key1', 'value' => 'store_db_value1')),
+                    new \Magento\Object(array('path' => 'config/key3', 'value' => 'store_db_value3'))
+                )
+            )
+        );
         $expectedData = array(
             'config' => array(
                 'key0' => 'website_value0', // value from website scope
                 'key1' => 'store_db_value1',
                 'key2' => 'store_value2', // value that has not been overridden in DB
                 'key3' => 'store_db_value3'
-            ),
+            )
         );
         $this->assertEquals($expectedData, $this->_model->read($storeCode));
     }

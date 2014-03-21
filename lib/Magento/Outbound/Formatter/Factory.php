@@ -46,10 +46,8 @@ class Factory
      * @param array $formatterMap
      * @param ObjectManager $objectManager
      */
-    public function __construct(
-        array $formatterMap,
-        ObjectManager $objectManager
-    ) {
+    public function __construct(array $formatterMap, ObjectManager $objectManager)
+    {
         $this->_formatterMap = $formatterMap;
         $this->_objectManager = $objectManager;
     }
@@ -68,11 +66,10 @@ class Factory
         }
         $formatterClassName = $this->_formatterMap[$format];
 
-        $formatter =  $this->_objectManager->get($formatterClassName);
+        $formatter = $this->_objectManager->get($formatterClassName);
         if (!$formatter instanceof FormatterInterface) {
             throw new \LogicException("Formatter class for {$format} does not implement FormatterInterface.");
         }
         return $formatter;
     }
-
 }

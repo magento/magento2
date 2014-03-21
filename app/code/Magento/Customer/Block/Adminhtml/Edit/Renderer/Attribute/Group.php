@@ -98,7 +98,7 @@ class Group extends Element
     public function getDisableAutoGroupChangeCheckboxState()
     {
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-        $checkedByDefault = ($customerId) ? false : $this->_addressHelper->isDisableAutoGroupAssignDefaultValue();
+        $checkedByDefault = $customerId ? false : $this->_addressHelper->isDisableAutoGroupAssignDefaultValue();
 
         $value = $this->getDisableAutoGroupChangeAttributeValue();
         $state = '';
@@ -115,8 +115,10 @@ class Group extends Element
      */
     public function getDisableAutoGroupChangeCheckboxElementName()
     {
-        return $this->getElement()->getForm()->getFieldNameSuffix()
-            . '[' . $this->_getDisableAutoGroupChangeElementHtmlId() . ']';
+        return $this->getElement()->getForm()->getFieldNameSuffix() .
+            '[' .
+            $this->_getDisableAutoGroupChangeElementHtmlId() .
+            ']';
     }
 
     /**

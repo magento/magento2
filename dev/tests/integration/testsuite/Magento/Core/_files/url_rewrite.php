@@ -26,8 +26,8 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$cmsPageId     = 1;
-$rewriteUrl    = 'test_rewrite_path';
+$cmsPageId = 1;
+$rewriteUrl = 'test_rewrite_path';
 
 // get CMS page
 /** @var $cmsPage \Magento\Cms\Model\Page */
@@ -41,7 +41,10 @@ if ($cmsPage->isObjectNew()) {
 // create URL rewrite
 /** @var $rewrite \Magento\Core\Model\Url\Rewrite */
 $rewrite = $objectManager->create('Magento\Core\Model\Url\Rewrite');
-$rewrite->setIdPath('cms_page/' . $cmsPage->getId())
-    ->setRequestPath($rewriteUrl)
-    ->setTargetPath('cms/page/view/page_id/' . $cmsPage->getId())
-    ->save();
+$rewrite->setIdPath(
+    'cms_page/' . $cmsPage->getId()
+)->setRequestPath(
+    $rewriteUrl
+)->setTargetPath(
+    'cms/page/view/page_id/' . $cmsPage->getId()
+)->save();

@@ -56,7 +56,7 @@ abstract class AbstractContainer
      * @param string|null $default
      * @return string
      */
-    public function getVar($key, $default=null)
+    public function getVar($key, $default = null)
     {
         if (!isset($this->_vars[$key])) {
             return $default;
@@ -77,7 +77,7 @@ abstract class AbstractContainer
      * @param string|null $value
      * @return $this
      */
-    public function setVar($key, $value=null)
+    public function setVar($key, $value = null)
     {
         if (is_array($key) && is_null($value)) {
             $this->_vars = $key;
@@ -109,7 +109,7 @@ abstract class AbstractContainer
      * @param string|null $data
      * @return true
      */
-    public function validateDataString($data=null)
+    public function validateDataString($data = null)
     {
         if (is_null($data)) {
             $data = $this->getData();
@@ -124,17 +124,16 @@ abstract class AbstractContainer
      * @param array|null $data
      * @return true
      */
-    public function validateDataGrid($data=null)
+    public function validateDataGrid($data = null)
     {
         if (is_null($data)) {
             $data = $this->getData();
         }
         if (!is_array($data) || !is_array(current($data))) {
-            if (count($data)==0) {
+            if (count($data) == 0) {
                 return true;
             }
-            $this->addException(
-                "Invalid data type, expecting 2D grid array.", ConvertException::FATAL);
+            $this->addException("Invalid data type, expecting 2D grid array.", ConvertException::FATAL);
         }
         return true;
     }
@@ -161,7 +160,7 @@ abstract class AbstractContainer
      * @param string|null $level
      * @return ConvertException
      */
-    public function addException($error, $level=null)
+    public function addException($error, $level = null)
     {
         $exception = new ConvertException($error);
         $exception->setLevel(!is_null($level) ? $level : ConvertException::NOTICE);

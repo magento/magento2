@@ -88,8 +88,14 @@ class ConfigFixture
                 $objectManager->get('Magento\App\ConfigInterface')->setValue($configPath, $value);
             }
         } else {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore($storeCode)->setConfig($configPath, $value);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Core\Model\StoreManagerInterface'
+            )->getStore(
+                $storeCode
+            )->setConfig(
+                $configPath,
+                $value
+            );
         }
     }
 
@@ -107,7 +113,7 @@ class ConfigFixture
         foreach ($annotations['method']['magentoConfigFixture'] as $configPathAndValue) {
             if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
                 /* Store-scoped config value */
-                $storeCode = ($matches[0] != 'current' ? $matches[0] : '');
+                $storeCode = $matches[0] != 'current' ? $matches[0] : '';
                 list(, $configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 3);
 
                 $originalValue = $this->_getConfigValue($configPath, $storeCode);
@@ -123,7 +129,6 @@ class ConfigFixture
 
                 $this->_setConfigValue($configPath, $requiredValue);
             }
-
         }
     }
 

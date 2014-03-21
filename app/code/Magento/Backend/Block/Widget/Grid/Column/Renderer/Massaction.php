@@ -32,8 +32,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
  * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Massaction
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
+class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkbox
 {
     /**
      * @var int
@@ -90,5 +89,4 @@ class Massaction
         $html .= 'value="' . $this->escapeHtml($value) . '" class="massaction-checkbox"' . $checked . '/>';
         return $html;
     }
-
 }

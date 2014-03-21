@@ -36,9 +36,8 @@ class QuoteItem
     /**
      * @param \Magento\GiftMessage\Helper\Message $helper
      */
-    public function __construct(
-        \Magento\GiftMessage\Helper\Message $helper
-    ) {
+    public function __construct(\Magento\GiftMessage\Helper\Message $helper)
+    {
         $this->_helper = $helper;
     }
 
@@ -56,11 +55,7 @@ class QuoteItem
     ) {
         /** @var $orderItem Item */
         $orderItem = $proceed($item);
-        $isAvailable = $this->_helper->isMessagesAvailable(
-            'item',
-            $item,
-            $item->getStoreId()
-        );
+        $isAvailable = $this->_helper->isMessagesAvailable('item', $item, $item->getStoreId());
 
         $orderItem->setGiftMessageId($item->getGiftMessageId());
         $orderItem->setGiftMessageAvailable($isAvailable);

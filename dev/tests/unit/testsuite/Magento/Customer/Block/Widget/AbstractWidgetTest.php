@@ -27,8 +27,11 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
 {
     /** Constants used in the various unit tests. */
     const KEY_FIELD_ID_FORMAT = 'field_id_format';
+
     const KEY_FIELD_NAME_FORMAT = 'field_name_format';
+
     const FORMAT_D = '%d';
+
     const FORMAT_S = '%s';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Address */
@@ -39,13 +42,16 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
+        $this->_addressHelper = $this->getMock('Magento\Customer\Helper\Address', array(), array(), '', false);
 
         $this->_block = new AbstractWidget(
-            $this->getMock('Magento\View\Element\Template\Context', [], [], '', false),
+            $this->getMock('Magento\View\Element\Template\Context', array(), array(), '', false),
             $this->_addressHelper,
             $this->getMockForAbstractClass(
-                'Magento\Customer\Service\V1\CustomerMetadataServiceInterface', [], '', false
+                'Magento\Customer\Service\V1\CustomerMetadataServiceInterface',
+                array(),
+                '',
+                false
             )
         );
     }
@@ -58,8 +64,15 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig($key, $expectedValue)
     {
-        $this->_addressHelper
-            ->expects($this->once())->method('getConfig')->with($key)->will($this->returnValue($expectedValue));
+        $this->_addressHelper->expects(
+            $this->once()
+        )->method(
+            'getConfig'
+        )->with(
+            $key
+        )->will(
+            $this->returnValue($expectedValue)
+        );
         $this->assertEquals($expectedValue, $this->_block->getConfig($key));
     }
 
@@ -68,10 +81,7 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function getConfigDataProvider()
     {
-        return [
-            ['key', 'value'],
-            [null, null]
-        ];
+        return array(array('key', 'value'), array(null, null));
     }
 
     /**
@@ -133,11 +143,11 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function getFieldIdDataProvider()
     {
-        return [
-            [self::FORMAT_S, 'Id', 'Id', 'is_string'],
-            [self::FORMAT_D, '123', '123', 'is_numeric'],
-            [self::FORMAT_D, 'Id', '0', 'is_numeric']
-        ];
+        return array(
+            array(self::FORMAT_S, 'Id', 'Id', 'is_string'),
+            array(self::FORMAT_D, '123', '123', 'is_numeric'),
+            array(self::FORMAT_D, 'Id', '0', 'is_numeric')
+        );
     }
 
     /**
@@ -163,10 +173,10 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function getFieldNameDataProvider()
     {
-        return [
-            [self::FORMAT_S, 'Name', 'Name', 'is_string'],
-            [self::FORMAT_D, '123', '123', 'is_numeric'],
-            [self::FORMAT_D, 'Name', '0', 'is_numeric']
-        ];
+        return array(
+            array(self::FORMAT_S, 'Name', 'Name', 'is_string'),
+            array(self::FORMAT_D, '123', '123', 'is_numeric'),
+            array(self::FORMAT_D, 'Name', '0', 'is_numeric')
+        );
     }
 }

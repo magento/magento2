@@ -82,8 +82,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     protected function _afterSave()
     {
-        $this->getResource()
-            ->saveItemTitle($this);
+        $this->getResource()->saveItemTitle($this);
         return parent::_afterSave();
     }
 
@@ -130,7 +129,6 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getSearchableData($productId, $storeId)
     {
-        return $this->_getResource()
-            ->getSearchableData($productId, $storeId);
+        return $this->_getResource()->getSearchableData($productId, $storeId);
     }
 }

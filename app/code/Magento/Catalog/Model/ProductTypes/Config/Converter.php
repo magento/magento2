@@ -50,7 +50,7 @@ class Converter implements \Magento\Config\ConverterInterface
             $data['label'] = $this->_getAttributeValue($typeNode, 'label', '');
             $data['model'] = $this->_getAttributeValue($typeNode, 'modelInstance');
             $data['composite'] = !empty($isComposite) && 'false' !== $isComposite;
-            $data['index_priority'] = (int) $this->_getAttributeValue($typeNode, 'indexPriority', 0);
+            $data['index_priority'] = (int)$this->_getAttributeValue($typeNode, 'indexPriority', 0);
             $data['can_use_qty_decimals'] = !empty($isDecimal) && 'false' !== $isDecimal;
             $data['is_qty'] = !empty($isQty) && 'false' !== $isQty;
 
@@ -92,7 +92,6 @@ class Converter implements \Magento\Config\ConverterInterface
                         }
                         break;
                 }
-
             }
             $output['types'][$typeName] = $data;
         }

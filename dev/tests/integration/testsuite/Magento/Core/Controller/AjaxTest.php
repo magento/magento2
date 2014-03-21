@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Controller;
 
 class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -41,9 +40,6 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function translateActionDataProvider()
     {
-        return array(
-            array('test'),
-            array(array('test'))
-        );
+        return array(array('test'), array(array('test')));
     }
 }

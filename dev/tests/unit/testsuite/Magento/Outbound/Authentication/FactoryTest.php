@@ -44,17 +44,20 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->_mockObjectManager = $this->getMockBuilder(
+            'Magento\ObjectManager'
+        )->setMethods(
+            array('get')
+        )->disableOriginalConstructor()->getMockForAbstractClass();
 
-        $this->_authFactory = new \Magento\Outbound\Authentication\Factory(array('hmac' => 'Test_Authentication_Hmac'),
-            $this->_mockObjectManager);
+        $this->_authFactory = new \Magento\Outbound\Authentication\Factory(
+            array('hmac' => 'Test_Authentication_Hmac'),
+            $this->_mockObjectManager
+        );
 
-        $this->_expectedObject = $this->getMockBuilder('Magento\Outbound\Authentication\Hmac')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_expectedObject = $this->getMockBuilder(
+            'Magento\Outbound\Authentication\Hmac'
+        )->disableOriginalConstructor()->getMock();
 
         $this->_formatterFactory = new \Magento\Outbound\Formatter\Factory(
             array('json' => 'Test_Formatter_Json'),
@@ -64,10 +67,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthenticationSuccess()
     {
-        $this->_mockObjectManager->expects($this->once())
-            ->method('get')
-            ->with('Test_Authentication_Hmac')
-            ->will($this->returnValue($this->_expectedObject));
+        $this->_mockObjectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Test_Authentication_Hmac'
+        )->will(
+            $this->returnValue($this->_expectedObject)
+        );
 
         $authObject = $this->_authFactory->getAuthentication(\Magento\Outbound\EndpointInterface::AUTH_TYPE_HMAC);
         $this->assertInstanceOf('Magento\Outbound\Authentication\Hmac', $authObject);
@@ -89,10 +97,15 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthenticationNoModel()
     {
-        $this->_mockObjectManager->expects($this->once())
-            ->method('get')
-            ->with('Test_Authentication_Hmac')
-            ->will($this->returnValue($this->getMock('Magento\Object')));
+        $this->_mockObjectManager->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'Test_Authentication_Hmac'
+        )->will(
+            $this->returnValue($this->getMock('Magento\Object'))
+        );
         $this->_authFactory->getAuthentication(\Magento\Outbound\EndpointInterface::AUTH_TYPE_HMAC);
     }
 }

@@ -33,19 +33,27 @@ class Fault extends \RuntimeException
      * Fault codes that are used in SOAP faults.
      */
     const FAULT_CODE_SENDER = 'Sender';
+
     const FAULT_CODE_RECEIVER = 'Receiver';
 
     /**#@+
      * Nodes that can appear in Detail node of SOAP fault.
      */
     const NODE_DETAIL_CODE = 'Code';
+
     const NODE_DETAIL_PARAMETERS = 'Parameters';
+
     /** Note that parameter node must be unique in scope of all complex types declared in WSDL */
     const NODE_DETAIL_PARAMETER = 'GenericFaultParameter';
+
     const NODE_DETAIL_PARAMETER_KEY = 'key';
+
     const NODE_DETAIL_PARAMETER_VALUE = 'value';
+
     const NODE_DETAIL_TRACE = 'Trace';
+
     const NODE_DETAIL_WRAPPER = 'GenericFault';
+
     /**#@-*/
 
     /** @var string */
@@ -234,9 +242,9 @@ class Fault extends \RuntimeException
     {
         $detailXml = $this->_generateDetailXml($details);
         $language = $this->getLanguage();
-        $detailsNamespace = !empty($detailXml)
-            ? 'xmlns:m="' . urlencode($this->_soapServer->generateUri(true)) . '"'
-            : '';
+        $detailsNamespace = !empty($detailXml) ? 'xmlns:m="' . urlencode(
+            $this->_soapServer->generateUri(true)
+        ) . '"' : '';
         $reason = htmlentities($reason);
         $message = <<<FAULT_MESSAGE
 <?xml version="1.0" encoding="utf-8" ?>
@@ -271,9 +279,10 @@ FAULT_MESSAGE;
         if (is_array($details) && !empty($details)) {
             $detailsXml = $this->_convertDetailsToXml($details);
             if ($detailsXml) {
-                $errorDetailsNode = $this->getFaultName() ? $this->getFaultName() :self::NODE_DETAIL_WRAPPER;
-                $detailsXml = "<env:Detail><m:{$errorDetailsNode}>"
-                    . $detailsXml . "</m:{$errorDetailsNode}></env:Detail>";
+                $errorDetailsNode = $this->getFaultName() ? $this->getFaultName() : self::NODE_DETAIL_WRAPPER;
+                $detailsXml = "<env:Detail><m:{$errorDetailsNode}>" .
+                    $detailsXml .
+                    "</m:{$errorDetailsNode}></env:Detail>";
             } else {
                 $detailsXml = '';
             }
@@ -300,7 +309,7 @@ FAULT_MESSAGE;
                     // break is intentionally omitted
                 case self::NODE_DETAIL_TRACE:
                     if (is_string($detailValue) || is_numeric($detailValue)) {
-                        $detailsXml .= "<m:$detailNode>" . htmlspecialchars($detailValue) . "</m:$detailNode>";
+                        $detailsXml .= "<m:{$detailNode}>" . htmlspecialchars($detailValue) . "</m:{$detailNode}>";
                     }
                     break;
                 case self::NODE_DETAIL_PARAMETERS:
@@ -327,13 +336,15 @@ FAULT_MESSAGE;
                     $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
                     $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
                     $parameterNode = self::NODE_DETAIL_PARAMETER;
-                    $paramsXml .= "<m:$parameterNode><m:$keyNode>$parameterName</m:$keyNode><m:$valueNode>"
-                        . htmlspecialchars($parameterValue) . "</m:$valueNode></m:$parameterNode>";
+                    $paramsXml .= "<m:{$parameterNode}><m:{$keyNode}>{$parameterName}</m:{$keyNode}><m:{$valueNode}>" .
+                        htmlspecialchars(
+                            $parameterValue
+                        ) . "</m:{$valueNode}></m:{$parameterNode}>";
                 }
             }
             if (!empty($paramsXml)) {
                 $parametersNode = self::NODE_DETAIL_PARAMETERS;
-                $result = "<m:$parametersNode>" . $paramsXml . "</m:$parametersNode>";
+                $result = "<m:{$parametersNode}>" . $paramsXml . "</m:{$parametersNode}>";
             }
         }
         return $result;

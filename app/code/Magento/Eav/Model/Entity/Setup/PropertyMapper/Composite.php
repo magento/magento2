@@ -64,8 +64,10 @@ class Composite implements PropertyMapperInterface
         foreach ($this->propertyMappers as $class) {
             if (!is_subclass_of($class, '\Magento\Eav\Model\Entity\Setup\PropertyMapperInterface')) {
                 throw new \InvalidArgumentException(
-                    'Property mapper ' . $class . ' must'
-                        . ' implement \Magento\Eav\Model\Entity\Setup\PropertyMapperInterface'
+                    'Property mapper ' .
+                    $class .
+                    ' must' .
+                    ' implement \Magento\Eav\Model\Entity\Setup\PropertyMapperInterface'
                 );
             }
             $data = array_replace($data, $this->objectManager->get($class)->map($input, $entityTypeId));

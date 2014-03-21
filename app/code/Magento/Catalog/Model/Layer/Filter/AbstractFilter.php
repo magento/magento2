@@ -74,19 +74,22 @@ abstract class AbstractFilter extends \Magento\Object
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer $layer,
         array $data = array()
     ) {
         $this->_filterItemFactory = $filterItemFactory;
         $this->_storeManager = $storeManager;
-        $this->_catalogLayer = $catalogLayer;
+        $this->_catalogLayer = $layer;
         parent::__construct($data);
+        if ($this->hasAttributeModel()) {
+            $this->_requestVar = $this->getAttributeModel()->getAttributeCode();
+        }
     }
 
     /**
@@ -135,10 +138,9 @@ abstract class AbstractFilter extends \Magento\Object
      * Apply filter to collection
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @param \Magento\Object $filterBlock
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
         return $this;
     }
@@ -193,18 +195,13 @@ abstract class AbstractFilter extends \Magento\Object
     protected function _initItems()
     {
         $data = $this->_getItemsData();
-        $items=array();
+        $items = array();
         foreach ($data as $itemData) {
-            $items[] = $this->_createItem(
-                $itemData['label'],
-                $itemData['value'],
-                $itemData['count']
-            );
+            $items[] = $this->_createItem($itemData['label'], $itemData['value'], $itemData['count']);
         }
         $this->_items = $items;
         return $this;
     }
-
 
     /**
      * Retrieve layer object
@@ -229,13 +226,17 @@ abstract class AbstractFilter extends \Magento\Object
      * @param   int $count
      * @return  \Magento\Catalog\Model\Layer\Filter\Item
      */
-    protected function _createItem($label, $value, $count=0)
+    protected function _createItem($label, $value, $count = 0)
     {
-        return $this->_filterItemFactory->create()
-            ->setFilter($this)
-            ->setLabel($label)
-            ->setValue($value)
-            ->setCount($count);
+        return $this->_filterItemFactory->create()->setFilter(
+            $this
+        )->setLabel(
+            $label
+        )->setValue(
+            $value
+        )->setCount(
+            $count
+        );
     }
 
     /**

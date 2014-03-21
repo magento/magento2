@@ -60,25 +60,25 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $_updateData = array(
         'address' => array( // address records
-            'update'            => '19107',  // address with updates
-            'new'               => '85034',  // new address
-            'no_customer'       => '33602',  // there is no customer with this primary key (email+website)
+            'update' => '19107',  // address with updates
+            'new' => '85034',  // new address
+            'no_customer' => '33602',  // there is no customer with this primary key (email+website)
             'new_no_address_id' => '32301',  // new address without address id
         ),
-        'update'  => array( // this data is changed in CSV file
+        'update' => array( // this data is changed in CSV file
             '19107' => array(
-                'firstname'  => 'Katy',
+                'firstname' => 'Katy',
                 'middlename' => 'T.',
             ),
         ),
-        'remove'  => array( // this data is not set in CSV file
+        'remove' => array( // this data is not set in CSV file
             '19107' => array(
-                'city'   => 'Philadelphia',
+                'city' => 'Philadelphia',
                 'region' => 'Pennsylvania',
             ),
         ),
         'default' => array( // new default billing/shipping addresses
-            'billing'  => '85034',
+            'billing' => '85034',
             'shipping' => '19107',
         ),
     );
@@ -89,7 +89,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_deleteData = array(
-        'delete'     => '19107',  // deleted address
+        'delete' => '19107',  // deleted address
         'not_delete' => '72701',  // not deleted address
     );
 
@@ -98,8 +98,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create($this->_testClassName);
+        $this->_entityAdapter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            $this->_testClassName
+        );
     }
 
     /**
@@ -110,32 +111,51 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         // check entity table
-        $this->assertAttributeInternalType('string', '_entityTable', $this->_entityAdapter,
-            'Entity table must be a string.');
+        $this->assertAttributeInternalType(
+            'string',
+            '_entityTable',
+            $this->_entityAdapter,
+            'Entity table must be a string.'
+        );
         $this->assertAttributeNotEmpty('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
 
         // check message templates
-        $this->assertAttributeInternalType('array', '_messageTemplates', $this->_entityAdapter,
-            'Templates must be an array.');
+        $this->assertAttributeInternalType(
+            'array',
+            '_messageTemplates',
+            $this->_entityAdapter,
+            'Templates must be an array.'
+        );
         $this->assertAttributeNotEmpty('_messageTemplates', $this->_entityAdapter, 'Templates must not be empty');
 
         // check attributes
-        $this->assertAttributeInternalType('array', '_attributes', $this->_entityAdapter,
-            'Attributes must be an array.');
+        $this->assertAttributeInternalType(
+            'array',
+            '_attributes',
+            $this->_entityAdapter,
+            'Attributes must be an array.'
+        );
         $this->assertAttributeNotEmpty('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
 
         // check addresses
-        $this->assertAttributeInternalType('array', '_addresses', $this->_entityAdapter,
-            'Addresses must be an array.');
+        $this->assertAttributeInternalType(
+            'array',
+            '_addresses',
+            $this->_entityAdapter,
+            'Addresses must be an array.'
+        );
         $this->assertAttributeNotEmpty('_addresses', $this->_entityAdapter, 'Addresses must not be empty');
 
         // check country regions and regions
-        $this->assertAttributeInternalType('array', '_countryRegions', $this->_entityAdapter,
-            'Country regions must be an array.');
+        $this->assertAttributeInternalType(
+            'array',
+            '_countryRegions',
+            $this->_entityAdapter,
+            'Country regions must be an array.'
+        );
         $this->assertAttributeNotEmpty('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
 
-        $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter,
-            'Regions must be an array.');
+        $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter, 'Regions must be an array.');
         $this->assertAttributeNotEmpty('_regions', $this->_entityAdapter, 'Regions must not be empty');
     }
 
@@ -168,8 +188,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $initAddresses->invoke($this->_entityAdapter);
 
         // check addresses
-        $this->assertAttributeInternalType('array', '_addresses', $this->_entityAdapter,
-            'Addresses must be an array.');
+        $this->assertAttributeInternalType(
+            'array',
+            '_addresses',
+            $this->_entityAdapter,
+            'Addresses must be an array.'
+        );
         $this->assertAttributeNotEmpty('_addresses', $this->_entityAdapter, 'Addresses must not be empty');
 
         $addressesReflection = new \ReflectionProperty($this->_testClassName, '_addresses');
@@ -204,8 +228,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         list($customerId, $addressId) = $this->_addTestAddress($this->_entityAdapter);
 
         // check DB
-        $testAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Address');
+        $testAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Address'
+        );
         $testAddress->load($addressId);
         $this->assertEquals($addressId, $testAddress->getId(), 'Incorrect address ID.');
         $this->assertEquals($customerId, $testAddress->getParentId(), 'Incorrect address customer ID.');
@@ -228,21 +253,27 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $customerId = $customer->getId();
 
         /** @var $addressModel \Magento\Customer\Model\Address */
-        $addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Address');
+        $addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Address'
+        );
         $tableName = $addressModel->getResource()->getEntityTable();
-        $addressId = $objectManager->get('Magento\Core\Model\Resource\HelperPool')->get('Magento_ImportExport')
-            ->getNextAutoincrement($tableName);
+        $addressId = $objectManager->get(
+            'Magento\Core\Model\Resource\HelperPool'
+        )->get(
+            'Magento_ImportExport'
+        )->getNextAutoincrement(
+            $tableName
+        );
 
         /** @var \Magento\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Stdlib\DateTime');
 
         $entityData = array(
-            'entity_id'      => $addressId,
+            'entity_id' => $addressId,
             'entity_type_id' => $addressModel->getEntityTypeId(),
-            'parent_id'      => $customerId,
-            'created_at'     => $dateTime->now(),
-            'updated_at'     => $dateTime->now()
+            'parent_id' => $customerId,
+            'created_at' => $dateTime->now(),
+            'updated_at' => $dateTime->now()
         );
 
         // invoke _saveAddressEntities
@@ -290,8 +321,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // check DB
         /** @var $testAddress \Magento\Customer\Model\Address */
-        $testAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Address');
+        $testAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Address'
+        );
         $testAddress->load($addressId);
         $this->assertEquals($addressId, $testAddress->getId(), 'Incorrect address ID.');
         $this->assertEquals($attributeValue, $testAddress->getData($attributeName), 'There is no attribute value.');
@@ -331,13 +363,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($notDefaultAddress, 'Not default address must exists.');
         $this->assertNotNull($addressCustomer, 'Not default address customer must exists.');
 
-        $addressId  = $notDefaultAddress->getId();
+        $addressId = $notDefaultAddress->getId();
         $customerId = $addressCustomer->getId();
 
         // set customer defaults
         $defaults = array();
-        foreach (\Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address::getDefaultAddressAttributeMapping()
-            as $attributeCode) {
+        foreach (\Magento\ImportExport\Model\Import\Entity\Eav\Customer\Address::
+                     getDefaultAddressAttributeMapping() as $attributeCode) {
             /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
             $attribute = $addressCustomer->getAttribute($attributeCode);
             $attributeTable = $attribute->getBackend()->getTable();
@@ -352,8 +384,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // check DB
         /** @var $testCustomer \Magento\Customer\Model\Customer */
-        $testCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer');
+        $testCustomer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Customer'
+        );
         $testCustomer->load($customerId);
         $this->assertEquals($customerId, $testCustomer->getId(), 'Customer must exists.');
         $this->assertNotNull($testCustomer->getDefaultBillingAddress(), 'Default billing address must exists.');
@@ -392,9 +425,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $directoryWrite = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
 
-        $result = $this->_entityAdapter
-            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
-            ->isDataValid();
+        $result = $this->_entityAdapter->setSource(
+            \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
+        )->isDataValid();
         $this->assertFalse($result, 'Validation result must be false.');
 
         // import data
@@ -410,8 +443,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         }
 
         // get addresses
-        $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Address\Collection');
+        $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Address\Collection'
+        );
         $addressCollection->addAttributeToSelect($requiredAttributes);
         $addresses = array();
         /** @var $address \Magento\Customer\Model\Address */
@@ -422,10 +456,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // is addresses exists
         $this->assertArrayHasKey($this->_updateData['address']['update'], $addresses, 'Address must exist.');
         $this->assertArrayHasKey($this->_updateData['address']['new'], $addresses, 'Address must exist.');
-        $this->assertArrayNotHasKey($this->_updateData['address']['no_customer'], $addresses,
+        $this->assertArrayNotHasKey(
+            $this->_updateData['address']['no_customer'],
+            $addresses,
             'Address must not exist.'
         );
-        $this->assertArrayHasKey($this->_updateData['address']['new_no_address_id'], $addresses, 'Address must exist.');
+        $this->assertArrayHasKey(
+            $this->_updateData['address']['new_no_address_id'],
+            $addresses,
+            'Address must exist.'
+        );
 
         // are updated address fields have new values
         $updatedAddressId = $this->_updateData['address']['update'];
@@ -444,8 +484,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // are default billing/shipping addresses have new value
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer');
+        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Customer'
+        );
         $customer->setWebsiteId(0);
         $customer->loadByEmail('BetsyParker@example.com');
         $defaultsData = $this->_updateData['default'];
@@ -470,9 +511,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testImportDataDelete()
     {
         // set behaviour
-        $this->_entityAdapter->setParameters(
-            array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE)
-        );
+        $this->_entityAdapter->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE));
 
         // set fixture CSV file
         $sourceFile = __DIR__ . '/../_files/address_import_delete.csv';
@@ -481,9 +520,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $filesystem = $objectManager->create('Magento\App\Filesystem');
         $directoryWrite = $filesystem->getDirectoryWrite(\Magento\App\Filesystem::ROOT_DIR);
-        $result = $this->_entityAdapter
-            ->setSource(\Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite))
-            ->isDataValid();
+        $result = $this->_entityAdapter->setSource(
+            \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
+        )->isDataValid();
         $this->assertTrue($result, 'Validation result must be true.');
 
         // import data
@@ -494,8 +533,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // get addresses
         /** @var $addressCollection \Magento\Customer\Model\Resource\Address\Collection */
-        $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Resource\Address\Collection');
+        $addressCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Address\Collection'
+        );
         $addressCollection->addAttributeToSelect($keyAttribute);
         $addresses = array();
         /** @var $address \Magento\Customer\Model\Address */

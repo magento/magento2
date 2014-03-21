@@ -101,9 +101,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         $attributes = $this->_weeeTax->getWeeeAttributeCodes(true);
         foreach ($attributes as $code) {
             if ($weeeTax = $form->getElement($code)) {
-                $weeeTax->setRenderer(
-                    $this->_layout->createBlock('Magento\Weee\Block\Renderer\Weee\Tax')
-                );
+                $weeeTax->setRenderer($this->_layout->createBlock('Magento\Weee\Block\Renderer\Weee\Tax'));
             }
         }
 
@@ -120,10 +118,10 @@ class Observer extends \Magento\Core\Model\AbstractModel
     {
         //adminhtml_catalog_product_form_prepare_excluded_field_list
 
-        $block      = $observer->getEvent()->getObject();
-        $list       = $block->getFormExcludedFieldList();
+        $block = $observer->getEvent()->getObject();
+        $list = $block->getFormExcludedFieldList();
         $attributes = $this->_weeeTax->getWeeeAttributeCodes(true);
-        $list       = array_merge($list, array_values($attributes));
+        $list = array_merge($list, array_values($attributes));
 
         $block->setFormExcludedFieldList($list);
 
@@ -161,8 +159,8 @@ class Observer extends \Magento\Core\Model\AbstractModel
                 'frontend_class',
                 '_scope',
                 '_default_value',
-                '_front_fieldset',
-            ),
+                '_front_fieldset'
+            )
         );
 
         $response->setTypes($types);
@@ -207,7 +205,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
     public function updateElementTypes(\Magento\Event\Observer $observer)
     {
         $response = $observer->getEvent()->getResponse();
-        $types    = $response->getTypes();
+        $types = $response->getTypes();
         $types['weee'] = 'Magento\Weee\Block\Element\Weee\Tax';
         $response->setTypes($types);
         return $this;
@@ -251,7 +249,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         }
 
         $response = $observer->getEvent()->getResponseObject();
-        $options  = $response->getAdditionalOptions();
+        $options = $response->getAdditionalOptions();
 
         $_product = $this->_coreRegistry->registry('current_product');
         if (!$_product) {
@@ -262,9 +260,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         $options['plusDisposition'] = $helper->getAmount($_product);
 
         // Exclude Weee amount from excluding tax amount
-        if (!$helper->typeOfDisplay($_product, array(
-            Tax::DISPLAY_INCL, Tax::DISPLAY_INCL_DESCR,
-        ))) {
+        if (!$helper->typeOfDisplay($_product, array(Tax::DISPLAY_INCL, Tax::DISPLAY_INCL_DESCR))) {
             $options['exclDisposition'] = true;
         }
 
@@ -298,12 +294,12 @@ class Observer extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        $amount          = $weeeHelper->getAmount($selection);
-        $attributes      = $weeeHelper->getProductWeeeAttributes($_product, null, null, null, $weeeHelper->isTaxable());
+        $amount = $weeeHelper->getAmount($selection);
+        $attributes = $weeeHelper->getProductWeeeAttributes($_product, null, null, null, $weeeHelper->isTaxable());
         $amountInclTaxes = $weeeHelper->getAmountInclTaxes($attributes);
-        $taxes           = $amountInclTaxes - $amount;
-        $options['plusDisposition']    = $amount;
-        $options['plusDispositionTax'] = ($taxes < 0) ? 0 : $taxes;
+        $taxes = $amountInclTaxes - $amount;
+        $options['plusDisposition'] = $amount;
+        $options['plusDispositionTax'] = $taxes < 0 ? 0 : $taxes;
         // Exclude Weee amount from excluding tax amount
         if (!$weeeHelper->typeOfDisplay($_product, array(0, 1, 4))) {
             $options['exclDisposition'] = true;

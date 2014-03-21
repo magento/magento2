@@ -39,7 +39,6 @@ use Magento\Catalog\Model\Resource\Product\Collection;
 
 class Attribute extends \Magento\Backend\Block\Widget
 {
-
     /**
      * Adminhtml catalog product edit action attribute
      *
@@ -66,26 +65,39 @@ class Attribute extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('back_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Back'),
-            'onclick'   => 'setLocation(\''.$this->getUrl('catalog/product/', array('store'=>$this->getRequest()->getParam('store', 0))).'\')',
-            'class' => 'back'
-        ));
+        $this->addChild(
+            'back_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getUrl(
+                    'catalog/product/',
+                    array('store' => $this->getRequest()->getParam('store', 0))
+                ) . '\')',
+                'class' => 'back'
+            )
+        );
 
-        $this->addChild('reset_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Reset'),
-            'onclick'   => 'setLocation(\''.$this->getUrl('catalog/*/*', array('_current'=>true)).'\')'
-        ));
+        $this->addChild(
+            'reset_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Reset'),
+                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('_current' => true)) . '\')'
+            )
+        );
 
-        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => __('Save'),
-            'class'     => 'save',
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '#attributes-edit-form'),
-                ),
-            ),
-        ));
+        $this->addChild(
+            'save_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Save'),
+                'class' => 'save',
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#attributes-edit-form'))
+                )
+            )
+        );
     }
 
     /**
@@ -146,12 +158,7 @@ class Attribute extends \Magento\Backend\Block\Widget
     public function getSaveUrl()
     {
         $helper = $this->_helperActionAttribute;
-        return $this->getUrl(
-            '*/*/save',
-            array(
-                'store' => $helper->getSelectedStoreId()
-            )
-        );
+        return $this->getUrl('*/*/save', array('store' => $helper->getSelectedStoreId()));
     }
 
     /**
@@ -161,6 +168,6 @@ class Attribute extends \Magento\Backend\Block\Widget
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('catalog/*/validate', array('_current'=>true));
+        return $this->getUrl('catalog/*/validate', array('_current' => true));
     }
 }

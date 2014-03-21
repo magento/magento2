@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Helper\Product;
 
 /**
@@ -31,8 +30,8 @@ namespace Magento\Catalog\Helper\Product;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Configuration extends \Magento\App\Helper\AbstractHelper
-    implements \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
+class Configuration extends \Magento\App\Helper\AbstractHelper implements
+    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface
 {
     /**
      * Filter manager
@@ -40,7 +39,6 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
      * @var \Magento\Filter\FilterManager
      */
     protected $filter;
-
 
     /**
      * Product option factory
@@ -91,10 +89,15 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $item->getOptionByCode('option_' . $option->getId());
-                    $group = $option->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setConfigurationItem($item)
-                        ->setConfigurationItemOption($itemOption);
+                    $group = $option->groupFactory(
+                        $option->getType()
+                    )->setOption(
+                        $option
+                    )->setConfigurationItem(
+                        $item
+                    )->setConfigurationItemOption(
+                        $itemOption
+                    );
 
                     if ('file' == $option->getType()) {
                         $downloadParams = $item->getFileDownloadParams();
@@ -219,7 +222,7 @@ class Configuration extends \Magento\App\Helper\AbstractHelper
 
         $result = array('value' => $truncatedValue);
 
-        if ($maxLength && ($this->string->strlen($optionValue) > $maxLength)) {
+        if ($maxLength && $this->string->strlen($optionValue) > $maxLength) {
             $result['value'] = $result['value'] . $cutReplacer;
             $optionValue = nl2br($optionValue);
             $result['full_view'] = $optionValue;

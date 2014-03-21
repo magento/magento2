@@ -34,6 +34,16 @@ namespace Magento\Customer\Helper;
 class Data extends \Magento\App\Helper\AbstractHelper
 {
     /**
+     * Customer group cache context
+     */
+    const CONTEXT_GROUP = 'customer_group';
+
+    /**
+     * Customer authorization cache context
+     */
+    const CONTEXT_AUTH = 'customer_logged_in';
+
+    /**
      * Query param name for last url visited
      */
     const REFERER_QUERY_PARAM_NAME = 'referer';
@@ -52,8 +62,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Config paths to VAT related customer groups
      */
     const XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP = 'customer/create_account/viv_intra_union_group';
+
     const XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP = 'customer/create_account/viv_domestic_group';
+
     const XML_PATH_CUSTOMER_VIV_INVALID_GROUP = 'customer/create_account/viv_invalid_group';
+
     const XML_PATH_CUSTOMER_VIV_ERROR_GROUP = 'customer/create_account/viv_error_group';
 
     /**
@@ -95,10 +108,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * VAT class constants
      */
-    const VAT_CLASS_DOMESTIC    = 'domestic';
+    const VAT_CLASS_DOMESTIC = 'domestic';
+
     const VAT_CLASS_INTRA_UNION = 'intra_union';
-    const VAT_CLASS_INVALID     = 'invalid';
-    const VAT_CLASS_ERROR       = 'error';
+
+    const VAT_CLASS_INVALID = 'invalid';
+
+    const VAT_CLASS_ERROR = 'error';
 
     /**
      * Core data
@@ -238,7 +254,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMerchantCountryCode($store = null)
     {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
+        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_COUNTRY_CODE, $store);
     }
 
     /**
@@ -249,7 +265,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getMerchantVatNumber($store = null)
     {
-        return (string) $this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
+        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_MERCHANT_VAT_NUMBER, $store);
     }
 
     /**
@@ -336,19 +352,20 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getLoginUrlParams()
     {
-        $params = [];
+        $params = array();
 
         $referer = $this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME);
 
-        if (!$referer && !$this->_coreStoreConfig->getConfigFlag(self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD)
-            && !$this->_customerSession->getNoReferer()
+        if (!$referer && !$this->_coreStoreConfig->getConfigFlag(
+            self::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD
+        ) && !$this->_customerSession->getNoReferer()
         ) {
-            $referer = $this->_getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+            $referer = $this->_getUrl('*/*/*', array('_current' => true, '_use_rewrite' => true));
             $referer = $this->_coreData->urlEncode($referer);
         }
 
         if ($referer) {
-            $params = [self::REFERER_QUERY_PARAM_NAME => $referer];
+            $params = array(self::REFERER_QUERY_PARAM_NAME => $referer);
         }
 
         return $params;
@@ -361,13 +378,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getLoginPostUrl()
     {
-        $params = [];
+        $params = array();
         if ($this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME)) {
-            $params = [
-                self::REFERER_QUERY_PARAM_NAME => $this->_getRequest()->getParam(
-                        self::REFERER_QUERY_PARAM_NAME
-                    )
-            ];
+            $params = array(
+                self::REFERER_QUERY_PARAM_NAME => $this->_getRequest()->getParam(self::REFERER_QUERY_PARAM_NAME)
+            );
         }
         return $this->_getUrl('customer/account/loginPost', $params);
     }
@@ -460,8 +475,10 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function isConfirmationRequired()
     {
         $customerId = $this->_customerSession->getCustomerId();
-        return (\Magento\Customer\Service\V1\CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED
-            == $this->_accountService->getConfirmationStatus($customerId));
+        return \Magento\Customer\Service\V1\CustomerAccountServiceInterface::ACCOUNT_CONFIRMATION_REQUIRED ==
+            $this->_accountService->getConfirmationStatus(
+                $customerId
+            );
     }
 
     /**
@@ -472,7 +489,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getEmailConfirmationUrl($email = null)
     {
-        return $this->_getUrl('customer/account/confirmation', ['email' => $email]);
+        return $this->_getUrl('customer/account/confirmation', array('email' => $email));
     }
 
     /**
@@ -493,9 +510,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getNamePrefixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions(
-            $this->_customerAddress->getConfig('prefix_options', $store)
-        );
+        return $this->_prepareNamePrefixSuffixOptions($this->_customerAddress->getConfig('prefix_options', $store));
     }
 
     /**
@@ -506,9 +521,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getNameSuffixOptions($store = null)
     {
-        return $this->_prepareNamePrefixSuffixOptions(
-            $this->_customerAddress->getConfig('suffix_options', $store)
-        );
+        return $this->_prepareNamePrefixSuffixOptions($this->_customerAddress->getConfig('suffix_options', $store));
     }
 
     /**
@@ -523,7 +536,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         if (empty($options)) {
             return false;
         }
-        $result = [];
+        $result = array();
         $options = explode(';', $options);
         foreach ($options as $value) {
             $value = $this->_escaper->escapeHtml(trim($value));
@@ -549,7 +562,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getResetPasswordLinkExpirationPeriod()
     {
-        return (int) $this->_coreConfig->getValue(
+        return (int)$this->_coreConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
             'default'
         );
@@ -580,12 +593,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         $vatClass = $this->getCustomerVatClass($customerCountryCode, $vatValidationResult, $store);
 
-        $vatClassToGroupXmlPathMap = [
+        $vatClassToGroupXmlPathMap = array(
             self::VAT_CLASS_DOMESTIC => self::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP,
             self::VAT_CLASS_INTRA_UNION => self::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP,
             self::VAT_CLASS_INVALID => self::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
             self::VAT_CLASS_ERROR => self::XML_PATH_CUSTOMER_VIV_ERROR_GROUP
-        ];
+        );
 
         if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
             $groupId = (int)$this->_coreStoreConfig->getConfig($vatClassToGroupXmlPathMap[$vatClass], $store);
@@ -607,12 +620,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Object([
-            'is_valid' => false,
-            'request_date' => '',
-            'request_identifier' => '',
-            'request_success' => false
-        ]);
+        $gatewayResponse = new \Magento\Object(
+            array('is_valid' => false, 'request_date' => '', 'request_identifier' => '', 'request_success' => false)
+        );
 
         if (!extension_loaded('soap')) {
             $this->_logger->logException(new \Magento\Core\Exception(__('PHP SOAP extension is required.')));
@@ -626,18 +636,18 @@ class Data extends \Magento\App\Helper\AbstractHelper
         try {
             $soapClient = $this->_createVatNumberValidationSoapClient();
 
-            $requestParams = [];
+            $requestParams = array();
             $requestParams['countryCode'] = $countryCode;
-            $requestParams['vatNumber'] = str_replace([' ', '-'], ['', ''], $vatNumber);
+            $requestParams['vatNumber'] = str_replace(array(' ', '-'), array('', ''), $vatNumber);
             $requestParams['requesterCountryCode'] = $requesterCountryCode;
-            $requestParams['requesterVatNumber'] = str_replace([' ', '-'], ['', ''], $requesterVatNumber);
+            $requestParams['requesterVatNumber'] = str_replace(array(' ', '-'), array('', ''), $requesterVatNumber);
 
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
-            $gatewayResponse->setIsValid((boolean) $result->valid);
-            $gatewayResponse->setRequestDate((string) $result->requestDate);
-            $gatewayResponse->setRequestIdentifier((string) $result->requestIdentifier);
+            $gatewayResponse->setIsValid((bool)$result->valid);
+            $gatewayResponse->setRequestDate((string)$result->requestDate);
+            $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
             $gatewayResponse->setRequestSuccess(true);
         } catch (\Exception $exception) {
             $gatewayResponse->setIsValid(false);
@@ -663,16 +673,23 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function canCheckVatNumber($countryCode, $vatNumber, $requesterCountryCode, $requesterVatNumber)
     {
         $result = true;
-        if (!is_string($countryCode)
-            || !is_string($vatNumber)
-            || !is_string($requesterCountryCode)
-            || !is_string($requesterVatNumber)
-            || empty($countryCode)
-            || !$this->isCountryInEU($countryCode)
-            || empty($vatNumber)
-            || (empty($requesterCountryCode) && !empty($requesterVatNumber))
-            || (!empty($requesterCountryCode) && empty($requesterVatNumber))
-            || (!empty($requesterCountryCode) && !$this->isCountryInEU($requesterCountryCode))
+        if (!is_string(
+            $countryCode
+        ) || !is_string(
+            $vatNumber
+        ) || !is_string(
+            $requesterCountryCode
+        ) || !is_string(
+            $requesterVatNumber
+        ) || empty($countryCode) || !$this->isCountryInEU(
+            $countryCode
+        ) ||
+            empty($vatNumber) ||
+            empty($requesterCountryCode) && !empty($requesterVatNumber) ||
+            !empty($requesterCountryCode) && empty($requesterVatNumber) ||
+            !empty($requesterCountryCode) && !$this->isCountryInEU(
+                $requesterCountryCode
+            )
         ) {
             $result = false;
         }
@@ -694,10 +711,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         $isVatNumberValid = $vatValidationResult->getIsValid();
 
-        if (is_string($customerCountryCode)
-            && !empty($customerCountryCode)
-            && $customerCountryCode === $this->getMerchantCountryCode($store)
-            && $isVatNumberValid
+        if (is_string(
+            $customerCountryCode
+        ) && !empty($customerCountryCode) && $customerCountryCode === $this->getMerchantCountryCode(
+            $store
+        ) && $isVatNumberValid
         ) {
             $vatClass = self::VAT_CLASS_DOMESTIC;
         } elseif ($isVatNumberValid) {
@@ -721,7 +739,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected function _createVatNumberValidationSoapClient($trace = false)
     {
-        return new \SoapClient(self::VAT_VALIDATION_WSDL_URL, ['trace' => $trace]);
+        return new \SoapClient(self::VAT_VALIDATION_WSDL_URL, array('trace' => $trace));
     }
 
     /**
@@ -735,14 +753,19 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Customer\Model\Metadata\Form $metadataForm to use for extraction
      * @return array Filtered customer data
      */
-    public function extractCustomerData(\Magento\App\RequestInterface $request, $formCode, $entityType,
-        $additionalAttributes = [], $scope = null, \Magento\Customer\Model\Metadata\Form $metadataForm = null
+    public function extractCustomerData(
+        \Magento\App\RequestInterface $request,
+        $formCode,
+        $entityType,
+        $additionalAttributes = array(),
+        $scope = null,
+        \Magento\Customer\Model\Metadata\Form $metadataForm = null
     ) {
         if (is_null($metadataForm)) {
             $metadataForm = $this->_formFactory->create(
                 $entityType,
                 $formCode,
-                [],
+                array(),
                 false,
                 \Magento\Customer\Model\Metadata\Form::DONT_IGNORE_INVISIBLE
             );
@@ -750,8 +773,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
         $filteredData = $metadataForm->extractData($request, $scope);
         $requestData = $request->getPost($scope);
         foreach ($additionalAttributes as $attributeCode) {
-            $filteredData[$attributeCode] = isset($requestData[$attributeCode])
-                ? $requestData[$attributeCode] : false;
+            $filteredData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
 
         $formAttributes = $metadataForm->getAttributes();
@@ -788,7 +810,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getSharedStoreIds($customerWebsiteId)
     {
-        $ids = [];
+        $ids = array();
         if ((bool)$this->_configShare->isWebsiteScope()) {
             $ids = $this->_storeManager->getWebsite($customerWebsiteId)->getStoreIds();
         } else {

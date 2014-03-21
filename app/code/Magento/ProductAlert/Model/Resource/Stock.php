@@ -39,10 +39,8 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
      * @param \Magento\App\Resource $resource
      * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
-    ) {
+    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory)
+    {
         $this->_dateFactory = $dateFactory;
         parent::__construct($resource);
     }
@@ -65,8 +63,8 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
      */
     protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
     {
-        if (is_null($object->getId()) && $object->getCustomerId()
-                && $object->getProductId() && $object->getWebsiteId()) {
+        if (is_null($object->getId()) && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
+        ) {
             if ($row = $this->_getAlertRow($object)) {
                 $object->addData($row);
                 $object->setStatus(0);

@@ -50,7 +50,7 @@ class Translator
              */
             // @var $argumentHierarchy array - path to translatable item in $args array
             $argumentHierarchy = explode('.', $translatableArg);
-            $argumentStack = &$args;
+            $argumentStack =& $args;
             $canTranslate = true;
             while (is_array($argumentStack) && count($argumentStack) > 0) {
                 $argumentName = array_shift($argumentHierarchy);
@@ -59,7 +59,7 @@ class Translator
                      * Move to the next element in arguments hierarchy
                      * in order to find target translatable argument
                      */
-                    $argumentStack = &$argumentStack[$argumentName];
+                    $argumentStack =& $argumentStack[$argumentName];
                 } else {
                     // Target argument cannot be found
                     $canTranslate = false;

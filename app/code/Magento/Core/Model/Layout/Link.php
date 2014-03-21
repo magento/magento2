@@ -35,7 +35,6 @@ namespace Magento\Core\Model\Layout;
  * @method \Magento\Core\Model\Layout\Link setThemeId($id)
  * @method \Magento\Core\Model\Layout\Link setLayoutUpdateId($id)
  */
-
 class Link extends \Magento\Core\Model\AbstractModel
 {
     /**

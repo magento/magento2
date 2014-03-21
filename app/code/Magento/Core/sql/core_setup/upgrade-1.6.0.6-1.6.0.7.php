@@ -35,12 +35,14 @@ $connection = $installer->getConnection();
  */
 $tableCoreLayoutLink = $installer->getTable('core_layout_link');
 
-$connection->addColumn($tableCoreLayoutLink, 'is_temporary',
+$connection->addColumn(
+    $tableCoreLayoutLink,
+    'is_temporary',
     array(
-        'type'     => \Magento\DB\Ddl\Table::TYPE_BOOLEAN,
+        'type' => \Magento\DB\Ddl\Table::TYPE_BOOLEAN,
         'nullable' => false,
-        'default'  => '0',
-        'comment'  => 'Defines whether Layout Update is Temporary'
+        'default' => '0',
+        'comment' => 'Defines whether Layout Update is Temporary'
     )
 );
 
@@ -54,13 +56,17 @@ $connection->dropForeignKey(
     $installer->getFkName($tableCoreLayoutLink, 'theme_id', 'core_theme', 'theme_id')
 );
 
-$connection->dropIndex($tableCoreLayoutLink, $installer->getIdxName(
+$connection->dropIndex(
     $tableCoreLayoutLink,
-    array('store_id', 'theme_id', 'layout_update_id'),
-    \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-));
+    $installer->getIdxName(
+        $tableCoreLayoutLink,
+        array('store_id', 'theme_id', 'layout_update_id'),
+        \Magento\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    )
+);
 
-$connection->addIndex($tableCoreLayoutLink,
+$connection->addIndex(
+    $tableCoreLayoutLink,
     $installer->getIdxName(
         $tableCoreLayoutLink,
         array('store_id', 'theme_id', 'layout_update_id', 'is_temporary'),

@@ -34,11 +34,15 @@ namespace Magento\Directory\Model;
 class Observer
 {
     const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
+
     const IMPORT_ENABLE = 'currency/import/enabled';
+
     const IMPORT_SERVICE = 'currency/import/service';
 
     const XML_PATH_ERROR_TEMPLATE = 'currency/import/error_email_template';
+
     const XML_PATH_ERROR_IDENTITY = 'currency/import/error_email_identity';
+
     const XML_PATH_ERROR_RECIPIENT = 'currency/import/error_email';
 
     /**
@@ -104,8 +108,11 @@ class Observer
     public function scheduledUpdateCurrencyRates($schedule)
     {
         $importWarnings = array();
-        if (!$this->_coreStoreConfig->getConfig(self::IMPORT_ENABLE)
-            || !$this->_coreStoreConfig->getConfig(self::CRON_STRING_PATH)
+        if (!$this->_coreStoreConfig->getConfig(
+            self::IMPORT_ENABLE
+        ) || !$this->_coreStoreConfig->getConfig(
+            self::CRON_STRING_PATH
+        )
         ) {
             return;
         }
@@ -138,15 +145,19 @@ class Observer
             $this->_translate->setTranslateInline(false);
 
             $this->_transportBuilder->setTemplateIdentifier(
-                    $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
-                )
-                ->setTemplateOptions(array(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
+            )->setTemplateOptions(
+                array(
                     'area' => \Magento\Core\Model\App\Area::AREA_FRONTEND,
-                    'store' => $this->_storeManager->getStore()->getId(),
-                ))
-                ->setTemplateVars(array('warnings' => join("\n", $importWarnings)))
-                ->setFrom($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY))
-                ->addTo($this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT));
+                    'store' => $this->_storeManager->getStore()->getId()
+                )
+            )->setTemplateVars(
+                array('warnings' => join("\n", $importWarnings))
+            )->setFrom(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_IDENTITY)
+            )->addTo(
+                $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)
+            );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 

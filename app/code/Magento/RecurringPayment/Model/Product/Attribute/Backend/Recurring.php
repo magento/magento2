@@ -27,8 +27,7 @@
  */
 namespace Magento\RecurringPayment\Model\Product\Attribute\Backend;
 
-class Recurring
-extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
+class Recurring extends \Magento\Eav\Model\Entity\Attribute\Backend\Serialized
 {
     /**
      * Serialize or remove before saving

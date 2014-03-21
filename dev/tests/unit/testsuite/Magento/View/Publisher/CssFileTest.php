@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Publisher;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -82,43 +81,65 @@ class CssFileTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->rootDirectory = $this->getMock('Magento\Filesystem\Directory\WriteInterface');
 
-        $this->filesystemMock = $this->getMock('Magento\App\Filesystem', [], [], '', false);
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with($this->equalTo(\Magento\App\Filesystem::ROOT_DIR))
-            ->will($this->returnValue($this->rootDirectory));
-        $this->filesystemMock->expects($this->any())
-            ->method('getPath')
-            ->with($this->anything())
-            ->will($this->returnCallback(array($this, 'getPathCallback')));
-        $this->serviceMock = $this->getMock('Magento\View\Service', [], [], '', false);
+        $this->filesystemMock = $this->getMock('Magento\App\Filesystem', array(), array(), '', false);
+        $this->filesystemMock->expects(
+            $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            $this->equalTo(\Magento\App\Filesystem::ROOT_DIR)
+        )->will(
+            $this->returnValue($this->rootDirectory)
+        );
+        $this->filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getPath'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnCallback(array($this, 'getPathCallback'))
+        );
+        $this->serviceMock = $this->getMock('Magento\View\Service', array(), array(), '', false);
         if ($developerModel) {
-            $this->serviceMock->expects($this->once())
-                ->method('getAppMode')
-                ->will($this->returnValue('developer'));
+            $this->serviceMock->expects($this->once())->method('getAppMode')->will($this->returnValue('developer'));
         }
 
-        $this->readerMock = $this->getMock('Magento\Module\Dir\Reader', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('Magento\View\FileSystem', [], [], '', false);
-        $this->viewFileSystem->expects($this->any())
-            ->method('getAppMode')
-            ->will($this->returnValue(\Magento\App\State::MODE_DEVELOPER));
+        $this->readerMock = $this->getMock('Magento\Module\Dir\Reader', array(), array(), '', false);
+        $this->viewFileSystem = $this->getMock('Magento\View\FileSystem', array(), array(), '', false);
+        $this->viewFileSystem->expects(
+            $this->any()
+        )->method(
+            'getAppMode'
+        )->will(
+            $this->returnValue(\Magento\App\State::MODE_DEVELOPER)
+        );
 
         if ($sourcePath) {
-            $this->rootDirectory->expects($this->any())
-                ->method('getRelativePath')
-                ->with($sourcePath)
-                ->will($this->returnValue('related\\' . $sourcePath));
-            $this->rootDirectory->expects($this->any())
-                ->method('isExist')
-                ->with('related\\' . $sourcePath)
-                ->will($this->returnValue(true));
+            $this->rootDirectory->expects(
+                $this->any()
+            )->method(
+                'getRelativePath'
+            )->with(
+                $sourcePath
+            )->will(
+                $this->returnValue('related\\' . $sourcePath)
+            );
+            $this->rootDirectory->expects(
+                $this->any()
+            )->method(
+                'isExist'
+            )->with(
+                'related\\' . $sourcePath
+            )->will(
+                $this->returnValue(true)
+            );
         }
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cssFile = $this->objectManagerHelper->getObject(
             'Magento\View\Publisher\CssFile',
-            [
+            array(
                 'filesystem' => $this->filesystemMock,
                 'viewService' => $this->serviceMock,
                 'modulesReader' => $this->readerMock,
@@ -127,7 +148,7 @@ class CssFileTest extends \PHPUnit_Framework_TestCase
                 'allowDuplication' => $allowDuplication,
                 'viewParams' => $viewParams,
                 'sourcePath' => $sourcePath
-            ]
+            )
         );
     }
 
@@ -160,7 +181,7 @@ class CssFileTest extends \PHPUnit_Framework_TestCase
     public function testIsPublicationAllowed($sourcePath, $expected, $developerModel)
     {
         $filePath = 'some/css/path';
-        $this->getModelMock($filePath, true, ['some', 'array'], $sourcePath, $developerModel);
+        $this->getModelMock($filePath, true, array('some', 'array'), $sourcePath, $developerModel);
         $this->assertSame($expected, $this->cssFile->isPublicationAllowed());
     }
 
@@ -169,21 +190,21 @@ class CssFileTest extends \PHPUnit_Framework_TestCase
      */
     public function isPublicationAllowedDataProvider()
     {
-        return [
-            [null, true, false],
-            ['some/interesting/path/to/file', true, false],
-            ['some\interesting\path\to\file', true, false],
-            [$this->libDir . '/path/to/file', false, false],
-            [$this->libDir . '\path\to\file', false, false],
-            [$this->viewStaticDir . '\path\to\file', false, false],
-            [$this->viewStaticDir . '/path/to/file', false, false],
-            [$this->themeDir . '/path/to/file', true, false],
-            [$this->themeDir . '\path\to\file', true, false],
-            [$this->libDir . '/path/to/file', false, false],
-            [$this->libDir . '\path\to\file', false, false],
-            [$this->viewStaticDir . '\path\to\file', true, true],
-            [$this->viewStaticDir . '/path/to/file', true, true],
-        ];
+        return array(
+            array(null, true, false),
+            array('some/interesting/path/to/file', true, false),
+            array('some\interesting\path\to\file', true, false),
+            array($this->libDir . '/path/to/file', false, false),
+            array($this->libDir . '\path\to\file', false, false),
+            array($this->viewStaticDir . '\path\to\file', false, false),
+            array($this->viewStaticDir . '/path/to/file', false, false),
+            array($this->themeDir . '/path/to/file', true, false),
+            array($this->themeDir . '\path\to\file', true, false),
+            array($this->libDir . '/path/to/file', false, false),
+            array($this->libDir . '\path\to\file', false, false),
+            array($this->viewStaticDir . '\path\to\file', true, true),
+            array($this->viewStaticDir . '/path/to/file', true, true)
+        );
     }
 
     /**
@@ -205,72 +226,71 @@ class CssFileTest extends \PHPUnit_Framework_TestCase
      */
     public function buildUniquePathDataProvider()
     {
-        $themModelWithPath = $this->getMock('Magento\View\Design\ThemeInterface', [], [], '', false);
+        $themModelWithPath = $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false);
         $themModelWithPath->expects($this->any())->method('getThemePath')->will($this->returnValue('theme/path'));
-        $themModelWithId = $this->getMock('Magento\View\Design\ThemeInterface', [], [], '', false);
+        $themModelWithId = $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false);
         $themModelWithId->expects($this->any())->method('getId')->will($this->returnValue(11));
-        return [
-            'theme with path' => [
+        return array(
+            'theme with path' => array(
                 'filePath' => 'some/css/path',
                 'allowDuplication' => true,
-                'viewParams' => [
+                'viewParams' => array(
                     'themeModel' => $themModelWithPath,
                     'area' => 'frontend',
                     'locale' => 'en_US',
-                    'module' => 'some_module',
-                ],
+                    'module' => 'some_module'
+                ),
                 'sourcePath' => null,
                 'expected' => 'frontend/theme/path/en_US/some_module/some/css/path'
-            ],
-            'theme with id' => [
+            ),
+            'theme with id' => array(
                 'filePath' => 'some/css/path2',
                 'allowDuplication' => true,
-                'viewParams' => [
+                'viewParams' => array(
                     'themeModel' => $themModelWithId,
                     'area' => 'backend',
                     'locale' => 'en_EN',
-                    'module' => 'some_other_module',
-                ],
+                    'module' => 'some_other_module'
+                ),
                 'sourcePath' => null,
                 'expected' => 'backend/_theme11/en_EN/some_other_module/some/css/path2'
-            ],
-            'theme without any data' => [
+            ),
+            'theme without any data' => array(
                 'filePath' => 'some/css/path3',
                 'allowDuplication' => true,
-                'viewParams' => [
-                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', [], [], '', false),
+                'viewParams' => array(
+                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false),
                     'locale' => 'fr_FR',
                     'area' => 'some_area',
-                    'module' => null,
-                ],
+                    'module' => null
+                ),
                 'sourcePath' => null,
                 'expected' => 'some_area/_view/fr_FR/some/css/path3'
-            ],
-            'no duplication modular file' => [
+            ),
+            'no duplication modular file' => array(
                 'filePath' => 'some/css/path4',
                 'allowDuplication' => false,
-                'viewParams' => [
-                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', [], [], '', false),
+                'viewParams' => array(
+                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false),
                     'locale' => 'fr_FR',
                     'area' => 'some_area',
-                    'module' => 'My_Module',
-                ],
+                    'module' => 'My_Module'
+                ),
                 'sourcePath' => 'custom_module_dir/some/css/path2',
                 'expected' => 'some_area/_view/fr_FR/My_Module/some/css/path4'
-            ],
-            'no duplication theme file' => [
+            ),
+            'no duplication theme file' => array(
                 'filePath' => 'some/css/path5',
                 'allowDuplication' => false,
-                'viewParams' => [
-                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', [], [], '', false),
+                'viewParams' => array(
+                    'themeModel' => $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false),
                     'locale' => 'fr_FR',
                     'area' => 'some_area',
-                    'module' => 'My_Module',
-                ],
+                    'module' => 'My_Module'
+                ),
                 'sourcePath' => $this->themeDir . '/custom_module_dir/some/css/path5',
                 'expected' => 'some_area/_view/fr_FR/My_Module/some/css/path5'
-            ],
-        ];
+            )
+        );
     }
-
 }

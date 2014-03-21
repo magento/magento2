@@ -81,7 +81,6 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
         parent::__construct($response, $filesystem);
     }
 
-
     /**
      * Set redirect into response
      *
@@ -90,10 +89,11 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @return \Magento\App\ResponseInterface
      * @TODO move method
      */
-    protected function _redirect($path, $arguments=array())
+    protected function _redirect($path, $arguments = array())
     {
-        $this->_session
-            ->setIsUrlNotice($this->_flag->get('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED));
+        $this->_session->setIsUrlNotice(
+            $this->_flag->get('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED)
+        );
         $this->_response->setRedirect($this->_helper->getUrl($path, $arguments));
         return $this->_response;
     }

@@ -48,7 +48,7 @@ class MaliciousCode implements \Zend_Filter_Interface
         //tags
         '/<\/?(script|meta|link|frame|iframe).*>/Uis',
         //base64 usage
-        '/src=[^<]*base64[^<]*(?=\>)/Uis',
+        '/src=[^<]*base64[^<]*(?=\>)/Uis'
     );
 
     /**

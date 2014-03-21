@@ -71,7 +71,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $vary = array('some-vary-key' => 'some-vary-value');
         $expected = sha1(serialize($vary));
 
-        $this->_context->setValue('some-vary-key', 'some-vary-value');
+        $this->_context->setValue('some-vary-key', 'some-vary-value', 'default');
         $this->_cookieMock
             ->expects($this->once())
             ->method('set')
@@ -96,7 +96,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($expiresResult > $between || $expiresResult < $between);
     }
 
-
     /**
      * Test for setting public headers without time to live parameter
      */
@@ -104,7 +103,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'InvalidArgumentException',
-            'time to live is a mandatory parameter for set public headers'
+            'Time to live is a mandatory parameter for set public headers'
         );
         $this->_model->setPublicHeaders(null);
     }
@@ -132,7 +131,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'InvalidArgumentException',
-            'time to live is a mandatory parameter for set private headers'
+            'Time to live is a mandatory parameter for set private headers'
         );
         $this->_model->setPrivateHeaders(null);
     }
@@ -151,5 +150,4 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cacheControl, $this->_model->getHeader('Cache-Control')['value']);
         $this->assertEquals($expires, $this->_model->getHeader('Expires')['value']);
     }
-
 }

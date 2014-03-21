@@ -55,7 +55,8 @@ class Tar extends \Magento\Archive\Tar
         $path = $this->_getCurrentFile();
 
         $filesystemIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
         $iterator = new \Magento\Backup\Filesystem\Iterator\Filter($filesystemIterator, $this->_skipFiles);

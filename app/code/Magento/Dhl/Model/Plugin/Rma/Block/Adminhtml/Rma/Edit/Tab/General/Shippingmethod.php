@@ -46,10 +46,8 @@ class Shippingmethod
      * @param bool $result
      * @return bool
      */
-    public function afterCanDisplayCustomValue(
-        \Magento\Object $subject,
-        $result
-    ) {
+    public function afterCanDisplayCustomValue(\Magento\Object $subject, $result)
+    {
         $carrierCode = $subject->getShipment()->getCarrierCode();
         if (!$carrierCode) {
             return (bool)$result || false;

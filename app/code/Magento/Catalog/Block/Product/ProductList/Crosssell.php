@@ -55,10 +55,9 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         $product = $this->_coreRegistry->registry('product');
         /* @var $product \Magento\Catalog\Model\Product */
 
-        $this->_itemCollection = $product->getCrossSellProductCollection()
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-            ->setPositionOrder()
-            ->addStoreFilter();
+        $this->_itemCollection = $product->getCrossSellProductCollection()->addAttributeToSelect(
+            $this->_catalogConfig->getProductAttributes()
+        )->setPositionOrder()->addStoreFilter();
 
         $this->_itemCollection->load();
 

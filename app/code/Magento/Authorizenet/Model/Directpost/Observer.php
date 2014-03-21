@@ -156,7 +156,7 @@ class Observer
      */
     public function updateAllEditIncrements(\Magento\Event\Observer $observer)
     {
-         /* @var $order \Magento\Sales\Model\Order */
+        /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
         $this->_authorizenetData->updateOrderEditIncrements($order);
 

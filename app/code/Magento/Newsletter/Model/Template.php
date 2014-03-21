@@ -57,7 +57,6 @@ namespace Magento\Newsletter\Model;
  */
 class Template extends \Magento\Core\Model\Template
 {
-
     /**
      * Template Text Preprocessed flag
      *
@@ -166,10 +165,10 @@ class Template extends \Magento\Core\Model\Template
     public function validate()
     {
         $validators = array(
-            'template_code'         => array(\Zend_Filter_Input::ALLOW_EMPTY => false),
-            'template_type'         => 'Int',
+            'template_code' => array(\Zend_Filter_Input::ALLOW_EMPTY => false),
+            'template_type' => 'Int',
             'template_sender_email' => 'EmailAddress',
-            'template_sender_name'  => array(\Zend_Filter_Input::ALLOW_EMPTY => false)
+            'template_sender_name' => array(\Zend_Filter_Input::ALLOW_EMPTY => false)
         );
         $data = array();
         foreach (array_keys($validators) as $validateField) {
@@ -269,9 +268,7 @@ class Template extends \Magento\Core\Model\Template
             $this->_filter->setStoreId($this->_request->getParam('store_id'));
         }
 
-        $this->_filter
-            ->setIncludeProcessor(array($this, 'getInclude'))
-            ->setVariables($variables);
+        $this->_filter->setIncludeProcessor(array($this, 'getInclude'))->setVariables($variables);
 
         if ($usePreprocess && $this->isPreprocessed()) {
             return $this->_filter->filter($this->getPreparedTemplateText(true));
@@ -309,8 +306,7 @@ class Template extends \Magento\Core\Model\Template
     {
         /** @var \Magento\Newsletter\Model\Template $template */
         $template = $this->_templateFactory->create();
-        $template->loadByCode($templateCode)
-            ->getProcessedTemplate($variables);
+        $template->loadByCode($templateCode)->getProcessedTemplate($variables);
         return $template;
     }
 
@@ -336,10 +332,14 @@ class Template extends \Magento\Core\Model\Template
     public function getTemplateText()
     {
         if (!$this->getData('template_text') && !$this->getId()) {
-            $this->setData('template_text',
-                __('Follow this link to unsubscribe <!-- This tag is for unsubscribe link  -->'
-                    . '<a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}'
-                    . '</a>'));
+            $this->setData(
+                'template_text',
+                __(
+                    'Follow this link to unsubscribe <!-- This tag is for unsubscribe link  -->' .
+                    '<a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}' .
+                    '</a>'
+                )
+            );
         }
 
         return $this->getData('template_text');
@@ -352,9 +352,8 @@ class Template extends \Magento\Core\Model\Template
      */
     public function isValidForSend()
     {
-        return !$this->_coreStoreConfig->getConfigFlag(\Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE)
-            && $this->getTemplateSenderName()
-            && $this->getTemplateSenderEmail()
-            && $this->getTemplateSubject();
+        return !$this->_coreStoreConfig->getConfigFlag(
+            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE
+        ) && $this->getTemplateSenderName() && $this->getTemplateSenderEmail() && $this->getTemplateSubject();
     }
 }

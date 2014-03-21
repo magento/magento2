@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Config;
 
 /**
@@ -130,9 +129,9 @@ class Value extends \Magento\Core\Model\AbstractModel implements \Magento\App\Co
      */
     public function getOldValue()
     {
-        $storeCode   = $this->getStoreCode();
+        $storeCode = $this->getStoreCode();
         $websiteCode = $this->getWebsiteCode();
-        $path        = $this->getPath();
+        $path = $this->getPath();
 
         if ($storeCode) {
             return $this->_storeManager->getStore($storeCode)->getConfig($path);
@@ -140,9 +139,8 @@ class Value extends \Magento\Core\Model\AbstractModel implements \Magento\App\Co
         if ($websiteCode) {
             return $this->_storeManager->getWebsite($websiteCode)->getConfig($path);
         }
-        return (string) $this->_config->getValue($path, \Magento\BaseScopeInterface::SCOPE_DEFAULT);
+        return (string)$this->_config->getValue($path, \Magento\BaseScopeInterface::SCOPE_DEFAULT);
     }
-
 
     /**
      * Get value by key for new user data from <section>/groups/<group>/fields/<field>
@@ -153,6 +151,6 @@ class Value extends \Magento\Core\Model\AbstractModel implements \Magento\App\Co
     public function getFieldsetDataValue($key)
     {
         $data = $this->_getData('fieldset_data');
-        return (is_array($data) && isset($data[$key])) ? $data[$key] : null;
+        return is_array($data) && isset($data[$key]) ? $data[$key] : null;
     }
 }

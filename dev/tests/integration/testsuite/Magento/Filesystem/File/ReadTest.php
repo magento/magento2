@@ -58,9 +58,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerNotValidFiles()
     {
-        return array(
-            array('invalid.csv'), //File does not exist
-        );
+        return array(array('invalid.csv')); //File does not exist
     }
 
     /**
@@ -85,10 +83,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerRead()
     {
-        return array(
-            array('popup.csv', 10, 'var myData'),
-            array('popup.csv', 15, 'var myData = 5;')
-        );
+        return array(array('popup.csv', 10, 'var myData'), array('popup.csv', 15, 'var myData = 5;'));
     }
 
     /**
@@ -157,10 +152,20 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat($path)
     {
         $file = $this->getFileInstance($path);
-        $expectedInfo =  array(
-            'dev', 'ino', 'mode', 'nlink', 'uid',
-            'gid', 'rdev', 'size', 'atime',
-            'mtime', 'ctime', 'blksize', 'blocks'
+        $expectedInfo = array(
+            'dev',
+            'ino',
+            'mode',
+            'nlink',
+            'uid',
+            'gid',
+            'rdev',
+            'size',
+            'atime',
+            'mtime',
+            'ctime',
+            'blksize',
+            'blocks'
         );
         $result = $file->stat();
         foreach ($expectedInfo as $key) {
@@ -175,10 +180,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function statProvider()
     {
-        return array(
-            array('popup.csv'),
-            array('foo/file_three.txt')
-        );
+        return array(array('popup.csv'), array('foo/file_three.txt'));
     }
 
     /**
@@ -209,9 +211,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerCsv()
     {
-        return array(
-            array('data.csv', 0, ',', '"', '\\', array('field1', 'field2'), array('field3', 'field4'))
-        );
+        return array(array('data.csv', 0, ',', '"', '\\', array('field1', 'field2'), array('field3', 'field4')));
     }
 
     /**
@@ -235,10 +235,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerPosition()
     {
-        return array(
-            array('popup.csv', 5),
-            array('popup.csv', 10)
-        );
+        return array(array('popup.csv', 5), array('popup.csv', 10));
     }
 
     /**
@@ -292,10 +289,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function providerEof()
     {
-        return array(
-            array('popup.csv', 5, false),
-            array('popup.csv', 10, false),
-        );
+        return array(array('popup.csv', 5, false), array('popup.csv', 10, false));
     }
 
     /**
@@ -328,13 +322,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     private function getFileInstance($path)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        return Bootstrap::getObjectManager()
-            ->create(
-                'Magento\Filesystem\File\Read',
-                array(
-                    'path' => $fullPath,
-                    'driver' => new \Magento\Filesystem\Driver\File()
-                )
-            );
+        return Bootstrap::getObjectManager()->create(
+            'Magento\Filesystem\File\Read',
+            array('path' => $fullPath, 'driver' => new \Magento\Filesystem\Driver\File())
+        );
     }
 }

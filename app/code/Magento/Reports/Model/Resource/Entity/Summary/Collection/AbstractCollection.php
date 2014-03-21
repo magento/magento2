@@ -52,10 +52,8 @@ class AbstractCollection extends \Magento\Data\Collection
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Stdlib\DateTime $dateTime
      */
-    public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Stdlib\DateTime $dateTime
-    ) {
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Stdlib\DateTime $dateTime)
+    {
         $this->dateTime = $dateTime;
         parent::__construct($entityFactory);
     }
@@ -73,22 +71,22 @@ class AbstractCollection extends \Magento\Data\Collection
         switch ($periodType) {
             case "24h":
                 $customStart = $this->dateTime->toTimestamp(true) - 86400;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "7d":
                 $customStart = $this->dateTime->toTimestamp(true) - 604800;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "30d":
                 $customStart = $this->dateTime->toTimestamp(true) - 2592000;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             case "1y":
                 $customStart = $this->dateTime->toTimestamp(true) - 31536000;
-                $customEnd   = $this->dateTime->toTimestamp(true);
+                $customEnd = $this->dateTime->toTimestamp(true);
                 break;
 
             default:
@@ -99,7 +97,6 @@ class AbstractCollection extends \Magento\Data\Collection
                     $customEnd = strtotime($customEnd);
                 }
                 break;
-
         }
 
         return $this;

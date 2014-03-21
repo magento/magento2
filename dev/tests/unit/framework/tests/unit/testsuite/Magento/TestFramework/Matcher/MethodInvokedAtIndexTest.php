@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Matcher;
 
-use Magento\TestFramework\Matcher\MethodInvokedAtIndex as MethodInvokedAtIndex;
+use Magento\TestFramework\Matcher\MethodInvokedAtIndex;
 
 class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,4 +45,3 @@ class MethodInvokedAtIndexTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($matcher->matches($invocationObject));
     }
 }
- 

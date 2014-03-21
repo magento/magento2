@@ -34,6 +34,8 @@
  */
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest as StubZendLogWriterStreamTest;
+
 class CategoryImageTest extends \PHPUnit_Framework_TestCase
 {
     /** @var int */
@@ -47,20 +49,34 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getConfig('dev/log/active');
-        $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getConfig('dev/log/exception_file');
+        $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->getConfig(
+            'dev/log/active'
+        );
+        $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->getConfig(
+            'dev/log/exception_file'
+        );
     }
 
     protected function tearDown()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('dev/log/active', $this->_oldLogActive);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->setConfig(
+            'dev/log/active',
+            $this->_oldLogActive
+        );
         $this->_oldLogActive = null;
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('dev/log/exception_file', $this->_oldExceptionFile);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Core\Model\StoreManagerInterface'
+        )->getStore()->setConfig(
+            'dev/log/exception_file',
+            $this->_oldExceptionFile
+        );
         $this->_oldExceptionFile = null;
 
         $this->_oldWriterModel = null;
@@ -72,7 +88,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
          * Added a quick fix to be able run separate tests with "phpunit --filter testMethod"
          */
         if (class_exists('Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest', false)) {
-            \Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest::$exceptions = array();
+            StubZendLogWriterStreamTest::$exceptions = array();
         }
     }
 
@@ -89,12 +105,10 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $objectManager->get('Magento\Registry')
-            ->registry('_fixture/Magento\Catalog\Model\Category');
+        $category = $objectManager->get('Magento\Registry')->registry('_fixture/Magento\Catalog\Model\Category');
         $this->assertNotEmpty($category->getId());
 
-        foreach (\Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest::$exceptions
-                 as $exception) {
+        foreach (StubZendLogWriterStreamTest::$exceptions as $exception) {
             $this->assertNotContains('$_FILES array is empty', $exception['message']);
         }
     }

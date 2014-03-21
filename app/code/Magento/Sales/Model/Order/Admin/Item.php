@@ -23,7 +23,7 @@
  */
 namespace Magento\Sales\Model\Order\Admin;
 
-class Item 
+class Item
 {
     /**
      * Get item sku
@@ -60,4 +60,4 @@ class Item
     {
         return $item->getProductId();
     }
-} 
+}

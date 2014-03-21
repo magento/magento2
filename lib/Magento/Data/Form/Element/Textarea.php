@@ -63,8 +63,19 @@ class Textarea extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array('title', 'class', 'style', 'onclick', 'onchange', 'rows', 'cols', 'readonly', 'disabled',
-                     'onkeyup', 'tabindex');
+        return array(
+            'title',
+            'class',
+            'style',
+            'onclick',
+            'onchange',
+            'rows',
+            'cols',
+            'readonly',
+            'disabled',
+            'onkeyup',
+            'tabindex'
+        );
     }
 
     /**
@@ -75,8 +86,9 @@ class Textarea extends AbstractElement
     public function getElementHtml()
     {
         $this->addClass('textarea');
-        $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" '
-                . $this->serialize($this->getHtmlAttributes()) . $this->_getUiId() . ' >';
+        $html = '<textarea id="' . $this->getHtmlId() . '" name="' . $this->getName() . '" ' . $this->serialize(
+            $this->getHtmlAttributes()
+        ) . $this->_getUiId() . ' >';
         $html .= $this->getEscapedValue();
         $html .= "</textarea>";
         $html .= $this->getAfterElementHtml();

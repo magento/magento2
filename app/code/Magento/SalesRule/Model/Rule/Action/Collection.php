@@ -49,10 +49,10 @@ class Collection extends \Magento\Rule\Model\Action\Collection
     public function getNewChildSelectOptions()
     {
         $actions = parent::getNewChildSelectOptions();
-        $actions = array_merge_recursive($actions, array(array(
-            'value' => 'Magento\SalesRule\Model\Rule\Action\Product',
-            'label' => __('Update the Product'))
-        ));
+        $actions = array_merge_recursive(
+            $actions,
+            array(array('value' => 'Magento\SalesRule\Model\Rule\Action\Product', 'label' => __('Update the Product')))
+        );
         return $actions;
     }
 }

@@ -45,10 +45,12 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      *
      * @var array
      */
-    protected $_optionsCfg = array('default' => array(
-        'helper' => 'Magento\Catalog\Helper\Product\Configuration',
-        'template' => 'Magento_Wishlist::options_list.phtml'
-    ));
+    protected $_optionsCfg = array(
+        'default' => array(
+            'helper' => 'Magento\Catalog\Helper\Product\Configuration',
+            'template' => 'Magento_Wishlist::options_list.phtml'
+        )
+    );
 
     /**
      * @param \Magento\View\Element\Template\Context $context
@@ -62,7 +64,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param array $data
@@ -82,7 +84,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
         array $data = array(),
@@ -101,7 +103,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
             $compareProduct,
             $layoutHelper,
             $imageHelper,
-            $customerSession,
+            $httpContext,
             $productFactory,
             $data,
             $priceBlockTypes

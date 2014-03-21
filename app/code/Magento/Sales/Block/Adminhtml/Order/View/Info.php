@@ -109,11 +109,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 return nl2br($this->getOrder()->getStoreName()) . $deleted;
             }
             $store = $this->_storeManager->getStore($storeId);
-            $name = array(
-                $store->getWebsite()->getName(),
-                $store->getGroup()->getName(),
-                $store->getName()
-            );
+            $name = array($store->getWebsite()->getName(), $store->getGroup()->getName(), $store->getName());
             return implode('<br/>', $name);
         }
         return null;
@@ -156,7 +152,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function getViewUrl($orderId)
     {
-        return $this->getUrl('sales/order/view', array('order_id'=>$orderId));
+        return $this->getUrl('sales/order/view', array('order_id' => $orderId));
     }
 
     /**
@@ -183,7 +179,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function getCustomerAccountData()
     {
-        $accountData = [];
+        $accountData = array();
         $entityType = 'customer';
 
         foreach ($this->_customerMetadataService->getAllCustomerAttributeMetadata($entityType) as $attribute) {
@@ -191,17 +187,17 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
             if (!$attribute->isVisible() || $attribute->isSystem()) {
                 continue;
             }
-            $orderKey   = sprintf('customer_%s', $attribute->getAttributeCode());
+            $orderKey = sprintf('customer_%s', $attribute->getAttributeCode());
             $orderValue = $this->getOrder()->getData($orderKey);
             if ($orderValue != '') {
                 $metadataElement = $this->_metadataElementFactory->create($attribute, $orderValue, $entityType);
-                $value      = $metadataElement->outputValue(AttributeDataFactory::OUTPUT_FORMAT_HTML);
-                $sortOrder  = $attribute->getSortOrder() + $attribute->isUserDefined() ? 200 : 0;
-                $sortOrder  = $this->_prepareAccountDataSortOrder($accountData, $sortOrder);
-                $accountData[$sortOrder] = [
+                $value = $metadataElement->outputValue(AttributeDataFactory::OUTPUT_FORMAT_HTML);
+                $sortOrder = $attribute->getSortOrder() + $attribute->isUserDefined() ? 200 : 0;
+                $sortOrder = $this->_prepareAccountDataSortOrder($accountData, $sortOrder);
+                $accountData[$sortOrder] = array(
                     'label' => $attribute->getFrontendLabel(),
-                    'value' => $this->escapeHtml($value, ['br'])
-                ];
+                    'value' => $this->escapeHtml($value, array('br'))
+                );
             }
         }
 
@@ -217,13 +213,13 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * @param string $label
      * @return string
      */
-    public function getAddressEditLink($address, $label='')
+    public function getAddressEditLink($address, $label = '')
     {
         if (empty($label)) {
             $label = __('Edit');
         }
-        $url = $this->getUrl('sales/order/address', array('address_id'=>$address->getId()));
-        return '<a href="'.$url.'">' . $label . '</a>';
+        $url = $this->getUrl('sales/order/address', array('address_id' => $address->getId()));
+        return '<a href="' . $url . '">' . $label . '</a>';
     }
 
     /**
@@ -233,8 +229,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      */
     public function shouldDisplayCustomerIp()
     {
-        return !$this->_storeConfig
-            ->getConfigFlag('sales/general/hide_customer_ip', $this->getOrder()->getStoreId());
+        return !$this->_storeConfig->getConfigFlag('sales/general/hide_customer_ip', $this->getOrder()->getStoreId());
     }
 
     /**

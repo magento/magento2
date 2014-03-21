@@ -54,7 +54,7 @@ class Node
      *
      * @return Graph
      */
-    public function &getGraph() 
+    public function &getGraph()
     {
         return $this->_graph;
     }
@@ -67,7 +67,7 @@ class Node
      * @param Graph &$graph
      * @return void
      */
-    public function setGraph(&$graph) 
+    public function setGraph(&$graph)
     {
         $this->_graph =& $graph;
     }
@@ -80,7 +80,7 @@ class Node
      * @return mixed Data stored in node
      * @access public
      */
-    public function &getData() 
+    public function &getData()
     {
         return $this->_data;
     }
@@ -93,7 +93,7 @@ class Node
      * @param mixed $data Data to store in node
      * @return void
      */
-    public function setData($data) 
+    public function setData($data)
     {
         $this->_data =& $data;
     }
@@ -105,7 +105,7 @@ class Node
      * @return bool
      * @access public
      */
-    public function metadataKeyExists($key) 
+    public function metadataKeyExists($key)
     {
         return array_key_exists($key, $this->_metadata);
     }
@@ -118,15 +118,15 @@ class Node
      * @return mixed
      * @throws \Exception
      */
-    public function & getMetadata($key, $nullIfNonexistent = false) 
+    public function &getMetadata($key, $nullIfNonexistent = false)
     {
         if (array_key_exists($key, $this->_metadata)) {
             return $this->_metadata[$key];
         } elseif ($nullIfNonexistent) {
-                $a = null;
-                return $a;
+            $a = null;
+            return $a;
         } else {
-            throw new \Exception(__METHOD__." : requested key doesn't exist: {$key}");            
+            throw new \Exception(__METHOD__ . " : requested key doesn't exist: {$key}");
         }
     }
 
@@ -136,12 +136,11 @@ class Node
      * @param string $key Key
      * @return void
      */
-    public function unsetMetadata($key) 
+    public function unsetMetadata($key)
     {
         if (array_key_exists($key, $this->_metadata)) {
             unset($this->_metadata[$key]);
-        }    
-        
+        }
     }
 
     /**
@@ -155,7 +154,7 @@ class Node
      * @param mixed   $data
      * @return void
      */
-    public function setMetadata($key, $data) 
+    public function setMetadata($key, $data)
     {
         $this->_metadata[$key] =& $data;
     }
@@ -164,7 +163,7 @@ class Node
      * @param mixed &$destinationNode
      * @return void
      */
-    protected function _connectTo(&$destinationNode) 
+    protected function _connectTo(&$destinationNode)
     {
         $this->_arcs[] =& $destinationNode;
     }
@@ -180,17 +179,17 @@ class Node
     public function connectTo(&$destinationNode)
     {
         $class = get_class($this);
-        if(!$destinationNode instanceof $class) {
-            throw new \Exception(__METHOD__." : argument should be instance of {$class}");
+        if (!$destinationNode instanceof $class) {
+            throw new \Exception(__METHOD__ . " : argument should be instance of {$class}");
         }
-         
+
         // Nodes must already be in graphs to be connected
         if ($this->_graph == null) {
-            throw new \Exception(__METHOD__." : tried to connect to null graph");
+            throw new \Exception(__METHOD__ . " : tried to connect to null graph");
         }
 
         if ($destinationNode->getGraph() == null) {
-            throw new \Exception(__METHOD__." : tried to connect to node that is not connected to any graph");
+            throw new \Exception(__METHOD__ . " : tried to connect to node that is not connected to any graph");
         }
 
         // Connect here
@@ -220,9 +219,9 @@ class Node
     public function connectsTo(&$target)
     {
         $arcKeys = array_keys($this->_arcs);
-        foreach($arcKeys as $key) {
+        foreach ($arcKeys as $key) {
             $arc =& $this->_arcs[$key];
-            if ($target === $arc) { 
+            if ($target === $arc) {
                 return true;
             }
         }
@@ -240,7 +239,7 @@ class Node
      *  
      * @return int
      */
-    public function inDegree() 
+    public function inDegree()
     {
         $result = 0;
 
@@ -258,7 +257,6 @@ class Node
             }
         }
         return $result;
-
     }
 
     /**
@@ -277,5 +275,4 @@ class Node
         }
         return count($this->_arcs);
     }
-
 }

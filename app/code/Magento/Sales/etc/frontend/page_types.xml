@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="sales_guest_creditmemo" label="Guest Order Creditmemo View"/>
     <type id="sales_guest_form" label="Returns"/>
     <type id="sales_guest_invoice" label="Guest Order Invoice View"/>

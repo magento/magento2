@@ -46,26 +46,30 @@ class LockValidatorCompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompositionsWithInvalidValidatorInstance()
     {
-        $validators = array(
-            'Magento\Catalog\Model'
+        $validators = array('Magento\Catalog\Model');
+        $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(
+            $this->objectManagerMock,
+            $validators
         );
-        $this->model =
-            new \Magento\Catalog\Model\Attribute\LockValidatorComposite($this->objectManagerMock, $validators);
     }
 
     public function testValidateWithValidValidatorInstance()
     {
-        $validators = array(
-            'Magento\Catalog\Model\Attribute\LockValidatorComposite'
-        );
+        $validators = array('Magento\Catalog\Model\Attribute\LockValidatorComposite');
         $lockValidatorMock = $this->getMock('Magento\Catalog\Model\Attribute\LockValidatorInterface');
-        $this->objectManagerMock->expects($this->any())
-            ->method('get')
-            ->with('Magento\Catalog\Model\Attribute\LockValidatorComposite')
-            ->will($this->returnValue($lockValidatorMock));
+        $this->objectManagerMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->with(
+            'Magento\Catalog\Model\Attribute\LockValidatorComposite'
+        )->will(
+            $this->returnValue($lockValidatorMock)
+        );
 
         $this->model = new \Magento\Catalog\Model\Attribute\LockValidatorComposite(
-            $this->objectManagerMock, $validators
+            $this->objectManagerMock,
+            $validators
         );
         $abstractModelHelper = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false, false);
         $lockValidatorMock->expects($this->once())->method('validate')->with($abstractModelHelper);

@@ -26,7 +26,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\PageCache\Block\System\Config\Form\Field;
 
 class StubExport extends \Magento\PageCache\Block\System\Config\Form\Field\Export
@@ -42,6 +41,7 @@ class StubExport extends \Magento\PageCache\Block\System\Config\Form\Field\Expor
     {
         $this->_urlBuilder = $urlBuilder;
     }
+
     /**
      * Retrieve element HTML markup
      *

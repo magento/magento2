@@ -158,7 +158,7 @@ class Info extends \Magento\Core\Model\AbstractModel
     public function setAdditionalInformation($key, $value = null)
     {
         if (is_object($value)) {
-           throw new \Magento\Core\Exception(__('The payment disallows storing objects.'));
+            throw new \Magento\Core\Exception(__('The payment disallows storing objects.'));
         }
         $this->_initAdditionalInformation();
         if (is_array($key) && is_null($value)) {
@@ -209,9 +209,10 @@ class Info extends \Magento\Core\Model\AbstractModel
     public function hasAdditionalInformation($key = null)
     {
         $this->_initAdditionalInformation();
-        return null === $key
-            ? !empty($this->_additionalInformation)
-            : array_key_exists($key, $this->_additionalInformation);
+        return null === $key ? !empty($this->_additionalInformation) : array_key_exists(
+            $key,
+            $this->_additionalInformation
+        );
     }
 
     /**

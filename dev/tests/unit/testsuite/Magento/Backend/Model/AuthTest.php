@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model;
+
 class AuthTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,22 +66,28 @@ class AuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoginFailed()
     {
-        $this->_modelFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->with('Magento\Backend\Model\Auth\Credential\StorageInterface')
-            ->will($this->returnValue($this->_credentialStorage));
-        $exceptionMock = new \Magento\Core\Exception;
-        $this->_credentialStorage
-            ->expects($this->once())
-            ->method('login')
-            ->with('username', 'password')
-            ->will($this->throwException($exceptionMock));
+        $this->_modelFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Backend\Model\Auth\Credential\StorageInterface'
+        )->will(
+            $this->returnValue($this->_credentialStorage)
+        );
+        $exceptionMock = new \Magento\Core\Exception();
+        $this->_credentialStorage->expects(
+            $this->once()
+        )->method(
+            'login'
+        )->with(
+            'username',
+            'password'
+        )->will(
+            $this->throwException($exceptionMock)
+        );
         $this->_credentialStorage->expects($this->never())->method('getId');
-        $this->_eventManagerMock
-            ->expects($this->once())
-            ->method('dispatch')
-        ->with('backend_auth_user_login_failed');
+        $this->_eventManagerMock->expects($this->once())->method('dispatch')->with('backend_auth_user_login_failed');
         $this->_model->login('username', 'password');
     }
 }

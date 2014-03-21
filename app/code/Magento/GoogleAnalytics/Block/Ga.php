@@ -95,15 +95,14 @@ class Ga extends \Magento\View\Element\Template
      */
     public function getPageTrackingCode($accountId)
     {
-        $pageName   = trim($this->getPageName());
+        $pageName = trim($this->getPageName());
         $optPageURL = '';
         if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
             $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
         }
-        return "
-_gaq.push(['_setAccount', '{$this->escapeJsQuote($accountId)}']);
-_gaq.push(['_trackPageview'{$optPageURL}]);
-";
+        return "\n_gaq.push(['_setAccount', '{$this->escapeJsQuote(
+            $accountId
+        )}']);\n_gaq.push(['_trackPageview'{$optPageURL}]);\n";
     }
 
     /**
@@ -128,7 +127,8 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
             } else {
                 $address = $order->getShippingAddress();
             }
-            $result[] = sprintf("_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);",
+            $result[] = sprintf(
+                "_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);",
                 $order->getIncrementId(),
                 $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 $order->getBaseGrandTotal(),
@@ -139,11 +139,14 @@ _gaq.push(['_trackPageview'{$optPageURL}]);
                 $this->escapeJsQuote($this->escapeHtml($address->getCountry()))
             );
             foreach ($order->getAllVisibleItems() as $item) {
-                $result[] = sprintf("_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);",
+                $result[] = sprintf(
+                    "_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);",
                     $order->getIncrementId(),
-                    $this->escapeJsQuote($item->getSku()), $this->escapeJsQuote($item->getName()),
+                    $this->escapeJsQuote($item->getSku()),
+                    $this->escapeJsQuote($item->getName()),
                     null, // there is no "category" defined for the order item
-                    $item->getBasePrice(), $item->getQtyOrdered()
+                    $item->getBasePrice(),
+                    $item->getQtyOrdered()
                 );
             }
             $result[] = "_gaq.push(['_trackTrans']);";

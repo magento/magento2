@@ -23,7 +23,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
 
 /**
@@ -34,12 +33,12 @@ class Cookie extends \Magento\App\Helper\AbstractHelper
     /**
      * Cookie name for users who allowed cookie save
      */
-    const IS_USER_ALLOWED_SAVE_COOKIE  = 'user_allowed_save_cookie';
+    const IS_USER_ALLOWED_SAVE_COOKIE = 'user_allowed_save_cookie';
 
     /**
      * Path to configuration, check is enable cookie restriction mode
      */
-    const XML_PATH_COOKIE_RESTRICTION  = 'web/cookie/cookie_restriction';
+    const XML_PATH_COOKIE_RESTRICTION = 'web/cookie/cookie_restriction';
 
     /**
      * Cookie restriction lifetime configuration path
@@ -82,7 +81,6 @@ class Cookie extends \Magento\App\Helper\AbstractHelper
         }
     }
 
-
     /**
      * Check if cookie restriction notice should be displayed
      *
@@ -91,8 +89,9 @@ class Cookie extends \Magento\App\Helper\AbstractHelper
     public function isUserNotAllowSaveCookie()
     {
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
-        return $this->_currentStore->getConfig(self::XML_PATH_COOKIE_RESTRICTION)
-            && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
+        return $this->_currentStore->getConfig(
+            self::XML_PATH_COOKIE_RESTRICTION
+        ) && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
     }
 
     /**
@@ -126,6 +125,6 @@ class Cookie extends \Magento\App\Helper\AbstractHelper
      */
     public function getCookieRestrictionLifetime()
     {
-        return (int) $this->_currentStore->getConfig(self::XML_PATH_COOKIE_RESTRICTION_LIFETIME);
+        return (int)$this->_currentStore->getConfig(self::XML_PATH_COOKIE_RESTRICTION_LIFETIME);
     }
 }

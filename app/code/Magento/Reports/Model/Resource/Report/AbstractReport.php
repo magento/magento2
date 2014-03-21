@@ -41,7 +41,7 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @var \Magento\Reports\Model\Flag
      */
-    protected $_flag     = null;
+    protected $_flag = null;
 
     /**
      * @var \Magento\Logger
@@ -104,10 +104,7 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _setFlagData($code, $value = null)
     {
-        $this->_getFlag()
-            ->setReportFlagCode($code)
-            ->unsetData()
-            ->loadSelf();
+        $this->_getFlag()->setReportFlagCode($code)->unsetData()->loadSelf();
 
         if ($value !== null) {
             $this->_getFlag()->setFlagData($value);
@@ -130,10 +127,7 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _getFlagData($code)
     {
-        $this->_getFlag()
-            ->setReportFlagCode($code)
-            ->unsetData()
-            ->loadSelf();
+        $this->_getFlag()->setReportFlagCode($code)->unsetData()->loadSelf();
 
         return $this->_getFlag()->getFlagData();
     }
@@ -166,7 +160,11 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param bool $doNotUseTruncate
      * @return $this
      */
-    protected function _clearTableByDateRange($table, $from = null, $to = null, $subSelect = null,
+    protected function _clearTableByDateRange(
+        $table,
+        $from = null,
+        $to = null,
+        $subSelect = null,
         $doNotUseTruncate = false
     ) {
         if ($from === null && $to === null && !$doNotUseTruncate) {
@@ -203,18 +201,24 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $alias
      * @return \Magento\DB\Select
      */
-    protected function _getTableDateRangeSelect($table, $column, $whereColumn, $from = null, $to = null,
-        $additionalWhere = array(), $alias = 'date_range_table'
+    protected function _getTableDateRangeSelect(
+        $table,
+        $column,
+        $whereColumn,
+        $from = null,
+        $to = null,
+        $additionalWhere = array(),
+        $alias = 'date_range_table'
     ) {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
-            ->from(
-                array($alias => $table),
-                $adapter->getDatePartSql(
-                    $this->getStoreTZOffsetQuery(array($alias => $table), $alias . '.' . $column, $from, $to)
-                )
+        $select = $adapter->select()->from(
+            array($alias => $table),
+            $adapter->getDatePartSql(
+                $this->getStoreTZOffsetQuery(array($alias => $table), $alias . '.' . $column, $from, $to)
             )
-            ->distinct(true);
+        )->distinct(
+            true
+        );
 
         if ($from !== null) {
             $select->where($alias . '.' . $whereColumn . ' >= ?', $from);
@@ -228,7 +232,8 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
             foreach ($additionalWhere as $condition) {
                 if (is_array($condition) && count($condition) == 2) {
                     $condition = $adapter->quoteInto($condition[0], $condition[1]);
-                } elseif (is_array($condition)) { // Invalid condition
+                } elseif (is_array($condition)) {
+                    // Invalid condition
                     continue;
                 }
                 $condition = str_replace('{{table}}', $adapter->quoteIdentifier($alias), $condition);
@@ -297,8 +302,16 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $relatedAlias
      * @return \Magento\DB\Select
      */
-    protected function _getTableDateRangeRelatedSelect($table, $relatedTable, $joinCondition, $column, $whereColumn,
-        $from = null, $to = null, $additionalWhere = array(), $alias = 'date_range_table',
+    protected function _getTableDateRangeRelatedSelect(
+        $table,
+        $relatedTable,
+        $joinCondition,
+        $column,
+        $whereColumn,
+        $from = null,
+        $to = null,
+        $additionalWhere = array(),
+        $alias = 'date_range_table',
         $relatedAlias = 'related_date_range_table'
     ) {
         $adapter = $this->_getReadAdapter();
@@ -308,19 +321,16 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
             $joinConditionSql[] = sprintf('%s.%s = %s.%s', $alias, $fkField, $relatedAlias, $pkField);
         }
 
-        $select = $adapter->select()
-            ->from(
-                array($alias => $table),
-                $adapter->getDatePartSql(
-                    $adapter->quoteIdentifier($alias . '.' . $column)
-                )
-            )
-            ->joinInner(
-                array($relatedAlias => $relatedTable),
-                implode(' AND ', $joinConditionSql),
-                array()
-            )
-            ->distinct(true);
+        $select = $adapter->select()->from(
+            array($alias => $table),
+            $adapter->getDatePartSql($adapter->quoteIdentifier($alias . '.' . $column))
+        )->joinInner(
+            array($relatedAlias => $relatedTable),
+            implode(' AND ', $joinConditionSql),
+            array()
+        )->distinct(
+            true
+        );
 
         if ($from !== null) {
             $select->where($relatedAlias . '.' . $whereColumn . ' >= ?', $from);
@@ -334,15 +344,13 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
             foreach ($additionalWhere as $condition) {
                 if (is_array($condition) && count($condition) == 2) {
                     $condition = $adapter->quoteInto($condition[0], $condition[1]);
-                } elseif (is_array($condition)) { // Invalid condition
+                } elseif (is_array($condition)) {
+                    // Invalid condition
                     continue;
                 }
                 $condition = str_replace(
                     array('{{table}}', '{{related_table}}'),
-                    array(
-                        $adapter->quoteIdentifier($alias),
-                        $adapter->quoteIdentifier($relatedAlias)
-                    ),
+                    array($adapter->quoteIdentifier($alias), $adapter->quoteIdentifier($relatedAlias)),
                     $condition
                 );
                 $select->where($condition);
@@ -387,13 +395,14 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
         $column = $this->_getWriteAdapter()->quoteIdentifier($column);
 
         if (null === $from) {
-            $selectOldest = $this->_getWriteAdapter()->select()
-                ->from($table, array("MIN($column)"));
+            $selectOldest = $this->_getWriteAdapter()->select()->from($table, array("MIN({$column})"));
             $from = $this->_getWriteAdapter()->fetchOne($selectOldest);
         }
 
         $periods = $this->_getTZOffsetTransitions(
-            $this->_localeDate->scopeDate($store)->toString(\Zend_Date::TIMEZONE_NAME), $from, $to
+            $this->_localeDate->scopeDate($store)->toString(\Zend_Date::TIMEZONE_NAME),
+            $from,
+            $to
         );
         if (empty($periods)) {
             return $column;
@@ -406,13 +415,16 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
         foreach ($periods as $offset => $timestamps) {
             $subParts = array();
             foreach ($timestamps as $ts) {
-                $subParts[] = "($column between {$ts['from']} and {$ts['to']})";
+                $subParts[] = "({$column} between {$ts['from']} and {$ts['to']})";
             }
 
-            $then = $this->_getWriteAdapter()
-                ->getDateAddSql($column, $offset, \Magento\DB\Adapter\AdapterInterface::INTERVAL_SECOND);
+            $then = $this->_getWriteAdapter()->getDateAddSql(
+                $column,
+                $offset,
+                \Magento\DB\Adapter\AdapterInterface::INTERVAL_SECOND
+            );
 
-            $query .= (++$i == $periodsCount) ? $then : "CASE WHEN " . join(" OR ", $subParts) . " THEN $then ELSE ";
+            $query .= ++$i == $periodsCount ? $then : "CASE WHEN " . join(" OR ", $subParts) . " THEN {$then} ELSE ";
         }
 
         return $query . str_repeat('END ', count($periods) - 1);
@@ -436,7 +448,9 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
 
             $to = new \Magento\Stdlib\DateTime\Date($to, \Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
-            $nextPeriod = $this->_getWriteAdapter()->formatDate($to->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+            $nextPeriod = $this->_getWriteAdapter()->formatDate(
+                $to->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+            );
             $to = $to->getTimestamp();
 
             $dtz = new \DateTimeZone($timezone);
@@ -452,8 +466,9 @@ abstract class AbstractReport extends \Magento\Core\Model\Resource\Db\AbstractDb
                 }
 
                 $dateTimeObject->set($tr['time']);
-                $tr['time'] = $this->_getWriteAdapter()
-                    ->formatDate($dateTimeObject->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+                $tr['time'] = $this->_getWriteAdapter()->formatDate(
+                    $dateTimeObject->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                );
                 $tzTransitions[$tr['offset']][] = array('from' => $tr['time'], 'to' => $nextPeriod);
 
                 if (!empty($from) && $tr['ts'] < $from) {

@@ -37,10 +37,7 @@ class Availability extends \Magento\GoogleShopping\Model\Attribute\DefaultAttrib
     /**
      * @var array
      */
-    protected $_googleAvailabilityMap = array(
-        0 => 'out of stock',
-        1 => 'in stock'
-    );
+    protected $_googleAvailabilityMap = array(0 => 'out of stock', 1 => 'in stock');
 
     /**
      * Set current attribute to entry (for specified product)

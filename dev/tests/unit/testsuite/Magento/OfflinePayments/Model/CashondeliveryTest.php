@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\OfflinePayments\Model;
 
 class CashondeliveryTest extends \PHPUnit_Framework_TestCase
@@ -40,16 +39,18 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
 
         $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
-        $adapterFactoryMock = $this->getMock('Magento\Logger\AdapterFactory', array('create'),
-            array(), '', false);
+        $adapterFactoryMock = $this->getMock('Magento\Logger\AdapterFactory', array('create'), array(), '', false);
 
         $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
-        $this->_object = $helper->getObject('Magento\OfflinePayments\Model\Cashondelivery', array(
-            'eventManager' => $eventManager,
-            'paymentData' => $paymentDataMock,
-            'coreStoreConfig' => $coreStoreConfig,
-            'logAdapterFactory' => $adapterFactoryMock,
-        ));
+        $this->_object = $helper->getObject(
+            'Magento\OfflinePayments\Model\Cashondelivery',
+            array(
+                'eventManager' => $eventManager,
+                'paymentData' => $paymentDataMock,
+                'coreStoreConfig' => $coreStoreConfig,
+                'logAdapterFactory' => $adapterFactoryMock
+            )
+        );
     }
 
     public function testGetInfoBlockType()

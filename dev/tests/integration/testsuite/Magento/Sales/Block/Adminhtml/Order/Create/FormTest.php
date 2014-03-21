@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 use Magento\Customer\Service\V1;
@@ -46,40 +45,32 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getQuote', 'getStoreId', 'getStore'])
-            ->getMock();
-        $sessionMock->expects($this->any())
-            ->method('getCustomerId')
-            ->will($this->returnValue(1));
+        $sessionMock = $this->getMockBuilder(
+            'Magento\Backend\Model\Session\Quote'
+        )->disableOriginalConstructor()->setMethods(
+            array('getCustomerId', 'getQuote', 'getStoreId', 'getStore')
+        )->getMock();
+        $sessionMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
         $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load(1);
-        $sessionMock->expects($this->any())
-            ->method('getQuote')
-            ->will($this->returnValue($quote));
+        $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
 
-        $sessionMock->expects($this->any())
-            ->method('getStoreId')
-            ->will($this->returnValue(1));
+        $sessionMock->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
-        $storeMock = $this->getMockBuilder('\Magento\Core\Model\Store')
-            ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode'])
-            ->getMock();
-        $storeMock->expects($this->any())
-            ->method('getCurrentCurrencyCode')
-            ->will($this->returnValue('USD'));
-        $sessionMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
+        $storeMock = $this->getMockBuilder(
+            '\Magento\Core\Model\Store'
+        )->disableOriginalConstructor()->setMethods(
+            array('getCurrentCurrencyCode')
+        )->getMock();
+        $storeMock->expects($this->any())->method('getCurrentCurrencyCode')->will($this->returnValue('USD'));
+        $sessionMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
         /** @var \Magento\View\LayoutInterface $layout */
         $layout = $this->_objectManager->get('Magento\View\LayoutInterface');
         $this->_orderCreateBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form',
             'order_create_block' . rand(),
-            ['sessionQuote' => $sessionMock]
+            array('sessionQuote' => $sessionMock)
         );
         parent::setUp();
     }
@@ -92,7 +83,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var array $addressIds */
         $addressIds = $this->setUpMockAddress();
         $orderDataJson = $this->_orderCreateBlock->getOrderDataJson();
-        $expectedOrderDataJson = <<< ORDER_DATA_JSON
+        $expectedOrderDataJson = <<<ORDER_DATA_JSON
         {
             "customer_id":1,
             "addresses":
@@ -121,46 +112,66 @@ ORDER_DATA_JSON;
         /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
         $addressService = $this->_objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
 
-        $addressData1 = $addressBuilder->setId(1)
-            ->setCountryId('US')
-            ->setCustomerId(1)
-            ->setDefaultBilling(true)
-            ->setDefaultShipping(true)
-            ->setPostcode('75477')
-            ->setRegion(
-                new V1\Data\Region((new V1\Data\RegionBuilder())->populateWithArray([
-                    'region_code' => 'AL',
-                    'region' => 'Alabama',
-                    'region_id' => 1
-                ]))
+        $addressData1 = $addressBuilder->setId(
+            1
+        )->setCountryId(
+            'US'
+        )->setCustomerId(
+            1
+        )->setDefaultBilling(
+            true
+        )->setDefaultShipping(
+            true
+        )->setPostcode(
+            '75477'
+        )->setRegion(
+            new V1\Data\Region(
+                (new V1\Data\RegionBuilder())->populateWithArray(
+                    array('region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1)
+                )
             )
-            ->setStreet(['Green str, 67'])
-            ->setTelephone('3468676')
-            ->setCity('CityM')
-            ->setFirstname('John')
-            ->setLastname('Smith')
-            ->create();
+        )->setStreet(
+            array('Green str, 67')
+        )->setTelephone(
+            '3468676'
+        )->setCity(
+            'CityM'
+        )->setFirstname(
+            'John'
+        )->setLastname(
+            'Smith'
+        )->create();
 
-        $addressData2 = $addressBuilder->setId(2)
-            ->setCountryId('US')
-            ->setCustomerId(1)
-            ->setDefaultBilling(false)
-            ->setDefaultShipping(false)
-            ->setPostcode('47676')
-            ->setRegion(
-                new V1\Data\Region((new V1\Data\RegionBuilder())->populateWithArray([
-                    'region_code' => 'AL',
-                    'region' => 'Alabama',
-                    'region_id' => 1
-                ]))
+        $addressData2 = $addressBuilder->setId(
+            2
+        )->setCountryId(
+            'US'
+        )->setCustomerId(
+            1
+        )->setDefaultBilling(
+            false
+        )->setDefaultShipping(
+            false
+        )->setPostcode(
+            '47676'
+        )->setRegion(
+            new V1\Data\Region(
+                (new V1\Data\RegionBuilder())->populateWithArray(
+                    array('region_code' => 'AL', 'region' => 'Alabama', 'region_id' => 1)
+                )
             )
-            ->setStreet(['Black str, 48'])
-            ->setCity('CityX')
-            ->setTelephone('3234676')
-            ->setFirstname('John')
-            ->setLastname('Smith')
-            ->create();
+        )->setStreet(
+            array('Black str, 48')
+        )->setCity(
+            'CityX'
+        )->setTelephone(
+            '3234676'
+        )->setFirstname(
+            'John'
+        )->setLastname(
+            'Smith'
+        )->create();
 
-        return $addressService->saveAddresses(1, [$addressData1, $addressData2]);
+        return $addressService->saveAddresses(1, array($addressData1, $addressData2));
     }
 }

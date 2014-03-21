@@ -129,7 +129,7 @@ class Curl implements \Magento\HTTP\IClient
      */
     public function setTimeout($value)
     {
-        $this->_timeout = (int) $value;
+        $this->_timeout = (int)$value;
     }
 
     /**
@@ -137,7 +137,6 @@ class Curl implements \Magento\HTTP\IClient
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -184,8 +183,8 @@ class Curl implements \Magento\HTTP\IClient
      */
     public function setCredentials($login, $pass)
     {
-        $val= base64_encode( "$login:$pass" );
-        $this->addHeader( "Authorization", "Basic $val" );
+        $val = base64_encode("{$login}:{$pass}");
+        $this->addHeader("Authorization", "Basic {$val}");
     }
 
     /**
@@ -287,7 +286,7 @@ class Curl implements \Magento\HTTP\IClient
             return array();
         }
         $out = array();
-        foreach ( $this->_responseHeaders['Set-Cookie'] as $row) {
+        foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
             $values = explode("; ", $row);
             $c = count($values);
             if (!$c) {
@@ -313,7 +312,7 @@ class Curl implements \Magento\HTTP\IClient
             return array();
         }
         $out = array();
-        foreach ( $this->_responseHeaders['Set-Cookie'] as $row) {
+        foreach ($this->_responseHeaders['Set-Cookie'] as $row) {
             $values = explode("; ", $row);
             $c = count($values);
             if (!$c) {
@@ -323,13 +322,13 @@ class Curl implements \Magento\HTTP\IClient
             if (is_null($val)) {
                 continue;
             }
-            $out[trim($key)] = array('value'=>trim($val));
+            $out[trim($key)] = array('value' => trim($val));
             array_shift($values);
             $c--;
             if (!$c) {
                 continue;
             }
-            for ($i = 0; $i<$c; $i++) {
+            for ($i = 0; $i < $c; $i++) {
                 list($subkey, $val) = explode("=", $values[$i]);
                 $out[trim($key)][trim($subkey)] = trim($val);
             }
@@ -370,20 +369,20 @@ class Curl implements \Magento\HTTP\IClient
 
         if (count($this->_headers)) {
             $heads = array();
-            foreach ($this->_headers as $k=>$v) {
-                $heads[] = $k.': '.$v;
+            foreach ($this->_headers as $k => $v) {
+                $heads[] = $k . ': ' . $v;
             }
             $this->curlOption(CURLOPT_HTTPHEADER, $heads);
         }
 
         if (count($this->_cookies)) {
             $cookies = array();
-            foreach ($this->_cookies as $k=>$v) {
-                $cookies[] = "$k=$v";
+            foreach ($this->_cookies as $k => $v) {
+                $cookies[] = "{$k}={$v}";
             }
             $this->curlOption(CURLOPT_COOKIE, implode(";", $cookies));
         }
-         
+
         if ($this->_timeout) {
             $this->curlOption(CURLOPT_TIMEOUT, $this->_timeout);
         }
@@ -394,11 +393,11 @@ class Curl implements \Magento\HTTP\IClient
 
         //$this->curlOption(CURLOPT_HEADER, 1);
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
-        $this->curlOption(CURLOPT_HEADERFUNCTION, array($this,'parseHeaders'));
-         
+        $this->curlOption(CURLOPT_HEADERFUNCTION, array($this, 'parseHeaders'));
+
 
         if (count($this->_curlUserOptions)) {
-            foreach ($this->_curlUserOptions as $k=>$v) {
+            foreach ($this->_curlUserOptions as $k => $v) {
                 $this->curlOption($k, $v);
             }
         }
@@ -437,7 +436,7 @@ class Curl implements \Magento\HTTP\IClient
 
             $line = explode(" ", trim($data), 3);
             if (count($line) != 3) {
-                return $this->doError("Invalid response line returned from server: ".$data);
+                return $this->doError("Invalid response line returned from server: " . $data);
             }
             $this->_responseStatus = intval($line[1]);
         } else {
@@ -459,10 +458,9 @@ class Curl implements \Magento\HTTP\IClient
                     $this->_responseHeaders[$name] = $value;
                 }
             }
-
         }
         $this->_headerCount++;
-         
+
 
         return strlen($data);
     }
@@ -510,5 +508,4 @@ class Curl implements \Magento\HTTP\IClient
     {
         $this->_curlUserOptions[$name] = $value;
     }
-
 }

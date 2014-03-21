@@ -22,15 +22,17 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once __DIR__ . '/bootstrap.php';
-
 use Magento\Tools\I18n\Code\ServiceLocator;
 
 try {
-    $console = new \Zend_Console_Getopt(array(
-        'directory|d=s' => 'Path to base directory for parsing',
-        'output|o=s' => 'Path(with filename) to output file, by default output the results into standard output stream',
-        'magento|m=s' => 'Indicates whether directory for parsing is Magento directory, "no" by default',
-    ));
+    $console = new \Zend_Console_Getopt(
+        array(
+            'directory|d=s' => 'Path to base directory for parsing',
+            'output|o=s' => 'Path(with filename) to output file, '.
+            'by default output the results into standard output stream',
+            'magento|m=s' => 'Indicates whether directory for parsing is Magento directory, "no" by default'
+        )
+    );
     $console->parse();
 
     $directory = $console->getOption('directory') ?: null;
@@ -46,11 +48,8 @@ try {
         $filesOptions = array(
             array(
                 'type' => 'php',
-                'paths' => array(
-                    $directory . '/app/code/',
-                    $directory . '/app/design/',
-                ),
-                'fileMask' => '/\.(php|phtml)$/',
+                'paths' => array($directory . '/app/code/', $directory . '/app/design/'),
+                'fileMask' => '/\.(php|phtml)$/'
             ),
             array(
                 'type' => 'js',
@@ -58,36 +57,21 @@ try {
                     $directory . '/app/code/',
                     $directory . '/app/design/',
                     $directory . '/pub/lib/mage/',
-                    $directory . '/pub/lib/varien/',
+                    $directory . '/pub/lib/varien/'
                 ),
-                'fileMask' => '/\.(js|phtml)$/',
+                'fileMask' => '/\.(js|phtml)$/'
             ),
             array(
                 'type' => 'xml',
-                'paths' => array(
-                    $directory . '/app/code/',
-                    $directory . '/app/design/',
-                ),
-                'fileMask' => '/\.xml$/',
-            ),
+                'paths' => array($directory . '/app/code/', $directory . '/app/design/'),
+                'fileMask' => '/\.xml$/'
+            )
         );
     } else {
         $filesOptions = array(
-            array(
-                'type' => 'php',
-                'paths' => array($directory),
-                'fileMask' => '/\.(php|phtml)$/',
-            ),
-            array(
-                'type' => 'js',
-                'paths' => array($directory),
-                'fileMask' => '/\.(js|phtml)$/',
-            ),
-            array(
-                'type' => 'xml',
-                'paths' => array($directory),
-                'fileMask' => '/\.xml$/',
-            ),
+            array('type' => 'php', 'paths' => array($directory), 'fileMask' => '/\.(php|phtml)$/'),
+            array('type' => 'js', 'paths' => array($directory), 'fileMask' => '/\.(js|phtml)$/'),
+            array('type' => 'xml', 'paths' => array($directory), 'fileMask' => '/\.xml$/')
         );
     }
 
@@ -96,7 +80,6 @@ try {
     $generator->generate($filesOptions, $outputFilename, $isMagento);
 
     fwrite(STDOUT, "\nDictionary successfully processed.\n");
-
 } catch (\Zend_Console_Getopt_Exception $e) {
     fwrite(STDERR, $e->getUsageMessage() . "\n");
     exit(1);

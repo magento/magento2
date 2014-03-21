@@ -113,8 +113,10 @@ class Rate extends \Magento\Core\Model\AbstractModel
     {
         $isWrongRange = $this->getZipIsRange() && ($this->getZipFrom() === '' || $this->getZipTo() === '');
 
-        $isEmptyValues = $this->getCode() === '' || $this->getTaxCountryId() === '' || $this->getRate() === ''
-            || $this->getTaxPostcode() === '';
+        $isEmptyValues = $this->getCode() === '' ||
+            $this->getTaxCountryId() === '' ||
+            $this->getRate() === '' ||
+            $this->getTaxPostcode() === '';
 
         if ($isEmptyValues || $isWrongRange) {
             throw new \Magento\Core\Exception(__('Please fill all required fields with valid information.'));
@@ -148,10 +150,7 @@ class Rate extends \Magento\Core\Model\AbstractModel
                 $taxPostCode = substr($taxPostCode, 0, 10);
             }
 
-            $this->setTaxPostcode($taxPostCode)
-                ->setZipIsRange(null)
-                ->setZipFrom(null)
-                ->setZipTo(null);
+            $this->setTaxPostcode($taxPostCode)->setZipIsRange(null)->setZipFrom(null)->setZipTo(null);
         }
 
         parent::_beforeSave();
@@ -216,14 +215,17 @@ class Rate extends \Magento\Core\Model\AbstractModel
 
         $this->getTitleModel()->deleteByRateId($this->getId());
         if (is_array($titles) && $titles) {
-            foreach ($titles as $store=>$title) {
+            foreach ($titles as $store => $title) {
                 if ($title !== '') {
-                    $this->getTitleModel()
-                        ->setId(null)
-                        ->setTaxCalculationRateId($this->getId())
-                        ->setStoreId((int) $store)
-                        ->setValue($title)
-                        ->save();
+                    $this->getTitleModel()->setId(
+                        null
+                    )->setTaxCalculationRateId(
+                        $this->getId()
+                    )->setStoreId(
+                        (int)$store
+                    )->setValue(
+                        $title
+                    )->save();
                 }
             }
         }
@@ -272,7 +274,6 @@ class Rate extends \Magento\Core\Model\AbstractModel
         $this->load($code, 'code');
         return $this;
     }
-
 
     /**
      * Check if rate exists in tax rule

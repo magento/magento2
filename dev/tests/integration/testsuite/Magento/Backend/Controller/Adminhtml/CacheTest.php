@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
@@ -38,13 +37,13 @@ class CacheTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/cache/flushAll');
 
         /** @var $cache \Magento\App\Cache */
-        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache');
+        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Cache');
         /** @var $cachePool \Magento\App\Cache\Frontend\Pool */
         $this->assertFalse($cache->load('APPLICATION_FIXTURE'));
 
-        $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\Frontend\Pool');
+        $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\Frontend\Pool'
+        );
         /** @var $cacheFrontend \Magento\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
             $this->assertFalse($cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE'));
@@ -60,17 +59,19 @@ class CacheTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/cache/flushSystem');
 
         /** @var $cache \Magento\App\Cache */
-        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache');
+        $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Cache');
         /** @var $cachePool \Magento\App\Cache\Frontend\Pool */
         $this->assertFalse($cache->load('APPLICATION_FIXTURE'));
 
-        $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\Frontend\Pool');
+        $cachePool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\Frontend\Pool'
+        );
         /** @var $cacheFrontend \Magento\Cache\FrontendInterface */
         foreach ($cachePool as $cacheFrontend) {
-            $this->assertSame('non-application cache data',
-                $cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE'));
+            $this->assertSame(
+                'non-application cache data',
+                $cacheFrontend->getBackend()->load('NON_APPLICATION_FIXTURE')
+            );
         }
     }
 
@@ -85,17 +86,19 @@ class CacheTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/cache/massEnable');
 
         /** @var  \Magento\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\TypeListInterface');
+        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\TypeListInterface'
+        );
         $types = array_keys($cacheTypeList->getTypes());
         /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\StateInterface');
+        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\StateInterface'
+        );
         foreach ($types as $type) {
             if (in_array($type, $typesToEnable)) {
-                $this->assertTrue($cacheState->isEnabled($type), "Type '$type' has not been enabled");
+                $this->assertTrue($cacheState->isEnabled($type), "Type '{$type}' has not been enabled");
             } else {
-                $this->assertFalse($cacheState->isEnabled($type), "Type '$type' must remain disabled");
+                $this->assertFalse($cacheState->isEnabled($type), "Type '{$type}' must remain disabled");
             }
         }
     }
@@ -111,17 +114,19 @@ class CacheTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/cache/massDisable');
 
         /** @var  \Magento\App\Cache\TypeListInterface $cacheTypeList */
-        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\TypeListInterface');
+        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\TypeListInterface'
+        );
         $types = array_keys($cacheTypeList->getTypes());
         /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\StateInterface');
+        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\StateInterface'
+        );
         foreach ($types as $type) {
             if (in_array($type, $typesToDisable)) {
-                $this->assertFalse($cacheState->isEnabled($type), "Type '$type' has not been disabled");
+                $this->assertFalse($cacheState->isEnabled($type), "Type '{$type}' has not been disabled");
             } else {
-                $this->assertTrue($cacheState->isEnabled($type), "Type '$type' must remain enabled");
+                $this->assertTrue($cacheState->isEnabled($type), "Type '{$type}' must remain enabled");
             }
         }
     }
@@ -137,12 +142,12 @@ class CacheTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/cache/massRefresh');
 
         /** @var $cacheTypeList \Magento\App\Cache\TypeListInterface */
-        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Cache\TypeListInterface');
+        $cacheTypeList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Cache\TypeListInterface'
+        );
         $invalidatedTypes = array_keys($cacheTypeList->getInvalidated());
         $failed = array_intersect($typesToRefresh, $invalidatedTypes);
         $this->assertEmpty($failed, 'Could not refresh following cache types: ' . join(', ', $failed));
-
     }
 
     /**
@@ -151,16 +156,14 @@ class CacheTest extends \Magento\Backend\Utility\Controller
     public function massActionsDataProvider()
     {
         return array(
-            'no types' => array(
-                array()
-            ),
+            'no types' => array(array()),
             'existing types' => array(
                 array(
                     \Magento\App\Cache\Type\Config::TYPE_IDENTIFIER,
                     \Magento\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                    \Magento\App\Cache\Type\Block::TYPE_IDENTIFIER,
+                    \Magento\App\Cache\Type\Block::TYPE_IDENTIFIER
                 )
-            ),
+            )
         );
     }
 
@@ -184,9 +187,9 @@ class CacheTest extends \Magento\Backend\Utility\Controller
     public function massActionsInvalidTypesDataProvider()
     {
         return array(
-            'enable'  => array('massEnable'),
+            'enable' => array('massEnable'),
             'disable' => array('massDisable'),
-            'refresh' => array('massRefresh'),
+            'refresh' => array('massRefresh')
         );
     }
 }

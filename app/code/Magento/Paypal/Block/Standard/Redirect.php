@@ -78,18 +78,25 @@ class Redirect extends \Magento\View\Element\AbstractBlock
         $standard = $this->_paypalStandardFactory->create();
 
         $form = $this->_formFactory->create();
-        $form->setAction($standard->getConfig()->getPaypalUrl())
-            ->setId('paypal_standard_checkout')
-            ->setName('paypal_standard_checkout')
-            ->setMethod('POST')
-            ->setUseContainer(true);
+        $form->setAction(
+            $standard->getConfig()->getPaypalUrl()
+        )->setId(
+            'paypal_standard_checkout'
+        )->setName(
+            'paypal_standard_checkout'
+        )->setMethod(
+            'POST'
+        )->setUseContainer(
+            true
+        );
         foreach ($standard->getStandardCheckoutFormFields() as $field => $value) {
             $form->addField($field, 'hidden', array('name' => $field, 'value' => $value));
         }
         $idSuffix = $this->mathRandom->getUniqueHash();
-        $submitButton = $this->_elementFactory->create('submit', array('data' => array(
-            'value' => __('Click here if you are not redirected within 10 seconds.'),
-        )));
+        $submitButton = $this->_elementFactory->create(
+            'submit',
+            array('data' => array('value' => __('Click here if you are not redirected within 10 seconds.')))
+        );
         $id = "submit_to_paypal_button_{$idSuffix}";
         $submitButton->setId($id);
         $form->addElement($submitButton);

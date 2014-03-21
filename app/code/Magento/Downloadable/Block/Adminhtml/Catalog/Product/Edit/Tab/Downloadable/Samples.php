@@ -32,8 +32,7 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Samples
-    extends \Magento\Backend\Block\Widget
+class Samples extends \Magento\Backend\Block\Widget
 {
     /**
      * Block config data
@@ -130,9 +129,8 @@ class Samples
      */
     public function isReadonly()
     {
-         return $this->getProduct()->getDownloadableReadonly();
+        return $this->getProduct()->getDownloadableReadonly();
     }
-
 
     /**
      * Retrieve Add Button HTML
@@ -141,13 +139,16 @@ class Samples
      */
     public function getAddButtonHtml()
     {
-        $addButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData([
+        $addButton = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
                 'label' => __('Add New Row'),
                 'id' => 'add_sample_item',
                 'class' => 'add',
-                'data_attribute' => ['action' => 'add-sample'],
-            ]);
+                'data_attribute' => array('action' => 'add-sample')
+            )
+        );
         return $addButton->toHtml();
     }
 
@@ -170,14 +171,12 @@ class Samples
                 'title' => $this->escapeHtml($item->getTitle()),
                 'sample_url' => $item->getSampleUrl(),
                 'sample_type' => $item->getSampleType(),
-                'sort_order' => $item->getSortOrder(),
+                'sort_order' => $item->getSortOrder()
             );
 
             $sampleFile = $item->getSampleFile();
             if ($sampleFile) {
-                $file = $fileHelper->getFilePath(
-                    $this->_sampleModel->getBasePath(), $sampleFile
-                );
+                $file = $fileHelper->getFilePath($this->_sampleModel->getBasePath(), $sampleFile);
 
                 $fileExist = $fileHelper->ensureFileInFilesystem($file);
 
@@ -188,7 +187,8 @@ class Samples
                             'name' => $fileHelper->getFileFromPathFile($sampleFile),
                             'size' => $fileHelper->getFileSize($file),
                             'status' => 'old'
-                        ));
+                        )
+                    );
                 }
             }
 
@@ -218,9 +218,11 @@ class Samples
      */
     public function getSamplesTitle()
     {
-        return $this->getProduct()->getId() && $this->getProduct()->getTypeId() == 'downloadable'
-            ? $this->getProduct()->getSamplesTitle()
-            : $this->_storeConfig->getConfig(\Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE);
+        return $this->getProduct()->getId() &&
+            $this->getProduct()->getTypeId() ==
+            'downloadable' ? $this->getProduct()->getSamplesTitle() : $this->_storeConfig->getConfig(
+                \Magento\Downloadable\Model\Sample::XML_PATH_SAMPLES_TITLE
+            );
     }
 
     /**
@@ -230,12 +232,16 @@ class Samples
      */
     protected function _prepareLayout()
     {
-        $this->addChild('upload_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id'      => '',
-            'label'   => __('Upload Files'),
-            'type'    => 'button',
-            'onclick' => 'Downloadable.massUploadByType(\'samples\')'
-        ));
+        $this->addChild(
+            'upload_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'id' => '',
+                'label' => __('Upload Files'),
+                'type' => 'button',
+                'onclick' => 'Downloadable.massUploadByType(\'samples\')'
+            )
+        );
     }
 
     /**
@@ -255,18 +261,14 @@ class Samples
      */
     public function getConfigJson()
     {
-        $url = $this->_urlFactory->create()
-            ->addSessionParam()
-            ->getUrl('adminhtml/downloadable_file/upload', array('type' => 'samples', '_secure' => true));
+        $url = $this->_urlFactory->create()->addSessionParam()->getUrl(
+            'adminhtml/downloadable_file/upload',
+            array('type' => 'samples', '_secure' => true)
+        );
         $this->getConfig()->setUrl($url);
         $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
         $this->getConfig()->setFileField('samples');
-        $this->getConfig()->setFilters(array(
-            'all'    => array(
-                'label' => __('All Files'),
-                'files' => array('*.*')
-            )
-        ));
+        $this->getConfig()->setFilters(array('all' => array('label' => __('All Files'), 'files' => array('*.*'))));
         $this->getConfig()->setReplaceBrowseWithRemove(true);
         $this->getConfig()->setWidth('32');
         $this->getConfig()->setHideUploadButton(true);

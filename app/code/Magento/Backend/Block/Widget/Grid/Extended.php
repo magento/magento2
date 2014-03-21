@@ -25,9 +25,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
-class Extended
-    extends \Magento\Backend\Block\Widget\Grid
-    implements \Magento\Backend\Block\Widget\Grid\ExportInterface
+class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
      * Columns array
@@ -148,7 +146,7 @@ class Extended
      *
      * @var string|null
      */
-    protected $_emptyTextCss    = 'a-center';
+    protected $_emptyTextCss = 'a-center';
 
     /**
      * @var bool
@@ -204,28 +202,37 @@ class Extended
      */
     protected function _prepareLayout()
     {
-        $this->setChild('export_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-                ->setData(array(
-                'label'     => __('Export'),
-                'onclick'   => $this->getJsObjectName().'.doExport()',
-                'class'   => 'task'
-            ))
+        $this->setChild(
+            'export_button',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button'
+            )->setData(
+                array(
+                    'label' => __('Export'),
+                    'onclick' => $this->getJsObjectName() . '.doExport()',
+                    'class' => 'task'
+                )
+            )
         );
-        $this->setChild('reset_filter_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-                ->setData(array(
-                'label'     => __('Reset Filter'),
-                'onclick'   => $this->getJsObjectName().'.resetFilter()',
-            ))
+        $this->setChild(
+            'reset_filter_button',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button'
+            )->setData(
+                array('label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()')
+            )
         );
-        $this->setChild('search_button',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-                ->setData(array(
-                'label'     => __('Search'),
-                'onclick'   => $this->getJsObjectName().'.doFilter()',
-                'class'   => 'task'
-            ))
+        $this->setChild(
+            'search_button',
+            $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Button'
+            )->setData(
+                array(
+                    'label' => __('Search'),
+                    'onclick' => $this->getJsObjectName() . '.doFilter()',
+                    'class' => 'task'
+                )
+            )
         );
         return parent::_prepareLayout();
     }
@@ -238,7 +245,8 @@ class Extended
     public function getColumnSet()
     {
         if (!$this->getChildBlock('grid.columnSet')) {
-            $this->setChild('grid.columnSet',
+            $this->setChild(
+                'grid.columnSet',
                 $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Grid\ColumnSet')
             );
         }
@@ -265,10 +273,7 @@ class Extended
     public function addExportType($url, $label)
     {
         $this->_exportTypes[] = new \Magento\Object(
-            array(
-                'url'   => $this->getUrl($url, array('_current'=>true)),
-                'label' => $label
-            )
+            array('url' => $this->getUrl($url, array('_current' => true)), 'label' => $label)
         );
         return $this;
     }
@@ -286,10 +291,15 @@ class Extended
         if (is_array($column)) {
             $this->getColumnSet()->setChild(
                 $columnId,
-                $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Grid\Column\Extended')
-                    ->setData($column)
-                    ->setId($columnId)
-                    ->setGrid($this)
+                $this->getLayout()->createBlock(
+                    'Magento\Backend\Block\Widget\Grid\Column\Extended'
+                )->setData(
+                    $column
+                )->setId(
+                    $columnId
+                )->setGrid(
+                    $this
+                )
             );
             $this->getColumnSet()->getChildBlock($columnId)->setGrid($this);
         } else {
@@ -429,27 +439,31 @@ class Extended
     protected function _prepareMassactionColumn()
     {
         $columnId = 'massaction';
-        $massactionColumn = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Grid\Column')
-            ->setData(array(
-            'index'        => $this->getMassactionIdField(),
-            'filter_index' => $this->getMassactionIdFilter(),
-            'type'         => 'massaction',
-            'name'         => $this->getMassactionBlock()->getFormFieldName(),
-            'is_system'    => true,
-            'header_css_class'  => 'col-select',
-            'column_css_class'  => 'col-select'
-        ));
+        $massactionColumn = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Grid\Column'
+        )->setData(
+            array(
+                'index' => $this->getMassactionIdField(),
+                'filter_index' => $this->getMassactionIdFilter(),
+                'type' => 'massaction',
+                'name' => $this->getMassactionBlock()->getFormFieldName(),
+                'is_system' => true,
+                'header_css_class' => 'col-select',
+                'column_css_class' => 'col-select'
+            )
+        );
 
         if ($this->getNoFilterMassactionColumn()) {
             $massactionColumn->setData('filter', false);
         }
 
-        $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())
-            ->setGrid($this)
-            ->setId($columnId);
+        $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())->setGrid($this)->setId($columnId);
 
         $this->getColumnSet()->insert(
-            $massactionColumn, count($this->getColumnSet()->getColumns()) + 1, false, $columnId
+            $massactionColumn,
+            count($this->getColumnSet()->getColumns()) + 1,
+            false,
+            $columnId
         );
         return $this;
     }
@@ -651,7 +665,7 @@ class Extended
     public function getRowUrl($item)
     {
         $res = parent::getRowUrl($item);
-        return ($res ? $res : '#');
+        return $res ? $res : '#';
     }
 
     /**
@@ -686,7 +700,7 @@ class Extended
      */
     public function shouldRenderSubTotal($item)
     {
-        return ($this->_countSubTotals && count($this->_subtotals) > 0 && count($this->getMultipleRows($item)) > 0);
+        return $this->_countSubTotals && count($this->_subtotals) > 0 && count($this->getMultipleRows($item)) > 0;
     }
 
     /**
@@ -732,7 +746,7 @@ class Extended
      */
     public function shouldRenderEmptyCell($item, $column)
     {
-        return ($item->getIsEmpty() && in_array($column['index'], $this->_groupedColumn));
+        return $item->getIsEmpty() && in_array($column['index'], $this->_groupedColumn);
     }
 
     /**
@@ -779,7 +793,7 @@ class Extended
      * @param bool $visible
      * @return void
      */
-    public function setHeadersVisibility($visible=true)
+    public function setHeadersVisibility($visible = true)
     {
         $this->_headersVisibility = $visible;
     }
@@ -800,7 +814,7 @@ class Extended
      * @param bool $visible
      * @return void
      */
-    public function setFilterVisibility($visible=true)
+    public function setFilterVisibility($visible = true)
     {
         $this->_filterVisibility = $visible;
     }
@@ -916,10 +930,10 @@ class Extended
     protected function _getExportTotals()
     {
         $totals = $this->getTotals();
-        $row    = array();
+        $row = array();
         foreach ($this->getColumns() as $column) {
             if (!$column->getIsSystem()) {
-                $row[] = ($column->hasTotalsLabel()) ? $column->getTotalsLabel() : $column->getRowFieldExport($totals);
+                $row[] = $column->hasTotalsLabel() ? $column->getTotalsLabel() : $column->getRowFieldExport($totals);
             }
         }
         return $row;
@@ -937,7 +951,7 @@ class Extended
     {
         $originalCollection = $this->getCollection();
         $count = null;
-        $page  = 1;
+        $page = 1;
         $lPage = null;
         $break = false;
 
@@ -953,7 +967,7 @@ class Extended
             if ($lPage == $page) {
                 $break = true;
             }
-            $page ++;
+            $page++;
 
             foreach ($collection as $item) {
                 call_user_func_array(array($this, $callback), array_merge(array($item), $args));
@@ -1009,9 +1023,9 @@ class Extended
         $stream->close();
 
         return array(
-            'type'  => 'filename',
+            'type' => 'filename',
             'value' => $file,
-            'rm'    => true // can delete file after use
+            'rm' => true  // can delete file after use
         );
     }
 
@@ -1033,31 +1047,37 @@ class Extended
         $data = array();
         foreach ($this->getColumns() as $column) {
             if (!$column->getIsSystem()) {
-                $data[] = '"'.$column->getExportHeader().'"';
+                $data[] = '"' . $column->getExportHeader() . '"';
             }
         }
-        $csv.= implode(',', $data)."\n";
+        $csv .= implode(',', $data) . "\n";
 
         foreach ($this->getCollection() as $item) {
             $data = array();
             foreach ($this->getColumns() as $column) {
                 if (!$column->getIsSystem()) {
-                    $data[] = '"' . str_replace(array('"', '\\'), array('""', '\\\\'),
-                        $column->getRowFieldExport($item)) . '"';
+                    $data[] = '"' . str_replace(
+                        array('"', '\\'),
+                        array('""', '\\\\'),
+                        $column->getRowFieldExport($item)
+                    ) . '"';
                 }
             }
-            $csv.= implode(',', $data)."\n";
+            $csv .= implode(',', $data) . "\n";
         }
 
         if ($this->getCountTotals()) {
             $data = array();
             foreach ($this->getColumns() as $column) {
                 if (!$column->getIsSystem()) {
-                    $data[] = '"' . str_replace(array('"', '\\'), array('""', '\\\\'),
-                        $column->getRowFieldExport($this->getTotals())) . '"';
+                    $data[] = '"' . str_replace(
+                        array('"', '\\'),
+                        array('""', '\\\\'),
+                        $column->getRowFieldExport($this->getTotals())
+                    ) . '"';
                 }
             }
-            $csv.= implode(',', $data)."\n";
+            $csv .= implode(',', $data) . "\n";
         }
 
         return $csv;
@@ -1083,14 +1103,14 @@ class Extended
             }
         }
         $xml = '<?xml version="1.0" encoding="UTF-8"?>';
-        $xml.= '<items>';
+        $xml .= '<items>';
         foreach ($this->getCollection() as $item) {
-            $xml.= $item->toXml($indexes);
+            $xml .= $item->toXml($indexes);
         }
         if ($this->getCountTotals()) {
-            $xml.= $this->getTotals()->toXml($indexes);
+            $xml .= $this->getTotals()->toXml($indexes);
         }
-        $xml.= '</items>';
+        $xml .= '</items>';
         return $xml;
     }
 
@@ -1143,9 +1163,9 @@ class Extended
         $stream->close();
 
         return array(
-            'type'  => 'filename',
+            'type' => 'filename',
             'value' => $file,
-            'rm'    => true // can delete file after use
+            'rm' => true // can delete file after use
         );
     }
 
@@ -1204,6 +1224,7 @@ class Extended
     {
         return empty($this->_exportTypes) ? false : $this->_exportTypes;
     }
+
     /**
      * Set collection object
      *
@@ -1278,8 +1299,8 @@ class Extended
     {
         $html = '';
         if ($this->getFilterVisibility()) {
-            $html.= $this->getResetFilterButtonHtml();
-            $html.= $this->getSearchButtonHtml();
+            $html .= $this->getResetFilterButtonHtml();
+            $html .= $this->getSearchButtonHtml();
         }
         return $html;
     }

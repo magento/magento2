@@ -40,10 +40,10 @@ class Review extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     protected function _construct()
     {
-        $this->getCheckout()->setStepData('review', array(
-            'label'     => __('Order Review'),
-            'is_show'   => $this->isShow()
-        ));
+        $this->getCheckout()->setStepData(
+            'review',
+            array('label' => __('Order Review'), 'is_show' => $this->isShow())
+        );
         parent::_construct();
 
         $this->getQuote()->collectTotals()->save();

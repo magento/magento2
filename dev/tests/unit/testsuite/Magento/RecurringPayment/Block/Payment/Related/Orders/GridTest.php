@@ -38,6 +38,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->_objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareLayout()
     {
         $customer = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
@@ -53,45 +57,53 @@ class GridTest extends \PHPUnit_Framework_TestCase
             '__wakeup'
         );
         $collectionElement = $this->getMock('Magento\RecurringPayment\Model\Payment', $args, array(), '', false);
-        $collectionElement->expects($this->once())->method('getIncrementId')
-            ->will($this->returnValue(1));
-        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
-        $collection->expects($this->any())->method('addFieldToFilter')
-            ->will($this->returnValue($collection));
-        $collection->expects($this->once())->method('addFieldToSelect')
-            ->will($this->returnValue($collection));
-        $collection->expects($this->once())->method('setOrder')
-            ->will($this->returnValue($collection));
-        $collection->expects($this->once())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator(array($collectionElement))));
+        $collectionElement->expects($this->once())->method('getIncrementId')->will($this->returnValue(1));
+        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', array(), array(), '', false);
+        $collection->expects($this->any())->method('addFieldToFilter')->will($this->returnValue($collection));
+        $collection->expects($this->once())->method('addFieldToSelect')->will($this->returnValue($collection));
+        $collection->expects($this->once())->method('setOrder')->will($this->returnValue($collection));
+        $collection->expects(
+            $this->once()
+        )->method(
+            'getIterator'
+        )->will(
+            $this->returnValue(new \ArrayIterator(array($collectionElement)))
+        );
         $payment = $this->getMock('Magento\RecurringPayment\Model\Payment', array(), array(), '', false);
         $registry = $this->getMock('Magento\Registry', array(), array(), '', false);
-        $registry->expects($this->at(0))
-            ->method('registry')
-            ->with('current_recurring_payment')
-            ->will($this->returnValue($payment));
-        $registry->expects($this->at(1))
-            ->method('registry')
-            ->with('current_customer')
-            ->will($this->returnValue($customer));
+        $registry->expects(
+            $this->at(0)
+        )->method(
+            'registry'
+        )->with(
+            'current_recurring_payment'
+        )->will(
+            $this->returnValue($payment)
+        );
+        $registry->expects(
+            $this->at(1)
+        )->method(
+            'registry'
+        )->with(
+            'current_customer'
+        )->will(
+            $this->returnValue($customer)
+        );
         $payment->expects($this->once())->method('setStore')->with($store)->will($this->returnValue($payment));
         $storeManager = $this->getMock('Magento\Core\Model\StoreManagerInterface');
-        $storeManager->expects($this->once())->method('getStore')
-            ->will($this->returnValue($store));
+        $storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $locale = $this->getMock('\Magento\Stdlib\DateTime\TimezoneInterface');
-        $locale->expects($this->once())->method('formatDate')
-            ->will($this->returnValue('11-11-1999'));
+        $locale->expects($this->once())->method('formatDate')->will($this->returnValue('11-11-1999'));
         $recurringCollectionFilter = $this->getMock(
             '\Magento\RecurringPayment\Model\Resource\Order\CollectionFilter',
-            ['byIds'],
-            [],
+            array('byIds'),
+            array(),
             '',
             false
         );
         $recurringCollectionFilter->expects($this->once())->method('byIds')->will($this->returnValue($collection));
         $helper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $helper->expects($this->once())->method('formatCurrency')
-            ->will($this->returnValue('10 USD'));
+        $helper->expects($this->once())->method('formatCurrency')->will($this->returnValue('10 USD'));
         $block = $this->_objectManagerHelper->getObject(
             'Magento\RecurringPayment\Block\Payment\Related\Orders\\Grid',
             array(
@@ -103,16 +115,22 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 'recurringCollectionFilter' => $recurringCollectionFilter
             )
         );
-        $pagerBlock = $this->getMockBuilder('Magento\Theme\Block\Html\Pager')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setCollection'))
-            ->getMock();
-        $pagerBlock->expects($this->once())->method('setCollection')
-            ->with($collection)
-            ->will($this->returnValue($pagerBlock));
+        $pagerBlock = $this->getMockBuilder(
+            'Magento\Theme\Block\Html\Pager'
+        )->disableOriginalConstructor()->setMethods(
+            array('setCollection')
+        )->getMock();
+        $pagerBlock->expects(
+            $this->once()
+        )->method(
+            'setCollection'
+        )->with(
+            $collection
+        )->will(
+            $this->returnValue($pagerBlock)
+        );
         $layout = $this->getMock('Magento\View\LayoutInterface');
-        $layout->expects($this->once())->method('createBlock')
-            ->will($this->returnValue($pagerBlock));
+        $layout->expects($this->once())->method('createBlock')->will($this->returnValue($pagerBlock));
         $block->setLayout($layout);
 
         /**
@@ -120,14 +138,16 @@ class GridTest extends \PHPUnit_Framework_TestCase
          */
         $this->assertNotEmpty($block->getGridColumns());
         $expectedResult = array(
-            new \Magento\Object(array(
-                'increment_id' => 1,
-                'increment_id_link_url' => null,
-                'created_at' => '11-11-1999',
-                'customer_name' => null,
-                'status' => null,
-                'base_grand_total' => '10 USD'
-            ))
+            new \Magento\Object(
+                array(
+                    'increment_id' => 1,
+                    'increment_id_link_url' => null,
+                    'created_at' => '11-11-1999',
+                    'customer_name' => null,
+                    'status' => null,
+                    'base_grand_total' => '10 USD'
+                )
+            )
         );
         $this->assertEquals($expectedResult, $block->getGridElements());
     }

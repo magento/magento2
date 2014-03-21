@@ -41,34 +41,24 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         /** @var $cache \Magento\App\Cache */
         $cache = $objectManager->create('Magento\App\Cache');
         $cache->clean();
-        $this->_fileResolverMock = $this->getMockBuilder('Magento\Config\FileResolverInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_model = $objectManager->create('Magento\Payment\Model\Config\Reader',
-            array('fileResolver'=>$this->_fileResolverMock));
+        $this->_fileResolverMock = $this->getMockBuilder(
+            'Magento\Config\FileResolverInterface'
+        )->disableOriginalConstructor()->getMock();
+        $this->_model = $objectManager->create(
+            'Magento\Payment\Model\Config\Reader',
+            array('fileResolver' => $this->_fileResolverMock)
+        );
     }
 
     public function testRead()
     {
         $fileList = array(file_get_contents(__DIR__ . '/../_files/payment.xml'));
-        $this->_fileResolverMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($fileList));
+        $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
         $result = $this->_model->read('global');
         $expected = array(
-            'credit_cards' => array(
-                'SO' => 'Solo',
-                'SM' => 'Switch/Maestro',
-            ),
-            'groups' => array(
-                'any_payment' => 'Any Payment'
-            ),
-            'methods' => array(
-                'checkmo' => array(
-                    'allow_multiple_address' => 1,
-                    'allow_multiple_with_3dsecure' => 1,
-                ),
-            ),
+            'credit_cards' => array('SO' => 'Solo', 'SM' => 'Switch/Maestro'),
+            'groups' => array('any_payment' => 'Any Payment'),
+            'methods' => array('checkmo' => array('allow_multiple_address' => 1, 'allow_multiple_with_3dsecure' => 1))
         );
         $this->assertEquals($expected, $result);
     }
@@ -79,30 +69,16 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             file_get_contents(__DIR__ . '/../_files/payment.xml'),
             file_get_contents(__DIR__ . '/../_files/payment2.xml')
         );
-        $this->_fileResolverMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($fileList));
+        $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
 
         $result = $this->_model->read('global');
         $expected = array(
-            'credit_cards' => array(
-                'AE' => 'American Express',
-                'SM' => 'Switch/Maestro',
-                'SO' => 'Solo',
-            ),
-            'groups' => array(
-                'any_payment' => 'Any Payment Methods',
-                'offline' => 'Offline Payment Methods',
-            ),
+            'credit_cards' => array('AE' => 'American Express', 'SM' => 'Switch/Maestro', 'SO' => 'Solo'),
+            'groups' => array('any_payment' => 'Any Payment Methods', 'offline' => 'Offline Payment Methods'),
             'methods' => array(
-                'checkmo' => array(
-                    'allow_multiple_address' => 1,
-                    'allow_multiple_with_3dsecure' => 1,
-                ),
-                'deny-method' => array(
-                    'allow_multiple_address' => 0,
-                ),
-            ),
+                'checkmo' => array('allow_multiple_address' => 1, 'allow_multiple_with_3dsecure' => 1),
+                'deny-method' => array('allow_multiple_address' => 0)
+            )
         );
         $this->assertEquals($expected, $result);
     }

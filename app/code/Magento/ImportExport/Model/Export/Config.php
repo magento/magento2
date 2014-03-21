@@ -23,9 +23,7 @@
  */
 namespace Magento\ImportExport\Model\Export;
 
-class Config
-    extends \Magento\Config\Data
-    implements \Magento\ImportExport\Model\Export\ConfigInterface
+class Config extends \Magento\Config\Data implements \Magento\ImportExport\Model\Export\ConfigInterface
 {
     /**
      * @param \Magento\ImportExport\Model\Export\Config\Reader $reader

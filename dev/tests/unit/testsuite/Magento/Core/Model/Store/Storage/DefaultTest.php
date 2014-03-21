@@ -74,33 +74,67 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->_groupMock = $this->getMock('Magento\Core\Model\Store\Group',
+        $this->_groupMock = $this->getMock(
+            'Magento\Core\Model\Store\Group',
             array('getCode', 'getId', '__wakeup'),
             array(),
             '',
             false,
             false
         );
-        $this->_storeFactoryMock = $this->getMock('Magento\Core\Model\StoreFactory',
-            array('create'), array(), '', false, false);
-        $this->_websiteFactoryMock = $this->getMock('Magento\Core\Model\Website\Factory',
-            array('create'), array(), '', false, false);
-        $this->_websiteFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->_websiteMock));
-        $this->_groupFactoryMock = $this->getMock('Magento\Core\Model\Store\Group\Factory',
-            array('create'), array(), '', false, false);
-        $this->_groupFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->_groupMock));
-        $this->_storeMock = $this->getMock('Magento\Core\Model\Store',
+        $this->_storeFactoryMock = $this->getMock(
+            'Magento\Core\Model\StoreFactory',
+            array('create'),
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_websiteFactoryMock = $this->getMock(
+            'Magento\Core\Model\Website\Factory',
+            array('create'),
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_websiteFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_websiteMock)
+        );
+        $this->_groupFactoryMock = $this->getMock(
+            'Magento\Core\Model\Store\Group\Factory',
+            array('create'),
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_groupFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_groupMock)
+        );
+        $this->_storeMock = $this->getMock(
+            'Magento\Core\Model\Store',
             array('setId', 'setCode', 'getCode', '__sleep', '__wakeup'),
-            array(), '', false, false);
-        $this->_storeFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->_storeMock));
+            array(),
+            '',
+            false,
+            false
+        );
+        $this->_storeFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValue($this->_storeMock)
+        );
         $this->_model = new DefaultStorage(
             $this->_storeFactoryMock,
             $this->_websiteFactoryMock,
@@ -200,9 +234,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCurrentStore()
     {
-        $this->_storeMock->expects($this->once())
-            ->method('getCode')
-            ->will($this->returnValue('result'));
+        $this->_storeMock->expects($this->once())->method('getCode')->will($this->returnValue('result'));
         $result = $this->_model->getCurrentStore();
         $this->assertEquals('result', $result);
     }

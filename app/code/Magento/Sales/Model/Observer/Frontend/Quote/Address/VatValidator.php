@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
 
 class VatValidator
@@ -68,9 +67,11 @@ class VatValidator
         $merchantVatNumber = $this->customerData->getMerchantVatNumber();
 
         $validationResult = null;
-        if ($this->customerAddress->hasValidateOnEachTransaction($store)
-            || $customerCountryCode != $quoteAddress->getValidatedCountryCode()
-            || $customerVatNumber != $quoteAddress->getValidatedVatNumber()
+        if ($this->customerAddress->hasValidateOnEachTransaction(
+            $store
+        ) ||
+            $customerCountryCode != $quoteAddress->getValidatedCountryCode() ||
+            $customerVatNumber != $quoteAddress->getValidatedVatNumber()
         ) {
             // Send request to gateway
             $validationResult = $this->customerData->checkVatNumber(
@@ -90,12 +91,14 @@ class VatValidator
             $quoteAddress->save();
         } else {
             // Restore validation results from corresponding quote address
-            $validationResult = new \Magento\Object(array(
-                'is_valid' => (int)$quoteAddress->getVatIsValid(),
-                'request_identifier' => (string)$quoteAddress->getVatRequestId(),
-                'request_date' => (string)$quoteAddress->getVatRequestDate(),
-                'request_success' => (boolean)$quoteAddress->getVatRequestSuccess()
-            ));
+            $validationResult = new \Magento\Object(
+                array(
+                    'is_valid' => (int)$quoteAddress->getVatIsValid(),
+                    'request_identifier' => (string)$quoteAddress->getVatRequestId(),
+                    'request_date' => (string)$quoteAddress->getVatRequestDate(),
+                    'request_success' => (bool)$quoteAddress->getVatRequestSuccess()
+                )
+            );
         }
 
         return $validationResult;
@@ -113,10 +116,9 @@ class VatValidator
         $configAddressType = $this->customerAddress->getTaxCalculationAddressType($store);
 
         // When VAT is based on billing address then Magento have to handle only billing addresses
-        $additionalBillingAddressCondition =
-            $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING
-                ? $configAddressType != $quoteAddress->getAddressType()
-                : false;
+        $additionalBillingAddressCondition = $configAddressType ==
+            \Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING ? $configAddressType !=
+            $quoteAddress->getAddressType() : false;
 
         // Handle only addresses that corresponds to VAT configuration
         if (!$this->customerAddress->isVatValidationEnabled($store) || $additionalBillingAddressCondition) {

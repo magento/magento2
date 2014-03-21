@@ -85,10 +85,16 @@ class Collection extends \Magento\Data\Collection\Filesystem
 
         $this->_varDirectory->create($this->_path);
         $path = rtrim($this->_varDirectory->getAbsolutePath($this->_path), '/') . '/';
-        $this->setOrder('time', self::SORT_ORDER_DESC)
-            ->addTargetDir($path)
-            ->setFilesFilter('/^[a-z0-9\-\_]+\.' . $extensions . '$/')
-            ->setCollectRecursively(false);
+        $this->setOrder(
+            'time',
+            self::SORT_ORDER_DESC
+        )->addTargetDir(
+            $path
+        )->setFilesFilter(
+            '/^[a-z0-9\-\_]+\.' . $extensions . '$/'
+        )->setCollectRecursively(
+            false
+        );
     }
 
     /**
@@ -114,8 +120,10 @@ class Collection extends \Magento\Data\Collection\Filesystem
     protected function _generateRow($filename)
     {
         $row = parent::_generateRow($filename);
-        foreach ($this->_backup->load($row['basename'], $this->_varDirectory->getAbsolutePath($this->_path))
-            ->getData() as $key => $value) {
+        foreach ($this->_backup->load(
+            $row['basename'],
+            $this->_varDirectory->getAbsolutePath($this->_path)
+        )->getData() as $key => $value) {
             $row[$key] = $value;
         }
         $row['size'] = $this->_varDirectory->stat($this->_varDirectory->getRelativePath($filename))['size'];

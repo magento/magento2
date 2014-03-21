@@ -121,12 +121,11 @@ class Context
         if (null === $this->_stagingTheme) {
             $editableTheme = $this->getEditableTheme();
             if (!$editableTheme->isVirtual()) {
-                throw new CoreException(
-                    __('Theme "%1" is not editable.', $editableTheme->getThemeTitle())
-                );
+                throw new CoreException(__('Theme "%1" is not editable.', $editableTheme->getThemeTitle()));
             }
-            $this->_stagingTheme = $editableTheme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
-                ->getStagingTheme();
+            $this->_stagingTheme = $editableTheme->getDomainModel(
+                \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL
+            )->getStagingTheme();
         }
         return $this->_stagingTheme;
     }

@@ -32,8 +32,11 @@ class Region extends \Magento\Service\Data\AbstractObject
      * Array keys
      */
     const KEY_REGION_CODE = 'region_code';
+
     const KEY_REGION = 'region';
+
     const KEY_REGION_ID = 'region_id';
+
     /**#@-*/
 
     /**

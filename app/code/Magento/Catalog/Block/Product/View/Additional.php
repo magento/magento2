@@ -46,7 +46,6 @@ class Additional extends \Magento\View\Element\Template
      */
     protected $_template = 'product/view/additional.phtml';
 
-
     /**
      * @return array
      */
@@ -61,5 +60,4 @@ class Additional extends \Magento\View\Element\Template
         }
         return $this->_list;
     }
-
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Locale;
 
 class Format implements \Magento\Locale\FormatInterface
@@ -79,7 +78,7 @@ class Format implements \Magento\Locale\FormatInterface
         $value = str_replace(array('\'', ' '), '', $value);
 
         $separatorComa = strpos($value, ',');
-        $separatorDot  = strpos($value, '.');
+        $separatorDot = strpos($value, '.');
 
         if ($separatorComa !== false && $separatorDot !== false) {
             if ($separatorComa > $separatorDot) {
@@ -106,30 +105,30 @@ class Format implements \Magento\Locale\FormatInterface
         $symbols = \Zend_Locale_Data::getList($this->_localeResolver->getLocaleCode(), 'symbols');
 
         $pos = strpos($format, ';');
-        if ($pos !== false){
+        if ($pos !== false) {
             $format = substr($format, 0, $pos);
         }
         $format = preg_replace("/[^0\#\.,]/", "", $format);
         $totalPrecision = 0;
         $decimalPoint = strpos($format, '.');
         if ($decimalPoint !== false) {
-            $totalPrecision = (strlen($format) - (strrpos($format, '.')+1));
+            $totalPrecision = strlen($format) - (strrpos($format, '.') + 1);
         } else {
             $decimalPoint = strlen($format);
         }
         $requiredPrecision = $totalPrecision;
         $t = substr($format, $decimalPoint);
         $pos = strpos($t, '#');
-        if ($pos !== false){
+        if ($pos !== false) {
             $requiredPrecision = strlen($t) - $pos - $totalPrecision;
         }
 
         if (strrpos($format, ',') !== false) {
-            $group = ($decimalPoint - strrpos($format, ',') - 1);
+            $group = $decimalPoint - strrpos($format, ',') - 1;
         } else {
             $group = strrpos($format, '.');
         }
-        $integerRequired = (strpos($format, '.') - strpos($format, '0'));
+        $integerRequired = strpos($format, '.') - strpos($format, '0');
 
         $result = array(
             //TODO: change interface

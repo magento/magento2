@@ -49,11 +49,8 @@ class QuoteConfigProductAttributes
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
      */
-    public function __construct(
-        Rule $ruleResource,
-        Session $customerSession,
-        StoreManagerInterface $storeManager
-    ) {
+    public function __construct(Rule $ruleResource, Session $customerSession, StoreManagerInterface $storeManager)
+    {
         $this->_ruleResource = $ruleResource;
         $this->_customerSession = $customerSession;
         $this->_storeManager = $storeManager;

@@ -91,57 +91,61 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array(
-            'header'    =>__('ID'),
-            'width'     =>'50px',
-            'index'     =>'entity_id',
-            'total'     =>'Total'
-        ));
+        $this->addColumn(
+            'entity_id',
+            array('header' => __('ID'), 'width' => '50px', 'index' => 'entity_id', 'total' => 'Total')
+        );
 
-        $this->addColumn('name', array(
-            'header'    =>__('Name'),
-            'index'     =>'name'
-        ));
+        $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
 
-        $this->addColumn('viewed', array(
-            'header'    =>__('Viewed'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'viewed',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'viewed',
+            array(
+                'header' => __('Viewed'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'viewed',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('added', array(
-            'header'    =>__('Added'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'added',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'added',
+            array('header' => __('Added'), 'width' => '50px', 'align' => 'right', 'index' => 'added', 'total' => 'sum')
+        );
 
-        $this->addColumn('purchased', array(
-            'header'    =>__('Purchased'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'purchased',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'purchased',
+            array(
+                'header' => __('Purchased'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'purchased',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('fulfilled', array(
-            'header'    =>__('Fulfilled'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'fulfilled',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'fulfilled',
+            array(
+                'header' => __('Fulfilled'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'fulfilled',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('revenue', array(
-            'header'    =>__('Revenue'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'revenue',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'revenue',
+            array(
+                'header' => __('Revenue'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'revenue',
+                'total' => 'sum'
+            )
+        );
 
         $this->setCountTotals(true);
 

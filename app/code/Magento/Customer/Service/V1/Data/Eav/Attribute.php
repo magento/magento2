@@ -32,6 +32,7 @@ class Attribute extends \Magento\Service\Data\AbstractObject
      * Constants used as keys into $_data
      */
     const ATTRIBUTE_CODE = 'attribute_code';
+
     const VALUE = 'value';
 
     /**

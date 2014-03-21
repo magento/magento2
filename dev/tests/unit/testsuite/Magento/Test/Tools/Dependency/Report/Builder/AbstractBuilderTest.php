@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Dependency\Report\Builder;
 
 class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
@@ -46,10 +45,10 @@ class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
         $this->dependenciesParserMock = $this->getMock('Magento\Tools\Dependency\ParserInterface');
         $this->reportWriterMock = $this->getMock('Magento\Tools\Dependency\Report\WriterInterface');
 
-        $this->builder = $this->getMockForAbstractClass('Magento\Tools\Dependency\Report\Builder\AbstractBuilder', [
-            'dependenciesParser' => $this->dependenciesParserMock,
-            'reportWriter' => $this->reportWriterMock,
-        ]);
+        $this->builder = $this->getMockForAbstractClass(
+            'Magento\Tools\Dependency\Report\Builder\AbstractBuilder',
+            array('dependenciesParser' => $this->dependenciesParserMock, 'reportWriter' => $this->reportWriterMock)
+        );
     }
 
     /**
@@ -68,10 +67,7 @@ class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongParseOptions()
     {
-        return [
-            [['write' => [1, 2]]],
-            [['parse' => [], 'write' => [1, 2]]],
-        ];
+        return array(array(array('write' => array(1, 2))), array(array('parse' => array(), 'write' => array(1, 2))));
     }
 
     /**
@@ -90,33 +86,39 @@ class AbstractBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongWriteOptions()
     {
-        return [
-            [['parse' => [1, 2]]],
-            [['parse' => [1, 2], 'write' => []]],
-        ];
+        return array(array(array('parse' => array(1, 2))), array(array('parse' => array(1, 2), 'write' => array())));
     }
 
     public function testBuild()
     {
-        $options = [
-            'parse' => [
-                'files_for_parse' => [1, 2, 3],
-            ],
-            'write' => [
-                'report_filename' => 'some_filename'
-            ],
-        ];
+        $options = array(
+            'parse' => array('files_for_parse' => array(1, 2, 3)),
+            'write' => array('report_filename' => 'some_filename')
+        );
 
 
-        $parseResult = ['foo', 'bar', 'baz'];
+        $parseResult = array('foo', 'bar', 'baz');
         $configMock = $this->getMock('\Magento\Tools\Dependency\Report\Data\ConfigInterface');
 
-        $this->dependenciesParserMock->expects($this->once())->method('parse')->with($options['parse'])
-            ->will($this->returnValue($parseResult));
-        $this->builder->expects($this->once())->method('buildData')->with($parseResult)
-            ->will($this->returnValue($configMock));
-        $this->reportWriterMock->expects($this->once())->method('write')
-            ->with($options['write'], $configMock);
+        $this->dependenciesParserMock->expects(
+            $this->once()
+        )->method(
+            'parse'
+        )->with(
+            $options['parse']
+        )->will(
+            $this->returnValue($parseResult)
+        );
+        $this->builder->expects(
+            $this->once()
+        )->method(
+            'buildData'
+        )->with(
+            $parseResult
+        )->will(
+            $this->returnValue($configMock)
+        );
+        $this->reportWriterMock->expects($this->once())->method('write')->with($options['write'], $configMock);
 
         $this->builder->build($options);
     }

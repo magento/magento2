@@ -124,8 +124,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      */
     public function loadByAttributeSetId($attributeSetId, $targetCountry)
     {
-        return $this->getResource()
-            ->loadByAttributeSetIdAndTargetCountry($this, $attributeSetId, $targetCountry);
+        return $this->getResource()->loadByAttributeSetIdAndTargetCountry($this, $attributeSetId, $targetCountry);
     }
 
     /**
@@ -179,10 +178,15 @@ class Type extends \Magento\Core\Model\AbstractModel
                             $result[$group[$name]] = $this->_attributeFactory->createAttribute($group[$name]);
                         }
                         // add group attribute to parent attribute
-                        $result[$group[$name]]->addData(array(
-                            'group_attribute_' . $name => $this->_attributeFactory->createAttribute($name)
-                                ->addData($attribute->getData())
-                        ));
+                        $result[$group[$name]]->addData(
+                            array(
+                                'group_attribute_' . $name => $this->_attributeFactory->createAttribute(
+                                    $name
+                                )->addData(
+                                    $attribute->getData()
+                                )
+                            )
+                        );
                         unset($group[$name]);
                     } else {
                         if (!isset($result[$name])) {
@@ -223,11 +227,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     {
         $group = $this->_config->getAttributeGroupsFlat();
         foreach ($group as $child => $parent) {
-            if (isset($attributes[$parent]) &&
-                !isset($attributes[$parent]['group_attribute_' . $child])) {
-                    $attributes[$parent]->addData(
-                        array('group_attribute_' . $child => $this->_attributeFactory->createAttribute($child))
-                    );
+            if (isset($attributes[$parent]) && !isset($attributes[$parent]['group_attribute_' . $child])) {
+                $attributes[$parent]->addData(
+                    array('group_attribute_' . $child => $this->_attributeFactory->createAttribute($child))
+                );
             }
         }
 
@@ -243,8 +246,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     protected function _getAttributesCollection()
     {
         if (is_null($this->_attributesCollection)) {
-            $this->_attributesCollection = $this->_collectionFactory->create()
-                ->addAttributeSetFilter($this->getAttributeSetId(), $this->getTargetCountry());
+            $this->_attributesCollection = $this->_collectionFactory->create()->addAttributeSetFilter(
+                $this->getAttributeSetId(),
+                $this->getTargetCountry()
+            );
         }
         return $this->_attributesCollection;
     }
@@ -271,9 +276,8 @@ class Type extends \Magento\Core\Model\AbstractModel
         $contentAttributes = $entry->getContentAttributes();
         foreach ($contentAttributes as $contentAttribute) {
             $name = $this->_gsData->normalizeName($contentAttribute->getName());
-            if (!in_array($name, $ignoredAttributes) &&
-                !in_array($existAttributes, $existAttributes)) {
-                    $entry->removeContentAttribute($name);
+            if (!in_array($name, $ignoredAttributes) && !in_array($existAttributes, $existAttributes)) {
+                $entry->removeContentAttribute($name);
             }
         }
 

@@ -34,24 +34,33 @@ class Filesystem
      * Content wrappers
      */
     const WRAPPER_CONTENT_ZLIB = 'compress.zlib';
+
     const WRAPPER_CONTENT_PHAR = 'phar';
-    const WRAPPER_CONTENT_RAR  = 'rar';
-    const WRAPPER_CONTENT_OGG  = 'ogg';
+
+    const WRAPPER_CONTENT_RAR = 'rar';
+
+    const WRAPPER_CONTENT_OGG = 'ogg';
+
     /**#@-*/
 
     /**#@+
      * Directories for remote access
      */
-    const FTP   = 'ftp';
-    const FTPS  = 'ftps';
-    const SSH2  = 'ssh2';
+    const FTP = 'ftp';
+
+    const FTPS = 'ftps';
+
+    const SSH2 = 'ssh2';
+
     /**#@-*/
 
     /**#@+
      * Remote resource Access Protocols
      */
-    const HTTP  = 'http';
+    const HTTP = 'http';
+
     const HTTPS = 'https';
+
     /**#@-*/
 
     /**
@@ -167,13 +176,13 @@ class Filesystem
         if (empty($protocol)) {
             $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));
             if ($protocol) {
-                $path = preg_replace('#.+://#', '', $path); // Strip down protocol from path
+                // Strip down protocol from path
+                $path = preg_replace('#.+://#', '', $path);
             }
         }
 
         if (!array_key_exists($protocol, $this->remoteResourceInstances)) {
-            $this->remoteResourceInstances[$protocol]
-                = $this->fileReadFactory->create($path, $protocol);
+            $this->remoteResourceInstances[$protocol] = $this->fileReadFactory->create($path, $protocol);
         }
         return $this->remoteResourceInstances[$protocol];
     }

@@ -53,8 +53,6 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      */
     public function getFrameActionUrl()
     {
-        return $this->_getOrder()
-            ->getPayment()
-            ->getAdditionalInformation('secure_form_url');
+        return $this->_getOrder()->getPayment()->getAdditionalInformation('secure_form_url');
     }
 }

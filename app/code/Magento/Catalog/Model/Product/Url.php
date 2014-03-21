@@ -133,7 +133,7 @@ class Url extends \Magento\Object
      */
     protected function _validImage($image)
     {
-        if($image == 'no_selection') {
+        if ($image == 'no_selection') {
             $image = null;
         }
         return $image;
@@ -193,7 +193,7 @@ class Url extends \Magento\Object
      * @return string
      * @throws \Magento\Core\Exception
      */
-    public function getUrlPath($product, $category=null)
+    public function getUrlPath($product, $category = null)
     {
         $path = $product->getData('url_path');
 
@@ -204,8 +204,7 @@ class Url extends \Magento\Object
             throw new \Magento\Core\Exception('Invalid category object supplied');
         }
 
-        return $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath())
-            . '/' . $path;
+        return $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath()) . '/' . $path;
     }
 
     /**
@@ -217,16 +216,16 @@ class Url extends \Magento\Object
      */
     public function getUrl(\Magento\Catalog\Model\Product $product, $params = array())
     {
-        $routePath      = '';
-        $routeParams    = $params;
+        $routePath = '';
+        $routeParams = $params;
 
-        $storeId    = $product->getStoreId();
+        $storeId = $product->getStoreId();
         if (isset($params['_ignore_category'])) {
             unset($params['_ignore_category']);
             $categoryId = null;
         } else {
-            $categoryId = $product->getCategoryId() && !$product->getDoNotUseCategoryId()
-                ? $product->getCategoryId() : null;
+            $categoryId = $product->getCategoryId() &&
+                !$product->getDoNotUseCategoryId() ? $product->getCategoryId() : null;
         }
 
         if ($product->hasUrlDataObject()) {
@@ -240,8 +239,7 @@ class Url extends \Magento\Object
                     $idPath = sprintf('%s/%d', $idPath, $categoryId);
                 }
                 $rewrite = $this->getUrlRewrite();
-                $rewrite->setStoreId($storeId)
-                    ->loadByIdPath($idPath);
+                $rewrite->setStoreId($storeId)->loadByIdPath($idPath);
                 if ($rewrite->getId()) {
                     $requestPath = $rewrite->getRequestPath();
                     $product->setRequestPath($requestPath);
@@ -263,8 +261,8 @@ class Url extends \Magento\Object
             $routeParams['_direct'] = $requestPath;
         } else {
             $routePath = 'catalog/product/view';
-            $routeParams['id']  = $product->getId();
-            $routeParams['s']   = $product->getUrlKey();
+            $routeParams['id'] = $product->getId();
+            $routeParams['s'] = $product->getUrlKey();
             if ($categoryId) {
                 $routeParams['category'] = $categoryId;
             }
@@ -275,7 +273,6 @@ class Url extends \Magento\Object
             $routeParams['_query'] = array();
         }
 
-        return $this->getUrlInstance()->setScope($storeId)
-            ->getUrl($routePath, $routeParams);
+        return $this->getUrlInstance()->setScope($storeId)->getUrl($routePath, $routeParams);
     }
 }

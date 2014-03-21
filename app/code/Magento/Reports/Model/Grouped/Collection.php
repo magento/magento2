@@ -27,22 +27,21 @@ namespace Magento\Reports\Model\Grouped;
 
 use Magento\Data\Collection\Db;
 
-class Collection
-    extends \Magento\Data\Collection //\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Data\Collection //\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * Column name for group by clause 
+     * Column name for group by clause
      *
      * @var string
      */
-    protected $_columnGroupBy       = null;
+    protected $_columnGroupBy = null;
 
     /**
      * Collection resource
      *
      * @var \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
      */
-    protected $_resourceCollection  = null;
+    protected $_resourceCollection = null;
 
     /**
      * Set column to group by

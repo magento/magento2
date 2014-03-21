@@ -62,7 +62,7 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
      * @param DateFactory $dateFactory
      * @param string $defaultTimezonePath
      */
-    function __construct(
+    public function __construct(
         \Magento\BaseScopeResolverInterface $scopeResolver,
         \Magento\Locale\ResolverInterface $localeResolver,
         \Magento\Stdlib\DateTime $dateTime,
@@ -113,8 +113,11 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
      */
     public function getDateFormatWithLongYear()
     {
-        return preg_replace('/(?<!y)yy(?!y)/', 'yyyy',
-            $this->_getTranslation(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT, 'date'));
+        return preg_replace(
+            '/(?<!y)yy(?!y)/',
+            'yyyy',
+            $this->_getTranslation(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT, 'date')
+        );
     }
 
     /**
@@ -146,14 +149,9 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
             // $date may be false, but \Magento\Stdlib\DateTime\DateInterface uses strict compare
             $date = null;
         }
-        $date = $this->_dateFactory->create(array(
-            'date' => $date,
-            'part' => $part,
-            'locale' => $locale,
-        ));
+        $date = $this->_dateFactory->create(array('date' => $date, 'part' => $part, 'locale' => $locale));
         if ($useTimezone) {
-            $timezone = $this->_scopeResolver->getScope()
-                ->getConfig($this->getDefaultTimezonePath());
+            $timezone = $this->_scopeResolver->getScope()->getConfig($this->getDefaultTimezonePath());
             if ($timezone) {
                 $date->setTimezone($timezone);
             }
@@ -165,20 +163,15 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function scopeDate($scope=null, $date=null, $includeTime=false)
+    public function scopeDate($scope = null, $date = null, $includeTime = false)
     {
-        $timezone = $this->_scopeResolver->getScope($scope)
-            ->getConfig($this->getDefaultTimezonePath());
-        $date = $this->_dateFactory->create(array(
-            'date' => $date,
-            'part' => null,
-            'locale' => $this->_localeResolver->getLocale(),
-        ));
+        $timezone = $this->_scopeResolver->getScope($scope)->getConfig($this->getDefaultTimezonePath());
+        $date = $this->_dateFactory->create(
+            array('date' => $date, 'part' => null, 'locale' => $this->_localeResolver->getLocale())
+        );
         $date->setTimezone($timezone);
         if (!$includeTime) {
-            $date->setHour(0)
-                ->setMinute(0)
-                ->setSecond(0);
+            $date->setHour(0)->setMinute(0)->setSecond(0);
         }
         return $date;
     }
@@ -187,20 +180,18 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
      * {@inheritdoc}
      */
     public function formatDate(
-        $date = null, $format = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT, $showTime = false
+        $date = null,
+        $format = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $showTime = false
     ) {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $date;
         }
-        if (!($date instanceof \Magento\Stdlib\DateTime\DateInterface) && $date && !strtotime($date)) {
+        if (!$date instanceof \Magento\Stdlib\DateTime\DateInterface && $date && !strtotime($date)) {
             return '';
         }
         if (is_null($date)) {
-            $date = $this->date(
-                gmdate('U'),
-                null,
-                null
-            );
+            $date = $this->date(gmdate('U'), null, null);
         } elseif (!$date instanceof \Magento\Stdlib\DateTime\DateInterface) {
             $date = $this->date(strtotime($date), null, null);
         }
@@ -218,7 +209,9 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
      * {@inheritdoc}
      */
     public function formatTime(
-        $time = null, $format = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT, $showDate = false
+        $time = null,
+        $format = \Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+        $showDate = false
     ) {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $time;
@@ -255,10 +248,9 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function scopeTimeStamp($scope=null)
+    public function scopeTimeStamp($scope = null)
     {
-        $timezone = $this->_scopeResolver->getScope($scope)
-            ->getConfig($this->getDefaultTimezonePath());
+        $timezone = $this->_scopeResolver->getScope($scope)->getConfig($this->getDefaultTimezonePath());
         $currentTimezone = @date_default_timezone_get();
         @date_default_timezone_set($timezone);
         $date = date('Y-m-d H:i:s');
@@ -276,8 +268,8 @@ class Timezone implements \Magento\Stdlib\DateTime\TimezoneInterface
         }
 
         $scopeTimeStamp = $this->scopeTimeStamp($scope);
-        $fromTimeStamp  = strtotime($dateFrom);
-        $toTimeStamp    = strtotime($dateTo);
+        $fromTimeStamp = strtotime($dateFrom);
+        $toTimeStamp = strtotime($dateTo);
         if ($dateTo) {
             // fix date YYYY-MM-DD 00:00:00 to YYYY-MM-DD 23:59:59
             $toTimeStamp += 86400;

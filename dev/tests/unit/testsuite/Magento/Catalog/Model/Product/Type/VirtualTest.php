@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 class VirtualTest extends \PHPUnit_Framework_TestCase
@@ -44,15 +43,18 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMockBuilder('Magento\App\Filesystem')->disableOriginalConstructor()->getMock();
         $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
-        $this->_model = $objectHelper->getObject('Magento\Catalog\Model\Product\Type\Virtual', array(
-            'eventManager' => $eventManager,
-            'coreData' => $coreDataMock,
-            'fileStorageDb' => $fileStorageDbMock,
-            'filesystem' => $filesystem,
-            'coreRegistry' => $coreRegistryMock,
-            'logger' => $logger,
-            'productFactory' => $productFactoryMock,
-        ));
+        $this->_model = $objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Type\Virtual',
+            array(
+                'eventManager' => $eventManager,
+                'coreData' => $coreDataMock,
+                'fileStorageDb' => $fileStorageDbMock,
+                'filesystem' => $filesystem,
+                'coreRegistry' => $coreRegistryMock,
+                'logger' => $logger,
+                'productFactory' => $productFactoryMock
+            )
+        );
     }
 
     public function testHasWeightFalse()

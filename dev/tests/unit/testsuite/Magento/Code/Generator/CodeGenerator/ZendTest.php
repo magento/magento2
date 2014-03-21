@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Code\Generator\CodeGenerator;
 
 class ZendTest extends \PHPUnit_Framework_TestCase
@@ -32,11 +31,16 @@ class ZendTest extends \PHPUnit_Framework_TestCase
     /**#@+
      * Possible flags for assertion
      */
-    const FLAG_CONST     = 'const';
-    const FLAG_STATIC    = 'static';
-    const FLAG_FINAL     = 'final';
-    const FLAG_ABSTRACT  = 'abstract';
+    const FLAG_CONST = 'const';
+
+    const FLAG_STATIC = 'static';
+
+    const FLAG_FINAL = 'final';
+
+    const FLAG_ABSTRACT = 'abstract';
+
     const FLAG_REFERENCE = 'passedByReference';
+
     /**#@-*/
 
     /**
@@ -50,11 +54,11 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_flagVerification = array(
-        self::FLAG_CONST     => 'isConst',
-        self::FLAG_STATIC    => 'isStatic',
-        self::FLAG_FINAL     => 'isFinal',
-        self::FLAG_ABSTRACT  => 'isAbstract',
-        self::FLAG_REFERENCE => 'getPassedByReference',
+        self::FLAG_CONST => 'isConst',
+        self::FLAG_STATIC => 'isStatic',
+        self::FLAG_FINAL => 'isFinal',
+        self::FLAG_ABSTRACT => 'isAbstract',
+        self::FLAG_REFERENCE => 'getPassedByReference'
     );
 
     /**
@@ -64,11 +68,11 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     protected $_docBlockData = array(
         'shortDescription' => 'test_short_description',
-        'longDescription'  => 'test_long_description',
-        'tags'             => array(
+        'longDescription' => 'test_long_description',
+        'tags' => array(
             'tag1' => array('name' => 'tag1', 'description' => 'data1'),
-            'tag2' => array('name' => 'tag2', 'description' => 'data2'),
-        ),
+            'tag2' => array('name' => 'tag2', 'description' => 'data2')
+        )
     );
 
     /**
@@ -78,39 +82,34 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     protected $_methodData = array(
         'testMethod1' => array(
-            'name'       => 'testMethod1',
-            'final'      => true,
-            'static'     => true,
+            'name' => 'testMethod1',
+            'final' => true,
+            'static' => true,
             'parameters' => array(
-                array('name' => 'data', 'type' => 'array', 'defaultValue' => array(), 'passedByReference' => true),
+                array('name' => 'data', 'type' => 'array', 'defaultValue' => array(), 'passedByReference' => true)
             ),
-            'body'     => 'return 1;',
-            'docblock' => array(
-                'shortDescription' => 'test short description'
-            ),
+            'body' => 'return 1;',
+            'docblock' => array('shortDescription' => 'test short description')
         ),
         '_testMethod2' => array(
-            'name'       => '_testMethod2',
+            'name' => '_testMethod2',
             'visibility' => 'private',
-            'abstract'   => true,
+            'abstract' => true,
             'parameters' => array(
                 array('name' => 'data', 'defaultValue' => 'test_default'),
-                array('name' => 'flag', 'defaultValue' => true),
+                array('name' => 'flag', 'defaultValue' => true)
             ),
-            'body'     => 'return 2;',
+            'body' => 'return 2;',
             'docblock' => array(
                 'shortDescription' => 'test short description',
-                'longDescription'  => 'test long description',
-                'tags'             => array(
+                'longDescription' => 'test long description',
+                'tags' => array(
                     'tag1' => array('name' => 'tag1', 'description' => 'data1'),
-                    'tag2' => array('name' => 'tag2', 'description' => 'data2'),
-                ),
-            ),
+                    'tag2' => array('name' => 'tag2', 'description' => 'data2')
+                )
+            )
         ),
-        'testMethod3' => array(
-            'name' => 'testMethod3',
-            'body' => 'return 3;',
-        ),
+        'testMethod3' => array('name' => 'testMethod3', 'body' => 'return 3;')
     );
 
     /**
@@ -120,25 +119,21 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      */
     protected $_propertyData = array(
         'TEST_CONSTANT' => array(
-            'name'         => 'TEST_CONSTANT',
-            'const'        => true,
+            'name' => 'TEST_CONSTANT',
+            'const' => true,
             'defaultValue' => 'default constant value',
-            'docblock'     => array('shortDescription' => 'test description'),
+            'docblock' => array('shortDescription' => 'test description')
         ),
         '_protectedProperty' => array(
-            'name'       => '_protectedProperty',
+            'name' => '_protectedProperty',
             'visibility' => 'protected',
-            'static'     => 'true',
-            'docblock'   => array(
+            'static' => 'true',
+            'docblock' => array(
                 'shortDescription' => 'Object Manager instance',
-                'tags'             => array(
-                    'var' => array('name' => 'var', 'description' => 'tag description')
-                )
-            ),
+                'tags' => array('var' => array('name' => 'var', 'description' => 'tag description'))
+            )
         ),
-        'publicProperty' => array(
-            'name' => 'publicProperty',
-        ),
+        'publicProperty' => array('name' => 'publicProperty')
     );
 
     protected function setUp()
@@ -264,7 +259,8 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedData
      * @param \Zend\Code\Generator\AbstractMemberGenerator $actualObject
      */
-    protected function _assertVisibility(array $expectedData,
+    protected function _assertVisibility(
+        array $expectedData,
         \Zend\Code\Generator\AbstractMemberGenerator $actualObject
     ) {
         $expectedVisibility = isset($expectedData['visibility']) ? $expectedData['visibility'] : 'public';

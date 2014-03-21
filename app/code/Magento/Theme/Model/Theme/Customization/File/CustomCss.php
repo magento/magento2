@@ -29,14 +29,15 @@
  */
 namespace Magento\Theme\Model\Theme\Customization\File;
 
-class CustomCss
-    extends \Magento\View\Design\Theme\Customization\AbstractFile
+class CustomCss extends \Magento\View\Design\Theme\Customization\AbstractFile
 {
     /**#@+
      * Custom CSS file type customization
      */
     const TYPE = 'custom_css';
+
     const CONTENT_TYPE = 'css';
+
     /**#@-*/
 
     /**
@@ -68,7 +69,7 @@ class CustomCss
     /**
      * {@inheritdoc}
      */
-    protected  function _prepareFileName(\Magento\View\Design\Theme\FileInterface $file)
+    protected function _prepareFileName(\Magento\View\Design\Theme\FileInterface $file)
     {
         if (!$file->getFileName()) {
             $file->setFileName(self::FILE_NAME);

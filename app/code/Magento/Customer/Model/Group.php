@@ -43,14 +43,15 @@ class Group extends \Magento\Core\Model\AbstractModel
     /**
      * Xml config path for create account default group
      */
-    const XML_PATH_DEFAULT_ID       = 'customer/create_account/default_group';
+    const XML_PATH_DEFAULT_ID = 'customer/create_account/default_group';
 
-    const NOT_LOGGED_IN_ID          = 0;
-    const CUST_GROUP_ALL            = 32000;
+    const NOT_LOGGED_IN_ID = 0;
 
-    const ENTITY                    = 'customer_group';
+    const CUST_GROUP_ALL = 32000;
 
-    const GROUP_CODE_MAX_LENGTH     = 32;
+    const ENTITY = 'customer_group';
+
+    const GROUP_CODE_MAX_LENGTH = 32;
 
     /**
      * Prefix of model events names
@@ -195,9 +196,7 @@ class Group extends \Magento\Core\Model\AbstractModel
      */
     protected function _prepareData()
     {
-        $this->setCode(
-            substr($this->getCode(), 0, self::GROUP_CODE_MAX_LENGTH)
-        );
+        $this->setCode(substr($this->getCode(), 0, self::GROUP_CODE_MAX_LENGTH));
         return $this;
     }
 }

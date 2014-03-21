@@ -114,7 +114,8 @@ class Scoped extends \Magento\Config\Data
             }
             foreach ($this->_scopePriorityScheme as $scopeCode) {
                 if (false == isset($this->_loadedScopes[$scopeCode])) {
-                    if ($scopeCode !== 'primary' && $data = $this->_cache->load($scopeCode . '::' . $this->_cacheId)) {
+                    if ($scopeCode !== 'primary' && ($data = $this->_cache->load($scopeCode . '::' . $this->_cacheId))
+                    ) {
                         $data = unserialize($data);
                     } else {
                         $data = $this->_reader->read($scopeCode);

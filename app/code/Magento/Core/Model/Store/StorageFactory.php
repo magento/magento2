@@ -113,24 +113,26 @@ class StorageFactory
      */
     public function get(array $arguments = array())
     {
-        $className = $this->_appState->isInstalled() ?
-            $this->_installedStoreClassName :
-            $this->_defaultStorageClassName;
+        $className = $this->_appState
+            ->isInstalled() ? $this
+            ->_installedStoreClassName : $this
+            ->_defaultStorageClassName;
 
         if (false == isset($this->_cache[$className])) {
             /** @var $instance \Magento\Core\Model\Store\StorageInterface */
             $instance = $this->_objectManager->create($className, $arguments);
 
-            if (false === ($instance instanceof \Magento\Core\Model\Store\StorageInterface)) {
-                throw new \InvalidArgumentException($className
-                    . ' doesn\'t implement \Magento\Core\Model\Store\StorageInterface'
+            if (false === $instance instanceof \Magento\Core\Model\Store\StorageInterface) {
+                throw new \InvalidArgumentException(
+                    $className . ' doesn\'t implement \Magento\Core\Model\Store\StorageInterface'
                 );
             }
             $this->_cache[$className] = $instance;
             $instance->initCurrentStore();
             if ($className === $this->_installedStoreClassName) {
-                $useSid = $instance->getStore()
-                    ->getConfig(\Magento\Core\Model\Session\SidResolver::XML_PATH_USE_FRONTEND_SID);
+                $useSid = $instance->getStore()->getConfig(
+                    \Magento\Core\Model\Session\SidResolver::XML_PATH_USE_FRONTEND_SID
+                );
                 $this->_sidResolver->setUseSessionInUrl($useSid);
 
                 $this->_eventManager->dispatch('core_app_init_current_store_after');
@@ -140,7 +142,10 @@ class StorageFactory
 
                     $this->_log->unsetLoggers();
                     $this->_log->addStreamLog(
-                        \Magento\Logger::LOGGER_SYSTEM, $store->getConfig('dev/log/file'), $this->_writerModel);
+                        \Magento\Logger::LOGGER_SYSTEM,
+                        $store->getConfig('dev/log/file'),
+                        $this->_writerModel
+                    );
                     $this->_log->addStreamLog(
                         \Magento\Logger::LOGGER_EXCEPTION,
                         $store->getConfig('dev/log/exception_file'),

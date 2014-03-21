@@ -27,9 +27,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend;
 
-class Encrypted
-    extends \Magento\Core\Model\Config\Value
-    implements \Magento\App\Config\Data\ProcessorInterface
+class Encrypted extends \Magento\Core\Model\Config\Value implements \Magento\App\Config\Data\ProcessorInterface
 {
     /**
      * @var \Magento\Encryption\EncryptorInterface
@@ -79,8 +77,7 @@ class Encrypted
     public function __wakeup()
     {
         parent::__wakeup();
-        $this->_encryptor = \Magento\App\ObjectManager::getInstance()
-            ->get('Magento\Encryption\EncryptorInterface');
+        $this->_encryptor = \Magento\App\ObjectManager::getInstance()->get('Magento\Encryption\EncryptorInterface');
     }
 
     /**

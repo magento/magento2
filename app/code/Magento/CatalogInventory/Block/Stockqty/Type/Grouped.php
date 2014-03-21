@@ -45,7 +45,6 @@ class Grouped extends \Magento\CatalogInventory\Block\Stockqty\Composite
      */
     protected function _getChildProducts()
     {
-        return $this->getProduct()->getTypeInstance()
-            ->getAssociatedProducts($this->getProduct());
+        return $this->getProduct()->getTypeInstance()->getAssociatedProducts($this->getProduct());
     }
 }

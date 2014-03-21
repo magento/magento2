@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design;
 
 /**
@@ -57,8 +56,8 @@ class EditorTest extends \Magento\Backend\Utility\Controller
         $wrongThemeId = 999;
         $this->getRequest()->setParam('theme_id', $wrongThemeId);
         $this->dispatch('backend/admin/system_design_editor/launch');
-        $this->assertSessionMessages($this->equalTo(
-            array('We can\'t find theme "' . $wrongThemeId . '".')),
+        $this->assertSessionMessages(
+            $this->equalTo(array('We can\'t find theme "' . $wrongThemeId . '".')),
             \Magento\Message\MessageInterface::TYPE_ERROR
         );
         $expected = 'http://localhost/index.php/backend/admin/system_design_editor/index/';

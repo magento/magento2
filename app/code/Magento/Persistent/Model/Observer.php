@@ -211,16 +211,15 @@ class Observer
      */
     public function applyPersistentData($observer)
     {
-        if (!$this->_persistentData->canProcess($observer)
-            || !$this->_persistentSession->isPersistent()
-            || $this->_customerSession->isLoggedIn()
+        if (!$this->_persistentData->canProcess(
+            $observer
+        ) || !$this->_persistentSession->isPersistent() || $this->_customerSession->isLoggedIn()
         ) {
             return $this;
         }
         /** @var \Magento\Persistent\Model\Persistent\Config $persistentConfig */
         $persistentConfig = $this->_persistentConfigFactory->create();
-        $persistentConfig->setConfigFilePath($this->_persistentData->getPersistentConfigFilePath())
-            ->fire();
+        $persistentConfig->setConfigFilePath($this->_persistentData->getPersistentConfigFilePath())->fire();
         return $this;
     }
 
@@ -270,8 +269,12 @@ class Observer
         $escapedName = $this->_escaper->escapeHtml($this->_getPersistentCustomer()->getName(), null);
 
         $this->_applyAccountLinksPersistentData();
-        $welcomeMessage = __('Welcome, %1!', $escapedName)
-            . ' ' . $this->_layout->getBlock('header.additional')->toHtml();
+        $welcomeMessage = __(
+            'Welcome, %1!',
+            $escapedName
+        ) . ' ' . $this->_layout->getBlock(
+            'header.additional'
+        )->toHtml();
         $block->setWelcome($welcomeMessage);
         return $this;
     }
@@ -308,14 +311,11 @@ class Observer
      */
     public function emulateQuote($observer)
     {
-        $stopActions = array(
-            'persistent_index_saveMethod',
-            'customer_account_createpost'
-        );
+        $stopActions = array('persistent_index_saveMethod', 'customer_account_createpost');
 
-        if (!$this->_persistentData->canProcess($observer)
-            || !$this->_persistentSession->isPersistent()
-            || $this->_customerSession->isLoggedIn()
+        if (!$this->_persistentData->canProcess(
+            $observer
+        ) || !$this->_persistentSession->isPersistent() || $this->_customerSession->isLoggedIn()
         ) {
             return;
         }
@@ -492,9 +492,9 @@ class Observer
 
         /** @var $controllerAction \Magento\Checkout\Controller\Express\RedirectLoginInterface*/
         $controllerAction = $observer->getEvent()->getControllerAction();
-        if (!$controllerAction
-            || !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface
-            || $controllerAction->getRedirectActionName() != $controllerAction->getRequest()->getActionName()
+        if (!$controllerAction ||
+            !$controllerAction instanceof \Magento\Checkout\Controller\Express\RedirectLoginInterface ||
+            $controllerAction->getRedirectActionName() != $controllerAction->getRequest()->getActionName()
         ) {
             return;
         }
@@ -512,9 +512,7 @@ class Observer
      */
     protected function _getPersistentCustomer()
     {
-        return $this->_customerFactory->create()->load(
-            $this->_persistentSession->getSession()->getCustomerId()
-        );
+        return $this->_customerFactory->create()->load($this->_persistentSession->getSession()->getCustomerId());
     }
 
     /**
@@ -581,10 +579,7 @@ class Observer
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $this->_checkoutSession->getQuote();
         if ($quote && $quote->getId()) {
-            if ($checkQuote
-                && !$this->_persistentData->isShoppingCartPersist()
-                && !$quote->getIsPersistent()
-            ) {
+            if ($checkQuote && !$this->_persistentData->isShoppingCartPersist() && !$quote->getIsPersistent()) {
                 $this->_checkoutSession->clearQuote()->clearStorage();
                 return;
             }
@@ -592,15 +587,21 @@ class Observer
             $quote->getPaymentsCollection()->walk('delete');
             $quote->getAddressesCollection()->walk('delete');
             $this->_setQuotePersistent = false;
-            $quote
-                ->setIsActive(true)
-                ->setCustomerId(null)
-                ->setCustomerEmail(null)
-                ->setCustomerFirstname(null)
-                ->setCustomerLastname(null)
-                ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID)
-                ->setIsPersistent(false)
-                ->removeAllAddresses();
+            $quote->setIsActive(
+                true
+            )->setCustomerId(
+                null
+            )->setCustomerEmail(
+                null
+            )->setCustomerFirstname(
+                null
+            )->setCustomerLastname(
+                null
+            )->setCustomerGroupId(
+                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+            )->setIsPersistent(
+                false
+            )->removeAllAddresses();
             //Create guest addresses
             $quote->getShippingAddress();
             $quote->getBillingAddress();
@@ -622,11 +623,11 @@ class Observer
             return;
         }
 
-        if ($this->_persistentData->isEnabled()
-            && !$this->_isPersistent()
-            && !$this->_customerSession->isLoggedIn()
-            && $this->_checkoutSession->getQuoteId()
-            && !($observer->getControllerAction() instanceof \Magento\Checkout\Controller\Onepage)
+        if ($this->_persistentData->isEnabled() &&
+            !$this->_isPersistent() &&
+            !$this->_customerSession->isLoggedIn() &&
+            $this->_checkoutSession->getQuoteId() &&
+            !$observer->getControllerAction() instanceof \Magento\Checkout\Controller\Onepage
             // persistent session does not expire on onepage checkout page to not spoil customer group id
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
@@ -644,10 +645,15 @@ class Observer
         if ($quote->getIsActive() && $quote->getCustomerId()) {
             $this->_checkoutSession->setCustomer(null)->clearQuote()->clearStorage();
         } else {
-            $quote->setIsActive(true)
-                ->setIsPersistent(false)
-                ->setCustomerId(null)
-                ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
+            $quote->setIsActive(
+                true
+            )->setIsPersistent(
+                false
+            )->setCustomerId(
+                null
+            )->setCustomerGroupId(
+                \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
+            );
         }
     }
 
@@ -699,9 +705,7 @@ class Observer
      */
     public function emulateCustomer($observer)
     {
-        if (!$this->_persistentData->canProcess($observer)
-            || !$this->_isShoppingCartPersist()
-        ) {
+        if (!$this->_persistentData->canProcess($observer) || !$this->_isShoppingCartPersist()) {
             return $this;
         }
 
@@ -709,9 +713,7 @@ class Observer
             /** @var $customer \Magento\Customer\Model\Customer */
             $customer = $this->_customerFactory->create();
             $customer->load($this->_persistentSession->getSession()->getCustomerId());
-            $this->_customerSession
-                ->setCustomerId($customer->getId())
-                ->setCustomerGroupId($customer->getGroupId());
+            $this->_customerSession->setCustomerId($customer->getId())->setCustomerGroupId($customer->getGroupId());
         }
         return $this;
     }

@@ -70,12 +70,15 @@ class Sales extends \Magento\Backend\Block\Dashboard\Bar
         if (!$this->_moduleManager->isEnabled('Magento_Reports')) {
             return $this;
         }
-        $isFilter = $this->getRequest()->getParam('store')
-            || $this->getRequest()->getParam('website')
-            || $this->getRequest()->getParam('group');
+        $isFilter = $this->getRequest()->getParam(
+            'store'
+        ) || $this->getRequest()->getParam(
+            'website'
+        ) || $this->getRequest()->getParam(
+            'group'
+        );
 
-        $collection = $this->_collectionFactory->create()
-            ->calculateSales($isFilter);
+        $collection = $this->_collectionFactory->create()->calculateSales($isFilter);
 
         if ($this->getRequest()->getParam('store')) {
             $collection->addFieldToFilter('store_id', $this->getRequest()->getParam('store'));

@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\App\Area\Request;
+
 class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,9 +47,15 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock('\Magento\App\RequestInterface',
-            array('isDirectAccessFrontendName', 'getModuleName',
-                'setModuleName', 'getActionName', 'setActionName', 'getParam'
+        $this->_requestMock = $this->getMock(
+            '\Magento\App\RequestInterface',
+            array(
+                'isDirectAccessFrontendName',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam'
             )
         );
         $this->_storeManagerMock = $this->getMock('\Magento\Core\Model\StoreManager', array(), array(), '', false);
@@ -58,13 +65,26 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreExistsAndIsNotDirectAcccessToFrontName()
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(false, true)
-            ->will($this->returnValue(array('storeCode' => $store)));
+        $this->_storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStores'
+        )->with(
+            false,
+            true
+        )->will(
+            $this->returnValue(array('storeCode' => $store))
+        );
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock
-            ->expects($this->once())->method('isDirectAccessFrontendName')
-            ->with('storeCode')->will($this->returnValue(false));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'isDirectAccessFrontendName'
+        )->with(
+            'storeCode'
+        )->will(
+            $this->returnValue(false)
+        );
         $this->_storeManagerMock->expects($this->once())->method('setCurrentStore')->with('storeCode');
         $this->assertEquals('/node_one/', $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
@@ -72,13 +92,26 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreExistsAndDirectAcccessToFrontName()
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(false, true)
-            ->will($this->returnValue(array('storeCode' => $store)));
+        $this->_storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStores'
+        )->with(
+            false,
+            true
+        )->will(
+            $this->returnValue(array('storeCode' => $store))
+        );
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock
-            ->expects($this->once())->method('isDirectAccessFrontendName')
-            ->with('storeCode')->will($this->returnValue(true));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'isDirectAccessFrontendName'
+        )->with(
+            'storeCode'
+        )->will(
+            $this->returnValue(true)
+        );
         $this->_requestMock->expects($this->once())->method('setActionName')->with('noroute');
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
@@ -87,13 +120,26 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $path = '/0/node_one/';
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(false, true)
-            ->will($this->returnValue(array('0' => $store)));
+        $this->_storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStores'
+        )->with(
+            false,
+            true
+        )->will(
+            $this->returnValue(array('0' => $store))
+        );
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
-        $this->_requestMock
-            ->expects($this->once())->method('isDirectAccessFrontendName')
-            ->with('0')->will($this->returnValue(true));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'isDirectAccessFrontendName'
+        )->with(
+            '0'
+        )->will(
+            $this->returnValue(true)
+        );
         $this->_requestMock->expects($this->never())->method('setActionName');
         $this->assertEquals($path, $this->_model->process($this->_requestMock, $path));
     }
@@ -101,9 +147,16 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreCodeIsNotExist()
     {
         $store = $this->getMock('\Magento\Core\Model\Store', array(), array(), '', false);
-        $this->_storeManagerMock
-            ->expects($this->once())->method('getStores')->with(false, true)
-            ->will($this->returnValue(array('0' => $store)));
+        $this->_storeManagerMock->expects(
+            $this->once()
+        )->method(
+            'getStores'
+        )->with(
+            false,
+            true
+        )->will(
+            $this->returnValue(array('0' => $store))
+        );
         $store->expects($this->never())->method('isUseStoreInUrl');
         $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));

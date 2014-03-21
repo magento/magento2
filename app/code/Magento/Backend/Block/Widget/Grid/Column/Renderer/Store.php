@@ -28,8 +28,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 /**
  * Store grid column filter
  */
-class Store
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var bool
@@ -77,9 +76,11 @@ class Store
      */
     protected function _getShowAllStoresLabelFlag()
     {
-        return $this->getColumn()->getData('skipAllStoresLabel')
-            ? $this->getColumn()->getData('skipAllStoresLabel')
-            : $this->_skipAllStoresLabel;
+        return $this->getColumn()->getData(
+            'skipAllStoresLabel'
+        ) ? $this->getColumn()->getData(
+            'skipAllStoresLabel'
+        ) : $this->_skipAllStoresLabel;
     }
 
     /**
@@ -89,9 +90,11 @@ class Store
      */
     protected function _getShowEmptyStoresLabelFlag()
     {
-        return $this->getColumn()->getData('skipEmptyStoresLabel')
-            ? $this->getColumn()->getData('skipEmptyStoresLabel')
-            : $this->_skipEmptyStoresLabel;
+        return $this->getColumn()->getData(
+            'skipEmptyStoresLabel'
+        ) ? $this->getColumn()->getData(
+            'skipEmptyStoresLabel'
+        ) : $this->_skipEmptyStoresLabel;
     }
 
     /**

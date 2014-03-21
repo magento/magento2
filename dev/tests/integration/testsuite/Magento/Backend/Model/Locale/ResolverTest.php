@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Locale;
 
 /**
@@ -40,8 +39,9 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Locale\Resolver');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\Locale\Resolver'
+        );
     }
 
     /**
@@ -58,11 +58,15 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     public function testSetLocaleWithBaseInterfaceLocale()
     {
         $user = new \Magento\Object();
-        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Auth\Session');
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Auth\Session'
+        );
         $session->setUser($user);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth\Session')
-            ->getUser()->setInterfaceLocale('fr_FR');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Auth\Session'
+        )->getUser()->setInterfaceLocale(
+            'fr_FR'
+        );
         $this->_checkSetLocale('fr_FR');
     }
 
@@ -71,8 +75,11 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLocaleWithSessionLocale()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')
-            ->setSessionLocale('es_ES');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Session'
+        )->setSessionLocale(
+            'es_ES'
+        );
         $this->_checkSetLocale('es_ES');
     }
 
@@ -81,8 +88,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLocaleWithRequestLocale()
     {
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\App\RequestInterface');
+        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface');
         $request->setPost(array('locale' => 'de_DE'));
         $this->_checkSetLocale('de_DE');
     }

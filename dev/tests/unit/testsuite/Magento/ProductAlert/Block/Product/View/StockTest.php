@@ -60,22 +60,28 @@ class StockTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $this->getMock(
-            'Magento\ProductAlert\Helper\Data', array('isStockAlertAllowed', 'getSaveUrl'), array(), '', false
+            'Magento\ProductAlert\Helper\Data',
+            array('isStockAlertAllowed', 'getSaveUrl'),
+            array(),
+            '',
+            false
         );
         $this->_product = $this->getMock(
-            'Magento\Catalog\Model\Product', array('isAvailable', 'getId', '__wakeup'), array(), '', false
+            'Magento\Catalog\Model\Product',
+            array('isAvailable', 'getId', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $this->_product->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->_registry = $this->getMockBuilder('Magento\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(array('registry'))
-            ->getMock();
+        $this->_registry = $this->getMockBuilder(
+            'Magento\Registry'
+        )->disableOriginalConstructor()->setMethods(
+            array('registry')
+        )->getMock();
         $this->_block = $objectManager->getObject(
             'Magento\ProductAlert\Block\Product\View\Stock',
-            array(
-                'helper' => $this->_helper,
-                'registry' => $this->_registry,
-            )
+            array('helper' => $this->_helper, 'registry' => $this->_registry)
         );
         $this->_layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
     }
@@ -83,17 +89,27 @@ class StockTest extends \PHPUnit_Framework_TestCase
     public function testSetTemplateStockUrlAllowed()
     {
         $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
-        $this->_helper->expects($this->once())
-            ->method('getSaveUrl')
-            ->with('stock')
-            ->will($this->returnValue('http://url'));
+        $this->_helper->expects(
+            $this->once()
+        )->method(
+            'getSaveUrl'
+        )->with(
+            'stock'
+        )->will(
+            $this->returnValue('http://url')
+        );
 
         $this->_product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
 
-        $this->_registry->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue($this->_product));
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue($this->_product)
+        );
 
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');
@@ -109,18 +125,26 @@ class StockTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTemplateStockUrlNotAllowed($stockAlertAllowed, $productAvailable)
     {
-        $this->_helper
-            ->expects($this->once())
-            ->method('isStockAlertAllowed')
-            ->will($this->returnValue($stockAlertAllowed));
+        $this->_helper->expects(
+            $this->once()
+        )->method(
+            'isStockAlertAllowed'
+        )->will(
+            $this->returnValue($stockAlertAllowed)
+        );
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
         $this->_product->expects($this->any())->method('isAvailable')->will($this->returnValue($productAvailable));
 
-        $this->_registry->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue($this->_product));
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue($this->_product)
+        );
 
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');
@@ -134,7 +158,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         return array(
             'stock alert not allowed' => array(false, false),
             'product is available (no alert)' => array(true, true),
-            'stock alert not allowed and product is available' => array(false, true),
+            'stock alert not allowed and product is available' => array(false, true)
         );
     }
 
@@ -143,10 +167,15 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_helper->expects($this->once())->method('isStockAlertAllowed')->will($this->returnValue(true));
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
-        $this->_registry->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue(null));
+        $this->_registry->expects(
+            $this->once()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue(null)
+        );
 
         $this->_block->setLayout($this->_layout);
         $this->_block->setTemplate('path/to/template.phtml');

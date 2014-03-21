@@ -23,9 +23,9 @@
  */
 namespace Magento\ObjectManager\Config;
 
-use \Magento\ObjectManager\ConfigCache;
-use \Magento\ObjectManager\Definition;
-use \Magento\ObjectManager\Relations;
+use Magento\ObjectManager\ConfigCache;
+use Magento\ObjectManager\Definition;
+use Magento\ObjectManager\Relations;
 
 class Config implements \Magento\ObjectManager\Config
 {
@@ -96,10 +96,8 @@ class Config implements \Magento\ObjectManager\Config
      * @param Relations $relations
      * @param Definition $definitions
      */
-    public function __construct(
-        Relations $relations = null,
-        Definition $definitions = null
-    ) {
+    public function __construct(Relations $relations = null, Definition $definitions = null)
+    {
         $this->_relations = $relations ?: new \Magento\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\ObjectManager\Definition\Runtime();
     }
@@ -134,9 +132,11 @@ class Config implements \Magento\ObjectManager\Config
      */
     public function getArguments($type)
     {
-        return isset($this->_mergedArguments[$type])
-            ? $this->_mergedArguments[$type]
-            : $this->_collectConfiguration($type);
+        return isset(
+            $this->_mergedArguments[$type]
+        ) ? $this->_mergedArguments[$type] : $this->_collectConfiguration(
+            $type
+        );
     }
 
     /**
@@ -178,8 +178,11 @@ class Config implements \Magento\ObjectManager\Config
         while (isset($this->_preferences[$type])) {
             if (isset($preferencePath[$this->_preferences[$type]])) {
                 throw new \LogicException(
-                    'Circular type preference: ' . $type . ' relates to '
-                    . $this->_preferences[$type] . ' and viceversa.'
+                    'Circular type preference: ' .
+                    $type .
+                    ' relates to ' .
+                    $this->_preferences[$type] .
+                    ' and viceversa.'
                 );
             }
             $type = $this->_preferences[$type];
@@ -281,17 +284,22 @@ class Config implements \Magento\ObjectManager\Config
     {
         if ($this->_cache) {
             if (!$this->_currentCacheKey) {
-                $this->_currentCacheKey = md5(serialize(array(
-                    $this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes
-                )));
+                $this->_currentCacheKey = md5(
+                    serialize(array($this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes))
+                );
             }
             $key = md5($this->_currentCacheKey . serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
-                list(
-                    $this->_arguments, $this->_nonShared, $this->_preferences,
-                    $this->_virtualTypes, $this->_mergedArguments
-                ) = $cached;
+                list($this->_arguments,
+                    $this
+                    ->_nonShared,
+                    $this
+                    ->_preferences,
+                    $this
+                    ->_virtualTypes,
+                    $this
+                    ->_mergedArguments) = $cached;
             } else {
                 $this->_mergeConfiguration($configuration);
                 if (!$this->_mergedArguments) {
@@ -299,10 +307,16 @@ class Config implements \Magento\ObjectManager\Config
                         $this->_collectConfiguration($class);
                     }
                 }
-                $this->_cache->save(array(
-                    $this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes,
-                    $this->_mergedArguments
-                ), $key);
+                $this->_cache->save(
+                    array(
+                        $this->_arguments,
+                        $this->_nonShared,
+                        $this->_preferences,
+                        $this->_virtualTypes,
+                        $this->_mergedArguments
+                    ),
+                    $key
+                );
             }
             $this->_currentCacheKey = $key;
         } else {

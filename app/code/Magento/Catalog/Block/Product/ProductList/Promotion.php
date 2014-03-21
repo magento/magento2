@@ -57,7 +57,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
      * @param \Magento\Catalog\Model\LayerFactory $layerFactory
      * @param CollectionFactory $productCollectionFactory
      * @param array $data
@@ -78,7 +78,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer\Category $catalogLayer,
         \Magento\Catalog\Model\LayerFactory $layerFactory,
         CollectionFactory $productCollectionFactory,
         array $data = array(),
@@ -115,8 +115,7 @@ class Promotion extends \Magento\Catalog\Block\Product\ListProduct
             $collection = $this->_productCollectionFactory->create();
             $this->_layerFactory->create()->prepareProductCollection($collection);
 
-            $collection->addAttributeToFilter('promotion', 1)
-                ->addStoreFilter();
+            $collection->addAttributeToFilter('promotion', 1)->addStoreFilter();
 
             $this->_productCollection = $collection;
         }

@@ -38,9 +38,12 @@ class Converter implements \Magento\Config\ConverterInterface
         $localeHierarchy = array();
         foreach ($localeConfig as $locale => $localeParent) {
             $localeParents = array($localeParent);
-            while (isset($localeConfig[$localeParent]) && !in_array($localeConfig[$localeParent], $localeParents)
-                && $locale != $localeConfig[$localeParent]
-            ) {
+            while (isset(
+                $localeConfig[$localeParent]
+            ) && !in_array(
+                $localeConfig[$localeParent],
+                $localeParents
+            ) && $locale != $localeConfig[$localeParent]) {
                 // inheritance chain starts with the deepest parent
                 array_unshift($localeParents, $localeConfig[$localeParent]);
                 $localeParent = $localeConfig[$localeParent];
@@ -68,7 +71,6 @@ class Converter implements \Magento\Config\ConverterInterface
             if ($parent) {
                 $output[$locale->attributes->getNamedItem('code')->nodeValue] = $parent->nodeValue;
             }
-
         }
         return $this->_composeLocaleHierarchy($output);
     }

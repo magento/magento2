@@ -34,8 +34,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Resource');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\App\Resource');
     }
 
     public function testGetTableName()
@@ -44,8 +43,10 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $tableSuffix = 'suffix';
         $tableNameOrig = 'core_website';
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\App\Resource', array('tablePrefix' => 'prefix_'));
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\App\Resource',
+            array('tablePrefix' => 'prefix_')
+        );
 
         $tableName = $this->_model->getTableName(array($tableNameOrig, $tableSuffix));
         $this->assertContains($tablePrefix, $tableName);
@@ -65,10 +66,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             'Magento\TestFramework\Db\Adapter\Mysql',
             array(
                 'config' => array(
-                    'profiler' => array(
-                        'class' => 'Magento\Core\Model\Resource\Db\Profiler',
-                        'enabled' => 'true'
-                    ),
+                    'profiler' => array('class' => 'Magento\Core\Model\Resource\Db\Profiler', 'enabled' => 'true'),
                     'username' => 'username',
                     'password' => 'password',
                     'host' => 'host',

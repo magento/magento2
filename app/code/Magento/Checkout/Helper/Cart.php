@@ -105,13 +105,10 @@ class Cart extends \Magento\Core\Helper\Url
      */
     public function getAddUrl($product, $additional = array())
     {
-        $continueUrl    = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
-        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $continueUrl = $this->_coreData->urlEncode($this->_urlBuilder->getCurrentUrl());
+        $urlParamName = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
-        $routeParams = array(
-            $urlParamName   => $continueUrl,
-            'product'       => $product->getEntityId()
-        );
+        $routeParams = array($urlParamName => $continueUrl, 'product' => $product->getEntityId());
 
         if (!empty($additional)) {
             $routeParams = array_merge($routeParams, $additional);
@@ -122,8 +119,8 @@ class Cart extends \Magento\Core\Helper\Url
             $routeParams['_scope_to_url'] = true;
         }
 
-        if ($this->_getRequest()->getRouteName() == 'checkout'
-            && $this->_getRequest()->getControllerName() == 'cart') {
+        if ($this->_getRequest()->getRouteName() == 'checkout' && $this->_getRequest()->getControllerName() == 'cart'
+        ) {
             $routeParams['in_cart'] = 1;
         }
 
@@ -139,7 +136,7 @@ class Cart extends \Magento\Core\Helper\Url
     public function getRemoveUrl($item)
     {
         $params = array(
-            'id'=>$item->getId(),
+            'id' => $item->getId(),
             \Magento\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url()
         );
         return $this->_getUrl('checkout/cart/delete', $params);

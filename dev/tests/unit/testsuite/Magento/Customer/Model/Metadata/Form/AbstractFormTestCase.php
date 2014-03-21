@@ -43,8 +43,8 @@ abstract class AbstractFormTestCase extends \PHPUnit_Framework_TestCase
         $this->localeMock = $this->getMockBuilder('Magento\Stdlib\DateTime\TimezoneInterface')->getMock();
         $this->localeResolverMock = $this->getMockBuilder('Magento\Locale\ResolverInterface')->getMock();
         $this->loggerMock = $this->getMockBuilder('Magento\Logger')->disableOriginalConstructor()->getMock();
-        $this->attributeMetadataMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMetadataMock = $this->getMockBuilder(
+            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
+        )->disableOriginalConstructor()->getMock();
     }
 }

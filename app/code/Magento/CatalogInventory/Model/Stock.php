@@ -35,17 +35,19 @@ use Magento\CatalogInventory\Model\Stock\Item;
  * @method string getStockName()
  * @method \Magento\CatalogInventory\Model\Stock setStockName(string $value)
  */
-
 class Stock extends \Magento\Core\Model\AbstractModel
 {
-    const BACKORDERS_NO             = 0;
-    const BACKORDERS_YES_NONOTIFY   = 1;
-    const BACKORDERS_YES_NOTIFY     = 2;
+    const BACKORDERS_NO = 0;
 
-    const STOCK_OUT_OF_STOCK        = 0;
-    const STOCK_IN_STOCK            = 1;
+    const BACKORDERS_YES_NONOTIFY = 1;
 
-    const DEFAULT_STOCK_ID          = 1;
+    const BACKORDERS_YES_NOTIFY = 2;
+
+    const STOCK_OUT_OF_STOCK = 0;
+
+    const STOCK_IN_STOCK = 1;
+
+    const DEFAULT_STOCK_ID = 1;
 
     /**
      * Catalog inventory data
@@ -129,10 +131,11 @@ class Stock extends \Magento\Core\Model\AbstractModel
      */
     public function addItemsToProducts($productCollection)
     {
-        $items = $this->getItemCollection()
-            ->addProductsFilter($productCollection)
-            ->joinStockStatus($productCollection->getStoreId())
-            ->load();
+        $items = $this->getItemCollection()->addProductsFilter(
+            $productCollection
+        )->joinStockStatus(
+            $productCollection->getStoreId()
+        )->load();
         $stockItems = array();
         foreach ($items as $item) {
             $stockItems[$item->getProductId()] = $item;
@@ -152,8 +155,7 @@ class Stock extends \Magento\Core\Model\AbstractModel
      */
     public function getItemCollection()
     {
-        return $this->_collectionFactory->create()
-            ->addStockFilter($this->getId());
+        return $this->_collectionFactory->create()->addStockFilter($this->getId());
     }
 
     /**
@@ -200,7 +202,8 @@ class Stock extends \Magento\Core\Model\AbstractModel
             if (!$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
                 throw new \Magento\Core\Exception(
-                    __('Not all of your products are available in the requested quantity.'));
+                    __('Not all of your products are available in the requested quantity.')
+                );
             }
             $item->subtractQty($qtys[$item->getProductId()]);
             if (!$item->verifyStock() || $item->verifyNotification()) {
@@ -265,8 +268,7 @@ class Stock extends \Magento\Core\Model\AbstractModel
         if ($stockItem->getId() && $this->_catalogInventoryData->isQty($stockItem->getTypeId())) {
             $stockItem->addQty($qty);
             if ($stockItem->getCanBackInStock() && $stockItem->getQty() > $stockItem->getMinQty()) {
-                $stockItem->setIsInStock(true)
-                    ->setStockStatusChangedAutomaticallyFlag(true);
+                $stockItem->setIsInStock(true)->setStockStatusChangedAutomaticallyFlag(true);
             }
             $stockItem->save();
         }

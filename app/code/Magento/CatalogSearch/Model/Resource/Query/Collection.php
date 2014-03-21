@@ -125,19 +125,22 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function setQueryFilter($query)
     {
-        $ifSynonymFor = $this->getConnection()
-            ->getIfNullSql('synonym_for', 'query_text');
-        $this->getSelect()->reset(\Zend_Db_Select::FROM)->distinct(true)
-            ->from(
-                array('main_table' => $this->getTable('catalogsearch_query')),
-                array('query'      => $ifSynonymFor, 'num_results')
-            )
-            ->where('num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
-                $this->_resourceHelper->addLikeEscape($query, array('position' => 'start')))
-            ->order('popularity ' . \Magento\DB\Select::SQL_DESC);
+        $ifSynonymFor = $this->getConnection()->getIfNullSql('synonym_for', 'query_text');
+        $this->getSelect()->reset(
+            \Zend_Db_Select::FROM
+        )->distinct(
+            true
+        )->from(
+            array('main_table' => $this->getTable('catalogsearch_query')),
+            array('query' => $ifSynonymFor, 'num_results')
+        )->where(
+            'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
+            $this->_resourceHelper->addLikeEscape($query, array('position' => 'start'))
+        )->order(
+            'popularity ' . \Magento\DB\Select::SQL_DESC
+        );
         if ($this->getStoreId()) {
-            $this->getSelect()
-                ->where('store_id = ?', (int)$this->getStoreId());
+            $this->getSelect()->where('store_id = ?', (int)$this->getStoreId());
         }
         return $this;
     }
@@ -150,27 +153,33 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function setPopularQueryFilter($storeIds = null)
     {
-        $ifSynonymFor = new \Zend_Db_Expr($this->getConnection()
-            ->getCheckSql("synonym_for IS NOT NULL AND synonym_for != ''", 'synonym_for', 'query_text'));
+        $ifSynonymFor = new \Zend_Db_Expr(
+            $this->getConnection()->getCheckSql(
+                "synonym_for IS NOT NULL AND synonym_for != ''",
+                'synonym_for',
+                'query_text'
+            )
+        );
 
-        $this->getSelect()
-            ->reset(\Zend_Db_Select::FROM)
-            ->reset(\Zend_Db_Select::COLUMNS)
-            ->distinct(true)
-            ->from(
-                array('main_table' => $this->getTable('catalogsearch_query')),
-                array('name' => $ifSynonymFor, 'num_results', 'popularity')
-            );
+        $this->getSelect()->reset(
+            \Zend_Db_Select::FROM
+        )->reset(
+            \Zend_Db_Select::COLUMNS
+        )->distinct(
+            true
+        )->from(
+            array('main_table' => $this->getTable('catalogsearch_query')),
+            array('name' => $ifSynonymFor, 'num_results', 'popularity')
+        );
         if ($storeIds) {
             $this->addStoreFilter($storeIds);
             $this->getSelect()->where('num_results > 0');
-        }
-        elseif (null === $storeIds) {
+        } elseif (null === $storeIds) {
             $this->addStoreFilter($this->_storeManager->getStore()->getId());
             $this->getSelect()->where('num_results > 0');
         }
 
-        $this->getSelect()->order(array('popularity desc','name'));
+        $this->getSelect()->order(array('popularity desc', 'name'));
 
         return $this;
     }

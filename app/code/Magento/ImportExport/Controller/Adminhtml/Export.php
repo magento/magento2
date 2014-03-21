@@ -140,9 +140,7 @@ class Export extends \Magento\Backend\App\Action
                 $export->setData($data);
 
                 $export->filterAttributeCollection(
-                    $attrFilterBlock->prepareCollection(
-                        $export->getEntityAttributeCollection()
-                    )
+                    $attrFilterBlock->prepareCollection($export->getEntityAttributeCollection())
                 );
                 $this->_view->renderLayout();
                 return;

@@ -24,6 +24,6 @@
  */
 -->
 
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <block class="Magento\Integration\Block\Adminhtml\Integration\Tokens" name="integration_token_popup" output="1"/>
 </layout>

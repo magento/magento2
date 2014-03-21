@@ -31,8 +31,10 @@ class Logger
     /**#@+
      * Keys that stand for particular log streams
      */
-    const LOGGER_SYSTEM    = 'system';
+    const LOGGER_SYSTEM = 'system';
+
     const LOGGER_EXCEPTION = 'exception';
+
     /**#@-*/
 
     /**
@@ -52,8 +54,7 @@ class Logger
     public function __construct(\Magento\App\Filesystem $filesystem, $defaultFile = '')
     {
         $this->_filesystem = $filesystem;
-        $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)
-            ->addStreamLog(self::LOGGER_EXCEPTION, $defaultFile);
+        $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)->addStreamLog(self::LOGGER_EXCEPTION, $defaultFile);
     }
 
     /**

@@ -29,3 +29,6 @@ PEAR
 Magento\LibFirst
 \Magento\SomeModule\Exception
 TestSuite
+DbTest
+Model1
+Model3

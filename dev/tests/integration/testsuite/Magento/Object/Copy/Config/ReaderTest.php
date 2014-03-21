@@ -41,13 +41,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\App\Filesystem $filesystem */
         $filesystem = $objectManager->create(
             'Magento\App\Filesystem',
-            array('directoryList' => $objectManager->create(
+            array(
+                'directoryList' => $objectManager->create(
                     'Magento\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
                         'directories' => array(
                             \Magento\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
-                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files'),
+                            \Magento\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files')
                         )
                     )
                 )
@@ -56,46 +57,36 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Module\Declaration\FileResolver $modulesDeclarations */
         $modulesDeclarations = $objectManager->create(
-            'Magento\Module\Declaration\FileResolver', array(
-                'filesystem' => $filesystem,
-            )
+            'Magento\Module\Declaration\FileResolver',
+            array('filesystem' => $filesystem)
         );
 
 
         /** @var \Magento\Module\Declaration\Reader\Filesystem $filesystemReader */
         $filesystemReader = $objectManager->create(
-            'Magento\Module\Declaration\Reader\Filesystem', array(
-                'fileResolver' => $modulesDeclarations,
-            )
+            'Magento\Module\Declaration\Reader\Filesystem',
+            array('fileResolver' => $modulesDeclarations)
         );
 
         /** @var \Magento\Module\ModuleList $modulesList */
-        $modulesList = $objectManager->create(
-            'Magento\Module\ModuleList', array(
-                'reader' => $filesystemReader,
-            )
-        );
+        $modulesList = $objectManager->create('Magento\Module\ModuleList', array('reader' => $filesystemReader));
 
         /** @var \Magento\Module\Dir\Reader $moduleReader */
         $moduleReader = $objectManager->create(
-            'Magento\Module\Dir\Reader', array(
-                'moduleList' => $modulesList,
-                'filesystem' => $filesystem
-            )
+            'Magento\Module\Dir\Reader',
+            array('moduleList' => $modulesList, 'filesystem' => $filesystem)
         );
         $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/Magento/Test/etc');
 
         /** @var \Magento\Core\Model\Config\FileResolver $fileResolver */
         $fileResolver = $objectManager->create(
-            'Magento\Core\Model\Config\FileResolver', array(
-                'moduleReader' => $moduleReader,
-            )
+            'Magento\Core\Model\Config\FileResolver',
+            array('moduleReader' => $moduleReader)
         );
 
         $this->_model = $objectManager->create(
-            'Magento\Object\Copy\Config\Reader', array(
-                'fileResolver' => $fileResolver,
-            )
+            'Magento\Object\Copy\Config\Reader',
+            array('fileResolver' => $fileResolver)
         );
     }
 
@@ -112,33 +103,33 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             file_get_contents(__DIR__ . '/_files/partialFieldsetFirst.xml'),
             file_get_contents(__DIR__ . '/_files/partialFieldsetSecond.xml')
         );
-        $fileResolverMock = $this->getMockBuilder('Magento\Config\FileResolverInterface')
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileResolverMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('fieldset.xml'), $this->equalTo('global'))
-            ->will($this->returnValue($fileList));
+        $fileResolverMock = $this->getMockBuilder(
+            'Magento\Config\FileResolverInterface'
+        )->setMethods(
+            array('get')
+        )->disableOriginalConstructor()->getMock();
+        $fileResolverMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            $this->equalTo('fieldset.xml'),
+            $this->equalTo('global')
+        )->will(
+            $this->returnValue($fileList)
+        );
 
         /** @var \Magento\Object\Copy\Config\Reader $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Object\Copy\Config\Reader', array(
-                'fileResolver' => $fileResolverMock,
-            )
+            'Magento\Object\Copy\Config\Reader',
+            array('fileResolver' => $fileResolverMock)
         );
         $expected = array(
             'global' => array(
                 'sales_convert_quote_item' => array(
-                    'event_id' => array(
-                        'to_order_item' => "*",
-                    ),
-                    'event_name' => array(
-                        'to_order_item' => "*"
-                    ),
-                    'event_description' => array(
-                        'to_order_item' => "complexDesciption"
-                    )
+                    'event_id' => array('to_order_item' => "*"),
+                    'event_name' => array('to_order_item' => "*"),
+                    'event_description' => array('to_order_item' => "complexDesciption")
                 )
             )
         );

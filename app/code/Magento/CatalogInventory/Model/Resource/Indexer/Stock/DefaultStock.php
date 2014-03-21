@@ -34,9 +34,7 @@
  */
 namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
-class DefaultStock
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
-    implements StockInterface
+class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer implements StockInterface
 {
     /**
      * Current Product Type Id
@@ -50,7 +48,7 @@ class DefaultStock
      *
      * @var bool
      */
-    protected $_isComposite    = false;
+    protected $_isComposite = false;
 
     /**
      * Core store config
@@ -172,7 +170,9 @@ class DefaultStock
      */
     protected function _isManageStock()
     {
-        return $this->_coreStoreConfig->getConfigFlag(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK);
+        return $this->_coreStoreConfig->getConfigFlag(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK
+        );
     }
 
     /**
@@ -186,33 +186,47 @@ class DefaultStock
     {
         $adapter = $this->_getWriteAdapter();
         $qtyExpr = $adapter->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
-        $select  = $adapter->select()
-            ->from(array('e' => $this->getTable('catalog_product_entity')), array('entity_id'));
+        $select = $adapter->select()->from(
+            array('e' => $this->getTable('catalog_product_entity')),
+            array('entity_id')
+        );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns('cw.website_id')
-            ->join(
-                array('cis' => $this->getTable('cataloginventory_stock')),
-                '',
-                array('stock_id'))
-            ->joinLeft(
-                array('cisi' => $this->getTable('cataloginventory_stock_item')),
-                'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-                array())
-            ->columns(array('qty' => $qtyExpr))
-            ->where('cw.website_id != 0')
-            ->where('e.type_id = ?', $this->getTypeId());
+        $select->columns(
+            'cw.website_id'
+        )->join(
+            array('cis' => $this->getTable('cataloginventory_stock')),
+            '',
+            array('stock_id')
+        )->joinLeft(
+            array('cisi' => $this->getTable('cataloginventory_stock_item')),
+            'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            array()
+        )->columns(
+            array('qty' => $qtyExpr)
+        )->where(
+            'cw.website_id != 0'
+        )->where(
+            'e.type_id = ?',
+            $this->getTypeId()
+        );
 
         // add limitation of status
         $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1, 'cisi.is_in_stock');
+            $statusExpr = $adapter->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+                1,
+                'cisi.is_in_stock'
+            );
         } else {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock', 1);
+            $statusExpr = $adapter->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+                'cisi.is_in_stock',
+                1
+            );
         }
 
         $select->columns(array('status' => $statusExpr));
@@ -233,8 +247,8 @@ class DefaultStock
     protected function _prepareIndexTable($entityIds = null)
     {
         $adapter = $this->_getWriteAdapter();
-        $select  = $this->_getStockStatusSelect($entityIds);
-        $query   = $select->insertFromSelect($this->getIdxTable());
+        $select = $this->_getStockStatusSelect($entityIds);
+        $query = $select->insertFromSelect($this->getIdxTable());
         $adapter->query($query);
 
         return $this;
@@ -249,21 +263,21 @@ class DefaultStock
     protected function _updateIndex($entityIds)
     {
         $adapter = $this->_getWriteAdapter();
-        $select  = $this->_getStockStatusSelect($entityIds, true);
-        $query   = $adapter->query($select);
+        $select = $this->_getStockStatusSelect($entityIds, true);
+        $query = $adapter->query($select);
 
-        $i      = 0;
-        $data   = array();
+        $i = 0;
+        $data = array();
         while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $i ++;
+            $i++;
             $data[] = array(
-                'product_id'    => (int)$row['entity_id'],
-                'website_id'    => (int)$row['website_id'],
-                'stock_id'      => (int)$row['stock_id'],
-                'qty'           => (float)$row['qty'],
-                'stock_status'  => (int)$row['status'],
+                'product_id' => (int)$row['entity_id'],
+                'website_id' => (int)$row['website_id'],
+                'stock_id' => (int)$row['stock_id'],
+                'qty' => (double)$row['qty'],
+                'stock_status' => (int)$row['status']
             );
-            if (($i % 1000) == 0) {
+            if ($i % 1000 == 0) {
                 $this->_updateIndexTable($data);
                 $data = array();
             }

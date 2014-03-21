@@ -91,10 +91,13 @@ class Items extends \Magento\Backend\Block\Widget\Grid\Container
      */
     public function getCaptchaHtml()
     {
-        return $this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Captcha')
-            ->setGcontentCaptchaToken($this->getGcontentCaptchaToken())
-            ->setGcontentCaptchaUrl($this->getGcontentCaptchaUrl())
-            ->toHtml();
+        return $this->getLayout()->createBlock(
+            'Magento\GoogleShopping\Block\Adminhtml\Captcha'
+        )->setGcontentCaptchaToken(
+            $this->getGcontentCaptchaToken()
+        )->setGcontentCaptchaUrl(
+            $this->getGcontentCaptchaUrl()
+        )->toHtml();
     }
 
     /**

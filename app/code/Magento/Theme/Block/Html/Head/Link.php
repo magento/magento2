@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html\Head;
 
 /**
@@ -46,10 +45,9 @@ class Link extends \Magento\View\Element\Template implements AssetBlockInterface
     ) {
         parent::__construct($context, $data);
         $this->setAsset(
-            $remoteFactory->create(array(
-                'url' => (string)$this->getData('url'),
-                'contentType' => self::VIRTUAL_CONTENT_TYPE,
-            ))
+            $remoteFactory->create(
+                array('url' => (string)$this->getData('url'), 'contentType' => self::VIRTUAL_CONTENT_TYPE)
+            )
         );
     }
 

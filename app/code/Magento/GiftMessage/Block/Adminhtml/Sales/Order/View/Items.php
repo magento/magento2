@@ -155,8 +155,9 @@ class Items extends \Magento\Backend\Block\Template
      */
     protected function _initMessage()
     {
-        $this->_giftMessage[$this->getItem()->getGiftMessageId()] =
-            $this->_messageHelper->getGiftMessage($this->getItem()->getGiftMessageId());
+        $this->_giftMessage[$this->getItem()->getGiftMessageId()] = $this->_messageHelper->getGiftMessage(
+            $this->getItem()->getGiftMessageId()
+        );
 
         // init default values for giftmessage form
         if (!$this->getMessage()->getSender()) {
@@ -190,11 +191,10 @@ class Items extends \Magento\Backend\Block\Template
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('sales/order_view_giftmessage/save', array(
-            'entity'    => $this->getItem()->getId(),
-            'type'      => 'order_item',
-            'reload'    => true
-        ));
+        return $this->getUrl(
+            'sales/order_view_giftmessage/save',
+            array('entity' => $this->getItem()->getId(), 'type' => 'order_item', 'reload' => true)
+        );
     }
 
     /**

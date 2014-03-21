@@ -71,15 +71,15 @@ class Factory
             $class = $this->_defaultDriverPrefix . ucfirst($type);
             if (!class_exists($class)) {
                 throw new \InvalidArgumentException(
-                    sprintf("Cannot create profiler driver, class \"%s\" doesn't exist.", $class
-                ));
+                    sprintf("Cannot create profiler driver, class \"%s\" doesn't exist.", $class)
+                );
             }
         }
         $driver = new $class($config);
         if (!$driver instanceof DriverInterface) {
-            throw new \InvalidArgumentException(sprintf(
-                "Driver class \"%s\" must implement \Magento\Profiler\DriverInterface.", get_class($driver)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf("Driver class \"%s\" must implement \Magento\Profiler\DriverInterface.", get_class($driver))
+            );
         }
         return $driver;
     }

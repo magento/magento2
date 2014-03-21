@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Design;
 
 /**
@@ -49,12 +48,12 @@ interface ThemeInterface
     /**
      * Virtual theme type
      */
-    const TYPE_VIRTUAL  = 1;
+    const TYPE_VIRTUAL = 1;
 
     /**
      * Staging theme type
      */
-    const TYPE_STAGING  = 2;
+    const TYPE_STAGING = 2;
 
     /**
      * Retrieve code of an area a theme belongs to

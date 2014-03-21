@@ -47,8 +47,14 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
     {
 
         $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
-        $this->addAttributeToFilter('created_at', array('from' => $fromDate, 'to' => $toDate, 'datetime' => true))
-             ->addExpressionAttributeToSelect('accounts', 'COUNT({{entity_id}})', array('entity_id'));
+        $this->addAttributeToFilter(
+            'created_at',
+            array('from' => $fromDate, 'to' => $toDate, 'datetime' => true)
+        )->addExpressionAttributeToSelect(
+            'accounts',
+            'COUNT({{entity_id}})',
+            array('entity_id')
+        );
 
         $this->getSelect()->having("{$this->_joinFields['accounts']['field']} > ?", 0);
 
@@ -64,8 +70,7 @@ class Collection extends \Magento\Reports\Model\Resource\Customer\Collection
      */
     public function setDateRange($fromDate, $toDate)
     {
-        $this->_reset()
-             ->_joinFields($fromDate, $toDate);
+        $this->_reset()->_joinFields($fromDate, $toDate);
         return $this;
     }
 

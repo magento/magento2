@@ -65,7 +65,7 @@ class Observer
     public function preDispatch(\Magento\Event\Observer $observer)
     {
         if ($this->_backendAuthSession->isLoggedIn()) {
-            $feedModel  = $this->_feedFactory->create();
+            $feedModel = $this->_feedFactory->create();
             /* @var $feedModel \Magento\AdminNotification\Model\Feed */
             $feedModel->checkUpdate();
         }

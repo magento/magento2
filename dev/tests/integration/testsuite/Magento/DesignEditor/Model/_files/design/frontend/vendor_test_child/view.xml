@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<view>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/Magento/Config/etc/view.xsd">
     <vars module="Magento_DesignEditor">
         <var name="test_var_key1">test_child_value1</var>
         <var name="test_var_key2">test_child_value2</var>

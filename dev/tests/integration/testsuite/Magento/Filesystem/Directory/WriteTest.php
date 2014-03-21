@@ -103,10 +103,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function deleteProvider()
     {
-        return array(
-            array('subdir'),
-            array('subdir/subsubdir')
-        );
+        return array(array('subdir'), array('subdir/subsubdir'));
     }
 
     /**
@@ -137,9 +134,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function renameProvider()
     {
-        return array(
-            array('newDir1', 0777, 'first_name.txt', 'second_name.txt')
-        );
+        return array(array('newDir1', 0777, 'first_name.txt', 'second_name.txt'));
     }
 
     /**
@@ -173,9 +168,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function renameTargetDirProvider()
     {
-        return array(
-            array('dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt')
-        );
+        return array(array('dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt'));
     }
 
     /**
@@ -368,10 +361,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function writeFileProvider()
     {
-        return array(
-            array('file1', '123', '456'),
-            array('folder1/file1', '123', '456'),
-        );
+        return array(array('file1', '123', '456'), array('folder1/file1', '123', '456'));
     }
 
     /**
@@ -398,15 +388,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path, $permissions)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $config = array(
-            'path' => $fullPath,
-            'permissions' => $permissions,
-            'allow_create_dirs' => true
-        );
+        $config = array('path' => $fullPath, 'permissions' => $permissions, 'allow_create_dirs' => true);
         $objectManager = Bootstrap::getObjectManager();
         $directoryFactory = $objectManager->create('Magento\Filesystem\Directory\WriteFactory');
-        $directory = $directoryFactory->create($config,
-            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList')));
+        $directory = $directoryFactory->create(
+            $config,
+            new \Magento\Filesystem\DriverFactory($objectManager->get('Magento\App\Filesystem\DirectoryList'))
+        );
         $this->testDirectories[] = $directory;
         return $directory;
     }

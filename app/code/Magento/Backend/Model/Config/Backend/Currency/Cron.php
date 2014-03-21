@@ -75,11 +75,11 @@ class Cron extends \Magento\Core\Model\Config\Value
         $frequencyMonthly = \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY;
 
         $cronExprArray = array(
-            intval($time[1]),                                   # Minute
-            intval($time[0]),                                   # Hour
-            ($frequency == $frequencyMonthly) ? '1' : '*',       # Day of the Month
-            '*',                                                # Month of the Year
-            ($frequency == $frequencyWeekly) ? '1' : '*',        # Day of the Week
+            intval($time[1]),                                 # Minute
+            intval($time[0]),                                 # Hour
+            $frequency == $frequencyMonthly ? '1' : '*',      # Day of the Month
+            '*',                                              # Month of the Year
+            $frequency == $frequencyWeekly ? '1' : '*'        # Day of the Week
         );
 
         $cronExprString = join(' ', $cronExprArray);
@@ -88,12 +88,9 @@ class Cron extends \Magento\Core\Model\Config\Value
             /** @var $configValue \Magento\App\Config\ValueInterface */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_STRING_PATH, 'path');
-            $configValue->setValue($cronExprString)
-                ->setPath(self::CRON_STRING_PATH)
-                ->save();
+            $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
         } catch (\Exception $e) {
             throw new \Exception(__('We can\'t save the Cron expression.'));
         }
     }
-
 }

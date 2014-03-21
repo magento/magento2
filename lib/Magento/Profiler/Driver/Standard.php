@@ -101,9 +101,7 @@ class Standard implements DriverInterface
             if (is_numeric($outputConfig)) {
                 $result = array();
             } else {
-                $result = array(
-                    'type' => $outputConfig
-                );
+                $result = array('type' => $outputConfig);
             }
         }
         return $result;
@@ -134,9 +132,7 @@ class Standard implements DriverInterface
      */
     protected function _getOutputFactory(array $config = null)
     {
-        if (isset($config['outputFactory'])
-            && $config['outputFactory'] instanceof OutputFactory
-        ) {
+        if (isset($config['outputFactory']) && $config['outputFactory'] instanceof OutputFactory) {
             $result = $config['outputFactory'];
         } else {
             $result = new OutputFactory();
@@ -152,9 +148,7 @@ class Standard implements DriverInterface
      */
     protected function _initStat(array $config = null)
     {
-        if (isset($config['stat'])
-            && $config['stat'] instanceof Stat
-        ) {
+        if (isset($config['stat']) && $config['stat'] instanceof Stat) {
             $this->_stat = $config['stat'];
         } else {
             $this->_stat = new Stat();

@@ -64,7 +64,7 @@ class Shared extends AbstractController
      */
     protected function _getWishlist()
     {
-        $code     = (string)$this->getRequest()->getParam('code');
+        $code = (string)$this->getRequest()->getParam('code');
         if (empty($code)) {
             return false;
         }
@@ -86,7 +86,7 @@ class Shared extends AbstractController
      */
     public function indexAction()
     {
-        $wishlist   = $this->_getWishlist();
+        $wishlist = $this->_getWishlist();
         $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
 
         if ($wishlist && $wishlist->getCustomerId() && $wishlist->getCustomerId() == $customerId) {
@@ -113,21 +113,24 @@ class Shared extends AbstractController
      */
     public function cartAction()
     {
-        $itemId = (int) $this->getRequest()->getParam('item');
+        $itemId = (int)$this->getRequest()->getParam('item');
 
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
 
 
         /* @var $session \Magento\Session\Generic */
-        $session    = $this->_objectManager->get('Magento\Wishlist\Model\Session');
-        $cart       = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        $session = $this->_objectManager->get('Magento\Wishlist\Model\Session');
+        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
 
         $redirectUrl = $this->_redirect->getRefererUrl();
 
         try {
-            $options = $this->_objectManager->create('Magento\Wishlist\Model\Item\Option')->getCollection()
-                    ->addItemFilter(array($itemId));
+            $options = $this->_objectManager->create(
+                'Magento\Wishlist\Model\Item\Option'
+            )->getCollection()->addItemFilter(
+                array($itemId)
+            );
             $item->setOptions($options->getOptionsByItem($itemId));
 
             $item->addToCart($cart);

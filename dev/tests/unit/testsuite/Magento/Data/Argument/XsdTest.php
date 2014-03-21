@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Data\Argument;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
@@ -61,7 +60,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidTypesXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/typesInvalidArray.php');
+        return include __DIR__ . '/_files/typesInvalidArray.php';
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()

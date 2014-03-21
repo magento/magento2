@@ -28,19 +28,8 @@ $installer = $this;
 /* @var $installer \Magento\Core\Model\Resource\Setup */
 
 $data = array(
-    array(
-        'type_id'     => 1,
-        'type_code'   => 'hour',
-        'period'      => 1,
-        'period_type' => 'HOUR',
-    ),
-
-    array(
-        'type_id'     => 2,
-        'type_code'   => 'day',
-        'period'      => 1,
-        'period_type' => 'DAY',
-    ),
+    array('type_id' => 1, 'type_code' => 'hour', 'period' => 1, 'period_type' => 'HOUR'),
+    array('type_id' => 2, 'type_code' => 'day', 'period' => 1, 'period_type' => 'DAY')
 );
 
 foreach ($data as $bind) {

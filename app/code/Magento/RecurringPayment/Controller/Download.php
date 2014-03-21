@@ -47,8 +47,11 @@ class Download extends \Magento\App\Action\Action
      */
     public function downloadPaymentCustomOptionAction()
     {
-        $recurringPayment = $this->_objectManager->create('Magento\RecurringPayment\Model\Payment')
-            ->load($this->getRequest()->getParam('id'));
+        $recurringPayment = $this->_objectManager->create(
+            'Magento\RecurringPayment\Model\Payment'
+        )->load(
+            $this->getRequest()->getParam('id')
+        );
 
         if (!$recurringPayment->getId()) {
             $this->_forward('noroute');

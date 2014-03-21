@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Asset;
 
 /**
@@ -90,12 +89,12 @@ class MergeService
         $isCss = $contentType == \Magento\View\Publisher::CONTENT_TYPE_CSS;
         $isJs = $contentType == \Magento\View\Publisher::CONTENT_TYPE_JS;
         if (!$isCss && !$isJs) {
-            throw new \InvalidArgumentException("Merge for content type '$contentType' is not supported.");
+            throw new \InvalidArgumentException("Merge for content type '{$contentType}' is not supported.");
         }
 
         $isCssMergeEnabled = $this->config->isMergeCssFiles();
         $isJsMergeEnabled = $this->config->isMergeJsFiles();
-        if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
+        if ($isCss && $isCssMergeEnabled || $isJs && $isJsMergeEnabled) {
             if ($this->state->getMode() == \Magento\App\State::MODE_PRODUCTION) {
                 $mergeStrategyClass = 'Magento\View\Asset\MergeStrategy\FileExists';
             } else {
@@ -104,7 +103,8 @@ class MergeService
             $mergeStrategy = $this->objectManager->get($mergeStrategyClass);
 
             $assets = $this->objectManager->create(
-                'Magento\View\Asset\Merged', array('assets' => $assets, 'mergeStrategy' => $mergeStrategy)
+                'Magento\View\Asset\Merged',
+                array('assets' => $assets, 'mergeStrategy' => $mergeStrategy)
             );
         }
 
@@ -118,7 +118,10 @@ class MergeService
      */
     public function cleanMergedJsCss()
     {
-        $this->filesystem->getDirectoryWrite(\Magento\App\Filesystem::PUB_VIEW_CACHE_DIR)
-            ->delete(Merged::PUBLIC_MERGE_DIR);
+        $this->filesystem->getDirectoryWrite(
+            \Magento\App\Filesystem::PUB_VIEW_CACHE_DIR
+        )->delete(
+            Merged::PUBLIC_MERGE_DIR
+        );
     }
 }

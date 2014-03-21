@@ -51,7 +51,7 @@ class Info extends \Magento\View\Element\Template
     public function getInfo()
     {
         $info = $this->getData('info');
-        if (!($info instanceof \Magento\Payment\Model\Info)) {
+        if (!$info instanceof \Magento\Payment\Model\Info) {
             throw new \Magento\Core\Exception(__('We cannot retrieve the payment info model object.'));
         }
         return $info;
@@ -165,15 +165,14 @@ class Info extends \Magento\View\Element\Template
     {
         if (null === $this->_paymentSpecificInformation) {
             if (null === $transport) {
-                $transport = new \Magento\Object;
+                $transport = new \Magento\Object();
             } elseif (is_array($transport)) {
                 $transport = new \Magento\Object($transport);
             }
-            $this->_eventManager->dispatch('payment_info_block_prepare_specific_information', array(
-                'transport' => $transport,
-                'payment'   => $this->getInfo(),
-                'block'     => $this,
-            ));
+            $this->_eventManager->dispatch(
+                'payment_info_block_prepare_specific_information',
+                array('transport' => $transport, 'payment' => $this->getInfo(), 'block' => $this)
+            );
             $this->_paymentSpecificInformation = $transport;
         }
         return $this->_paymentSpecificInformation;

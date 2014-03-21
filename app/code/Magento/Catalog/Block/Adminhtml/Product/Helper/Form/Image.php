@@ -42,8 +42,9 @@ class Image extends \Magento\Data\Form\Element\Image
     {
         $url = false;
         if ($this->getValue()) {
-            $url = $this->_urlBuilder
-                ->getBaseUrl(\Magento\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product/' . $this->getValue();
+            $url = $this->_urlBuilder->getBaseUrl(
+                \Magento\UrlInterface::URL_TYPE_MEDIA
+            ) . 'catalog/product/' . $this->getValue();
         }
         return $url;
     }
@@ -61,7 +62,11 @@ class Image extends \Magento\Data\Form\Element\Image
                 $inputField = '<input value="%s" id="%s_hidden" type="hidden" class="required-entry" />';
                 $html .= sprintf($inputField, $this->getValue(), $this->getHtmlId());
                 $html .= '<script type="text/javascript">
-                    syncOnchangeValue(\''.$this->getHtmlId().'\', \''.$this->getHtmlId().'_hidden\');
+                    syncOnchangeValue(\'' .
+                    $this->getHtmlId() .
+                    '\', \'' .
+                    $this->getHtmlId() .
+                    '_hidden\');
                 </script>';
             }
         } else {

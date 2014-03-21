@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Resource\Product;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -40,8 +39,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Resource\Product\Collection');
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Resource\Product\Collection'
+        );
     }
 
     /**
@@ -50,13 +50,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testSetOrder($order, $expectedOrder)
     {
         $this->_collection->setOrder($order);
-        $this->_collection->load(); // perform real SQL query
+        $this->_collection->load();
+        // perform real SQL query
 
         $selectOrder = $this->_collection->getSelect()->getPart(\Zend_Db_Select::ORDER);
         foreach ($expectedOrder as $field) {
             $orderBy = array_shift($selectOrder);
             $this->assertArrayHasKey(0, $orderBy);
-            $this->assertTrue(false !== strpos($orderBy[0], $field),
+            $this->assertTrue(
+                false !== strpos($orderBy[0], $field),
                 'Ordering by same column more than once is restricted by multiple RDBMS requirements.'
             );
         }
@@ -66,7 +68,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array('sku', 'sku'), array('sku')),
-            array(array('sku', 'name', 'sku'), array('name', 'sku')),
+            array(array('sku', 'name', 'sku'), array('name', 'sku'))
         );
     }
 
@@ -84,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'category-1/url-key-5.html',
             'category-1/url-key-1000.html',
             'category-1/url-key-999.html',
-            'category-1/url-key-asdf.html',
+            'category-1/url-key-asdf.html'
         );
         $this->assertEquals($expectedResult, $this->_collection->getColumnValues('request_path'));
     }

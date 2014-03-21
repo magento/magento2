@@ -53,10 +53,7 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(array(
-            'field' => array('code'),
-            'title' => __('Code'),
-        ));
+        $this->_uniqueFields = array(array('field' => array('code'), 'title' => __('Code')));
         return $this;
     }
 
@@ -80,9 +77,13 @@ class Rate extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function isInRule($rateId)
     {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()
-            ->from($this->getTable('tax_calculation'), array('tax_calculation_rate_id'))
-            ->where('tax_calculation_rate_id = ?', $rateId);
+        $select = $adapter->select()->from(
+            $this->getTable('tax_calculation'),
+            array('tax_calculation_rate_id')
+        )->where(
+            'tax_calculation_rate_id = ?',
+            $rateId
+        );
         return $adapter->fetchCol($select);
     }
 }

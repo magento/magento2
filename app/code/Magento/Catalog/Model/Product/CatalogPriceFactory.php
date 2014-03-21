@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
 /**
@@ -34,14 +33,13 @@ class CatalogPriceFactory
      */
     protected $objectManager;
 
-
     /**
      * @param \Magento\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager) {
+    public function __construct(\Magento\ObjectManager $objectManager)
+    {
         $this->objectManager = $objectManager;
     }
-
 
     /**
      * Provide custom price model with basic validation
@@ -53,9 +51,10 @@ class CatalogPriceFactory
     public function create($name)
     {
         $customPriceModel = $this->objectManager->get($name);
-        if (!($customPriceModel instanceof \Magento\Catalog\Model\Product\CatalogPriceInterface)) {
-            throw new \UnexpectedValueException('Class ' . $name
-                . ' should be an instance of \Magento\Catalog\Model\Product\CatalogPriceInterface');
+        if (!$customPriceModel instanceof \Magento\Catalog\Model\Product\CatalogPriceInterface) {
+            throw new \UnexpectedValueException(
+                'Class ' . $name . ' should be an instance of \Magento\Catalog\Model\Product\CatalogPriceInterface'
+            );
         }
 
         return $customPriceModel;

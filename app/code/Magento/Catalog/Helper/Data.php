@@ -30,23 +30,43 @@ namespace Magento\Catalog\Helper;
  */
 class Data extends \Magento\App\Helper\AbstractHelper
 {
-    const PRICE_SCOPE_GLOBAL               = 0;
-    const PRICE_SCOPE_WEBSITE              = 1;
-    const XML_PATH_PRICE_SCOPE             = 'catalog/price/scope';
-    const XML_PATH_SEO_SAVE_HISTORY        = 'catalog/seo/save_rewrites_history';
-    const CONFIG_USE_STATIC_URLS           = 'cms/wysiwyg/use_static_urls_in_catalog';
-    const CONFIG_PARSE_URL_DIRECTIVES      = 'catalog/frontend/parse_url_directives';
-    const XML_PATH_DISPLAY_PRODUCT_COUNT   = 'catalog/layered_navigation/display_product_count';
+    const PRICE_SCOPE_GLOBAL = 0;
+
+    const PRICE_SCOPE_WEBSITE = 1;
+
+    const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
+
+    const XML_PATH_SEO_SAVE_HISTORY = 'catalog/seo/save_rewrites_history';
+
+    const CONFIG_USE_STATIC_URLS = 'cms/wysiwyg/use_static_urls_in_catalog';
+
+    const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';
+
+    const XML_PATH_DISPLAY_PRODUCT_COUNT = 'catalog/layered_navigation/display_product_count';
 
     /**
      * Minimum advertise price constants
      */
     const XML_PATH_MSRP_ENABLED = 'sales/msrp/enabled';
+
     const XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE = 'sales/msrp/display_price_type';
+
     const XML_PATH_MSRP_APPLY_TO_ALL = 'sales/msrp/apply_for_all';
+
     const XML_PATH_MSRP_EXPLANATION_MESSAGE = 'sales/msrp/explanation_message';
+
     const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
 
+    /**
+     * Cache context
+     */
+    const CONTEXT_CATALOG_SORT_DIRECTION = 'catalog_sort_direction';
+
+    const CONTEXT_CATALOG_SORT_ORDER = 'catalog_sort_order';
+
+    const CONTEXT_CATALOG_DISPLAY_MODE = 'catalog_mode';
+
+    const CONTEXT_CATALOG_LIMIT = 'catalog_limit';
 
     /**
      * Breadcrumb Path cache
@@ -228,7 +248,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
                 // add category path breadcrumb
                 foreach ($pathIds as $categoryId) {
                     if (isset($categories[$categoryId]) && $categories[$categoryId]->getName()) {
-                        $path['category'.$categoryId] = array(
+                        $path['category' . $categoryId] = array(
                             'label' => $categories[$categoryId]->getName(),
                             'link' => $this->_isCategoryLink($categoryId) ? $categories[$categoryId]->getUrl() : ''
                         );
@@ -237,7 +257,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             }
 
             if ($this->getProduct()) {
-                $path['product'] = array('label'=>$this->getProduct()->getName());
+                $path['product'] = array('label' => $this->getProduct()->getName());
             }
 
             $this->_categoryPath = $path;
@@ -436,7 +456,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         return $this->_escaper->escapeHtml(
             $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE, $this->_storeId),
-            array('b','br','strong','i','u', 'p', 'span')
+            array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
         );
     }
 
@@ -449,7 +469,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         return $this->_escaper->escapeHtml(
             $this->_coreStoreConfig->getConfig(self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS, $this->_storeId),
-            array('b','br','strong','i','u', 'p', 'span')
+            array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
         );
     }
 
@@ -470,9 +490,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         if (is_numeric($product)) {
             /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($product);
+            $product = $this->_productFactory->create()->setStoreId(
+                $this->_storeManager->getStore()->getId()
+            )->load(
+                $product
+            );
         }
 
         if (!$this->canApplyMsrpToProductType($product)) {
@@ -490,15 +512,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
 
         if ($result && $visibility !== null) {
             $productVisibility = $product->getMsrpDisplayActualPriceType();
-            if ($productVisibility == \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type\Price::TYPE_USE_CONFIG) {
+            if ($productVisibility == \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type\Price::TYPE_USE_CONFIG
+            ) {
                 $productVisibility = $this->getMsrpDisplayActualPriceType();
             }
-            $result = ($productVisibility == $visibility);
+            $result = $productVisibility == $visibility;
         }
 
-        if ($product->getTypeInstance()->isComposite($product)
-            && $checkAssociatedItems
-            && (!$result || $visibility !== null)
+        if ($product->getTypeInstance()->isComposite(
+            $product
+        ) && $checkAssociatedItems && (!$result || $visibility !== null)
         ) {
             $resultInOptions = $product->getTypeInstance()->isMapEnabledInOptions($product, $visibility);
             if ($resultInOptions !== null) {
@@ -517,10 +540,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function canApplyMsrpToProductType($product)
     {
-        if($this->_mapApplyToProductType === null) {
+        if ($this->_mapApplyToProductType === null) {
             /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            $attribute = $this->_eavAttributeFactory->create()
-                ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'msrp_enabled');
+            $attribute = $this->_eavAttributeFactory->create()->loadByCode(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'msrp_enabled'
+            );
             $this->_mapApplyToProductType = $attribute->getApplyTo();
         }
         return empty($this->_mapApplyToProductType) || in_array($product->getTypeId(), $this->_mapApplyToProductType);
@@ -535,15 +560,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function getMsrpPriceMessage($product)
     {
         $message = "";
-        if ($this->canApplyMsrp(
-            $product,
-            \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_IN_CART
-        )) {
+        if ($this->canApplyMsrp($product, \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_IN_CART)) {
             $message = __('To see product price, add this item to your cart. You can always remove it later.');
         } elseif ($this->canApplyMsrp(
             $product,
             \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_BEFORE_ORDER_CONFIRM
-        )) {
+        )
+        ) {
             $message = __('See price before order confirmation.');
         }
         return $message;

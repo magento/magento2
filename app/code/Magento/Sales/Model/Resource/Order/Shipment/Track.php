@@ -39,7 +39,7 @@ class Track extends \Magento\Sales\Model\Resource\Order\AbstractOrder
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_track_resource';
+    protected $_eventPrefix = 'sales_order_shipment_track_resource';
 
     /**
      * Model initialization

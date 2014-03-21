@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View\Publisher;
 
 use Magento\ObjectManager;
@@ -49,9 +48,7 @@ class FileFactory
     /**
      * @var array
      */
-    protected $publisherFileTypes = [
-        'css' => 'Magento\View\Publisher\CssFile'
-    ];
+    protected $publisherFileTypes = array('css' => 'Magento\View\Publisher\CssFile');
 
     /**
      * @param ObjectManager $objectManager
@@ -81,15 +78,11 @@ class FileFactory
         }
         $publisherFile = $this->objectManager->create(
             $instanceName,
-            [
-                'filePath'   => $filePath,
-                'viewParams' => $viewParams,
-                'sourcePath' => $sourcePath
-            ]
+            array('filePath' => $filePath, 'viewParams' => $viewParams, 'sourcePath' => $sourcePath)
         );
 
         if (!$publisherFile instanceof FileInterface) {
-            throw new \UnexpectedValueException("$instanceName has to implement the publisher file interface.");
+            throw new \UnexpectedValueException("{$instanceName} has to implement the publisher file interface.");
         }
         return $publisherFile;
     }

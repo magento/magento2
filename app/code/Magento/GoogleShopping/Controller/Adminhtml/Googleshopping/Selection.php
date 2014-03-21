@@ -42,12 +42,14 @@ class Selection extends \Magento\Backend\App\Action
     public function searchAction()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()
-                ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
-                ->setIndex($this->getRequest()->getParam('index'))
-                ->setFirstShow(true)
-                ->toHtml()
-           );
+            $this->_view->getLayout()->createBlock(
+                'Magento\GoogleShopping\Block\Adminhtml\Items\Product'
+            )->setIndex(
+                $this->getRequest()->getParam('index')
+            )->setFirstShow(
+                true
+            )->toHtml()
+        );
     }
 
     /**
@@ -59,10 +61,11 @@ class Selection extends \Magento\Backend\App\Action
     {
         $this->_view->loadLayout();
         $this->getResponse()->setBody(
-            $this->_view->getLayout()
-                ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
-                ->setIndex($this->getRequest()->getParam('index'))
-                ->toHtml()
-           );
+            $this->_view->getLayout()->createBlock(
+                'Magento\GoogleShopping\Block\Adminhtml\Items\Product'
+            )->setIndex(
+                $this->getRequest()->getParam('index')
+            )->toHtml()
+        );
     }
 }

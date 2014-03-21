@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Usps\Block\Rma\Adminhtml\Rma\Edit\Tab\General\Shipping\Packaging;
 
 use Magento\App\RequestInterface;
@@ -66,10 +65,8 @@ class Plugin
      * @param bool $result
      * @return bool
      */
-    public function afterIsGirthAllowed(
-        \Magento\Object $subject,
-        $result
-    ) {
+    public function afterIsGirthAllowed(\Magento\Object $subject, $result)
+    {
         return $result && $this->uspsHelper->displayGirthValue($this->request->getParam('method'));
     }
 
@@ -80,36 +77,27 @@ class Plugin
      * @param \Closure $proceed
      * @return array
      */
-    public function aroundCheckSizeAndGirthParameter(
-        \Magento\Object $subject,
-        \Closure $proceed
-    ) {
+    public function aroundCheckSizeAndGirthParameter(\Magento\Object $subject, \Closure $proceed)
+    {
         $carrier = $subject->getCarrier();
         $size = $subject->getSourceSizeModel();
 
         $girthEnabled = false;
         $sizeEnabled = false;
         if ($carrier && isset($size[0]['value'])) {
-            if ($size[0]['value'] == Carrier::SIZE_LARGE
-                && in_array(
-                    key($subject->getContainers()),
-                    array(
-                        Carrier::CONTAINER_NONRECTANGULAR,
-                        Carrier::CONTAINER_VARIABLE,
-                    )
-                )
+            if ($size[0]['value'] == Carrier::SIZE_LARGE && in_array(
+                key($subject->getContainers()),
+                array(Carrier::CONTAINER_NONRECTANGULAR, Carrier::CONTAINER_VARIABLE)
+            )
             ) {
                 $girthEnabled = true;
             }
 
             if (in_array(
                 key($subject->getContainers()),
-                array(
-                    Carrier::CONTAINER_NONRECTANGULAR,
-                    Carrier::CONTAINER_RECTANGULAR,
-                    Carrier::CONTAINER_VARIABLE,
-                )
-            )) {
+                array(Carrier::CONTAINER_NONRECTANGULAR, Carrier::CONTAINER_RECTANGULAR, Carrier::CONTAINER_VARIABLE)
+            )
+            ) {
                 $sizeEnabled = true;
             }
         }

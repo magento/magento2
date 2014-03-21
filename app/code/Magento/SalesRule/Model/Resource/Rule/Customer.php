@@ -55,9 +55,13 @@ class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function loadByCustomerRule($rule, $customerId, $ruleId)
     {
         $read = $this->_getReadAdapter();
-        $select = $read->select()->from($this->getMainTable())
-            ->where('customer_id = :customer_id')
-            ->where('rule_id = :rule_id');
+        $select = $read->select()->from(
+            $this->getMainTable()
+        )->where(
+            'customer_id = :customer_id'
+        )->where(
+            'rule_id = :rule_id'
+        );
         $data = $read->fetchRow($select, array(':rule_id' => $ruleId, ':customer_id' => $customerId));
         if (false === $data) {
             // set empty data, as an existing rule object might be used

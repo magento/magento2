@@ -104,7 +104,6 @@ class Command
         $this->commandsInfo = self::$_commandsByClass[$class];
     }
 
-
     /**
      * Get command info (static)
      * @param string $name command name
@@ -124,7 +123,6 @@ class Command
      * @param string $name
      * @return array|bool
      */
-
     public function getCommandInfo($name)
     {
         if (!isset(self::$_commandsByClass[$this->_class][$name])) {
@@ -145,10 +143,10 @@ class Command
     {
         $data = $this->getCommandInfo($command);
         $method = $data['function'];
-        if (! method_exists($this, $method)) {
-            throw new \Exception("$method does't exist in class ".$this->_class);
+        if (!method_exists($this, $method)) {
+            throw new \Exception("{$method} does't exist in class " . $this->_class);
         }
-        return $this->$method($command, $options, $params);
+        return $this->{$method}($command, $options, $params);
     }
 
     /**
@@ -164,7 +162,7 @@ class Command
     public static function getInstance($commandName)
     {
         if (!isset(self::$_commandsAll[$commandName])) {
-            throw new \UnexpectedValueException("Cannot find command $commandName");
+            throw new \UnexpectedValueException("Cannot find command {$commandName}");
         }
         $currentCommand = self::$_commandsAll[$commandName];
         return new $currentCommand['class']();
@@ -188,7 +186,6 @@ class Command
         return self::$_sconfig;
     }
 
-
     /**
      * Sets frontend object for all commands
      *
@@ -200,7 +197,6 @@ class Command
         self::$_frontend = $obj;
     }
 
-
     /**
      * Set config object for all commands
      *
@@ -211,7 +207,6 @@ class Command
     {
         self::$_config = $obj;
     }
-
 
     /**
      * Non-static getter for config
@@ -231,7 +226,6 @@ class Command
     {
         return self::$_frontend;
     }
-
 
     /**
      * Get validator object
@@ -259,7 +253,6 @@ class Command
         return self::$_rest;
     }
 
-
     /**
      * Get commands list sorted
      * @return array
@@ -272,7 +265,6 @@ class Command
         ksort(self::$_commandsAll);
         return self::$_commandsAll;
     }
-
 
     /**
      * Get Getopt args from command definitions
@@ -292,7 +284,7 @@ class Command
         while (list($option, $info) = each($commandInfo['options'])) {
             $larg = $sarg = '';
             if (isset($info['arg'])) {
-                if ($info['arg']{0} == '(') {
+                if ($info['arg'][0] == '(') {
                     $larg = '==';
                     $sarg = '::';
                     $arg = substr($info['arg'], 1, -1);
@@ -319,19 +311,19 @@ class Command
         $pathCommands = __DIR__ . '/' . basename(__FILE__, ".php");
         $f = new \DirectoryIterator($pathCommands);
         foreach ($f as $file) {
-            if (! $file->isFile()) {
+            if (!$file->isFile()) {
                 continue;
             }
             $pattern = preg_match("/(.*)_Header\.php/imsu", $file->getFilename(), $matches);
-            if (! $pattern) {
+            if (!$pattern) {
                 continue;
             }
-            include($file->getPathname());
-            if (! isset($commands)) {
+            include $file->getPathname();
+            if (!isset($commands)) {
                 continue;
             }
-            $class = __CLASS__."_".$matches[1];
-            foreach ($commands as $k=>$v) {
+            $class = __CLASS__ . "_" . $matches[1];
+            foreach ($commands as $k => $v) {
                 $commands[$k]['class'] = $class;
                 self::$_commandsAll[$k] = $commands[$k];
             }
@@ -348,7 +340,6 @@ class Command
     {
         return $this->ui()->doError($command, $message);
     }
-
 
     /**
      * Set command return
@@ -385,13 +376,13 @@ class Command
      * @param array &$params by reference
      * @return void
      */
-    public function cleanupParams(array & $params)
+    public function cleanupParams(array &$params)
     {
         $newParams = array();
         if (!count($params)) {
             return;
         }
-        foreach ($params as $k=>$v) {
+        foreach ($params as $k => $v) {
             if (is_string($v)) {
                 $v = trim($v);
                 if (!strlen($v)) {
@@ -410,7 +401,7 @@ class Command
      * @param array &$params
      * @return void
      */
-    public function splitPackageArgs(array & $params)
+    public function splitPackageArgs(array &$params)
     {
         if (!count($params) || !isset($params[0])) {
             return;

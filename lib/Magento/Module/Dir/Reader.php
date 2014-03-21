@@ -72,15 +72,15 @@ class Reader
      * @param FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
-        Dir                 $moduleDirs,
+        Dir $moduleDirs,
         ModuleListInterface $moduleList,
-        Filesystem          $filesystem,
+        Filesystem $filesystem,
         FileIteratorFactory $fileIteratorFactory
     ) {
-        $this->moduleDirs           = $moduleDirs;
-        $this->modulesList          = $moduleList;
-        $this->fileIteratorFactory  = $fileIteratorFactory;
-        $this->modulesDirectory     = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
+        $this->moduleDirs = $moduleDirs;
+        $this->modulesList = $moduleList;
+        $this->fileIteratorFactory = $fileIteratorFactory;
+        $this->modulesDirectory = $filesystem->getDirectoryRead(Filesystem::MODULES_DIR);
     }
 
     /**

@@ -100,11 +100,12 @@ class Store implements \Magento\App\Config\Scope\ReaderInterface
             }
             $config = $this->_converter->convert($dbStoreConfig, $config);
         } else {
-            $websiteConfig = $this->_scopePool
-                ->getScope('website', \Magento\BaseScopeInterface::SCOPE_DEFAULT)
-                ->getSource();
+            $websiteConfig = $this->_scopePool->getScope(
+                'website',
+                \Magento\BaseScopeInterface::SCOPE_DEFAULT
+            )->getSource();
             $config = $this->_converter->convert($websiteConfig, $this->_initialConfig->getData("stores|{$code}"));
         }
         return $config;
     }
-} 
+}

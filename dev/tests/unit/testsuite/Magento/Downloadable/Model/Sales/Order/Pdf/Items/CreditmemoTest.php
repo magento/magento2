@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 
 class CreditmemoTest extends \PHPUnit_Framework_TestCase
@@ -48,44 +47,69 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
-            'productFactory' => $this->getMock(
-                'Magento\Catalog\Model\ProductFactory', array(), array(), '', false
-            ),
+            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
             'orderItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Item\CollectionFactory', array(), array(), '', false
+                'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             'serviceOrderFactory' => $this->getMock(
-                'Magento\Sales\Model\Service\OrderFactory', array(), array(), '', false
+                'Magento\Sales\Model\Service\OrderFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             'currencyFactory' => $this->getMock(
-                'Magento\Directory\Model\CurrencyFactory', array(), array(), '', false
+                'Magento\Directory\Model\CurrencyFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             'orderHistoryFactory' => $this->getMock(
-                'Magento\Sales\Model\Order\Status\HistoryFactory', array(), array(), '', false
+                'Magento\Sales\Model\Order\Status\HistoryFactory',
+                array(),
+                array(),
+                '',
+                false
             ),
             'orderTaxCollectionFactory' => $this->getMock(
-                'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory', array(), array(), '', false
-            ),
+                'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory',
+                array(),
+                array(),
+                '',
+                false
+            )
         );
         $orderConstructorArgs = $objectManager->getConstructArguments('Magento\Sales\Model\Order', $arguments);
         $this->_order = $this->getMock('Magento\Sales\Model\Order', array('formatPriceTxt'), $orderConstructorArgs);
-        $this->_order
-            ->expects($this->any())
-            ->method('formatPriceTxt')
-            ->will($this->returnCallback(array($this, 'formatPrice')));
+        $this->_order->expects(
+            $this->any()
+        )->method(
+            'formatPriceTxt'
+        )->will(
+            $this->returnCallback(array($this, 'formatPrice'))
+        );
 
         $this->_pdf = $this->getMock(
-            'Magento\Sales\Model\Order\Pdf\AbstractPdf', array('drawLineBlocks', 'getPdf'), array(), '', false, false
+            'Magento\Sales\Model\Order\Pdf\AbstractPdf',
+            array('drawLineBlocks', 'getPdf'),
+            array(),
+            '',
+            false,
+            false
         );
 
         $filterManager = $this->getMock('Magento\Filter\FilterManager', array('stripTags'), array(), '', false);
         $filterManager->expects($this->any())->method('stripTags')->will($this->returnArgument(0));
 
-        $modelConstructorArgs = $objectManager
-            ->getConstructArguments('Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo', array(
-                'string' => new \Magento\Stdlib\String(),
-                'filterManager' => $filterManager
-        ));
+        $modelConstructorArgs = $objectManager->getConstructArguments(
+            'Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo',
+            array('string' => new \Magento\Stdlib\String(), 'filterManager' => $filterManager)
+        );
 
         $this->_model = $this->getMock(
             'Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo',
@@ -120,69 +144,70 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     {
         $expectedPageSettings = array('table_header' => true);
         $expectedPdfPage = new \Zend_Pdf_Page('a4');
-        $expectedPdfData = array(array(
-            'lines' => array(
-                array(
-                    array('text' => array('Downloadable Documentation'), 'feed' => 35),
-                    array('text' => array('downloadable-docu', 'mentation'), 'feed' => 255, 'align' => 'right'),
-                    array('text' => '$20.00',   'feed' => 330, 'font' => 'bold', 'align' => 'right'),
-                    array('text' => '$-5.00',   'feed' => 380, 'font' => 'bold', 'align' => 'right'),
-                    array('text' => '1',        'feed' => 445, 'font' => 'bold', 'align' => 'right'),
-                    array('text' => '$2.00',    'feed' => 495, 'font' => 'bold', 'align' => 'right'),
-                    array('text' => '$17.00',   'feed' => 565, 'font' => 'bold', 'align' => 'right'),
-                ),
-                array(
-                    array('text' => array('Test Custom Option'), 'font' => 'italic', 'feed' => 35),
-                ),
-                array(
-                    array('text' => array('test value'), 'feed' => 40),
-                ),
-                array(
-                    array('text' => array('Download Links'), 'font' => 'italic', 'feed' => 35),
-                ),
-                array(
-                    array('text' => array('Magento User Guide'), 'feed' => 40),
-                ),
-            ),
-            'height' => 20,
-        ));
-
-        $this->_model->setItem(new \Magento\Object(array(
-            'name'              => 'Downloadable Documentation',
-            'sku'               => 'downloadable-documentation',
-            'row_total'         => 20.00,
-            'discount_amount'   => 5.00,
-            'qty'               => 1,
-            'tax_amount'        => 2.00,
-            'hidden_tax_amount' => 0.00,
-            'order_item'        => new \Magento\Object(array(
-                'product_options' => array(
-                    'options' => array(
-                        array('label' => 'Test Custom Option', 'value' => 'test value'),
+        $expectedPdfData = array(
+            array(
+                'lines' => array(
+                    array(
+                        array('text' => array('Downloadable Documentation'), 'feed' => 35),
+                        array('text' => array('downloadable-docu', 'mentation'), 'feed' => 255, 'align' => 'right'),
+                        array('text' => '$20.00', 'feed' => 330, 'font' => 'bold', 'align' => 'right'),
+                        array('text' => '$-5.00', 'feed' => 380, 'font' => 'bold', 'align' => 'right'),
+                        array('text' => '1', 'feed' => 445, 'font' => 'bold', 'align' => 'right'),
+                        array('text' => '$2.00', 'feed' => 495, 'font' => 'bold', 'align' => 'right'),
+                        array('text' => '$17.00', 'feed' => 565, 'font' => 'bold', 'align' => 'right')
                     ),
+                    array(array('text' => array('Test Custom Option'), 'font' => 'italic', 'feed' => 35)),
+                    array(array('text' => array('test value'), 'feed' => 40)),
+                    array(array('text' => array('Download Links'), 'font' => 'italic', 'feed' => 35)),
+                    array(array('text' => array('Magento User Guide'), 'feed' => 40))
                 ),
-            )),
-        )));
-        $this->_model
-            ->expects($this->any())
-            ->method('getLinksTitle')
-            ->will($this->returnValue('Download Links'))
-        ;
-        $this->_model
-            ->expects($this->any())
-            ->method('getLinks')
-            ->will($this->returnValue(new \Magento\Object(array(
-                'purchased_items' => array(
-                    new \Magento\Object(array('link_title' => 'Magento User Guide')),
+                'height' => 20
+            )
+        );
+
+        $this->_model->setItem(
+            new \Magento\Object(
+                array(
+                    'name' => 'Downloadable Documentation',
+                    'sku' => 'downloadable-documentation',
+                    'row_total' => 20.00,
+                    'discount_amount' => 5.00,
+                    'qty' => 1,
+                    'tax_amount' => 2.00,
+                    'hidden_tax_amount' => 0.00,
+                    'order_item' => new \Magento\Object(
+                        array(
+                            'product_options' => array(
+                                'options' => array(array('label' => 'Test Custom Option', 'value' => 'test value'))
+                            )
+                        )
+                    )
                 )
-            ))))
-        ;
-        $this->_pdf
-            ->expects($this->once())
-            ->method('drawLineBlocks')
-            ->with($this->anything(), $expectedPdfData, $expectedPageSettings)
-            ->will($this->returnValue($expectedPdfPage))
-        ;
+            )
+        );
+        $this->_model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
+        $this->_model->expects(
+            $this->any()
+        )->method(
+            'getLinks'
+        )->will(
+            $this->returnValue(
+                new \Magento\Object(
+                    array('purchased_items' => array(new \Magento\Object(array('link_title' => 'Magento User Guide'))))
+                )
+            )
+        );
+        $this->_pdf->expects(
+            $this->once()
+        )->method(
+            'drawLineBlocks'
+        )->with(
+            $this->anything(),
+            $expectedPdfData,
+            $expectedPageSettings
+        )->will(
+            $this->returnValue($expectedPdfPage)
+        );
 
         $this->assertNotSame($expectedPdfPage, $this->_model->getPage());
         $this->assertNull($this->_model->draw());

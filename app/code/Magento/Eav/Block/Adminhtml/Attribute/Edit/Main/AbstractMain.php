@@ -36,8 +36,7 @@ namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
 use Magento\Catalog\Model\Resource\Eav\Attribute;
 
-abstract class AbstractMain
-    extends \Magento\Backend\Block\Widget\Form\Generic
+abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * Attribute instance
@@ -130,22 +129,14 @@ abstract class AbstractMain
         $attributeObject = $this->getAttributeObject();
 
         /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id' => 'edit_form',
-                'action' => $this->getData('action'),
-                'method' => 'post',
-            ))
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
 
-        $fieldset = $form->addFieldset('base_fieldset',
-            array('legend' => __('Attribute Properties'))
-        );
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Attribute Properties')));
 
         if ($attributeObject->getAttributeId()) {
-            $fieldset->addField('attribute_id', 'hidden', array(
-                'name' => 'attribute_id',
-            ));
+            $fieldset->addField('attribute_id', 'hidden', array('name' => 'attribute_id'));
         }
 
         $this->_addElementTypes($fieldset);
@@ -166,24 +157,37 @@ abstract class AbstractMain
         );
 
 
-        $validateClass = sprintf('validate-code validate-length maximum-length-%d',
-            \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH);
-        $fieldset->addField('attribute_code', 'text', array(
-            'name'  => 'attribute_code',
-            'label' => __('Attribute Code'),
-            'title' => __('Attribute Code'),
-            'note'  => __('For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols', \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH),
-            'class' => $validateClass,
-            'required' => true,
-        ));
+        $validateClass = sprintf(
+            'validate-code validate-length maximum-length-%d',
+            \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+        );
+        $fieldset->addField(
+            'attribute_code',
+            'text',
+            array(
+                'name' => 'attribute_code',
+                'label' => __('Attribute Code'),
+                'title' => __('Attribute Code'),
+                'note' => __(
+                    'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
+                    \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+                ),
+                'class' => $validateClass,
+                'required' => true
+            )
+        );
 
-        $fieldset->addField('frontend_input', 'select', array(
-            'name' => 'frontend_input',
-            'label' => __('Catalog Input Type for Store Owner'),
-            'title' => __('Catalog Input Type for Store Owner'),
-            'value' => 'text',
-            'values'=> $this->_inputTypeFactory->create()->toOptionArray()
-        ));
+        $fieldset->addField(
+            'frontend_input',
+            'select',
+            array(
+                'name' => 'frontend_input',
+                'label' => __('Catalog Input Type for Store Owner'),
+                'title' => __('Catalog Input Type for Store Owner'),
+                'value' => 'text',
+                'values' => $this->_inputTypeFactory->create()->toOptionArray()
+            )
+        );
 
         $fieldset->addField(
             'is_required',
@@ -192,41 +196,57 @@ abstract class AbstractMain
                 'name' => 'is_required',
                 'label' => __('Values Required'),
                 'title' => __('Values Required'),
-                'values' => $yesno,
+                'values' => $yesno
             )
         );
 
-        $fieldset->addField('default_value_text', 'text', array(
-            'name' => 'default_value_text',
-            'label' => __('Default Value'),
-            'title' => __('Default Value'),
-            'value' => $attributeObject->getDefaultValue(),
-        ));
+        $fieldset->addField(
+            'default_value_text',
+            'text',
+            array(
+                'name' => 'default_value_text',
+                'label' => __('Default Value'),
+                'title' => __('Default Value'),
+                'value' => $attributeObject->getDefaultValue()
+            )
+        );
 
-        $fieldset->addField('default_value_yesno', 'select', array(
-            'name' => 'default_value_yesno',
-            'label' => __('Default Value'),
-            'title' => __('Default Value'),
-            'values' => $yesno,
-            'value' => $attributeObject->getDefaultValue(),
-        ));
+        $fieldset->addField(
+            'default_value_yesno',
+            'select',
+            array(
+                'name' => 'default_value_yesno',
+                'label' => __('Default Value'),
+                'title' => __('Default Value'),
+                'values' => $yesno,
+                'value' => $attributeObject->getDefaultValue()
+            )
+        );
 
         $dateFormat = $this->_localeDate->getDateFormat(\Magento\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-        $fieldset->addField('default_value_date', 'date', array(
-            'name'   => 'default_value_date',
-            'label'  => __('Default Value'),
-            'title'  => __('Default Value'),
-            'image'  => $this->getViewFileUrl('images/grid-cal.gif'),
-            'value'  => $attributeObject->getDefaultValue(),
-            'date_format' => $dateFormat
-        ));
+        $fieldset->addField(
+            'default_value_date',
+            'date',
+            array(
+                'name' => 'default_value_date',
+                'label' => __('Default Value'),
+                'title' => __('Default Value'),
+                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'value' => $attributeObject->getDefaultValue(),
+                'date_format' => $dateFormat
+            )
+        );
 
-        $fieldset->addField('default_value_textarea', 'textarea', array(
-            'name' => 'default_value_textarea',
-            'label' => __('Default Value'),
-            'title' => __('Default Value'),
-            'value' => $attributeObject->getDefaultValue(),
-        ));
+        $fieldset->addField(
+            'default_value_textarea',
+            'textarea',
+            array(
+                'name' => 'default_value_textarea',
+                'label' => __('Default Value'),
+                'title' => __('Default Value'),
+                'value' => $attributeObject->getDefaultValue()
+            )
+        );
 
         $fieldset->addField(
             'is_unique',
@@ -236,18 +256,20 @@ abstract class AbstractMain
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
                 'note' => __('Not shared with other products'),
-                'values' => $yesno,
+                'values' => $yesno
             )
         );
 
-        $fieldset->addField('frontend_class', 'select', array(
-            'name'  => 'frontend_class',
-            'label' => __('Input Validation for Store Owner'),
-            'title' => __('Input Validation for Store Owner'),
-            'values'=> $this->_eavData->getFrontendClasses(
-                $attributeObject->getEntityType()->getEntityTypeCode()
+        $fieldset->addField(
+            'frontend_class',
+            'select',
+            array(
+                'name' => 'frontend_class',
+                'label' => __('Input Validation for Store Owner'),
+                'title' => __('Input Validation for Store Owner'),
+                'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
             )
-        ));
+        );
 
         if ($attributeObject->getId()) {
             $form->getElement('attribute_code')->setDisabled(1);
@@ -269,11 +291,11 @@ abstract class AbstractMain
      */
     protected function _initFormValues()
     {
-        $this->_eventManager->dispatch('adminhtml_block_eav_attribute_edit_form_init', array(
-            'form' => $this->getForm(),
-        ));
-        $this->getForm()
-            ->addValues($this->getAttributeObject()->getData());
+        $this->_eventManager->dispatch(
+            'adminhtml_block_eav_attribute_edit_form_init',
+            array('form' => $this->getForm())
+        );
+        $this->getForm()->addValues($this->getAttributeObject()->getData());
         return parent::_initFormValues();
     }
 
@@ -307,8 +329,7 @@ abstract class AbstractMain
      */
     protected function _afterToHtml($html)
     {
-        $jsScripts = $this->getLayout()
-            ->createBlock('Magento\Eav\Block\Adminhtml\Attribute\Edit\Js')->toHtml();
+        $jsScripts = $this->getLayout()->createBlock('Magento\Eav\Block\Adminhtml\Attribute\Edit\Js')->toHtml();
         return $html . $jsScripts;
     }
 }

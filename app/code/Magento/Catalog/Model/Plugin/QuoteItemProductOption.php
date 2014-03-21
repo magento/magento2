@@ -48,10 +48,11 @@ class QuoteItemProductOption
                     $option = $item->getProduct()->getOptionById($code[1]);
                     if ($option && $option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE) {
                         try {
-                            $option->groupFactory($option->getType())
-                                ->setQuoteItemOption($itemOption)
-                                ->copyQuoteToOrder();
-
+                            $option->groupFactory(
+                                $option->getType()
+                            )->setQuoteItemOption(
+                                $itemOption
+                            )->copyQuoteToOrder();
                         } catch (\Exception $e) {
                             continue;
                         }

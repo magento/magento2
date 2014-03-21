@@ -54,15 +54,15 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\App\State')->setAreaCode('adminhtml');
 
         $this->coreRegistry = $objectManager->get('Magento\Registry');
-        $this->block = $objectManager->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter',
-                '',
-                [
-                    'registry' => $this->coreRegistry
-                ]
-            )
-            ->setTemplate('tab/newsletter.phtml');
+        $this->block = $objectManager->get(
+            'Magento\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter',
+            '',
+            array('registry' => $this->coreRegistry)
+        )->setTemplate(
+            'tab/newsletter.phtml'
+        );
     }
 
     /**

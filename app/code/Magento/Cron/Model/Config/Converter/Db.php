@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cron\Model\Config\Converter;
 
 /**
@@ -83,6 +82,7 @@ class Db implements \Magento\Config\ConverterInterface
             $result[$jobName]['config_path'] = $jobConfig['schedule']['config_path'];
         }
     }
+
     /**
      * Fetch parameter 'cron_expr' from 'schedule' container, reassign it
      *

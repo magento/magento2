@@ -47,8 +47,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formMock = $this->getMock('Magento\Data\Form', array('setFieldNameSuffix', 'addFieldset'), array(), '',
-            false);
+        $this->_formMock = $this->getMock(
+            'Magento\Data\Form',
+            array('setFieldNameSuffix', 'addFieldset'),
+            array(),
+            '',
+            false
+        );
         $this->_fieldsetMock = $this->getMock('Magento\Data\Form\Element\Fieldset', array(), array(), '', false);
         $this->_experimentCodeMock = $this->getMock(
             'Magento\GoogleOptimizer\Model\Code',
@@ -58,9 +63,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             false
         );
         $context = $this->getMock('Magento\App\Helper\Context', array(), array(), '', false);
-        $data = array(
-            'context' => $context
-        );
+        $data = array('context' => $context);
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Form', $data);
     }
@@ -69,10 +72,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $experimentCode = 'some-code';
         $experimentCodeId = 'code-id';
-        $this->_experimentCodeMock->expects($this->once())->method('getExperimentScript')
-            ->will($this->returnValue($experimentCode));
-        $this->_experimentCodeMock->expects($this->once())->method('getCodeId')
-            ->will($this->returnValue($experimentCodeId));
+        $this->_experimentCodeMock->expects(
+            $this->once()
+        )->method(
+            'getExperimentScript'
+        )->will(
+            $this->returnValue($experimentCode)
+        );
+        $this->_experimentCodeMock->expects(
+            $this->once()
+        )->method(
+            'getCodeId'
+        )->will(
+            $this->returnValue($experimentCodeId)
+        );
         $this->_prepareFormMock($experimentCode, $experimentCodeId);
 
         $this->_helper->addGoogleoptimizerFields($this->_formMock, $this->_experimentCodeMock);
@@ -93,26 +106,43 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareFormMock($experimentCode, $experimentCodeId)
     {
-        $this->_formMock->expects($this->once())->method('addFieldset')
-            ->with('googleoptimizer_fields', array('legend' => 'Google Analytics Content Experiments Code'))
-            ->will($this->returnValue($this->_fieldsetMock));
+        $this->_formMock->expects(
+            $this->once()
+        )->method(
+            'addFieldset'
+        )->with(
+            'googleoptimizer_fields',
+            array('legend' => 'Google Analytics Content Experiments Code')
+        )->will(
+            $this->returnValue($this->_fieldsetMock)
+        );
 
-        $this->_fieldsetMock->expects($this->at(0))->method('addField')
-            ->with('experiment_script', 'textarea', array(
+        $this->_fieldsetMock->expects(
+            $this->at(0)
+        )->method(
+            'addField'
+        )->with(
+            'experiment_script',
+            'textarea',
+            array(
                 'name' => 'experiment_script',
                 'label' => 'Experiment Code',
                 'value' => $experimentCode,
                 'class' => 'textarea googleoptimizer',
                 'required' => false,
-                'note' => 'Note: Experiment code should be added to the original page only.',
-            ));
+                'note' => 'Note: Experiment code should be added to the original page only.'
+            )
+        );
 
-        $this->_fieldsetMock->expects($this->at(1))->method('addField')
-            ->with('code_id', 'hidden', array(
-                'name' => 'code_id',
-                'value' => $experimentCodeId,
-                'required' => false,
-            ));
+        $this->_fieldsetMock->expects(
+            $this->at(1)
+        )->method(
+            'addField'
+        )->with(
+            'code_id',
+            'hidden',
+            array('name' => 'code_id', 'value' => $experimentCodeId, 'required' => false)
+        );
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }
 }

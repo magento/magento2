@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GroupedProduct\Block\Stockqty\Type;
 
 class GroupedTest extends \PHPUnit_Framework_TestCase
@@ -55,9 +54,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $productTags = array('catalog_product_1');
         $childProduct = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $childProduct->expects($this->once())
-            ->method('getIdentities')
-            ->will($this->returnValue($productTags));
+        $childProduct->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
         $typeInstance = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
             array(),
@@ -65,20 +62,24 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $typeInstance->expects($this->once())
-            ->method('getAssociatedProducts')
-            ->will($this->returnValue(array($childProduct)));
-        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
-        $product->expects($this->once())
-            ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstance));
-        $this->registry->expects($this->any())
-            ->method('registry')
-            ->with('current_product')
-            ->will($this->returnValue($product));
-        $this->assertEquals(
-            $productTags,
-            $this->block->getIdentities()
+        $typeInstance->expects(
+            $this->once()
+        )->method(
+            'getAssociatedProducts'
+        )->will(
+            $this->returnValue(array($childProduct))
         );
+        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $product->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+        $this->registry->expects(
+            $this->any()
+        )->method(
+            'registry'
+        )->with(
+            'current_product'
+        )->will(
+            $this->returnValue($product)
+        );
+        $this->assertEquals($productTags, $this->block->getIdentities());
     }
 }

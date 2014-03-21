@@ -42,5 +42,4 @@ class Ip extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
     {
         return long2ip($row->getData($this->getColumn()->getIndex()));
     }
-
 }

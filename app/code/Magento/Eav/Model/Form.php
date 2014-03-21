@@ -111,7 +111,7 @@ abstract class Form
      *
      * @var bool
      */
-    protected $_isAjax          = false;
+    protected $_isAjax = false;
 
     /**
      * Whether the invisible form fields need to be filtered/ignored
@@ -214,11 +214,13 @@ abstract class Form
      */
     protected function _getFilteredFormAttributeCollection()
     {
-        return $this->_getFormAttributeCollection()
-            ->setStore($this->getStore())
-            ->setEntityType($this->getEntityType())
-            ->addFormCodeFilter($this->getFormCode())
-            ->setSortOrder();
+        return $this->_getFormAttributeCollection()->setStore(
+            $this->getStore()
+        )->setEntityType(
+            $this->getEntityType()
+        )->addFormCodeFilter(
+            $this->getFormCode()
+        )->setSortOrder();
     }
 
     /**
@@ -335,8 +337,8 @@ abstract class Form
     public function getAttributes()
     {
         if (is_null($this->_attributes)) {
-            $this->_attributes      = array();
-            $this->_userAttributes  = array();
+            $this->_attributes = array();
+            $this->_userAttributes = array();
             /** @var $attribute \Magento\Eav\Model\Attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;
@@ -475,14 +477,14 @@ abstract class Form
             $validatorFactory = $this->_validatorConfigFactory->create(array('configFiles' => $configFiles));
             $builder = $validatorFactory->createValidatorBuilder('eav_entity', 'form');
 
-            $builder->addConfiguration('eav_data_validator', array(
-                'method' => 'setAttributes',
-                'arguments' => array($this->getAllowedAttributes())
-            ));
-            $builder->addConfiguration('eav_data_validator', array(
-                'method' => 'setData',
-                'arguments' => array($data)
-            ));
+            $builder->addConfiguration(
+                'eav_data_validator',
+                array('method' => 'setAttributes', 'arguments' => array($this->getAllowedAttributes()))
+            );
+            $builder->addConfiguration(
+                'eav_data_validator',
+                array('method' => 'setData', 'arguments' => array($data))
+            );
             $this->_validator = $builder->createValidator();
         }
         return $this->_validator;

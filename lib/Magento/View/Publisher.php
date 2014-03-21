@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\View;
 
 use Magento\Filesystem\Directory\WriteInterface;
@@ -35,15 +34,20 @@ class Publisher implements PublicFilesManagerInterface
      * Extensions group for static files
      */
     const CONTENT_TYPE_CSS = 'css';
-    const CONTENT_TYPE_JS  = 'js';
+
+    const CONTENT_TYPE_JS = 'js';
+
     /**#@-*/
 
     /**#@+
      * Protected extensions group for publication mechanism
      */
-    const CONTENT_TYPE_PHP   = 'php';
+    const CONTENT_TYPE_PHP = 'php';
+
     const CONTENT_TYPE_PHTML = 'phtml';
-    const CONTENT_TYPE_XML   = 'xml';
+
+    const CONTENT_TYPE_XML = 'xml';
+
     /**#@-*/
 
     /**
@@ -126,11 +130,7 @@ class Publisher implements PublicFilesManagerInterface
      */
     protected function isAllowedExtension($extension)
     {
-        $protectedExtensions = array(
-            self::CONTENT_TYPE_PHP,
-            self::CONTENT_TYPE_PHTML,
-            self::CONTENT_TYPE_XML
-        );
+        $protectedExtensions = array(self::CONTENT_TYPE_PHP, self::CONTENT_TYPE_PHTML, self::CONTENT_TYPE_XML);
         if (in_array($extension, $protectedExtensions)) {
             return false;
         }
@@ -183,8 +183,11 @@ class Publisher implements PublicFilesManagerInterface
         $targetDirectory = $this->pubDirectory;
 
         $fileMTime = $this->rootDirectory->stat($sourcePathRelative)['mtime'];
-        if (!$targetDirectory->isExist($targetPathRelative)
-            || $fileMTime != $targetDirectory->stat($targetPathRelative)['mtime']
+        if (!$targetDirectory->isExist(
+            $targetPathRelative
+        ) || $fileMTime != $targetDirectory->stat(
+            $targetPathRelative
+        )['mtime']
         ) {
             if ($this->rootDirectory->isFile($sourcePathRelative)) {
                 $this->rootDirectory->copyFile($sourcePathRelative, $targetPathRelative, $targetDirectory);

@@ -34,8 +34,7 @@ use Magento\Core\Model\Website;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Collection
-    extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
     /**
      * code of password hash in customer's EAV tables
@@ -164,12 +163,12 @@ abstract class Collection
      */
     protected function _initSelect()
     {
-        $select         = $this->getSelect();
-        $connection     = $this->getConnection();
-        $entityType     = $this->getEntityType();
-        $extraTable     = $entityType->getAdditionalAttributeTable();
-        $mainDescribe   = $this->getConnection()->describeTable($this->getResource()->getMainTable());
-        $mainColumns    = array();
+        $select = $this->getSelect();
+        $connection = $this->getConnection();
+        $entityType = $this->getEntityType();
+        $extraTable = $entityType->getAdditionalAttributeTable();
+        $mainDescribe = $this->getConnection()->describeTable($this->getResource()->getMainTable());
+        $mainColumns = array();
 
         foreach (array_keys($mainDescribe) as $columnName) {
             $mainColumns[$columnName] = $columnName;
@@ -178,8 +177,8 @@ abstract class Collection
         $select->from(array('main_table' => $this->getResource()->getMainTable()), $mainColumns);
 
         // additional attribute data table
-        $extraDescribe  = $connection->describeTable($this->getTable($extraTable));
-        $extraColumns   = array();
+        $extraDescribe = $connection->describeTable($this->getTable($extraTable));
+        $extraColumns = array();
         foreach (array_keys($extraDescribe) as $columnName) {
             if (isset($mainColumns[$columnName])) {
                 continue;
@@ -188,33 +187,36 @@ abstract class Collection
         }
 
         $this->addBindParam('mt_entity_type_id', (int)$entityType->getId());
-        $select
-            ->join(
-                array('additional_table' => $this->getTable($extraTable)),
-                'additional_table.attribute_id = main_table.attribute_id',
-                $extraColumns)
-            ->where('main_table.entity_type_id = :mt_entity_type_id');
+        $select->join(
+            array('additional_table' => $this->getTable($extraTable)),
+            'additional_table.attribute_id = main_table.attribute_id',
+            $extraColumns
+        )->where(
+            'main_table.entity_type_id = :mt_entity_type_id'
+        );
 
         // scope values
 
-        $scopeDescribe  = $connection->describeTable($this->_getEavWebsiteTable());
+        $scopeDescribe = $connection->describeTable($this->_getEavWebsiteTable());
         unset($scopeDescribe['attribute_id']);
-        $scopeColumns   = array();
+        $scopeColumns = array();
         foreach (array_keys($scopeDescribe) as $columnName) {
             if ($columnName == 'website_id') {
                 $scopeColumns['scope_website_id'] = $columnName;
             } else {
                 if (isset($mainColumns[$columnName])) {
                     $alias = sprintf('scope_%s', $columnName);
-                    $expression = $connection->getCheckSql('main_table.%s IS NULL',
-                        'scope_table.%s', 'main_table.%s');
+                    $expression = $connection->getCheckSql('main_table.%s IS NULL', 'scope_table.%s', 'main_table.%s');
                     $expression = sprintf($expression, $columnName, $columnName, $columnName);
                     $this->addFilterToMap($columnName, $expression);
                     $scopeColumns[$alias] = $columnName;
                 } elseif (isset($extraColumns[$columnName])) {
                     $alias = sprintf('scope_%s', $columnName);
-                    $expression = $connection->getCheckSql('additional_table.%s IS NULL',
-                        'scope_table.%s', 'additional_table.%s');
+                    $expression = $connection->getCheckSql(
+                        'additional_table.%s IS NULL',
+                        'scope_table.%s',
+                        'additional_table.%s'
+                    );
                     $expression = sprintf($expression, $columnName, $columnName, $columnName);
                     $this->addFilterToMap($columnName, $expression);
                     $scopeColumns[$alias] = $columnName;
@@ -263,8 +265,11 @@ abstract class Collection
     public function addSystemHiddenFilter()
     {
         $connection = $this->getConnection();
-        $expression = $connection->getCheckSql('additional_table.is_system = 1 AND additional_table.is_visible = 0',
-            '1', '0');
+        $expression = $connection->getCheckSql(
+            'additional_table.is_system = 1 AND additional_table.is_visible = 0',
+            '1',
+            '0'
+        );
         $this->getSelect()->where($connection->quoteInto($expression . ' = ?', 0));
         return $this;
     }
@@ -282,7 +287,8 @@ abstract class Collection
                 'additional_table.is_system = 1 AND additional_table.is_visible = 0 AND main_table.attribute_code != ?',
                 self::EAV_CODE_PASSWORD_HASH
             ),
-            '1', '0'
+            '1',
+            '0'
         );
         $this->getSelect()->where($connection->quoteInto($expression . ' = ?', 0));
         return $this;

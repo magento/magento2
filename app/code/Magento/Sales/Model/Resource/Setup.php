@@ -60,7 +60,14 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     ) {
         $this->_config = $config;
         $this->_encryptor = $context->getEncryptor();
-        parent::__construct($context, $resourceName, $cache, $attrGroupCollectionFactory, $moduleName, $connectionName);
+        parent::__construct(
+            $context,
+            $resourceName,
+            $cache,
+            $attrGroupCollectionFactory,
+            $moduleName,
+            $connectionName
+        );
     }
 
     /**
@@ -68,28 +75,28 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      *
      * @var $_flatEntityTables array
      */
-    protected $_flatEntityTables     = array(
-        'quote'             => 'sales_flat_quote',
-        'quote_item'        => 'sales_flat_quote_item',
-        'quote_address'     => 'sales_flat_quote_address',
-        'quote_address_item'=> 'sales_flat_quote_address_item',
-        'quote_address_rate'=> 'sales_flat_quote_shipping_rate',
-        'quote_payment'     => 'sales_flat_quote_payment',
-        'order'             => 'sales_flat_order',
-        'order_payment'     => 'sales_flat_order_payment',
-        'order_item'        => 'sales_flat_order_item',
-        'order_address'     => 'sales_flat_order_address',
+    protected $_flatEntityTables = array(
+        'quote' => 'sales_flat_quote',
+        'quote_item' => 'sales_flat_quote_item',
+        'quote_address' => 'sales_flat_quote_address',
+        'quote_address_item' => 'sales_flat_quote_address_item',
+        'quote_address_rate' => 'sales_flat_quote_shipping_rate',
+        'quote_payment' => 'sales_flat_quote_payment',
+        'order' => 'sales_flat_order',
+        'order_payment' => 'sales_flat_order_payment',
+        'order_item' => 'sales_flat_order_item',
+        'order_address' => 'sales_flat_order_address',
         'order_status_history' => 'sales_flat_order_status_history',
-        'invoice'           => 'sales_flat_invoice',
-        'invoice_item'      => 'sales_flat_invoice_item',
-        'invoice_comment'   => 'sales_flat_invoice_comment',
-        'creditmemo'        => 'sales_flat_creditmemo',
-        'creditmemo_item'   => 'sales_flat_creditmemo_item',
-        'creditmemo_comment'=> 'sales_flat_creditmemo_comment',
-        'shipment'          => 'sales_flat_shipment',
-        'shipment_item'     => 'sales_flat_shipment_item',
-        'shipment_track'    => 'sales_flat_shipment_track',
-        'shipment_comment'  => 'sales_flat_shipment_comment',
+        'invoice' => 'sales_flat_invoice',
+        'invoice_item' => 'sales_flat_invoice_item',
+        'invoice_comment' => 'sales_flat_invoice_comment',
+        'creditmemo' => 'sales_flat_creditmemo',
+        'creditmemo_item' => 'sales_flat_creditmemo_item',
+        'creditmemo_comment' => 'sales_flat_creditmemo_comment',
+        'shipment' => 'sales_flat_shipment',
+        'shipment_item' => 'sales_flat_shipment_item',
+        'shipment_track' => 'sales_flat_shipment_track',
+        'shipment_comment' => 'sales_flat_shipment_comment'
     );
 
     /**
@@ -97,12 +104,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      *
      * @var string[] $_flatEntitiesGrid
      */
-    protected $_flatEntitiesGrid     = array(
-        'order',
-        'invoice',
-        'shipment',
-        'creditmemo'
-    );
+    protected $_flatEntitiesGrid = array('order', 'invoice', 'shipment', 'creditmemo');
 
     /**
      * Check if table exist for flat entity
@@ -126,9 +128,12 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      */
     public function addAttribute($entityTypeId, $code, array $attr)
     {
-        if (isset($this->_flatEntityTables[$entityTypeId]) &&
-            $this->_flatTableExist($this->_flatEntityTables[$entityTypeId]))
-        {
+        if (isset(
+            $this->_flatEntityTables[$entityTypeId]
+        ) && $this->_flatTableExist(
+            $this->_flatEntityTables[$entityTypeId]
+        )
+        ) {
             $this->_addFlatAttribute($this->_flatEntityTables[$entityTypeId], $code, $attr);
             $this->_addGridAttribute($this->_flatEntityTables[$entityTypeId], $code, $attr, $entityTypeId);
         } else {
@@ -217,7 +222,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         }
 
         $data['nullable'] = isset($data['required']) ? !$data['required'] : true;
-        $data['comment']  = isset($data['comment']) ? $data['comment'] : ucwords(str_replace('_', ' ', $code));
+        $data['comment'] = isset($data['comment']) ? $data['comment'] : ucwords(str_replace('_', ' ', $code));
         return $data;
     }
 
@@ -227,33 +232,33 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     public function getDefaultEntities()
     {
         $entities = array(
-            'order'                       => array(
-                'entity_model'                   => 'Magento\Sales\Model\Resource\Order',
-                'table'                          => 'sales_flat_order',
-                'increment_model'                => 'Magento\Eav\Model\Entity\Increment\Numeric',
-                'increment_per_store'            => true,
-                'attributes'                     => array()
+            'order' => array(
+                'entity_model' => 'Magento\Sales\Model\Resource\Order',
+                'table' => 'sales_flat_order',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_per_store' => true,
+                'attributes' => array()
             ),
-            'invoice'                       => array(
-                'entity_model'                   => 'Magento\Sales\Model\Resource\Order\Invoice',
-                'table'                          => 'sales_flat_invoice',
-                'increment_model'                => 'Magento\Eav\Model\Entity\Increment\Numeric',
-                'increment_per_store'            => true,
-                'attributes'                     => array()
+            'invoice' => array(
+                'entity_model' => 'Magento\Sales\Model\Resource\Order\Invoice',
+                'table' => 'sales_flat_invoice',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_per_store' => true,
+                'attributes' => array()
             ),
-            'creditmemo'                       => array(
-                'entity_model'                   => 'Magento\Sales\Model\Resource\Order\Creditmemo',
-                'table'                          => 'sales_flat_creditmemo',
-                'increment_model'                => 'Magento\Eav\Model\Entity\Increment\Numeric',
-                'increment_per_store'            => true,
-                'attributes'                     => array()
+            'creditmemo' => array(
+                'entity_model' => 'Magento\Sales\Model\Resource\Order\Creditmemo',
+                'table' => 'sales_flat_creditmemo',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_per_store' => true,
+                'attributes' => array()
             ),
-            'shipment'                       => array(
-                'entity_model'                   => 'Magento\Sales\Model\Resource\Order\Shipment',
-                'table'                          => 'sales_flat_shipment',
-                'increment_model'                => 'Magento\Eav\Model\Entity\Increment\Numeric',
-                'increment_per_store'            => true,
-                'attributes'                     => array()
+            'shipment' => array(
+                'entity_model' => 'Magento\Sales\Model\Resource\Order\Shipment',
+                'table' => 'sales_flat_shipment',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_per_store' => true,
+                'attributes' => array()
             )
         );
         return $entities;

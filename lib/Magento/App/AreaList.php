@@ -66,8 +66,9 @@ class AreaList
     {
         foreach ($this->_areas as $areaCode => &$areaInfo) {
             if (!isset($areaInfo['frontName']) && isset($areaInfo['frontNameResolver'])) {
-                $areaInfo['frontName'] = $this->_resolverFactory->create($areaInfo['frontNameResolver'])
-                    ->getFrontName();
+                $areaInfo['frontName'] = $this->_resolverFactory->create(
+                    $areaInfo['frontNameResolver']
+                )->getFrontName();
             }
             if ($areaInfo['frontName'] == $frontName) {
                 return $areaCode;

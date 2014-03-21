@@ -44,15 +44,19 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
     {
         $adapter = $this->_getReadAdapter();
         if ($object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()) {
-            $select = $adapter->select()
-                ->from($this->getMainTable())
-                ->where('customer_id = :customer_id')
-                ->where('product_id  = :product_id')
-                ->where('website_id  = :website_id');
+            $select = $adapter->select()->from(
+                $this->getMainTable()
+            )->where(
+                'customer_id = :customer_id'
+            )->where(
+                'product_id  = :product_id'
+            )->where(
+                'website_id  = :website_id'
+            );
             $bind = array(
                 ':customer_id' => $object->getCustomerId(),
-                ':product_id'  => $object->getProductId(),
-                ':website_id'  => $object->getWebsiteId()
+                ':product_id' => $object->getProductId(),
+                ':website_id' => $object->getWebsiteId()
             );
             return $adapter->fetchRow($select, $bind);
         }
@@ -82,10 +86,10 @@ abstract class AbstractResource extends \Magento\Core\Model\Resource\Db\Abstract
      * @param int $websiteId
      * @return $this
      */
-    public function deleteCustomer(\Magento\Core\Model\AbstractModel $object, $customerId, $websiteId=null)
+    public function deleteCustomer(\Magento\Core\Model\AbstractModel $object, $customerId, $websiteId = null)
     {
         $adapter = $this->_getWriteAdapter();
-        $where   = array();
+        $where = array();
         $where[] = $adapter->quoteInto('customer_id=?', $customerId);
         if ($websiteId) {
             $where[] = $adapter->quoteInto('website_id=?', $websiteId);

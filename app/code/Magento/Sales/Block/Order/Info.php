@@ -76,10 +76,7 @@ class Info extends \Magento\View\Element\Template
         if ($headBlock = $this->getLayout()->getBlock('head')) {
             $headBlock->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
         }
-        $this->setChild(
-            'payment_info',
-            $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment())
-        );
+        $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
     }
 
     /**
@@ -99,5 +96,4 @@ class Info extends \Magento\View\Element\Template
     {
         return $this->_coreRegistry->registry('current_order');
     }
-
 }

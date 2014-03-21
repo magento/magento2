@@ -62,7 +62,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         array $data = array()
     ) {
         parent::__construct(
-            $context, $backendData, $config, $product, $productResource, $attrSetCollection, $localeFormat, $data
+            $context,
+            $backendData,
+            $config,
+            $product,
+            $productResource,
+            $attrSetCollection,
+            $localeFormat,
+            $data
         );
         $this->_productFactory = $productFactory;
     }
@@ -92,13 +99,17 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $object->getProduct();
-        if (!($product instanceof \Magento\Catalog\Model\Product)) {
+        if (!$product instanceof \Magento\Catalog\Model\Product) {
             $product = $this->_productFactory->create()->load($object->getProductId());
         }
 
-        $product->setQuoteItemQty($object->getQty())
-            ->setQuoteItemPrice($object->getPrice()) // possible bug: need to use $object->getBasePrice()
-            ->setQuoteItemRowTotal($object->getBaseRowTotal());
+        $product->setQuoteItemQty(
+            $object->getQty()
+        )->setQuoteItemPrice(
+            $object->getPrice() // possible bug: need to use $object->getBasePrice()
+        )->setQuoteItemRowTotal(
+            $object->getBaseRowTotal()
+        );
 
         return parent::validate($product);
     }

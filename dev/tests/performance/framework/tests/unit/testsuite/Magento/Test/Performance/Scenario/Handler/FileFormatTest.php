@@ -24,7 +24,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Performance\Scenario\Handler;
 
 class FileFormatTest extends \PHPUnit_Framework_TestCase
@@ -47,11 +46,17 @@ class FileFormatTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_handler = $this->getMockForAbstractClass(
-            'Magento\TestFramework\Performance\Scenario\HandlerInterface');
+            'Magento\TestFramework\Performance\Scenario\HandlerInterface'
+        );
         $this->_object = new \Magento\TestFramework\Performance\Scenario\Handler\FileFormat();
         $this->_object->register('jmx', $this->_handler);
-        $this->_scenario =
-            new \Magento\TestFramework\Performance\Scenario('Scenario', 'scenario.jmx', array(), array(), array());
+        $this->_scenario = new \Magento\TestFramework\Performance\Scenario(
+            'Scenario',
+            'scenario.jmx',
+            array(),
+            array(),
+            array()
+        );
     }
 
     protected function tearDown()
@@ -71,11 +76,7 @@ class FileFormatTest extends \PHPUnit_Framework_TestCase
     public function testRunDelegation()
     {
         $reportFile = 'scenario.jtl';
-        $this->_handler
-            ->expects($this->once())
-            ->method('run')
-            ->with($this->_scenario, $reportFile)
-        ;
+        $this->_handler->expects($this->once())->method('run')->with($this->_scenario, $reportFile);
         $this->_object->run($this->_scenario, $reportFile);
     }
 
@@ -85,8 +86,13 @@ class FileFormatTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunUnsupportedFormat()
     {
-        $scenario =
-            new \Magento\TestFramework\Performance\Scenario('Scenario', 'scenario.txt', array(), array(), array());
+        $scenario = new \Magento\TestFramework\Performance\Scenario(
+            'Scenario',
+            'scenario.txt',
+            array(),
+            array(),
+            array()
+        );
         $this->_object->run($scenario);
     }
 }

@@ -24,7 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
- /**
+/**
  * Currency Symbol helper
  *
  * @category   Magento
@@ -57,13 +57,7 @@ class Data extends \Magento\Core\Helper\Data
         $dbCompatibleMode = true
     ) {
         $this->_symbolFactory = $symbolFactory;
-        parent::__construct(
-            $context,
-            $coreStoreConfig,
-            $storeManager,
-            $appState,
-            $dbCompatibleMode
-        );
+        parent::__construct($context, $coreStoreConfig, $storeManager, $appState, $dbCompatibleMode);
     }
 
     /**
@@ -80,7 +74,7 @@ class Data extends \Magento\Core\Helper\Data
             $customCurrencySymbol = $currencySymbol->getCurrencySymbol($baseCode);
 
             if ($customCurrencySymbol) {
-                $currencyOptions['symbol']  = $customCurrencySymbol;
+                $currencyOptions['symbol'] = $customCurrencySymbol;
                 $currencyOptions['display'] = \Magento\Currency::USE_SYMBOL;
             }
         }

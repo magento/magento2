@@ -49,10 +49,8 @@ class Price extends \Magento\App\Helper\AbstractHelper
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Calculation $taxCalculation
      */
-    public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Tax\Model\Calculation $taxCalculation
-    ) {
+    public function __construct(\Magento\Tax\Helper\Data $taxData, \Magento\Tax\Model\Calculation $taxCalculation)
+    {
         $this->taxData = $taxData;
         $this->taxCalculation = $taxCalculation;
     }

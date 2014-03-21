@@ -28,5 +28,8 @@ $installer = $this;
 $installer->cleanCache();
 
 $installer->updateAttribute(
-    'customer_address', 'street', 'backend_model', 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend'
+    'customer_address',
+    'street',
+    'backend_model',
+    'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend'
 );

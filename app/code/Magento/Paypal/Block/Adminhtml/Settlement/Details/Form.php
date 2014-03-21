@@ -75,12 +75,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'fields' => array(
                     'transaction_id' => array('label' => $this->_settlement->getFieldLabel('transaction_id')),
                     'invoice_id' => array('label' => $this->_settlement->getFieldLabel('invoice_id')),
-                    'paypal_reference_id' => array('label' => $this->_settlement->getFieldLabel('paypal_reference_id')),
+                    'paypal_reference_id' => array(
+                        'label' => $this->_settlement->getFieldLabel('paypal_reference_id')
+                    ),
                     'paypal_reference_id_type' => array(
                         'label' => $this->_settlement->getFieldLabel('paypal_reference_id_type'),
                         'value' => $model->getReferenceType($model->getData('paypal_reference_id_type'))
                     ),
-                    'custom_field' => array('label' => $this->_settlement->getFieldLabel('custom_field')),
+                    'custom_field' => array('label' => $this->_settlement->getFieldLabel('custom_field'))
                 ),
                 'legend' => __('Reference Information')
             ),
@@ -88,7 +90,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'fields' => array(
                     'transaction_event_code' => array(
                         'label' => $this->_settlement->getFieldLabel('transaction_event_code'),
-                        'value' => sprintf('%s (%s)',
+                        'value' => sprintf(
+                            '%s (%s)',
                             $model->getData('transaction_event_code'),
                             $model->getTransactionEvent($model->getData('transaction_event_code'))
                         )
@@ -115,9 +118,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     ),
                     'gross_transaction_amount' => array(
                         'label' => $this->_settlement->getFieldLabel('gross_transaction_amount'),
-                        'value' => $this->_localeCurrency->getCurrency($model->getData('gross_transaction_currency'))
-                            ->toCurrency($model->getData('gross_transaction_amount'))
-                    ),
+                        'value' => $this->_localeCurrency->getCurrency(
+                            $model->getData('gross_transaction_currency')
+                        )->toCurrency(
+                            $model->getData('gross_transaction_amount')
+                        )
+                    )
                 ),
                 'legend' => __('Transaction Information')
             ),
@@ -129,12 +135,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     ),
                     'fee_amount' => array(
                         'label' => $this->_settlement->getFieldLabel('fee_amount'),
-                        'value' => $this->_localeCurrency->getCurrency($model->getData('fee_currency'))
-                            ->toCurrency($model->getData('fee_amount'))
-                    ),
+                        'value' => $this->_localeCurrency->getCurrency(
+                            $model->getData('fee_currency')
+                        )->toCurrency(
+                            $model->getData('fee_amount')
+                        )
+                    )
                 ),
                 'legend' => __('PayPal Fee Information')
-            ),
+            )
         );
 
         /** @var \Magento\Data\Form $form */
@@ -142,12 +151,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         foreach ($fieldsets as $key => $data) {
             $fieldset = $form->addFieldset($key, array('legend' => $data['legend']));
             foreach ($data['fields'] as $id => $info) {
-                $fieldset->addField($id, 'label', array(
-                    'name'  => $id,
-                    'label' => $info['label'],
-                    'title' => $info['label'],
-                    'value' => isset($info['value']) ? $info['value'] : $model->getData($id),
-                ));
+                $fieldset->addField(
+                    $id,
+                    'label',
+                    array(
+                        'name' => $id,
+                        'label' => $info['label'],
+                        'title' => $info['label'],
+                        'value' => isset($info['value']) ? $info['value'] : $model->getData($id)
+                    )
+                );
             }
         }
         $this->setForm($form);
