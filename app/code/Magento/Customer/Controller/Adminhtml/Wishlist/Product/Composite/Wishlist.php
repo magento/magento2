@@ -26,7 +26,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
 use Exception;
-use Magento\Core\Exception as CoreException;
+use Magento\Model\Exception as CoreException;
 
 /**
  * Catalog composite product configuration controller

@@ -26,7 +26,7 @@
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\App\RequestInterface;
-use Magento\Core\Exception as CoreException;
+use Magento\Model\Exception as CoreException;
 
 /**
  * EAV Attribute Abstract Data Model
@@ -47,7 +47,7 @@ abstract class AbstractData
     /**
      * Entity instance
      *
-     * @var \Magento\Core\Model\AbstractModel
+     * @var \Magento\Model\AbstractModel
      */
     protected $_entity;
 
@@ -171,10 +171,10 @@ abstract class AbstractData
     /**
      * Set entity instance
      *
-     * @param \Magento\Core\Model\AbstractModel $entity
+     * @param \Magento\Model\AbstractModel $entity
      * @return $this
      */
-    public function setEntity(\Magento\Core\Model\AbstractModel $entity)
+    public function setEntity(\Magento\Model\AbstractModel $entity)
     {
         $this->_entity = $entity;
         return $this;
@@ -183,7 +183,7 @@ abstract class AbstractData
     /**
      * Returns entity instance
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     public function getEntity()
     {

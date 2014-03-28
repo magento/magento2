@@ -174,7 +174,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
             $this->getResponse()->setRedirect(
                 $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
             );
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             $this->messageManager->addMessages($exception->getMessages());
             $this->_redirect(
                 'adminhtml/auth/resetpassword',
@@ -189,7 +189,7 @@ class Auth extends \Magento\Backend\App\AbstractAction
      * @param int $userId
      * @param string $resetPasswordToken
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _validateResetPasswordLinkToken($userId, $resetPasswordToken)
     {
@@ -199,18 +199,18 @@ class Auth extends \Magento\Backend\App\AbstractAction
             $resetPasswordToken
         ) || empty($resetPasswordToken) || empty($userId) || $userId < 0
         ) {
-            throw new \Magento\Core\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Model\Exception(__('Please correct the password reset token.'));
         }
 
         /** @var $user \Magento\User\Model\User */
         $user = $this->_userFactory->create()->load($userId);
         if (!$user->getId()) {
-            throw new \Magento\Core\Exception(__('Please specify the correct account and try again.'));
+            throw new \Magento\Model\Exception(__('Please specify the correct account and try again.'));
         }
 
         $userToken = $user->getRpToken();
         if (strcmp($userToken, $resetPasswordToken) != 0 || $user->isResetPasswordLinkTokenExpired()) {
-            throw new \Magento\Core\Exception(__('Your password reset link has expired.'));
+            throw new \Magento\Model\Exception(__('Your password reset link has expired.'));
         }
     }
 

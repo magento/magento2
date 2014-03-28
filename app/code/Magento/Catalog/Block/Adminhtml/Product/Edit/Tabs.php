@@ -82,15 +82,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected $_translateInline;
 
     /**
-     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Module\Manager $moduleManager
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Catalog $helperCatalog
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Registry $registry
-     * @param \Magento\Translate\InlineInterface $translateInline,
+     * @param \Magento\Translate\InlineInterface $translateInline
      * @param array $data
      */
     public function __construct(
@@ -262,22 +262,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             if ($this->getChildBlock('product-alerts')) {
                 $this->addTab('product-alerts', 'product-alerts');
                 $this->getChildBlock('product-alerts')->setGroupCode(self::ADVANCED_TAB_GROUP_CODE);
-            }
-
-            if ($this->getRequest()->getParam('id')) {
-                if ($this->_catalogData->isModuleEnabled('Magento_Review')) {
-                    if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-                        $this->addTab(
-                            'product-reviews',
-                            array(
-                                'label' => __('Product Reviews'),
-                                'url' => $this->getUrl('catalog/*/reviews', array('_current' => true)),
-                                'class' => 'ajax',
-                                'group_code' => self::ADVANCED_TAB_GROUP_CODE
-                            )
-                        );
-                    }
-                }
             }
 
             if (isset($advancedGroups['autosettings'])) {

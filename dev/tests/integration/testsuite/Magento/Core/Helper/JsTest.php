@@ -40,17 +40,12 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Helper\Js');
     }
 
-    public function testGetTranslateJson()
-    {
-        $this->assertNotNull(json_decode($this->_helper->getTranslateJson()));
-    }
-
     public function testGetTranslatorScript()
     {
         $this->assertEquals(
             "<script type=\"text/javascript\">//<![CDATA[\n" .
             '(function($) {$.mage.translate.add(' .
-            $this->_helper->getTranslateJson() .
+            $this->_helper->encode($this->_helper->getTranslateData()) .
             ')})(jQuery);' .
             "\n//]]></script>",
             $this->_helper->getTranslatorScript()

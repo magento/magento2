@@ -85,7 +85,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      *
      * @param Shipment $orderShipment
      * @return \Magento\Object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function requestToShipment(Shipment $orderShipment)
     {
@@ -97,7 +97,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
         if (!$shipmentCarrier) {
-            throw new \Magento\Core\Exception('Invalid carrier: ' . $shippingMethod->getCarrierCode());
+            throw new \Magento\Model\Exception('Invalid carrier: ' . $shippingMethod->getCarrierCode());
         }
         $shipperRegionCode = $this->_coreStoreConfig->getConfig(Shipment::XML_PATH_STORE_REGION_ID, $shipmentStoreId);
         if (is_numeric($shipperRegionCode)) {
@@ -129,7 +129,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
                 $shipmentStoreId
             )
         ) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     'We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.'
                 )

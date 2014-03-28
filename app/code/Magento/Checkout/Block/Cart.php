@@ -205,13 +205,13 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @param string $name Block name in layout
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getMethodHtml($name)
     {
         $block = $this->getLayout()->getBlock($name);
         if (!$block) {
-            throw new \Magento\Core\Exception(__('Invalid method: %1', $name));
+            throw new \Magento\Model\Exception(__('Invalid method: %1', $name));
         }
         return $block->toHtml();
     }

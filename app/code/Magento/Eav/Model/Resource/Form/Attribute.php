@@ -34,7 +34,7 @@
  */
 namespace Magento\Eav\Model\Resource\Form;
 
-abstract class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
+abstract class Attribute extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Return form attribute IDs by form code

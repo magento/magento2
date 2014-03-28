@@ -136,7 +136,7 @@ class Sidebar extends \Magento\View\Element\Template
     public function getWishlist()
     {
         if (!$this->_wishlist) {
-            $this->_wishlist = $this->_createWishList()->loadByCustomer($this->_customerSession->getCustomer());
+            $this->_wishlist = $this->_createWishList()->loadByCustomerId($this->_customerSession->getId());
             $this->_wishlist->getItemCollection()->addAttributeToSelect(
                 'name'
             )->addAttributeToSelect(

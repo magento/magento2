@@ -49,7 +49,7 @@ namespace Magento\Sales\Model\Order\Payment;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends \Magento\Core\Model\AbstractModel
+class Transaction extends \Magento\Model\AbstractModel
 {
     /**#@+
      * Supported transaction types
@@ -175,7 +175,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -185,7 +185,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -238,14 +238,14 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @param string $parentTxnId
      * @param string $txnId
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setParentTxnId($parentTxnId, $txnId = null)
     {
         $this->_verifyTxnId($parentTxnId);
         if (empty($txnId)) {
             if ('' == $this->getTxnId()) {
-                throw new \Magento\Core\Exception(__('The parent transaction ID must have a transaction ID.'));
+                throw new \Magento\Model\Exception(__('The parent transaction ID must have a transaction ID.'));
             }
         } else {
             $this->setTxnId($txnId);
@@ -439,7 +439,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
                 return false;
             }
             return true;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             // jam all logical exceptions, fallback to false
         }
         return false;
@@ -515,12 +515,12 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * @param string $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setAdditionalInformation($key, $value)
     {
         if (is_object($value)) {
-            throw new \Magento\Core\Exception(__('Payment transactions disallow storing objects.'));
+            throw new \Magento\Model\Exception(__('Payment transactions disallow storing objects.'));
         }
         $info = $this->_getData('additional_information');
         if (!$info) {
@@ -572,7 +572,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param bool $shouldSave
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @throws \Exception
      */
     public function close($shouldSave = true)
@@ -581,7 +581,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             $this->_verifyThisTransactionExists();
         }
         if (1 == $this->getIsClosed() && $this->_isFailsafe) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('The transaction "%1" (%2) is already closed.', $this->getTxnId(), $this->getTxnType())
             );
         }
@@ -666,7 +666,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param \Magento\Sales\Model\Order|null|boolean $order
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setOrder($order = null)
     {
@@ -681,7 +681,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         } elseif (!$this->getId() || $this->getOrderId() == $order->getId()) {
             $this->_order = $order;
         } else {
-            throw new \Magento\Core\Exception(__('Set order for existing transactions not allowed'));
+            throw new \Magento\Model\Exception(__('Set order for existing transactions not allowed'));
         }
 
         return $this;
@@ -730,7 +730,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * Load child transactions
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _loadChildren()
     {
@@ -743,7 +743,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
         $payment = $this->_verifyPaymentObject(true);
         $paymentId = $payment ? $payment->getId() : $this->_getData('payment_id');
         if (!$paymentId) {
-            throw new \Magento\Core\Exception(__('At minimum, you need to set a payment ID.'));
+            throw new \Magento\Model\Exception(__('At minimum, you need to set a payment ID.'));
         }
 
         $this->setOrder(true);
@@ -841,7 +841,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param string $txnType
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _verifyTxnType($txnType = null)
     {
@@ -857,7 +857,7 @@ class Transaction extends \Magento\Core\Model\AbstractModel
             case self::TYPE_REFUND:
                 break;
             default:
-                throw new \Magento\Core\Exception(__('We found an unsupported transaction type "%1".', $txnType));
+                throw new \Magento\Model\Exception(__('We found an unsupported transaction type "%1".', $txnType));
         }
     }
 
@@ -867,13 +867,13 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param bool $dryRun
      * @return \Magento\Sales\Model\Order\Payment|null|false
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _verifyPaymentObject($dryRun = false)
     {
         if (!$this->_paymentObject || !$this->getOrderId()) {
             if (!$dryRun) {
-                throw new \Magento\Core\Exception(__('Please set a proper payment object.'));
+                throw new \Magento\Model\Exception(__('Please set a proper payment object.'));
             }
         }
         return $this->_paymentObject;
@@ -884,12 +884,12 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      *
      * @param string $txnId
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _verifyTxnId($txnId)
     {
         if (null !== $txnId && 0 == strlen($txnId)) {
-            throw new \Magento\Core\Exception(__('The Transaction ID field cannot be empty.'));
+            throw new \Magento\Model\Exception(__('The Transaction ID field cannot be empty.'));
         }
     }
 
@@ -898,12 +898,12 @@ class Transaction extends \Magento\Core\Model\AbstractModel
      * TODO for more restriction we can check for data consistency
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _verifyThisTransactionExists()
     {
         if (!$this->getId()) {
-            throw new \Magento\Core\Exception(__('You can\'t do this without a transaction object.'));
+            throw new \Magento\Model\Exception(__('You can\'t do this without a transaction object.'));
         }
         $this->_verifyTxnType();
     }

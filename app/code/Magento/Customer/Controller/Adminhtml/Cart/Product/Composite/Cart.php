@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 /**
  * Catalog composite product configuration controller
@@ -61,13 +61,13 @@ class Cart extends \Magento\Backend\App\Action
      * Loads customer, quote and quote item by request params
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _initData()
     {
         $this->_customerId = (int)$this->getRequest()->getParam('customer_id');
         if (!$this->_customerId) {
-            throw new \Magento\Core\Exception(__('No customer ID defined.'));
+            throw new \Magento\Model\Exception(__('No customer ID defined.'));
         }
 
         $quoteItemId = (int)$this->getRequest()->getParam('id');
@@ -113,7 +113,7 @@ class Cart extends \Magento\Backend\App\Action
             $configureResult->setProductId($quoteItem->getProductId());
             $configureResult->setBuyRequest($quoteItem->getBuyRequest());
             $configureResult->setCurrentStoreId($quoteItem->getStoreId());
-            $configureResult->setCustomerId($this->_customerId);
+            $configureResult->setCurrentCustomerId($this->_customerId);
         } catch (\Exception $e) {
             $configureResult->setError(true);
             $configureResult->setMessage($e->getMessage());

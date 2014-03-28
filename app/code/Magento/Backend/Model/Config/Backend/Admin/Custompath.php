@@ -43,7 +43,7 @@ class Custompath extends \Magento\Core\Model\Config\Value
     protected function _beforeSave()
     {
         if ($this->getOldValue() != $this->getValue()) {
-            $this->_coreRegistry->register('custom_admin_path_redirect', true, true);
+            $this->_registry->register('custom_admin_path_redirect', true, true);
         }
         return $this;
     }

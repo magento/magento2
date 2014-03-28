@@ -120,11 +120,6 @@ class Observer
     protected $_stockColFactory;
 
     /**
-     * @var \Magento\TranslateInterface
-     */
-    protected $_translate;
-
-    /**
      * @var \Magento\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
@@ -135,6 +130,11 @@ class Observer
     protected $_emailFactory;
 
     /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
@@ -143,9 +143,9 @@ class Observer
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory
      * @param \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory
-     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\ProductAlert\Model\EmailFactory $emailFactory
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
@@ -156,9 +156,9 @@ class Observer
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Stdlib\DateTime\DateTimeFactory $dateFactory,
         \Magento\ProductAlert\Model\Resource\Stock\CollectionFactory $stockColFactory,
-        \Magento\TranslateInterface $translate,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\ProductAlert\Model\EmailFactory $emailFactory
+        \Magento\ProductAlert\Model\EmailFactory $emailFactory,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_taxData = $taxData;
         $this->_coreStoreConfig = $coreStoreConfig;
@@ -168,9 +168,9 @@ class Observer
         $this->_productFactory = $productFactory;
         $this->_dateFactory = $dateFactory;
         $this->_stockColFactory = $stockColFactory;
-        $this->_translate = $translate;
         $this->_transportBuilder = $transportBuilder;
         $this->_emailFactory = $emailFactory;
+        $this->inlineTranslation = $inlineTranslation;
     }
 
     /**
@@ -378,7 +378,7 @@ class Observer
                 return $this;
             }
 
-            $this->_translate->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
@@ -397,7 +397,7 @@ class Observer
 
             $transport->sendMessage();
 
-            $this->_translate->setTranslateInline(true);
+            $this->inlineTranslation->resume();
             $this->_errors[] = array();
         }
         return $this;

@@ -141,7 +141,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Math\Random $mathRandom
      * @param States $states
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -162,7 +162,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Math\Random $mathRandom,
         States $states,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -625,7 +625,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
      * @param string $againstState
      * @param bool $soft
      * @return bool
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _checkWorkflow($againstState, $soft = true)
     {
@@ -633,7 +633,7 @@ class Payment extends \Magento\RecurringPayment\Model\RecurringPayment
         $state = $this->getState();
         $result = !empty($this->_workflow[$state]) && in_array($againstState, $this->_workflow[$state]);
         if (!$soft && !$result) {
-            throw new \Magento\Core\Exception(__('This payment state cannot be changed to "%1".', $againstState));
+            throw new \Magento\Model\Exception(__('This payment state cannot be changed to "%1".', $againstState));
         }
         return $result;
     }

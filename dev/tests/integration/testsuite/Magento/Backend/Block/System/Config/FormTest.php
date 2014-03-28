@@ -25,6 +25,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Block\System\Config;
+use Magento\App\Cache\State;
 
 /**
  * @magentoAppArea adminhtml
@@ -251,20 +252,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function _setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            array(\Magento\Core\Model\App::PARAM_BAN_CACHE => true)
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Config\ScopeInterface'
-        )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->loadAreaPart(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-            \Magento\Core\Model\App\Area::PART_CONFIG
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+            State::PARAM_BAN_CACHE => true,
+        ));
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Config\ScopeInterface')
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\AreaList')
+            ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+            ->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         $fileResolverMock = $this->getMockBuilder(
             'Magento\Core\Model\Config\FileResolver'

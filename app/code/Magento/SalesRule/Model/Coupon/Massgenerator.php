@@ -34,7 +34,7 @@ namespace Magento\SalesRule\Model\Coupon;
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Massgenerator extends \Magento\Core\Model\AbstractModel implements
+class Massgenerator extends \Magento\Model\AbstractModel implements
     \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
 {
     /**
@@ -79,7 +79,7 @@ class Massgenerator extends \Magento\Core\Model\AbstractModel implements
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\Stdlib\DateTime\DateTime $date
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -90,7 +90,7 @@ class Massgenerator extends \Magento\Core\Model\AbstractModel implements
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\Stdlib\DateTime\DateTime $date,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -161,7 +161,7 @@ class Massgenerator extends \Magento\Core\Model\AbstractModel implements
     /**
      * Generate Coupons Pool
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return $this
      */
     public function generatePool()
@@ -195,7 +195,7 @@ class Massgenerator extends \Magento\Core\Model\AbstractModel implements
             $attempt = 0;
             do {
                 if ($attempt >= $maxAttempts) {
-                    throw new \Magento\Core\Exception(
+                    throw new \Magento\Model\Exception(
                         __('We cannot create the requested Coupon Qty. Please check your settings and try again.')
                     );
                 }

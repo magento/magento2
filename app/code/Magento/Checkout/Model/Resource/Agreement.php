@@ -32,7 +32,7 @@ namespace Magento\Checkout\Model\Resource;
  * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Agreement extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Filter\FilterManager
@@ -62,10 +62,10 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Method to run before save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         // format height
         $height = $object->getContentHeight();
@@ -83,10 +83,10 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Method to run after save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         $condition = array('agreement_id = ?' => $object->getId());
         $this->_getWriteAdapter()->delete($this->getTable('checkout_agreement_store'), $condition);
@@ -104,10 +104,10 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Method to run after load
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(\Magento\Model\AbstractModel $object)
     {
         $select = $this->_getReadAdapter()->select()->from(
             $this->getTable('checkout_agreement_store'),
@@ -128,7 +128,7 @@ class Agreement extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return \Magento\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)

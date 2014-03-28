@@ -41,4 +41,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\DesignEditor\Model\Translate\Inline\Provider">
+        <arguments>
+            <argument name="vdeInlineTranslate" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Proxy</argument>
+            <argument name="inlineTranslate" xsi:type="object">\Magento\Translate\Inline\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Phrase\Renderer\Inline">
+        <arguments>
+            <argument name="inlineProvider" xsi:type="object">Magento\DesignEditor\Model\Translate\Inline\Provider</argument>
+        </arguments>
+    </type>
 </config>

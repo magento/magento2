@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product\Compare;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection

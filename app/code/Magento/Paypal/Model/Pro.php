@@ -233,7 +233,7 @@ class Pro
      *
      * @param \Magento\Object $payment
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function void(\Magento\Object $payment)
     {
@@ -243,7 +243,7 @@ class Pro
             $api->setPayment($payment)->setAuthorizationId($authTransactionId)->callDoVoid();
             $this->importPaymentInfo($api, $payment);
         } else {
-            throw new \Magento\Core\Exception(__('You need an authorization transaction to void.'));
+            throw new \Magento\Model\Exception(__('You need an authorization transaction to void.'));
         }
     }
 
@@ -284,7 +284,7 @@ class Pro
      * @param \Magento\Object $payment
      * @param float $amount
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function refund(\Magento\Object $payment, $amount)
     {
@@ -310,7 +310,7 @@ class Pro
             $api->callRefundTransaction();
             $this->_importRefundResultToPayment($api, $payment, $canRefundMore);
         } else {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('We can\'t issue a refund transaction because there is no capture transaction.')
             );
         }

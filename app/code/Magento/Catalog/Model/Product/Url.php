@@ -191,7 +191,7 @@ class Url extends \Magento\Object
      * @param \Magento\Catalog\Model\Category $category
      *
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getUrlPath($product, $category = null)
     {
@@ -201,7 +201,7 @@ class Url extends \Magento\Object
             /** @todo get default category */
             return $path;
         } elseif (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Core\Exception('Invalid category object supplied');
+            throw new \Magento\Model\Exception('Invalid category object supplied');
         }
 
         return $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath()) . '/' . $path;

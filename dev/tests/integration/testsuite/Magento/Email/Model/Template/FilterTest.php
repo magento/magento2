@@ -67,10 +67,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertStringMatchesFormat('http://example.com/%sarbitrary_url/', $url);
 
-        $url = $this->_model->storeDirective(
-            array('{{store url="core/ajax/translate"}}', 'store', ' url="core/ajax/translate"')
-        );
-        $this->assertStringMatchesFormat('http://example.com/%score/ajax/translate/', $url);
+        $url = $this->_model->storeDirective(array(
+            '{{store url="translation/ajax/index"}}',
+            'store',
+            ' url="translation/ajax/index"',
+        ));
+        $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
     }
 
     public function testEscapehtmlDirective()
@@ -126,7 +128,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $design = $objectManager->create('Magento\Core\Model\View\Design', array('themes' => $themes));
         $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadArea($area);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
         $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();

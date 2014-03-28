@@ -43,7 +43,7 @@ namespace Magento\GiftMessage\Model;
  * @package     Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Message extends \Magento\Core\Model\AbstractModel
+class Message extends \Magento\Model\AbstractModel
 {
     /**
      * @var \Magento\GiftMessage\Model\TypeFactory

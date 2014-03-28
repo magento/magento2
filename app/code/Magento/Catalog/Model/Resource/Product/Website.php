@@ -26,7 +26,7 @@ namespace Magento\Catalog\Model\Resource\Product;
 /**
  * Catalog Product Website Resource Model
  */
-class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Website extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Store manager

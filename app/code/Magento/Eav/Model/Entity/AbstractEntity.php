@@ -27,9 +27,9 @@ namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Core\Model\Config\Element;
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
@@ -41,7 +41,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractEntity extends \Magento\Core\Model\Resource\AbstractResource implements EntityInterface
+abstract class AbstractEntity extends \Magento\Model\Resource\AbstractResource implements EntityInterface
 {
     /**
      * Read connection

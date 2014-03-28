@@ -180,7 +180,7 @@ class Http extends File
             $hostname .
             "\r\n" .
             'User-Agent: Magento ver/' .
-            \Magento\Core\Model\App::VERSION .
+            \Magento\AppInterface::VERSION .
             "\r\n" .
             'Connection: close' .
             "\r\n" .

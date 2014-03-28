@@ -35,6 +35,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storeId = 'default';
 
+    /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $state;
+
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
@@ -49,6 +54,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Translate\Inline'
+        );
+        $this->state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Translate\Inline\StateInterface'
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -81,7 +89,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->_model->disable();
+        $this->state->suspend();
         $this->assertFalse($this->_model->isAllowed());
         $this->assertFalse($this->_model->isAllowed($this->_storeId));
         $this->assertFalse(

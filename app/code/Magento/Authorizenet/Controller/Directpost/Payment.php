@@ -114,7 +114,7 @@ class Payment extends \Magento\App\Action\Action
             }
             $paymentMethod->process($data);
             $result['success'] = 1;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             $result['success'] = 0;
             $result['error_msg'] = $e->getMessage();

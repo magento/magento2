@@ -34,7 +34,7 @@
  */
 namespace Magento\CatalogRule\Model\Resource\Rule\Product;
 
-class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Price extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table

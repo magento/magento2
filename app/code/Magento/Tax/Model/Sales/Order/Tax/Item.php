@@ -30,7 +30,7 @@ namespace Magento\Tax\Model\Sales\Order\Tax;
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Model\AbstractModel
 {
     /**
      * Initialization

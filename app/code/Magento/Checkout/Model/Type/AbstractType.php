@@ -86,12 +86,7 @@ abstract class AbstractType extends \Magento\Object
      */
     public function getCheckoutSession()
     {
-        $checkout = $this->getData('checkout_session');
-        if (is_null($checkout)) {
-            $checkout = $this->_checkoutSession;
-            $this->setData('checkout_session', $checkout);
-        }
-        return $checkout;
+        return $this->_checkoutSession;
     }
 
     /**

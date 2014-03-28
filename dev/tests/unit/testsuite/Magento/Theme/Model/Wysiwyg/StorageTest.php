@@ -155,7 +155,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testUploadInvalidFile()
     {
@@ -253,7 +253,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testCreateFolderWithInvalidName()
     {
@@ -263,7 +263,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testCreateFolderDirectoryAlreadyExist()
     {
@@ -319,7 +319,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testGetDirsCollectionWrongDirName()
     {
@@ -532,7 +532,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testDeleteRootDirectory()
     {

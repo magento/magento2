@@ -26,6 +26,6 @@
  */
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
-class Stub extends \Magento\Core\Model\AbstractModel
+class Stub extends \Magento\Model\AbstractModel
 {
 }

@@ -226,11 +226,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function jsonEncode($valueToEncode, $cycleCheck = false, $options = array())
     {
         $json = \Zend_Json::encode($valueToEncode, $cycleCheck, $options);
-        $translateInline = $this->_inlineFactory->get();
-        if ($translateInline->isAllowed()) {
-            $translateInline->processResponseBody($json, true);
-        }
-
+        $this->translateInline->processResponseBody($json, true);
         return $json;
     }
 

@@ -25,7 +25,7 @@
  */
 namespace Magento\Index\Model\Resource;
 
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 use Magento\Index\Model\Process as ProcessModel;
 
 /**
@@ -35,7 +35,7 @@ use Magento\Index\Model\Process as ProcessModel;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Event extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @return void

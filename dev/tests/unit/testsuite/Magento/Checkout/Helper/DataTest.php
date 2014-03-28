@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_translator = $this->getMock('Magento\TranslateInterface', array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\Translate\Inline\StateInterface', array(), array(), '', false);
         $context = $this->getMock('\Magento\App\Helper\Context', array(), array(), '', false);
 
         $storeConfig = $this->getMock('\Magento\Core\Model\Store\Config', array(), array(), '', false);
@@ -180,8 +180,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->getMock('Magento\Mail\TransportInterface'))
         );
 
-        $this->_translator->expects($this->at(0))->method('setTranslateInline')->with(false);
-        $this->_translator->expects($this->at(1))->method('setTranslateInline')->with(true);
+        $this->_translator->expects($this->at(1))
+            ->method('suspend');
+        $this->_translator->expects($this->at(1))
+            ->method('resume');
 
         $productOne = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $productOne->expects($this->once())->method('getName')->will($this->returnValue('Product One'));

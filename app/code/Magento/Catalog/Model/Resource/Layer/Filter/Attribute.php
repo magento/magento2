@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource\Layer\Filter;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Attribute extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table name

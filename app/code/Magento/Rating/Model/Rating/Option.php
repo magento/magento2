@@ -43,7 +43,7 @@ namespace Magento\Rating\Model\Rating;
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Core\Model\AbstractModel
+class Option extends \Magento\Model\AbstractModel
 {
     /**
      * @return void

@@ -58,11 +58,6 @@ class Observer
     protected $_coreStoreConfig;
 
     /**
-     * @var \Magento\TranslateInterface
-     */
-    protected $_translate;
-
-    /**
      * @var \Magento\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
@@ -78,27 +73,32 @@ class Observer
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\TranslateInterface $translate,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory
+        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_importFactory = $importFactory;
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_translate = $translate;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;
+        $this->inlineTranslation = $inlineTranslation;
     }
 
     /**
@@ -141,8 +141,7 @@ class Observer
         if (sizeof($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
         } else {
-            $translate = $this->_translate->getTranslateInline();
-            $this->_translate->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
@@ -161,7 +160,7 @@ class Observer
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 
-            $this->_translate->setTranslateInline($translate);
+            $this->inlineTranslation->resume();
         }
     }
 }

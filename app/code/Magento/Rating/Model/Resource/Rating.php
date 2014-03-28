@@ -32,7 +32,7 @@ namespace Magento\Rating\Model\Resource;
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Rating extends \Magento\Model\Resource\Db\AbstractDb
 {
     const RATING_STATUS_APPROVED = 'Approved';
 
@@ -131,10 +131,10 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Actions after load
      *
-     * @param \Magento\Core\Model\AbstractModel|\Magento\Rating\Model\Rating $object
+     * @param \Magento\Model\AbstractModel|\Magento\Rating\Model\Rating $object
      * @return $this
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(\Magento\Model\AbstractModel $object)
     {
         parent::_afterLoad($object);
 
@@ -184,10 +184,10 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Actions after save
      *
-     * @param \Magento\Core\Model\AbstractModel|\Magento\Rating\Model\Rating $object
+     * @param \Magento\Model\AbstractModel|\Magento\Rating\Model\Rating $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
 
@@ -273,10 +273,10 @@ class Rating extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Perform actions after object delete
      * Prepare rating data for reaggregate all data for reviews
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterDelete(\Magento\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
         if (!$this->_ratingData->isModuleEnabled('Magento_Review')) {

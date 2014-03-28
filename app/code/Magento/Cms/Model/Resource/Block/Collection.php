@@ -28,7 +28,7 @@ namespace Magento\Cms\Model\Resource\Block;
 /**
  * CMS block model
  */
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model

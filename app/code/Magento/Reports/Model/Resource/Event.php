@@ -34,7 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource;
 
-class Event extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Event extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Core store config

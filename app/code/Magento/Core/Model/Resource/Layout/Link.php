@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\Layout;
 /**
  * Layout Link resource model
  */
-class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Link extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table

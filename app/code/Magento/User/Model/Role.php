@@ -43,7 +43,7 @@ namespace Magento\User\Model;
  * @method string getRoleName()
  * @method \Magento\User\Model\Role setRoleName(string $value)
  */
-class Role extends \Magento\Core\Model\AbstractModel
+class Role extends \Magento\Model\AbstractModel
 {
     /**
      * @var string

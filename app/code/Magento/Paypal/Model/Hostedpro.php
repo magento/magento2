@@ -209,7 +209,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _setPaymentFormUrl(\Magento\Payment\Model\Info $payment)
     {
@@ -218,7 +218,7 @@ class Hostedpro extends \Magento\Paypal\Model\Direct
         if ($response) {
             $payment->setAdditionalInformation('secure_form_url', $response);
         } else {
-            throw new \Magento\Core\Exception('Cannot get secure form URL from PayPal');
+            throw new \Magento\Model\Exception('Cannot get secure form URL from PayPal');
         }
     }
 

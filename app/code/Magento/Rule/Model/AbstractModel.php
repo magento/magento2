@@ -29,9 +29,9 @@
  */
 namespace Magento\Rule\Model;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
-abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
+abstract class AbstractModel extends \Magento\Model\AbstractModel
 {
     /**
      * Store rule combine conditions model
@@ -97,7 +97,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Data\FormFactory $formFactory
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -106,7 +106,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Data\FormFactory $formFactory,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

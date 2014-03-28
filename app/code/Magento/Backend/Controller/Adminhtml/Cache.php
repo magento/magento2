@@ -26,7 +26,7 @@
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 class Cache extends Action
 {

@@ -100,7 +100,7 @@ class File extends \Magento\App\Helper\AbstractHelper
      * @param string $basePath
      * @param string $file
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -110,7 +110,7 @@ class File extends \Magento\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Core\Exception(__('Something went wrong while saving the file(s).'));
+                    throw new \Magento\Model\Exception(__('Something went wrong while saving the file(s).'));
                 }
             }
             return $fileName;

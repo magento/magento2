@@ -219,8 +219,8 @@ class Url extends \Magento\Url implements \Magento\Backend\Model\UrlInterface
             return $result;
         }
         $routeName = $this->_getRouteName('*');
-        $controllerName = $this->_getControllerName($this->_getDefaultControllerName());
-        $actionName = $this->_getActionName($this->_getDefaultActionName());
+        $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
+        $actionName = $this->_getActionName(self::DEFAULT_ACTION_NAME);
         if ($cacheSecretKey) {
             $secret = array(self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$");
         } else {

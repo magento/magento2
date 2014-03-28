@@ -40,9 +40,9 @@ lib/Magento/Translate/Adapter.php
 lib/Magento/Translate/AdapterInterface.php
 # WrapperInterface methods cannot be camelCase as they follow method naming convention from framework classes
 lib/Magento/Filesystem/WrapperInterface.php
+# PSR-1 not applied to
+dev/tests/integration/testsuite/Magento
+# PSR-1 not applied to
+dev/tests/unit/testsuite/Magento
 # Newer version of phpcs does not complain about spacing issue.  This appears to be a bug in the phpcs version that is currently run in bamboo.
 app/code/Magento/Sales/Model/Order/Payment/Transaction.php
-
-# Skipped for no reason
-dev/tests/integration/testsuite/Magento
-dev/tests/unit/testsuite/Magento

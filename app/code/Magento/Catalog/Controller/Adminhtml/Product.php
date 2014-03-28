@@ -477,24 +477,7 @@ class Product extends \Magento\Backend\App\Action
         $this->_view->renderLayout();
     }
 
-    /**
-     * Get product reviews grid
-     *
-     * @return void
-     */
-    public function reviewsAction()
-    {
-        $product = $this->productBuilder->build($this->getRequest());
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'admin.product.reviews'
-        )->setProductId(
-            $product->getId()
-        )->setUseAjax(
-            true
-        );
-        $this->_view->renderLayout();
-    }
+
 
     /**
      * Validate product
@@ -556,7 +539,7 @@ class Product extends \Magento\Backend\App\Action
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -588,7 +571,7 @@ class Product extends \Magento\Backend\App\Action
 
             try {
                 if (isset($data['product'][$product->getIdFieldName()])) {
-                    throw new \Magento\Core\Exception(__('Unable to save product'));
+                    throw new \Magento\Model\Exception(__('Unable to save product'));
                 }
 
                 $originalSku = $product->getSku();
@@ -634,7 +617,7 @@ class Product extends \Magento\Backend\App\Action
                     $newProduct = $this->productCopier->copy($product);
                     $this->messageManager->addSuccess(__('You duplicated the product.'));
                 }
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
                 $redirectBack = true;
@@ -755,7 +738,7 @@ class Product extends \Magento\Backend\App\Action
             $this->_productPriceIndexerProcessor->reindexList($productIds);
         } catch (\Magento\Core\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
@@ -770,13 +753,13 @@ class Product extends \Magento\Backend\App\Action
      * @param array $productIds
      * @param int $status
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function _validateMassStatus(array $productIds, $status)
     {
         if ($status == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED) {
             if (!$this->_objectManager->create('Magento\Catalog\Model\Product')->isProductsHasSku($productIds)) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __('Please make sure to define SKU values for all processed products.')
                 );
             }

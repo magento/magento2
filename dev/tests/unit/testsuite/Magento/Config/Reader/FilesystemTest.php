@@ -77,6 +77,22 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $model->read('scope');
     }
 
+    public function testReadWithoutFiles()
+    {
+        $model = new Filesystem(
+            $this->_fileResolverMock,
+            $this->_converterMock,
+            $this->_schemaLocatorMock,
+            $this->_validationStateMock,
+            'fileName',
+            array()
+        );
+        $this->_fileResolverMock
+            ->expects($this->once())->method('get')->will($this->returnValue(array()));
+
+        $this->assertEmpty($model->read('scope'));
+    }
+
     /**
      * @expectedException \Magento\Exception
      * @expectedExceptionMessage Invalid Document

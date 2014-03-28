@@ -28,6 +28,11 @@ namespace Magento\Translate\Inline;
 class ParserFactory
 {
     /**
+     * Default instance type
+     */
+    const DEFAULT_INSTANCE_TYPE = 'Magento\Translate\Inline\ParserInterface';
+
+    /**
      * Object Manager
      *
      * @var \Magento\ObjectManager
@@ -50,15 +55,15 @@ class ParserFactory
      */
     public function get()
     {
-        return $this->_objectManager->get('Magento\Translate\Inline\ParserInterface');
+        return $this->_objectManager->get(self::DEFAULT_INSTANCE_TYPE);
     }
 
     /**
-     * @param array $data
+     * @param array $arguments
      * @return \Magento\Translate\Inline\ParserInterface
      */
-    public function create(array $data = null)
+    public function create(array $arguments = array())
     {
-        return $this->_objectManager->create('Magento\Translate\Inline\ParserInterface', $data);
+        return $this->_objectManager->create(self::DEFAULT_INSTANCE_TYPE, $arguments);
     }
 }

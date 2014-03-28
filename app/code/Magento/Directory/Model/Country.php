@@ -38,7 +38,7 @@
  */
 namespace Magento\Directory\Model;
 
-class Country extends \Magento\Core\Model\AbstractModel
+class Country extends \Magento\Model\AbstractModel
 {
     /**
      * @var array
@@ -66,7 +66,7 @@ class Country extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Locale\ListsInterface $localeLists
      * @param Country\FormatFactory $formatFactory
      * @param Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -76,7 +76,7 @@ class Country extends \Magento\Core\Model\AbstractModel
         \Magento\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

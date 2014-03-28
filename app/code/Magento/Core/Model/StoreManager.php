@@ -26,6 +26,14 @@ namespace Magento\Core\Model;
 class StoreManager implements \Magento\Core\Model\StoreManagerInterface
 {
     /**
+     * Application run code
+     */
+    const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
+    /**
+     * Application run type (store|website)
+     */
+    const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
+    /**
      * Store storage factory model
      *
      * @var \Magento\Core\Model\Store\StorageFactory
@@ -120,7 +128,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
      * Retrieve application store object without Store_Exception
      *
      * @param string|int|Store $storeId
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return Store
      */
     public function getSafeStore($storeId = null)
@@ -133,7 +141,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
                 return new \Magento\Object();
             }
 
-            throw new \Magento\Core\Exception(__('Requested invalid store "%1"', $storeId));
+            throw new \Magento\Model\Exception(__('Requested invalid store "%1"', $storeId));
         }
     }
 
@@ -219,7 +227,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
      *
      * @param null|bool|int|string|Website $websiteId
      * @return Website
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getWebsite($websiteId = null)
     {
@@ -263,7 +271,7 @@ class StoreManager implements \Magento\Core\Model\StoreManagerInterface
      *
      * @param null|\Magento\Core\Model\Store\Group|string $groupId
      * @return \Magento\Core\Model\Store\Group
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getGroup($groupId = null)
     {

@@ -55,7 +55,7 @@
         <!-- DB model layer. Used to determine names of resource helpers and
             specific installs/upgrades for a DB vendor. -->
         <model>{{db_model}}</model>
-        <adapter>Magento\Core\Model\Resource\Type\Db\Pdo\Mysql</adapter>
+        <adapter>Magento\Model\Resource\Type\Db\Pdo\Mysql</adapter>
         <!-- Connection activation. Default connection is last level of fallback, thus
             it must be always left active.  -->
         <active>1</active>

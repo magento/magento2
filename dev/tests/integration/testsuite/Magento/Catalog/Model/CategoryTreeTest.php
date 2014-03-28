@@ -97,7 +97,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testMoveWrongParent()
     {
@@ -106,7 +106,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testMoveWrongId()
     {

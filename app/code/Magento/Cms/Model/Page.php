@@ -65,7 +65,7 @@ namespace Magento\Cms\Model;
  * @method string getCustomThemeTo()
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
  */
-class Page extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
+class Page extends \Magento\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     /**
      * No route page id

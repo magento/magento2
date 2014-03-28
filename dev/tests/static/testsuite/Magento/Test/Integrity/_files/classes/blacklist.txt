@@ -16,8 +16,8 @@
 \Magento\Core\Model\Config\FileResolver
 \Magento\Core\Model\Config\Cache
 \Magento\Core\Model\Config\Base
-\Magento\Core\Model\Translate\String
-\Magento\Core\Model\Translate\Inline\Config
-\Magento\Core\Model\Translate\Inline\Parser
+\Magento\Translation\Model\String
+\Magento\Translation\Model\Inline\Config
+\Magento\Translation\Model\Inline\Parser
 \Magento\Translate
 \Magento\Email\Model\Template

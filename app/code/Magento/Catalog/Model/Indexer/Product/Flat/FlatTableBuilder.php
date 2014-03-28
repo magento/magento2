@@ -114,7 +114,7 @@ class FlatTableBuilder
      *
      * @param int|string $storeId
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _createTemporaryFlatTable($storeId)
     {
@@ -126,7 +126,7 @@ class FlatTableBuilder
             \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction::XML_NODE_MAX_INDEX_COUNT
         );
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     "The Flat Catalog module has a limit of %2\$d filterable and/or sortable attributes." .
                     "Currently there are %1\$d of them." .

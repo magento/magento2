@@ -27,14 +27,14 @@
  */
 namespace Magento\Event;
 
-class ManagerStub extends \Magento\Event\ManagerInterface
+class ManagerStub implements \Magento\Event\ManagerInterface
 {
     /**
      * Stub dispatch event
      *
      * @param string $eventName
      * @param array $params
-     * @return \Magento\Core\Model\App|null
+     * @return null
      */
     public function dispatch($eventName, array $params = array())
     {

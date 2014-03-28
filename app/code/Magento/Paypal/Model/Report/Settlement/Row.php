@@ -68,7 +68,7 @@ namespace Magento\Paypal\Model\Report\Settlement;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Row extends \Magento\Core\Model\AbstractModel
+class Row extends \Magento\Model\AbstractModel
 {
     /**
      * Assoc array event code => label

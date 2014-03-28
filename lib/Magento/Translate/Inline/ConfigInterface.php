@@ -30,7 +30,7 @@ interface ConfigInterface
     /**
      * Check whether inline translation is enabled
      *
-     * @param int|null $scope
+     * @param null|string|bool|int|\Magento\Core\Model\Store $scope
      * @return bool
      */
     public function isActive($scope = null);
@@ -38,7 +38,7 @@ interface ConfigInterface
     /**
      * Check whether allowed client ip for inline translation
      *
-     * @param mixed $scope
+     * @param null|string|bool|int|\Magento\Core\Model\Store $scope
      * @return bool
      */
     public function isDevAllowed($scope = null);

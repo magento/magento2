@@ -34,8 +34,10 @@ use Magento\Exception\InputException;
 use Magento\Exception\AuthenticationException;
 use Magento\Exception\NoSuchEntityException;
 use Magento\Exception\StateException;
+use Magento\Mail\Exception as MailException;
 use Magento\Math\Random;
 use Magento\UrlInterface;
+use Magento\Logger;
 
 /**
  * Handle various customer account actions
@@ -101,6 +103,11 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     private $_url;
 
     /**
+     * @var Logger
+     */
+    protected $_logger;
+
+    /**
      * Constructor
      *
      * @param CustomerFactory $customerFactory
@@ -115,6 +122,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * @param CustomerAddressServiceInterface $customerAddressService
      * @param CustomerMetadataServiceInterface $customerMetadataService
      * @param UrlInterface $url
+     * @param Logger $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -130,7 +138,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         Data\SearchResultsBuilder $searchResultsBuilder,
         CustomerAddressServiceInterface $customerAddressService,
         CustomerMetadataServiceInterface $customerMetadataService,
-        UrlInterface $url
+        UrlInterface $url,
+        Logger $logger
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_eventManager = $eventManager;
@@ -144,6 +153,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $this->_customerAddressService = $customerAddressService;
         $this->_customerMetadataService = $customerMetadataService;
         $this->_url = $url;
+        $this->_logger = $logger;
     }
 
     /**
@@ -157,11 +167,16 @@ class CustomerAccountService implements CustomerAccountServiceInterface
             throw (new NoSuchEntityException('email', $email))->addField('websiteId', $websiteId);
         }
         if ($customer->getConfirmation()) {
-            $customer->sendNewAccountEmail(
-                self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
-                $redirectUrl,
-                $this->_storeManager->getStore()->getId()
-            );
+            try {
+                $customer->sendNewAccountEmail(
+                    self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                    $redirectUrl,
+                    $this->_storeManager->getStore()->getId()
+                );
+            } catch (MailException $e) {
+                // If we are not able to send a new account email, this should be ignored
+                $this->_logger->logException($e);
+            }
         } else {
             throw new StateException('No confirmation needed.', StateException::INVALID_STATE);
         }
@@ -200,7 +215,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $customerModel->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());
         try {
             $customerModel->authenticate($username, $password);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             switch ($e->getCode()) {
                 case CustomerModel::EXCEPTION_EMAIL_NOT_CONFIRMED:
                     $code = AuthenticationException::EMAIL_NOT_CONFIRMED;
@@ -248,15 +263,20 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         );
 
         $customer->setResetPasswordUrl($resetUrl);
-        switch ($template) {
-            case CustomerAccountServiceInterface::EMAIL_REMINDER:
-                $customer->sendPasswordReminderEmail();
-                break;
-            case CustomerAccountServiceInterface::EMAIL_RESET:
-                $customer->sendPasswordResetConfirmationEmail();
-                break;
-            default:
-                throw new InputException(__('Invalid email type.'), InputException::INVALID_FIELD_VALUE);
+        try {
+            switch ($template) {
+                case CustomerAccountServiceInterface::EMAIL_REMINDER:
+                    $customer->sendPasswordReminderEmail();
+                    break;
+                case CustomerAccountServiceInterface::EMAIL_RESET:
+                    $customer->sendPasswordResetConfirmationEmail();
+                    break;
+                default:
+                    throw new InputException(__('Invalid email type.'), InputException::INVALID_FIELD_VALUE);
+            }
+        } catch (MailException $e) {
+            // If we are not able to send a reset password email, this should be ignored
+            $this->_logger->logException($e);
         }
     }
 
@@ -331,18 +351,23 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $newLinkToken = $this->_mathRandom->getUniqueHash();
         $customerModel->changeResetPasswordLinkToken($newLinkToken);
 
-        if ($customerModel->isConfirmationRequired()) {
-            $customerModel->sendNewAccountEmail(
-                self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
-                $redirectUrl,
-                $customer->getStoreId()
-            );
-        } else {
-            $customerModel->sendNewAccountEmail(
-                self::NEW_ACCOUNT_EMAIL_REGISTERED,
-                $redirectUrl,
-                $customer->getStoreId()
-            );
+        try {
+            if ($customerModel->isConfirmationRequired()) {
+                $customerModel->sendNewAccountEmail(
+                    self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
+                    $redirectUrl,
+                    $customer->getStoreId()
+                );
+            } else {
+                $customerModel->sendNewAccountEmail(
+                    self::NEW_ACCOUNT_EMAIL_REGISTERED,
+                    $redirectUrl,
+                    $customer->getStoreId()
+                );
+            }
+        } catch (MailException $e) {
+            // If we are not able to send a new account email, this should be ignored
+            $this->_logger->logException($e);
         }
         return $this->_converter->createCustomerFromModel($customerModel);
     }

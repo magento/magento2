@@ -43,7 +43,7 @@ class Factory
      *
      * @param string $className
      * @param array $arguments
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function create($className, array $arguments = array())
     {

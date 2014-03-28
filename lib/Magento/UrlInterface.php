@@ -45,6 +45,13 @@ interface UrlInterface
     const URL_TYPE_JS = 'js';
 
     /**
+     * Default url type
+     *
+     * Equals to self::URL_TYPE_LINK
+     */
+    const DEFAULT_URL_TYPE = 'link';
+
+    /**
      * Default controller name
      */
     const DEFAULT_CONTROLLER_NAME = 'index';
@@ -103,12 +110,12 @@ interface UrlInterface
     public function addSessionParam();
 
     /**
-     * Set query Params as array
+     * Add query parameters
      *
      * @param array $data
      * @return \Magento\UrlInterface
      */
-    public function setQueryParams(array $data);
+    public function addQueryParams(array $data);
 
     /**
      * Set query param

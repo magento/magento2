@@ -52,14 +52,14 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Catalog\Model\Product\Type\Price
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function create($className, array $data = array())
     {
         $price = $this->_objectManager->create($className, $data);
 
         if (!$price instanceof \Magento\Catalog\Model\Product\Type\Price) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Type\Price'
             );
         }

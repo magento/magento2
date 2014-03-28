@@ -28,7 +28,7 @@ namespace Magento\Reports\Model\Resource\Product\Index;
 /**
  * Reports Product Index Abstract Resource Model
  */
-abstract class AbstractIndex extends \Magento\Core\Model\Resource\Db\AbstractDb
+abstract class AbstractIndex extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Stdlib\DateTime
@@ -36,22 +36,22 @@ abstract class AbstractIndex extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var \Magento\Reports\Model\Resource\HelperFactory
+     * @var \Magento\Reports\Model\Resource\Helper
      */
-    protected $_helperFactory;
+    protected $_resourceHelper;
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Reports\Model\Resource\HelperFactory $helperFactory
+     * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Reports\Model\Resource\HelperFactory $helperFactory,
+        \Magento\Reports\Model\Resource\Helper $resourceHelper,
         \Magento\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
-        $this->_helperFactory = $helperFactory;
+        $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
     }
 
@@ -141,10 +141,10 @@ abstract class AbstractIndex extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Save Product Index data (forced save)
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return $this|\Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Model\AbstractModel $object
+     * @return $this|\Magento\Model\Resource\Db\AbstractDb
      */
-    public function save(\Magento\Core\Model\AbstractModel $object)
+    public function save(\Magento\Model\AbstractModel $object)
     {
         if ($object->isDeleted()) {
             return $this->delete($object);
@@ -159,8 +159,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $matchFields = array('product_id', 'store_id');
 
-        $this->_helperFactory->create()->mergeVisitorProductIndex($this->getMainTable(), $data, $matchFields);
-
+        $this->_resourceHelper->mergeVisitorProductIndex($this->getMainTable(), $data, $matchFields);
 
         $this->unserializeFields($object);
         $this->_afterSave($object);
@@ -233,7 +232,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         $matchFields = array('product_id', 'store_id');
         foreach ($data as $row) {
-            $this->_helperFactory->create()->mergeVisitorProductIndex($this->getMainTable(), $row, $matchFields);
+            $this->_resourceHelper->mergeVisitorProductIndex($this->getMainTable(), $row, $matchFields);
         }
         return $this;
     }

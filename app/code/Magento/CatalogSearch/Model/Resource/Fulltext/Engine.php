@@ -32,7 +32,7 @@ namespace Magento\CatalogSearch\Model\Resource\Fulltext;
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Engine extends \Magento\Core\Model\Resource\Db\AbstractDb implements
+class Engine extends \Magento\Model\Resource\Db\AbstractDb implements
     \Magento\CatalogSearch\Model\Resource\EngineInterface
 {
     /**

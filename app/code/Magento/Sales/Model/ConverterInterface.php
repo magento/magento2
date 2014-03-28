@@ -39,18 +39,18 @@ interface ConverterInterface
     /**
      * Decode data
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param string $filedName
      * @return mixed
      */
-    public function decode(\Magento\Core\Model\AbstractModel $object, $filedName);
+    public function decode(\Magento\Model\AbstractModel $object, $filedName);
 
     /**
      * Encode data
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param string $filedName
      * @return mixed
      */
-    public function encode(\Magento\Core\Model\AbstractModel $object, $filedName);
+    public function encode(\Magento\Model\AbstractModel $object, $filedName);
 }

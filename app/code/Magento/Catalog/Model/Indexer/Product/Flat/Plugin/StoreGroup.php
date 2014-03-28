@@ -46,14 +46,14 @@ class StoreGroup
      * Before save handler
      *
      * @param \Magento\Core\Model\Resource\Store\Group $subject
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         \Magento\Core\Model\Resource\Store\Group $subject,
-        \Magento\Core\Model\AbstractModel $object
+        \Magento\Model\AbstractModel $object
     ) {
         if (!$object->getId() || $object->dataHasChangedFor('root_category_id')) {
             $this->_productFlatIndexerProcessor->markIndexerAsInvalid();

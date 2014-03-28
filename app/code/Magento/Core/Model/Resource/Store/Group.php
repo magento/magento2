@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource\Store;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
@@ -47,10 +47,10 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Update default store group for website
      *
-     * @param \Magento\Core\Model\AbstractModel $model
+     * @param \Magento\Model\AbstractModel $model
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $model)
+    protected function _afterSave(\Magento\Model\AbstractModel $model)
     {
         $this->_updateStoreWebsite($model->getId(), $model->getWebsiteId());
         $this->_updateWebsiteDefaultGroup($model->getWebsiteId(), $model->getId());
@@ -87,10 +87,10 @@ class Group extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Change store group website
      *
-     * @param \Magento\Core\Model\AbstractModel $model
+     * @param \Magento\Model\AbstractModel $model
      * @return $this
      */
-    protected function _changeWebsite(\Magento\Core\Model\AbstractModel $model)
+    protected function _changeWebsite(\Magento\Model\AbstractModel $model)
     {
         if ($model->getOriginalWebsiteId() && $model->getWebsiteId() != $model->getOriginalWebsiteId()) {
             $select = $this->_getWriteAdapter()->select()->from(

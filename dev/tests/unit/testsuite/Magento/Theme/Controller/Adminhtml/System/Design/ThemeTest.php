@@ -47,11 +47,23 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_request;
 
+    /**
+     * @var \Magento\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManager;
+
+    /**
+     * @var \Magento\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $view;
+
     protected function setUp()
     {
         $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
 
         $this->_request = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
+        $this->eventManager = $this->getMock('\Magento\Event\ManagerInterface', array(), array(), '', false);
+        $this->view = $this->getMock('\Magento\App\ViewInterface', array(), array(), '', false);
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
@@ -59,7 +71,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array(
                 'request' => $this->_request,
                 'objectManager' => $this->_objectManagerMock,
-                'response' => $this->getMock('Magento\App\Response\Http', array(), array(), '', false)
+                'response' => $this->getMock('Magento\App\Response\Http', array(), array(), '', false),
+                'eventManager' => $this->eventManager,
+                'view' => $this->view,
             )
         );
     }
@@ -78,50 +92,50 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->_request->expects(
             $this->at(0)
         )->method(
-            'getParam'
-        )->with(
-            'back',
-            false
-        )->will(
-            $this->returnValue(true)
-        );
+                'getParam'
+            )->with(
+                'back',
+                false
+            )->will(
+                $this->returnValue(true)
+            );
 
         $this->_request->expects(
             $this->at(1)
         )->method(
-            'getParam'
-        )->with(
-            'theme'
-        )->will(
-            $this->returnValue($themeData)
-        );
+                'getParam'
+            )->with(
+                'theme'
+            )->will(
+                $this->returnValue($themeData)
+            );
         $this->_request->expects(
             $this->at(2)
         )->method(
-            'getParam'
-        )->with(
-            'custom_css_content'
-        )->will(
-            $this->returnValue($customCssContent)
-        );
+                'getParam'
+            )->with(
+                'custom_css_content'
+            )->will(
+                $this->returnValue($customCssContent)
+            );
         $this->_request->expects(
             $this->at(3)
         )->method(
-            'getParam'
-        )->with(
-            'js_removed_files'
-        )->will(
-            $this->returnValue($jsRemovedFiles)
-        );
+                'getParam'
+            )->with(
+                'js_removed_files'
+            )->will(
+                $this->returnValue($jsRemovedFiles)
+            );
         $this->_request->expects(
             $this->at(4)
         )->method(
-            'getParam'
-        )->with(
-            'js_order'
-        )->will(
-            $this->returnValue($jsOrder)
-        );
+                'getParam'
+            )->with(
+                'js_order'
+            )->will(
+                $this->returnValue($jsOrder)
+            );
         $this->_request->expects($this->once(5))->method('getPost')->will($this->returnValue(true));
 
         $themeMock = $this->getMock(
@@ -147,33 +161,63 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->_objectManagerMock->expects(
             $this->at(0)
         )->method(
-            'get'
-        )->with(
-            'Magento\View\Design\Theme\FlyweightFactory'
-        )->will(
-            $this->returnValue($themeFactory)
-        );
+                'get'
+            )->with(
+                'Magento\View\Design\Theme\FlyweightFactory'
+            )->will(
+                $this->returnValue($themeFactory)
+            );
 
         $this->_objectManagerMock->expects(
             $this->at(1)
         )->method(
-            'get'
-        )->with(
-            'Magento\Theme\Model\Theme\Customization\File\CustomCss'
-        )->will(
-            $this->returnValue(null)
-        );
+                'get'
+            )->with(
+                'Magento\Theme\Model\Theme\Customization\File\CustomCss'
+            )->will(
+                $this->returnValue(null)
+            );
 
         $this->_objectManagerMock->expects(
             $this->at(2)
         )->method(
-            'create'
-        )->with(
-            'Magento\Theme\Model\Theme\SingleFile'
-        )->will(
-            $this->returnValue(null)
-        );
+                'create'
+            )->with(
+                'Magento\Theme\Model\Theme\SingleFile'
+            )->will(
+                $this->returnValue(null)
+            );
 
         $this->_model->saveAction();
+    }
+
+    public function testIndexAction()
+    {
+        $menuModel = $this->getMock('\Magento\Backend\Model\Menu', array(), array(), '', false);
+        $menuModel->expects($this->once())
+            ->method('getParentItems')
+            ->with($this->equalTo('Magento_Theme::system_design_theme'))
+            ->will($this->returnValue(array()));
+
+        $menuBlock = $this->getMock('\Magento\Backend\Block\Menu', array(), array(), '', false);
+        $menuBlock->expects($this->once())
+            ->method('getMenuModel')
+            ->will($this->returnValue($menuModel));
+
+        $layout = $this->getMock('\Magento\View\LayoutInterface', array(), array(), '', false);
+        $layout->expects($this->any())
+            ->method('getBlock')
+            ->with($this->equalTo('menu'))
+            ->will($this->returnValue($menuBlock));
+
+        $this->view->expects($this->once())
+            ->method('getLayout')
+            ->will($this->returnValue($layout));
+
+        $this->eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with($this->equalTo('theme_registration_from_filesystem'))
+            ->will($this->returnValue(null));
+        $this->_model->indexAction();
     }
 }

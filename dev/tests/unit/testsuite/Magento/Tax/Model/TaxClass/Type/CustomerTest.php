@@ -31,7 +31,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     public function testGetAssignedObjects()
     {
         $collectionMock = $this->getMockBuilder(
-            'Magento\Core\Model\Resource\Db\Collection\AbstractCollection'
+            'Magento\Model\Resource\Db\Collection\AbstractCollection'
         )->setMethods(
             array('addFieldToFilter')
         )->disableOriginalConstructor()->getMock();

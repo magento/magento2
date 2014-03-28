@@ -48,21 +48,29 @@ class Context implements \Magento\ObjectManager\ContextInterface
     protected $_appState;
 
     /**
+     * @var \Magento\Model\ActionValidator\RemoveAction
+     */
+    protected $_actionValidator;
+
+    /**
      * @param \Magento\Logger $logger
      * @param \Magento\Event\ManagerInterface $eventDispatcher
      * @param \Magento\App\CacheInterface $cacheManager
      * @param \Magento\App\State $appState
+     * @param ActionValidator\RemoveAction $actionValidator
      */
     public function __construct(
         \Magento\Logger $logger,
         \Magento\Event\ManagerInterface $eventDispatcher,
         \Magento\App\CacheInterface $cacheManager,
-        \Magento\App\State $appState
+        \Magento\App\State $appState,
+        \Magento\Model\ActionValidator\RemoveAction $actionValidator
     ) {
         $this->_eventDispatcher = $eventDispatcher;
         $this->_cacheManager = $cacheManager;
         $this->_appState = $appState;
         $this->_logger = $logger;
+        $this->_actionValidator = $actionValidator;
     }
 
     /**
@@ -95,5 +103,13 @@ class Context implements \Magento\ObjectManager\ContextInterface
     public function getAppState()
     {
         return $this->_appState;
+    }
+
+    /**
+     * @return \Magento\Model\ActionValidator\RemoveAction
+     */
+    public function getActionValidator()
+    {
+        return $this->_actionValidator;
     }
 }

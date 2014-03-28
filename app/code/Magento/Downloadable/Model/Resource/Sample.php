@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Model\Resource;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Sample extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection

@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Model\Resource\Link;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Purchased extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Purchased extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Magento class constructor

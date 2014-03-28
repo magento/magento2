@@ -34,7 +34,7 @@
  */
 namespace Magento\Eav\Model\Resource;
 
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 use Magento\DB\Select;
 
 abstract class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute

@@ -57,14 +57,14 @@ class CheckoutManagerObserver
      *
      * @param \Magento\Event\Observer $observer
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function submitRecurringPayments($observer)
     {
         $this->_recurringPayments = $this->_quoteImporter->import($observer->getEvent()->getQuote());
         foreach ($this->_recurringPayments as $payment) {
             if (!$payment->isValid()) {
-                throw new \Magento\Core\Exception($payment->getValidationErrors());
+                throw new \Magento\Model\Exception($payment->getValidationErrors());
             }
             $payment->submit();
         }

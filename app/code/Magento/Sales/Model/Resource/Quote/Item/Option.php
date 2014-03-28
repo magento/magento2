@@ -32,7 +32,7 @@ namespace Magento\Sales\Model\Resource\Quote\Item;
  * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Main table and field initialization

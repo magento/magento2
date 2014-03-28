@@ -32,7 +32,7 @@ namespace Magento\Bundle\Model\Resource;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Selection extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Selection extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table and id field

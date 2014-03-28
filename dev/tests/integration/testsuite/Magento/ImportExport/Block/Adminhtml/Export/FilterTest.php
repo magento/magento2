@@ -37,17 +37,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDateFromToHtmlWithValue()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->loadArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
-        )->setDefaultDesignTheme();
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ImportExport\Block\Adminhtml\Export\Filter'
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+            ->setDefaultDesignTheme();
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\ImportExport\Block\Adminhtml\Export\Filter');
         $method = new \ReflectionMethod(
             'Magento\ImportExport\Block\Adminhtml\Export\Filter',
             '_getDateFromToHtmlWithValue'

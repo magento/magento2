@@ -327,7 +327,7 @@ class Service extends \Magento\Object
      *
      * @param \Magento\Object $data
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function validate($data)
     {
@@ -350,12 +350,12 @@ class Service extends \Magento\Object
         // check whether is authenticated before placing order
         if ($this->getIsPlaceOrder()) {
             if ($validationState->getChecksum() != $newChecksum) {
-                throw new \Magento\Core\Exception(__('Payment information error. Please start over.'));
+                throw new \Magento\Model\Exception(__('Payment information error. Please start over.'));
             }
             if ($validationState->isAuthenticateSuccessful()) {
                 return;
             }
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Please verify the card with the issuer bank before placing the order.')
             );
         } else {
@@ -366,7 +366,7 @@ class Service extends \Magento\Object
             if ($validationState->isLookupSuccessful()) {
                 return;
             }
-            throw new \Magento\Core\Exception(__('This card has failed validation and cannot be used.'));
+            throw new \Magento\Model\Exception(__('This card has failed validation and cannot be used.'));
         }
     }
 

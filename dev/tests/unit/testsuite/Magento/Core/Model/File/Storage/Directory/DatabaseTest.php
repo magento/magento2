@@ -57,11 +57,6 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $dateModelMock;
 
     /**
-     * @var \Magento\Core\Model\App |\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $applicationMock;
-
-    /**
      * @var \Magento\Core\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryMock;
@@ -106,7 +101,6 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->dateModelMock = $this->getMock('Magento\Stdlib\DateTime\DateTime', array(), array(), '', false);
-        $this->applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
         $this->directoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\Directory\Database',
             array('setPath', 'setName', '__wakeup', 'save', 'getParentId'),
@@ -139,24 +133,10 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->applicationMock->expects(
-            $this->any()
-        )->method(
-            'getConfig'
-        )->will(
-            $this->returnValue($this->configMock)
-        );
-
-        $this->configMock->expects(
-            $this->any()
-        )->method(
-            'getValue'
-        )->with(
-            \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
-            'default'
-        )->will(
-            $this->returnValue($this->customConnectionName)
-        );
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->with(\Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE, 'default')
+            ->will($this->returnValue($this->customConnectionName));
 
         $this->contextMock->expects($this->once())->method('getLogger')->will($this->returnValue($this->loggerMock));
 
@@ -165,7 +145,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             $this->registryMock,
             $this->helperStorageDatabase,
             $this->dateModelMock,
-            $this->applicationMock,
+            $this->configMock,
             $this->directoryFactoryMock,
             $this->resourceDirectoryDatabaseMock,
             null,

@@ -299,11 +299,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     /**
      * Fill row with attributes values
      *
-     * @param \Magento\Core\Model\AbstractModel $item export entity
+     * @param \Magento\Model\AbstractModel $item export entity
      * @param array $row data row
      * @return array
      */
-    protected function _addAttributeValuesToRow(\Magento\Core\Model\AbstractModel $item, array $row = array())
+    protected function _addAttributeValuesToRow(\Magento\Model\AbstractModel $item, array $row = array())
     {
         $validAttributeCodes = $this->_getExportAttributeCodes();
         // go through all valid attribute codes

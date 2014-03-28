@@ -49,7 +49,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     protected $_eventObject = 'order_collection';
 
     /**
-     * @var \Magento\Core\Model\Resource\Helper
+     * @var \Magento\DB\Helper
      */
     protected $_coreResourceHelper;
 
@@ -58,18 +58,18 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Model\Resource\Helper $coreResourceHelper
+     * @param \Magento\DB\Helper $coreResourceHelper
      * @param \Zend_Db_Adapter_Abstract $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Core\Model\Resource\Helper $coreResourceHelper,
+        \Magento\DB\Helper $coreResourceHelper,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_coreResourceHelper = $coreResourceHelper;

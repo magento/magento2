@@ -29,7 +29,7 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 class Address extends \Magento\Core\Model\Config\Value
 {

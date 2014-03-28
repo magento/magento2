@@ -53,7 +53,7 @@ namespace Magento\CatalogRule\Model\Rule\Product;
 
 use Magento\DB\Select;
 
-class Price extends \Magento\Core\Model\AbstractModel
+class Price extends \Magento\Model\AbstractModel
 {
     /**
      * Initialize resource model

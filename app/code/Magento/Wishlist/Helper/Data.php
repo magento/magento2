@@ -204,7 +204,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             } else {
                 $this->_wishlist = $this->_wishlistFactory->create();
                 if ($this->getCustomer()) {
-                    $this->_wishlist->loadByCustomer($this->getCustomer());
+                    $this->_wishlist->loadByCustomerId($this->getCustomer()->getId());
                 }
             }
         }

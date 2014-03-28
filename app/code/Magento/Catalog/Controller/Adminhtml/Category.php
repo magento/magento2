@@ -377,16 +377,16 @@ class Category extends \Magento\Backend\App\Action
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
-                            throw new \Magento\Core\Exception(__('Attribute "%1" is required.', $attribute));
+                            throw new \Magento\Model\Exception(__('Attribute "%1" is required.', $attribute));
                         } else {
-                            throw new \Magento\Core\Exception($error);
+                            throw new \Magento\Model\Exception($error);
                         }
                     }
                 }
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Core\Exception(__('Unable to save the category'));
+                    throw new \Magento\Model\Exception(__('Unable to save the category'));
                 }
 
                 $category->save();
@@ -468,7 +468,7 @@ class Category extends \Magento\Backend\App\Action
         try {
             $category->move($parentNodeId, $prevNodeId);
             $this->getResponse()->setBody('SUCCESS');
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->getResponse()->setBody($e->getMessage());
         } catch (\Exception $e) {
             $this->getResponse()->setBody(__('There was a category move error %1', $e));
@@ -493,7 +493,7 @@ class Category extends \Magento\Backend\App\Action
 
                 $category->delete();
                 $this->messageManager->addSuccess(__('You deleted the category.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->getResponse()->setRedirect($this->getUrl('catalog/*/edit', array('_current' => true)));
                 return;

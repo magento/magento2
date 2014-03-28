@@ -93,7 +93,7 @@ class Files extends \Magento\Backend\App\Action
         try {
             $path = $this->_getSession()->getStoragePath();
             $result = $this->_getStorage()->createFolder($name, $path);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => __('Sorry, there was an unknown error.'));

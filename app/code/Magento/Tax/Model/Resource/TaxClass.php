@@ -32,7 +32,7 @@ namespace Magento\Tax\Model\Resource;
  * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class TaxClass extends \Magento\Core\Model\Resource\Db\AbstractDb
+class TaxClass extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

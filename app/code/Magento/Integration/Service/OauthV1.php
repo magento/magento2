@@ -123,7 +123,7 @@ class OauthV1 implements OauthV1Interface
             $consumer = $this->_consumerFactory->create($consumerData);
             $consumer->save();
             return $consumer;
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Oauth\Exception(__('Unexpected error. Unable to create oAuth consumer account.'));
@@ -178,7 +178,7 @@ class OauthV1 implements OauthV1Interface
     {
         try {
             return $this->_consumerFactory->create()->load($consumerId);
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Oauth\Exception(__('Unexpected error. Unable to load oAuth consumer account.'));
@@ -192,7 +192,7 @@ class OauthV1 implements OauthV1Interface
     {
         try {
             return $this->_consumerFactory->create()->load($key, 'key');
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
             throw new \Magento\Oauth\Exception(__('Unexpected error. Unable to load oAuth consumer account.'));
@@ -229,7 +229,7 @@ class OauthV1 implements OauthV1Interface
             $this->_httpClient->setConfig(array('maxredirects' => $maxredirects, 'timeout' => $timeout));
             $this->_httpClient->request(\Magento\HTTP\ZendClient::POST);
             return $verifier->getVerifier();
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             throw $exception;
         } catch (\Magento\Oauth\Exception $exception) {
             throw $exception;

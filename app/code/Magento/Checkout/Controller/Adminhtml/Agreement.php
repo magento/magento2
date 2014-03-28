@@ -124,7 +124,7 @@ class Agreement extends \Magento\Backend\App\Action
                 $this->_redirect('checkout/*/');
 
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving this condition.'));
@@ -153,7 +153,7 @@ class Agreement extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(__('The condition has been deleted.'));
             $this->_redirect('checkout/*/');
             return;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Something went wrong  while deleting this condition.'));

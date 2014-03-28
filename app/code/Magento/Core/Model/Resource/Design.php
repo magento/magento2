@@ -34,7 +34,7 @@ use Magento\Stdlib\DateTime;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Design extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var DateTime
@@ -64,11 +64,11 @@ class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
-    public function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    public function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         if ($date = $object->getDateFrom()) {
             $object->setDateFrom($this->dateTime->formatDate($date));
@@ -92,7 +92,7 @@ class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
             $object->getDateTo()
         )
         ) {
-            throw new \Magento\Core\Exception(__('Start date cannot be greater than end date.'));
+            throw new \Magento\Model\Exception(__('Start date cannot be greater than end date.'));
         }
 
         $check = $this->_checkIntersection(
@@ -103,7 +103,7 @@ class Design extends \Magento\Core\Model\Resource\Db\AbstractDb
         );
 
         if ($check) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     'Your design change for the specified store intersects with another one, please specify another date range.'
                 )

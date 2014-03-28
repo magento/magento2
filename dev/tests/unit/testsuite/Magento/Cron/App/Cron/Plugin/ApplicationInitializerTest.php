@@ -33,7 +33,7 @@ class ApplicationInitializerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $applicationMock;
+    protected $appStateMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -47,15 +47,18 @@ class ApplicationInitializerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->applicationMock = $this->getMock('Magento\AppInterface');
+        $this->appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         $this->sidResolverMock = $this->getMock('\Magento\Session\SidResolverInterface', array(), array(), '', false);
         $this->subjectMock = $this->getMock('Magento\App\Cron', array(), array(), '', false);
-        $this->model = new ApplicationInitializer($this->applicationMock, $this->sidResolverMock);
+        $this->model = new ApplicationInitializer(
+            $this->appStateMock,
+            $this->sidResolverMock
+        );
     }
 
     public function testBeforeExecutePerformsRequiredChecks()
     {
-        $this->applicationMock->expects($this->once())->method('requireInstalledInstance');
+        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->sidResolverMock->expects($this->once())->method('setUseSessionInUrl')->with(false);
         $this->model->beforeLaunch($this->subjectMock);
     }

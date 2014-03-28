@@ -59,7 +59,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Registry $registry
@@ -67,7 +67,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Registry $registry,

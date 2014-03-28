@@ -731,7 +731,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Initialize product type models.
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _initTypeModels()
     {
@@ -740,12 +740,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $params = array($this, $productTypeName);
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], array('params' => $params)))
             ) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     sprintf("Entity type model '%s' is not found", $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __(
                         'Entity type model must be an instance of ' .
                         'Magento\ImportExport\Model\Import\Entity\Product\Type\AbstractType'
@@ -1549,7 +1549,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Returns an object for upload a media files
      *
      * @return \Magento\ImportExport\Model\Import\Uploader
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _getUploader()
     {
@@ -1560,14 +1560,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
-                throw new \Magento\Core\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
+                throw new \Magento\Model\Exception(sprintf("File directory '%s' is not readable.", $tmpPath));
             }
             $destinationDir = "catalog/product";
             $destinationPath = $this->_mediaDirectory->getAbsolutePath($destinationDir);
 
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
-                throw new \Magento\Core\Exception(sprintf("File directory '%s' is not writable.", $destinationPath));
+                throw new \Magento\Model\Exception(sprintf("File directory '%s' is not writable.", $destinationPath));
             }
         }
         return $this->_fileUploader;

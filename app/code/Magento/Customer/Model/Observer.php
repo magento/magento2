@@ -218,27 +218,4 @@ class Observer
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, false, true);
         }
     }
-
-    /**
-     * Revert emulated customer group_id
-     *
-     * @param \Magento\Event\Observer $observer
-     * @return void
-     */
-    public function quoteSubmitAfter($observer)
-    {
-        /** @var $customer Customer */
-        $customer = $observer->getQuote()->getCustomer();
-
-        if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())) {
-            return;
-        }
-
-        if (!$customer->getId()) {
-            return;
-        }
-
-        $customer->setGroupId((int)$customer->getOrigData('group_id'));
-        $customer->save();
-    }
 }

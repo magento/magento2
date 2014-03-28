@@ -156,7 +156,7 @@ class Shell extends \Magento\App\AbstractShell
             try {
                 $indexer->{$method}();
                 echo $indexer->getTitle() . " indexer was successfully changed index mode" . PHP_EOL;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {
@@ -186,7 +186,7 @@ class Shell extends \Magento\App\AbstractShell
             try {
                 $indexer->reindexAll();
                 echo $indexer->getTitle() . " index has been rebuilt successfully" . PHP_EOL;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . PHP_EOL;
                 $this->hasErrors = true;
             } catch (\Exception $e) {

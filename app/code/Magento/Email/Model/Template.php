@@ -25,7 +25,7 @@
  */
 namespace Magento\Email\Model;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Email\Model\Template\Filter;
 use Magento\Filter\Template as FilterTemplate;
 

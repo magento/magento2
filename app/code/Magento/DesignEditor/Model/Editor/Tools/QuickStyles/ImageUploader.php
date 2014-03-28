@@ -136,7 +136,7 @@ class ImageUploader extends \Magento\Object
 
         if (!$uploader->save($this->getStoragePath())) {
             /** @todo add translator */
-            throw new \Magento\Core\Exception('Cannot upload file.');
+            throw new \Magento\Model\Exception('Cannot upload file.');
         }
         $result['css_path'] = implode(
             '/',

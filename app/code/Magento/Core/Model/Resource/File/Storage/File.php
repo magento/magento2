@@ -103,7 +103,7 @@ class File
      * Save directory to storage
      *
      * @param array $dir
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     public function saveDir($dir)
@@ -118,7 +118,7 @@ class File
             $this->_filesystem->getDirectoryWrite(\Magento\App\Filesystem::MEDIA_DIR)->create($path);
         } catch (\Exception $e) {
             $this->_logger->log($e->getMessage());
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Unable to create directory: %1', \Magento\App\Filesystem::MEDIA_DIR . '/' . $path)
             );
         }
@@ -132,7 +132,7 @@ class File
      * @param string $filePath
      * @param string $content
      * @param bool $overwrite
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     public function saveFile($filePath, $content, $overwrite = false)
@@ -145,7 +145,7 @@ class File
             }
         } catch (\Magento\Filesystem\FilesystemException $e) {
             $this->_logger->log($e->getMessage());
-            throw new \Magento\Core\Exception(__('Unable to save file: %1', $filePath));
+            throw new \Magento\Model\Exception(__('Unable to save file: %1', $filePath));
         }
 
         return false;

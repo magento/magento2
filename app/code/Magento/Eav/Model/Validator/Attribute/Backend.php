@@ -37,15 +37,15 @@ class Backend extends \Magento\Validator\AbstractValidator
     /**
      * Returns true if and only if $value meets the validation requirements.
      *
-     * @param \Magento\Core\Model\AbstractModel $entity
+     * @param \Magento\Model\AbstractModel $entity
      * @return bool
      * @throws \InvalidArgumentException
      */
     public function isValid($entity)
     {
         $this->_messages = array();
-        if (!$entity instanceof \Magento\Core\Model\AbstractModel) {
-            throw new \InvalidArgumentException('Model must be extended from \Magento\Core\Model\AbstractModel');
+        if (!$entity instanceof \Magento\Model\AbstractModel) {
+            throw new \InvalidArgumentException('Model must be extended from \Magento\Model\AbstractModel');
         }
         /** @var \Magento\Eav\Model\Entity\AbstractEntity $resource */
         $resource = $entity->getResource();
@@ -72,7 +72,7 @@ class Backend extends \Magento\Validator\AbstractValidator
                 } elseif (is_string($result)) {
                     $this->_messages[$attribute->getAttributeCode()][] = $result;
                 }
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->_messages[$attribute->getAttributeCode()][] = $e->getMessage();
             }
         }

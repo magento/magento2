@@ -224,7 +224,7 @@ class Product extends \Magento\App\Action\Action
                 'review_controller_product_init_after',
                 array('product' => $product, 'controller_action' => $this)
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_logger->logException($e);
             return false;
         }

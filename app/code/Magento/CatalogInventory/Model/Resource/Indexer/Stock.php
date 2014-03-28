@@ -329,13 +329,13 @@ class Stock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractInde
      *
      * @param string $productTypeId
      * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _getIndexer($productTypeId)
     {
         $types = $this->_getTypeIndexers();
         if (!isset($types[$productTypeId])) {
-            throw new \Magento\Core\Exception(__('Unsupported product type "%1".', $productTypeId));
+            throw new \Magento\Model\Exception(__('Unsupported product type "%1".', $productTypeId));
         }
         return $types[$productTypeId];
     }

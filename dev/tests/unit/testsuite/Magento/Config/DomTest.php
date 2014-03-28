@@ -163,4 +163,17 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $dom = new \Magento\Config\Dom($xml, array(), null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
+
+    public function testValidateUnknownError()
+    {
+        $xml = '<root><node id="id1"/><node id="id2"/></root>';
+        $schemaFile = __DIR__ . '/_files/sample.xsd';
+        $dom = new \Magento\Config\Dom($xml);
+        $domMock = $this->getMock('DOMDocument', array('schemaValidate'), array());
+        $domMock->expects($this->once())
+            ->method('schemaValidate')
+            ->with($schemaFile)
+            ->will($this->returnValue(false));
+        $this->assertEquals(array('Unknown validation error'), $dom->validateDomDocument($domMock, $schemaFile));
+    }
 }

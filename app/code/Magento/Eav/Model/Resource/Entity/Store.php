@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 use Magento\Object;
 
 /**
@@ -35,7 +35,7 @@ use Magento\Object;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Store extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

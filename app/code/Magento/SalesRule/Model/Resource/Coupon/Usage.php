@@ -32,7 +32,7 @@ namespace Magento\SalesRule\Model\Resource\Coupon;
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Usage extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Usage extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Constructor
@@ -104,7 +104,7 @@ class Usage extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $object->setData($data);
             }
         }
-        if ($object instanceof \Magento\Core\Model\AbstractModel) {
+        if ($object instanceof \Magento\Model\AbstractModel) {
             $this->_afterLoad($object);
         }
         return $this;

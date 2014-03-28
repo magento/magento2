@@ -28,11 +28,11 @@ namespace Magento\Phrase;
 interface RendererInterface
 {
     /**
-     * Render result text
+     * Render source text
      *
-     * @param string $text
-     * @param array $arguments
+     * @param [] $source
+     * @param [] $arguments
      * @return string
      */
-    public function render($text, array $arguments);
+    public function render(array $source, array $arguments);
 }

@@ -45,7 +45,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Widget"/>
             <module name="Magento_Wishlist"/>
-            <module name="Magento_Review"/>
             <module name="Magento_Tax"/>
             <module name="Magento_Bundle"/>
             <module name="Magento_ImportExport"/>
@@ -56,7 +55,6 @@
             <module name="Magento_CatalogSearch"/>
             <module name="Magento_Weee"/>
             <module name="Magento_ProductAlert"/>
-            <module name="Magento_Rating"/>
         </depends>
     </module>
 </config>

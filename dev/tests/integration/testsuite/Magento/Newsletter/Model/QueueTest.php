@@ -38,9 +38,9 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $app \Magento\TestFramework\App */
-        $app = $objectManager->get('Magento\Core\Model\App');
-        $app->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $objectManager->get('Magento\App\State')->setAreaCode(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $area = $objectManager->get('Magento\App\AreaList')->getArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        $area->load();
 
         /** @var $filter \Magento\Newsletter\Model\Template\Filter */
         $filter = $objectManager->get('Magento\Newsletter\Model\Template\Filter');
@@ -77,8 +77,10 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     {
         $errorMsg = md5(microtime());
 
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\App')->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
 
         $transport = $this->getMock('\Magento\Mail\TransportInterface');
         $transport->expects(

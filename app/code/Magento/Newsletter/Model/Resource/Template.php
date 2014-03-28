@@ -32,7 +32,7 @@ namespace Magento\Newsletter\Model\Resource;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Template extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Date
@@ -153,14 +153,14 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Model\AbstractModel $object)
     {
         if ($this->checkCodeUsage($object)) {
-            throw new \Magento\Core\Exception(__('Duplicate template code'));
+            throw new \Magento\Model\Exception(__('Duplicate template code'));
         }
 
         if (!$object->hasTemplateActual()) {

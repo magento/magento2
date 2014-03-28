@@ -40,7 +40,7 @@ use Magento\CatalogSearch\Model\Fulltext as ModelFulltext;
 use Magento\CatalogSearch\Model\Resource\Indexer\Fulltext as IndexerFulltext;
 use Magento\Model\Context;
 use Magento\Registry;
-use Magento\Core\Model\Resource\AbstractResource;
+use Magento\Model\Resource\AbstractResource;
 use Magento\Core\Model\Store;
 use Magento\Core\Model\Store\Group;
 use Magento\Core\Model\StoreManagerInterface;

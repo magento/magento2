@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource\Entity\Attribute;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Set extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Set extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory
@@ -64,10 +64,10 @@ class Set extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         if ($object->getGroups()) {
             /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */

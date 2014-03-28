@@ -23,7 +23,7 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Sales\Model\Quote\Address\RateRequest;
 use Magento\Sales\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;

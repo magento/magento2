@@ -231,9 +231,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_model->setWriter($writer);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\AbstractModel');
+        $arguments = $objectManagerHelper->getConstructArguments('Magento\Model\AbstractModel');
         $arguments['data'] = $this->_customerData;
-        $item = $this->getMockForAbstractClass('Magento\Core\Model\AbstractModel', $arguments);
+        $item = $this->getMockForAbstractClass('Magento\Model\AbstractModel', $arguments);
 
         $this->_model->exportItem($item);
     }

@@ -48,25 +48,25 @@ class Search extends \Magento\Backend\Block\Widget
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\HelperPool
+     * @var \Magento\DB\Helper
      */
-    protected $_helperPool;
+    protected $_resourceHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Resource\HelperPool $helperPool
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Resource\HelperPool $helperPool,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
         \Magento\Registry $registry,
         array $data = array()
     ) {
-        $this->_helperPool = $helperPool;
+        $this->_resourceHelper = $resourceHelper;
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -107,9 +107,7 @@ class Search extends \Magento\Backend\Block\Widget
      */
     public function getSuggestedAttributes($labelPart, $templateId = null)
     {
-        $escapedLabelPart = $this->_helperPool->get(
-            'Magento_Core'
-        )->addLikeEscape(
+        $escapedLabelPart = $this->_resourceHelper->addLikeEscape(
             $labelPart,
             array('position' => 'any')
         );

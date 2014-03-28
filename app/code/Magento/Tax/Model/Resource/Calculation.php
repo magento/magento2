@@ -30,7 +30,7 @@
  */
 namespace Magento\Tax\Model\Resource;
 
-class Calculation extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Calculation extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Rates cache

@@ -100,13 +100,4 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($this->_disabledCacheTypes, $this->_model->getDisabledCacheTypes());
     }
-
-    public function testGetAvailableModes()
-    {
-        $this->_model = new \Magento\DesignEditor\Helper\Data($this->_context, self::TEST_FRONT_NAME);
-        $this->assertEquals(
-            array(\Magento\DesignEditor\Model\State::MODE_NAVIGATION),
-            $this->_model->getAvailableModes()
-        );
-    }
 }

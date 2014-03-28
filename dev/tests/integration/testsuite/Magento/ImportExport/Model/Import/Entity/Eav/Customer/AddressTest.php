@@ -257,13 +257,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Model\Address'
         );
         $tableName = $addressModel->getResource()->getEntityTable();
-        $addressId = $objectManager->get(
-            'Magento\Core\Model\Resource\HelperPool'
-        )->get(
-            'Magento_ImportExport'
-        )->getNextAutoincrement(
-            $tableName
-        );
+        $addressId = $objectManager->get('Magento\ImportExport\Model\Resource\Helper')
+            ->getNextAutoincrement($tableName);
 
         /** @var \Magento\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Stdlib\DateTime');

@@ -23,29 +23,31 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+
 class CustomerGroup extends AbstractPlugin
 {
     /**
-     * @param \Magento\Customer\Model\Resource\Group $subject
-     * @param \Magento\Customer\Model\Resource\Group $result
-     * @return \Magento\Customer\Model\Resource\Group
+     * @param CustomerGroupServiceInterface $subject
+     * @param string                        $result
+     * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(\Magento\Customer\Model\Resource\Group $subject, $result)
+    public function afterSaveGroup(CustomerGroupServiceInterface $subject, $result)
     {
         $this->invalidateIndexer();
         return $result;
     }
 
     /**
-     * @param \Magento\Customer\Model\Resource\Group $subject
-     * @param \Magento\Customer\Model\Resource\Group $result
-     * @return \Magento\Customer\Model\Resource\Group
+     * @param CustomerGroupServiceInterface $subject
+     * @param string                        $result
+     * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(\Magento\Customer\Model\Resource\Group $subject, $result)
+    public function afterDeleteGroup(CustomerGroupServiceInterface $subject, $result)
     {
         $this->invalidateIndexer();
         return $result;

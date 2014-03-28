@@ -169,7 +169,7 @@ class Statistics extends \Magento\Backend\App\Action
                 $this->_objectManager->create($collectionName)->aggregate($date);
             }
             $this->messageManager->addSuccess(__('Recent statistics have been updated.'));
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
@@ -196,7 +196,7 @@ class Statistics extends \Magento\Backend\App\Action
                 $this->_objectManager->create($collectionName)->aggregate();
             }
             $this->messageManager->addSuccess(__('We updated lifetime statistics.'));
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));

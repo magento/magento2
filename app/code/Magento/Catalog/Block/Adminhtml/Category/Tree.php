@@ -60,9 +60,9 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_backendSession;
 
     /**
-     * @var \Magento\Core\Model\Resource\HelperPool
+     * @var \Magento\DB\Helper
      */
-    protected $_helperPool;
+    protected $_resourceHelper;
 
     /**
      * @var \Magento\Json\EncoderInterface
@@ -71,10 +71,10 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\Resource\HelperPool $helperPool
+     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\DB\Helper $resourceHelper
      * @param \Magento\Backend\Model\Auth\Session $backendSession
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
@@ -84,13 +84,13 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Registry $registry,
         \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Model\Resource\HelperPool $helperPool,
+        \Magento\DB\Helper $resourceHelper,
         \Magento\Backend\Model\Auth\Session $backendSession,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_helperPool = $helperPool;
+        $this->_resourceHelper = $resourceHelper;
         $this->_backendSession = $backendSession;
         $this->_categoryFactory = $categoryFactory;
         parent::__construct($context, $categoryTree, $registry, $data);
@@ -201,9 +201,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $collection = $this->_categoryFactory->create()->getCollection();
 
         $matchingNamesCollection = clone $collection;
-        $escapedNamePart = $this->_helperPool->get(
-            'Magento_Core'
-        )->addLikeEscape(
+        $escapedNamePart = $this->_resourceHelper->addLikeEscape(
             $namePart,
             array('position' => 'any')
         );

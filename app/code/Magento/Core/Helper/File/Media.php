@@ -69,7 +69,7 @@ class Media extends \Magento\App\Helper\AbstractHelper
      * @param string $mediaDirectory
      * @param string $path
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function collectFileInfo($mediaDirectory, $path)
     {
@@ -79,10 +79,10 @@ class Media extends \Magento\App\Helper\AbstractHelper
         $dir = $this->filesystem->getDirectoryRead(\Magento\App\Filesystem::MEDIA_DIR);
         $relativePath = $dir->getRelativePath($fullPath);
         if (!$dir->isFile($relativePath)) {
-            throw new \Magento\Core\Exception(__('File %1 does not exist', $fullPath));
+            throw new \Magento\Model\Exception(__('File %1 does not exist', $fullPath));
         }
         if (!$dir->isReadable($relativePath)) {
-            throw new \Magento\Core\Exception(__('File %1 is not readable', $fullPath));
+            throw new \Magento\Model\Exception(__('File %1 is not readable', $fullPath));
         }
 
         $path = str_replace(array('/', '\\'), '/', $path);

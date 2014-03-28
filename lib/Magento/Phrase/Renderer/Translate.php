@@ -28,11 +28,9 @@ namespace Magento\Phrase\Renderer;
 class Translate implements \Magento\Phrase\RendererInterface
 {
     /**
-     * Basic object for translation
-     *
      * @var \Magento\TranslateInterface
      */
-    protected $_translator;
+    protected $translator;
 
     /**
      * Renderer construct
@@ -41,20 +39,33 @@ class Translate implements \Magento\Phrase\RendererInterface
      */
     public function __construct(\Magento\TranslateInterface $translator)
     {
-        $this->_translator = $translator;
+        $this->translator = $translator;
     }
 
     /**
-     * {@inheritdoc}
+     * Render source text
      *
-     * @param string $text
-     * @param array $arguments
+     * @param [] $source
+     * @param [] $arguments
      * @return string
      */
-    public function render($text, array $arguments)
+    public function render(array $source, array $arguments)
     {
-        array_unshift($arguments, $text);
+        $text = end($source);
 
-        return call_user_func(array($this->_translator, 'translate'), $arguments);
+        $code = $this->translator->getTheme()
+            . \Magento\View\Service::SCOPE_SEPARATOR
+            . $text;
+
+        $data = $this->translator->getData();
+
+        if (array_key_exists($code, $data)) {
+            return $data[$code];
+        }
+        if (array_key_exists($text, $data)) {
+            return $data[$text];
+        }
+
+        return $text;
     }
 }

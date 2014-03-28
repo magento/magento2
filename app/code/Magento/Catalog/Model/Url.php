@@ -902,12 +902,12 @@ class Url
      * @param \Magento\Object $category
      * @param string $parentPath
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function generatePath($type = 'target', $product = null, $category = null, $parentPath = null)
     {
         if (!$product && !$category) {
-            throw new \Magento\Core\Exception(__('Please specify either a category or a product, or both.'));
+            throw new \Magento\Model\Exception(__('Please specify either a category or a product, or both.'));
         }
 
         // generate id_path
@@ -949,7 +949,7 @@ class Url
 
             // for product & category
             if (!$category) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __('A category object is required for determining the product request path.')
                 );
             }

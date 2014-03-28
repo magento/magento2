@@ -34,7 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource\Event\Type;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Resource initialization

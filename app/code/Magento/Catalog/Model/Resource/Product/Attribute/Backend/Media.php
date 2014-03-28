@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Media extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Media extends \Magento\Model\Resource\Db\AbstractDb
 {
     const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
 

@@ -509,7 +509,7 @@
                 </field>
             </group>
             <group id="seo" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Search Engines Optimization</label>
+                <label>Search Engine Optimization</label>
                 <field id="use_rewrites" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Web Server Rewrites</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>

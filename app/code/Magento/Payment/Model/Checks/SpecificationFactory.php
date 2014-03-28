@@ -55,7 +55,7 @@ class SpecificationFactory
      *
      * @param array $data
      * @return SpecificationInterface
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function create($data)
     {

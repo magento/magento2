@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Form;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 /**
  * Eav Form Element Model
@@ -44,7 +44,7 @@ use Magento\Core\Exception;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Element extends \Magento\Core\Model\AbstractModel
+class Element extends \Magento\Model\AbstractModel
 {
     /**
      * Prefix of model events names
@@ -62,7 +62,7 @@ class Element extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -70,7 +70,7 @@ class Element extends \Magento\Core\Model\AbstractModel
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

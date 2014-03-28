@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\Theme\File;
 /**
  * Theme files collection
  */
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection implements
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection implements
     \Magento\View\Design\Theme\File\CollectionInterface
 {
     /**

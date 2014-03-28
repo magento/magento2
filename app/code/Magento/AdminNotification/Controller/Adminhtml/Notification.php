@@ -60,7 +60,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
                     $notificationId
                 );
                 $this->messageManager->addSuccess(__('The message has been marked as Read.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -121,7 +121,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
                 $this->messageManager->addSuccess(
                     __('A total of %1 record(s) have been marked as Read.', count($ids))
                 );
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -149,7 +149,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
             try {
                 $model->setIsRemove(1)->save();
                 $this->messageManager->addSuccess(__('The message has been removed.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));
@@ -178,7 +178,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
                     }
                 }
                 $this->messageManager->addSuccess(__('Total of %1 record(s) have been removed.', count($ids)));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __("We couldn't remove the messages because of an error."));

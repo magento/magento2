@@ -319,7 +319,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Initialize product type models.
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return $this
      */
     protected function _initTypeModels()
@@ -327,10 +327,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $productTypes = $this->_exportConfig->getProductTypes();
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
-                throw new \Magento\Core\Exception("Entity type model '{$productTypeConfig['model']}' is not found");
+                throw new \Magento\Model\Exception("Entity type model '{$productTypeConfig['model']}' is not found");
             }
             if (!$model instanceof \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __(
                         'Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType'
                     )
@@ -346,7 +346,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         if (!$this->_productTypeModels) {
-            throw new \Magento\Core\Exception(__('There are no product types available for export'));
+            throw new \Magento\Model\Exception(__('There are no product types available for export'));
         }
         $this->_disabledAttrs = array_unique($this->_disabledAttrs);
 

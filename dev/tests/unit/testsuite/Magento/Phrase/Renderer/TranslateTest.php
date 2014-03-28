@@ -46,20 +46,44 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testTranslate()
+    public function testRenderByCode()
     {
+        $text = 'original text';
         $result = 'rendered text';
 
         $this->_translator->expects(
             $this->once()
         )->method(
-            'translate'
-        )->with(
-            array('text', 'param1', 'param2', 'param3')
+            'getTheme'
         )->will(
-            $this->returnValue($result)
+            $this->returnValue('theme')
+        );
+        $this->_translator->expects(
+            $this->once()
+        )->method(
+            'getData'
+        )->will(
+            $this->returnValue(['theme::' . $text => $result])
         );
 
-        $this->assertEquals($result, $this->_renderer->render('text', array('param1', 'param2', 'param3')));
+        $this->assertEquals($result, $this->_renderer->render([$text], []));
+    }
+
+    public function testRenderByText()
+    {
+        $text = 'original text';
+        $result = 'rendered text';
+
+        $this->_translator->expects($this->once())
+            ->method('getTheme')
+            ->will($this->returnValue('theme'));
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue([
+                'theme::' . $text => $result,
+                $text => $result,
+            ]));
+
+        $this->assertEquals($result, $this->_renderer->render([$text], []));
     }
 }

@@ -40,7 +40,7 @@ use Magento\Sales\Model\Quote\Address;
  * @method mixed getCustomerGroupId()
  * @method \Magento\SalesRule\Model\Validator setCustomerGroupId($id)
  */
-class Validator extends \Magento\Core\Model\AbstractModel
+class Validator extends \Magento\Model\AbstractModel
 {
     /**
      * Rule source collection
@@ -129,7 +129,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -142,7 +142,7 @@ class Validator extends \Magento\Core\Model\AbstractModel
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
         \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -773,12 +773,12 @@ class Validator extends \Magento\Core\Model\AbstractModel
     /**
      * @param int $key
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getRuleItemTotalsInfo($key)
     {
         if (empty($this->_rulesItemTotals[$key])) {
-            throw new \Magento\Core\Exception(__('Item totals are not set for the rule.'));
+            throw new \Magento\Model\Exception(__('Item totals are not set for the rule.'));
         }
 
         return $this->_rulesItemTotals[$key];

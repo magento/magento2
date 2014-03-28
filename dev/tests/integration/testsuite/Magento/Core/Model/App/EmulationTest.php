@@ -39,15 +39,12 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
      */
     public function testEnvironmentEmulation()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\App\Emulation'
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->loadArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Core\Model\App\Emulation');
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\View\DesignInterface');
 
         $initialEnvInfo = $this->_model->startEnvironmentEmulation(1);
         $initialDesign = $initialEnvInfo->getInitialDesign();

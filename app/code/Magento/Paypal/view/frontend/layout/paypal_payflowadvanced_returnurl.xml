@@ -25,5 +25,5 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <block class="Magento\Paypal\Block\Payflow\Advanced\Iframe" name="payflow.advanced.iframe" output="1"
-           template="payflowadvanced/redirect.phtml"/>
+           template="payflowadvanced/redirect.phtml" cacheable="false"/>
 </layout>

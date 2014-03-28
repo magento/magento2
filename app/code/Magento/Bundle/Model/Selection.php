@@ -53,7 +53,7 @@ namespace Magento\Bundle\Model;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Selection extends \Magento\Core\Model\AbstractModel
+class Selection extends \Magento\Model\AbstractModel
 {
     /**
      * Catalog data

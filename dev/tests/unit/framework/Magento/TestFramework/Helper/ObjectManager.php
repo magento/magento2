@@ -37,8 +37,8 @@ class ObjectManager
      * @var array
      */
     protected $_specialCases = array(
-        'Magento\Core\Model\Resource\AbstractResource' => '_getResourceModelMock',
-        'Magento\TranslateInterface' => '_getTranslatorMock'
+        'Magento\Model\Resource\AbstractResource' => '_getResourceModelMock',
+        'Magento\TranslateInterface' => '_getTranslatorMock',
     );
 
     /**

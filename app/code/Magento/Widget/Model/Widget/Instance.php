@@ -43,7 +43,7 @@ namespace Magento\Widget\Model\Widget;
  * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Instance extends \Magento\Core\Model\AbstractModel
+class Instance extends \Magento\Model\AbstractModel
 {
     const SPECIFIC_ENTITIES = 'specific';
 
@@ -137,7 +137,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\App\Filesystem $filesystem
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param string[] $relatedCacheTypes
      * @param array $data
@@ -154,7 +154,7 @@ class Instance extends \Magento\Core\Model\AbstractModel
         \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
         \Magento\Math\Random $mathRandom,
         \Magento\App\Filesystem $filesystem,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = array(),
         array $data = array()

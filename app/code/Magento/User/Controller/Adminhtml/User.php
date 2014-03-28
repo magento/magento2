@@ -177,7 +177,7 @@ class User extends \Magento\Backend\App\AbstractAction
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());
             $this->_getSession()->setUserData($data);
             $this->_redirect('adminhtml/*/edit', array('_current' => true));

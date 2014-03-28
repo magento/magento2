@@ -132,7 +132,7 @@ class Rule extends \Magento\Backend\App\Action
 
                 $this->_redirect('tax/*/');
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong saving this tax rule.'));
@@ -165,7 +165,7 @@ class Rule extends \Magento\Backend\App\Action
             $this->_redirect('tax/*/');
 
             return;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Something went wrong deleting this tax rule.'));

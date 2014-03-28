@@ -46,7 +46,7 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Review extends \Magento\Core\Model\AbstractModel
+class Review extends \Magento\Model\AbstractModel
 {
     /**
      * Event prefix for observer
@@ -129,7 +129,7 @@ class Review extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Review\Model\Review\Summary $reviewSummary
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\UrlInterface $urlModel
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -143,7 +143,7 @@ class Review extends \Magento\Core\Model\AbstractModel
         \Magento\Review\Model\Review\Summary $reviewSummary,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\UrlInterface $urlModel,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -276,7 +276,7 @@ class Review extends \Magento\Core\Model\AbstractModel
     /**
      * Perform actions after object delete
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _afterDeleteCommit()
     {
@@ -325,7 +325,6 @@ class Review extends \Magento\Core\Model\AbstractModel
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         return parent::_beforeDelete();
     }
 

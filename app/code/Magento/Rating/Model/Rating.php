@@ -40,7 +40,7 @@ namespace Magento\Rating\Model;
  * @package    Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rating extends \Magento\Core\Model\AbstractModel
+class Rating extends \Magento\Model\AbstractModel
 {
     /**
      * rating entity codes
@@ -66,7 +66,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Rating\Model\Rating\OptionFactory $ratingOptionFactory
      * @param \Magento\Rating\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -75,7 +75,7 @@ class Rating extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Rating\Model\Rating\OptionFactory $ratingOptionFactory,
         \Magento\Rating\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

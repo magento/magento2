@@ -33,7 +33,7 @@
  */
 namespace Magento\Log\Model\Resource;
 
-class Helper extends \Magento\Core\Model\Resource\Helper
+class Helper extends \Magento\DB\Helper
 {
     /**
      * Returns information about table in DB

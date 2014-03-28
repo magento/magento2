@@ -58,19 +58,20 @@ interface QueryParamsResolverInterface
     public function getQueryParams();
 
     /**
-     * Purge Query params array
-     *
-     * @return \Magento\Url\QueryParamsResolverInterface
-     */
-    public function purgeQueryParams();
-
-    /**
-     * Set query Params as array
+     * Set query parameters
      *
      * @param array $data
      * @return \Magento\Url\QueryParamsResolverInterface
      */
     public function setQueryParams(array $data);
+
+    /**
+     * Add query parameters
+     *
+     * @param array $data
+     * @return \Magento\Url\QueryParamsResolverInterface
+     */
+    public function addQueryParams(array $data);
 
     /**
      * Unset data from the object.

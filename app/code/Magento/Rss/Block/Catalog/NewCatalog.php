@@ -46,7 +46,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
     protected $_visibility;
 
     /**
-     * @var \Magento\Core\Model\Resource\Iterator
+     * @var \Magento\Model\Resource\Iterator
      */
     protected $_resourceIterator;
 
@@ -62,7 +62,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
-     * @param \Magento\Core\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
@@ -73,7 +73,7 @@ class NewCatalog extends \Magento\Rss\Block\Catalog\AbstractCatalog
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Visibility $visibility,
-        \Magento\Core\Model\Resource\Iterator $resourceIterator,
+        \Magento\Model\Resource\Iterator $resourceIterator,
         \Magento\Catalog\Helper\Image $imageHelper,
         array $data = array()
     ) {

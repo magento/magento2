@@ -29,7 +29,7 @@
  */
 namespace Magento\Directory\Model\Resource;
 
-class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Region extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Table with localized region names
@@ -69,7 +69,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return \Magento\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
@@ -78,7 +78,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
 
         $locale = $this->_localeResolver->getLocaleCode();
-        $systemLocale = \Magento\Core\Model\App::DISTRO_LOCALE_CODE;
+        $systemLocale = \Magento\AppInterface::DISTRO_LOCALE_CODE;
 
         $regionField = $adapter->quoteIdentifier($this->getMainTable() . '.' . $this->getIdFieldName());
 
@@ -107,7 +107,7 @@ class Region extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load object by country id and code or default name
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @param int $countryId
      * @param string $value
      * @param string $field

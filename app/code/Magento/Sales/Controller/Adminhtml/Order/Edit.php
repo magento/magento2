@@ -53,7 +53,7 @@ class Edit extends \Magento\Sales\Controller\Adminhtml\Order\Create
             } else {
                 $this->_redirect('sales/order/');
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('sales/order/view', array('order_id' => $orderId));
         } catch (\Exception $e) {

@@ -44,7 +44,7 @@ use Magento\Index\Model\Indexer;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Event extends \Magento\Core\Model\AbstractModel
+class Event extends \Magento\Model\AbstractModel
 {
     /**
      * Predefined event types
@@ -92,7 +92,7 @@ class Event extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param Indexer $indexer
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -101,7 +101,7 @@ class Event extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         Indexer $indexer,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

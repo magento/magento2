@@ -28,7 +28,7 @@ namespace Magento\Persistent\Model;
 /**
  * Persistent Session Model
  */
-class Session extends \Magento\Core\Model\AbstractModel
+class Session extends \Magento\Model\AbstractModel
 {
     /**
      * Persistent cookie key length
@@ -116,7 +116,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Math\Random $mathRandom
      * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -130,7 +130,7 @@ class Session extends \Magento\Core\Model\AbstractModel
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Math\Random $mathRandom,
         \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

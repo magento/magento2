@@ -30,7 +30,12 @@ class State implements StateInterface
     /**
      * Cache identifier used to store cache type statuses
      */
-    const CACHE_ID = 'core_cache_options';
+    const CACHE_ID  = 'core_cache_options';
+    
+    /**
+     * Disallow cache
+     */
+    const PARAM_BAN_CACHE = 'global_ban_use_cache';
 
     /**
      * Persistent storage of cache type statuses

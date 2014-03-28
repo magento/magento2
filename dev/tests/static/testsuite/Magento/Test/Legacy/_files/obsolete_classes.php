@@ -793,9 +793,26 @@ return array(
     array('Mage_Core_Model_Config_System'),
     array('Mage_Core_Model_Design_Source_Apply'),
     array('Mage_Core_Model_Language'),
+    array('Magento\Core\Model\Flag', 'Magento\Flag'),
+    array('Magento\Core\Exception', 'Magento\Model\Exception'),
+    array('Magento\Core\Model\AbstractModel', 'Magento\Model\AbstractModel'),
     array('Magento\Core\Model\Email\Info', 'Magento\Mail\MessageInterface'),
     array('Magento\Core\Model\Email\Sender', 'Magento\Mail\Template\TransportBuilder'),
     array('Magento\Core\Model\Email\Template\Mailer', 'Magento\Mail\Template\TransportBuilder'),
+    array('Magento\Core\Model\Resource\AbstractResource', 'Magento\Model\Resource\AbstractResource'),
+    array('Magento\Core\Model\Resource\Db\AbstractDb', 'Magento\Model\Resource\Db\AbstractDb'),
+    array('Magento\Core\Model\Resource\Db\Profiler', 'Magento\Model\Resource\Db\Profiler'),
+    array('Magento\Core\Model\Resource\Entity\AbstractEntity', 'Magento\Model\Resource\Entity\AbstractEntity'),
+    array('Magento\Core\Model\Resource\Entity\Table', 'Magento\Model\Resource\Entity\Table'),
+    array('Magento\Core\Model\Resource\Flag', 'Magento\Flag\Resource'),
+    array('Magento\Core\Model\Resource\Iterator', 'Magento\Model\Resource\Iterator'),
+    array('Magento\Core\Model\Resource\Type\AbstractType', 'Magento\Model\Resource\Type\AbstractType'),
+    array('Magento\Core\Model\Resource\Type\Db', 'Magento\Model\Resource\Type\Db'),
+    array('Magento\Core\Model\Resource\Type\Db\Pdo\Mysql', 'Magento\Model\Resource\Type\Db\Pdo\Mysql'),
+    array(
+        'Magento\Core\Model\Resource\Db\Collection\AbstractCollection',
+        'Magento\Model\Resource\Db\Collection\AbstractCollection'
+    ),
     array('Magento\Email\Model\Info', 'Magento\Mail\MessageInterface'),
     array('Magento\Email\Model\Sender', 'Magento\Mail\Template\TransportBuilder'),
     array('Magento\Email\Model\Template\Mailer', 'Magento\Mail\Template\TransportBuilder'),
@@ -1260,7 +1277,12 @@ return array(
     ),
     array('Magento\Sales\Model\ResourceFactory'),
     array('Magento\Sales\Model\Resource\Helper\Mysql4', 'Magento\Sales\Model\Resource\Helper'),
-    array('Magento\Core\Model\Resource\Helper\Mysql4', 'Magento\Core\Model\Resource\Helper'),
+    array('Magento\Core\Model\Resource\Helper\Mysql4', 'Magento\DB\Helper'),
+    array('Magento\Core\Model\Resource\Helper', 'Magento\DB\Helper'),
+    array('Magento\Core\Model\Resource\Helper\AbstractHelper', 'Magento\DB\Helper\AbstractHelper'),
+    array('Magento\Core\Model\Resource\HelperFactory'),
+    array('Magento\Core\Model\Resource\HelperPool'),
+    array('Magento\Core\Model\Resource\Transaction', 'Magento\DB\Transaction'),
     array('Magento\Catalog\Model\Resource\Helper\Mysql4', 'Magento\Catalog\Model\Resource\Helper'),
     array('Magento\Eav\Model\Resource\Helper\Mysql4', 'Magento\Eav\Model\Resource\Helper'),
     array(
@@ -1320,6 +1342,7 @@ return array(
     array('Magento\Core\Model\ModuleListInterface'),
     array('Magento\Core\Model\RouterList'),
     array('Magento\Core\Model\App\State'),
+    array('Magento\Core\Model\App'),
     array('Magento\Core\Model\Event\Config\Converter'),
     array('Magento\Core\Model\Event\Config\Data'),
     array('Magento\Core\Model\Event\Config\Reader'),
@@ -2103,5 +2126,43 @@ return array(
     array('Magento\Catalog\Helper\Product\Url', 'Magento\Filter\Translit'),
     array('Magento\Catalog\Model\Product\Indexer\Price'),
     array('Magento\Catalog\Model\Resource\Product\Indexer\Price'),
-    array('Magento\Indexer\Model\Processor\CacheInvalidate', 'Magento\Indexer\Model\Processor\InvalidateCache')
+    ['Magento\PubSub'], // unused library code which was removed
+    ['Magento\Outbound'], // unused library code which was removed
+    array('Magento\Indexer\Model\Processor\CacheInvalidate', 'Magento\Indexer\Model\Processor\InvalidateCache'),
+    array(
+        'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Reviews',
+        'Magento\Review\Block\Adminhtml\Product\Edit\Tab\Reviews'
+    ),
+    array(
+        'Magento\Catalog\Controller\Adminhtml\Product\Review',
+        'Magento\Review\Controller\Adminhtml\Product'
+    ),
+    array(
+        'Magento\Review\Block\Helper',
+        'Magento\Review\Block\Product\ReviewRenderer'
+    ),
+    array(
+        'Magento\LauncherInterface',
+        'Magento\AppInterface',
+    ),
+    array('Magento\Convert\ConvertException'),
+    array('Magento\Convert\Container\AbstractContainer'),
+    array('Magento\Convert\Mapper\Column'),
+    array('Magento\Convert\Mapper\MapperInterface'),
+    ['Magento\Core\Controller\Ajax', 'Magento\Translation\Controller\Ajax'],
+    ['Magento\Core\Helper\Translate', 'Magento\Translation\Helper\Data'],
+    ['Magento\Core\Model\Translate\Inline\Config', 'Magento\Translation\Model\Inline\Config'],
+    ['Magento\Core\Model\Translate\Inline\Parser', 'Magento\Translation\Model\Inline\Parser'],
+    ['Magento\Core\Model\Resource\Translate\String', 'Magento\Translation\Model\Resource\String'],
+    ['Magento\Core\Model\Resource\Translate', 'Magento\Translation\Model\Resource\Translate'],
+    ['Magento\Core\Model\Translate\String', 'Magento\Translation\Model\String'],
+    ['Magento\Translation\Helper\Data'],
+    ['Magento\Translate\Factory'],
+    ['Magento\Backend\Model\Translate'],
+    ['Magento\Backend\Model\Resource\Translate'],
+    ['Magento\Backend\Model\Resource\Translate\String'],
+    ['Magento\DesignEditor\Model\Translate\InlineVde', 'Magento\DesignEditor\Model\Translate\Inline'],
+    ['Magento\Backend\Model\Translate\Inline'],
+    ['Magento\Backend\Model\Translate\Inline\ConfigFactory'],
+    ['Magento\Translate\Inline\ConfigFactory'],
 );

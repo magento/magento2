@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Store\Storage;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\App\State;
 use Magento\Core\Model\Store;
 use Magento\Core\Model\Store\StorageInterface;

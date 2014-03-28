@@ -36,12 +36,12 @@ class Base extends AbstractCurrency
      * Check base currency is available in installed currencies
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
-            throw new \Magento\Core\Exception(__('Sorry, we haven\'t installed the base currency you selected.'));
+            throw new \Magento\Model\Exception(__('Sorry, we haven\'t installed the base currency you selected.'));
         }
         return $this;
     }

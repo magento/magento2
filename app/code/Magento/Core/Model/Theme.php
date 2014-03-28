@@ -26,6 +26,7 @@
 namespace Magento\Core\Model;
 
 use Magento\View\Design\ThemeInterface;
+use Magento\Model\AbstractModel;
 
 /**
  * Theme model class
@@ -343,13 +344,13 @@ class Theme extends AbstractModel implements ThemeInterface
      * Validate theme data
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _validate()
     {
         if (!$this->_validator->validate($this)) {
             $messages = $this->_validator->getErrorMessages();
-            throw new \Magento\Core\Exception(implode(PHP_EOL, reset($messages)));
+            throw new \Magento\Model\Exception(implode(PHP_EOL, reset($messages)));
         }
         return $this;
     }

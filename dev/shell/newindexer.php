@@ -25,9 +25,11 @@
  */
 
 require_once __DIR__ . '/../../app/bootstrap.php';
+use Magento\Core\Model\StoreManager;
+
 $params = array(
-    \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
-    \Magento\Core\Model\App::PARAM_RUN_TYPE => 'store'
+    StoreManager::PARAM_RUN_CODE => 'admin',
+    StoreManager::PARAM_RUN_TYPE => 'store'
 );
 
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);

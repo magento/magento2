@@ -30,7 +30,7 @@ namespace Magento\Sitemap\Model\Resource\Catalog;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Product extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Product extends \Magento\Model\Resource\Db\AbstractDb
 {
     const NOT_SELECTED_IMAGE = 'no_selection';
 

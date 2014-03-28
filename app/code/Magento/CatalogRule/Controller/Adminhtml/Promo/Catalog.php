@@ -36,7 +36,7 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\CatalogRule\Model\Rule\Job;
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Stdlib\DateTime\Filter\Date;
 use Magento\Registry;
 use Magento\Rule\Model\Condition\AbstractCondition;

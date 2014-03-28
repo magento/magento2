@@ -128,9 +128,11 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\
     public function getIdentities()
     {
         $identities = array();
-        foreach ($this->getWishlistItems() as $item) {
-            /** @var $item \Magento\Wishlist\Model\Item */
-            $identities = array_merge($identities, $item->getProduct()->getIdentities());
+        if ($this->getItemCount()) {
+            foreach ($this->getWishlistItems() as $item) {
+                /** @var $item \Magento\Wishlist\Model\Item */
+                $identities = array_merge($identities, $item->getProduct()->getIdentities());
+            }
         }
         return $identities;
     }

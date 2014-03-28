@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model;
  * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Core\Model\AbstractModel
+class Attribute extends \Magento\Model\AbstractModel
 {
     /**
      * Default ignored attribute codes

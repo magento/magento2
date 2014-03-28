@@ -189,7 +189,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Create instance of entity adapter and return it
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\Magento\ImportExport\Model\Import\AbstractEntity
      */
     protected function _getEntityAdapter()
@@ -202,12 +202,12 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
-                    throw new \Magento\Core\Exception(__('Please enter a correct entity model'));
+                    throw new \Magento\Model\Exception(__('Please enter a correct entity model'));
                 }
                 if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\Entity\AbstractEntity &&
                     !$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\AbstractEntity
                 ) {
-                    throw new \Magento\Core\Exception(
+                    throw new \Magento\Model\Exception(
                         __(
                             'Entity adapter object must be an instance of %1 or %2',
                             'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
@@ -218,12 +218,12 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
                 // check for entity codes integrity
                 if ($this->getEntity() != $this->_entityAdapter->getEntityTypeCode()) {
-                    throw new \Magento\Core\Exception(
+                    throw new \Magento\Model\Exception(
                         __('The input entity code is not equal to entity adapter code.')
                     );
                 }
             } else {
-                throw new \Magento\Core\Exception(__('Please enter a correct entity.'));
+                throw new \Magento\Model\Exception(__('Please enter a correct entity.'));
             }
             $this->_entityAdapter->setParameters($this->getData());
         }
@@ -339,13 +339,13 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Override standard entity getter.
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return string
      */
     public function getEntity()
     {
         if (empty($this->_data['entity'])) {
-            throw new \Magento\Core\Exception(__('Entity is unknown'));
+            throw new \Magento\Model\Exception(__('Entity is unknown'));
         }
         return $this->_data['entity'];
     }
@@ -537,7 +537,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Move uploaded file and create source adapter instance.
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return string Source file path
      */
     public function uploadSource()
@@ -551,7 +551,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             } else {
                 $errorMessage = __('File was not uploaded.');
             }
-            throw new \Magento\Core\Exception($errorMessage);
+            throw new \Magento\Model\Exception($errorMessage);
         }
 
         $entity = $this->getEntity();
@@ -564,7 +564,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $uploadedFile = $result['path'] . $result['file'];
         if (!$extension) {
             $this->_varDirectory->delete($uploadedFile);
-            throw new \Magento\Core\Exception(__('Uploaded file has no extension'));
+            throw new \Magento\Model\Exception(__('Uploaded file has no extension'));
         }
         $sourceFile = $this->getWorkingDir() . $entity;
 
@@ -582,7 +582,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $sourceFileRelative
                 );
             } catch (\Magento\Filesystem\FilesystemException $e) {
-                throw new \Magento\Core\Exception(__('Source file moving failed'));
+                throw new \Magento\Model\Exception(__('Source file moving failed'));
             }
         }
         $this->_removeBom($sourceFile);
@@ -591,7 +591,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $this->_getSourceAdapter($sourceFile);
         } catch (\Exception $e) {
             $this->_varDirectory->delete($sourceFileRelative);
-            throw new \Magento\Core\Exception($e->getMessage());
+            throw new \Magento\Model\Exception($e->getMessage());
         }
         return $sourceFile;
     }
@@ -665,7 +665,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * )
      *
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getEntityBehaviors()
     {
@@ -681,7 +681,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     'code' => $behavior->getCode() . '_behavior'
                 );
             } else {
-                throw new \Magento\Core\Exception(__('Invalid behavior token for %1', $entityCode));
+                throw new \Magento\Model\Exception(__('Invalid behavior token for %1', $entityCode));
             }
         }
         return $behaviourData;

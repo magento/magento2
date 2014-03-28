@@ -205,7 +205,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
      * @param Indexer\Category\Flat\State $flatState
      * @param \Magento\Indexer\Model\IndexerInterface $flatIndexer
      * @param \Magento\Indexer\Model\IndexerInterface $productIndexer
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -226,7 +226,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
         Indexer\Category\Flat\State $flatState,
         \Magento\Indexer\Model\IndexerInterface $flatIndexer,
         \Magento\Indexer\Model\IndexerInterface $productIndexer,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -337,7 +337,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
      * @param  int $parentId new parent category id
      * @param  null|int $afterCategoryId category id after which we have put current category
      * @return $this
-     * @throws \Magento\Core\Exception|\Exception
+     * @throws \Magento\Model\Exception|\Exception
      */
     public function move($parentId, $afterCategoryId)
     {
@@ -348,7 +348,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
         $parent = $this->_categoryFactory->create()->setStoreId($this->getStoreId())->load($parentId);
 
         if (!$parent->getId()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     'Sorry, but we can\'t move the category because we can\'t find the new parent category you selected.'
                 )
@@ -356,11 +356,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
         }
 
         if (!$this->getId()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     'We can\'t perform this category move operation because the parent category matches the child category.'
                 )
@@ -862,14 +862,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
     /**
      * Before delete process
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return $this
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         if ($this->getResource()->isForbiddenToDelete($this->getId())) {
-            throw new \Magento\Core\Exception("Can't delete root category.");
+            throw new \Magento\Model\Exception("Can't delete root category.");
         }
         return parent::_beforeDelete();
     }
@@ -891,12 +890,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
         if ($this->_useFlatResource) {
             $anchors = $this->_getResource()->getAnchorsAbove($path, $this->getStoreId());
         } else {
-            if (!$this->_coreRegistry->registry('_category_is_anchor_attribute')) {
+            if (!$this->_registry->registry('_category_is_anchor_attribute')) {
                 $model = $this->_getAttribute('is_anchor');
-                $this->_coreRegistry->register('_category_is_anchor_attribute', $model);
+                $this->_registry->register('_category_is_anchor_attribute', $model);
             }
 
-            $isAnchorAttribute = $this->_coreRegistry->registry('_category_is_anchor_attribute');
+            $isAnchorAttribute = $this->_registry->registry('_category_is_anchor_attribute');
             if ($isAnchorAttribute) {
                 $anchors = $this->getResource()->findWhereAttributeIs($path, $isAnchorAttribute, 1);
             }
@@ -1079,7 +1078,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements \Magento\
     /**
      * Init indexing process after category delete
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _afterDeleteCommit()
     {

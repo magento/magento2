@@ -41,11 +41,6 @@ class Lists implements \Magento\Locale\ListsInterface
     protected $_config;
 
     /**
-     * @var \Magento\AppInterface
-     */
-    protected $_app;
-
-    /**
      * @var \Magento\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -59,7 +54,6 @@ class Lists implements \Magento\Locale\ListsInterface
      * @param \Magento\App\State $appState
      * @param \Magento\BaseScopeResolverInterface $scopeResolver
      * @param \Magento\Locale\ConfigInterface $config
-     * @param \Magento\AppInterface $app
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param string $currencyInstalled
      * @param string $locale
@@ -68,7 +62,6 @@ class Lists implements \Magento\Locale\ListsInterface
         \Magento\App\State $appState,
         \Magento\BaseScopeResolverInterface $scopeResolver,
         \Magento\Locale\ConfigInterface $config,
-        \Magento\AppInterface $app,
         \Magento\Locale\ResolverInterface $localeResolver,
         $currencyInstalled,
         $locale = null
@@ -76,7 +69,6 @@ class Lists implements \Magento\Locale\ListsInterface
         $this->_appState = $appState;
         $this->_scopeResolver = $scopeResolver;
         $this->_config = $config;
-        $this->_app = $app;
         $this->_localeResolver = $localeResolver;
         if ($locale !== null) {
             $this->_localeResolver->setLocale($locale);

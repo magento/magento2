@@ -28,7 +28,7 @@ namespace Magento\Log\Model\Resource;
 /**
  * Visitor log resource
  */
-class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Visitor extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Magento string lib
@@ -78,10 +78,10 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Prepare data for save
      *
-     * @param \Magento\Core\Model\AbstractModel $visitor
+     * @param \Magento\Model\AbstractModel $visitor
      * @return array
      */
-    protected function _prepareDataForSave(\Magento\Core\Model\AbstractModel $visitor)
+    protected function _prepareDataForSave(\Magento\Model\AbstractModel $visitor)
     {
         return array(
             'session_id' => $visitor->getSessionId(),
@@ -119,10 +119,10 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Save url info before save
      *
-     * @param \Magento\Core\Model\AbstractModel $visitor
+     * @param \Magento\Model\AbstractModel $visitor
      * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $visitor)
+    protected function _beforeSave(\Magento\Model\AbstractModel $visitor)
     {
         if (!$visitor->getIsNewVisitor()) {
             $this->_saveUrlInfo($visitor);
@@ -133,10 +133,10 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Actions after save
      *
-     * @param \Magento\Core\Model\AbstractModel $visitor
+     * @param \Magento\Model\AbstractModel $visitor
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $visitor)
+    protected function _afterSave(\Magento\Model\AbstractModel $visitor)
     {
         if ($visitor->getIsNewVisitor()) {
             $this->_saveVisitorInfo($visitor);
@@ -156,10 +156,10 @@ class Visitor extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Model\AbstractModel|\Magento\Object $object
+     * @return \Magento\Model\Resource\Db\AbstractDb
      */
-    protected function _afterLoad(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterLoad(\Magento\Model\AbstractModel $object)
     {
         parent::_afterLoad($object);
         // Add information about quote to visitor

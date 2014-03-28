@@ -35,11 +35,8 @@ class AreaTest extends \PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->cleanCache(
-            array(\Magento\Core\Model\Design::CACHE_TAG)
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\CacheInterface')->
+            clean(array(\Magento\Core\Model\Design::CACHE_TAG));
     }
 
     protected function setUp()

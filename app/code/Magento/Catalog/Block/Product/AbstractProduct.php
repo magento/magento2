@@ -35,7 +35,6 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\View\Element\BlockInterface;
-use Magento\View\Element\Template\Helper;
 
 abstract class AbstractProduct extends \Magento\View\Element\Template
 {
@@ -72,11 +71,6 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
      * @var bool
      */
     protected $_useLinkForAsLowAs = true;
-
-    /**
-     * @var Helper
-     */
-    protected $_reviewsHelperBlock;
 
     /**
      * Default product amount per row
@@ -158,48 +152,32 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
     protected $_imageHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var ReviewRendererInterface
+     */
+    protected $reviewRenderer;
+
+    /**
+     * @param Context $context
      * @param array $data
      * @param array $priceBlockTypes
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         array $data = array(),
         array $priceBlockTypes = array()
     ) {
-        $this->_imageHelper = $imageHelper;
-        $this->_layoutHelper = $layoutHelper;
-        $this->_compareProduct = $compareProduct;
-        $this->_wishlistHelper = $wishlistHelper;
-        $this->_cartHelper = $cartHelper;
-        $this->_catalogConfig = $catalogConfig;
-        $this->_coreRegistry = $registry;
-        $this->_taxData = $taxData;
-        $this->_catalogData = $catalogData;
-        $this->_mathRandom = $mathRandom;
+        $this->_imageHelper = $context->getImageHelper();
+        $this->_layoutHelper = $context->getLayoutHelper();
+        $this->_compareProduct = $context->getCompareProduct();
+        $this->_wishlistHelper = $context->getWishlistHelper();
+        $this->_cartHelper = $context->getCartHelper();
+        $this->_catalogConfig = $context->getCatalogConfig();
+        $this->_coreRegistry = $context->getRegistry();
+        $this->_taxData = $context->getTaxData();
+        $this->_catalogData = $context->getCatalogHelper();
+        $this->_mathRandom = $context->getMathRandom();
         $this->_priceBlockTypes = $priceBlockTypes;
+        $this->reviewRenderer = $context->getReviewRenderer();
         parent::__construct($context, $data);
     }
 
@@ -400,29 +378,7 @@ abstract class AbstractProduct extends \Magento\View\Element\Template
         $templateType = false,
         $displayIfNoReviews = false
     ) {
-        if ($this->_initReviewsHelperBlock()) {
-            return $this->_reviewsHelperBlock->getSummaryHtml($product, $templateType, $displayIfNoReviews);
-        }
-
-        return '';
-    }
-
-    /**
-     * Create reviews summary helper block once
-     *
-     * @return boolean
-     */
-    protected function _initReviewsHelperBlock()
-    {
-        if (!$this->_reviewsHelperBlock) {
-            if (!$this->_catalogData->isModuleEnabled('Magento_Review')) {
-                return false;
-            } else {
-                $this->_reviewsHelperBlock = $this->getLayout()->createBlock('Magento\Review\Block\Helper');
-            }
-        }
-
-        return true;
+        return $this->reviewRenderer->getReviewsSummaryHtml($product, $templateType, $displayIfNoReviews);
     }
 
     /**

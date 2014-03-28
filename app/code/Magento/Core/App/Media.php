@@ -26,12 +26,12 @@
 namespace Magento\Core\App;
 
 use Magento\App\State;
-use Magento\LauncherInterface;
+use Magento\AppInterface;
 use Magento\ObjectManager;
 use Magento\Core\Model\File\Storage\Request;
 use Magento\Core\Model\File\Storage\Response;
 
-class Media implements LauncherInterface
+class Media implements AppInterface
 {
     /**
      * @var \Magento\App\State

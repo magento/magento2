@@ -71,7 +71,8 @@ class Plugin
     protected function _init($localeCode)
     {
         if (!is_null($localeCode)) {
-            $this->_translate->initLocale($localeCode);
+            $this->_translate->setLocale($localeCode)
+                ->loadData(null, true);
         }
     }
 }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Email\Model\Resource;
 
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 
 /**
  * Template db resource
@@ -34,7 +34,7 @@ use Magento\Core\Model\AbstractModel;
  * @package     Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Template extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Stdlib\DateTime

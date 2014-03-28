@@ -47,9 +47,9 @@ class Observer
     protected $_authSession;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\ResponseInterface
      */
-    protected $_app;
+    protected $_response;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -60,20 +60,20 @@ class Observer
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Registry $coreRegistry
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\ResponseInterface $response
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Registry $coreRegistry,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Model\App $app,
+        \Magento\App\ResponseInterface $response,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_backendData = $backendData;
         $this->_coreRegistry = $coreRegistry;
         $this->_authSession = $authSession;
-        $this->_app = $app;
+        $this->_response = $response;
         $this->_storeManager = $storeManager;
     }
 
@@ -93,9 +93,9 @@ class Observer
 
         $route = $this->_backendData->getAreaFrontName();
 
-        $this->_app->getResponse()->setRedirect(
-            $this->_storeManager->getStore()->getBaseUrl() . $route
-        )->sendResponse();
+        $this->_response
+            ->setRedirect($this->_storeManager->getStore()->getBaseUrl() . $route)
+            ->sendResponse();
         exit(0);
     }
 }

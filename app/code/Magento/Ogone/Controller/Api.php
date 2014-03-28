@@ -45,18 +45,18 @@ class Api extends \Magento\App\Action\Action
     protected $_salesOrderFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\TransactionFactory
+     * @var \Magento\DB\TransactionFactory
      */
     protected $_transactionFactory;
 
     /**
      * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Resource\TransactionFactory $transactionFactory
+     * @param \Magento\DB\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\OrderFactory $salesOrderFactory
      */
     public function __construct(
         \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Resource\TransactionFactory $transactionFactory,
+        \Magento\DB\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\OrderFactory $salesOrderFactory
     ) {
         parent::__construct($context);

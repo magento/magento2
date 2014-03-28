@@ -31,6 +31,7 @@
         </arguments>
     </type>
     <preference for="Magento\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
+    <preference for="Magento\Model\ActionValidator\RemoveAction" type="Magento\Model\ActionValidator\RemoveAction\Allowed" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
     <type name="Magento\Webapi\Controller\Soap">
         <arguments>

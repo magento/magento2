@@ -36,7 +36,7 @@ class Js extends \Magento\App\Helper\AbstractHelper
      *
      * @var array
      */
-    protected $_translateData = null;
+    protected $_translateData = [];
 
     /**
      * @var \Magento\View\Url
@@ -44,35 +44,15 @@ class Js extends \Magento\App\Helper\AbstractHelper
     protected $_viewUrl;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
-     */
-    protected $_coreData = null;
-
-    /**
      * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\View\Url $viewUrl
      */
     public function __construct(
         \Magento\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
         \Magento\View\Url $viewUrl
     ) {
-        $this->_coreData = $coreData;
         parent::__construct($context);
         $this->_viewUrl = $viewUrl;
-    }
-
-    /**
-     * Retrieve JSON of JS sentences translation
-     *
-     * @return string
-     */
-    public function getTranslateJson()
-    {
-        return $this->_coreData->jsonEncode($this->getTranslateData());
     }
 
     /**
@@ -82,7 +62,9 @@ class Js extends \Magento\App\Helper\AbstractHelper
      */
     public function getTranslatorScript()
     {
-        $script = '(function($) {$.mage.translate.add(' . $this->getTranslateJson() . ')})(jQuery);';
+        $script = '(function($) {$.mage.translate.add('
+            . $this->encode($this->getTranslateData())
+            . ')})(jQuery);';
         return $this->getScript($script);
     }
 
@@ -115,8 +97,7 @@ class Js extends \Magento\App\Helper\AbstractHelper
      */
     public function getTranslateData()
     {
-        if ($this->_translateData === null) {
-            $this->_translateData = array();
+        if (!$this->_translateData) {
             $this->_populateTranslateData();
         }
         return $this->_translateData;
@@ -469,5 +450,18 @@ class Js extends \Magento\App\Helper\AbstractHelper
         if ($key !== $translatedText) {
             $this->_translateData[$key] = $translatedText;
         }
+    }
+
+    /**
+     * Encode the mixed $data into the JSON format.
+     *
+     * @param mixed $data
+     * @return string
+     */
+    public function encode($data)
+    {
+        $json = \Zend_Json::encode($data);
+        $this->translateInline->processResponseBody($json, false);
+        return $json;
     }
 }

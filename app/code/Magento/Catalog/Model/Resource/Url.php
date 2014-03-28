@@ -32,7 +32,7 @@ namespace Magento\Catalog\Model\Resource;
  * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Url extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Stores configuration array
@@ -358,7 +358,7 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param array $rewriteData
      * @param int|\Magento\Object $rewrite
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function saveRewrite($rewriteData, $rewrite)
     {
@@ -367,7 +367,7 @@ class Url extends \Magento\Core\Model\Resource\Db\AbstractDb
             $adapter->insertOnDuplicate($this->getMainTable(), $rewriteData);
         } catch (\Exception $e) {
             $this->_logger->logException($e);
-            throw new \Magento\Core\Exception(__('Something went wrong saving the URL rewite.'));
+            throw new \Magento\Model\Exception(__('Something went wrong saving the URL rewite.'));
         }
 
         if ($rewrite && $rewrite->getId()) {

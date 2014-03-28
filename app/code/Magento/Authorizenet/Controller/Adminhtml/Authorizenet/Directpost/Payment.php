@@ -150,7 +150,7 @@ class Payment extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
                 $result['success'] = 1;
                 $isError = false;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $message = $e->getMessage();
                 if (!empty($message)) {
                     $this->messageManager->addError($message);

@@ -55,7 +55,7 @@ class QuantityValidator
      * @param \Magento\Event\Observer $observer
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function validate(\Magento\Event\Observer $observer)
     {
@@ -160,7 +160,7 @@ class QuantityValidator
         } else {
             /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
             if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-                throw new \Magento\Core\Exception(__('The stock item for Product in option is not valid.'));
+                throw new \Magento\Model\Exception(__('The stock item for Product in option is not valid.'));
             }
 
             $result = $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);

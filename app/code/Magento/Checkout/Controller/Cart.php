@@ -250,7 +250,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
                 }
                 $this->_goBack();
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice(
                     $this->_objectManager->get('Magento\Escaper')->escapeHtml($e->getMessage())
@@ -294,7 +294,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
             foreach ($itemsCollection as $item) {
                 try {
                     $this->cart->addOrderItem($item, 1);
-                } catch (\Magento\Core\Exception $e) {
+                } catch (\Magento\Model\Exception $e) {
                     if ($this->_checkoutSession->getUseNotice(true)) {
                         $this->messageManager->addNotice($e->getMessage());
                     } else {
@@ -376,15 +376,15 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Core\Exception(__("We can't find the quote item."));
+                throw new \Magento\Model\Exception(__("We can't find the quote item."));
             }
 
             $item = $this->cart->updateItem($id, new \Magento\Object($params));
             if (is_string($item)) {
-                throw new \Magento\Core\Exception($item);
+                throw new \Magento\Model\Exception($item);
             }
             if ($item->getHasError()) {
-                throw new \Magento\Core\Exception($item->getMessage());
+                throw new \Magento\Model\Exception($item->getMessage());
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -410,7 +410,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
                 }
                 $this->_goBack();
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNotice($e->getMessage());
             } else {
@@ -489,7 +489,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
                 $this->cart->updateItems($cartData)->save();
             }
             $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError(
                 $this->_objectManager->get('Magento\Escaper')->escapeHtml($e->getMessage())
             );
@@ -509,7 +509,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
         try {
             $this->cart->truncate()->save();
             $this->_checkoutSession->setCartWasUpdated(true);
-        } catch (\Magento\Core\Exception $exception) {
+        } catch (\Magento\Model\Exception $exception) {
             $this->messageManager->addError($exception->getMessage());
         } catch (\Exception $exception) {
             $this->messageManager->addException($exception, __('We cannot update the shopping cart.'));
@@ -631,7 +631,7 @@ class Cart extends \Magento\App\Action\Action implements \Magento\Catalog\Contro
             } else {
                 $this->messageManager->addSuccess(__('The coupon code was canceled.'));
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot apply the coupon code.'));

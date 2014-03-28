@@ -32,7 +32,7 @@ namespace Magento\Core\Model;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class Template extends \Magento\Core\Model\AbstractModel implements \Magento\App\TemplateTypesInterface
+abstract class Template extends \Magento\Model\AbstractModel implements \Magento\App\TemplateTypesInterface
 {
     /**
      * Default design area for emulation

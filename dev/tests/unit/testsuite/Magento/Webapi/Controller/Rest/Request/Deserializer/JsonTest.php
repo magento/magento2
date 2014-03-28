@@ -37,23 +37,17 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected $_helperMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_appMock;
+    protected $_appStateMock;
 
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder(
-            'Magento\Core\Helper\Data'
-        )->disableOriginalConstructor()->getMock();
-        $this->_appMock = $this->getMockBuilder(
-            'Magento\Core\Model\App'
-        )->setMethods(
-            array('isDeveloperMode')
-        )->disableOriginalConstructor()->getMock();
+        $this->_helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
+        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
         /** Initialize SUT. */
         $this->_jsonDeserializer = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Json(
             $this->_helperMock,
-            $this->_appMock
+            $this->_appStateMock
         );
         parent::setUp();
     }
@@ -62,7 +56,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_jsonDeserializer);
         unset($this->_helperMock);
-        unset($this->_appMock);
+        unset($this->_appStateMock);
         parent::tearDown();
     }
 
@@ -99,14 +93,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeInvalidEncodedBodyExceptionDeveloperModeOff()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_helperMock->expects(
-            $this->once()
-        )->method(
-            'jsonDecode'
-        )->will(
-            $this->throwException(new \Zend_Json_Exception())
-        );
-        $this->_appMock->expects($this->once())->method('isDeveloperMode')->will($this->returnValue(false));
+        $this->_helperMock->expects($this->once())
+            ->method('jsonDecode')
+            ->will($this->throwException(new \Zend_Json_Exception));
+        $this->_appStateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue('production'));
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
@@ -135,7 +127,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
                 new \Zend_Json_Exception('Decoding error:' . PHP_EOL . 'Decoding failed: Syntax error')
             )
         );
-        $this->_appMock->expects($this->once())->method('isDeveloperMode')->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue('developer'));
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {

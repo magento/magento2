@@ -26,7 +26,7 @@
 namespace Magento\Core\Model\Theme;
 
 use Magento\App\Filesystem;
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\View\Design\ThemeInterface;
 
 /**
@@ -35,7 +35,7 @@ use Magento\View\Design\ThemeInterface;
 class Registration
 {
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Core\Model\Resource\Theme\Data\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -74,13 +74,13 @@ class Registration
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
-     * @param Collection $filesystemCollection
+     * @param \Magento\Core\Model\Resource\Theme\Data\CollectionFactory $collectionFactory
+     * @param \Magento\Core\Model\Theme\Data\Collection $filesystemCollection
      * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory,
-        Collection $filesystemCollection,
+        \Magento\Core\Model\Resource\Theme\Data\CollectionFactory $collectionFactory,
+        \Magento\Core\Model\Theme\Data\Collection $filesystemCollection,
         Filesystem $filesystem
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -161,7 +161,7 @@ class Registration
         if (!$theme->getPreviewImage() || !$themeDirectory) {
             return $this;
         }
-        $imagePath = $this->directoryRead->getAbsolutePath($themeDirectory . '/' . $theme->getPreviewImage());
+        $imagePath = $themeDirectory . '/' . $theme->getPreviewImage();
         if (0 === strpos($imagePath, $themeDirectory)) {
             $theme->getThemeImage()->createPreviewImage($imagePath);
         }

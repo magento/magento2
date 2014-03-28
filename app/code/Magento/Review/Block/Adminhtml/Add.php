@@ -97,7 +97,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         }
                         new Ajax.Updater("rating_detail", "' .
             $this->getUrl(
-                'catalog/*/ratingItems'
+                'review/product/ratingItems'
             ) .
             '", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
@@ -106,7 +106,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                         var response = Ext.util.JSON.decode(o.responseText);
                         if( response.error ) {
                             alert(response.message);
-                        } elseif( response.id ){
+                        } else if( response.id ){
                             $("product_id").value = response.id;
 
                             $("product_name").innerHTML = \'<a href="' .
@@ -114,7 +114,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                 'catalog/product/edit'
             ) .
             'id/\' + response.id + \'" target="_blank">\' + response.name + \'</a>\';
-                        } elseif ( response.message ) {
+                        } else if ( response.message ) {
                             alert(response.message);
                         }
                     }

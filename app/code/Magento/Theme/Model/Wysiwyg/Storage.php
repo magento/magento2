@@ -108,7 +108,7 @@ class Storage
      *
      * @param string $targetPath
      * @return bool
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function uploadFile($targetPath)
     {
@@ -120,7 +120,7 @@ class Storage
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Core\Exception(__('We cannot upload the file.'));
+            throw new \Magento\Model\Exception(__('We cannot upload the file.'));
         }
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
@@ -178,12 +178,12 @@ class Storage
      * @param string $name
      * @param string $path
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function createFolder($name, $path)
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            throw new \Magento\Core\Exception(__('Use only standard alphanumeric, dashes and underscores.'));
+            throw new \Magento\Model\Exception(__('Use only standard alphanumeric, dashes and underscores.'));
         }
         if (!$this->mediaWriteDirectory->isWritable($path)) {
             $path = $this->_helper->getStorageRoot();
@@ -192,7 +192,7 @@ class Storage
         $newPath = $path . '/' . $name;
 
         if ($this->mediaWriteDirectory->isExist($newPath)) {
-            throw new \Magento\Core\Exception(__('We found a directory with the same name.'));
+            throw new \Magento\Model\Exception(__('We found a directory with the same name.'));
         }
 
         $this->mediaWriteDirectory->create($newPath);
@@ -233,12 +233,12 @@ class Storage
      *
      * @param string $currentPath
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getDirsCollection($currentPath)
     {
         if (!$this->mediaWriteDirectory->isExist($currentPath)) {
-            throw new \Magento\Core\Exception(__('We cannot find a directory with this name.'));
+            throw new \Magento\Model\Exception(__('We cannot find a directory with this name.'));
         }
         $paths = $this->mediaWriteDirectory->search('.*', $currentPath);
         $directories = array();
@@ -306,7 +306,7 @@ class Storage
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function deleteDirectory($path)
     {
@@ -314,7 +314,7 @@ class Storage
         $pathCmp = rtrim($path, '/');
 
         if ($rootCmp == $pathCmp) {
-            throw new \Magento\Core\Exception(__('We cannot delete root directory %1.', $path));
+            throw new \Magento\Model\Exception(__('We cannot delete root directory %1.', $path));
         }
 
         return $this->mediaWriteDirectory->delete($path);

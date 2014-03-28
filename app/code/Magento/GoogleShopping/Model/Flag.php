@@ -32,7 +32,7 @@ namespace Magento\GoogleShopping\Model;
  * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Flag extends \Magento\Core\Model\Flag
+class Flag extends \Magento\Flag
 {
     /**
      * Flag time to live in seconds

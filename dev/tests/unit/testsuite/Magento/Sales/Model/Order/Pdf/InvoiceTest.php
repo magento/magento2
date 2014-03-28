@@ -40,7 +40,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
         $stringMock = $this->getMock('Magento\Stdlib\String', array(), array(), '', false, false);
         $storeConfigMock = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false, false);
-        $translateMock = $this->getMock('Magento\TranslateInterface', array(), array(), '', false, false);
+        $translateMock = $this->getMock('Magento\Translate\Inline\StateInterface', array(), array(), '', false, false);
         $directoryMock = $this->getMock('Magento\Filesystem\Directory\Write', array(), array(), '', false, false);
         $directoryMock->expects($this->any())->method('getAbsolutePath')->will(
             $this->returnCallback(
@@ -99,12 +99,12 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             $paymentDataMock,
             $stringMock,
             $storeConfigMock,
-            $translateMock,
             $filesystemMock,
             $this->_pdfConfigMock,
             $totalFactoryMock,
             $pdfItemsFactoryMock,
             $localeDateMock,
+            $translateMock,
             $storeManagerMock,
             $localeResolverMock,
             array()

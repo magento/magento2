@@ -25,7 +25,14 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\App\Helper\Context;
+use Magento\App\ViewInterface;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Core\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Model\Converter;
+use Magento\Registry;
 
 /**
  * Adminhtml catalog product composite helper
@@ -39,61 +46,61 @@ class Composite extends \Magento\App\Helper\AbstractHelper
     /**
      * Core registry
      *
-     * @var \Magento\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $_customerFactory;
-
-    /**
-     * @var \Magento\App\ViewInterface
+     * @var ViewInterface
      */
     protected $_view;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Registry $coreRegistry
-     * @param \Magento\App\ViewInterface $view
+     * @var Converter
+     */
+    protected $_converter;
+
+    /**
+     * @param Context $context
+     * @param ProductFactory $productFactory
+     * @param StoreManagerInterface $storeManager
+     * @param Product $catalogProduct
+     * @param Registry $coreRegistry
+     * @param ViewInterface $view
+     * @param Converter $converter
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Registry $coreRegistry,
-        \Magento\App\ViewInterface $view
+        Context $context,
+        ProductFactory $productFactory,
+        StoreManagerInterface $storeManager,
+        Product $catalogProduct,
+        Registry $coreRegistry,
+        ViewInterface $view,
+        Converter $converter
     ) {
-        $this->_customerFactory = $customerFactory;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogProduct = $catalogProduct;
         $this->_view = $view;
+        $this->_converter = $converter;
         parent::__construct($context);
     }
 
@@ -157,8 +164,8 @@ class Composite extends \Magento\App\Helper\AbstractHelper
     /**
      * Prepares and render result of composite product configuration request
      *
-     * $configureResult holds either:
-     *  - 'ok' = true, and 'product_id', 'buy_request', 'current_store_id', 'current_customer' or 'current_customer_id'
+     * The $configureResult variable holds either:
+     *  - 'ok' = true, and 'product_id', 'buy_request', 'current_store_id', 'current_customer_id'
      *  - 'error' = true, and 'message' to show
      *
      * @param \Magento\Object $configureResult
@@ -168,7 +175,7 @@ class Composite extends \Magento\App\Helper\AbstractHelper
     {
         try {
             if (!$configureResult->getOk()) {
-                throw new \Magento\Core\Exception($configureResult->getMessage());
+                throw new \Magento\Model\Exception($configureResult->getMessage());
             }
 
             $currentStoreId = (int)$configureResult->getCurrentStoreId();
@@ -182,22 +189,17 @@ class Composite extends \Magento\App\Helper\AbstractHelper
                 $configureResult->getProductId()
             );
             if (!$product->getId()) {
-                throw new \Magento\Core\Exception(__('The product is not loaded.'));
+                throw new \Magento\Model\Exception(__('The product is not loaded.'));
             }
             $this->_coreRegistry->register('current_product', $product);
             $this->_coreRegistry->register('product', $product);
 
             // Register customer we're working with
-            $currentCustomer = $configureResult->getCurrentCustomer();
-            if (!$currentCustomer) {
-                $currentCustomerId = (int)$configureResult->getCurrentCustomerId();
-                if ($currentCustomerId) {
-                    $currentCustomer = $this->_customerFactory->create()->load($currentCustomerId);
-                }
-            }
-            if ($currentCustomer) {
-                $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $currentCustomer);
-            }
+            $customerId = (int)$configureResult->getCurrentCustomerId();
+            // TODO: Remove the customer model from the registry once all readers are refactored
+            $customerModel = $this->_converter->loadCustomerModel($customerId);
+            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customerModel);
+            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
             // Prepare buy request values
             $buyRequest = $configureResult->getBuyRequest();

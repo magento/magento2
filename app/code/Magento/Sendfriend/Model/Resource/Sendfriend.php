@@ -32,7 +32,7 @@ namespace Magento\Sendfriend\Model\Resource;
  * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sendfriend extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Sendfriend extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and table

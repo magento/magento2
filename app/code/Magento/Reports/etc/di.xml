@@ -49,4 +49,9 @@
             <argument name="reportSession" xsi:type="object">Magento\Reports\Model\Session</argument>
         </arguments>
     </type>
+    <type name="Magento\Reports\Model\Resource\Helper">
+        <arguments>
+            <argument name="modulePrefix" xsi:type="string">reports</argument>
+        </arguments>
+    </type>
 </config>

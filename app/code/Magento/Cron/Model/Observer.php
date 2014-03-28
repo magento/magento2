@@ -78,9 +78,9 @@ class Observer
     protected $_objectManager;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\CacheInterface
      */
-    protected $_app;
+    protected $_cache;
 
     /**
      * @var \Magento\Core\Model\Store\Config
@@ -105,7 +105,7 @@ class Observer
     /**
      * @param \Magento\ObjectManager $objectManager
      * @param ScheduleFactory $scheduleFactory
-     * @param \Magento\AppInterface $app
+     * @param \Magento\App\CacheInterface $cache
      * @param ConfigInterface $config
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\App\Console\Request $request
@@ -114,7 +114,7 @@ class Observer
     public function __construct(
         \Magento\ObjectManager $objectManager,
         \Magento\Cron\Model\ScheduleFactory $scheduleFactory,
-        \Magento\AppInterface $app,
+        \Magento\App\CacheInterface $cache,
         \Magento\Cron\Model\ConfigInterface $config,
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\App\Console\Request $request,
@@ -122,7 +122,7 @@ class Observer
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
-        $this->_app = $app;
+        $this->_cache = $cache;
         $this->_config = $config;
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_request = $request;
@@ -264,7 +264,7 @@ class Observer
         /**
          * check if schedule generation is needed
          */
-        $lastRun = (int)$this->_app->loadCache(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT);
+        $lastRun = (int)$this->_cache->load(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT);
         $rawSchedulePeriod = (int)$this->_coreStoreConfig->getConfig(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_GENERATE_EVERY
         );
@@ -289,7 +289,7 @@ class Observer
         /**
          * save time schedules generation was ran with no expiration
          */
-        $this->_app->saveCache(time(), self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT, array('crontab'), null);
+        $this->_cache->save(time(), self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT, array('crontab'), null);
 
         return $this;
     }
@@ -354,7 +354,7 @@ class Observer
     protected function _cleanup($groupId)
     {
         // check if history cleanup is needed
-        $lastCleanup = (int)$this->_app->loadCache(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT);
+        $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT);
         $historyCleanUp = (int)$this->_coreStoreConfig->getConfig(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY
         );
@@ -391,7 +391,7 @@ class Observer
         }
 
         // save time history cleanup was ran with no expiration
-        $this->_app->saveCache(time(), self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT, array('crontab'), null);
+        $this->_cache->save(time(), self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT, array('crontab'), null);
 
         return $this;
     }

@@ -48,7 +48,7 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-class Rate extends \Magento\Core\Model\AbstractModel
+class Rate extends \Magento\Model\AbstractModel
 {
     /**
      * @var mixed
@@ -75,7 +75,7 @@ class Rate extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -84,7 +84,7 @@ class Rate extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -107,7 +107,7 @@ class Rate extends \Magento\Core\Model\AbstractModel
      * Prepare location settings and tax postcode before save rate
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -119,11 +119,11 @@ class Rate extends \Magento\Core\Model\AbstractModel
             $this->getTaxPostcode() === '';
 
         if ($isEmptyValues || $isWrongRange) {
-            throw new \Magento\Core\Exception(__('Please fill all required fields with valid information.'));
+            throw new \Magento\Model\Exception(__('Please fill all required fields with valid information.'));
         }
 
         if (!is_numeric($this->getRate()) || $this->getRate() <= 0) {
-            throw new \Magento\Core\Exception(__('Rate Percent should be a positive number.'));
+            throw new \Magento\Model\Exception(__('Rate Percent should be a positive number.'));
         }
 
         if ($this->getZipIsRange()) {
@@ -131,15 +131,15 @@ class Rate extends \Magento\Core\Model\AbstractModel
             $zipTo = $this->getZipTo();
 
             if (strlen($zipFrom) > 9 || strlen($zipTo) > 9) {
-                throw new \Magento\Core\Exception(__('Maximum zip code length is 9.'));
+                throw new \Magento\Model\Exception(__('Maximum zip code length is 9.'));
             }
 
             if (!is_numeric($zipFrom) || !is_numeric($zipTo) || $zipFrom < 0 || $zipTo < 0) {
-                throw new \Magento\Core\Exception(__('Zip code should not contain characters other than digits.'));
+                throw new \Magento\Model\Exception(__('Zip code should not contain characters other than digits.'));
             }
 
             if ($zipFrom > $zipTo) {
-                throw new \Magento\Core\Exception(__('Range To should be equal or greater than Range From.'));
+                throw new \Magento\Model\Exception(__('Range To should be equal or greater than Range From.'));
             }
 
             $this->setTaxPostcode($zipFrom . '-' . $zipTo);
@@ -181,12 +181,12 @@ class Rate extends \Magento\Core\Model\AbstractModel
      * Processing object before delete data
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _beforeDelete()
     {
         if ($this->_isInRule()) {
-            throw new \Magento\Core\Exception(__('The tax rate cannot be removed. It exists in a tax rule.'));
+            throw new \Magento\Model\Exception(__('The tax rate cannot be removed. It exists in a tax rule.'));
         }
         return parent::_beforeDelete();
     }

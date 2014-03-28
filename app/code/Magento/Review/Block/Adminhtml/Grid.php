@@ -307,7 +307,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                     array(
                         'caption' => __('Edit'),
                         'url' => array(
-                            'base' => 'catalog/product_review/edit',
+                            'base' => 'review/product/edit',
                             'params' => array(
                                 'productId' => $this->getProductId(),
                                 'customerId' => $this->getCustomerId(),
@@ -383,7 +383,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getRowUrl($row)
     {
         return $this->getUrl(
-            'catalog/product_review/edit',
+            'review/product/edit',
             array(
                 'id' => $row->getReviewId(),
                 'productId' => $this->getProductId(),
@@ -402,7 +402,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         if ($this->getProductId() || $this->getCustomerId()) {
             return $this->getUrl(
-                'catalog/product_review/' . ($this->_coreRegistry->registry('usePendingFilter') ? 'pending' : ''),
+                'review/product' . ($this->_coreRegistry->registry('usePendingFilter') ? 'pending' : ''),
                 array('productId' => $this->getProductId(), 'customerId' => $this->getCustomerId())
             );
         } else {

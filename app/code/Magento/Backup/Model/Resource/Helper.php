@@ -25,7 +25,7 @@
  */
 namespace Magento\Backup\Model\Resource;
 
-class Helper extends \Magento\Core\Model\Resource\Helper
+class Helper extends \Magento\DB\Helper
 {
     /**
      * Tables foreign key data array
@@ -44,13 +44,13 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
     /**
      * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      * @param string $modulePrefix
+     * @param \Magento\Stdlib\DateTime\DateTime $coreDate
      */
     public function __construct(
         \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime\DateTime $coreDate,
-        $modulePrefix
+        $modulePrefix,
+        \Magento\Stdlib\DateTime\DateTime $coreDate
     ) {
         parent::__construct($resource, $modulePrefix);
         $this->_coreDate = $coreDate;

@@ -28,7 +28,7 @@ namespace Magento\Core\Model\File\Storage\Database;
 /**
  * Class AbstractDatabase
  */
-abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
+abstract class AbstractDatabase extends \Magento\Model\AbstractModel
 {
     /**
      * Store media base directory path
@@ -52,17 +52,17 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
     protected $_date;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\ConfigInterface
      */
-    protected $_app;
+    protected $_configuration;
 
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Stdlib\DateTime\DateTime $dateModel
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\App\ConfigInterface $configuration
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param string|null $connectionName
      * @param array $data
@@ -72,14 +72,14 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\App\ConfigInterface $configuration,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $connectionName = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_app = $app;
+        $this->_configuration = $configuration;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_date = $dateModel;
         if (!$connectionName) {
@@ -95,10 +95,11 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
      */
     public function getConfigConnectionName()
     {
-        $connectionName = $this->_app->getConfig()->getValue(
-            \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
-            'default'
-        );
+        $connectionName = $this->_configuration
+            ->getValue(
+                \Magento\Core\Model\File\Storage::XML_PATH_STORAGE_MEDIA_DATABASE,
+                'default'
+            );
         if (empty($connectionName)) {
             $connectionName = 'default_setup';
         }
@@ -108,7 +109,7 @@ abstract class AbstractDatabase extends \Magento\Core\Model\AbstractModel
     /**
      * Get resource instance
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return \Magento\Model\Resource\AbstractResource
      */
     protected function _getResource()
     {

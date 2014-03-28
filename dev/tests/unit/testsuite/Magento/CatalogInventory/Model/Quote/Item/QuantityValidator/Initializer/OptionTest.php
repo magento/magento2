@@ -244,7 +244,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      * @expectedExceptionMessage The stock item for Product in option is not valid.
      */
     public function testInitializeWithInvalidOptionQty()

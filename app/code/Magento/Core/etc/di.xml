@@ -25,6 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/ObjectManager/etc/config.xsd">
     <preference for="Magento\Acl\CacheInterface" type="Magento\Acl\Cache" />
+    <preference for="Magento\App\AreaInterface" type="Magento\Core\Model\App\Area" />
     <preference for="Magento\Module\Updater\SetupInterface" type="Magento\Core\Model\Resource\Setup" />
     <preference for="Magento\Module\ResourceResolverInterface" type="Magento\Module\ResourceResolver" />
     <preference for="Magento\AuthorizationInterface" type="Magento\Authorization" />
@@ -36,12 +37,8 @@
     <preference for="Magento\App\ReinitableConfigInterface" type="Magento\App\ReinitableConfig" />
     <preference for="Magento\App\Config\Scope\ReaderPoolInterface" type="Magento\Core\Model\Config\Scope\ReaderPool" />
     <preference for="Magento\App\Config\Storage\WriterInterface" type="Magento\Core\Model\Config\Storage\Db" />
-    <preference for="Magento\PubSub\Event\QueueWriterInterface" type="Magento\PubSub\Event\QueueWriter" />
-    <preference for="Magento\PubSub\Event\FactoryInterface" type="Magento\PubSub\Event\Factory" />
     <preference for="Magento\View\Design\Theme\FileInterface" type="Magento\Core\Model\Theme\File" />
-    <preference for="Magento\PubSub\Message\DispatcherAsyncInterface" type="Magento\PubSub\Message\DispatcherAsync" />
     <preference for="Magento\Config\ConverterInterface" type="Magento\Config\Converter\Dom"/>
-    <preference for="Magento\Phrase\RendererInterface" type="Magento\Phrase\Renderer\Composite" />
     <preference for="Magento\Core\Model\Url\SecurityInfoInterface" type="Magento\Core\Model\Url\SecurityInfo\Proxy" />
     <preference for="Magento\App\DefaultPathInterface" type="Magento\App\DefaultPath\DefaultPath" />
     <preference for="Magento\Encryption\EncryptorInterface" type="Magento\Encryption\Encryptor" />
@@ -53,12 +50,8 @@
     <preference for="Magento\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\View\Asset\MergeStrategyInterface" type="Magento\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\App\ViewInterface" type="Magento\App\View" />
-    <preference for="Magento\TranslateInterface" type="Magento\Translate" />
     <preference for="Magento\App\Response\RedirectInterface" type="Magento\Core\App\Response\Redirect" />
     <preference for="Magento\Data\Collection\EntityFactoryInterface" type="Magento\Core\Model\EntityFactory" />
-    <preference for="Magento\Translate\InlineInterface" type="Magento\Translate\Inline" />
-    <preference for="Magento\Translate\Inline\ConfigInterface" type="Magento\Core\Model\Translate\Inline\Config" />
-    <preference for="Magento\Translate\Inline\ParserInterface" type="Magento\Core\Model\Translate\Inline\Parser" />
     <preference for="Magento\Session\ValidatorInterface" type="Magento\Core\Model\Session\Validator" />
     <preference for="Magento\Session\StorageInterface" type="Magento\Session\Storage" />
     <preference for="Magento\Url\RouteParamsResolverInterface" type="Magento\Core\Model\Url\RouteParamsResolver" />
@@ -68,13 +61,10 @@
     <preference for="Magento\Mview\ConfigInterface" type="Magento\Mview\Config" />
     <preference for="Magento\Mview\ViewInterface" type="Magento\Mview\View" />
     <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
-    <preference for="Magento\Mview\View\StateInterface" type="Magento\Core\Model\Mview\View\State" />
-    <preference for="Magento\Mview\View\State\CollectionInterface" type="Magento\Core\Model\Resource\Mview\View\State\Collection" />
     <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
     <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
     <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
     <preference for="Magento\Css\PreProcessor\AdapterInterface" type="Magento\Css\PreProcessor\Adapter\Oyejorge" />
-    <preference for="Magento\Translate\ResourceInterface" type="Magento\Core\Model\Resource\Translate" />
     <preference for="Magento\BaseScopeResolverInterface" type="Magento\Core\Model\BaseScopeResolver" />
     <preference for="Magento\LocaleInterface" type="Magento\Locale" />
     <preference for="Magento\Locale\CurrencyInterface" type="Magento\Locale\Currency" />
@@ -85,13 +75,6 @@
     <preference for="Magento\Stdlib\DateTime\DateInterface" type="Magento\Stdlib\DateTime\Date" />
     <preference for="Magento\Locale\ScopeConfigInterface" type="Magento\Core\Model\Store\Config" />
     <preference for="Magento\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Less\PreProcessor\ErrorHandler" />
-    <type name="Magento\Translate\Inline">
-        <arguments>
-            <argument name="templateFileName" xsi:type="string">Magento_Core::translate_inline.phtml</argument>
-            <argument name="translatorRoute" xsi:type="string">core/ajax/translate</argument>
-            <argument name="layout" xsi:type="object">Magento\View\LayoutInterface\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\App\DefaultPath\DefaultPath">
         <arguments>
             <argument name="parts" xsi:type="array">
@@ -242,23 +225,6 @@
             <argument name="uploader" xsi:type="object">Magento\View\Design\Theme\Image\Uploader\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Phrase\Renderer\Composite">
-        <arguments>
-            <argument name="renderers" xsi:type="array">
-                <item name="translation" xsi:type="object">Magento\Phrase\Renderer\Translate</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Phrase\Renderer\Translate">
-        <arguments>
-            <argument name="translator" xsi:type="object">Magento\Translate</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Core\Model\Translate\Inline\Parser">
-        <arguments>
-            <argument name="inputFilter" xsi:type="object">Magento\Filter\Input\MaliciousCode</argument>
-        </arguments>
-    </type>
     <type name="Magento\App\Config\ScopePool">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Config</argument>
@@ -379,7 +345,7 @@
             <argument name="reader" xsi:type="object">Magento\Locale\Hierarchy\Config\Reader</argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\Resource\Helper">
+    <type name="Magento\DB\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">core</argument>
         </arguments>
@@ -562,6 +528,15 @@
         <plugin name="initLocale" type="Magento\Translate\Locale\Resolver\Plugin" sortOrder="10"/>
         <arguments>
             <argument name="defaultLocalePath" xsi:type="string">general/locale/code</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Model\ActionValidator\RemoveAction">
+        <arguments>
+            <argument name="protectedModels" xsi:type="array">
+                <item name="store" xsi:type="string">Magento\Core\Model\Store</item>
+                <item name="website" xsi:type="string">Magento\Core\Model\Website</item>
+                <item name="storeGroup" xsi:type="string">Magento\Core\Model\Store\Group</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\App\PageCache\Identifier">

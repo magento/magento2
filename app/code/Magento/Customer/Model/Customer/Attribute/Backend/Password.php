@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 /**
  * Customer password attribute backend

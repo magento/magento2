@@ -30,7 +30,7 @@ namespace Magento\Authorizenet\Model\Resource\Authorizenet;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Debug extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Debug extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

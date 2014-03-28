@@ -25,7 +25,7 @@
  */
 namespace Magento\Sendfriend\Model;
 
-use Magento\Core\Exception as CoreException;
+use Magento\Model\Exception as CoreException;
 
 /**
  * SendFriend Log
@@ -41,7 +41,7 @@ use Magento\Core\Exception as CoreException;
  * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sendfriend extends \Magento\Core\Model\AbstractModel
+class Sendfriend extends \Magento\Model\AbstractModel
 {
     /**
      * Recipient Names
@@ -115,15 +115,20 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     protected $_escaper;
 
     /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\TranslateInterface $translate
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
      * @param \Magento\Escaper $escaper
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -132,20 +137,20 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\TranslateInterface $translate,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
         \Magento\Escaper $escaper,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
-        $this->_translate = $translate;
         $this->_catalogImage = $catalogImage;
         $this->_sendfriendData = $sendfriendData;
         $this->_escaper = $escaper;
+        $this->inlineTranslation = $inlineTranslation;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -166,13 +171,12 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     public function send()
     {
         if ($this->isExceedLimit()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('You\'ve met your limit of %1 sends in an hour.', $this->getMaxSendsToFriend())
             );
         }
 
-        $translate = $this->_translate->getTranslateInline();
-        $this->_translate->setTranslateInline(false);
+        $this->inlineTranslation->suspend();
 
         $message = nl2br(htmlspecialchars($this->getSender()->getMessage()));
         $sender = array(
@@ -209,7 +213,9 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
         }
-        $this->_translate->setTranslateInline($translate);
+
+        $this->inlineTranslation->resume();
+
         $this->_incrementSentCount();
 
         return $this;
@@ -277,14 +283,14 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve Cookie instance
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\Stdlib\Cookie
      */
     public function getCookie()
     {
         $cookie = $this->_getData('_cookie');
         if (!$cookie instanceof \Magento\Stdlib\Cookie) {
-            throw new \Magento\Core\Exception(__('Please define a correct Cookie instance.'));
+            throw new \Magento\Model\Exception(__('Please define a correct Cookie instance.'));
         }
         return $cookie;
     }
@@ -402,14 +408,14 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve Product instance
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()
     {
         $product = $this->_getData('_product');
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            throw new \Magento\Core\Exception(__('Please define a correct Product instance.'));
+            throw new \Magento\Model\Exception(__('Please define a correct Product instance.'));
         }
         return $product;
     }
@@ -432,14 +438,14 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve Sender Information Object
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\Object
      */
     public function getSender()
     {
         $sender = $this->_getData('_sender');
         if (!$sender instanceof \Magento\Object) {
-            throw new \Magento\Core\Exception(__('Please define the correct Sender information.'));
+            throw new \Magento\Model\Exception(__('Please define the correct Sender information.'));
         }
         return $sender;
     }
@@ -590,8 +596,8 @@ class Sendfriend extends \Magento\Core\Model\AbstractModel
      */
     public function register()
     {
-        if (!$this->_coreRegistry->registry('send_to_friend_model')) {
-            $this->_coreRegistry->register('send_to_friend_model', $this);
+        if (!$this->_registry->registry('send_to_friend_model')) {
+            $this->_registry->register('send_to_friend_model', $this);
         }
         return $this;
     }

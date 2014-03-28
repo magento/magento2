@@ -33,7 +33,7 @@ class CollectionFilter
     /**
      * Add filter by specified recurring payment id(s)
      *
-     * @param \Magento\Core\Model\Resource\Db\Collection\AbstractCollection $collection
+     * @param \Magento\Model\Resource\Db\Collection\AbstractCollection $collection
      * @param array|int $ids
      * @return \Magento\Sales\Model\Resource\Order\Collection
      */

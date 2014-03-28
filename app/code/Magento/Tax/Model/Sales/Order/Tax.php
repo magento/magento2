@@ -51,7 +51,7 @@ namespace Magento\Tax\Model\Sales\Order;
  * @method int getHidden()
  * @method \Magento\Tax\Model\Sales\Order\Tax setHidden(int $value)
  */
-class Tax extends \Magento\Core\Model\AbstractModel
+class Tax extends \Magento\Model\AbstractModel
 {
     /**
      * @return void

@@ -26,6 +26,8 @@
  */
 namespace Magento\Catalog\Model\Resource\Product;
 
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -89,5 +91,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'category-1/url-key-asdf.html'
         );
         $this->assertEquals($expectedResult, $this->_collection->getColumnValues('request_path'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/Model/Resource/_files/product_simple.php
+     */
+    public function testAddTierPriceData()
+    {
+        $this->_collection->setFlag('tier_price_added', false);
+        $this->_collection->addIdFilter(2);
+        $this->assertInstanceOf(
+            '\Magento\Catalog\Model\Resource\Product\Collection',
+            $this->_collection->addTierPriceData()
+        );
+        $tierPrice = $this->_collection->getFirstItem()->getDataByKey('tier_price');
+        $this->assertEquals(CustomerGroupServiceInterface::NOT_LOGGED_IN_ID, current($tierPrice)['cust_group']);
+        $this->assertEquals(CustomerGroupServiceInterface::CUST_GROUP_ALL, next($tierPrice)['cust_group']);
+        $this->assertTrue($this->_collection->getFlag('tier_price_added'));
     }
 }

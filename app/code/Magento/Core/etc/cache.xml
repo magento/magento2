@@ -36,10 +36,6 @@
         <label>Blocks HTML output</label>
         <description>Page blocks HTML.</description>
     </type>
-    <type name="translate" translate="label,description" instance="Magento\App\Cache\Type\Translate">
-        <label>Translations</label>
-        <description>Translation files.</description>
-    </type>
     <type name="collections" translate="label,description" instance="Magento\App\Cache\Type\Collection">
         <label>Collections Data</label>
         <description>Collection data files.</description>

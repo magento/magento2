@@ -27,7 +27,7 @@ namespace Magento\Reports\Model\Grouped;
 
 use Magento\Data\Collection\Db;
 
-class Collection extends \Magento\Data\Collection //\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Data\Collection
 {
     /**
      * Column name for group by clause
@@ -39,7 +39,7 @@ class Collection extends \Magento\Data\Collection //\Magento\Core\Model\Resource
     /**
      * Collection resource
      *
-     * @var \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @var \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     protected $_resourceCollection = null;
 

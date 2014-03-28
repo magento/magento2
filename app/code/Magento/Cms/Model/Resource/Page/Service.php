@@ -28,7 +28,7 @@ namespace Magento\Cms\Model\Resource\Page;
 /**
  * Cms page service resource model
  */
-class Service extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Service extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Init cms page service model

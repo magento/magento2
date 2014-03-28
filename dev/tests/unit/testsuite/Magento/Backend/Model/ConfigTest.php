@@ -94,11 +94,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_transFactoryMock = $this->getMock(
-            'Magento\Core\Model\Resource\TransactionFactory',
-            array('create'),
-            array(),
-            '',
-            false
+            'Magento\DB\TransactionFactory',
+            array('create'), array(), '', false
         );
         $this->_appConfigMock = $this->getMock('Magento\App\ConfigInterface', array(), array(), '', false);
         $this->_configLoaderMock = $this->getMock(
@@ -149,7 +146,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
     {
-        $transactionMock = $this->getMock('Magento\Core\Model\Resource\Transaction', array(), array(), '', false);
+        $transactionMock = $this->getMock(
+            'Magento\DB\Transaction', array(), array(), '', false
+        );
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 

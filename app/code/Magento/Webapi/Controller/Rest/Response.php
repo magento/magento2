@@ -33,24 +33,26 @@ class Response extends \Magento\Webapi\Controller\Response
     /** @var \Magento\Webapi\Controller\Rest\Response\RendererInterface */
     protected $_renderer;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_app;
+    /**
+     * @var \Magento\App\State
+     */
+    protected $_appState;
 
     /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory
      * @param \Magento\Webapi\Controller\ErrorProcessor $errorProcessor
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\State $appState
      */
     public function __construct(
         \Magento\Webapi\Controller\Rest\Response\Renderer\Factory $rendererFactory,
         \Magento\Webapi\Controller\ErrorProcessor $errorProcessor,
-        \Magento\Core\Model\App $app
+        \Magento\App\State $appState
     ) {
         $this->_renderer = $rendererFactory->get();
         $this->_errorProcessor = $errorProcessor;
-        $this->_app = $app;
+        $this->_appState = $appState;
     }
 
     /**
@@ -103,7 +105,7 @@ class Response extends \Magento\Webapi\Controller\Response
             if ($maskedException->getDetails()) {
                 $messageData['parameters'] = $maskedException->getDetails();
             }
-            if ($this->_app->isDeveloperMode()) {
+            if ($this->_appState->getMode() == \Magento\App\State::MODE_DEVELOPER) {
                 $messageData['trace'] = $exception->getTraceAsString();
             }
             $formattedMessages['errors'][] = $messageData;

@@ -497,12 +497,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param  \Magento\Payment\Model\Info $payment
      * @param  float $amount
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function authorize(\Magento\Object $payment, $amount)
     {
         if ($amount <= 0) {
-            throw new \Magento\Core\Exception(__('This is an invalid amount for authorization.'));
+            throw new \Magento\Model\Exception(__('This is an invalid amount for authorization.'));
         }
 
         $this->_initCardsStorage($payment);
@@ -524,12 +524,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Payment\Model\Info $payment
      * @param float $amount
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function capture(\Magento\Object $payment, $amount)
     {
         if ($amount <= 0) {
-            throw new \Magento\Core\Exception(__('This is an invalid amount for capture.'));
+            throw new \Magento\Model\Exception(__('This is an invalid amount for capture.'));
         }
         $this->_initCardsStorage($payment);
         if ($this->_isPreauthorizeCapture($payment)) {
@@ -594,7 +594,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Payment\Model\Info $payment
      * @param float $requestedAmount
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function refund(\Magento\Object $payment, $requestedAmount)
     {
@@ -604,7 +604,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             $cardsStorage->getCapturedAmount() - $cardsStorage->getRefundedAmount()
         ) < $requestedAmount
         ) {
-            throw new \Magento\Core\Exception(__('This is an invalid amount for refund.'));
+            throw new \Magento\Model\Exception(__('This is an invalid amount for refund.'));
         }
 
         $messages = array();
@@ -650,12 +650,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function cancelPartialAuthorization(\Magento\Payment\Model\Info $payment)
     {
         if (!$payment->getAdditionalInformation($this->_splitTenderIdKey)) {
-            throw new \Magento\Core\Exception(__('This is an invalid split tenderId ID.'));
+            throw new \Magento\Model\Exception(__('This is an invalid split tenderId ID.'));
         }
 
         $request = $this->_getRequest();
@@ -672,7 +672,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_ALL_CANCELED);
                 return;
             default:
-                throw new \Magento\Core\Exception(__('Something went wrong while canceling the payment.'));
+                throw new \Magento\Model\Exception(__('Something went wrong while canceling the payment.'));
         }
     }
 
@@ -683,7 +683,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param float $amount
      * @param string $requestType
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _place($payment, $amount, $requestType)
     {
@@ -762,12 +762,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         return $this;
                     }
                 }
-                throw new \Magento\Core\Exception($defaultExceptionMessage);
+                throw new \Magento\Model\Exception($defaultExceptionMessage);
             case self::RESPONSE_CODE_DECLINED:
             case self::RESPONSE_CODE_ERROR:
-                throw new \Magento\Core\Exception($this->_wrapGatewayError($result->getResponseReasonText()));
+                throw new \Magento\Model\Exception($this->_wrapGatewayError($result->getResponseReasonText()));
             default:
-                throw new \Magento\Core\Exception($defaultExceptionMessage);
+                throw new \Magento\Model\Exception($defaultExceptionMessage);
         }
         return $this;
     }
@@ -780,7 +780,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param string $requestType
      * @return $this
      * @throws \Magento\Payment\Model\Info\Exception
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _partialAuthorization($payment, $amount, $requestType)
     {
@@ -811,7 +811,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         $amount = $amount - $this->getCardsStorage()->getProcessedAmount();
         if ($amount <= 0) {
-            throw new \Magento\Core\Exception(__('This is an invalid amount for partial authorization.'));
+            throw new \Magento\Model\Exception(__('This is an invalid amount for partial authorization.'));
         }
         $payment->setAmount($amount);
         $request = $this->_buildRequest($payment);
@@ -879,7 +879,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Payment\Model\Info $payment
      * @param float $requestedAmount
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _preauthorizeCapture($payment, $requestedAmount)
     {
@@ -889,7 +889,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             $cardsStorage->getProcessedAmount() - $cardsStorage->getCapturedAmount()
         ) < $requestedAmount
         ) {
-            throw new \Magento\Core\Exception(__('This is an invalid amount for capture.'));
+            throw new \Magento\Model\Exception(__('This is an invalid amount for capture.'));
         }
 
         $messages = array();
@@ -933,7 +933,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param float $amount
      * @param \Magento\Object $card
      * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _preauthorizeCaptureCardTransaction($payment, $amount, $card)
     {
@@ -988,7 +988,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             $amount,
             $exceptionMessage
         );
-        throw new \Magento\Core\Exception($exceptionMessage);
+        throw new \Magento\Model\Exception($exceptionMessage);
     }
 
     /**
@@ -997,7 +997,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Payment\Model\Info $payment
      * @param \Magento\Object $card
      * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _voidCardTransaction($payment, $card)
     {
@@ -1080,7 +1080,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             false,
             $exceptionMessage
         );
-        throw new \Magento\Core\Exception($exceptionMessage);
+        throw new \Magento\Model\Exception($exceptionMessage);
     }
 
     /**
@@ -1102,7 +1102,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param float $amount
      * @param \Magento\Object $card
      * @return \Magento\Sales\Model\Order\Payment\Transaction
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _refundCardTransaction($payment, $amount, $card)
     {
@@ -1173,7 +1173,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             $amount,
             $exceptionMessage
         );
-        throw new \Magento\Core\Exception($exceptionMessage);
+        throw new \Magento\Model\Exception($exceptionMessage);
     }
 
     /**
@@ -1515,7 +1515,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Authorizenet\Model\Authorizenet\Request $request
      * @return \Magento\Authorizenet\Model\Authorizenet\Result
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _postRequest(\Magento\Object $request)
     {
@@ -1549,7 +1549,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
             $debugData['result'] = $result->getData();
             $this->_debug($debugData);
-            throw new \Magento\Core\Exception($this->_wrapGatewayError($e->getMessage()));
+            throw new \Magento\Model\Exception($this->_wrapGatewayError($e->getMessage()));
         }
 
         $responseBody = $response->getBody();
@@ -1601,7 +1601,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 $r[54]
             );
         } else {
-            throw new \Magento\Core\Exception(__('Something went wrong in the payment gateway.'));
+            throw new \Magento\Model\Exception(__('Something went wrong in the payment gateway.'));
         }
 
         $debugData['result'] = $result->getData();
@@ -1768,7 +1768,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param  string $messages
      * @param  bool $isSuccessfulTransactions
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _processFailureMultitransactionAction($payment, $messages, $isSuccessfulTransactions)
     {
@@ -1792,7 +1792,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             }
             $copyOrder->save();
         }
-        throw new \Magento\Core\Exception($this->_authorizenetData->convertMessagesToMessage($messages));
+        throw new \Magento\Model\Exception($this->_authorizenetData->convertMessagesToMessage($messages));
     }
 
     /**
@@ -1817,7 +1817,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @param string $transactionId
      * @return \Magento\Object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
      * @link http://developer.authorize.net/api/transaction_details/
      */
@@ -1852,7 +1852,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             $responseXmlDocument = new \Magento\Simplexml\Element($responseBody);
             libxml_use_internal_errors(false);
         } catch (\Exception $e) {
-            throw new \Magento\Core\Exception(__('Payment updating error.'));
+            throw new \Magento\Model\Exception(__('Payment updating error.'));
         }
 
         $response = new \Magento\Object();

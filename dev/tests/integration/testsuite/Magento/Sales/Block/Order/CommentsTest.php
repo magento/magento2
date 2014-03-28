@@ -77,7 +77,7 @@ class CommentsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testGetCommentsWrongEntityException()
     {

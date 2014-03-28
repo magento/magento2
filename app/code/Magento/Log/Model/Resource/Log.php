@@ -32,7 +32,7 @@ namespace Magento\Log\Model\Resource;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Log extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Log extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Core event manager proxy

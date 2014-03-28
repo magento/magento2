@@ -39,7 +39,7 @@ namespace Magento\Core\Model;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Variable extends \Magento\Core\Model\AbstractModel
+class Variable extends \Magento\Model\AbstractModel
 {
     const TYPE_TEXT = 'text';
 

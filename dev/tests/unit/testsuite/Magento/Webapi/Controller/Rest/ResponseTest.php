@@ -30,8 +30,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Rest\Response */
     protected $_responseRest;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_appMock;
+    /** @var \Magento\App\State */
+    protected $_appStateMock;
 
     /** @var \Magento\Webapi\Controller\Rest\Response\Renderer\Xml */
     protected $_rendererMock;
@@ -49,16 +49,15 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Controller\Rest\Response\Renderer\Factory'
         )->disableOriginalConstructor()->getMock();
         $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->_rendererMock));
-        $this->_errorProcessorMock = $this->getMockBuilder(
-            'Magento\Webapi\Controller\ErrorProcessor'
-        )->disableOriginalConstructor()->getMock();
-        $this->_appMock = $this->getMockBuilder('Magento\Core\Model\App')->disableOriginalConstructor()->getMock();
+        $this->_errorProcessorMock = $this->getMockBuilder('Magento\Webapi\Controller\ErrorProcessor')
+            ->disableOriginalConstructor()->getMock();
+        $this->_appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
 
         /** Init SUP. */
         $this->_responseRest = new \Magento\Webapi\Controller\Rest\Response(
             $rendererFactoryMock,
             $this->_errorProcessorMock,
-            $this->_appMock
+            $this->_appStateMock
         );
         $this->_responseRest->headersSentThrowsException = false;
         parent::setUp();
@@ -67,7 +66,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_responseRest);
-        unset($this->_appMock);
+        unset($this->_appStateMock);
         unset($this->_rendererMock);
         unset($this->_errorProcessorMock);
         parent::tearDown();

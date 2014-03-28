@@ -226,7 +226,7 @@ class Layer extends \Magento\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setCurrentCategory($category)
     {
@@ -234,12 +234,12 @@ class Layer extends \Magento\Object
             $category = $this->_categoryFactory->create()->load($category);
         }
         if (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('The category must be an instance of \Magento\Catalog\Model\Category.')
             );
         }
         if (!$category->getId()) {
-            throw new \Magento\Core\Exception(__('Please correct the category.'));
+            throw new \Magento\Model\Exception(__('Please correct the category.'));
         }
 
         if ($category->getId() != $this->getCurrentCategory()->getId()) {

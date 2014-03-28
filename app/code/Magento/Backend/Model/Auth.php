@@ -185,7 +185,7 @@ class Auth
                 array('user_name' => $username, 'exception' => $e)
             );
             throw $e;
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 array('user_name' => $username, 'exception' => $e)

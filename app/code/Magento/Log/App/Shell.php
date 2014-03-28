@@ -26,9 +26,9 @@
 namespace Magento\Log\App;
 
 use Magento\App\Console\Response;
-use Magento\LauncherInterface;
+use Magento\AppInterface;
 
-class Shell implements LauncherInterface
+class Shell implements AppInterface
 {
     /**
      * Filename of the entry point script

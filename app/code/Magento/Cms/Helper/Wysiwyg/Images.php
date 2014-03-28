@@ -216,7 +216,7 @@ class Images extends \Magento\App\Helper\AbstractHelper
      * Try to create target directory if it doesn't exist
      *
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getCurrentPath()
     {
@@ -236,7 +236,7 @@ class Images extends \Magento\App\Helper\AbstractHelper
                 }
             } catch (\Magento\Filesystem\FilesystemException $e) {
                 $message = __('The directory %1 is not writable by server.', $currentPath);
-                throw new \Magento\Core\Exception($message);
+                throw new \Magento\Model\Exception($message);
             }
             $this->_currentPath = $currentPath;
         }

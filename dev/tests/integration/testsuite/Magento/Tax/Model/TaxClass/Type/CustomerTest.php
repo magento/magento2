@@ -58,7 +58,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $this->_objectManager->create('Magento\Tax\Model\TaxClass\Type\Customer');
         $model->setId(self::TAX_CLASS_ID);
-        /** @var $collection \Magento\Core\Model\Resource\Db\Collection\AbstractCollection */
+        /** @var $collection \Magento\Model\Resource\Db\Collection\AbstractCollection */
         $collection = $model->getAssignedToObjects();
         $this->assertEquals(self::TAX_CLASS_ID, $collection->getFirstItem()->getData('tax_class_id'));
         $this->assertEquals(self::GROUP_CODE, $collection->getFirstItem()->getData('customer_group_code'));

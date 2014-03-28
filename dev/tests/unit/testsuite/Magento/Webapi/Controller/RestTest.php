@@ -54,6 +54,16 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Authz\Service\AuthorizationV1Interface */
     protected $_authzServiceMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $areaListMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $areaMock;
+
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
@@ -100,16 +110,16 @@ class RestTest extends \PHPUnit_Framework_TestCase
             'Magento\Authz\Service\AuthorizationV1Interface'
         )->disableOriginalConstructor()->getMock();
 
-        /** @var $applicationMock \Magento\AppInterface */
-        $applicationMock = $this->getMockBuilder('Magento\AppInterface')->disableOriginalConstructor()->getMock();
         $layoutMock = $this->getMockBuilder('Magento\View\LayoutInterface')->disableOriginalConstructor()->getMock();
-        $applicationMock->expects($this->once())->method('getLayout')->will($this->returnValue($layoutMock));
 
         $errorProcessorMock = $this->getMock('Magento\Webapi\Controller\ErrorProcessor', array(), array(), '', false);
         $errorProcessorMock->expects($this->any())->method('maskException')->will($this->returnArgument(0));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $serializer = $objectManager->getObject('Magento\Webapi\Controller\ServiceArgsSerializer');
+        $this->areaListMock = $this->getMock('\Magento\App\AreaList', array(), array(), '', false);
+        $this->areaMock = $this->getMock('Magento\App\AreaInterface');
+        $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
 
         /** Init SUT. */
         $this->_restController = $objectManager->getObject(
@@ -120,10 +130,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
                 'router' => $this->_routerMock,
                 'objectManager' => $this->_objectManagerMock,
                 'appState' => $this->_appStateMock,
-                'application' => $applicationMock,
+                'layout' => $layoutMock,
                 'authorizationService' => $this->_authzServiceMock,
                 'serializer' => $serializer,
-                'errorProcessor' => $errorProcessorMock
+                'errorProcessor' => $errorProcessorMock,
+                'areaList' => $this->areaListMock
             )
         );
 

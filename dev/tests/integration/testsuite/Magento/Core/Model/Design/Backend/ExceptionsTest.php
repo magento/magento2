@@ -120,7 +120,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var array $value
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      * @dataProvider saveWrongExceptionDataProvider
      * @magentoDbIsolation enabled
      */

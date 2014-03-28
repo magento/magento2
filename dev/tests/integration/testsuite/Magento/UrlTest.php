@@ -102,15 +102,14 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseUrlWithTypeRestoring()
     {
         /**
-         * Get base ull with default type
+         * Get base URL with default type
          */
         $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
 
         /**
          * Set specified type
          */
-        $this->_model->setType(\Magento\UrlInterface::URL_TYPE_WEB);
-        $webUrl = $this->_model->getBaseUrl();
+        $webUrl = $this->_model->getBaseUrl(['_type' => \Magento\UrlInterface::URL_TYPE_WEB]);
         $this->assertEquals('http://localhost/', $webUrl, 'Incorrect web url');
         $this->assertEquals('http://localhost/index.php/', $this->_model->getBaseUrl(), 'Incorrect link url');
 

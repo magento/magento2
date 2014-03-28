@@ -35,7 +35,7 @@ namespace Magento\Customer\Model\Layout;
 class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DepersonalizePlugin
+     * @var \Magento\Customer\Model\Layout\DepersonalizePlugin
      */
     protected $plugin;
 

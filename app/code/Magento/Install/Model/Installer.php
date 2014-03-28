@@ -95,11 +95,11 @@ class Installer extends \Magento\Object
     protected $_filesystem;
 
     /**
-     * Application
+     * Area list
      *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\AreaList
      */
-    protected $_app;
+    protected $_areaList;
 
     /**
      * Application
@@ -198,7 +198,7 @@ class Installer extends \Magento\Object
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Module\Updater\SetupFactory $setupFactory
      * @param \Magento\App\Arguments $arguments
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\AreaList $areaList
      * @param \Magento\App\State $appState
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\User\Model\UserFactory $userModelFactory
@@ -225,7 +225,7 @@ class Installer extends \Magento\Object
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Module\Updater\SetupFactory $setupFactory,
         \Magento\App\Arguments $arguments,
-        \Magento\Core\Model\App $app,
+        \Magento\App\AreaList $areaList,
         \Magento\App\State $appState,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\User\Model\UserFactory $userModelFactory,
@@ -253,7 +253,7 @@ class Installer extends \Magento\Object
         $this->_encryptor = $encryptor;
         $this->mathRandom = $mathRandom;
         $this->_arguments = $arguments;
-        $this->_app = $app;
+        $this->_areaList = $areaList;
         $this->_appState = $appState;
         $this->_storeManager = $storeManager;
         $this->_userModelFactory = $userModelFactory;
@@ -503,10 +503,9 @@ class Installer extends \Magento\Object
     public function createAdministrator($data)
     {
         // \Magento\User\Model\User belongs to adminhtml area
-        $this->_app->loadAreaPart(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-            \Magento\Core\Model\App\Area::PART_CONFIG
-        );
+        $this->_areaList
+            ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+            ->load(\Magento\App\AreaInterface::PART_CONFIG);
 
         /** @var $user \Magento\User\Model\User */
         $user = $this->_userModelFactory->create();

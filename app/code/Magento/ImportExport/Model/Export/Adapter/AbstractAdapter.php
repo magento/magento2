@@ -58,7 +58,7 @@ abstract class AbstractAdapter
      *
      * @param \Magento\App\Filesystem $filesystem
      * @param string|null $destination
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function __construct(\Magento\App\Filesystem $filesystem, $destination = null)
     {
@@ -68,14 +68,14 @@ abstract class AbstractAdapter
             $this->_directoryHandle->touch($destination);
         }
         if (!is_string($destination)) {
-            throw new \Magento\Core\Exception(__('Destination file path must be a string'));
+            throw new \Magento\Model\Exception(__('Destination file path must be a string'));
         }
 
         if (!$this->_directoryHandle->isWritable()) {
-            throw new \Magento\Core\Exception(__('Destination directory is not writable'));
+            throw new \Magento\Model\Exception(__('Destination directory is not writable'));
         }
         if ($this->_directoryHandle->isFile($destination) && !$this->_directoryHandle->isWritable($destination)) {
-            throw new \Magento\Core\Exception(__('Destination file is not writable'));
+            throw new \Magento\Model\Exception(__('Destination file is not writable'));
         }
 
         $this->_destination = $destination;

@@ -31,6 +31,25 @@ use Magento\View\Element\AbstractBlock;
 class Editable extends AbstractBlock implements RendererInterface
 {
     /**
+     * @var \Magento\Translate\InlineInterface
+     */
+    protected $inlineTranslate;
+
+    /**
+     * @param \Magento\View\Element\Context $context
+     * @param \Magento\Translate\InlineInterface $inlineTranslate
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Context $context,
+        \Magento\Translate\InlineInterface $inlineTranslate,
+        array $data = array()
+    ) {
+        $this->inlineTranslate = $inlineTranslate;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Render element
      *
      * @param \Magento\Data\Form\Element\AbstractElement $element
@@ -66,7 +85,7 @@ class Editable extends AbstractBlock implements RendererInterface
                 '>' .
                 '<a href="javascript:void(0)" class="label">';
 
-            if ($this->_translator->isAllowed()) {
+            if ($this->inlineTranslate->isAllowed()) {
                 $html .= $this->escapeHtml($valueName);
             } else {
                 $html .= $this->escapeHtml(

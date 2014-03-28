@@ -40,7 +40,7 @@ namespace Magento\Core\Model\Layout;
  * @method \Magento\Core\Model\Layout\Update setUpdatedAt() setUpdatedAt(string $updateDateTime)
  * @method \Magento\Core\Model\Resource\Layout\Update\Collection getCollection()
  */
-class Update extends \Magento\Core\Model\AbstractModel
+class Update extends \Magento\Model\AbstractModel
 {
     /**
      * @var \Magento\Stdlib\DateTime
@@ -51,7 +51,7 @@ class Update extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -59,7 +59,7 @@ class Update extends \Magento\Core\Model\AbstractModel
         \Magento\Model\Context $context,
         \Magento\Registry $registry,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -80,7 +80,7 @@ class Update extends \Magento\Core\Model\AbstractModel
     /**
      * Set current updated date
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _beforeSave()
     {

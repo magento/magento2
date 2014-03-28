@@ -32,7 +32,7 @@ namespace Magento\Rating\Model\Resource\Rating;
  * @package     Magento_Rating
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Review table

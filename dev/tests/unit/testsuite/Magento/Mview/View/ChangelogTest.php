@@ -86,12 +86,59 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ViewIdTest' . '_' . \Magento\Mview\View\Changelog::NAME_SUFFIX, $this->model->getName());
     }
 
+    public function testGetViewId()
+    {
+        $this->model->setViewId('ViewIdTest');
+        $this->assertEquals('ViewIdTest', $this->model->getViewId());
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage View's identifier is not set
+     */
+    public function testGetNameWithException()
+    {
+        $this->model->getName();
+    }
+
     public function testGetColumnName()
     {
         $this->assertEquals(\Magento\Mview\View\Changelog::COLUMN_NAME, $this->model->getColumnName());
     }
 
-    public function testGetVersionWithException()
+    public function testGetVersion()
+    {
+        $changelogTableName = 'viewIdtest_cl';
+        $this->mockIsTableExists($changelogTableName, true);
+        $this->mockGetTableName();
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->will($this->returnValue(['Auto_increment' => 11]));
+
+        $this->model->setViewId('viewIdtest');
+        $this->assertEquals(10, $this->model->getVersion());
+    }
+
+    public function testGetVersionWithExceptionNoAutoincrement()
+    {
+        $changelogTableName = 'viewIdtest_cl';
+        $this->mockIsTableExists($changelogTableName, true);
+        $this->mockGetTableName();
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->will($this->returnValue([]));
+
+        $this->setExpectedException(
+            'Exception',
+            "Table status for `{$changelogTableName}` is incorrect. Can`t fetch version id."
+        );
+        $this->model->setViewId('viewIdtest');
+        $this->model->getVersion();
+    }
+
+    public function testGetVersionWithExceptionNoTable()
     {
         $changelogTableName = 'viewIdtest_cl';
         $this->mockIsTableExists($changelogTableName, false);
@@ -102,7 +149,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->model->getVersion();
     }
 
-    public function testDropWithException()
+    public function testDrop()
     {
         $changelogTableName = 'viewIdtest_cl';
         $this->mockIsTableExists($changelogTableName, false);
@@ -111,6 +158,44 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception', "Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->drop();
+    }
+
+    public function testDropWithException()
+    {
+        $changelogTableName = 'viewIdtest_cl';
+        $this->mockIsTableExists($changelogTableName, true);
+        $this->mockGetTableName();
+
+        $this->connectionMock->expects($this->once())
+            ->method('dropTable')
+            ->with($changelogTableName)
+            ->will($this->returnValue(true));
+
+        $this->model->setViewId('viewIdtest');
+        $this->model->drop();
+    }
+
+    public function testCreate()
+    {
+        $changelogTableName = 'viewIdtest_cl';
+        $this->mockIsTableExists($changelogTableName, false);
+        $this->mockGetTableName();
+
+        $tableMock = $this->getMock('Magento\DB\Ddl\Table', array(), array(), '', false, false);
+        $tableMock->expects($this->exactly(2))
+            ->method('addColumn')
+            ->will($this->returnSelf());
+
+        $this->connectionMock->expects($this->once())
+            ->method('newTable')
+            ->with($changelogTableName)
+            ->will($this->returnValue($tableMock));
+        $this->connectionMock->expects($this->once())
+            ->method('createTable')
+            ->with($tableMock);
+
+        $this->model->setViewId('viewIdtest');
+        $this->model->create();
     }
 
     public function testCreateWithException()
@@ -122,6 +207,37 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Exception', "Table {$changelogTableName} already exist");
         $this->model->setViewId('viewIdtest');
         $this->model->create();
+    }
+
+    public function testGetList()
+    {
+        $changelogTableName = 'viewIdtest_cl';
+        $this->mockIsTableExists($changelogTableName, true);
+        $this->mockGetTableName();
+
+        $selectMock = $this->getMock('Magento\DB\Select', array(), array(), '', false, false);
+        $selectMock->expects($this->once())
+            ->method('distinct')
+            ->with(true)
+            ->will($this->returnSelf());
+        $selectMock->expects($this->once())
+            ->method('from')
+            ->with($changelogTableName, ['entity_id'])
+            ->will($this->returnSelf());
+        $selectMock->expects($this->exactly(2))
+            ->method('where')
+            ->will($this->returnSelf());
+
+        $this->connectionMock->expects($this->once())
+            ->method('select')
+            ->will($this->returnValue($selectMock));
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->with($selectMock)
+            ->will($this->returnValue(['some_data']));
+
+        $this->model->setViewId('viewIdtest');
+        $this->assertEquals(['some_data'], $this->model->getList(1, 2));
     }
 
     public function testGetListWithException()

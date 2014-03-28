@@ -67,8 +67,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $localeResolver = $this->getMock('Magento\Locale\ResolverInterface', array(), array(), '', false, false);
-        $appMock = $this->getMock('\Magento\Core\Model\App', array('getLocaleResolver'), array(), '', false);
-        $appMock->expects($this->any())->method('getLocaleResolver')->will($this->returnValue($localeResolver));
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\Paypal\Block\Express\Form',
@@ -77,7 +75,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
                 'paypalConfigFactory' => $paypalConfigFactory,
                 'currentCustomer' => $this->currentCustomer,
                 'layout' => $layout,
-                'app' => $appMock
+                'localeResolver' => $localeResolver
             )
         );
     }

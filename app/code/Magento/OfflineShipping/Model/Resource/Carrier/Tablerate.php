@@ -31,7 +31,7 @@
  */
 namespace Magento\OfflineShipping\Model\Resource\Carrier;
 
-class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Tablerate extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Import table rates website ID
@@ -254,7 +254,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Upload table rate file and import data from it
      *
      * @param \Magento\Object $object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
@@ -281,7 +281,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
         $headers = $stream->readCsv();
         if ($headers === false || count($headers) < 5) {
             $stream->close();
-            throw new \Magento\Core\Exception(__('Please correct Table Rates File Format.'));
+            throw new \Magento\Model\Exception(__('Please correct Table Rates File Format.'));
         }
 
         if ($object->getData('groups/tablerate/fields/condition_name/inherit') == '1') {
@@ -327,15 +327,15 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
             }
             $this->_saveImportData($importData);
             $stream->close();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $adapter->rollback();
             $stream->close();
-            throw new \Magento\Core\Exception($e->getMessage());
+            throw new \Magento\Model\Exception($e->getMessage());
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
             $this->_logger->logException($e);
-            throw new \Magento\Core\Exception(__('Something went wrong while importing table rates.'));
+            throw new \Magento\Model\Exception(__('Something went wrong while importing table rates.'));
         }
 
         $adapter->commit();
@@ -345,7 +345,7 @@ class Tablerate extends \Magento\Core\Model\Resource\Db\AbstractDb
                 'We couldn\'t import this file because of these errors: %1',
                 implode(" \n", $this->_importErrors)
             );
-            throw new \Magento\Core\Exception($error);
+            throw new \Magento\Model\Exception($error);
         }
 
         return $this;

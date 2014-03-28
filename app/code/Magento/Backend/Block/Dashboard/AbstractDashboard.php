@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Block\Dashboard;
 
-use Magento\Core\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Adminhtml dashboard tab abstract

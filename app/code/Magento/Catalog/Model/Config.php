@@ -133,7 +133,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Constructor
      *
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
      * @param \Magento\App\Cache\StateInterface $cacheState
      * @param \Magento\Validator\UniversalFactory $universalFactory
@@ -148,7 +148,7 @@ class Config extends \Magento\Eav\Model\Config
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\App $app,
+        \Magento\App\CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
         \Magento\App\Cache\StateInterface $cacheState,
         \Magento\Validator\UniversalFactory $universalFactory,
@@ -168,7 +168,7 @@ class Config extends \Magento\Eav\Model\Config
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
 
-        parent::__construct($app, $entityTypeFactory, $cacheState, $universalFactory);
+        parent::__construct($cache, $entityTypeFactory, $cacheState, $universalFactory);
     }
 
     /**

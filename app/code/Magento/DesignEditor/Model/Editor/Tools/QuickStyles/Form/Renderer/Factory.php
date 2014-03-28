@@ -83,12 +83,12 @@ class Factory
      * @param string $elementClassName
      * @param string $rendererName
      * @return RendererInterface
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function create($elementClassName, $rendererName)
     {
         if (!isset($this->_rendererByElement[$elementClassName])) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 sprintf('No renderer registered for elements of class "%s"', $elementClassName)
             );
         }

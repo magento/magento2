@@ -71,7 +71,7 @@ class Job extends \Magento\Object
         try {
             $this->_eventManager->dispatch('catalogrule_apply_all');
             $this->setSuccess(__('The rules have been applied.'));
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->setError($e->getMessage());
         }
         return $this;

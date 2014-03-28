@@ -141,7 +141,7 @@ class Form extends \Magento\View\Element\Template
 
         // add logged in customer name as nickname
         if (!$data->getNickname()) {
-            $customer = $this->_customerSession->getCustomer();
+            $customer = $this->_customerSession->getCustomerDataObject();
             if ($customer && $customer->getId()) {
                 $data->setNickname($customer->getFirstname());
             }

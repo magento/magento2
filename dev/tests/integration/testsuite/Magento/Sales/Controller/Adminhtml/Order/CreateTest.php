@@ -157,4 +157,28 @@ class CreateTest extends \Magento\Backend\Utility\Controller
             array('', true, 'Magento_Sales::actions')
         );
     }
+
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoAppArea adminhtml
+     */
+    public function testConfigureProductToAddAction()
+    {
+        $this->getRequest()->setParam('id', 1)
+            ->setParam('isAjax', true);
+
+        $this->dispatch('backend/sales/order_create/configureProductToAdd');
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertNotEmpty($body);
+        $this->assertContains('>Quantity</label>', $body);
+        $this->assertContains('>Test Configurable</label>', $body);
+        $this->assertContains('"code":"test_configurable","label":"Test Configurable"', $body);
+        $this->assertContains('"label":"Option 1","price":"5","oldPrice":"5","products":[', $body);
+        $this->assertContains('"label":"Option 2","price":"5","oldPrice":"5","products":[', $body);
+        $this->assertContains('"basePrice":"100","oldPrice":"100","productId":"1","chooseText":"Choose an Option..."',
+            $body);
+    }
 }

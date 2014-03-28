@@ -69,11 +69,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ' "new_products" widget in Catalog module'
         );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get(
-            'Magento\Core\Model\App'
-        )->loadArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
         $expectedFilePath = "/adminhtml/magento_backend/en_US/{$expectedFile}";
         $expectedPubFile = $objectManager->get(

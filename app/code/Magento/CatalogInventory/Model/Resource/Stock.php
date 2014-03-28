@@ -28,7 +28,7 @@
  */
 namespace Magento\CatalogInventory\Model\Resource;
 
-class Stock extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Stock extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Is initialized configuration flag

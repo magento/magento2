@@ -34,7 +34,7 @@
  */
 namespace Magento\Reports\Model\Resource;
 
-class Helper extends \Magento\Core\Model\Resource\Helper implements \Magento\Reports\Model\Resource\HelperInterface
+class Helper extends \Magento\DB\Helper implements \Magento\Reports\Model\Resource\HelperInterface
 {
     /**
      * @param \Magento\App\Resource $resource

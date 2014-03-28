@@ -40,33 +40,34 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_cookieMock;
 
-    /**
-     * @var \Magento\Core\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_resource;
-
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_configMock = $this->getMock('Magento\Session\Config\ConfigInterface');
         $this->_cookieMock = $this->getMock('Magento\Stdlib\Cookie', array(), array(), '', false);
-        $this->_resource = $this->getMockForAbstractClass(
-            'Magento\Core\Model\Resource\Db\AbstractDb',
-            array(),
-            '',
-            false,
-            false,
-            true,
-            array('__wakeup', 'getIdFieldName', 'getConnection', 'beginTransaction', 'delete', 'commit', 'rollBack')
+        $resourceMock = $this->getMockForAbstractClass('Magento\Model\Resource\Db\AbstractDb',
+            array(), '', false, false, true,
+            array('__wakeup', 'getIdFieldName', 'getConnection', 'beginTransaction', 'delete', 'commit', 'rollBack'));
+
+        $appStateMock = $this->getMock('Magento\App\State', array(), array(), '', false);
+        $eventDispatcherMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false, false);
+        $cacheManagerMock = $this->getMock('Magento\App\CacheInterface', array(), array(), '', false, false);
+        $loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $actionValidatorMock = $this->getMock(
+            '\Magento\Model\ActionValidator\RemoveAction', array(), array(), '', false
         );
-        $this->_model = $helper->getObject(
-            'Magento\Persistent\Model\Session',
-            array(
-                'sessionConfig' => $this->_configMock,
-                'cookie' => $this->_cookieMock,
-                'resource' => $this->_resource
-            )
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+
+        $context = new \Magento\Model\Context(
+            $loggerMock, $eventDispatcherMock, $cacheManagerMock, $appStateMock, $actionValidatorMock
         );
+
+        $this->_model = $helper->getObject('Magento\Persistent\Model\Session', array(
+            'sessionConfig' => $this->_configMock,
+            'cookie'        => $this->_cookieMock,
+            'resource'      => $resourceMock,
+            'context'       => $context
+        ));
     }
 
     /**

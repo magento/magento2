@@ -95,7 +95,7 @@ class Subscriber extends \Magento\App\Action\Action
     /**
      * New subscription action
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return void
      */
     public function newAction()
@@ -105,7 +105,7 @@ class Subscriber extends \Magento\App\Action\Action
 
             try {
                 if (!\Zend_Validate::is($email, 'EmailAddress')) {
-                    throw new \Magento\Core\Exception(__('Please enter a valid email address.'));
+                    throw new \Magento\Model\Exception(__('Please enter a valid email address.'));
                 }
 
                 if ($this->_objectManager->get(
@@ -114,7 +114,7 @@ class Subscriber extends \Magento\App\Action\Action
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG
                 ) != 1 && !$this->_customerSession->isLoggedIn()
                 ) {
-                    throw new \Magento\Core\Exception(
+                    throw new \Magento\Model\Exception(
                         __(
                             'Sorry, but the administrator denied subscription for guests. ' .
                             'Please <a href="%1">register</a>.',
@@ -129,7 +129,7 @@ class Subscriber extends \Magento\App\Action\Action
                     $email
                 )->getId();
                 if ($ownerId !== null && $ownerId != $this->_customerSession->getId()) {
-                    throw new \Magento\Core\Exception(__('This email address is already assigned to another user.'));
+                    throw new \Magento\Model\Exception(__('This email address is already assigned to another user.'));
                 }
 
                 $status = $this->_subscriberFactory->create()->subscribe($email);
@@ -138,7 +138,7 @@ class Subscriber extends \Magento\App\Action\Action
                 } else {
                     $this->messageManager->addSuccess(__('Thank you for your subscription.'));
                 }
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addException(
                     $e,
                     __('There was a problem with the subscription: %1', $e->getMessage())
@@ -190,7 +190,7 @@ class Subscriber extends \Magento\App\Action\Action
             try {
                 $this->_subscriberFactory->create()->load($id)->setCheckCode($code)->unsubscribe();
                 $this->messageManager->addSuccess(__('You have been unsubscribed.'));
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addException($e, $e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong with the un-subscription.'));

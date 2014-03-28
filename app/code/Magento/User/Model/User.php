@@ -54,7 +54,7 @@ namespace Magento\User\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend\Model\Auth\Credential\StorageInterface
+class User extends \Magento\Model\AbstractModel implements \Magento\Backend\Model\Auth\Credential\StorageInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -149,7 +149,7 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param array $data
@@ -167,7 +167,7 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
         \Magento\Encryption\EncryptorInterface $encryptor,
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -223,7 +223,7 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
         $this->_eventManager = $objectManager->get('Magento\Event\ManagerInterface');
         $this->_userData = $objectManager->get('Magento\User\Helper\Data');
         $this->_config = $objectManager->get('Magento\Backend\App\ConfigInterface');
-        $this->_coreRegistry = $objectManager->get('Magento\Registry');
+        $this->_registry = $objectManager->get('Magento\Registry');
         $this->_validatorObject = $objectManager->get('Magento\Validator\ObjectFactory');
         $this->_roleFactory = $objectManager->get('Magento\User\Model\RoleFactory');
         $this->_encryptor = $objectManager->get('Magento\Encryption\EncryptorInterface');
@@ -519,7 +519,7 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @throws \Magento\Backend\Model\Auth\Exception
      * @throws \Magento\Backend\Model\Auth\Plugin\Exception
      */
@@ -550,7 +550,7 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
                 'admin_user_authenticate_after',
                 array('username' => $username, 'password' => $password, 'user' => $this, 'result' => $result)
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->unsetData();
             throw $e;
         }
@@ -633,12 +633,12 @@ class User extends \Magento\Core\Model\AbstractModel implements \Magento\Backend
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Core\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Model\Exception(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
         $this->setRpTokenCreatedAt($this->dateTime->now());

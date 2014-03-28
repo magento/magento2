@@ -41,7 +41,7 @@ class Favicon extends \Magento\Backend\Model\Config\Backend\Image
      * Return path to directory for upload file
      *
      * @return string
-     * @throw \Magento\Core\Exception
+     * @throw \Magento\Model\Exception
      */
     protected function _getUploadDir()
     {

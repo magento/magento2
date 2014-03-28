@@ -34,7 +34,7 @@ use Magento\Index\Model\Process as ModelProcess;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Process extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Process extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Stdlib\DateTime

@@ -30,7 +30,7 @@ namespace Magento\Indexer\Model\Indexer;
  * @method string getUpdated()
  * @method \Magento\Indexer\Model\Indexer\State setUpdated($value)
  */
-class State extends \Magento\Core\Model\AbstractModel
+class State extends \Magento\Model\AbstractModel
 {
     /**
      * Indexer statuses

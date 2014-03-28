@@ -27,7 +27,4 @@
     <event name="controller_action_layout_generate_blocks_after">
         <observer name="vde_editor" instance="Magento\DesignEditor\Model\Observer" method="clearJs" />
     </event>
-    <event name="translate_initialization_before">
-        <observer name="initialize_translation" instance="Magento\DesignEditor\Model\Observer" method="initializeTranslation" />
-    </event>
 </config>

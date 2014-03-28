@@ -35,6 +35,10 @@ use Magento\App\State;
 class Filesystem extends \Magento\Config\Reader\Filesystem
 {
     /**
+     * Allowed modules
+     */
+    const PARAM_ALLOWED_MODULES = 'allowed_modules';
+    /**
      * The list of allowed modules
      *
      * @var array

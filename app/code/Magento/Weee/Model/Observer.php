@@ -25,7 +25,7 @@
  */
 namespace Magento\Weee\Model;
 
-class Observer extends \Magento\Core\Model\AbstractModel
+class Observer extends \Magento\Model\AbstractModel
 {
     /**
      * @var \Magento\Catalog\Model\Product\Type
@@ -62,7 +62,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -74,7 +74,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         \Magento\Weee\Helper\Data $weeeData,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -251,7 +251,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         $response = $observer->getEvent()->getResponseObject();
         $options = $response->getAdditionalOptions();
 
-        $_product = $this->_coreRegistry->registry('current_product');
+        $_product = $this->_registry->registry('current_product');
         if (!$_product) {
             return $this;
         }
@@ -287,7 +287,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         $selection = $observer->getEvent()->getSelection();
         $options = $response->getAdditionalOptions();
 
-        $_product = $this->_coreRegistry->registry('current_product');
+        $_product = $this->_registry->registry('current_product');
 
         $typeDynamic = \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::DYNAMIC;
         if (!$_product || $_product->getPriceType() != $typeDynamic) {

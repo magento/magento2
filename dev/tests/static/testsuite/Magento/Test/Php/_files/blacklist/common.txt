@@ -45,9 +45,6 @@ lib/Magento/Cache/Backend/Eaccelerator.php
 lib/Magento/Cache/Backend/Memcached.php
 lib/Magento/Cache/Core.php
 lib/Magento/Connect
-lib/Magento/Convert/ConvertException.php
-lib/Magento/Convert/Mapper/Column.php
-lib/Magento/Convert/Mapper/MapperInterface.php
 lib/Magento/Data/Collection.php
 lib/Magento/Data/Collection/Db.php
 lib/Magento/Data/Collection/Db/FetchStrategy/Cache.php

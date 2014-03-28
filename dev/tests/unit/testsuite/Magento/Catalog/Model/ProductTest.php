@@ -94,22 +94,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
 
+        $actionValidatorMock = $this->getMock(
+            '\Magento\Model\ActionValidator\RemoveAction', array(), array(), '', false
+        );
+        $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
         $cacheInterfaceMock = $this->getMock('Magento\App\CacheInterface', array(), array(), '', false);
 
 
         $contextMock = $this->getMock(
             '\Magento\Model\Context',
-            array('getEventDispatcher', 'getCacheManager', 'getAppState'),
-            array(),
-            '',
-            false
+            array('getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'), array(), '', false
         );
 
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
 
         $contextMock->expects($this->any())->method('getEventDispatcher')->will($this->returnValue($eventManagerMock));
 
-        $contextMock->expects($this->any())->method('getCacheManager')->will($this->returnValue($cacheInterfaceMock));
+        $contextMock->expects($this->any())
+            ->method('getCacheManager')
+            ->will($this->returnValue($cacheInterfaceMock));
+
+        $contextMock->expects($this->any())
+            ->method('getActionValidator')
+            ->will($this->returnValue($actionValidatorMock));
 
         $this->_model = new \Magento\Catalog\Model\Product(
             $contextMock,

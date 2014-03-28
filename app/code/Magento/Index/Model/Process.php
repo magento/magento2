@@ -45,7 +45,7 @@ use Magento\Index\Model\Resource\Event\Collection;
  * @package     Magento_Index
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Process extends \Magento\Core\Model\AbstractModel
+class Process extends \Magento\Model\AbstractModel
 {
     /**
      * Process statuses
@@ -132,7 +132,7 @@ class Process extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig
      * @param \Magento\Index\Model\Lock\Storage $lockStorage
      * @param \Magento\Index\Model\EventRepository $eventRepository
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -145,7 +145,7 @@ class Process extends \Magento\Core\Model\AbstractModel
         \Magento\Index\Model\Indexer\ConfigInterface $indexerConfig,
         \Magento\Index\Model\Lock\Storage $lockStorage,
         \Magento\Index\Model\EventRepository $eventRepository,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -245,13 +245,13 @@ class Process extends \Magento\Core\Model\AbstractModel
      * Reindex all data what this process responsible is
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @throws \Exception
      */
     public function reindexAll()
     {
         if ($this->isLocked()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     '%1 Index process is not working now. Please try running this process later.',
                     $this->getIndexer()->getName()
@@ -364,7 +364,7 @@ class Process extends \Magento\Core\Model\AbstractModel
     /**
      * Get Indexer strategy object
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\Index\Model\IndexerInterface
      */
     public function getIndexer()
@@ -372,17 +372,17 @@ class Process extends \Magento\Core\Model\AbstractModel
         if ($this->_currentIndexer === null) {
             $name = $this->_getData('indexer_code');
             if (!$name) {
-                throw new \Magento\Core\Exception(__('Indexer name is not defined.'));
+                throw new \Magento\Model\Exception(__('Indexer name is not defined.'));
             }
             $indexerConfiguration = $this->_indexerConfig->getIndexer($name);
             if (!$indexerConfiguration || empty($indexerConfiguration['instance'])) {
-                throw new \Magento\Core\Exception(__('Indexer model is not defined.'));
+                throw new \Magento\Model\Exception(__('Indexer model is not defined.'));
             }
             $indexerModel = $this->_indexerFactory->create($indexerConfiguration['instance']);
             if ($indexerModel instanceof \Magento\Index\Model\Indexer\AbstractIndexer) {
                 $this->_currentIndexer = $indexerModel;
             } else {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Model\Exception(
                     __('Indexer model should extend \Magento\Index\Model\Indexer\Abstract.')
                 );
             }

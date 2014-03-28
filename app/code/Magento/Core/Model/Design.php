@@ -25,7 +25,8 @@
  */
 namespace Magento\Core\Model;
 
-use Magento\Core\Model\Resource\AbstractResource;
+use Magento\Model\Resource\AbstractResource;
+use Magento\Model\AbstractModel;
 
 /**
  * Design settings change model

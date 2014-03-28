@@ -65,13 +65,13 @@ class TypeFactory
      *
      * @param string $eavType
      * @return mixed
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function createType($eavType)
     {
         $types = $this->_allowedEntityTypes;
         if (!isset($types[$eavType])) {
-            throw new \Magento\Core\Exception(__('Unknown entity type'));
+            throw new \Magento\Model\Exception(__('Unknown entity type'));
         }
         return $this->_objectManager->create($types[$eavType]);
     }

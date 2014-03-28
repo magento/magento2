@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\DB\Select;
@@ -37,7 +37,7 @@ use Magento\DB\Select;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Attribute extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Eav Entity attributes cache
@@ -45,13 +45,6 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @var array
      */
     protected static $_entityAttributes = array();
-
-    /**
-     * Application instance
-     *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_application;
 
     /**
      * @var \Magento\Core\Model\StoreManagerInterface
@@ -201,14 +194,14 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param EntityAttribute|AbstractModel $object
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _beforeSave(AbstractModel $object)
     {
         $frontendLabel = $object->getFrontendLabel();
         if (is_array($frontendLabel)) {
             if (!isset($frontendLabel[0]) || is_null($frontendLabel[0]) || $frontendLabel[0] == '') {
-                throw new \Magento\Core\Exception(__('Frontend label is not defined'));
+                throw new \Magento\Model\Exception(__('Frontend label is not defined'));
             }
             $object->setFrontendLabel($frontendLabel[0])->setStoreLabels($frontendLabel);
         }
@@ -389,12 +382,12 @@ class Attribute extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param array $values
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _checkDefaultOptionValue($values)
     {
         if (!isset($values[0])) {
-            throw new \Magento\Core\Exception(__('Default option value is not defined'));
+            throw new \Magento\Model\Exception(__('Default option value is not defined'));
         }
     }
 

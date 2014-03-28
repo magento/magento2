@@ -40,7 +40,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Core\Exception(__('Invalid parent block for this block'));
+            throw new \Magento\Model\Exception(__('Invalid parent block for this block'));
         }
         parent::_beforeToHtml();
     }

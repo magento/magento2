@@ -27,6 +27,7 @@ namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Core\Model\Store;
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 
 /**
  * Product collection
@@ -513,7 +514,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      */
     public function setEntity($entity)
     {
-        if ($this->isEnabledFlat() && $entity instanceof \Magento\Core\Model\Resource\Db\AbstractDb) {
+        if ($this->isEnabledFlat() && $entity instanceof \Magento\Model\Resource\Db\AbstractDb) {
             $this->_entity = $entity;
             return $this;
         }
@@ -2075,10 +2076,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         foreach ($adapter->fetchAll($select) as $row) {
             $tierPrices[$row['product_id']][] = array(
                 'website_id' => $row['website_id'],
-                'cust_group' => $row['all_groups'] ? \Magento\Customer\Model\Group::CUST_GROUP_ALL : $row['cust_group'],
+                'cust_group' => $row['all_groups'] ? CustomerGroupServiceInterface::CUST_GROUP_ALL : $row['cust_group'],
                 'price_qty' => $row['price_qty'],
                 'price' => $row['price'],
-                'website_price' => $row['price']
+                'website_price' => $row['price'],
+
             );
         }
 

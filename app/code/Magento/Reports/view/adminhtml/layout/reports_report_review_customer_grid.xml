@@ -51,7 +51,7 @@
                     <argument name="filter_visibility" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">customers_grid</argument>
                     <argument name="rowUrl" xsi:type="array">
-                        <item name="path" xsi:type="string">catalog/product_review</item>
+                        <item name="path" xsi:type="string">review/product</item>
                         <item name="extraParamsTemplate" xsi:type="array">
                             <item name="customerId" xsi:type="string">getCustomerId</item>
                         </item>

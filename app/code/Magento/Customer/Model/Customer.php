@@ -44,7 +44,7 @@ use Magento\Customer\Service\V1\Data\CustomerBuilder;
  * @method \Magento\Customer\Model\Customer setDefaultBilling($value)
  * @method \Magento\Customer\Model\Customer setDefaultShipping($value)
  */
-class Customer extends \Magento\Core\Model\AbstractModel
+class Customer extends \Magento\Model\AbstractModel
 {
     /**
      * Configuration paths for email templates and identities
@@ -292,19 +292,19 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param  string $login
      * @param  string $password
      * @return bool
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('This account is not confirmed.'),
                 self::EXCEPTION_EMAIL_NOT_CONFIRMED
             );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Invalid login or password.'),
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
@@ -710,7 +710,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param string $backUrl
      * @param string $storeId
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
@@ -725,7 +725,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
             'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE
         );
         if (!isset($types[$type])) {
-            throw new \Magento\Core\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Model\Exception(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {
@@ -1072,7 +1072,6 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected function _beforeDelete()
     {
         //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
-        //$this->_protectFromNonAdmin();
         return parent::_beforeDelete();
     }
 
@@ -1162,7 +1161,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
         /* If an email was used to start the registration process and it is the same email as the one
            used to register, then this can skip confirmation.
            */
-        $skipConfirmationIfEmail = $this->_coreRegistry->registry("skip_confirmation_if_email");
+        $skipConfirmationIfEmail = $this->_registry->registry("skip_confirmation_if_email");
         if (!$skipConfirmationIfEmail) {
             return false;
         }
@@ -1235,12 +1234,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
      *
      * @param string $passwordLinkToken
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Invalid password reset token.'),
                 self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
             );

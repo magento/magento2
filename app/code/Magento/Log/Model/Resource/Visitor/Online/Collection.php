@@ -25,6 +25,8 @@
  */
 namespace Magento\Log\Model\Resource\Visitor\Online;
 
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+
 /**
  * Log Online visitors collection
  *
@@ -32,7 +34,7 @@ namespace Magento\Log\Model\Resource\Visitor\Online;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Joined fields array
@@ -42,29 +44,29 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_fields = array();
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Eav\Helper\Data
      */
-    protected $_customerFactory;
+    protected $_eavHelper;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Logger $logger
      * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Eav\Helper\Data $eavHelper
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
         \Magento\Logger $logger,
         \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Eav\Helper\Data $eavHelper,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        $this->_customerFactory = $customerFactory;
+        $this->_eavHelper = $eavHelper;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -85,7 +87,6 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     public function addCustomerData()
     {
-        $customer = $this->_customerFactory->create();
         // alias => attribute_code
         $attributes = array(
             'customer_lastname' => 'lastname',
@@ -94,37 +95,34 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         );
 
         foreach ($attributes as $alias => $attributeCode) {
-            $attribute = $customer->getAttribute($attributeCode);
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
 
-            if ($attribute->getBackendType() == 'static') {
-                $tableAlias = 'customer_' . $attribute->getAttributeCode();
+            $attribute = $this->_eavHelper->getAttributeMetadata(
+                CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER,
+                $attributeCode
+            );
 
+            $tableAlias = 'customer_' . $attributeCode;
+
+            if ($attribute['backend_type'] == 'static') {
                 $this->getSelect()->joinLeft(
-                    array($tableAlias => $attribute->getBackend()->getTable()),
+                    array($tableAlias => $attribute['attribute_table']),
                     sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    array($alias => $attribute->getAttributeCode())
+                    array($alias => $attributeCode)
                 );
-
-                $this->_fields[$alias] = sprintf('%s.%s', $tableAlias, $attribute->getAttributeCode());
+                $this->_fields[$alias] = sprintf('%s.%s', $tableAlias, $attributeCode);
             } else {
-                $tableAlias = 'customer_' . $attribute->getAttributeCode();
-
-                $joinConds = array(
+                $joinConds  = array(
                     sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    $this->getConnection()->quoteInto($tableAlias . '.attribute_id=?', $attribute->getAttributeId())
+                    $this->getConnection()->quoteInto($tableAlias . '.attribute_id=?', $attribute['attribute_id'])
                 );
-
                 $this->getSelect()->joinLeft(
-                    array($tableAlias => $attribute->getBackend()->getTable()),
+                    array($tableAlias => $attribute['attribute_table']),
                     join(' AND ', $joinConds),
                     array($alias => 'value')
                 );
-
                 $this->_fields[$alias] = sprintf('%s.value', $tableAlias);
             }
         }
-
         $this->setFlag('has_customer_data', true);
         return $this;
     }

@@ -150,7 +150,6 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
             self::ROUTE_PATH;
 
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($sourceUrl));
-        $this->assertEquals($this->_model, $this->_model->setType(null));
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($expectedUrl));
     }
 }

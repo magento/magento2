@@ -34,7 +34,7 @@ namespace Magento\Cms\Model\Page;
  * @method \Magento\Cms\Model\Page\Urlrewrite setCmsPageId() setCmsPageId(int)
  * @method \Magento\Cms\Model\Page\Urlrewrite setUrlRewriteId() setUrlRewriteId(int)
  */
-class Urlrewrite extends \Magento\Core\Model\AbstractModel
+class Urlrewrite extends \Magento\Model\AbstractModel
 {
     /**
      * Initialize resource model

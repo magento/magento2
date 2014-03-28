@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource\Url;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rewrite extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Rewrite extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table

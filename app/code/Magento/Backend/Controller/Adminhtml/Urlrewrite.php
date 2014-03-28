@@ -28,7 +28,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Core\Model\Url\Rewrite;
 
 /**

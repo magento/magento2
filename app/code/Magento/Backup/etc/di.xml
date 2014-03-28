@@ -30,4 +30,9 @@
             <argument name="backupDbInstanceName" xsi:type="string">Magento\Backup\Model\Db</argument>
         </arguments>
     </type>
+    <type name="Magento\Backup\Model\Resource\Helper">
+        <arguments>
+            <argument name="modulePrefix" xsi:type="string">backup</argument>
+        </arguments>
+    </type>
 </config>

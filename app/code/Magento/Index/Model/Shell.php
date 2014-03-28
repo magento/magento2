@@ -164,7 +164,7 @@ class Shell extends \Magento\App\AbstractShell
             try {
                 $process->setMode($mode)->save();
                 echo $process->getIndexer()->getName() . " index was successfully changed index mode\n";
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {
@@ -194,7 +194,7 @@ class Shell extends \Magento\App\AbstractShell
             try {
                 $process->reindexEverything();
                 echo $process->getIndexer()->getName() . " index was rebuilt successfully\n";
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 echo $e->getMessage() . "\n";
                 $this->_hasErrors = true;
             } catch (\Exception $e) {

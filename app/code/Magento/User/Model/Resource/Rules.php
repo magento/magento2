@@ -26,7 +26,7 @@ namespace Magento\User\Model\Resource;
 /**
  * Admin rule resource model
  */
-class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Rules extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Root ACL resource
@@ -88,7 +88,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\User\Model\Rules $rule
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function saveRel(\Magento\User\Model\Rules $rule)
     {
@@ -130,7 +130,7 @@ class Rules extends \Magento\Core\Model\Resource\Db\AbstractDb
 
             $adapter->commit();
             $this->_aclCache->clean();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $adapter->rollBack();
             throw $e;
         } catch (\Exception $e) {

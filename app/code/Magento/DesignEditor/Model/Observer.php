@@ -135,19 +135,4 @@ class Observer
             $change->save();
         }
     }
-
-    /**
-     * Determine if the vde specific translation class should be used.
-     *
-     * @param  EventObserver $observer
-     * @return $this
-     */
-    public function initializeTranslation(EventObserver $observer)
-    {
-        if ($this->_helper->isVdeRequest()) {
-            // Request is for vde.  Override the translation class.
-            $observer->getResult()->setInlineType('Magento\DesignEditor\Model\Translate\InlineVde');
-        }
-        return $this;
-    }
 }

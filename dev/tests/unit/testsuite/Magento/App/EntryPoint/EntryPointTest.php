@@ -66,7 +66,7 @@ class EntryPointTest extends \PHPUnit_Framework_TestCase
     public function testRunExecutesApplication()
     {
         $applicationName = '\Magento\App\TestApplication';
-        $applicationMock = $this->getMock('\Magento\LauncherInterface');
+        $applicationMock = $this->getMock('\Magento\AppInterface');
         $applicationMock->expects($this->once())->method('launch')->will($this->returnValue($this->_responseMock));
         $this->_objectManagerMock->expects(
             $this->once()
@@ -84,7 +84,7 @@ class EntryPointTest extends \PHPUnit_Framework_TestCase
     public function testRunCatchesExceptionThrownByApplication()
     {
         $applicationName = '\Magento\App\TestApplication';
-        $applicationMock = $this->getMock('\Magento\LauncherInterface');
+        $applicationMock = $this->getMock('\Magento\AppInterface');
         $applicationMock->expects(
             $this->once()
         )->method(

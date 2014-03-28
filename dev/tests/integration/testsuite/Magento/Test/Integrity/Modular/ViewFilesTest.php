@@ -37,19 +37,14 @@ class ViewFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
              * @param string $file
              */
             function ($application, $file) {
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Core\Model\App'
-                )->loadArea(
-                    $application
-                );
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\View\DesignInterface'
-                )->setDefaultDesignTheme();
-                $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\View\FileSystem'
-                )->getViewFile(
-                    $file
-                );
+                \Magento\TestFramework\Helper\Bootstrap::getInstance()
+                    ->loadArea($application);
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\View\DesignInterface')
+                    ->setDefaultDesignTheme();
+                $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                    ->get('Magento\View\FileSystem')
+                    ->getViewFile($file);
                 $this->assertFileExists($result);
             },
             $this->viewFilesFromModulesViewDataProvider()

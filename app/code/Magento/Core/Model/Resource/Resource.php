@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Resource extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Resource extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Database versions

@@ -56,7 +56,7 @@ abstract class AbstractType extends \Magento\Object implements \Magento\Tax\Mode
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToRules()
     {

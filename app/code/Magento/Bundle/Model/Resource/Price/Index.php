@@ -34,7 +34,7 @@ use Magento\Core\Model\Website;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Index extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Index extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * EAV attributes cache

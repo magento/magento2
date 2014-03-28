@@ -100,12 +100,12 @@ class Column extends \Magento\Data\Form\Element\Fieldset implements
 
     /**
      * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer\Factory
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getRendererFactory()
     {
         if (!$this->_rendererFactory) {
-            throw new \Magento\Core\Exception('Renderer factory was not set');
+            throw new \Magento\Model\Exception('Renderer factory was not set');
         }
         return $this->_rendererFactory;
     }
@@ -122,12 +122,12 @@ class Column extends \Magento\Data\Form\Element\Fieldset implements
 
     /**
      * @return \Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element\Factory
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getElementsFactory()
     {
         if (!$this->_elementsFactory) {
-            throw new \Magento\Core\Exception('Form elements factory was not set');
+            throw new \Magento\Model\Exception('Form elements factory was not set');
         }
         return $this->_elementsFactory;
     }

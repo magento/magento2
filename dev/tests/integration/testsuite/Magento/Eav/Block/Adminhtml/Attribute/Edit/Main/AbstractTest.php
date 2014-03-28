@@ -40,17 +40,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get(
-            'Magento\Core\Model\App'
-        )->loadArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
-        $objectManager->get('Magento\View\DesignInterface')->setDefaultDesignTheme();
-        $entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Eav\Model\Config'
-        )->getEntityType(
-            'customer'
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $objectManager->get('Magento\View\DesignInterface')
+            ->setDefaultDesignTheme();
+        $entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
+            ->getEntityType('customer');
         $model = $objectManager->create('Magento\Customer\Model\Attribute');
         $model->setEntityTypeId($entityType->getId());
         $objectManager->get('Magento\Registry')->register('entity_attribute', $model);

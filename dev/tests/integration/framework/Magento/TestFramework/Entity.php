@@ -26,20 +26,20 @@
  */
 
 /**
- * Class that implements CRUP tests for \Magento\Core\Model\AbstractModel based objects
+ * Class that implements CRUP tests for \Magento\Model\AbstractModel based objects
  */
 namespace Magento\TestFramework;
 
 class Entity
 {
     /**
-     * @var \Magento\Core\Model\AbstractModel
+     * @var \Magento\Model\AbstractModel
      */
     protected $_model;
 
     protected $_updateData;
 
-    public function __construct(\Magento\Core\Model\AbstractModel $model, array $updateData)
+    public function __construct(\Magento\Model\AbstractModel $model, array $updateData)
     {
         $this->_model = $model;
         $this->_updateData = $updateData;
@@ -59,7 +59,7 @@ class Entity
     }
 
     /**
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Model\AbstractModel
      */
     protected function _getEmptyModel()
     {

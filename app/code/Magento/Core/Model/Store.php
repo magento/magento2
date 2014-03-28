@@ -26,6 +26,7 @@
 namespace Magento\Core\Model;
 
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Model\AbstractModel;
 
 /**
  * Store model
@@ -329,6 +330,11 @@ class Store extends AbstractModel implements
     protected $_httpContext;
 
     /**
+     * @var \Magento\App\ConfigInterface
+     */
+    protected $_appConfig;
+
+    /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -344,6 +350,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Session\SidResolverInterface $sidResolver
      * @param \Magento\Stdlib\Cookie $cookie
      * @param \Magento\App\Http\Context $httpContext
+     * @param \Magento\App\ConfigInterface $appConfig
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
@@ -364,6 +371,7 @@ class Store extends AbstractModel implements
         \Magento\Session\SidResolverInterface $sidResolver,
         \Magento\Stdlib\Cookie $cookie,
         \Magento\App\Http\Context $httpContext,
+        \Magento\App\ConfigInterface $appConfig,
         \Magento\Data\Collection\Db $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = array()
@@ -381,6 +389,7 @@ class Store extends AbstractModel implements
         $this->_sidResolver = $sidResolver;
         $this->_cookie = $cookie;
         $this->_httpContext = $httpContext;
+        $this->_appConfig = $appConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -826,7 +835,10 @@ class Store extends AbstractModel implements
     {
         $configValue = $this->getConfig(self::XML_PATH_PRICE_SCOPE);
         if ($configValue == self::PRICE_SCOPE_GLOBAL) {
-            return \Magento\App\ObjectManager::getInstance()->get('Magento\Core\Model\App')->getBaseCurrencyCode();
+            return $this->_appConfig->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                'default'
+            );
         } else {
             return $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
         }
@@ -1248,7 +1260,6 @@ class Store extends AbstractModel implements
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         \Magento\App\ObjectManager::getInstance()->get(
             'Magento\Index\Model\Indexer'
         )->logEvent(

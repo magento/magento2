@@ -73,7 +73,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setClassTypeFilter with wrong Class Type
      *
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testSetClassTypeFilterWithWrongType()
     {

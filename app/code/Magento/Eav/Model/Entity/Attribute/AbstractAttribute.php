@@ -32,8 +32,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
  * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractAttribute extends \Magento\Core\Model\AbstractModel implements
-    \Magento\Eav\Model\Entity\Attribute\AttributeInterface
+abstract class AbstractAttribute extends \Magento\Model\AbstractModel implements AttributeInterface
 {
     const TYPE_STATIC = 'static';
 
@@ -127,7 +126,7 @@ abstract class AbstractAttribute extends \Magento\Core\Model\AbstractModel imple
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -140,7 +139,7 @@ abstract class AbstractAttribute extends \Magento\Core\Model\AbstractModel imple
         \Magento\Core\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -439,7 +438,7 @@ abstract class AbstractAttribute extends \Magento\Core\Model\AbstractModel imple
      * Retrieve backend instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getBackend()
     {
@@ -478,7 +477,7 @@ abstract class AbstractAttribute extends \Magento\Core\Model\AbstractModel imple
      * Retrieve source instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getSource()
     {

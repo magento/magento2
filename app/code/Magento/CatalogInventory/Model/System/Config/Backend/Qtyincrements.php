@@ -30,7 +30,7 @@
  */
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 class Qtyincrements extends \Magento\Core\Model\Config\Value
 {

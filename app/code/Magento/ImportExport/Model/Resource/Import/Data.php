@@ -32,7 +32,7 @@ namespace Magento\ImportExport\Model\Resource\Import;
  * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Data extends \Magento\Core\Model\Resource\Db\AbstractDb implements \IteratorAggregate
+class Data extends \Magento\Model\Resource\Db\AbstractDb implements \IteratorAggregate
 {
     /**
      * @var \Iterator
@@ -130,7 +130,7 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Iterat
      *
      * @param string $code parameter name
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getUniqueColumnData($code)
     {
@@ -138,7 +138,7 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Iterat
         $values = array_unique($adapter->fetchCol($adapter->select()->from($this->getMainTable(), array($code))));
 
         if (count($values) != 1) {
-            throw new \Magento\Core\Exception(__('Error in data structure: %1 values are mixed', $code));
+            throw new \Magento\Model\Exception(__('Error in data structure: %1 values are mixed', $code));
         }
         return $values[0];
     }

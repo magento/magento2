@@ -26,9 +26,9 @@
 namespace Magento\Index\App;
 
 use Magento\App\Console\Response;
-use Magento\LauncherInterface;
+use Magento\AppInterface;
 
-class Indexer implements LauncherInterface
+class Indexer implements AppInterface
 {
     /**
      * Report directory

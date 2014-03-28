@@ -26,7 +26,7 @@ namespace Magento\RecurringPayment\Model\Resource\Payment;
 /**
  * Recurring payment collection
  */
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Event prefix

@@ -53,10 +53,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\Core\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\AbstractModel');
+        /** @var $model \Magento\Model\AbstractModel */
+        $arguments = $objectManagerHelper->getConstructArguments('Magento\Model\AbstractModel');
         $arguments['data'] = $attributeData;
-        $model = $this->getMock('Magento\Core\Model\AbstractModel', null, $arguments);
+        $model = $this->getMock('Magento\Model\AbstractModel', null, $arguments);
         $model->setDefault(array('2'));
         $model->setOption(array('delete' => array(1 => '', 2 => '')));
 
@@ -122,10 +122,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\Core\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\AbstractModel');
+        /** @var $model \Magento\Model\AbstractModel */
+        $arguments = $objectManagerHelper->getConstructArguments('Magento\Model\AbstractModel');
         $arguments['data'] = $attributeData;
-        $model = $this->getMock('Magento\Core\Model\AbstractModel', null, $arguments);
+        $model = $this->getMock('Magento\Model\AbstractModel', null, $arguments);
         $model->setOption(array('value' => array('option_1' => array('Backend Label', 'Frontend Label'))));
 
         $adapter->expects(
@@ -202,9 +202,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         list($adapter, $resourceModel) = $this->_prepareResourceModel();
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $model \Magento\Core\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\AbstractModel');
-        $model = $this->getMock('Magento\Core\Model\AbstractModel', null, $arguments);
+        /** @var $model \Magento\Model\AbstractModel */
+        $arguments = $objectManagerHelper->getConstructArguments('Magento\Model\AbstractModel');
+        $model = $this->getMock('Magento\Model\AbstractModel', null, $arguments);
         $model->setOption('not-an-array');
 
         $adapter->expects($this->once())->method('insert')->with('eav_attribute');

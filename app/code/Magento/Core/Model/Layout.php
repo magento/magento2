@@ -1400,7 +1400,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      *
      * @param string|\Magento\View\Element\AbstractBlock $block
      * @param array $attributes
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\View\Element\AbstractBlock
      */
     protected function _getBlockInstance($block, array $attributes = array())
@@ -1413,7 +1413,7 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
             }
         }
         if (!$block instanceof \Magento\View\Element\AbstractBlock) {
-            throw new \Magento\Core\Exception(__('Invalid block type: %1', $block));
+            throw new \Magento\Model\Exception(__('Invalid block type: %1', $block));
         }
         return $block;
     }
@@ -1527,14 +1527,14 @@ class Layout extends \Magento\Simplexml\Config implements \Magento\View\LayoutIn
      * Get block singleton
      *
      * @param string $type
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\App\Helper\AbstractHelper
      */
     public function getBlockSingleton($type)
     {
         if (!isset($this->_helpers[$type])) {
             if (!$type) {
-                throw new \Magento\Core\Exception(__('Invalid block type: %1', $type));
+                throw new \Magento\Model\Exception(__('Invalid block type: %1', $type));
             }
 
             $helper = $this->_blockFactory->createBlock($type);

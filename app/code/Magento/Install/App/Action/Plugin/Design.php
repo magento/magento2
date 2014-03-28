@@ -33,9 +33,9 @@ class Design
     protected $_request;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\AreaList
      */
-    protected $_app;
+    protected $_areaList;
 
     /**
      * @var \Magento\View\LayoutInterface
@@ -53,15 +53,15 @@ class Design
     protected $_viewDesign;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\App $app
+     * @param RequestInterface $request
+     * @param \Magento\App\AreaList $areaList
      * @param \Magento\View\LayoutInterface $layout
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\View\Design\Theme\ListInterface $themeList
      */
     public function __construct(
         \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\App $app,
+        \Magento\App\AreaList $areaList,
         \Magento\View\LayoutInterface $layout,
         \Magento\View\DesignInterface $viewDesign,
         \Magento\View\Design\Theme\ListInterface $themeList
@@ -69,7 +69,7 @@ class Design
         $this->_viewDesign = $viewDesign;
         $this->_themeList = $themeList;
         $this->_request = $request;
-        $this->_app = $app;
+        $this->_areaList = $areaList;
         $this->_layout = $layout;
     }
 
@@ -85,7 +85,7 @@ class Design
     public function beforeDispatch(\Magento\Install\Controller\Action $subject, RequestInterface $request)
     {
         $areaCode = $this->_layout->getArea();
-        $area = $this->_app->getArea($areaCode);
+        $area = $this->_areaList->getArea($areaCode);
         $area->load(\Magento\Core\Model\App\Area::PART_CONFIG);
 
         $themePath = $this->_viewDesign->getConfigurationDesignTheme($areaCode);

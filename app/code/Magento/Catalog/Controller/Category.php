@@ -120,7 +120,7 @@ class Category extends \Magento\App\Action\Action
                 'catalog_controller_category_init_after',
                 array('category' => $category, 'controller_action' => $this)
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);
             return false;
         }

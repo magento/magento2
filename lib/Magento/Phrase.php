@@ -80,7 +80,7 @@ class Phrase
      */
     public function render()
     {
-        return self::$_renderer ? self::$_renderer->render($this->_text, $this->_arguments) : $this->_text;
+        return self::$_renderer ? self::$_renderer->render([$this->_text], $this->_arguments) : $this->_text;
     }
 
     /**

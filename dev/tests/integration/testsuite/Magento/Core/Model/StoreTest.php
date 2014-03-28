@@ -64,7 +64,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $objectManager->get('Magento\Core\Model\StoreManager'),
             'sidResolver' => $objectManager->get('Magento\Session\SidResolverInterface'),
             'cookie' => $objectManager->get('Magento\Stdlib\Cookie'),
-            'httpContext' => $objectManager->get('Magento\App\Http\Context')
+            'httpContext' => $objectManager->get('Magento\App\Http\Context'),
+            'config' => $objectManager->get('Magento\App\ConfigInterface')
         );
 
         return $this->getMock('Magento\Core\Model\Store', array('getUrl'), $this->_modelParams);
@@ -322,7 +323,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @dataProvider saveValidationDataProvider
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Model\Exception
      */
     public function testSaveValidation($badStoreData)
     {

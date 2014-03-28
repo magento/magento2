@@ -34,7 +34,7 @@
  */
 namespace Magento\Tax\Model\Resource\Sales\Order\Tax;
 
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

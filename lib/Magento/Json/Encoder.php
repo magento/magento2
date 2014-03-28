@@ -49,10 +49,7 @@ class Encoder implements EncoderInterface
     public function encode($data)
     {
         $json = \Zend_Json::encode($data);
-        if ($this->translateInline->isAllowed()) {
-            $this->translateInline->processResponseBody($json, true);
-        }
-
+        $this->translateInline->processResponseBody($json, true);
         return $json;
     }
 }

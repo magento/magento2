@@ -32,7 +32,7 @@ namespace Magento\Eav\Model\Resource\Form;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Element extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Element extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table

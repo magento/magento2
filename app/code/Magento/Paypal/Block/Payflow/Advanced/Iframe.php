@@ -35,6 +35,26 @@ namespace Magento\Paypal\Block\Payflow\Advanced;
 class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
 {
     /**
+     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Paypal\Helper\Hss $hssHelper
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\View\Element\Template\Context $context,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Paypal\Helper\Hss $hssHelper,
+        \Magento\Payment\Helper\Data $paymentData,
+        array $data = array()
+    ) {
+        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $paymentData, $data);
+        $this->_isScopePrivate = false;
+    }
+
+    /**
      * Set payment method code
      *
      * @return void

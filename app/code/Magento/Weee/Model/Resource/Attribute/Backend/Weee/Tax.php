@@ -32,7 +32,7 @@ namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
  * @package     Magento_Weee
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Tax extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Tax extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Core\Model\StoreManagerInterface

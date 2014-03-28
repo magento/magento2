@@ -32,7 +32,7 @@ namespace Magento\AdminNotification\Model\Resource;
  * @package     Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Inbox extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Inbox extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * AdminNotification Resource initialization

@@ -32,7 +32,7 @@ namespace Magento\Bundle\Model\Resource;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Bundle extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Bundle extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Relation

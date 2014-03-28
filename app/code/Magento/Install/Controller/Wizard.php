@@ -514,7 +514,7 @@ class Wizard extends \Magento\Install\Controller\Action
             $this->getResponse()->setRedirect($step->getNextUrl());
         } catch (\Exception $e) {
             $this->_session->setAdminData($adminData);
-            if ($e instanceof \Magento\Core\Exception) {
+            if ($e instanceof \Magento\Model\Exception) {
                 $this->messageManager->addMessages($e->getMessages());
             } else {
                 $this->messageManager->addError($e->getMessage());

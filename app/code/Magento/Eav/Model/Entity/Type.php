@@ -58,7 +58,7 @@ namespace Magento\Eav\Model\Entity;
  * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Type extends \Magento\Core\Model\AbstractModel
+class Type extends \Magento\Model\AbstractModel
 {
     /**
      * Collection of attributes
@@ -108,7 +108,7 @@ class Type extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory
      * @param \Magento\Eav\Model\Entity\StoreFactory $storeFactory
      * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -119,7 +119,7 @@ class Type extends \Magento\Core\Model\AbstractModel
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory,
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -388,7 +388,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve resource entity object
      *
-     * @return \Magento\Core\Model\Resource\AbstractResource
+     * @return \Magento\Model\Resource\AbstractResource
      */
     public function getEntity()
     {

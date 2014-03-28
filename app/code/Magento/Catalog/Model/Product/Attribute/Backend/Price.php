@@ -164,7 +164,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -175,7 +175,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
-            throw new \Magento\Core\Exception(__('Please enter a number 0 or greater in this field.'));
+            throw new \Magento\Model\Exception(__('Please enter a number 0 or greater in this field.'));
         }
 
         return true;

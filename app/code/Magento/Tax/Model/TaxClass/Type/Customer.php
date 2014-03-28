@@ -87,7 +87,7 @@ class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
      * \Magento\Tax\Model\TaxClass\Type\TypeInterface::getAssignedToObjects are refactored to return Data Objects.
      * Will be revisited in MAGETWO-21827
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToObjects()
     {

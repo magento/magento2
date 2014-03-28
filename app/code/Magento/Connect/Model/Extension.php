@@ -112,7 +112,7 @@ class Extension extends \Magento\Object
      * Set package object
      *
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function generatePackageXml()
     {
@@ -121,7 +121,7 @@ class Extension extends \Magento\Object
         $this->_setPackage()->_setRelease()->_setAuthors()->_setDependencies()->_setContents();
         if (!$this->getPackage()->validate()) {
             $message = $this->getPackage()->getErrors();
-            throw new \Magento\Core\Exception(__($message[0]));
+            throw new \Magento\Model\Exception(__($message[0]));
         }
         $this->setPackageXml($this->getPackage()->getPackageXml());
         return $this;

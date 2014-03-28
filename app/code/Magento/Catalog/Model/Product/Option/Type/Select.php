@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 /**
  * Catalog product option select type

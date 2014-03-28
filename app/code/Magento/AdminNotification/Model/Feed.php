@@ -32,7 +32,7 @@ namespace Magento\AdminNotification\Model;
  * @package    Magento_AdminNotification
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Feed extends \Magento\Core\Model\AbstractModel
+class Feed extends \Magento\Model\AbstractModel
 {
     const XML_USE_HTTPS_PATH = 'system/adminnotification/use_https';
 
@@ -64,7 +64,7 @@ class Feed extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -73,7 +73,7 @@ class Feed extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

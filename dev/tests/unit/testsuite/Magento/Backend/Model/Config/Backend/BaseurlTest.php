@@ -29,10 +29,19 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         $eventDispatcher = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
         $appState = $this->getMock('Magento\App\State', array(), array(), '', false);
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
         $cacheManager = $this->getMock('Magento\App\CacheInterface');
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $context = new \Magento\Model\Context($logger, $eventDispatcher, $cacheManager, $appState, $storeManager);
+        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);        
+        $actionValidatorMock = $this->getMock(
+            'Magento\Model\ActionValidator\RemoveAction', array(), array(), '', false
+        );
+
+        $context = new \Magento\Model\Context(
+            $logger,
+            $eventDispatcher,
+            $cacheManager,
+            $appState,
+            $actionValidatorMock
+        );
 
         $resource = $this->getMock('Magento\Core\Model\Resource\Config\Data', array(), array(), '', false);
         $resource->expects($this->any())->method('addCommitCallback')->will($this->returnValue($resource));

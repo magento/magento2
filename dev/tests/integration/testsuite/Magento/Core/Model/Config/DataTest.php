@@ -63,11 +63,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _refreshConfiguration()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->cleanCache(
-            array(\Magento\App\Config::CACHE_TAG)
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\CacheInterface')
+            ->clean(array(\Magento\App\Config::CACHE_TAG));
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
     }
 

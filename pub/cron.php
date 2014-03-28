@@ -26,10 +26,12 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+use Magento\Core\Model\StoreManager;
+
 require dirname(__DIR__) . '/app/bootstrap.php';
 umask(0);
 $params = array(
-    \Magento\Core\Model\App::PARAM_RUN_CODE => 'admin',
+    StoreManager::PARAM_RUN_CODE => 'admin',
     \Magento\Core\Model\Store::CUSTOM_ENTRY_POINT_PARAM => true
 );
 $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);

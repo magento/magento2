@@ -32,7 +32,7 @@ namespace Magento\Downloadable\Model\Resource;
  * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Link extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Catalog data
@@ -42,9 +42,9 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected $_catalogData;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\App\ConfigInterface
      */
-    protected $_app;
+    protected $_configuration;
 
     /**
      * @var \Magento\Directory\Model\CurrencyFactory
@@ -59,19 +59,19 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\App\Resource $resource
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\ConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\App\Resource $resource,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\App $app,
+        \Magento\App\ConfigInterface $configuration,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager
     ) {
         $this->_catalogData = $catalogData;
-        $this->_app = $app;
+        $this->_configuration = $configuration;
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         parent::__construct($resource);
@@ -152,7 +152,10 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
                 if ($linkObject->getWebsiteId() == 0 && $_isNew && !$this->_catalogData->isPriceGlobal()) {
                     $websiteIds = $linkObject->getProductWebsiteIds();
                     foreach ($websiteIds as $websiteId) {
-                        $baseCurrency = $this->_app->getBaseCurrencyCode();
+                        $baseCurrency = $this->_configuration->getValue(
+                            \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                            'default'
+                        );
                         $websiteCurrency = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
                         if ($websiteCurrency == $baseCurrency) {
                             continue;

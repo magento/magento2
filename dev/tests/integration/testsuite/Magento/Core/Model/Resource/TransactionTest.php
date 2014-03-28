@@ -29,15 +29,14 @@ namespace Magento\Core\Model\Resource;
 class TransactionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\Transaction
+     * @var \Magento\DB\Transaction
      */
     protected $_model;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Transaction'
-        );
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\DB\Transaction');
     }
 
     /**

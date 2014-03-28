@@ -28,7 +28,7 @@ namespace Magento\Reports\Model\Product\Index;
 /**
  * Reports Product Index Abstract Model
  */
-abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
+abstract class AbstractIndex extends \Magento\Model\AbstractModel
 {
     /**
      * Cache key name for Count of product index
@@ -76,7 +76,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Session\Generic $reportSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -89,7 +89,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
         \Magento\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {

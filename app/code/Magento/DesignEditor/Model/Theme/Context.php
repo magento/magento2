@@ -25,7 +25,7 @@
  */
 namespace Magento\DesignEditor\Model\Theme;
 
-use Magento\Core\Exception as CoreException;
+use Magento\Model\Exception as CoreException;
 
 /**
  * Design editor theme context

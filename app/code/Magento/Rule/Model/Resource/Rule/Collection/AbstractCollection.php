@@ -33,7 +33,7 @@
  */
 namespace Magento\Rule\Model\Resource\Rule\Collection;
 
-abstract class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map
@@ -165,7 +165,7 @@ abstract class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collec
      *
      * @param string $entityType
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return array
      */
     protected function _getAssociatedEntityInfo($entityType)
@@ -174,7 +174,7 @@ abstract class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collec
             return $this->_associatedEntitiesMap[$entityType];
         }
 
-        throw new \Magento\Core\Exception(
+        throw new \Magento\Model\Exception(
             __('There is no information about associated entity type "%1".', $entityType),
             0
         );

@@ -30,7 +30,7 @@ use Magento\Filesystem\Directory\WriteInterface;
 /**
  * PayPal specific model for certificate based authentication
  */
-class Cert extends \Magento\Core\Model\AbstractModel
+class Cert extends \Magento\Model\AbstractModel
 {
     /**
      * Certificate base path
@@ -52,7 +52,7 @@ class Cert extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\App\Filesystem $filesystem
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -61,7 +61,7 @@ class Cert extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\App\Filesystem $filesystem,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -98,12 +98,12 @@ class Cert extends \Magento\Core\Model\AbstractModel
      * Get path to PayPal certificate file, if file does not exist try to create it
      *
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getCertPath()
     {
         if (!$this->getContent()) {
-            throw new \Magento\Core\Exception(__('The PayPal certificate does not exist.'));
+            throw new \Magento\Model\Exception(__('The PayPal certificate does not exist.'));
         }
 
         $certFileName = sprintf('cert_%s_%s.pem', $this->getWebsiteId(), strtotime($this->getUpdatedAt()));

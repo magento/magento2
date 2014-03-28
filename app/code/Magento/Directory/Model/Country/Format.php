@@ -41,7 +41,7 @@ namespace Magento\Directory\Model\Country;
  * @package     Magento_Directory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Format extends \Magento\Core\Model\AbstractModel
+class Format extends \Magento\Model\AbstractModel
 {
     /**
      * @return void

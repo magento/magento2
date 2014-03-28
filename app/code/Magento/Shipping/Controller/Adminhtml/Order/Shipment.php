@@ -88,7 +88,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     /**
      * Initialize shipment model instance
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return \Magento\Sales\Model\Order\Shipment|bool
      */
     protected function _initShipment()
@@ -136,7 +136,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             if ($tracks) {
                 foreach ($tracks as $data) {
                     if (empty($data['number'])) {
-                        throw new \Magento\Core\Exception(__('Please enter a tracking number.'));
+                        throw new \Magento\Model\Exception(__('Please enter a tracking number.'));
                     }
                     $track = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment\Track')->addData($data);
                     $shipment->addTrack($track);
@@ -158,7 +158,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
     {
         $shipment->getOrder()->setIsInProcess(true);
         $transactionSave = $this->_objectManager->create(
-            'Magento\Core\Model\Resource\Transaction'
+            'Magento\DB\Transaction'
         )->addObject(
             $shipment
         )->addObject(
@@ -284,7 +284,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 $isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage : $shipmentCreatedMessage
             );
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage($e->getMessage());
@@ -332,7 +332,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 }
                 $this->messageManager->addSuccess(__('You sent the shipment.'));
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('Cannot send shipment information.'));
@@ -344,7 +344,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
      * Add new tracking number action
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function addTrackAction()
     {
@@ -353,10 +353,10 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $number = $this->getRequest()->getPost('number');
             $title = $this->getRequest()->getPost('title');
             if (empty($carrier)) {
-                throw new \Magento\Core\Exception(__('Please specify a carrier.'));
+                throw new \Magento\Model\Exception(__('Please specify a carrier.'));
             }
             if (empty($number)) {
-                throw new \Magento\Core\Exception(__('Please enter a tracking number.'));
+                throw new \Magento\Model\Exception(__('Please enter a tracking number.'));
             }
             $shipment = $this->_initShipment();
             if ($shipment) {
@@ -379,7 +379,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                     'message' => __('Cannot initialize shipment for adding tracking number.')
                 );
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot add tracking number.'));
@@ -435,7 +435,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Core\Exception(__("The comment text field cannot be empty."));
+                throw new \Magento\Model\Exception(__("The comment text field cannot be empty."));
             }
             $shipment = $this->_initShipment();
             $shipment->addComment(
@@ -448,7 +448,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
 
             $this->_view->loadLayout(false);
             $response = $this->_view->getLayout()->getBlock('shipment_comments')->toHtml();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
@@ -462,7 +462,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
      * Create shipping label for specific shipment with validation.
      *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @return bool
      */
     protected function _createShippingLabel(\Magento\Sales\Model\Order\Shipment $shipment)
@@ -482,7 +482,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $shipment
         );
         if ($response->hasErrors()) {
-            throw new \Magento\Core\Exception($response->getErrors());
+            throw new \Magento\Model\Exception($response->getErrors());
         }
         if (!$response->hasInfo()) {
             return false;
@@ -537,7 +537,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                 $this->messageManager->addSuccess(__('You created the shipping label.'));
                 $response->setOk(true);
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -585,7 +585,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
                     'application/pdf'
                 );
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Logger')->logException($e);

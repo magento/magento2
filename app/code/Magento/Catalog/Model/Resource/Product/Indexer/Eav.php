@@ -104,13 +104,13 @@ class Eav extends AbstractIndexer
      *
      * @param string $type
      * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getIndexer($type)
     {
         $indexers = $this->getIndexers();
         if (!isset($indexers[$type])) {
-            throw new \Magento\Core\Exception(__('We found an unknown EAV indexer type "%1".', $type));
+            throw new \Magento\Model\Exception(__('We found an unknown EAV indexer type "%1".', $type));
         }
         return $indexers[$type];
     }

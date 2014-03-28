@@ -28,7 +28,7 @@ namespace Magento\Payment\Model;
 /**
  * Payment information model
  */
-class Info extends \Magento\Core\Model\AbstractModel
+class Info extends \Magento\Model\AbstractModel
 {
     /**
      * Additional information container
@@ -54,7 +54,7 @@ class Info extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -63,7 +63,7 @@ class Info extends \Magento\Core\Model\AbstractModel
         \Magento\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -98,7 +98,7 @@ class Info extends \Magento\Core\Model\AbstractModel
      * Retrieve payment method model object
      *
      * @return \Magento\Payment\Model\MethodInterface
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getMethodInstance()
     {
@@ -111,7 +111,7 @@ class Info extends \Magento\Core\Model\AbstractModel
                     return $instance;
                 }
             }
-            throw new \Magento\Core\Exception(__('The payment method you requested is not available.'));
+            throw new \Magento\Model\Exception(__('The payment method you requested is not available.'));
         }
 
         return $this->_getData('method_instance');
@@ -153,12 +153,12 @@ class Info extends \Magento\Core\Model\AbstractModel
      * @param string|array $key
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function setAdditionalInformation($key, $value = null)
     {
         if (is_object($value)) {
-            throw new \Magento\Core\Exception(__('The payment disallows storing objects.'));
+            throw new \Magento\Model\Exception(__('The payment disallows storing objects.'));
         }
         $this->_initAdditionalInformation();
         if (is_array($key) && is_null($value)) {

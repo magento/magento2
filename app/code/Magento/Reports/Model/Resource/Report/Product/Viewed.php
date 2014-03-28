@@ -57,9 +57,9 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     protected $_productResource;
 
     /**
-     * @var \Magento\Reports\Model\Resource\HelperFactory
+     * @var \Magento\Reports\Model\Resource\Helper
      */
-    protected $_helperFactory;
+    protected $_resourceHelper;
 
     /**
      * @param \Magento\App\Resource $resource
@@ -69,7 +69,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Stdlib\DateTime $dateTime
      * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Reports\Model\Resource\HelperFactory $helperFactory
+     * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\App\Resource $resource,
@@ -79,11 +79,11 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Stdlib\DateTime $dateTime,
         \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Reports\Model\Resource\HelperFactory $helperFactory
+        \Magento\Reports\Model\Resource\Helper $resourceHelper
     ) {
         parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
         $this->_productResource = $productResource;
-        $this->_helperFactory = $helperFactory;
+        $this->_resourceHelper = $resourceHelper;
     }
 
     /**
@@ -234,10 +234,9 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
         $adapter->query($insertQuery);
 
-        $helper = $this->_helperFactory->create();
-        $helper->updateReportRatingPos('day', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_DAILY));
-        $helper->updateReportRatingPos('month', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_MONTHLY));
-        $helper->updateReportRatingPos('year', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_YEARLY));
+        $this->_resourceHelper->updateReportRatingPos('day', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_DAILY));
+        $this->_resourceHelper->updateReportRatingPos('month', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_MONTHLY));
+        $this->_resourceHelper->updateReportRatingPos('year', 'views_num', $mainTable, $this->getTable(self::AGGREGATION_YEARLY));
 
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE);
 

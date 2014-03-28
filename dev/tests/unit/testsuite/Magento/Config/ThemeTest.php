@@ -76,4 +76,50 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array('test_external_package_descendant', array('default_test2'))
         );
     }
+
+    /**
+     * @param string $themePath
+     * @param array $expected
+     * @dataProvider dataGetterDataProvider
+     */
+    public function testDataGetter($themePath, $expected)
+    {
+        $expected = reset($expected);
+        $config = new \Magento\Config\Theme(file_get_contents(__DIR__ . "/_files/area/$themePath/theme.xml"));
+        $this->assertSame($expected['version'], $config->getThemeVersion());
+        $this->assertSame($expected['media'], $config->getMedia());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataGetterDataProvider()
+    {
+        return array(
+            array(
+                'default_default',
+                array(array(
+                    'version' => '2.0.0.9',
+                    'media' => array('preview_image' => 'media/default_default.jpg'),
+                ))),
+            array(
+                'default_test',
+                array(array(
+                    'version' => '2.1.0.0',
+                    'media' => array('preview_image' => ''),
+                ))),
+            array(
+                'default_test2',
+                array(array(
+                    'version' => '2.0.0.0',
+                    'media' => array('preview_image' => ''),
+                ))),
+            array(
+                'test_default',
+                array(array(
+                    'version' => '2.0.1.0',
+                    'media' => array('preview_image' => 'media/test_default.jpg'),
+                ))),
+        );
+    }
 }

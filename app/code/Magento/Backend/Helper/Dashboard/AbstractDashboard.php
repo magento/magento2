@@ -26,7 +26,7 @@
 namespace Magento\Backend\Helper\Dashboard;
 
 use Magento\Core\Helper\Data as HelperData;
-use Magento\Core\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Adminhtml abstract  dashboard helper.

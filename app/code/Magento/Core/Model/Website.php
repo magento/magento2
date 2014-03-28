@@ -45,7 +45,7 @@ namespace Magento\Core\Model;
  * @method int getIsDefault()
  * @method \Magento\Core\Model\Website setIsDefault(int $value)
  */
-class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
+class Website extends \Magento\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     const ENTITY = 'core_website';
 
@@ -174,11 +174,6 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
     protected $_storeManager;
 
     /**
-     * @var App
-     */
-    protected $_app;
-
-    /**
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -186,15 +181,14 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
     /**
      * @param \Magento\Model\Context $context
      * @param \Magento\Registry $registry
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param Resource\Config\Data $configDataResource
      * @param \Magento\App\ConfigInterface $coreConfig
-     * @param \Magento\Core\Model\StoreFactory $storeFactory
-     * @param \Magento\Core\Model\Store\GroupFactory $storeGroupFactory
-     * @param \Magento\Core\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\App $app
+     * @param StoreFactory $storeFactory
+     * @param Store\GroupFactory $storeGroupFactory
+     * @param WebsiteFactory $websiteFactory
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -207,9 +201,8 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
         \Magento\Core\Model\Store\GroupFactory $storeGroupFactory,
         \Magento\Core\Model\WebsiteFactory $websiteFactory,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\App $app,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -220,7 +213,6 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
-        $this->_app = $app;
         $this->_currencyFactory = $currencyFactory;
     }
 
@@ -525,7 +517,6 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         $this->_configDataResource->clearWebsiteData($this);
         return parent::_beforeDelete();
     }
@@ -553,10 +544,14 @@ class Website extends \Magento\Core\Model\AbstractModel implements \Magento\Obje
             \Magento\Core\Model\Store::XML_PATH_PRICE_SCOPE
         ) == \Magento\Core\Model\Store::PRICE_SCOPE_GLOBAL
         ) {
-            return $this->_app->getBaseCurrencyCode();
+            $currencyCode = $this->_coreConfig
+                ->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
+
         } else {
-            return $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
+            $currencyCode =  $this->getConfig(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE);
         }
+
+        return $currencyCode;
     }
 
     /**

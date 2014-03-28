@@ -494,7 +494,7 @@ class Product extends \Magento\Core\Helper\Url
                 'catalog_controller_product_init_after',
                 array('product' => $product, 'controller_action' => $controller)
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->_logger->logException($e);
             return false;
         }

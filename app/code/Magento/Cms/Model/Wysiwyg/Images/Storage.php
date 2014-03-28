@@ -353,12 +353,12 @@ class Storage extends \Magento\Object
      * @param string $name New directory name
      * @param string $path Parent directory path
      * @return array New directory info
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function createDirectory($name, $path)
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('Please correct the folder name. Use only letters, numbers, underscores and dashes.')
             );
         }
@@ -371,7 +371,7 @@ class Storage extends \Magento\Object
         $newPath = $path . '/' . $name;
         $relativeNewPath = $this->_directory->getRelativePath($newPath);
         if ($this->_directory->isDirectory($relativeNewPath)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __('We found a directory with the same name. Please try another folder name.')
             );
         }
@@ -391,7 +391,7 @@ class Storage extends \Magento\Object
             );
             return $result;
         } catch (\Magento\Filesystem\FilesystemException $e) {
-            throw new \Magento\Core\Exception(__('We cannot create a new directory.'));
+            throw new \Magento\Model\Exception(__('We cannot create a new directory.'));
         }
     }
 
@@ -400,7 +400,7 @@ class Storage extends \Magento\Object
      *
      * @param string $path Target dir
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function deleteDirectory($path)
     {
@@ -412,7 +412,7 @@ class Storage extends \Magento\Object
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
         } catch (\Magento\Filesystem\FilesystemException $e) {
-            throw new \Magento\Core\Exception(__('We cannot delete directory %1.', $path));
+            throw new \Magento\Model\Exception(__('We cannot delete directory %1.', $path));
         }
     }
 
@@ -462,7 +462,7 @@ class Storage extends \Magento\Object
      * @param string $targetPath Target directory
      * @param string $type Type of storage, e.g. image, media etc.
      * @return array File info Array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function uploadFile($targetPath, $type = null)
     {
@@ -477,7 +477,7 @@ class Storage extends \Magento\Object
         $result = $uploader->save($targetPath);
 
         if (!$result) {
-            throw new \Magento\Core\Exception(__('We cannot upload the file.'));
+            throw new \Magento\Model\Exception(__('We cannot upload the file.'));
         }
 
         // create thumbnail
@@ -699,16 +699,16 @@ class Storage extends \Magento\Object
      *
      * @param string $path
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _validatePath($path)
     {
         $root = $this->_sanitizePath($this->_cmsWysiwygImages->getStorageRoot());
         if ($root == $path) {
-            throw new \Magento\Core\Exception(__('We cannot delete root directory %1.', $path));
+            throw new \Magento\Model\Exception(__('We cannot delete root directory %1.', $path));
         }
         if (strpos($path, $root) !== 0) {
-            throw new \Magento\Core\Exception(__('Directory %1 is not under storage root path.', $path));
+            throw new \Magento\Model\Exception(__('Directory %1 is not under storage root path.', $path));
         }
     }
 

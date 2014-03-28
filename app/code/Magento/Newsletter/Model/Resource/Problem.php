@@ -32,7 +32,7 @@ namespace Magento\Newsletter\Model\Resource;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Problem extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Problem extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table

@@ -33,7 +33,7 @@ namespace Magento\Paypal\Model\Resource\Payment;
  * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Transaction extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Serializeable field: additional_information
@@ -71,11 +71,11 @@ class Transaction extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Serialize additional information, if any
      *
-     * @param \Magento\Core\Model\AbstractModel $transaction
+     * @param \Magento\Model\AbstractModel $transaction
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $transaction)
+    protected function _beforeSave(\Magento\Model\AbstractModel $transaction)
     {
         $txnId = $transaction->getData('txn_id');
         $idFieldName = $this->getIdFieldName();

@@ -29,7 +29,7 @@ namespace Magento\Core\Model\Resource;
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Resource\Helper
+     * @var \Magento\DB\Helper
      */
     protected $_model;
 
@@ -41,7 +41,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Helper',
+            'Magento\DB\Helper',
             array('modulePrefix' => 'core')
         );
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

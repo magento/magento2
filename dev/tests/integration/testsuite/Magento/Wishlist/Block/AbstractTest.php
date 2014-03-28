@@ -37,19 +37,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_block = $this->getMockForAbstractClass(
-            'Magento\Wishlist\Block\AbstractBlock',
+            'Magento\Wishlist\Block\AbstractBlock', 
             array(
-                $objectManager->get('Magento\View\Element\Template\Context'),
-                $objectManager->get('Magento\Catalog\Model\Config'),
-                $objectManager->get('Magento\Registry'),
-                $objectManager->get('Magento\Tax\Helper\Data'),
-                $objectManager->get('Magento\Catalog\Helper\Data'),
-                $objectManager->get('Magento\Math\Random'),
-                $objectManager->get('Magento\Checkout\Helper\Cart'),
-                $objectManager->get('Magento\Wishlist\Helper\Data'),
-                $objectManager->get('Magento\Catalog\Helper\Product\Compare'),
-                $objectManager->get('Magento\Theme\Helper\Layout'),
-                $objectManager->get('Magento\Catalog\Helper\Image'),
+                $objectManager->get('Magento\Catalog\Block\Product\Context'),
                 $objectManager->get('Magento\App\Http\Context'),
                 $objectManager->get('Magento\Catalog\Model\ProductFactory'),
             )
@@ -62,17 +52,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testImage()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->loadArea(
-            \Magento\Core\Model\App\Area::AREA_FRONTEND
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\View\DesignInterface'
-        )->setDefaultDesignTheme();
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+            ->setDefaultDesignTheme();
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Model\Product');
         $product->load(1);
 
         $size = $this->_block->getImageSize();

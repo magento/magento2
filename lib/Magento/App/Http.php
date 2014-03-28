@@ -33,7 +33,7 @@ use Magento\Event;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Http implements \Magento\LauncherInterface
+class Http implements \Magento\AppInterface
 {
     /**
      * @var \Magento\ObjectManager

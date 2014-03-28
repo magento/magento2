@@ -32,7 +32,7 @@ namespace Magento\Directory\Model\Resource\Country;
  * @package     Magento_Directory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Format extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Format extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

@@ -28,7 +28,7 @@ namespace Magento\DesignEditor\Model\Theme;
 /**
  * Design editor theme change
  */
-class Change extends \Magento\Core\Model\AbstractModel
+class Change extends \Magento\Model\AbstractModel
 {
     /**
      * Theme model initialization

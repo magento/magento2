@@ -23,7 +23,7 @@
  */
 namespace Magento\Indexer\App;
 
-class Shell implements \Magento\LauncherInterface
+class Shell implements \Magento\AppInterface
 {
     /**
      * Filename of the entry point script

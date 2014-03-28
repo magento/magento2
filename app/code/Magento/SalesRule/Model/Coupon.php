@@ -47,7 +47,7 @@ namespace Magento\SalesRule\Model;
  * @method int getType()
  * @method \Magento\SalesRule\Model\Coupon setType(int $value)
  */
-class Coupon extends \Magento\Core\Model\AbstractModel
+class Coupon extends \Magento\Model\AbstractModel
 {
     /**
      * Coupon's owner rule instance

@@ -66,12 +66,12 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
      * @param \Magento\Registry $registry
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Stdlib\DateTime\DateTime $dateModel
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\App\ConfigInterface $configuration
      * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Resource\File\Storage\Database $resource
-     * @param \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory
+     * @param Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param string|null $connectionName
+     * @param null $connectionName
      * @param array $data
      */
     public function __construct(
@@ -79,7 +79,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
         \Magento\Registry $registry,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Stdlib\DateTime\DateTime $dateModel,
-        \Magento\Core\Model\App $app,
+        \Magento\App\ConfigInterface $configuration,
         \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Resource\File\Storage\Database $resource,
         \Magento\Core\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
@@ -94,7 +94,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
             $registry,
             $coreFileStorageDb,
             $dateModel,
-            $app,
+            $configuration,
             $resource,
             $resourceCollection,
             $connectionName,

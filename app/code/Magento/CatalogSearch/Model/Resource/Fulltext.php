@@ -28,7 +28,7 @@ namespace Magento\CatalogSearch\Model\Resource;
 /**
  * CatalogSearch Fulltext Index resource model
  */
-class Fulltext extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Fulltext extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Searchable attributes cache

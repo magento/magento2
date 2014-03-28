@@ -292,9 +292,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->_model->setWriter($writer);
         $this->_model->setParameters(array());
 
-        $arguments = $this->_objectManager->getConstructArguments('Magento\Core\Model\AbstractModel');
+        $arguments = $this->_objectManager->getConstructArguments('Magento\Model\AbstractModel');
         $arguments['data'] = $this->_addressData;
-        $item = $this->getMockForAbstractClass('Magento\Core\Model\AbstractModel', $arguments);
+        $item = $this->getMockForAbstractClass('Magento\Model\AbstractModel', $arguments);
         $this->_model->exportItem($item);
     }
 

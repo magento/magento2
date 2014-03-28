@@ -99,9 +99,9 @@ class Advanced extends \Magento\App\Action\Action
         $this->_view->loadLayout();
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-            $defaultUrl = $this->_urlFactory->create()->setQueryParams(
+            $defaultUrl = $this->_urlFactory->create()->addQueryParams(
                 $this->getRequest()->getQuery()
             )->getUrl(
                 '*/*/'

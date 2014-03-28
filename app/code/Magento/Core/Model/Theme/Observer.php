@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\Theme;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 use Magento\Event\Observer as EventObserver;
 
 /**

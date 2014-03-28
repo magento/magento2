@@ -38,12 +38,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param array $ids
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function execute($ids)
     {
         if (empty($ids)) {
-            throw new \Magento\Core\Exception(__('Bad value was supplied.'));
+            throw new \Magento\Model\Exception(__('Bad value was supplied.'));
         }
         foreach ($this->_storeManager->getStores() as $store) {
             $idsBatches = array_chunk($ids, \Magento\Catalog\Helper\Product\Flat\Indexer::BATCH_SIZE);

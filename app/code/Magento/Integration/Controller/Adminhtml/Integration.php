@@ -268,7 +268,7 @@ class Integration extends Action
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
             $this->_redirectOnSaveError();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {
@@ -387,7 +387,7 @@ class Integration extends Action
                 self::REGISTRY_KEY_CURRENT_INTEGRATION,
                 $this->_integrationService->get($integrationId)->getData()
             );
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;
@@ -434,7 +434,7 @@ class Integration extends Action
                 'popup_content' => $popupContent
             );
             $this->getResponse()->setBody($this->_coreHelper->jsonEncode($result));
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*');
             return;

@@ -32,7 +32,7 @@ namespace Magento\Core\Model\Resource;
  * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cache extends \Magento\Core\Model\Resource\Db\AbstractDb implements \Magento\App\Cache\State\OptionsInterface
+class Cache extends \Magento\Model\Resource\Db\AbstractDb implements \Magento\App\Cache\State\OptionsInterface
 {
     /**
      * Define main table

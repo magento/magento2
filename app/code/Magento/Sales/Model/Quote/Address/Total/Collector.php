@@ -134,13 +134,13 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * @param string $totalCode
      * @param array $totalConfig
      * @return \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _initModelInstance($class, $totalCode, $totalConfig)
     {
         $model = $this->_totalFactory->create($class);
         if (!$model instanceof \Magento\Sales\Model\Quote\Address\Total\AbstractTotal) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Model\Exception(
                 __(
                     'The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.'
                 )
@@ -159,7 +159,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      *
      * @return $this
      */
-    protected function _initRetrievers()
+    private function _initRetrievers()
     {
         $sorts = $this->_coreStoreConfig->getConfig(self::XML_PATH_SALES_TOTALS_SORT, $this->_store);
         foreach ($sorts as $code => $sortOrder) {

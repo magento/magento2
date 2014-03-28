@@ -30,7 +30,7 @@ namespace Magento\Sitemap\Model\Resource\Catalog;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Category extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Category extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Collection Zend Db select

@@ -63,26 +63,26 @@ class StoreGroup
     /**
      * Validate changes for invalidating indexer
      *
-     * @param \Magento\Core\Model\AbstractModel $group
+     * @param \Magento\Model\AbstractModel $group
      * @return bool
      */
-    protected function validate(\Magento\Core\Model\AbstractModel $group)
+    protected function validate(\Magento\Model\AbstractModel $group)
     {
         return $group->dataHasChangedFor('root_category_id') && !$group->isObjectNew();
     }
 
     /**
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $subject
+     * @param \Magento\Model\Resource\Db\AbstractDb $subject
      * @param callable $proceed
-     * @param \Magento\Core\Model\AbstractModel $group
+     * @param \Magento\Model\AbstractModel $group
      *
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @return \Magento\Model\Resource\Db\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Core\Model\Resource\Db\AbstractDb $subject,
+        \Magento\Model\Resource\Db\AbstractDb $subject,
         \Closure $proceed,
-        \Magento\Core\Model\AbstractModel $group
+        \Magento\Model\AbstractModel $group
     ) {
         $needInvalidating = $this->validate($group);
         $objectResource = $proceed($group);

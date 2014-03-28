@@ -35,6 +35,11 @@ class AreaList
     protected $_areas;
 
     /**
+     * @var \Magento\App\AreaInterface[]
+     */
+    protected $_areaInstances = array();
+
+    /**
      * @var string
      */
     protected $_defaultAreaCode;
@@ -45,12 +50,23 @@ class AreaList
     protected $_resolverFactory;
 
     /**
+     * @var \Magento\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @param \Magento\ObjectManager $objectManager
      * @param Area\FrontNameResolverFactory $resolverFactory
      * @param array $areas
      * @param string $default
      */
-    public function __construct(Area\FrontNameResolverFactory $resolverFactory, array $areas, $default)
-    {
+    public function __construct(
+        \Magento\ObjectManager $objectManager,
+        Area\FrontNameResolverFactory $resolverFactory,
+        array $areas,
+        $default
+    ) {
+        $this->objectManager = $objectManager;
         $this->_resolverFactory = $resolverFactory;
         $this->_areas = $areas;
         $this->_defaultAreaCode = $default;
@@ -107,5 +123,22 @@ class AreaList
     public function getDefaultRouter($areaCode)
     {
         return isset($this->_areas[$areaCode]['router']) ? $this->_areas[$areaCode]['router'] : null;
+    }
+
+    /**
+     * Retrieve application area
+     *
+     * @param   string $code
+     * @return  \Magento\Core\Model\App\Area
+     */
+    public function getArea($code)
+    {
+        if (!isset($this->_areaInstances[$code])) {
+            $this->_areaInstances[$code] = $this->objectManager->create(
+                'Magento\App\AreaInterface',
+                array('areaCode' => $code)
+            );
+        }
+        return $this->_areaInstances[$code];
     }
 }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Review\Helper\Action;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 /**
  * Action pager helper for iterating over search results

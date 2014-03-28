@@ -25,7 +25,7 @@
  */
 namespace Magento\SalesRule\Model\Resource\Coupon;
 
-use Magento\Core\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Model\Resource\Db\Collection\AbstractCollection;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\SalesRule\Model\Rule;
 

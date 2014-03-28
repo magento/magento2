@@ -388,7 +388,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
 
             return $encryptionKey;
         } catch (\Exception $e) {
-            if ($e instanceof \Magento\Core\Exception) {
+            if ($e instanceof \Magento\Model\Exception) {
                 foreach ($e->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $errorMessage) {
                     $this->addError($errorMessage);
                 }

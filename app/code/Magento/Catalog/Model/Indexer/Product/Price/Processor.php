@@ -38,11 +38,12 @@ class Processor
     protected $_indexer;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
      */
-    public function __construct(\Magento\Indexer\Model\IndexerInterface $indexer)
-    {
-        $this->_indexer = $indexer;
+    public function __construct(
+        \Magento\Indexer\Model\IndexerFactory $indexerFactory
+    ) {
+        $this->_indexer = $indexerFactory->create();
     }
 
     /**

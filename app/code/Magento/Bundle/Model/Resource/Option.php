@@ -32,7 +32,7 @@ namespace Magento\Bundle\Model\Resource;
  * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Option extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define resource
@@ -47,10 +47,10 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * After save process
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
 
@@ -83,10 +83,10 @@ class Option extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * After delete process
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterDelete(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterDelete(\Magento\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
 

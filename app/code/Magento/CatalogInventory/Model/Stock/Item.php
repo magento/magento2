@@ -70,7 +70,7 @@ use Magento\Catalog\Model\Product;
  * @package     Magento_CatalogInventory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Model\AbstractModel
 {
     const XML_PATH_GLOBAL = 'cataloginventory/options/';
 
@@ -216,7 +216,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Math\Division $mathDivision
      * @param \Magento\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -233,7 +233,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Math\Division $mathDivision,
         \Magento\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -558,7 +558,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Check quantity
      *
      * @param int|float $qty
-     * @exception \Magento\Core\Exception
+     * @exception \Magento\Model\Exception
      * @return bool
      */
     public function checkQty($qty)

@@ -71,7 +71,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
      * Retrieve available order
      *
      * @return Order
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function getOrder()
     {
@@ -84,7 +84,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
         if ($this->_coreRegistry->registry('order')) {
             return $this->_coreRegistry->registry('order');
         }
-        throw new \Magento\Core\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Model\Exception(__('We cannot get the order instance.'));
     }
 
     /**

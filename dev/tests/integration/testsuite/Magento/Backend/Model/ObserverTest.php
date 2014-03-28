@@ -71,9 +71,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $observer = $this->_buildObserver();
         $this->_model->actionPreDispatchAdmin($observer);
 
-        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->getResponse();
+        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ResponseInterface');
         $code = $response->getHttpResponseCode();
         $this->assertTrue($code >= 300 && $code < 400);
 
@@ -94,9 +92,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $observer = $this->_buildObserver();
         $this->_model->actionPreDispatchAdmin($observer);
 
-        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Core\Model\App'
-        )->getResponse();
+        $response = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\ResponseInterface');
         $code = $response->getHttpResponseCode();
         $this->assertFalse($code >= 300 && $code < 400);
 

@@ -28,7 +28,7 @@ namespace Magento\Weee\Model;
 use Magento\Catalog\Model\Product;
 use Magento\Core\Model\Website;
 
-class Tax extends \Magento\Core\Model\AbstractModel
+class Tax extends \Magento\Model\AbstractModel
 {
     /**
      * Including FPT only

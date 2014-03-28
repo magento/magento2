@@ -30,8 +30,10 @@ class FaultTest extends \PHPUnit_Framework_TestCase
 {
     const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
 
-    /** @var \Magento\Core\Model\App */
-    protected $_appMock;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_requestMock;
 
     /** @var \Magento\Webapi\Model\Soap\Server */
     protected $_soapServerMock;
@@ -42,9 +44,14 @@ class FaultTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject*/
     protected $_localeResolverMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_appStateMock;
+
     protected function setUp()
     {
-        $this->_appMock = $this->getMockBuilder('Magento\Core\Model\App')->disableOriginalConstructor()->getMock();
+        $this->_requestMock = $this->getMock('\Magento\App\RequestInterface');
         /** Initialize SUT. */
         $message = "Soap fault reason.";
         $details = array('param1' => 'value1', 'param2' => 2);
@@ -71,11 +78,14 @@ class FaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \Zend_Locale('en_US'))
         );
 
+        $this->_appStateMock = $this->getMock('\Magento\App\State', array(), array(), '', false);
+
         $this->_soapFault = new \Magento\Webapi\Model\Soap\Fault(
-            $this->_appMock,
+            $this->_requestMock,
             $this->_soapServerMock,
             $webapiException,
-            $this->_localeResolverMock
+            $this->_localeResolverMock,
+            $this->_appStateMock
         );
         parent::setUp();
     }
@@ -83,13 +93,13 @@ class FaultTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_soapFault);
-        unset($this->_appMock);
+        unset($this->_requestMock);
         parent::tearDown();
     }
 
     public function testToXmlDeveloperModeOff()
     {
-        $this->_appMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(false));
+        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('production'));
         $wsdlUrl = urlencode(self::WSDL_URL);
         $expectedResult = <<<XML
 <?xml version="1.0" encoding="utf-8" ?>
@@ -132,7 +142,7 @@ XML;
 
     public function testToXmlDeveloperModeOn()
     {
-        $this->_appMock->expects($this->any())->method('isDeveloperMode')->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
         $actualXml = $this->_soapFault->toXml(true);
         $this->assertContains('<m:Trace>', $actualXml, 'Exception trace is not found in XML.');
     }
@@ -225,10 +235,11 @@ XML;
             $details
         );
         $soapFault = new \Magento\Webapi\Model\Soap\Fault(
-            $this->_appMock,
+            $this->_requestMock,
             $this->_soapServerMock,
             $webapiException,
-            $this->_localeResolverMock
+            $this->_localeResolverMock,
+            $this->_appStateMock
         );
         $actualXml = $soapFault->toXml();
         $wsdlUrl = urlencode(self::WSDL_URL);

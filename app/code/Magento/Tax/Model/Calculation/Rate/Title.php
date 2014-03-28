@@ -43,7 +43,7 @@
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
-class Title extends \Magento\Core\Model\AbstractModel
+class Title extends \Magento\Model\AbstractModel
 {
     /**
      * @return void

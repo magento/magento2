@@ -28,7 +28,7 @@ namespace Magento\Paypal\Model\Resource\Report;
 /**
  * Report settlement resource model
  */
-class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Settlement extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Table name
@@ -66,10 +66,10 @@ class Settlement extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Save report rows collected in settlement model
      *
-     * @param \Magento\Core\Model\AbstractModel|\Magento\Paypal\Model\Report\Settlement $object
+     * @param \Magento\Model\AbstractModel|\Magento\Paypal\Model\Report\Settlement $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Model\AbstractModel $object)
     {
         $rows = $object->getRows();
         if (is_array($rows)) {

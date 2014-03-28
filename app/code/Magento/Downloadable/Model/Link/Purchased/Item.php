@@ -65,7 +65,7 @@ use Magento\Downloadable\Model\Resource\Link\Purchased\Item as Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Model\AbstractModel
 {
     const XML_PATH_ORDER_ITEM_STATUS = 'catalog/downloadable/order_item_status';
 

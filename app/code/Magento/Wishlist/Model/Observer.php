@@ -31,7 +31,7 @@
  */
 namespace Magento\Wishlist\Model;
 
-class Observer extends \Magento\Core\Model\AbstractModel
+class Observer extends \Magento\Model\AbstractModel
 {
     /**
      * Wishlist data
@@ -68,7 +68,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
      * @param \Magento\Customer\Model\Session $customerSession
      * @param WishlistFactory $wishlistFactory
      * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -80,7 +80,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         \Magento\Customer\Model\Session $customerSession,
         WishlistFactory $wishlistFactory,
         \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -103,7 +103,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         if (!$customerId) {
             return false;
         }
-        return $this->_wishlistFactory->create()->loadByCustomer($customerId, true);
+        return $this->_wishlistFactory->create()->loadByCustomerId($customerId, true);
     }
 
     /**
@@ -172,7 +172,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
 
             if ($this->_customerSession->isLoggedIn()) {
                 $wishlist = $this->_wishlistFactory->create()
-                    ->loadByCustomer($this->_customerSession->getCustomer(), true);
+                    ->loadByCustomerId($this->_customerSession->getCustomerId(), true);
             } elseif ($sharedWishlist) {
                 $wishlist = $this->_wishlistFactory->create()->loadByCode($sharedWishlist);
             } else {

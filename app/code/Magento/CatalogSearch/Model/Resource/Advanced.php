@@ -32,7 +32,7 @@ namespace Magento\CatalogSearch\Model\Resource;
  * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Advanced extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Advanced extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Core event manager proxy

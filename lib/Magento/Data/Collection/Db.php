@@ -636,33 +636,6 @@ class Db extends \Magento\Data\Collection
     }
 
     /**
-     * Convert items array to hash for select options
-     * using fetchItem method
-     *
-     * The difference between _toOptionHash() and this one is that this
-     * method fetch items one by one and does not load all collection items at once
-     * return items hash
-     * array($value => $label)
-     *
-     * @see     fetchItem()
-     *
-     * @param   string $valueField
-     * @param   string $labelField
-     * @return  array
-     */
-    protected function _toOptionHashOptimized($valueField = null, $labelField = 'name')
-    {
-        if ($valueField === null) {
-            $valueField = $this->getIdFieldName();
-        }
-        $result = array();
-        while ($item = $this->fetchItem()) {
-            $result[$item->getData($valueField)] = $item->getData($labelField);
-        }
-        return $result;
-    }
-
-    /**
      * Get all data array for collection
      *
      * @return array
@@ -790,7 +763,7 @@ class Db extends \Magento\Data\Collection
     {
         if (is_null($this->_map)) {
             $this->_map = array($group => array());
-        } elseif (is_null($this->_map[$group])) {
+        } elseif (empty($this->_map[$group])) {
             $this->_map[$group] = array();
         }
         $this->_map[$group][$filter] = $alias;

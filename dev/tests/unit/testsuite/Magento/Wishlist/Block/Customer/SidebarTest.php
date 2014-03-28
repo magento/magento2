@@ -30,10 +30,19 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * @var \Magento\Wishlist\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $wishlistHelper;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject('Magento\Wishlist\Block\Customer\Sidebar');
+        $this->wishlistHelper = $this->getMock('Magento\Wishlist\Helper\Data', ['getItemCount'], [], '', false);
+        $this->block = $objectManager->getObject(
+            'Magento\Wishlist\Block\Customer\Sidebar',
+            ['wishlistHelper' => $this->wishlistHelper]
+        );
     }
 
     protected function tearDown()
@@ -41,17 +50,19 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->block = null;
     }
 
-    public function testGetIdentities()
+    public function testGetIdentitiesItemsPresent()
     {
-        $productTags = array('catalog_product_1');
+        $productTags = ['catalog_product_1'];
 
-        $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->wishlistHelper->expects($this->once())->method('getItemCount')->will($this->returnValue(5));
+
+        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
 
         $item = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Item',
-            array('getProduct', '__wakeup'),
-            array(),
+            ['getProduct', '__wakeup'],
+            [],
             '',
             false
         );
@@ -59,7 +70,16 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
         $collection = new \ReflectionProperty('Magento\Wishlist\Block\Customer\Sidebar', '_collection');
         $collection->setAccessible(true);
-        $collection->setValue($this->block, array($item));
+        $collection->setValue($this->block, [$item]);
+
+        $this->assertEquals($productTags, $this->block->getIdentities());
+    }
+
+    public function testGetIdentitiesNoItems()
+    {
+        $productTags = [];
+
+        $this->wishlistHelper->expects($this->once())->method('getItemCount')->will($this->returnValue(0));
 
         $this->assertEquals($productTags, $this->block->getIdentities());
     }

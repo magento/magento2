@@ -285,7 +285,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Core\Exception();
+        $exception = new \Magento\Model\Exception();
         $error = new \Magento\Message\Error('Something Bad happened');
         $exception->addMessage($error);
 
@@ -322,7 +322,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         );
 
         // Setup a core exception to return
-        $exception = new \Magento\Core\Exception($warningText);
+        $exception = new \Magento\Model\Exception($warningText);
         $error = new \Magento\Message\Warning('Something Not So Bad happened');
         $exception->addMessage($error);
 

@@ -41,6 +41,16 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
         array(1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', 90232, 'United States', 'California')
     );
 
+    protected $_testHeader = array(
+        'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'HeaderZIP',
+        'HeaderCountry', 'HeaderRegion',
+    );
+
+    protected $_testFooter = array(
+        'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'FooterZIP',
+        'FooterCountry', 'FooterRegion',
+    );
+
     /**
      * Path for Sample File
      *
@@ -75,7 +85,9 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData));
-        $isEqual = file_get_contents($this->_getSampleOutputFile()) == $convert->convert();
+        $convert->setDataHeader($this->_testHeader);
+        $convert->setDataFooter($this->_testFooter);
+        $isEqual = (file_get_contents($this->_getSampleOutputFile()) == $convert->convert());
         $this->assertTrue($isEqual, 'Failed asserting that data is the same.');
     }
 
@@ -107,6 +119,8 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
 
         if (!$callback) {
             $convert = new \Magento\Convert\Excel(new \ArrayIterator($this->_testData));
+            $convert->setDataHeader($this->_testHeader);
+            $convert->setDataFooter($this->_testFooter);
         } else {
             $convert = new \Magento\Convert\Excel(
                 new \ArrayIterator($this->_testData),

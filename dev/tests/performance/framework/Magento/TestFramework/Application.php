@@ -44,13 +44,6 @@ class Application
     protected $_config;
 
     /**
-     * Application object
-     *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_application;
-
-    /**
      * Path to shell installer script
      *
      * @var string
@@ -211,8 +204,6 @@ class Application
      */
     protected function _bootstrap()
     {
-        /** @var $app \Magento\Core\Model\App */
-        $this->_application = $this->getObjectManager()->get('Magento\Core\Model\App');
         $this->getObjectManager()->configure(
             $this->getObjectManager()->get('Magento\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
         );

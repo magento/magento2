@@ -186,7 +186,7 @@ class Quote extends \Magento\Backend\App\Action
                 if ($id) {
                     $model->load($id);
                     if ($id != $model->getId()) {
-                        throw new \Magento\Core\Exception(__('The wrong rule is specified.'));
+                        throw new \Magento\Model\Exception(__('The wrong rule is specified.'));
                     }
                 }
 
@@ -233,7 +233,7 @@ class Quote extends \Magento\Backend\App\Action
                 }
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $id = (int)$this->getRequest()->getParam('rule_id');
                 if (!empty($id)) {
@@ -271,7 +271,7 @@ class Quote extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('The rule has been deleted.'));
                 $this->_redirect('sales_rule/*/');
                 return;
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(
@@ -492,7 +492,7 @@ class Quote extends \Magento\Backend\App\Action
                     $this->_view->getLayout()->initMessages();
                     $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
                 }
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $result['error'] = $e->getMessage();
             } catch (\Exception $e) {
                 $result['error'] = __(

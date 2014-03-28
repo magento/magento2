@@ -52,9 +52,9 @@ class Resolver implements \Magento\Locale\ResolverInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\AppInterface
+     * @var \Magento\App\CacheInterface
      */
-    protected $_app;
+    protected $_cache;
 
     /**
      * Emulated locales stack
@@ -69,20 +69,20 @@ class Resolver implements \Magento\Locale\ResolverInterface
     protected $_localeFactory;
 
     /**
-     * @param \Magento\Locale\ScopeConfigInterface $scopeConfig
-     * @param \Magento\AppInterface $app
+     * @param ScopeConfigInterface $scopeConfig
+     * @param \Magento\App\CacheInterface $cache
      * @param \Magento\LocaleFactory $localeFactory
      * @param string $defaultLocalePath
-     * @param mixed $locale
+     * @param null $locale
      */
     public function __construct(
         \Magento\Locale\ScopeConfigInterface $scopeConfig,
-        \Magento\AppInterface $app,
+        \Magento\App\CacheInterface $cache,
         \Magento\LocaleFactory $localeFactory,
         $defaultLocalePath,
         $locale = null
     ) {
-        $this->_app = $app;
+        $this->_cache = $cache;
         $this->_scopeConfig = $scopeConfig;
         $this->_localeFactory = $localeFactory;
         $this->_defaultLocalePath = $defaultLocalePath;
@@ -140,7 +140,7 @@ class Resolver implements \Magento\Locale\ResolverInterface
     public function getLocale()
     {
         if (!$this->_locale) {
-            \Zend_Locale_Data::setCache($this->_app->getCache()->getLowLevelFrontend());
+            \Zend_Locale_Data::setCache($this->_cache->getFrontend()->getLowLevelFrontend());
             $this->_locale = $this->_localeFactory->create(array('locale' => $this->getLocaleCode()));
         } elseif ($this->_locale->__toString() != $this->_localeCode) {
             $this->setLocale($this->_localeCode);

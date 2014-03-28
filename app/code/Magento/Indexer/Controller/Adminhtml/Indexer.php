@@ -65,7 +65,7 @@ class Indexer extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(
                     __('A total of %1 indexer(s) have been turned Update on Save mode on.', count($indexerIds))
                 );
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -101,7 +101,7 @@ class Indexer extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(
                     __('A total of %1 indexer(s) have been turned Update by Schedule mode on.', count($indexerIds))
                 );
-            } catch (\Magento\Core\Exception $e) {
+            } catch (\Magento\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(

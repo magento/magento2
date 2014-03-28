@@ -124,7 +124,7 @@ class Reports extends \Magento\Backend\App\Action
      * Forced fetch reports action
      *
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function fetchAction()
     {
@@ -133,7 +133,7 @@ class Reports extends \Magento\Backend\App\Action
             /* @var $reports \Magento\Paypal\Model\Report\Settlement */
             $credentials = $reports->getSftpCredentials();
             if (empty($credentials)) {
-                throw new \Magento\Core\Exception(__('We found nothing to fetch because of an empty configuration.'));
+                throw new \Magento\Model\Exception(__('We found nothing to fetch because of an empty configuration.'));
             }
             foreach ($credentials as $config) {
                 try {
@@ -155,7 +155,7 @@ class Reports extends \Magento\Backend\App\Action
                     $this->_logger->logException($e);
                 }
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->_logger->logException($e);

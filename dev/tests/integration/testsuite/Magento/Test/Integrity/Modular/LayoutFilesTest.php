@@ -49,7 +49,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutArguments($area, $layoutFile)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')->loadArea($area);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
         $dom = new \DOMDocument();
         $dom->load($layoutFile);
         $xpath = new \DOMXPath($dom);

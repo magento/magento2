@@ -32,7 +32,7 @@ namespace Magento\GiftMessage\Model\Resource;
  * @package     Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Message extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Message extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table

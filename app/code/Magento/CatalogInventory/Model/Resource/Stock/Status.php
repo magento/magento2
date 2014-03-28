@@ -26,7 +26,7 @@ namespace Magento\CatalogInventory\Model\Resource\Stock;
 /**
  * CatalogInventory Stock Status per website Resource Model
  */
-class Status extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Status extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Store model manager

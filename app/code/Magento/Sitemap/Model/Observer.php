@@ -75,34 +75,34 @@ class Observer
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\TranslateInterface
-     */
-    protected $_translateModel;
-
-    /**
      * @var \Magento\Core\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param Resource\Sitemap\CollectionFactory $collectionFactory
-     * @param \Magento\TranslateInterface $translateModel
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      */
     public function __construct(
         \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\Sitemap\Model\Resource\Sitemap\CollectionFactory $collectionFactory,
-        \Magento\TranslateInterface $translateModel,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Mail\Template\TransportBuilder $transportBuilder
+        \Magento\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation
     ) {
         $this->_coreStoreConfig = $coreStoreConfig;
         $this->_collectionFactory = $collectionFactory;
-        $this->_translateModel = $translateModel;
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
+        $this->inlineTranslation = $inlineTranslation;
     }
 
     /**
@@ -133,8 +133,7 @@ class Observer
         }
 
         if ($errors && $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_RECIPIENT)) {
-            $translate = $this->_translateModel->getTranslateInline();
-            $this->_translateModel->setTranslateInline(false);
+            $this->inlineTranslation->suspend();
 
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_coreStoreConfig->getConfig(self::XML_PATH_ERROR_TEMPLATE)
@@ -153,7 +152,7 @@ class Observer
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 
-            $this->_translateModel->setTranslateInline($translate);
+            $this->inlineTranslation->resume();
         }
     }
 }

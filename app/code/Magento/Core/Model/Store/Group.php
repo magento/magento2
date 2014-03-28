@@ -40,7 +40,7 @@ namespace Magento\Core\Model\Store;
 
 use Magento\Core\Model\Website;
 
-class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object\IdentityInterface
+class Group extends \Magento\Model\AbstractModel implements \Magento\Object\IdentityInterface
 {
     const ENTITY = 'store_group';
 
@@ -122,7 +122,7 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Core\Model\Store $store
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -132,7 +132,7 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Core\Model\Store $store,
         \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -376,7 +376,6 @@ class Group extends \Magento\Core\Model\AbstractModel implements \Magento\Object
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
         $this->_configDataResource->clearStoreData($this->getStoreIds());
         return parent::_beforeDelete();
     }

@@ -206,7 +206,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Locale\FormatInterface $localeFormat
      * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
+     * @param \Magento\Model\Resource\AbstractResource $resource
      * @param \Magento\Data\Collection\Db $resourceCollection
      * @param array $data
      *
@@ -219,7 +219,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Locale\FormatInterface $localeFormat,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
+        \Magento\Model\Resource\AbstractResource $resource = null,
         \Magento\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -632,7 +632,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *
      * @param \Magento\Sales\Model\Quote\Item\Option|\Magento\Object $option
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function addOption($option)
     {
@@ -649,7 +649,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         } elseif ($option instanceof \Magento\Sales\Model\Quote\Item\Option) {
             $option->setItem($this);
         } else {
-            throw new \Magento\Core\Exception(__('We found an invalid item option format.'));
+            throw new \Magento\Model\Exception(__('We found an invalid item option format.'));
         }
 
         $exOption = $this->getOptionByCode($option->getCode());
@@ -710,14 +710,14 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *
      * @param \Magento\Sales\Model\Quote\Item\Option $option
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     protected function _addOptionCode($option)
     {
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Core\Exception(__('An item option with code %1 already exists.', $option->getCode()));
+            throw new \Magento\Model\Exception(__('An item option with code %1 already exists.', $option->getCode()));
         }
         return $this;
     }

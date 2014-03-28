@@ -56,13 +56,11 @@
          * @private
          */
         _checkCookie: function(event) {
-            $.cookie("test", 1);
-            if ($.cookie("test")) {
-                $.cookie("test", null);
-            } else {
-                event.preventDefault();
-                window.location = this.options.noCookieUrl;
+            if (navigator.cookieEnabled) {
+                return;
             }
+            event.preventDefault();
+            window.location = this.options.noCookieUrl;
         }
     });
 })(jQuery);

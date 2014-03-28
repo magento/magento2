@@ -275,7 +275,7 @@ abstract class AbstractCarrier extends \Magento\Object implements AbstractCarrie
 
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
-     * @return $this|bool|false|\Magento\Core\Model\AbstractModel
+     * @return $this|bool|false|\Magento\Model\AbstractModel
      */
     public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {

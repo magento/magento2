@@ -69,4 +69,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Model\ActionValidator\RemoveAction">
+        <arguments>
+            <argument name="protectedModels" xsi:type="array">
+                <item name="salesOrder" xsi:type="string">Magento\Sales\Model\Order</item>
+                <item name="salesOrderCreditmemo" xsi:type="string">Magento\Sales\Model\Order\Creditmemo</item>
+                <item name="salesOrderInvoice" xsi:type="string">Magento\Sales\Model\Order\Invoice</item>
+                <item name="salesOrderShipment" xsi:type="string">Magento\Sales\Model\Order\Shipment</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

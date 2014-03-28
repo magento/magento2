@@ -32,7 +32,7 @@ namespace Magento\Log\Model\Resource\Visitor;
  * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Online extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Online extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * @var \Magento\Stdlib\DateTime\DateTime

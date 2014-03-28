@@ -222,7 +222,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      *
      * @param string $baseUrl
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      * @throws \Exception
      */
     protected function _checkUrl($baseUrl)
@@ -240,7 +240,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         }
         if ($response->getStatus() != 200) {
             $this->messageManager->addError(__('The URL "%1" is invalid.', $baseUrl));
-            throw new \Magento\Core\Exception(__('Response from the server is invalid.'));
+            throw new \Magento\Model\Exception(__('Response from the server is invalid.'));
         }
     }
 

@@ -796,7 +796,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
      *
      * @param array $option
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function addAttributeOption($option)
     {
@@ -830,7 +830,7 @@ class Setup extends \Magento\Core\Model\Resource\Setup
 
                 // Default value
                 if (!isset($values[0])) {
-                    throw new \Magento\Core\Exception(__('Default option value is not defined'));
+                    throw new \Magento\Model\Exception(__('Default option value is not defined'));
                 }
                 $condition = array('option_id =?' => $intOptionId);
                 $this->_connection->delete($optionValueTable, $condition);

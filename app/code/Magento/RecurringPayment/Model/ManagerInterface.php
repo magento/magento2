@@ -36,7 +36,7 @@ interface ManagerInterface
      *
      * @param RecurringPayment $payment
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function validate(RecurringPayment $payment);
 

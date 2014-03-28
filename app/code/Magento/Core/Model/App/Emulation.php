@@ -46,14 +46,7 @@ class Emulation extends \Magento\Object
     protected $_translate;
 
     /**
-     * @var \Magento\Core\Helper\Translate
-     */
-    protected $_helperTranslate;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Core\Model\Store\ConfigInterface
      */
     protected $_coreStoreConfig;
 
@@ -68,18 +61,23 @@ class Emulation extends \Magento\Object
     protected $_design;
 
     /**
-     * @var \Magento\Translate\Inline\ConfigFactory
+     * @var \Magento\Translate\Inline\ConfigInterface
      */
-    protected $_configFactory;
+    protected $inlineConfig;
+
+    /**
+     * @var \Magento\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
 
     /**
      * @param \Magento\Core\Model\StoreManagerInterface $storeManager
      * @param \Magento\View\DesignInterface $viewDesign
      * @param \Magento\Core\Model\Design $design
      * @param \Magento\TranslateInterface $translate
-     * @param \Magento\Core\Helper\Translate $helperTranslate
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Translate\Inline\ConfigFactory $configFactory
+     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
+     * @param \Magento\Translate\Inline\ConfigInterface $inlineConfig
+     * @param \Magento\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
@@ -88,9 +86,9 @@ class Emulation extends \Magento\Object
         \Magento\View\DesignInterface $viewDesign,
         \Magento\Core\Model\Design $design,
         \Magento\TranslateInterface $translate,
-        \Magento\Core\Helper\Translate $helperTranslate,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Translate\Inline\ConfigFactory $configFactory,
+        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
+        \Magento\Translate\Inline\ConfigInterface $inlineConfig,
+        \Magento\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
@@ -100,9 +98,9 @@ class Emulation extends \Magento\Object
         $this->_viewDesign = $viewDesign;
         $this->_design = $design;
         $this->_translate = $translate;
-        $this->_helperTranslate = $helperTranslate;
         $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_configFactory = $configFactory;
+        $this->inlineConfig = $inlineConfig;
+        $this->inlineTranslation = $inlineTranslation;
     }
 
     /**
@@ -175,10 +173,11 @@ class Emulation extends \Magento\Object
         if (is_null($storeId)) {
             $newTranslateInline = false;
         } else {
-            $newTranslateInline = $this->_configFactory->get()->isActive($storeId);
+            $newTranslateInline = $this->inlineConfig->isActive($storeId);
         }
-        $translateInline = $this->_translate->getTranslateInline();
-        $this->_translate->setTranslateInline($newTranslateInline);
+
+        $translateInline = $this->inlineTranslation->isEnabled();
+        $this->inlineTranslation->suspend($newTranslateInline);
         return $translateInline;
     }
 
@@ -223,7 +222,9 @@ class Emulation extends \Magento\Object
         $initialLocaleCode = $this->_localeResolver->getLocaleCode();
         $newLocaleCode = $this->_coreStoreConfig->getConfig($this->_localeResolver->getDefaultLocalePath(), $storeId);
         $this->_localeResolver->setLocaleCode($newLocaleCode);
-        $this->_translate->initLocale($newLocaleCode, $area);
+        $this->_translate->setLocale($newLocaleCode)
+            ->loadData($area, true);
+
         return $initialLocaleCode;
     }
 
@@ -235,7 +236,7 @@ class Emulation extends \Magento\Object
      */
     protected function _restoreInitialInlineTranslation($initialTranslate)
     {
-        $this->_translate->setTranslateInline($initialTranslate);
+        $this->inlineTranslation->resume($initialTranslate);
         return $this;
     }
 
@@ -263,7 +264,9 @@ class Emulation extends \Magento\Object
         $initialArea = \Magento\Core\Model\App\Area::AREA_ADMIN
     ) {
         $this->_localeResolver->setLocaleCode($initialLocaleCode);
-        $this->_translate->initLocale($initialLocaleCode);
+        $this->_translate->setLocale($initialLocaleCode)
+            ->loadData($initialArea, true);
+
         return $this;
     }
 }

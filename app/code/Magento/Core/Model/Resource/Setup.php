@@ -540,14 +540,17 @@ class Setup implements \Magento\Module\Updater\SetupInterface
      */
     protected function _getModifySqlFiles($actionType, $fromVersion, $toVersion, $arrFiles)
     {
-        $arrRes = array();
+        $arrRes = [];
         switch ($actionType) {
             case self::TYPE_DB_INSTALL:
             case self::TYPE_DATA_INSTALL:
                 uksort($arrFiles, 'version_compare');
                 foreach ($arrFiles as $version => $file) {
                     if (version_compare($version, $toVersion) !== self::VERSION_COMPARE_GREATER) {
-                        $arrRes[0] = array('toVersion' => $version, 'fileName' => $file);
+                        $arrRes[0] = [
+                            'toVersion' => $version,
+                            'fileName'  => $file
+                        ];
                     }
                 }
                 break;
@@ -563,16 +566,16 @@ class Setup implements \Magento\Module\Updater\SetupInterface
                         break;
                     }
                     $infoFrom = $versionInfo[0];
-                    $infoTo = $versionInfo[1];
-                    if (version_compare(
-                        $infoFrom,
-                        $fromVersion
-                    ) !== self::VERSION_COMPARE_LOWER && version_compare(
-                        $infoTo,
-                        $toVersion
-                    ) !== self::VERSION_COMPARE_GREATER
+                    $infoTo   = $versionInfo[1];
+                    if (version_compare($infoFrom, $fromVersion, '>=')
+                        && version_compare($infoTo, $fromVersion, '>')
+                        && version_compare($infoTo, $toVersion, '<=')
+                        && version_compare($infoFrom, $toVersion, '<')
                     ) {
-                        $arrRes[] = array('toVersion' => $infoTo, 'fileName' => $file);
+                        $arrRes[] = [
+                            'toVersion' => $infoTo,
+                            'fileName'  => $file
+                        ];
                     }
                 }
                 break;

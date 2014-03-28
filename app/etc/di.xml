@@ -30,7 +30,6 @@
     <preference for="Magento\App\RouterListInterface" type="Magento\App\RouterList" />
     <preference for="Magento\App\FrontControllerInterface" type="Magento\App\FrontController" />
     <preference for="Magento\Module\UpdaterInterface" type="Magento\Module\Updater" />
-    <preference for="Magento\AppInterface" type="Magento\Core\Model\App\Proxy" />
     <preference for="Magento\App\CacheInterface" type="Magento\App\Cache\Proxy" />
     <preference for="Magento\App\Cache\StateInterface" type="Magento\App\Cache\State" />
     <preference for="Magento\App\Cache\TypeListInterface" type="Magento\App\Cache\TypeList" />
@@ -87,7 +86,12 @@
     <preference for="Magento\Mview\ProcessorInterface" type="Magento\Mview\Processor" />
     <preference for="Magento\Mview\View\CollectionInterface" type="Magento\Mview\View\Collection" />
     <preference for="Magento\Mview\View\SubscriptionInterface" type="Magento\Mview\View\Subscription" />
-    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />    
+    <preference for="Magento\Mview\View\ChangelogInterface" type="Magento\Mview\View\Changelog" />
+    <type name="Magento\Model\Context">
+        <arguments>
+            <argument name="actionValidator" xsi:type="object">Magento\Model\ActionValidator\RemoveAction\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Message\Manager">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Message\Session\Proxy</argument>
@@ -141,12 +145,12 @@
     </type>
     <type name="Magento\Module\Declaration\Reader\Filesystem">
         <arguments>
-            <argument name="allowedModules" xsi:type="init_parameter">Magento\Core\Model\App::PARAM_ALLOWED_MODULES</argument>
+            <argument name="allowedModules" xsi:type="init_parameter">Magento\Module\Declaration\Reader\Filesystem::PARAM_ALLOWED_MODULES</argument>
         </arguments>
     </type>
     <type name="Magento\App\Cache\Frontend\Factory">
         <arguments>
-            <argument name="enforcedOptions" xsi:type="init_parameter">Magento\Core\Model\App::PARAM_CACHE_FORCED_OPTIONS</argument>
+            <argument name="enforcedOptions" xsi:type="init_parameter">Magento\App\Cache\Frontend\Factory::PARAM_CACHE_FORCED_OPTIONS</argument>
             <argument name="decorators" xsi:type="array">
                 <item name="tag" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Cache\Frontend\Decorator\TagScope</item>
@@ -160,19 +164,26 @@
     </type>
     <type name="Magento\App\Cache\State">
         <arguments>
-            <argument name="banAll" xsi:type="init_parameter">Magento\Core\Model\App::PARAM_BAN_CACHE</argument>
+            <argument name="banAll" xsi:type="init_parameter">Magento\App\Cache\State::PARAM_BAN_CACHE</argument>
         </arguments>
     </type>
     <type name="Magento\Core\Model\StoreManager">
         <arguments>
-            <argument name="scopeCode" xsi:type="init_parameter">Magento\Core\Model\App::PARAM_RUN_CODE</argument>
-            <argument name="scopeType" xsi:type="init_parameter">Magento\Core\Model\App::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Core\Model\StoreManager::PARAM_RUN_CODE</argument>
+            <argument name="scopeType" xsi:type="init_parameter">Magento\Core\Model\StoreManager::PARAM_RUN_TYPE</argument>
         </arguments>
     </type>
     <type name="Magento\Translate">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\App\Cache\Type\Translate</argument>
             <argument name="locale" xsi:type="object">Magento\Locale\Resolver\Proxy</argument>
+            <argument name="translate" xsi:type="object">Magento\Translate\ResourceInterface\Proxy</argument>
+            <argument name="request" xsi:type="object">Magento\App\Request\Http\Proxy</argument>
+        </arguments>
+    </type>
+     <type name="Magento\App\Helper\Context">
+        <arguments>
+            <argument name="translateInline" xsi:type="object">Magento\Translate\InlineInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Data\Structure" shared="false" />
@@ -326,7 +337,7 @@
     </type>
     <type name="Magento\Mview\View">
         <arguments>
-            <argument name="state" xsi:type="object" shared="false">Magento\Core\Model\Mview\View\State</argument>
+            <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Mview\View\State</argument>
             <argument name="changelog" xsi:type="object" shared="false">Magento\Mview\View\Changelog</argument>
         </arguments>
     </type>
@@ -366,6 +377,11 @@
             <argument name="typeFrontendMap" xsi:type="array">
                 <item name="full_page" xsi:type="string">page_cache</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translate\Inline">
+        <arguments>
+            <argument name="parser" xsi:type="object">Magento\Translate\Inline\ParserInterface\Proxy</argument>
         </arguments>
     </type>
 </config>

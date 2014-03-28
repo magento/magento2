@@ -35,13 +35,6 @@ namespace Magento\Rss\Block;
 class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
 {
     /**
-     * Customer instance
-     *
-     * @var \Magento\Customer\Model\Customer
-     */
-    protected $_customer;
-
-    /**
      * Default MAP renderer type
      *
      * @var string
@@ -52,11 +45,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @var \Magento\Wishlist\Model\WishlistFactory
      */
     protected $_wishlistFactory;
-
-    /**
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $_customerFactory;
 
     /**
      * @var \Magento\Rss\Model\RssFactory
@@ -74,46 +62,22 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_outputHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\App\Http\Context $httpContext
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Catalog\Helper\Output $outputHelper
      * @param array $data
      * @param array $priceBlockTypes
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\App\Http\Context $httpContext,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Catalog\Helper\Output $outputHelper,
         array $data = array(),
@@ -122,20 +86,9 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         $this->_outputHelper = $outputHelper;
         $this->_coreData = $coreData;
         $this->_wishlistFactory = $wishlistFactory;
-        $this->_customerFactory = $customerFactory;
         $this->_rssFactory = $rssFactory;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $httpContext,
             $productFactory,
             $data,
@@ -151,41 +104,13 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected function _getWishlist()
     {
         if (is_null($this->_wishlist)) {
-            $this->_wishlist = $this->_wishlistFactory->create();
-            $wishlistId = $this->getRequest()->getParam('wishlist_id');
-            if ($wishlistId) {
-                $this->_wishlist->load($wishlistId);
-                if ($this->_wishlist->getCustomerId() != $this->_getCustomer()->getId()) {
-                    $this->_wishlist->unsetData();
-                }
-            } else {
-                if ($this->_getCustomer()->getId()) {
-                    $this->_wishlist->loadByCustomer($this->_getCustomer());
-                }
+            $this->_wishlist = parent::_getWishlist();
+            if ($this->_wishlist->getCustomerId() != $this->_getHelper()->getCustomer()->getId()) {
+                $this->_wishlist->unsetData();
             }
         }
+
         return $this->_wishlist;
-    }
-
-    /**
-     * Retrieve Customer instance
-     *
-     * @return \Magento\Customer\Model\Customer
-     */
-    protected function _getCustomer()
-    {
-        if (is_null($this->_customer)) {
-            $this->_customer = $this->_customerFactory->create();
-
-            $params = $this->_coreData->urlDecode($this->getRequest()->getParam('data'));
-            $data   = explode(',', $params);
-            $cId    = abs(intval($data[0]));
-            if ($cId && ($cId == $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH))) {
-                $this->_customer->load($cId);
-            }
-        }
-
-        return $this->_customer;
     }
 
     /**
@@ -195,7 +120,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected function _getTitle()
     {
-        return __('%1\'s Wishlist', $this->_getCustomer()->getName());
+        return __('%1\'s Wishlist', $this->_getHelper()->getCustomerName());
     }
 
     /**

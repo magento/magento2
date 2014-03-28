@@ -26,7 +26,7 @@
 namespace Magento\Newsletter\Model\Resource;
 
 use Magento\Newsletter\Model\Queue as ModelQueue;
-use Magento\Core\Model\AbstractModel;
+use Magento\Model\AbstractModel;
 
 /**
  * Newsletter queue resource model
@@ -35,7 +35,7 @@ use Magento\Core\Model\AbstractModel;
  * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Queue extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Subscriber collection
@@ -74,16 +74,16 @@ class Queue extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param ModelQueue $queue
      * @param array $subscriberIds
      * @return void
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Model\Exception
      */
     public function addSubscribersToQueue(ModelQueue $queue, array $subscriberIds)
     {
         if (count($subscriberIds) == 0) {
-            throw new \Magento\Core\Exception(__('There are no subscribers selected.'));
+            throw new \Magento\Model\Exception(__('There are no subscribers selected.'));
         }
 
         if (!$queue->getId() && $queue->getQueueStatus() != Magento_Newsletter_Model_Queue::STATUS_NEVER) {
-            throw new \Magento\Core\Exception(__('You selected an invalid queue.'));
+            throw new \Magento\Model\Exception(__('You selected an invalid queue.'));
         }
 
         $adapter = $this->_getWriteAdapter();

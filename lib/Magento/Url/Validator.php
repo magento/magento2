@@ -39,7 +39,6 @@ class Validator extends \Zend_Validate_Abstract
      * Error keys
      */
     const INVALID_URL = 'invalidUrl';
-
     /**#@-*/
 
     /**
@@ -68,7 +67,6 @@ class Validator extends \Zend_Validate_Abstract
     {
         $this->_setValue($value);
 
-        //check valid URL
         if (!\Zend_Uri::check($value)) {
             $this->_error(self::INVALID_URL);
             return false;

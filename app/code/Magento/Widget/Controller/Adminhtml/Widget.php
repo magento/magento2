@@ -110,7 +110,7 @@ class Widget extends \Magento\Backend\App\Action
                 }
                 $this->_view->renderLayout();
             }
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Model\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
         }

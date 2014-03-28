@@ -32,7 +32,7 @@ namespace Magento\SalesRule\Model\Resource\Rule;
  * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Customer extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Customer extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Constructor

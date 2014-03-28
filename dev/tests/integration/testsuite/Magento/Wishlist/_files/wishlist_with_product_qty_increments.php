@@ -37,6 +37,6 @@ $product->setStockData(array('enable_qty_increments' => 1, 'qty_increments' => 5
 
 /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
 $wishlist = $objectManager->create('Magento\Wishlist\Model\Wishlist');
-$wishlist->loadByCustomer($customer->getId(), true);
+$wishlist->loadByCustomerId($customer->getId(), true);
 $wishlist->addNewItem($product);
 $wishlist->save();

@@ -36,8 +36,8 @@ namespace Magento\CatalogRule\Model\Resource;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Rule as ModelRule;
-use Magento\Core\Model\AbstractModel;
-use Magento\Core\Model\Resource\Db\AbstractDb;
+use Magento\Model\AbstractModel;
+use Magento\Model\Resource\Db\AbstractDb;
 
 class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 {

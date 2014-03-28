@@ -153,17 +153,38 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
 
     /**
      * Aggregate before/after information from all items and sort totals based on this data
+     * Invoke simple sorting if the first element contains the "sort_order" key
      *
      * @param array $config
      * @return array
      */
-    protected function _getSortedCollectorCodes(array $config)
+    private function _getSortedCollectorCodes(array $config)
     {
-        // invoke simple sorting if the first element contains the "sort_order" key
         reset($config);
         $element = current($config);
         if (isset($element['sort_order'])) {
-            uasort($config, array($this, '_compareSortOrder'));
+            uasort(
+                $config,
+                // @codingStandardsIgnoreStart
+                /**
+                 * @param array $a
+                 * @param array $b
+                 * @return int
+                 */
+                // @codingStandardsIgnoreEnd
+                function ($a, $b) {
+                    if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
+                        return 0;
+                    }
+                    if ($a['sort_order'] > $b['sort_order']) {
+                        return 1;
+                    } elseif ($a['sort_order'] < $b['sort_order']) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            );
         }
         $result = array_keys($config);
         return $result;
@@ -191,27 +212,5 @@ abstract class Ordered extends \Magento\Core\Model\Config\Base
         }
 
         return $this;
-    }
-
-    /**
-     * Callback that uses sort_order for comparison
-     *
-     * @param array $a
-     * @param array $b
-     * @return int
-     */
-    protected function _compareSortOrder($a, $b)
-    {
-        if (!isset($a['sort_order']) || !isset($b['sort_order'])) {
-            return 0;
-        }
-        if ($a['sort_order'] > $b['sort_order']) {
-            $res = 1;
-        } elseif ($a['sort_order'] < $b['sort_order']) {
-            $res = -1;
-        } else {
-            $res = 0;
-        }
-        return $res;
     }
 }

@@ -51,7 +51,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($eventDispatcherMock)
         );
         $this->_resourceMock = $this->getMock(
-            'Magento\Core\Model\Resource\AbstractResource',
+            'Magento\Model\Resource\AbstractResource',
             array(
                 '_construct',
                 '_getReadAdapter',

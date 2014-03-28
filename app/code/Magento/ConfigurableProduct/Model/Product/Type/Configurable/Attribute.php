@@ -37,7 +37,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
  * @method Attribute setProductAttribute(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $value)
  * @method \Magento\Eav\Model\Entity\Attribute\AbstractAttribute getProductAttribute()
  */
-class Attribute extends \Magento\Core\Model\AbstractModel
+class Attribute extends \Magento\Model\AbstractModel
 {
     /**
      * Initialize resource model

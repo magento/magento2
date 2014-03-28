@@ -25,7 +25,7 @@ namespace Magento\Downloadable\Controller;
 
 use Magento\App\ResponseInterface;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
-use Magento\Core\Exception as CoreException;
+use Magento\Model\Exception as CoreException;
 use Magento\Downloadable\Model\Link\Purchased\Item as PurchasedLink;
 
 /**

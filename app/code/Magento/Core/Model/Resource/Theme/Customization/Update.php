@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\Theme\Customization;
 /**
  * Theme customization link resource model
  */
-class Update extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Update extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization

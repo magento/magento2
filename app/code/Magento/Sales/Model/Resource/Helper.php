@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource;
 /**
  * Sales Mysql resource helper model
  */
-class Helper extends \Magento\Core\Model\Resource\Helper implements HelperInterface
+class Helper extends \Magento\DB\Helper implements HelperInterface
 {
     /**
      * @var \Magento\Reports\Model\Resource\Helper

@@ -33,7 +33,7 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
-use Magento\Core\Exception;
+use Magento\Model\Exception;
 
 class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

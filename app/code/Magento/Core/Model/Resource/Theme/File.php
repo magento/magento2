@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Resource\Theme;
 /**
  * Theme files resource model
  */
-class File extends \Magento\Core\Model\Resource\Db\AbstractDb
+class File extends \Magento\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
