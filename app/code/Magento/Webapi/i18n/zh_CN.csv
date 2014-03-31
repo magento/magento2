@@ -35,6 +35,7 @@
 "Operation allowed only in HTTPS",仅允许HTTPS
 "Request does not match any route.",请求不匹配任何路由。
 "Request method is invalid.",请求方法无效。
+"Requested service is not available: ""%1""","请求的服务无效：""%1"""
 "Resource Access",资源访问
 Resources,资源
 "Role Users Information",角色用户信息
@@ -56,4 +57,3 @@ Resources,资源
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告！\r\n该操作将移那些除已经分配角色的用户\r\n你确定吗？"
 "Web Api","Web Api"
 "Web Services Configuration",Web服务配置
-"Requested service is not available: ""%1""","请求的服务无效：""%1"""

@@ -1,23 +1,60 @@
 "A user with the same user name or email already exists.",相同用户名和邮件地址的用户已经存在。
+"Account Status",账户状态
+"Add New Role",添加新角色
+"Add New User",添加新用户
 "All Users",全部用户
+"An error occurred while deleting this role.",删除该角色时发生错误。
+"An error occurred while saving this role.",保存该角色时出现了错误。
+Assigned,已分配
+"Delete Role",删除角色
+"Delete User",删除用户
+"Edit Role",编辑角色
+"Edit User",编辑用户
 "First Name is a required field.",名字是必输项。
+"Forgot your user name or password?",忘记了您的用户名或密码？
 "If there is an account associated with %1 you will receive an email with a link to reset your password.",如果账户和%1关联你将收到重置密码的邮件
 "Interface Locale",接口本地化
 "Last Name is a required field.",姓是必输项。
 "Magento Admin Panel",Magento管理面板
+"New Role",新角色
+"New User",新用户
 "Password is required field.",密码是必输项。
+Permissions,权限
 "Please correct the password reset token.",请纠正密码重置口令。
 "Please correct this email address:",请纠正邮件地址：
+"Please enter a valid email.",请输入有效邮件。
 "Please specify the correct account and try again.",请指定正确的账户名重试。
+"Reset Password",重设密码
 "Reset Password Template",重置密码模板
+"Retrieve Password",找回密码
 Role,角色
+"Role Info",角色信息
+"Role Information",角色信息
+"Role Name",角色名称
+"Role Resources",角色资源
+"Role Users",角色用户
+Roles,角色
+"Roles Resources",角色资源
+"Save Role",保存角色
+"Save User",保存用户
+"The email address is empty.",电子邮件地址为空。
+"This account is",该账户为
+"This account is inactive.",该账户未被激活。
 "This role no longer exists.",该角色不存在。
+"This user no longer exists.",该用户已不存在。
+"User ID",用户ID
+"User Info",用户信息
+"User Information",用户信息
 "User Name is a required field.",用户名是必输项。
+"User Role",用户角色
 "User Roles",用户角色
+"User Roles Information",用户角色信息
+Users,用户
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除这个用户\r\n您确定？"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","警告!\r\n该操作将从已经分配角色中移除那些用户\r\n您确定？"
 "We can't find a user to delete.",找不到要删除的用户。
 "You cannot delete self-assigned roles.",不能删除自分配的角色。
+"You cannot delete your own account.",您无法删除自己的账户。
 "You deleted the role.",成功删除了角色。
 "You deleted the user.",成功删除用户。
 "You saved the role.",成功存储了角色。

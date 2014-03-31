@@ -1,0 +1,56 @@
+"1 Day Freight",1天送达
+"2 Day",2天
+"2 Day AM","2 Day AM"
+"2 Day Freight",2天送达
+"3 Day Freight",3天送达
+Adult,成人
+"Allowed Methods",允许的方式
+"Business Service Center",商业服务中心
+Direct,直接
+"Drop Box",取件箱
+Dropoff,自取
+"Empty response",无需应答
+"Enabled for Checkout",为付款启用
+"Enabled for RMA","Enabled for RMA"
+"Europe First Priority",欧洲优先
+"Express Saver",快速经济
+"Failed to parse xml document: %1","解析xml文档 %1 出错"
+FedEx,FedEx
+"FedEx 10kg Box","FedEx 10公斤箱子"
+"FedEx 25kg Box","DefEx 25公斤箱子"
+"FedEx Box","FedEx 箱子"
+"FedEx Envelope",FedEx信封
+"FedEx Pak","FedEx 聚酯包装"
+"FedEx Tube","FedEx 包装管"
+"First Overnight",次日达
+"Free Method",免费方法
+"Free Shipping Amount Threshold",免费运送数量限制
+Freight,送达
+Ground,地面
+"Handling Applied",需要的处理
+"Home Delivery",家庭运送
+"Hub ID","Hub ID"
+Indirect,非直接
+"International Economy",国际经济型
+"International First",国际优先
+"International Ground",国际陆云
+"International Priority",国际优先
+"Intl Economy Freight",国际经济达
+"Intl Priority Freight",国际优先达
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
+"Meter Number",仪表编号
+"National Freight",全国达
+"Not Required",非必须
+"Packages Request Type",包裹请求类型
+Packaging,打包
+"Please make sure to use only digits here. No dashes are allowed.",请在这里只使用数字，不能使用横线。
+"Priority Overnight",第二天优先
+"Regular Pickup",常规取件
+"Request Courier",需要快递员
+"Residential Delivery",住宅送货
+"Smart Post",智能发布
+"Standard Overnight",标准次日
+Station,站台
+"The field is applicable if the Smart Post method is selected.","如果Smart Post方法被选择该字段是可接受的。"
+"Unable to retrieve tracking",无法获取追踪
+"Your Packaging",您的包裹

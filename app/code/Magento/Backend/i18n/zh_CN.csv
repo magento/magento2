@@ -56,6 +56,7 @@ Amounts,数量
 "Anchor Text for Previous",上一个的锚点文字
 "Any data created since the backup was made will be lost including admin users, customers and orders.",备份完成后创建的任何数据都将丢失，包括管理员用户、顾客，以及订单。
 "Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/",任何字段允许以'/'结尾的完整的URLs。如：http://example.com/magento/
+"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/",任何字段允许URL全名用/（斜杠）结尾，例如：https：//example.com/magento/
 "Are you sure you want to continue?",您确定要继续吗？
 "Are you sure you want to delete the selected backup(s)?",你是否确定要删除所选备份？
 "Are you sure you want to proceed?",你是否确定要继续？
@@ -147,6 +148,8 @@ Elements,元素
 "Enable Single-Store Mode",允许单店模式
 "Enabled for Admin",启用管理
 "Enabled for Frontend",为前端启用
+"Enter https protocol to use Secure URLs in Admin.",
+"Enter https protocol to use Secure URLs in Frontend.",输入https协议让前端使用安全URLs。
 "Environment Update Time",环境更新时间
 Error,错误
 "European Union Countries",欧盟成员国
@@ -240,6 +243,7 @@ Minute,分
 "Offloader header",Offloader头部
 "Only Once (version upgrade)",仅一次（版本升级）
 Optional,可选
+"Order #%1","订单 #%1"
 "Order #%1 (%2)","订单 #%1（%2）"
 "Other Settings",其他设置
 "PHP GD2","PHP GD2"
@@ -345,6 +349,8 @@ Size(bytes),尺寸（字节）
 "Store Design",店铺设计
 "Store Email Addresses",店铺电子邮件地址
 "Store Email Addresses Section",店铺邮件地址区域
+"Store Name",店铺名
+"Store Phone Number",店铺电话号码
 Stores,店铺
 "Street Address Line 2",街道地址第二行
 Synchronize,同步
@@ -407,6 +413,7 @@ Tools,工具
 "Validate REMOTE_ADDR","验证 REMOTE_ADDR"
 "Value must be a URL or one of placeholders: %1",值必须是URL或者占位符%1中的一个
 "Values less than 60 are ignored.",值小于60将被忽略。
+Variable,变量
 "Variable Code",变量代码
 "Variable HTML Value",变量HTML值
 "Variable ID",变量ID
@@ -424,6 +431,7 @@ Warning,警告
 "We couldn't delete one or more backups.",不能删除一个或多个备份。
 "We couldn't find any records.",未找到任何记录。
 "Web Section",Web区域
+"Web Site",站点
 "Web Site Information",站点信息
 "Weekend Days",周末
 "When the adapter was changed, please, flush Catalog Images Cache.",当适配器改变，请刷新产品目录缓存。
@@ -453,6 +461,3 @@ YTD,YTD
 "see error log for details",打开错误日志看详细信息
 "store(%1) scope",店铺（%1）范围
 "website(%1) scope",站点（%1）范围
-"Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/","任何字段允许URL全名用/（斜杠）结尾，例如：https://example.com/magento/"
-"Enter https protocol to use Secure URLs in Admin.",,"输入https协议让后台使用安全URLs。"
-"Enter https protocol to use Secure URLs in Frontend.","输入https协议让前端使用安全URLs。"

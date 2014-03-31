@@ -1,0 +1,10 @@
+"<label class=""label""><span>Make Check payable to:</span></label> %1","<label class=""label""><span>支付支票到：</span></label> %1"
+"Bank Transfer Payment",银行转帐
+"Cash On Delivery Payment",货到付款
+"Centinel API URL","Centinel API链接"
+"Enabling this method will store credit card information in the database, which may increase your security or compliance requirements.",允许该方法将存储信用卡信息到数据库，这可能提高您的安全和灵活性需求。
+Instructions,指令
+"Make Check payable to",付支票付给
+"Make Check payable to: %1",通过支票付款给：%1
+"Offline Payment Methods",线下支付方法
+"Purchase Order Number: %1",付款的订单号：%1

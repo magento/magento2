@@ -8,11 +8,16 @@ Communications,通讯
 "Failed to load template. See error log for details.",不能加载模板，打开错误日志查看详细描述。
 GLOBAL,全局
 "Insert Variable...",插入变量...
+"Invalid transactional email code: %1","无效的交易邮件代码： %1"
 "Load Template",加载模板
 "Load default template",加载默认模板
 "New Email Template",新组
 "New System Template",新系统模板
 "Return Html Version",返回Html版本
+"Store Name",店铺名
+"Store Phone Number",店铺电话号码
+"Street Address 1","街道地址 1"
+"Street Address 2","街道地址 2"
 "The email template has been deleted.",电子邮件模板已被删除。
 "The email template has been saved.",邮件模板已保存。
 "This email template no longer exists.",邮件模板不再存在。

@@ -1,0 +1,91 @@
+"2nd Day Air",2天航空
+"2nd Day Air AM",第二天航空朝至
+"2nd Day Air AM Letter",第二天航空朝至信件
+"2nd Day Air Letter",第二天航空信件
+"3 Day Select",3天选择
+"Access License Number",访问许可编号
+"Adult Signature Required",需要核对签名
+"Allowed Methods",允许的方式
+"Canada Standard",加拿大标准
+"Cannot retrieve shipping rates",无法获取运费
+Commercial,商业
+Container,容器
+"Customer Packaging",顾客自取
+"Customer Supplied Package",顾客提供包裹
+"Delivery Confirmation",交付确认
+"Destination Type",目的地类型
+"Empty response",无需应答
+"Enable Negotiated Rates",启用协商费率
+"Enabled for Checkout",为付款启用
+"Free Method",免费方法
+"Free Shipping Amount Threshold",免费运送数量限制
+"Gateway XML URL","网关 XML URL"
+Ground,地面
+"Ground Commercial",地面运送
+"Ground Residential",地面住宅
+"Handling Applied",需要的处理
+Kilograms,千克
+"Large Express Box",大型快递箱
+"Live account",活动账号
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
+"Medium Express Box",中等快递箱
+"Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)",最小包裹重量（可支持的最小包裹重量请咨询您的物流公司）
+"Next Day Air",下一日空运
+"Next Day Air Early AM",下一日空运朝至
+"Next Day Air Early AM Letter",下一日空运朝至信件
+"Next Day Air Intra (Puerto Rico)",下一日空运（波多黎各）
+"Next Day Air Letter",下一日空运信件
+"Next Day Air Saver",下一日空运节约型
+"Next Day Air Saver Letter",下一日空运节约型信件
+"Not Required",非必须
+"Origin of the Shipment",始发运送
+"Packages Request Type",包裹请求类型
+Pallet,托盘
+"Pickup Method",取货方法
+Pounds,磅
+"Required for negotiated rates; 6-character UPS",对于协议汇率是必须的；6-字符UPS
+Residential,住宅
+"Shipper Number",运单号
+"Signature Required",需要签名
+"Small Express Box",快递小箱
+"This enables or disables SSL verification of the Magento server by UPS.",这里启用或禁止由UPS发起的Magento服务器的SSL校验.
+"Tracking XML URL","追踪XML URL"
+"UPS Expedited",UPS加快
+"UPS Express",UPS快速
+"UPS Express Box",UPS快件箱
+"UPS Express Early A.M.",UPS快速朝至
+"UPS Express Plus",UPS快速加急
+"UPS Ground",UPS陆运
+"UPS Letter Envelope",UPS信封
+"UPS Next Day Air",UPS次日空运
+"UPS Next Day Air Early A.M.",UPS次日空运朝至
+"UPS Next Day Air Saver",UPS次日空运节约型
+"UPS Saver",UPS节约型
+"UPS Second Day Air",UPS次日空运
+"UPS Second Day Air A.M.",UPS次日空运朝至
+"UPS Standard",UPS标准型
+"UPS Three-Day Select",UPS第三天选择
+"UPS Today Dedicated Courrier",UPS当天专运
+"UPS Today Express",UPS当天快速
+"UPS Today Express Saver",UPS当天快速节约型
+"UPS Today Intercity",UPS当天城际
+"UPS Today Standard",UPS当天标准型
+"UPS Tube",UPS包装管
+"UPS Type",UPS类型
+"UPS Worldwide 10 kilo",UPS全球10公斤
+"UPS Worldwide 25 kilo",UPS全球25公斤
+"UPS Worldwide Expedited",UPS全球专运
+"UPS Worldwide Express",UPS全球快速
+"UPS Worldwide Express Plus",UPS全球快速加急
+"UPS Worldwide Express PlusSM",UPS全球快速加急SM
+"UPS Worldwide Saver",UPS全球存储器
+"United Parcel Service",美国联合包裹服务
+"United Parcel Service XML",美国联合包裹服务XML
+"User ID",用户ID
+"Weight Unit",重量单位
+"Worldwide Expedited",全球专递
+"Worldwide Express",全球快速
+"Worldwide Express Letter",全球快速信件
+"Worldwide Express Plus",全球快速加急
+"Worldwide Express Plus Letter",全球快速加急信件
+"Worldwide Express Saver",全球快速节约型

@@ -9,6 +9,7 @@
 "An error occurred validating the nonce",当前校验发生错误
 "Are you sure ?",你确定吗？
 Authentication,认证
+"Basic Settings",基础设置
 "Callback URL",回调URL
 "Cannot convert to access token due to token is not request type",由于令牌不是请求类型不能转成换存取令牌
 "Cannot create request token because consumer token is not a verifier token",由于消费者令牌不是核验者令牌，所以不能创建请求令牌
@@ -77,4 +78,3 @@ OAuth,OAuth
 "Verifier is not the correct length",核验者长度不正确
 "View ""%1"" Integration","查看""%1""集成"
 "When using Oauth for token exchange, enter URL where Oauth credentials can be POST-ed. We strongly recommend you to use https://",当使用令牌交换的Oauth，输入Oauth证书能被发布的URL。我们强烈推荐你使用https：//
-"Basic Settings",基础设置

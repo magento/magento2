@@ -1,16 +1,26 @@
-"Configurable Product","可配置的产品"
-"Configurable Product Settings","可配置的产品设置"
-"Configurable Product Image","可配置产品图片"
-"This attribute is used in configurable products","该属性已用于可配置产品"
 "Attribute '%s' used in configurable products","配置产品中使用的属性 '%s'"
-"Select Configurable Attributes","选择可配置属性"
-"Configure Product","配置产品"
-"Copy From Configurable","从配置中复制"
-"Product with this combination of attributes already associated to configurable.","具有此属性组合的产品已与可配置产品关联。"
-"Scope must not be changed, because the attribute is used in configurable products.","范围不能更改，因为可配置产品中使用了属性。"
-"Select Configurable Attributes ","选择可配置属性"
-"This attribute is used in configurable products.","该属性已用于可配置产品。"
-"This attribute is used in configurable products. You cannot remove it from the attribute set.","该属性用于可配置的产品。您无法从属性集中将其删除。"
-"This group contains attributes, used in configurable products. Please move these attributes to another group and try again.","该群组包含用于可配置产品的属性。请移动这些属性到另一群组并重试。"
-"Use To Create Configurable Product","用于创建可配置的产品"
-"Wrong product type to extract configurable options.","错误的产品类型来提取可配置选项。"
+"Change Price",改变价格
+Choose,选择
+"Choose Affected Attribute Set",选择受影响的属性集
+"Configurable Product",可配置的产品
+"Configurable Product Image",可配置产品图片
+"Configurable Product Settings",可配置的产品设置
+"Configure Product",配置产品
+"Copy From Configurable",从配置中复制
+"Create New Variation Set",创建新的变量组
+"Current Variations",当前变量
+"Product with this combination of attributes already associated to configurable.",具有此属性组合的产品已与可配置产品关联。
+"Scope must not be changed, because the attribute is used in configurable products.",范围不能更改，因为可配置产品中使用了属性。
+"Select Configurable Attributes",选择可配置属性
+"Select Configurable Attributes ",选择可配置属性
+"This attribute is used in configurable products",该属性已用于可配置产品
+"This attribute is used in configurable products.",该属性已用于可配置产品。
+"This attribute is used in configurable products. You cannot remove it from the attribute set.",该属性用于可配置的产品。您无法从属性集中将其删除。
+"This group contains attributes used in configurable products. Please move these attributes to another group and try again.",该组包含使用在配置产品中的属性。请移动这些属性到另一个组再试。
+"This group contains attributes, used in configurable products. Please move these attributes to another group and try again.",该群组包含用于可配置产品的属性。请移动这些属性到另一群组并重试。
+"Upload Image",上传图片
+"Use To Create Configurable Product",用于创建可配置的产品
+"Variation Label",变量标签
+Variations,变量
+"Wrong product type to extract configurable options.",错误的产品类型来提取可配置选项。
+"begin typing to add value",开始输入来添加值

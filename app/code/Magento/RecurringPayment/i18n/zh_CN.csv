@@ -1,0 +1,28 @@
+"Billing Period",账期
+"Billing Period Unit",账期单位
+"Customer Name",顾客名字
+"Invalid parent block for this block",该块的父块无效
+Operations,操作
+"Recurring Billing",周期账单
+Reference,参考
+"Repeats %1 time(s)",重复%1次
+"The billing period unit is not defined or wrong.",账期单位未定义或定义错误。
+"The currency code is undefined.",货币码未定义。
+"The payment method code is undefined.",支付方法未定义。
+"The period frequency is wrong.",周期频率错误。
+"The schedule description must be provided.",必须提供日程描述。
+"The start date has an invalid format.",开始日期格式无效。
+"The start date is undefined.",开始日期未定义。
+"The trial billing amount is wrong.",试用账单额错误。
+"The trial billing period unit is wrong.",试用账期单位错误。
+"The trial period frequency is wrong.",试用期频率错误。
+"The trial period max cycles is wrong.",试用期最大周期错误。
+"The wrong %1 is specified.",指定了错误的%1。
+"There are no orders yet.",还没有订单。
+"This is the number of billing cycles for the payment period.",这是支付期间的账单周期数。
+"This is the number of billing periods that make up one billing cycle.",这是用来完成一个账单周期的账期数。
+"This is the unit for billing during the subscription period.",这是账单订阅期间的单位。
+"Trial Billing Period Unit",试用账期单位
+"We couldn't update the payment.",不能更新该支付。
+"We found a wrong or empty billing amount specified.",未指定或指定错误的账单额。
+"Wrong state: ""%1""","错误状态： ""%1"""

@@ -1,0 +1,59 @@
+"""Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package.","""每订单""是整个订单采用一笔处理费用。 ""每包裹""""是每个包裹单独一笔处理费用。"""
+"Access ID",访问ID
+"Allowed Methods",允许的方式
+"Break bulk economy",经济式拆分
+"Break bulk express",快速式拆分
+Centimeters,厘米
+"Content Type",内容类型
+"Customer services",顾客服务
+DHL,DHL
+Depth,深度
+"Divide Order Weight",拆分订单重量
+Documents,文档
+"Domestic economy select",选择经济型
+"Domestic express",选择快速型
+"Easy shop",轻松购物
+"Economy select",选择经济的
+"Enabled for Checkout",为付款启用
+"Enabled for RMA","Enabled for RMA"
+"Error #%1 : %2","错误 #%1 ： %2"
+Europack,欧洲
+"Express 10:30","快速 10：30"
+"Express 12:00","快速 12：00"
+"Express 9:00","快速 9：00"
+"Express easy",快速简单
+"Express envelope",快速信封
+"Express worldwide",快速全球
+"Free Method",免费方法
+"Free Shipping Amount Threshold",免费运送数量限制
+"Freight worldwide",直飞全球
+"Globalmail business",全球邮寄业务
+"Handling Applied",需要的处理
+"Height, width and length should be equal or greater than %1","高度、宽度，及长度必须等于或大于 %1"
+Inches,英寸
+Jetline,Jetline
+"Jumbo box","Jumbo 箱"
+Kilograms,千克
+"Medical express",医疗快速
+"No packages for request",无所请求的包裹
+"Non Documents",无文档
+"Non documents",无文档
+Others,其他
+"Package ready time after order submission (in hours)",在订单提交后打包时间（小时）
+"Please, specify origin country",请指定发起国家
+Pounds,磅
+"Ready time",准备时间
+Regular,常规
+"Response is in the wrong format",响应的格式有误
+"Same day",当天
+Secureline,安全线
+Specific,指定
+Sprintline,Sprintline
+"The response is in wrong format.",响应格式有误。
+"There is no items in this order",该订单不包含商品
+"This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.",如果超过70公斤允许拆分整个订单重量到多个小包以确保更精确的运费结算。
+"Unable to retrieve tracking",无法获取追踪
+"Weight Unit",重量单位
+"Wrong Content Type",错误的内容类型
+"Wrong Region",地区错误
+inch,英寸

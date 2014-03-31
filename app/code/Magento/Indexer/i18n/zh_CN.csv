@@ -1,10 +1,10 @@
-"A total of %1 indexer(s) have been turned Update by Schedule mode on.","总共%1个索引器在计划模式打开下更新。"
-"A total of %1 indexer(s) have been turned Update on Save mode on.","总共%1个索引器在存储模式打开下更新。"
-"Change indexer mode","改变索引模式"
+"A total of %1 indexer(s) have been turned Update by Schedule mode on.",总共%1个索引器在计划模式打开下更新。
+"A total of %1 indexer(s) have been turned Update on Save mode on.",总共%1个索引器在存储模式打开下更新。
+"Change indexer mode",改变索引模式
 Indexer,索引器
-"New Index Management","新索引管理"
-"New Indexer Management","新索引器管理"
-"Please select indexers.","请选择索引器。"
-"Reindex required","要求重新索引"
-"State for the same indexer","说明为同样的索引器"
-"Update by Schedule","按计划更新"
+"New Index Management",新索引管理
+"New Indexer Management",新索引器管理
+"Please select indexers.",请选择索引器。
+"Reindex required",要求重新索引
+"State for the same indexer",说明为同样的索引器
+"Update by Schedule",按计划更新

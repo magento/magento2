@@ -1,0 +1,104 @@
+"Allowed Methods",允许的方式
+Container,容器
+Documents,文档
+"Empty response",无需应答
+"Enabled for Checkout",为付款启用
+"First-Class Mail International Large Envelope",头等国际邮件大包
+"First-Class Mail International Letter",头等国际邮件信
+"First-Class Mail International Postcard",头等国际邮件明信片
+"First-Class Mail Large Envelope",头等邮件大包
+"First-Class Mail Large Postcards",头等邮件大明信片
+"First-Class Mail Letter",头等邮件信
+"First-Class Mail Parcel",头等邮件小包
+"First-Class Mail Postcards",头等邮件明信片
+"First-Class Package International Service",头等国际包裹服务
+"First-Class Package Service",头等包裹服务
+"First-Class Package Service Hold For Pickup",头等包裹服务上门取件
+Flat,扁平
+"Flat-Rate Box",平纸箱
+"Flat-Rate Envelope",平信封
+"Free Method",免费方法
+"Free Shipping Amount Threshold",免费运送数量限制
+Gift,礼品
+"Global Express Guaranteed (GXG)",全球快递担保（GXG）
+"Global Express Guaranteed Document",全球快递担保文档
+"Global Express Guaranteed Non-Document Non-Rectangular",全球快递担保非文档、非矩形
+"Global Express Guaranteed Non-Document Rectangular",全球快递担保非文档、矩形
+"Handling Applied",需要的处理
+Large,大型
+Letter,信件
+Machinable,可加工
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)",最大包裹重量（可支持的最大包裹重量请咨询您的物流公司）
+"Media Mail",媒体邮件
+Merchandise,商品
+Non-rectangular,非矩形
+"Not Required",非必须
+"Packages Request Type",包裹请求类型
+Parcel,小包
+"Priority Mail",优先邮件
+"Priority Mail Express",快递
+"Priority Mail Express Flat Rate Boxes",快递统价盒子
+"Priority Mail Express Flat Rate Boxes Hold For Pickup",快递统价盒子
+"Priority Mail Express Flat Rate Envelope",快递统价封袋
+"Priority Mail Express Flat Rate Envelope Hold For Pickup",快递统价封袋上门取件
+"Priority Mail Express Hold For Pickup",快递上门取件
+"Priority Mail Express International",国际快递
+"Priority Mail Express International Flat Rate Boxes",国际快递统价盒子
+"Priority Mail Express International Flat Rate Envelope",国际快递统价封袋
+"Priority Mail Express International Legal Flat Rate Envelope",国际快递法定统价封袋
+"Priority Mail Express International Padded Flat Rate Envelope",国际快递填充的统价封袋
+"Priority Mail Express Legal Flat Rate Envelope",快递法定的统价封袋
+"Priority Mail Express Legal Flat Rate Envelope Hold For Pickup",快递法定的统价封袋上门取件
+"Priority Mail Express Padded Flat Rate Envelope",快递填充的统价封袋
+"Priority Mail Express Padded Flat Rate Envelope Hold For Pickup",快递填充的统价封袋上门取件
+"Priority Mail Express Sunday/Holiday Delivery",快递周日/假日发货
+"Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes",快递周日/假日发货统价盒子
+"Priority Mail Express Sunday/Holiday Delivery Flat Rate Envelope",快递周日/假日发货统价封袋
+"Priority Mail Express Sunday/Holiday Delivery Legal Flat Rate Envelope",快递周日/假日发合法统价封袋
+"Priority Mail Express Sunday/Holiday Delivery Padded Flat Rate Envelope",快递周日/假日发货填充的统价封袋
+"Priority Mail Flat Rate Envelope",快递统价封袋
+"Priority Mail Flat Rate Envelope Hold For Pickup",快递统价上门取件
+"Priority Mail Gift Card Flat Rate Envelope",快递礼物卡统价封袋
+"Priority Mail Gift Card Flat Rate Envelope Hold For Pickup",快递礼物卡统价封袋上门取件
+"Priority Mail Hold For Pickup",快递上门取件
+"Priority Mail International",国际快递
+"Priority Mail International DVD Flat Rate priced box",国际快递DVD统价盒子
+"Priority Mail International Flat Rate Envelope",国际快递统价封袋
+"Priority Mail International Gift Card Flat Rate Envelope",国际快递礼物卡统价封袋
+"Priority Mail International Large Flat Rate Box",国际快递大统价盒
+"Priority Mail International Large Video Flat Rate priced box",国际快递大视频统价盒
+"Priority Mail International Legal Flat Rate Envelope",国际快递法定统价盒
+"Priority Mail International Medium Flat Rate Box",国际快递中等统价盒
+"Priority Mail International Padded Flat Rate Envelope",国际快递填充的统价封袋
+"Priority Mail International Small Flat Rate Box",国际快递小统价盒
+"Priority Mail International Small Flat Rate Envelope",国际快递小统价封袋
+"Priority Mail International Window Flat Rate Envelope",国际快递窗口统价封袋
+"Priority Mail Large Flat Rate Box",快递大统价盒
+"Priority Mail Large Flat Rate Box Hold For Pickup",快递大统价盒上门取件
+"Priority Mail Legal Flat Rate Envelope",快递法定统价封袋
+"Priority Mail Legal Flat Rate Envelope Hold For Pickup",快递法定小统价封袋上门取件
+"Priority Mail Medium Flat Rate Box",快递中价盒
+"Priority Mail Medium Flat Rate Box Hold For Pickup",快递中统价盒上门取件
+"Priority Mail Padded Flat Rate Envelope",快递填充的统价封袋
+"Priority Mail Padded Flat Rate Envelope Hold For Pickup",快递填充的统价封袋上门取件
+"Priority Mail Regional Rate Box A",快递区域费率盒A
+"Priority Mail Regional Rate Box A Hold For Pickup",快递区域费率盒A上门取件
+"Priority Mail Regional Rate Box B",快递区域费率盒B
+"Priority Mail Regional Rate Box B Hold For Pickup",快递区域费率盒B上门取件
+"Priority Mail Regional Rate Box C",快递区域费率盒C
+"Priority Mail Regional Rate Box C Hold For Pickup",快递区域费率盒C上门取件
+"Priority Mail Small Flat Rate Box",快递小统价盒
+"Priority Mail Small Flat Rate Box Hold For Pickup","快递小统价盒上门取件""
+Priority Mail Small Flat Rate Envelope"""
+"Priority Mail Small Flat Rate Envelope",快递小统价封袋
+"Priority Mail Small Flat Rate Envelope Hold For Pickup",快递小统价封袋上门取件
+"Priority Mail Window Flat Rate Envelope",快递窗口统计封袋
+"Priority Mail Window Flat Rate Envelope Hold For Pickup",快递窗口统计封袋上门取件
+Rectangular,矩形
+Regular,常规
+Return,退货
+"Secure Gateway URL",安全网关URL
+"Service type does not match",服务类型不匹配
+"Unable to retrieve tracking",无法获取追踪
+"User ID",用户ID
+Variable,变量

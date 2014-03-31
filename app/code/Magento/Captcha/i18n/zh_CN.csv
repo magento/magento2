@@ -7,6 +7,7 @@ CAPTCHA,验证码
 "CAPTCHA Timeout (minutes)",验证码超时（分钟）
 "CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","如果选择该项，""创建用户""和""忘记密码""的CAPTCHA表单总是被允许。"
 "Case Sensitive",大小写敏感
+"Contact Us",联系我们
 "Create user",创建用户
 "Displaying Mode",显示模式
 "Enable CAPTCHA in Admin",在管理界面中启用验证码
